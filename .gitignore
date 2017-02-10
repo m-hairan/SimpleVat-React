@@ -3,7 +3,8 @@
 #################
 
 target/
-.idea/
+.idea/*
+
 
 #################
 ## Eclipse
@@ -221,3 +222,4 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+.idea/artifacts/simplevat_war_exploded.xml
