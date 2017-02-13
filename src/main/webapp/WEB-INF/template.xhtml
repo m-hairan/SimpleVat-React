@@ -24,13 +24,13 @@
     <h:body styleClass="main-body #{guestPreferences.compact ? 'layout-compact' : null}">
         
         <div class="layout-wrapper #{guestPreferences.menuLayout}">
-            <ui:include src="./sample_topbar.xhtml" />
-            <ui:include src="./sample_menu.xhtml" />
+            <ui:include src="topbar.xhtml" />
+            <ui:include src="./menu.xhtml" />
             
             <div class="layout-main">
                 <ui:insert name="content"/>
                 
-                <ui:include src="./sample_footer.xhtml" />
+                <ui:include src="./footer.xhtml" />
             </div>
         </div>
         
