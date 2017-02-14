@@ -41,11 +41,11 @@
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/javax.el/el-api -->
-        <dependency>
+<!--         <dependency>
             <groupId>javax.el</groupId>
             <artifactId>el-api</artifactId>
             <version>2.2</version>
-        </dependency>
+        </dependency> -->
 
 
         <dependency>
@@ -91,7 +91,7 @@
                 <version>8.1.9.v20130131</version>
                 <configuration>
                     <webAppConfig>
-                        <contextPath>/ultima</contextPath>
+                        <contextPath>/simplevat</contextPath>
                     </webAppConfig>
                     <scanIntervalSeconds>5</scanIntervalSeconds>
                     <connectors>
@@ -187,7 +187,7 @@
                             <target>1.8</target>
                         </configuration>
                     </plugin>
-                    <plugin>
+<!--                     <plugin>
                         <groupId>org.apache.tomcat.maven</groupId>
                         <artifactId>tomcat7-maven-plugin</artifactId>
                         <version>2.2</version>
@@ -196,7 +196,7 @@
                             <port>9966</port>
                         </configuration>
                     </plugin>
-
+ -->
                 </plugins>
             </build>
         </profile>
