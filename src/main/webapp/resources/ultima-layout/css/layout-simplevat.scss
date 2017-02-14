@@ -8,4 +8,17 @@ $accentTextColor: #212121;
 $darkMenuBgColor: #424242;
 $darkMenuHoverColor: #676767;
 
+
 @import '../../sass/layout/_layout';
+
+body.layout-compact .contacts .ui-widget-header {
+    font-size: 18px;
+}
+
+body.layout-compact .ui-widget-content .email {
+    font-size: 14px; color: #757575;
+}
+
+body.layout-compact .ui-widget-content .phone {
+    font-size: 14px; color: #757575;
+}

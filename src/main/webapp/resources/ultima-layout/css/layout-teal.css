@@ -1978,13 +1978,3 @@ body.layout-compact {
     padding: 14px 16px; }
     body.layout-compact .layout-wrapper .topbar .topbar-right .topbar-items > li > a i {
       font-size: 20px; } }
-body.layout-compact .contacts .ui-widget-header {
-  font-size: 18px; }
-
-body.layout-compact .ui-widget-content .email {
-  font-size: 14px;
-  color: #757575; }
-
-body.layout-compact .ui-widget-content .phone {
-  font-size: 14px;
-  color: #757575; }

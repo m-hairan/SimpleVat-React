@@ -53,14 +53,14 @@
                             <f:facet name="header">
                                 My Contacts
                             </f:facet>
-
+							<div class="contacts">
                             <p:panel header="Joshua Williams" style="text-align:center">
                                 <h:panelGrid columns="1" style="width:100%">
                                     <p:graphicImage name="images/avatar1.png" library="ultima-layout" width="45"/>
-                                    <h:outputText value="+971-56 610 4818" styleClass="name Fs14 FontDosisMedium"/>
-                                    <h:outputText value="joshua@pf-ultima.com" styleClass="name"/>
+                                    <h:outputText value="+971-56 610 4818" styleClass="phone"/>
+                                    <h:outputText value="joshua@pf-ultima.com" styleClass="email"/>
 
-                                    <h:panelGrid columns="2" style="width:100%">
+                                    <h:panelGrid columns="2" style="margin: 0 auto">
                                         <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" update=":form:selectedCarDetail" oncomplete="PF('carDialog').show()">
                                             <f:setPropertyActionListener value="#{car}" target="#{dataGridView.selectedCar}" />
                                         </p:commandButton>
@@ -72,7 +72,7 @@
 
                                 </h:panelGrid>
                             </p:panel>
-
+							</div>
                         </p:dataGrid>
 
                         <p:dialog header="Car Info" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
