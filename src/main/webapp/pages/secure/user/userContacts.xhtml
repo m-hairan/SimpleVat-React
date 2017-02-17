@@ -7,30 +7,30 @@
 
     <ui:define name="head">
         <style type="text/css">
-            .cars-datalist .text-column p:last-child{
+            .contacts-datalist .text-column p:last-child{
                 color:#757575;
             }
 
-            .cars-datalist .car-item i, .cars-datalist .car-item .car-details {
+            .contacts-datalist .contact-item i, .contacts-datalist .contact-item .contact-details {
                 display: inline-block;
                 vertical-align: middle;
             }
 
-            .cars-datalist .car-item button {
+            .contacts-datalist .contact-item button {
                 float: right;
             }
 
-            .cars-datalist ul {
+            .contacts-datalist ul {
                 margin: 0;
                 padding: 0;
             }
 
-            .ui-car-display td:last-child {
+            .ui-contact-display td:last-child {
                 font-weight: 700;
             }
 
             @media (max-width:640px) {
-                .cars-datalist .text-column {
+                .contacts-datalist .text-column {
                     text-align: center;
                 }
             }
@@ -61,11 +61,11 @@
                                     <h:outputText value="joshua@pf-ultima.com" styleClass="email"/>
 
                                     <h:panelGrid columns="2" style="margin: 0 auto">
-                                        <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" update=":form:selectedCarDetail" oncomplete="PF('carDialog').show()">
+                                        <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" update=":form:selectedContactDetail" oncomplete="PF('contactDialog').show()">
                                             <f:setPropertyActionListener value="#{car}" target="#{dataGridView.selectedCar}" />
                                         </p:commandButton>
 
-                                        <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" update=":form:selectedCarDetail" oncomplete="PF('carDialog').show()">
+                                        <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" update=":form:selectedContactDetail" oncomplete="PF('contactDialog').show()">
                                             <f:setPropertyActionListener value="#{car}" target="#{dataGridView.selectedCar}" />
                                         </p:commandButton>
                                     </h:panelGrid>
@@ -75,8 +75,8 @@
 							</div>
                         </p:dataGrid>
 
-                        <p:dialog header="Car Info" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
-                            <p:outputPanel id="selectedCarDetail" style="text-align:center;">
+                        <p:dialog header="Contact Info" widgetVar="contactDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
+                            <p:outputPanel id="selectedContactDetail" style="text-align:center;">
                                 <p:panelGrid  columns="2" rendered="#{not empty dataGridView.selectedCar}" columnClasses="label,value">
                                     <f:facet name="header">
                                         <p:graphicImage name="demo/images/car/#{dataGridView.selectedCar.brand}-big.gif"/>
