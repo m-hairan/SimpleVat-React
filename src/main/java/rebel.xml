@@ -9,6 +9,8 @@
 	<classpath>
 		<dir name="C:/Users/mohsinh/Documents/GitHub/simplevat/target/classes">
 		</dir>
+		<dir name="C:/Users/mohsinh/Documents/GitHub/simplevat/target/test-classes">
+		</dir>
 	</classpath>
 
 	<web>
