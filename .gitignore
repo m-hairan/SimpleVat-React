@@ -4,6 +4,7 @@
 
 target/
 .idea/*
+*.iml
 
 
 #################
@@ -225,3 +226,5 @@ pip-log.txt
 #Mr Developer
 .mr.developer.cfg
 .idea/artifacts/simplevat_war_exploded.xml
+*.iml
+simplevat.iml
