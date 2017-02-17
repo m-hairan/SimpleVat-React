@@ -24,6 +24,7 @@ local.properties
 .settings/
 .loadpath
 .sass-cache/
+rebel.xml
 
 # External tool builders
 .externalToolBuilders/
