@@ -1,18 +1,20 @@
 /**
  * 
  */
-package org.simplevat.dao.impl;
+package org.simplevat.dao.user.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.simplevat.dao.ContactDao;
+import org.simplevat.dao.user.ContactDao;
 import org.simplevat.domain.user.Contact;
+import org.springframework.stereotype.Repository;
 
 /**
  * @author MohsinH
  *
  */
+@Repository
 public class ContactDaoImpl implements ContactDao {
 
 	/* (non-Javadoc)

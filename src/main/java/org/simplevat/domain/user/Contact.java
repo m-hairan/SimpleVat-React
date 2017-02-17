@@ -4,12 +4,14 @@ import java.io.Serializable;
 
 public class Contact implements Serializable {
 	
-	public Integer contactId;
-	public String contactFirstName;
-	public String contactLastName;
-	public String contactEmail;
-	public String contactPhone;
-	public String contactImage;
+	private Integer contactId;
+	private String contactFirstName;
+	private String contactLastName;
+	private String contactEmail;
+	private String contactPhone;
+	private String contactImage;
+	private String contactFullName;
+
 	
 	
 	/**
@@ -167,8 +169,9 @@ public class Contact implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
-	
 
+	public String getContactFullName() {
+		contactFullName = this.contactFirstName+" "+this.contactLastName;
+		return contactFullName;
+	}
 }

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.simplevat.dao;
+package org.simplevat.service.user;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import org.simplevat.domain.user.Contact;
  * @author MohsinH
  *
  */
-public interface ContactDao {
+public interface ContactService {
 	
 	public Contact createContact(Contact contact);
 	
@@ -22,4 +22,5 @@ public interface ContactDao {
 	public List<Contact> getContacts();
 	
 	public Contact getContactbyId(Integer contactId);
+
 }

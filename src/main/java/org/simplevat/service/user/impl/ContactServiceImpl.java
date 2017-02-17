@@ -1,22 +1,29 @@
 /**
  * 
  */
-package org.simplevat.service.impl;
+package org.simplevat.service.user.impl;
 
 import java.util.List;
 
-import org.simplevat.dao.ContactDao;
+import org.simplevat.dao.user.ContactDao;
 import org.simplevat.domain.user.Contact;
-import org.simplevat.service.ContactService;
+import org.simplevat.service.user.ContactService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 /**
  * @author MohsinH
  *
  */
+
+@Service
 public class ContactServiceImpl implements ContactService {
-	
-	
-	public ContactDao contactDao;
+
+
+	@Qualifier("contactDaoImpl")
+	@Autowired
+	private ContactDao contactDao;
 
 	/* (non-Javadoc)
 	 * @see org.simplevat.service.ContactService#createContact(org.simplevat.domain.user.Contact)

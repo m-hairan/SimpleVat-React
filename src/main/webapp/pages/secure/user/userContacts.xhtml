@@ -47,26 +47,26 @@
                     <!-- Left Side -->
                     <div class="card card-w-title">
                         <h1>Contacts</h1>
-                        <p:dataGrid var="car" value="#{dataGridView.cars}" columns="4" layout="grid"
-                                    rows="6" paginator="false" id="cars">
+                        <p:dataGrid var="contact" value="#{contactDataGridBean.contacts}" columns="4" layout="grid"
+                                    rows="6" paginator="false" id="contacts">
 
                             <f:facet name="header">
                                 My Contacts
                             </f:facet>
 							<div class="contacts">
-                            <p:panel header="Joshua Williams" style="text-align:center">
+                            <p:panel header="#{contact.contactFullName}" style="text-align:center">
                                 <h:panelGrid columns="1" style="width:100%">
                                     <p:graphicImage name="images/avatar1.png" library="ultima-layout" width="45"/>
-                                    <h:outputText value="+971-56 610 4818" styleClass="phone"/>
-                                    <h:outputText value="joshua@pf-ultima.com" styleClass="email"/>
+                                    <h:outputText value="#{contact.contactPhone}" styleClass="phone"/>
+                                    <h:outputText value="#{contact.contactEmail}" styleClass="email"/>
 
                                     <h:panelGrid columns="2" style="margin: 0 auto">
                                         <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" update=":form:selectedContactDetail" oncomplete="PF('contactDialog').show()">
-                                            <f:setPropertyActionListener value="#{car}" target="#{dataGridView.selectedCar}" />
+                                            <f:setPropertyActionListener value="#{contact}" target="#{contactDataGridBean.selectedContact}" />
                                         </p:commandButton>
 
                                         <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" update=":form:selectedContactDetail" oncomplete="PF('contactDialog').show()">
-                                            <f:setPropertyActionListener value="#{car}" target="#{dataGridView.selectedCar}" />
+                                            <f:setPropertyActionListener value="#{contact}" target="#{contactDataGridBean.selectedContact}}" />
                                         </p:commandButton>
                                     </h:panelGrid>
 
@@ -77,22 +77,22 @@
 
                         <p:dialog header="Contact Info" widgetVar="contactDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
                             <p:outputPanel id="selectedContactDetail" style="text-align:center;">
-                                <p:panelGrid  columns="2" rendered="#{not empty dataGridView.selectedCar}" columnClasses="label,value">
+                                <p:panelGrid  columns="2" rendered="#{not empty contactDataGridBean.selectedContact}" columnClasses="label,value">
                                     <f:facet name="header">
-                                        <p:graphicImage name="demo/images/car/#{dataGridView.selectedCar.brand}-big.gif"/>
+                                        <p:graphicImage name="demo/images/car/#{contactDataGridBean.selectedContact.contactFirstName}-big.gif"/>
                                     </f:facet>
 
                                     <h:outputText value="Id:" />
-                                    <h:outputText value="#{dataGridView.selectedCar.id}" />
+                                    <h:outputText value="#{contactDataGridBean.selectedContact.contactId}" />
 
-                                    <h:outputText value="Year" />
-                                    <h:outputText value="#{dataGridView.selectedCar.year}" />
+                                    <h:outputText value="First Name:" />
+                                    <h:outputText value="#{contactDataGridBean.selectedContact.contactFirstName}" />
 
-                                    <h:outputText value="Color:" />
-                                    <h:outputText value="#{dataGridView.selectedCar.color}" style="color:#{dataGridView.selectedCar.color}"/>
+                                    <h:outputText value="Last Name:" />
+                                    <h:outputText value="#{contactDataGridBean.selectedContact.contactLastName}" />
 
-                                    <h:outputText value="Price" />
-                                    <h:outputText value="\$#{dataGridView.selectedCar.price}" />
+                                    <h:outputText value="Email" />
+                                    <h:outputText value="\$#{contactDataGridBean.selectedContact.contactEmail}" />
                                 </p:panelGrid>
                             </p:outputPanel>
                         </p:dialog>
