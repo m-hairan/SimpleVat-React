@@ -34,7 +34,7 @@ public class ContactDAOTest {
         while(contactIt.hasNext())
         {
             Contact contact = contactIt.next();
-            System.out.println("Name :" + contact.contactFirstName + " " + contact.contactLastName);
+            System.out.println("Name :" + contact.getContactFirstName() + " " + contact.getContactLastName());
         }
 
 

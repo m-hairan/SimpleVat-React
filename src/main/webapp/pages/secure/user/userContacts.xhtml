@@ -47,16 +47,22 @@
                     <!-- Left Side -->
                     <div class="card card-w-title">
                         <h1>Contacts</h1>
-                        <p:dataGrid var="contact" value="#{contactDataGridBean.contacts}" columns="4" layout="grid"
-                                    rows="6" paginator="false" id="contacts">
-
+                        <p:dataGrid var="contact" value="#{contactDataGridBean.filteredContacts}" columns="6" layout="grid"
+                                    paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    rowsPerPageTemplate="6,12,18"
+                                    rows="18" id="contacts">
                             <f:facet name="header">
-                                My Contacts
+                                <p:selectOneButton id="filterChar" value="#{contactDataGridBean.selectedFilter}">
+                                    <p:ajax listener="#{contactDataGridBean.onContactFilterChange}" update="contacts" />
+                                    <!--<f:converter converterId="javax.faces.Boolean" />-->
+                                    <f:selectItem itemLabel="All" itemValue="" />
+                                    <f:selectItems value="#{contactDataGridBean.filters}" />
+                                </p:selectOneButton>
                             </f:facet>
 							<div class="contacts">
                             <p:panel header="#{contact.contactFullName}" style="text-align:center">
                                 <h:panelGrid columns="1" style="width:100%">
-                                    <p:graphicImage name="images/avatar1.png" library="ultima-layout" width="45"/>
+                                    <p:graphicImage name="images/#{contact.contactImage}" library="ultima-layout" width="45"/>
                                     <h:outputText value="#{contact.contactPhone}" styleClass="phone"/>
                                     <h:outputText value="#{contact.contactEmail}" styleClass="email"/>
 
@@ -79,7 +85,7 @@
                             <p:outputPanel id="selectedContactDetail" style="text-align:center;">
                                 <p:panelGrid  columns="2" rendered="#{not empty contactDataGridBean.selectedContact}" columnClasses="label,value">
                                     <f:facet name="header">
-                                        <p:graphicImage name="demo/images/car/#{contactDataGridBean.selectedContact.contactFirstName}-big.gif"/>
+                                        <p:graphicImage name="images/#{contactDataGridBean.selectedContact.contactImage}" library="ultima-layout" width="250"/>
                                     </f:facet>
 
                                     <h:outputText value="Id:" />
