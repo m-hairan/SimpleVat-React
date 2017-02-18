@@ -20,7 +20,7 @@
     <!-- Project Stage Level -->
 
     <welcome-file-list>
-        <welcome-file>pages/secure/user/userHome.xhtml</welcome-file>
+        <welcome-file>pages/secure/user/home.xhtml</welcome-file>
     </welcome-file-list>
 
     <context-param>

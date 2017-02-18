@@ -5,7 +5,7 @@ import java.util.*;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 
 import org.apache.log4j.Logger;
 import org.simplevat.domain.user.Contact;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ManagedBean(name = "contactDataGridBean")
-@SessionScoped
+@ViewScoped
 public class ContactDataGridBean implements Serializable {
 
 	final static Logger logger = Logger.getLogger(ContactDataGridBean.class);
