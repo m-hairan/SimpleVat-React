@@ -13,7 +13,11 @@ import org.simplevat.domain.user.Contact;
 import org.simplevat.service.user.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
+@Component
 @ManagedBean(name = "contactDataGridBean")
 @ViewScoped
 public class ContactDataGridBean implements Serializable {
@@ -35,13 +39,8 @@ public class ContactDataGridBean implements Serializable {
 		if(logger.isDebugEnabled()){
 			logger.debug("Initializing manages bean");
 		}
-//		contacts = contactService.getContacts();
+		contacts = contactService.getContacts();
 
-		contacts = new ArrayList<Contact>();
-		Contact contact = new Contact(new Integer(1), "Mohsin", "Hashmi", "myselfmohsin@gmail.com","0566104818","image url");
-		contacts.add(contact);
-		contact = new Contact(new Integer(2), "Asim", "Fawaz", "fawaz.asim@gmail.com","0565610010","image url fawaz");
-		contacts.add(contact);
     }
 
 

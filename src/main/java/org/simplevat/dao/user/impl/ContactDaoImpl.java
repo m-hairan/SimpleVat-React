@@ -51,9 +51,9 @@ public class ContactDaoImpl implements ContactDao {
 	public List<Contact> getContacts() {
 		List<Contact> contacts = new ArrayList<Contact>();
 
-		Contact contact = new Contact(new Integer(1), "Mohsin", "Hashmi", "myselfmohsin@gmail.com","0566104818","image url");
+		Contact contact = new Contact(new Integer(1), "Mohsin", "Hashmi", "myselfmohsin@gmail.com","+971 0566104818","image url");
 		contacts.add(contact);
-		contact = new Contact(new Integer(2), "Asim", "Fawaz", "fawaz.asim@gmail.com","0565610010","image url fawaz");
+		contact = new Contact(new Integer(2), "Asim", "Fawaz", "fawaz.asim@gmail.com","+971 0565610010","image url fawaz");
 		contacts.add(contact);
 		return contacts;
 	}
