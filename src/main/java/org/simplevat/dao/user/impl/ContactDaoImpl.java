@@ -11,7 +11,7 @@ import org.simplevat.domain.user.Contact;
 import org.springframework.stereotype.Repository;
 
 /**
- * @author MohsinH
+ * @author JohnH
  *
  */
 @Repository
@@ -51,35 +51,35 @@ public class ContactDaoImpl implements ContactDao {
 	public List<Contact> getContacts() {
 		List<Contact> contacts = new ArrayList<Contact>();
 
-		Contact contact = new Contact(new Integer(1), "Mohsin", "Hashmi", "myselfmohsin@gmail.com","+971 0566104818","user-avtar-icon1.png");
+		Contact contact = new Contact(new Integer(1), "John", "Clark", "John.Clark@gmail.com","+971 565656565","user-avtar-icon1.png");
 		contacts.add(contact);
-		contact = new Contact(new Integer(2), "Asim", "Fawaz", "fawaz.asim@gmail.com","+971 0565610010","user-avtar-icon2.png");
+		contact = new Contact(new Integer(2), "Alex", "Hoar", "Hoare.17@gmail.com","+971 0505050505","user-avtar-icon2.png");
 		contacts.add(contact);
-		contact = new Contact(new Integer(3), "Kashif", "Fawaz", "fawaz.asim@gmail.com","+971 0565610010","user-avtar-icon2.png");
+		contact = new Contact(new Integer(3), "Jemi", "Hoare", "Hoare.17@gmail.com","+971 0505050505","user-avtar-icon2.png");
 		contacts.add(contact);
-		contact = new Contact(new Integer(4), "Zubair", "Fawaz", "fawaz.asim@gmail.com","+971 0565610010","user-avtar-icon2.png");
+		contact = new Contact(new Integer(4), "Zin", "Hoare", "Hoare.17@gmail.com","+971 0505050505","user-avtar-icon2.png");
 		contacts.add(contact);
-		contact = new Contact(new Integer(5), "Yaseen", "Fawaz", "fawaz.asim@gmail.com","+971 0565610010","user-avtar-icon2.png");
+		contact = new Contact(new Integer(5), "Yarn", "Hoare", "Hoare.17@gmail.com","+971 0505050505","user-avtar-icon2.png");
 		contacts.add(contact);
-		contact = new Contact(new Integer(6), "Sameen", "Fawaz", "fawaz.asim@gmail.com","+971 0565610010","user-avtar-icon2.png");
+		contact = new Contact(new Integer(6), "Sam", "Hoare", "Hoare.17@gmail.com","+971 0505050505","user-avtar-icon2.png");
 		contacts.add(contact);
-		contact = new Contact(new Integer(7), "Muzamil", "Fawaz", "fawaz.asim@gmail.com","+971 0565610010","user-avtar-icon2.png");
+		contact = new Contact(new Integer(7), "Moz", "Hoare", "Hoare.17@gmail.com","+971 0505050505","user-avtar-icon2.png");
 		contacts.add(contact);
-		contact = new Contact(new Integer(8), "Mohsin", "Hashmi", "myselfmohsin@gmail.com","+971 0566104818","user-avtar-icon1.png");
+		contact = new Contact(new Integer(8), "John", "Clark", "myselfJohn@gmail.com","+971 565656565","user-avtar-icon1.png");
 		contacts.add(contact);
-		contact = new Contact(new Integer(9), "Mohsin", "Hashmi", "myselfmohsin@gmail.com","+971 0566104818","user-avtar-icon1.png");
+		contact = new Contact(new Integer(9), "John", "Clark", "myselfJohn@gmail.com","+971 565656565","user-avtar-icon1.png");
 		contacts.add(contact);
-		contact = new Contact(new Integer(10), "Mohsin", "Hashmi", "myselfmohsin@gmail.com","+971 0566104818","user-avtar-icon1.png");
+		contact = new Contact(new Integer(10), "John", "Clark", "myselfJohn@gmail.com","+971 565656565","user-avtar-icon1.png");
 		contacts.add(contact);
-		contact = new Contact(new Integer(11), "Mohsin", "Hashmi", "myselfmohsin@gmail.com","+971 0566104818","user-avtar-icon1.png");
+		contact = new Contact(new Integer(11), "John", "Clark", "myselfJohn@gmail.com","+971 565656565","user-avtar-icon1.png");
 		contacts.add(contact);
-		contact = new Contact(new Integer(12), "Mohsin", "Hashmi", "myselfmohsin@gmail.com","+971 0566104818","user-avtar-icon1.png");
+		contact = new Contact(new Integer(12), "John", "Clark", "myselfJohn@gmail.com","+971 565656565","user-avtar-icon1.png");
 		contacts.add(contact);
-		contact = new Contact(new Integer(13), "Mohsin", "Hashmi", "myselfmohsin@gmail.com","+971 0566104818","user-avtar-icon1.png");
+		contact = new Contact(new Integer(13), "John", "Clark", "myselfJohn@gmail.com","+971 565656565","user-avtar-icon1.png");
 		contacts.add(contact);
-		contact = new Contact(new Integer(14), "Mohsin", "Hashmi", "myselfmohsin@gmail.com","+971 0566104818","user-avtar-icon1.png");
+		contact = new Contact(new Integer(14), "John", "Clark", "myselfJohn@gmail.com","+971 565656565","user-avtar-icon1.png");
 		contacts.add(contact);
-		contact = new Contact(new Integer(15), "Mohsin", "Hashmi", "myselfmohsin@gmail.com","+971 0566104818","user-avtar-icon1.png");
+		contact = new Contact(new Integer(15), "John", "Clark", "myselfJohn@gmail.com","+971 565656565","user-avtar-icon1.png");
 		contacts.add(contact);
 		return contacts;
 	}
