@@ -5,7 +5,7 @@ package org.simplevat.dao.user;
 
 import java.util.List;
 
-import org.simplevat.domain.user.Contact;
+import org.simplevat.entity.user.Contact;
 
 /**
  * @author MohsinH

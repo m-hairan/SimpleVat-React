@@ -6,7 +6,7 @@ package org.simplevat.service.user.impl;
 import java.util.List;
 
 import org.simplevat.dao.user.ContactDao;
-import org.simplevat.domain.user.Contact;
+import org.simplevat.entity.user.Contact;
 import org.simplevat.service.user.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

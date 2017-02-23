@@ -5,7 +5,7 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui"
     xmlns:pu="http://primefaces.org/ultima">
-    
+
     <h:form id="menuform"> 
         <div class="layout-menu #{guestPreferences.menuClass}">
             <div class="nano">
@@ -18,7 +18,7 @@
                                 <i class="material-icons">&#xE313;</i>
                             </a>
                         </div>
-                    
+
                         <ul id="profile-menu" class="ultima-menu">
                             <li role="menuitem">
                                 <a href="#" class="ripplelink">
@@ -46,15 +46,15 @@
                             </li>
                         </ul>
                     </ui:fragment>
-                    
+
                     <pu:menu widgetVar="me">
                         <p:menuitem id="st_dashboard" value="Home" icon="&#xE871;" outcome="/pages/secure/user/home"/>
 
                         <p:menuitem id="st_contact" value="Contacs" icon="contacts" outcome="/pages/secure/user/contacts"/>
 
-                        <p:menuitem id="st_project" value="Projects" icon="book" outcome="/pages/secure/user/contacts"/>
+                        <p:menuitem id="st_project" value="Projects" icon="book" outcome="/pages/secure/user/projects"/>
 
-                        <p:menuitem id="st_invoice" value="Invoices" icon="receipt" outcome="/pages/secure/user/contacts"/>
+                        <p:menuitem id="st_invoice" value="Invoices" icon="receipt" outcome="/pages/secure/user/invoices"/>
 
                     </pu:menu>
                 </div>

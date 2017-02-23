@@ -42,11 +42,11 @@
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/javax.el/el-api -->
-<!--         <dependency>
+        <dependency>
             <groupId>javax.el</groupId>
             <artifactId>el-api</artifactId>
             <version>2.2</version>
-        </dependency> -->
+        </dependency>
 
 
         <dependency>
@@ -77,7 +77,7 @@
             <version>${spring.version}</version>
         </dependency>
         
-                <!-- JSON Processing dependencies starts-->
+        <!-- JSON Processing dependencies starts-->
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -104,9 +104,9 @@
         </dependency>
 
         <!--<dependency>-->
-            <!--<groupId>log4j</groupId>-->
-            <!--<artifactId>log4j</artifactId>-->
-            <!--<version>1.2.17</version>-->
+        <!--<groupId>log4j</groupId>-->
+        <!--<artifactId>log4j</artifactId>-->
+        <!--<version>1.2.17</version>-->
         <!--</dependency>-->
         <!-- from java.util.logging to log4j -->
         <dependency>
@@ -130,6 +130,18 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.14.8</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api 
+        -->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.1</version>
         </dependency>
 
         <dependency>
@@ -291,16 +303,16 @@
                             <target>1.8</target>
                         </configuration>
                     </plugin>
-<!--                     <plugin>
-                        <groupId>org.apache.tomcat.maven</groupId>
-                        <artifactId>tomcat7-maven-plugin</artifactId>
-                        <version>2.2</version>
-                        <configuration>
-                            <server>tomcat-development-server</server>
-                            <port>9966</port>
-                        </configuration>
-                    </plugin>
- -->
+                    <!--                     <plugin>
+                                           <groupId>org.apache.tomcat.maven</groupId>
+                                           <artifactId>tomcat7-maven-plugin</artifactId>
+                                           <version>2.2</version>
+                                           <configuration>
+                                               <server>tomcat-development-server</server>
+                                               <port>9966</port>
+                                           </configuration>
+                                       </plugin>
+                    -->
                 </plugins>
             </build>
         </profile>

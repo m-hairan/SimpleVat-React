@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.simplevat.dao.user.ContactDao;
-import org.simplevat.domain.user.Contact;
+import org.simplevat.entity.user.Contact;
 import org.springframework.stereotype.Repository;
 
 /**

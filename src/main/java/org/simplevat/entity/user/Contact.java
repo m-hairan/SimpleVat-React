@@ -1,4 +1,4 @@
-package org.simplevat.domain.user;
+package org.simplevat.entity.user;
 
 import java.io.Serializable;
 

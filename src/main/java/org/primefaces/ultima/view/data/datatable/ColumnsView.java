@@ -28,30 +28,30 @@ import javax.faces.context.FacesContext;
 import org.primefaces.ultima.domain.Car;
 import org.primefaces.ultima.service.CarService;
 
-@ManagedBean(name="dtColumnsView")
+@ManagedBean(name = "dtColumnsView")
 @ViewScoped
 public class ColumnsView implements Serializable {
-    
+
     private final static List<String> VALID_COLUMN_KEYS = Arrays.asList("id", "brand", "year", "color", "price");
-	
+
     private String columnTemplate = "id brand year";
-    
+
     private List<ColumnModel> columns;
-    
+
     private List<Car> cars;
-    
+
     private List<Car> filteredCars;
-    
+
     @ManagedProperty("#{carService}")
     private CarService service;
 
     @PostConstruct
     public void init() {
         cars = service.createCars(10);
-        
+
         createDynamicColumns();
     }
-    
+
     public List<Car> getCars() {
         return cars;
     }
@@ -82,26 +82,26 @@ public class ColumnsView implements Serializable {
 
     private void createDynamicColumns() {
         String[] columnKeys = columnTemplate.split(" ");
-        columns = new ArrayList<ColumnModel>();   
-        
-        for(String columnKey : columnKeys) {
+        columns = new ArrayList<ColumnModel>();
+
+        for (String columnKey : columnKeys) {
             String key = columnKey.trim();
-            
-            if(VALID_COLUMN_KEYS.contains(key)) {
+
+            if (VALID_COLUMN_KEYS.contains(key)) {
                 columns.add(new ColumnModel(columnKey.toUpperCase(), columnKey));
             }
         }
     }
-    
+
     public void updateColumns() {
         //reset table state
         UIComponent table = FacesContext.getCurrentInstance().getViewRoot().findComponent(":form:cars");
         table.setValueExpression("sortBy", null);
-        
+
         //update columns
         createDynamicColumns();
     }
-    
+
     static public class ColumnModel implements Serializable {
 
         private String header;

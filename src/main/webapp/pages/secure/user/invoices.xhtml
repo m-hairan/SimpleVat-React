@@ -3,18 +3,72 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                template="/WEB-INF/sample_template.xhtml">
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Invoices</ui:define>
 
     <ui:define name="content">
-        <div class="ui-g">
-            <div class="ui-g-12">
-                <div class="card">
-                    <h1>Empty Page</h1>
-                    <p>Use this page to start from scratch and place your custom content.</p>
-                    <p:button outcome="dashboard" value="Home" style="display:inline-block;margin-top:5px"/>
+        <h:form id="form">
+            <div class="ui-g ">
+
+
+                <div class="ui-g-12">
+                    <div class="card card-w-title">
+                        <h1>Invoices</h1>
+                        <p:dataTable var="invoice" 
+                                     value="#{userInvoiceListController.getInvoices()}" 
+                                     selectionMode="single"
+                                     reflow="true"
+                                     rowIndexVar="index"
+                                     selection="#{userInvoiceListController.selectedInvoice}" 
+                                     rowKey="#{invoice.uuid}" 
+                                     paginator="true" rows="5">
+                            <f:facet name="header">
+                                Invoices
+                            </f:facet>
+                            <p:column headerText="Number" sortBy="#{invoice.invoiceNumber}">
+                                <h:outputText value="#{invoice.invoiceNumber}" />
+                            </p:column>
+
+                            <p:column headerText="Date" sortBy="#{invoice.date}">
+                                <h:outputText value="#{invoice.date.time}" >
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="Due Date" sortBy="#{invoice.dueDate}">
+                                <h:outputText value="#{invoice.dueDate.time}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="Cust. Name"
+                                      sortBy="#{invoice.customerUUID}">
+                                <h:outputText value="#{invoice.customerUUID}" />
+                            </p:column>
+                            <p:column headerText="No. of Items"
+                                      sortBy="#{invoice.invoiceItems.size()}">
+                                <h:outputText value="#{invoice.invoiceItems.size()}" />
+                            </p:column>
+                            <p:column headerText="Total Cost">
+                                <h:outputText value="USD #{300*index}" />
+                            </p:column>
+
+                            <p:column headerText="Action">
+                                <p:commandButton title="View Invoice"
+                                                 icon="ui-icon-search">
+                                </p:commandButton>
+                                <p:commandButton style="margin-left: 7px" 
+                                                 title="Delete Invoice" 
+                                                 icon="ui-icon-delete">
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
                 </div>
+
             </div>
-        </div>
+        </h:form>
 
     </ui:define>
 
