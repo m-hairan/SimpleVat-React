@@ -1,4 +1,4 @@
-package org.simplevat.bean.user;
+package org.simplevat.controller.user;
 
 import java.io.Serializable;
 import java.util.*;
@@ -7,6 +7,8 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.log4j.Logger;
 import org.simplevat.entity.user.Contact;
 import org.simplevat.service.user.ContactService;
@@ -15,20 +17,29 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-@ManagedBean(name = "contactDataGridBean")
+@ManagedBean(name = "contactListController")
 @ViewScoped
-public class ContactDataGridBean implements Serializable {
+public class ContactListController implements Serializable {
 
-	final static Logger logger = Logger.getLogger(ContactDataGridBean.class);
-	
+	final static Logger logger = Logger.getLogger(ContactListController.class);
+
+	@Getter
+    @Setter
 	private List<Contact> contacts;
 
+	@Getter
+    @Setter
     private List<Contact> filteredContacts;
 
+	@Getter
+    @Setter
     private String selectedFilter;
-	
+
+    @Getter
+    @Setter
 	private Contact selectedContact;
 
+    @Getter
 	private Map<String,String> filters;
 
 	@Qualifier("contactServiceImpl")
@@ -44,38 +55,6 @@ public class ContactDataGridBean implements Serializable {
 
     }
 
-    /**
-	 * @return the contacts
-	 */
-	public List<Contact> getContacts() {
-
-		if(logger.isDebugEnabled()){
-			logger.debug("Returning all contacts");
-		}
-		return contacts;
-	}
-
-	/**
-	 * @param contacts the contacts to set
-	 */
-	public void setContacts(List<Contact> contacts) {
-		this.contacts = contacts;
-	}
-
-	/**
-	 * @return the selectedContact
-	 */
-	public Contact getSelectedContact() {
-		return selectedContact;
-	}
-
-	/**
-	 * @param selectedContact the selectedContact to set
-	 */
-	public void setSelectedContact(Contact selectedContact) {
-		this.selectedContact = selectedContact;
-	}
-
     public Map<String, String> getFilters() {
         filters = new TreeMap<String, String>();
         Iterator<Contact> contactIterator = contacts.iterator();
@@ -85,22 +64,6 @@ public class ContactDataGridBean implements Serializable {
             logger.debug("Contact Filter Char :"+contact.getContactFirstName().substring(0,1));
         }
         return filters;
-    }
-
-    public List<Contact> getFilteredContacts() {
-        return filteredContacts;
-    }
-
-    public void setFilteredContacts(List<Contact> filteredContacts) {
-        this.filteredContacts = filteredContacts;
-    }
-
-    public String getSelectedFilter() {
-        return selectedFilter;
-    }
-
-    public void setSelectedFilter(String selectedFilter) {
-        this.selectedFilter = selectedFilter;
     }
 
     public void onContactFilterChange() {

@@ -3,6 +3,8 @@ package org.simplevat.entity.invoice;
 import java.math.BigDecimal;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -42,7 +44,7 @@ public class InvoiceItem extends AbstractDomain {
     /**
      * either in % or absolute.
      * It will be decided based on discountType
-     * @see org.simplevat.domain.user.InvoiceItem#getDiscountType().
+     *
      *
      */
     @Nullable

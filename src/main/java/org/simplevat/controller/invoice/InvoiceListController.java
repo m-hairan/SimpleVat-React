@@ -20,7 +20,7 @@ import org.springframework.stereotype.Controller;
 @ViewScoped
 @ManagedBean
 @Controller
-public class UserInvoiceListController implements Serializable {
+public class InvoiceListController implements Serializable {
 
     private static final long serialVersionUID = 9066359395680732884L;
 

@@ -5,6 +5,8 @@ package org.simplevat.service.user.impl;
 
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.simplevat.dao.user.ContactDao;
 import org.simplevat.entity.user.Contact;
 import org.simplevat.service.user.ContactService;
@@ -70,20 +72,5 @@ public class ContactServiceImpl implements ContactService {
 		
 		return contactDao.getContactbyId(contactId);
 	}
-
-	/**
-	 * @return the contactDao
-	 */
-	public ContactDao getContactDao() {
-		return contactDao;
-	}
-
-	/**
-	 * @param contactDao the contactDao to set
-	 */
-	public void setContactDao(ContactDao contactDao) {
-		this.contactDao = contactDao;
-	}
-
 
 }
