@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
+
+    <persistence-unit name="persistenceUnit">
+        <class>org.simplevat.entity.BankAccountEntity</class>
+        <class>org.simplevat.entity.BankAccountStatusEntity</class>
+        <class>org.simplevat.entity.BankFeedStatusEntity</class>
+        <class>org.simplevat.entity.CompanyEntity</class>
+        <class>org.simplevat.entity.CompanyTypeEntity</class>
+        <class>org.simplevat.entity.ContactEntity</class>
+        <class>org.simplevat.entity.CountryEntity</class>
+        <class>org.simplevat.entity.CurrencyEntity</class>
+        <class>org.simplevat.entity.ExpenseEntity</class>
+        <class>org.simplevat.entity.ImportedDraftTransactonEntity</class>
+        <class>org.simplevat.entity.InvoiceEntity</class>
+        <class>org.simplevat.entity.InvoiceLineItemEntity</class>
+        <class>org.simplevat.entity.LanguageEntity</class>
+        <class>org.simplevat.entity.ProjectEntity</class>
+        <class>org.simplevat.entity.RoleEntity</class>
+        <class>org.simplevat.entity.TransactionCategoryEntity</class>
+        <class>org.simplevat.entity.TransactionTypeEntity</class>
+        <class>org.simplevat.entity.TransactonEntity</class>
+        <class>org.simplevat.entity.UserEntity</class>
+        <properties>
+            <property name="hibernate.connection.url"
+                      value="jdbc:mysql://dev-simpalvat.c1suvjot86kl.us-west-2.rds.amazonaws.com:3306/simplevat"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+        </properties>
+    </persistence-unit>
+</persistence>

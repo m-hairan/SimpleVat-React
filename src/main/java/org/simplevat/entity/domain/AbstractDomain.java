@@ -16,7 +16,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public abstract class AbstractDomain implements Serializable {
+public abstract class AbstractDomain extends Object implements Serializable {
 
     private static final long serialVersionUID = 4773139730329730019L;
 
