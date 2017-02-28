@@ -20,9 +20,11 @@
         <h:outputScript name="js/swipe.js" library="ultima-layout" />
         <ui:insert name="head"/>
     </h:head>
+    
+    <f:loadBundle basename="JSFMessage" var="messages" />
 
     <h:body styleClass="main-body #{guestPreferences.compact ? 'layout-compact' : null}">
-        
+        <ui:param name="expenseMenuLink" value="/pages/secure/user/expenses" />
         <div class="layout-wrapper #{guestPreferences.menuLayout}">
             <ui:include src="./topbar.xhtml" />
             <ui:include src="./menu.xhtml" />
