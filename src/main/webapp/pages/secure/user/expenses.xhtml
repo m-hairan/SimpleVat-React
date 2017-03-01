@@ -1,0 +1,57 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">#{messages.label_expenses}</ui:define>
+
+    <ui:define name="content">
+        <h:form id="form">
+            <div class="ui-g ">
+                <div class="ui-g-12">
+                    <div class="card card-w-title">
+                        <h1>#{messages.label_expenses}</h1>
+                        <p:dataTable var="expensemodel" value="#{expenseListController.expenseList}" sortBy="#{expense.type}" rowExpandMode="single">
+                            <p:column style="width:16px">
+                                <p:rowToggler />
+                            </p:column>
+                            <p:column headerText="#{messages.label_type}">
+                                <h:outputText value="#{expensemodel.type}" />
+                            </p:column>
+                            <p:column headerText="#{messages.label_total}">
+                                <h:outputText value="#{expensemodel.totalExpense}" />
+                            </p:column>
+
+                            <p:rowExpansion>
+                                <p:dataTable var="expense" value="#{expenseListController.getTypeExpenseList(expensemodel.type)}" sortBy="#{expense.type}">
+                                    <p:column headerText="#{messages.label_year}">
+                                        <h:outputText value="#{expense.year}" />
+                                    </p:column>
+
+                                    <p:column headerText="#{messages.label_description}">
+                                        <h:outputText value="#{expense.description}" />
+                                    </p:column>
+
+                                    <p:column headerText="#{messages.label_created_date}">
+                                        <h:outputText value="#{expense.createdDate.time}" >
+                                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                                        </h:outputText>
+                                    </p:column>
+
+                                    <p:column headerText="#{messages.label_amount}">
+                                        <h:outputText value="#{expense.amount}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p:rowExpansion>
+                        </p:dataTable>
+                    </div>
+                </div>
+
+            </div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>
