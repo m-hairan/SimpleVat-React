@@ -32,7 +32,7 @@ public class InvoiceEntity {
     private int versionNumber;
     private ContactEntity contactByContactId;
     private ProjectEntity projectByProjectId;
-    private LanguageEntity languageByLanguageCode;
+    private Language languageByLanguageCode;
     private CurrencyEntity currencyByCurrencyCode;
     private Collection<InvoiceLineItemEntity> invoiceLineItemsByInvoiceId;
 
@@ -308,11 +308,11 @@ public class InvoiceEntity {
 
     @ManyToOne
     @JoinColumn(name = "LANGUAGE_CODE", referencedColumnName = "LANGUAGE_CODE")
-    public LanguageEntity getLanguageByLanguageCode() {
+    public Language getLanguageByLanguageCode() {
         return languageByLanguageCode;
     }
 
-    public void setLanguageByLanguageCode(LanguageEntity languageByLanguageCode) {
+    public void setLanguageByLanguageCode(Language languageByLanguageCode) {
         this.languageByLanguageCode = languageByLanguageCode;
     }
 

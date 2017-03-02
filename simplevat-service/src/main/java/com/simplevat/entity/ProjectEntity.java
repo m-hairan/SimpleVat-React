@@ -28,7 +28,7 @@ public class ProjectEntity {
     private Collection<ExpenseEntity> expensesByProjectId;
     private Collection<InvoiceEntity> invoicesByProjectId;
     private ContactEntity contactByContactId;
-    private LanguageEntity languageByInvoiceLanguageCode;
+    private Language languageByInvoiceLanguageCode;
     private CurrencyEntity currencyByCurrencyCode;
     private Collection<TransactionEntity> transactonsByProjectId;
 
@@ -252,11 +252,11 @@ public class ProjectEntity {
 
     @ManyToOne
     @JoinColumn(name = "INVOICE_LANGUAGE_CODE", referencedColumnName = "LANGUAGE_CODE")
-    public LanguageEntity getLanguageByInvoiceLanguageCode() {
+    public Language getLanguageByInvoiceLanguageCode() {
         return languageByInvoiceLanguageCode;
     }
 
-    public void setLanguageByInvoiceLanguageCode(LanguageEntity languageByInvoiceLanguageCode) {
+    public void setLanguageByInvoiceLanguageCode(Language languageByInvoiceLanguageCode) {
         this.languageByInvoiceLanguageCode = languageByInvoiceLanguageCode;
     }
 

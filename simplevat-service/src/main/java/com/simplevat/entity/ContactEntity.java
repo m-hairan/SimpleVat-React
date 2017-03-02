@@ -38,7 +38,7 @@ public class ContactEntity {
     private String deleteFlag;
     private int versionNumber;
     private CountryEntity countryByCountryCode;
-    private LanguageEntity languageByInvoiceLanguageCode;
+    private Language languageByInvoiceLanguageCode;
     private CurrencyEntity currencyByCurrencyCode;
     private Collection<InvoiceEntity> invoicesByContactId;
     private Collection<ProjectEntity> projectsByContactId;
@@ -403,11 +403,11 @@ public class ContactEntity {
 
     @ManyToOne
     @JoinColumn(name = "INVOICE_LANGUAGE_CODE", referencedColumnName = "LANGUAGE_CODE")
-    public LanguageEntity getLanguageByInvoiceLanguageCode() {
+    public Language getLanguageByInvoiceLanguageCode() {
         return languageByInvoiceLanguageCode;
     }
 
-    public void setLanguageByInvoiceLanguageCode(LanguageEntity languageByInvoiceLanguageCode) {
+    public void setLanguageByInvoiceLanguageCode(Language languageByInvoiceLanguageCode) {
         this.languageByInvoiceLanguageCode = languageByInvoiceLanguageCode;
     }
 

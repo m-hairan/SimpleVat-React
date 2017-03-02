@@ -2,6 +2,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:context="http://www.springframework.org/schema/context"
         xmlns:tx="http://www.springframework.org/schema/tx"
+
         xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
         http://www.springframework.org/schema/context
@@ -20,14 +21,15 @@
 				<value>com.mysql.jdbc.Driver</value>
 			</property>
 			<property name="url">
-				<value>jdbc:mysql://127.0.0.1:3306/simplevat</value>
+				<value>jdbc:mysql://dev-simpalvat.c1suvjot86kl.us-west-2.rds.amazonaws.com:3306/simplevat</value>
 			</property>
 			<property name="username">
-				<value>root</value>
+				<value>simplevat</value>
 			</property>
 			<property name="password">
-				<value>root</value>
+				<value>SimpleVat123$</value>
 			</property>
+
 		</bean> 
 
 	    <!-- Session Factory Declaration -->
@@ -40,16 +42,32 @@
 	        </property> -->
 	        <property name="annotatedClasses">
 	            <list>
-	                <value>com.simplevat.entity.TestEntity</value>
+	                <!--<value>com.simplevat.entity.TestEntity</value>-->
+                    <value>com.simplevat.entity.Language</value>
 	            </list>
 	        </property>
-	        <property name="hibernateProperties">
-	            <props>
-	                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-	                <prop key="hibernate.show_sql">true</prop>
-	                <prop key="hibernate.hbm2ddl.auto">update</prop>
-	            </props>
-	        </property>
+	        <!--<property name="hibernateProperties">-->
+	            <!--<props>-->
+	                <!--<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>-->
+	                <!--<prop key="hibernate.show_sql">true</prop>-->
+	                <!--<prop key="hibernate.hbm2ddl.auto">validate</prop>-->
+	            <!--</props>-->
+	        <!--</property>-->
+            <property name="hibernateProperties">
+                <props>
+                    <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                    <!--<prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>-->
+                    <!--<prop key="hibernate.implicit_naming_strategy">com.simplevat.util.CustomNamingStrategy</prop>-->
+                    <prop key="hibernate.format_sql">true</prop>
+                    <prop key="hibernate.hbm2ddl.auto">validate</prop>
+                    <prop key="hibernate.show_sql">true</prop>
+                    <prop key="hibernate.use_sql_comments">false</prop>
+                    <prop key="hibernate.id.new_generator_mappings">false</prop>
+                    <prop key="hibernate.enable_lazy_load_no_trans">true</prop>
+                    <prop key="hibernate.max_fetch_depth">1</prop>
+                    <prop key="hibernate.default_batch_fetch_size">16</prop>
+                </props>
+            </property>
 	    </bean>
 
 	    <!-- Enable the configuration of transactional behavior based on annotations -->
