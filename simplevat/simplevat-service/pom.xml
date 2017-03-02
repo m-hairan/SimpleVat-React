@@ -6,6 +6,11 @@
 	<artifactId>simplevat-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
+        <parent>
+            <groupId>com.simplevat</groupId>
+            <artifactId>simplevat</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </parent>
 
 	<name>simplevat-service</name>
 	<url>http://maven.apache.org</url>
