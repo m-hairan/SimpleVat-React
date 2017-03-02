@@ -1,0 +1,63 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.3.xsd
+        http://www.springframework.org/schema/tx 
+        http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+        <context:component-scan base-package="com.simplevat">
+			<context:include-filter type="regex" expression=".(service|dao).*.impl.*Impl.*"/>
+        </context:component-scan>
+        
+       <!-- Data Source Declaration -->
+	   <bean id="dataSource"
+			class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+			<property name="driverClassName">
+				<value>com.mysql.jdbc.Driver</value>
+			</property>
+			<property name="url">
+				<value>jdbc:mysql://127.0.0.1:3306/simplevat</value>
+			</property>
+			<property name="username">
+				<value>root</value>
+			</property>
+			<property name="password">
+				<value>root</value>
+			</property>
+		</bean> 
+
+	    <!-- Session Factory Declaration -->
+	    <bean id="SessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+	        <property name="dataSource" ref="dataSource" />
+	       <!-- <property name="packagesToScan">
+	            <list>
+	                <value>com.simplevat.entity</value>
+	            </list>
+	        </property> -->
+	        <property name="annotatedClasses">
+	            <list>
+	                <value>com.simplevat.entity.TestEntity</value>
+	            </list>
+	        </property>
+	        <property name="hibernateProperties">
+	            <props>
+	                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+	                <prop key="hibernate.show_sql">true</prop>
+	                <prop key="hibernate.hbm2ddl.auto">update</prop>
+	            </props>
+	        </property>
+	    </bean>
+
+	    <!-- Enable the configuration of transactional behavior based on annotations -->
+	    <tx:annotation-driven transaction-manager="txManager"/>
+
+	    <!-- Transaction Manager is defined -->
+	    <bean id="txManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+	        <property name="sessionFactory" ref="SessionFactory"/>
+	    </bean>
+        
+</beans>
