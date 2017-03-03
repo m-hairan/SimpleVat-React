@@ -2,15 +2,25 @@ package com.simplevat.dao.impl;
 
 import org.springframework.stereotype.Repository;
 
-import com.simplevat.dao.CommonDao;
 import com.simplevat.dao.ExpenseDao;
-import com.simplevat.entity.ExpenseEntity;
+import com.simplevat.entity.Expense;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 @Repository
-public class ExpenseDaoImpl extends CommonDao implements ExpenseDao  {
+@Transactional
+public class ExpenseDaoImpl implements ExpenseDao  {
 
-	public void saveExpense(ExpenseEntity expenseEntity) {
-		this.getSessionFactory().getCurrentSession().save(expenseEntity);
+	@PersistenceContext
+	private EntityManager entityManager;
+
+	public Expense saveExpense(Expense expense) {
+
+        entityManager.persist(expense);
+		return expense;
+
 	}
 
 }

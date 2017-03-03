@@ -1,25 +1,26 @@
-package com.simplevat.test;
+package com.simplevat.test.service;
 
+import com.simplevat.test.common.BaseManagerTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.simplevat.entity.ExpenseEntity;
+import com.simplevat.entity.Expense;
 import org.junit.Ignore;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 @Ignore
-public class ExpenseServiceTest extends BaseManagerTest {
+public class TestExpenseService extends BaseManagerTest {
 	
 	@Test
 	public void testSaveExpense(){
 		
-		ExpenseEntity expenseEntity = new ExpenseEntity();
-		expenseEntity.setExpenseDescription("test description");
+		Expense expense = new Expense();
+		expense.setExpenseDescription("test description");
 		
-		expenseService.saveExpense(expenseEntity);
+		Expense newExpense = expenseService.saveExpense(expense);
 	}
 
 }

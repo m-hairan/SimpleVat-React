@@ -1,4 +1,4 @@
-package com.simplevat.test;
+package com.simplevat.test.common;
 
 import org.junit.Test;
 import org.springframework.test.context.ContextConfiguration;

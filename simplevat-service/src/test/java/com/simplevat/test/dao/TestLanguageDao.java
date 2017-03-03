@@ -1,6 +1,7 @@
-package com.simplevat.test;
+package com.simplevat.test.dao;
 
 import com.simplevat.entity.Language;
+import com.simplevat.test.common.BaseManagerTest;
 import org.junit.Test;
 
 /**

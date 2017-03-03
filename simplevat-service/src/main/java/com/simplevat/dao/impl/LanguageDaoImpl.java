@@ -6,13 +6,19 @@ import com.simplevat.entity.Language;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 /**
  * Created by mohsin on 3/2/2017.
  */
 @Repository
-@Transactional
-public class LanguageDaoImpl extends CommonDao implements LanguageDao{
+public class LanguageDaoImpl implements LanguageDao{
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
     public Language getLanguageById(Integer languageId) {
-        return this.getSessionFactory().getCurrentSession().get(Language.class,languageId);
+        return this.entityManager.find(Language.class,languageId);
     }
 }

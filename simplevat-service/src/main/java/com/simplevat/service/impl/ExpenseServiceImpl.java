@@ -5,18 +5,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.simplevat.dao.ExpenseDao;
-import com.simplevat.entity.ExpenseEntity;
+import com.simplevat.entity.Expense;
 import com.simplevat.service.ExpenseService;
 
-@Service("expenseService")
-@Transactional(readOnly = true)
+@Service
 public class ExpenseServiceImpl implements ExpenseService  {
 
 	@Autowired
     public ExpenseDao expenseDao;
 	
-	public void saveExpense(ExpenseEntity expenseEntity) {
-		expenseDao.saveExpense(expenseEntity);
+	public Expense saveExpense(Expense expense) {
+		return expenseDao.saveExpense(expense);
 	}
 
 }

@@ -1,9 +1,9 @@
 package com.simplevat.dao;
 
-import com.simplevat.entity.ExpenseEntity;
+import com.simplevat.entity.Expense;
 
 public interface ExpenseDao {
 	
-	public void saveExpense(ExpenseEntity expenseEntity);
+	public Expense saveExpense(Expense expense);
 
 }

@@ -1,9 +1,9 @@
 package com.simplevat.service;
 
-import com.simplevat.entity.ExpenseEntity;
+import com.simplevat.entity.Expense;
 
 public interface ExpenseService {
 	
-	public void saveExpense(ExpenseEntity expenseEntity);
+	public Expense saveExpense(Expense expense);
 
 }

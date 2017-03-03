@@ -1,11 +1,12 @@
-package com.simplevat.test;
+package com.simplevat.test.common;
+import com.simplevat.dao.ExpenseDao;
 import com.simplevat.dao.LanguageDao;
+import com.simplevat.dao.RoleDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import com.simplevat.service.ExpenseService;
-import com.simplevat.service.TestService;
 
 @ContextConfiguration({"/spring/applicationContext.xml"})
 public abstract class BaseManagerTest extends AbstractJUnit4SpringContextTests {
@@ -14,10 +15,13 @@ public abstract class BaseManagerTest extends AbstractJUnit4SpringContextTests {
 	protected  ExpenseService expenseService;
 	
 	@Autowired
-	protected  TestService testService;
+	protected LanguageDao languageDao;
 
 	@Autowired
-	protected LanguageDao languageDao;
+	protected RoleDao roleDao;
+
+	@Autowired
+	protected ExpenseDao expenseDao;
 	
 
 }
