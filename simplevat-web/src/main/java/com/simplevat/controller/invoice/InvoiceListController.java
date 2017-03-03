@@ -1,15 +1,15 @@
-package org.simplevat.controller.invoice;
+package com.simplevat.controller.invoice;
 
+import com.simplevat.entity.Invoice;
 import java.io.Serializable;
 import java.util.List;
-import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import lombok.Getter;
 import lombok.Setter;
-import org.simplevat.entity.invoice.Invoice;
-import org.simplevat.service.invoice.InvoiceService;
+import com.simplevat.service.InvoiceService;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -24,7 +24,6 @@ public class InvoiceListController implements Serializable {
 
     private static final long serialVersionUID = 9066359395680732884L;
 
-    @Nonnull
     @Getter
     @Setter
     private List<Invoice> invoices;
@@ -38,7 +37,8 @@ public class InvoiceListController implements Serializable {
 
     @PostConstruct
     public void listAllInvoices() {
-        this.setInvoices(invoiceService.getInvoices());
+        List<Invoice> invoices = invoiceService.getInvoices();
+        this.setInvoices(new ArrayList<Invoice>());
     }
 
 }
