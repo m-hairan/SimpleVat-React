@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.simplevat.com</groupId>
+    <groupId>com.simplevat</groupId>
     <artifactId>simplevat-web</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
@@ -23,6 +23,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>simplevat-service</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
@@ -52,45 +57,13 @@
             <artifactId>el-api</artifactId>
             <version>2.2</version>
         </dependency>
-
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
         
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-aspects</artifactId>
+            <artifactId>spring-test</artifactId>
             <version>${spring.version}</version>
+            <scope>test</scope>
         </dependency>
-        
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-
-        <!-- Persistance API -->
-
-        <!-- https://mvnrepository.com/artifact/javax.persistence/persistence-api -->
-        <dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>persistence-api</artifactId>
-            <version>1.0.2</version>
-        </dependency>
-
 
         <!-- https://mvnrepository.com/artifact/javax/javaee-api -->
         <!--<dependency>-->
@@ -150,30 +123,11 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.14.8</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api 
-        -->
-        <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-            <version>3.0.1</version>
-        </dependency>
-
+        
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
             <version>1.10.19</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -200,14 +154,6 @@
         <!-- Testing dependencies ends -->
 
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>prime-repo</id>
-            <name>PrimeFaces Maven Repository</name>
-            <url>http://repository.primefaces.org</url>
-        </repository>
-    </repositories>
 
     <build>
         <plugins>

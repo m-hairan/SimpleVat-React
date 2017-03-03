@@ -1,4 +1,4 @@
-package org.simplevat.entity.invoice;
+package com.simplevat.util;
 
 /**
  *

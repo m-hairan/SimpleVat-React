@@ -1,14 +1,11 @@
 package com.simplevat.entity;
 
-import com.simplevat.entity.Contact;
-import com.simplevat.entity.Currency;
-import com.simplevat.entity.Language;
+import java.io.Serializable;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.Collection;
 
 /**
  * Created by mohsinh on 2/26/2017.
@@ -16,7 +13,10 @@ import java.util.Collection;
 @Entity
 @Table(name = "INVOICE")
 @Data
-public class Invoice {
+public class Invoice implements Serializable {
+
+    private static final long serialVersionUID = -8324261801367612269L;
+    
     @Id
     @Column(name = "INVOICE_ID")
     private int invoiceId;
