@@ -1,4 +1,5 @@
 package com.simplevat.test.common;
+import com.simplevat.dao.ContactDao;
 import com.simplevat.dao.ExpenseDao;
 import com.simplevat.dao.LanguageDao;
 import com.simplevat.dao.RoleDao;
@@ -22,6 +23,9 @@ public abstract class BaseManagerTest extends AbstractJUnit4SpringContextTests {
 
 	@Autowired
 	protected ExpenseDao expenseDao;
+
+	@Autowired
+	protected ContactDao contactDao;
 	
 
 }

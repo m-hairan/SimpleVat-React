@@ -11,7 +11,6 @@ import org.junit.Ignore;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
-@Ignore
 public class TestExpenseService extends BaseManagerTest {
 	
 	@Test

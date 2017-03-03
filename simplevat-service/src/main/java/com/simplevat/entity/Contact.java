@@ -10,6 +10,13 @@ import java.util.Collection;
 /**
  * Created by mohsinh on 2/26/2017.
  */
+
+@NamedQueries({
+        @NamedQuery(name="paginatedContacts",
+                query="SELECT c " +
+                        "FROM Contact c ")
+})
+
 @Entity
 @Table(name = "CONTACT")
 @Data
