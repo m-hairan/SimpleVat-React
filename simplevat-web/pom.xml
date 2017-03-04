@@ -65,41 +65,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/javax/javaee-api -->
-        <!--<dependency>-->
-        <!--<groupId>javax</groupId>-->
-        <!--<artifactId>javaee-api</artifactId>-->
-        <!--<version>7.0</version>-->
-        <!--</dependency>-->
 
-
-        <!-- Persistance API -->
-        
-        <!-- JSON Processing dependencies starts-->
-
-        <!--<dependency>-->
-        <!--<groupId>com.fasterxml.jackson.core</groupId>-->
-        <!--<artifactId>jackson-core</artifactId>-->
-        <!--<version>2.8.5</version>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-        <!--<groupId>com.fasterxml.jackson.core</groupId>-->
-        <!--<artifactId>jackson-annotations</artifactId>-->
-        <!--<version>2.8.5</version>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-        <!--<groupId>com.fasterxml.jackson.core</groupId>-->
-        <!--<artifactId>jackson-databind</artifactId>-->
-        <!--<version>2.8.5</version>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-        <!--<groupId>log4j</groupId>-->
-        <!--<artifactId>log4j</artifactId>-->
-        <!--<version>1.2.17</version>-->
-        <!--</dependency>-->
         <!-- from java.util.logging to log4j -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -136,20 +102,6 @@
             <version>3.0.1</version>
             <scope>test</scope>
         </dependency>
-
-        <!--<dependency>-->
-        <!--<groupId>com.jayway.jsonpath</groupId>-->
-        <!--<artifactId>json-path</artifactId>-->
-        <!--<version>2.0.0</version>-->
-        <!--<scope>test</scope>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-        <!--<groupId>com.jayway.jsonpath</groupId>-->
-        <!--<artifactId>json-path-assert</artifactId>-->
-        <!--<version>2.0.0</version>-->
-        <!--<scope>test</scope>-->
-        <!--</dependency>-->
 
         <!-- Testing dependencies ends -->
 
@@ -189,7 +141,7 @@
                 <configuration>
                     <webResources>
                         <resource>
-                            <directory>${build.sourceDirectory}</directory>
+                            <directory>${project.build.sourceDirectory}</directory>
                             <targetPath>sources</targetPath>
                         </resource>
                     </webResources>
@@ -239,28 +191,6 @@
                     </plugin>
 
                     <plugin>
-                        <groupId>org.zeroturnaround</groupId>
-                        <artifactId>jrebel-maven-plugin</artifactId>
-                        <version>1.1.1</version>
-                        <configuration>
-                            <rebelXmlDirectory>src/main/resources</rebelXmlDirectory>
-                            <addResourcesDirToRebelXml>true</addResourcesDirToRebelXml>
-                            <showGenerated>true</showGenerated>
-                            <alwaysGenerate>true</alwaysGenerate>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>generate-rebel-xml</id>
-
-                                <phase>process-resources</phase>
-                                <goals>
-                                    <goal>generate</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
                         <version>3.6.0</version>
@@ -269,16 +199,16 @@
                             <target>1.8</target>
                         </configuration>
                     </plugin>
-                    <!--                     <plugin>
-                                           <groupId>org.apache.tomcat.maven</groupId>
-                                           <artifactId>tomcat7-maven-plugin</artifactId>
-                                           <version>2.2</version>
-                                           <configuration>
-                                               <server>tomcat-development-server</server>
-                                               <port>9966</port>
-                                           </configuration>
-                                       </plugin>
-                    -->
+                  <plugin>
+                       <groupId>org.apache.tomcat.maven</groupId>
+                       <artifactId>tomcat7-maven-plugin</artifactId>
+                       <version>2.2</version>
+                       <configuration>
+                           <server>tomcat-development-server</server>
+                           <port>9966</port>
+                       </configuration>
+                   </plugin>
+
                 </plugins>
             </build>
         </profile>

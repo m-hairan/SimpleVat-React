@@ -1,4 +1,4 @@
-package org.simplevat.controller.user;
+package com.simplevat.controller.contact;
 
 import java.io.Serializable;
 import java.util.*;
@@ -7,21 +7,27 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import com.simplevat.entity.Contact;
+import com.simplevat.service.ContactService;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.log4j.Logger;
-import org.simplevat.entity.user.Contact;
-import org.simplevat.service.user.ContactService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
-@Component
-@ManagedBean(name = "contactListController")
+@Controller
+@ManagedBean
 @ViewScoped
 public class ContactListController implements Serializable {
 
 	final static Logger logger = Logger.getLogger(ContactListController.class);
+
+    @Getter
+    @Setter
+	private String welcomeMSG = "Welcome Mohsin";
 
 	@Getter
     @Setter
@@ -42,7 +48,7 @@ public class ContactListController implements Serializable {
     @Getter
 	private Map<String,String> filters;
 
-	@Qualifier("contactServiceImpl")
+
 	@Autowired
 	private ContactService contactService;
 	
@@ -50,8 +56,9 @@ public class ContactListController implements Serializable {
 	@PostConstruct
     public void init() {
 
-		this.contacts = contactService.getContacts();
+		this.contacts = contactService.getContacts(new Integer(1), new Integer(50));
 		this.filteredContacts = this.contacts;
+        logger.debug("Fetched Contacts :"+contacts.size());
 
     }
 
@@ -60,8 +67,8 @@ public class ContactListController implements Serializable {
         Iterator<Contact> contactIterator = contacts.iterator();
         while (contactIterator.hasNext()) {
             Contact contact = contactIterator.next();
-            filters.put(contact.getContactFirstName().substring(0,1).toUpperCase(),contact.getContactFirstName().substring(0,1).toUpperCase());
-            logger.debug("Contact Filter Char :"+contact.getContactFirstName().substring(0,1));
+            filters.put(contact.getFirstName().substring(0,1).toUpperCase(),contact.getLastName().substring(0,1).toUpperCase());
+            logger.debug("Contact Filter Char :"+contact.getFirstName().substring(0,1));
         }
         return filters;
     }
@@ -70,7 +77,7 @@ public class ContactListController implements Serializable {
         if(logger.isDebugEnabled()){
             logger.debug("Changing Filter to :"+this.selectedFilter);
         }
-        this.contacts = contactService.getContacts();
+        this.contacts = contactService.getContacts(new Integer(1), new Integer(50));
 	    if (this.selectedFilter == null || this.selectedFilter.isEmpty()) {
             this.filteredContacts = contacts;
         }
@@ -88,7 +95,7 @@ public class ContactListController implements Serializable {
         Iterator<Contact> contactIterator = contacts.iterator();
         while (contactIterator.hasNext()) {
             Contact contact = contactIterator.next();
-            if (contact.getContactFirstName().substring(0,1).toUpperCase().equals(filterChar.toUpperCase())) {
+            if (contact.getFirstName().substring(0,1).toUpperCase().equals(filterChar.toUpperCase())) {
                 returnContacts.add(contact);
             }
         }

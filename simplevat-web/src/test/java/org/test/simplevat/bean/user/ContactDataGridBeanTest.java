@@ -22,7 +22,7 @@ import org.junit.Ignore;
 @ContextConfiguration("classpath:spring/applicationContext.xml")
 public class ContactDataGridBeanTest {
 
-    @Qualifier("contactServiceImpl")
+
     @Autowired
     private ContactService contactService;
 

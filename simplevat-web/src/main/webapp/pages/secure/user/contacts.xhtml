@@ -46,7 +46,7 @@
                 <div class="ui-g-12">
                     <!-- Left Side -->
                     <div class="card card-w-title">
-                        <h1>Contacts</h1>
+                        <h1>Contacts<h:outputText value="#{contactListController.welcomeMSG}" styleClass="phone"/>Message End</h1>
                         <p:dataGrid var="contact" value="#{contactListController.filteredContacts}" columns="6" layout="grid"
                                     paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                     rowsPerPageTemplate="6,12,18"
