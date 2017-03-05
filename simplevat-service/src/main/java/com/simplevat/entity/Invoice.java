@@ -27,7 +27,7 @@ public class Invoice implements Serializable {
     @Column(name = "INVOICE_DATE")
     private Date invoiceDate;
     @Basic
-    @Column(name = "INVOICE_DUE_ON")
+    @Column(name = "INVOICE_DUE_IN_DAYS")
     private Integer invoiceDueOn;
     @Basic
     @Column(name = "INVOICE_TEXT")
