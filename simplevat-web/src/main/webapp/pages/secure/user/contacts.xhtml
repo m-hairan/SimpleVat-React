@@ -46,25 +46,24 @@
                 <div class="ui-g-12">
                     <!-- Left Side -->
                     <div class="card card-w-title">
-                        <h1>Contacts<h:outputText value="#{contactListController.welcomeMSG}" styleClass="phone"/>Message End</h1>
+                        <h1>Contacts</h1>
                         <p:dataGrid var="contact" value="#{contactListController.filteredContacts}" columns="6" layout="grid"
                                     paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                    rowsPerPageTemplate="6,12,18"
+                                    rowsPerPageTemplate="6,12,18,24"
                                     rows="18" id="contacts">
                             <f:facet name="header">
                                 <p:selectOneButton id="filterChar" value="#{contactListController.selectedFilter}">
                                     <p:ajax listener="#{contactListController.onContactFilterChange}" update="contacts" />
-                                    <!--<f:converter converterId="javax.faces.Boolean" />-->
                                     <f:selectItem itemLabel="All" itemValue="" />
                                     <f:selectItems value="#{contactListController.filters}" />
                                 </p:selectOneButton>
                             </f:facet>
 							<div class="contacts">
-                            <p:panel header="#{contact.contactFirstName} #{contact.contactLastName}" style="text-align:center">
+                            <p:panel header="#{contact.firstName} #{contact.lastName}" style="text-align:center">
                                 <h:panelGrid columns="1" style="width:100%">
-                                    <p:graphicImage name="images/#{contact.contactImage}" library="ultima-layout" width="45"/>
-                                    <h:outputText value="#{contact.contactPhone}" styleClass="phone"/>
-                                    <h:outputText value="#{contact.contactEmail}" styleClass="email"/>
+                                    <p:graphicImage name="images/user-avtar-icon2.png" library="ultima-layout" width="45"/>
+                                    <h:outputText value="#{contact.telephone}" styleClass="phone"/>
+                                    <h:outputText value="#{contact.email}" styleClass="email"/>
 
                                     <h:panelGrid columns="2" style="margin: 0 auto">
                                         <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" update=":form:selectedContactDetail" oncomplete="PF('contactDialog').show()">
@@ -85,20 +84,20 @@
                             <p:outputPanel id="selectedContactDetail" style="text-align:center;">
                                 <p:panelGrid  columns="2" rendered="#{not empty contactListController.selectedContact}" columnClasses="label,value">
                                     <f:facet name="header">
-                                        <p:graphicImage name="images/#{contactListController.selectedContact.contactImage}" library="ultima-layout" width="250"/>
+                                        <p:graphicImage name="images/#{contactListController.selectedContact.versionNumber}" library="ultima-layout" width="250"/>
                                     </f:facet>
 
                                     <h:outputText value="Id:" />
                                     <h:outputText value="#{contactListController.selectedContact.contactId}" />
 
                                     <h:outputText value="First Name:" />
-                                    <h:outputText value="#{contactListController.selectedContact.contactFirstName}" />
+                                    <h:outputText value="#{contactListController.selectedContact.firstName}" />
 
                                     <h:outputText value="Last Name:" />
-                                    <h:outputText value="#{contactListController.selectedContact.contactLastName}" />
+                                    <h:outputText value="#{contactListController.selectedContact.lastName}" />
 
                                     <h:outputText value="Email" />
-                                    <h:outputText value="\$#{contactListController.selectedContact.contactEmail}" />
+                                    <h:outputText value="\$#{contactListController.selectedContact.email}" />
                                 </p:panelGrid>
                             </p:outputPanel>
                         </p:dialog>

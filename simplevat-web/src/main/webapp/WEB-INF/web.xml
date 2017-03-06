@@ -119,4 +119,27 @@
         <extension>svg#fontawesomeregular</extension>
         <mime-type>image/svg+xml</mime-type>
     </mime-mapping>
+
+    <!-- Error Page -->
+
+    <error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/pages/public/common/error.xhtml</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.sql.SQLException</exception-type>
+        <location>/pages/public/common/error.xhtml</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.RuntimeException</exception-type>
+        <location>/pages/public/common/error.xhtml</location>
+    </error-page>
+
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/pages/public/common/error.xhtml</location>
+    </error-page>
+
+
+
 </web-app>

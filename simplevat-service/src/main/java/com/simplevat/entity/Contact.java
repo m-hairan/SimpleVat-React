@@ -12,7 +12,7 @@ import java.util.Collection;
  */
 
 @NamedQueries({
-        @NamedQuery(name="paginatedContacts",
+        @NamedQuery(name="allContacts",
                 query="SELECT c " +
                         "FROM Contact c ")
 })

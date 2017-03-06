@@ -19,9 +19,15 @@ public class ContactDaoImpl implements ContactDao {
     private EntityManager entityManager;
 
     public List<Contact> getContacts(Integer pageIndex, Integer noOfRecorgs) {
-        List<Contact> contacts = entityManager.createNamedQuery("paginatedContacts",Contact.class)
+        List<Contact> contacts = entityManager.createNamedQuery("allContacts",Contact.class)
                 .setMaxResults(noOfRecorgs)
                 .setFirstResult(pageIndex * noOfRecorgs).getResultList();
+        return contacts;
+    }
+
+    @Override
+    public List<Contact> getContacts() {
+        List<Contact> contacts = entityManager.createNamedQuery("allContacts",Contact.class).getResultList();
         return contacts;
     }
 }

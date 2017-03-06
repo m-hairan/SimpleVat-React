@@ -6,6 +6,7 @@ import com.simplevat.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +21,12 @@ public class ContactServiceImpl implements ContactService {
     private ContactDao contactDao;
 
     public List<Contact> getContacts(Integer pageIndex, Integer noOfRecorgs) {
-        return contactDao.getContacts(pageIndex,noOfRecorgs);
+
+        return this.contactDao.getContacts(pageIndex,noOfRecorgs);
+    }
+
+    @Override
+    public List<Contact> getContacts() {
+        return this.contactDao.getContacts();
     }
 }

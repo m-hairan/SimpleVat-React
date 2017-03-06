@@ -10,4 +10,6 @@ import java.util.List;
 public interface ContactDao {
 
     public List<Contact> getContacts(Integer pageIndex, Integer noOfRecorgs);
+
+    public List<Contact> getContacts();
 }

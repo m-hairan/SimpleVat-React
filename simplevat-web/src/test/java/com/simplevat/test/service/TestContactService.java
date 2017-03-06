@@ -15,7 +15,9 @@ public class TestContactService extends BaseManagerTest {
     @Test
     public void testGetContacts()
     {
-        List<Contact> contacts = this.contactService.getContacts(new Integer(1), new Integer(20));
+        List<Contact> contacts = this.contactService.getContacts(new Integer(0), new Integer(20));
+
+        System.out.println(" Size of contacts :" + contacts.size());
 
         Iterator<Contact> contactIterator = contacts.iterator();
         while(contactIterator.hasNext())
