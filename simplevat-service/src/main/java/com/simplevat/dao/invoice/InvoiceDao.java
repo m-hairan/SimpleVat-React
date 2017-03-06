@@ -1,6 +1,6 @@
-package com.simplevat.dao;
+package com.simplevat.dao.invoice;
 
-import com.simplevat.entity.Invoice;
+import com.simplevat.entity.invoice.Invoice;
 import java.util.List;
 
 /**
@@ -12,5 +12,7 @@ public interface InvoiceDao {
     Invoice getInvoice(String invoice);
 
     List<Invoice> getInvoices();
+    
+    void saveInvoice(Invoice invoice);
 
 }

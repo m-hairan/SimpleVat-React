@@ -1,6 +1,6 @@
-package com.simplevat.entity;
+package com.simplevat.entity.invoice;
 
-import com.simplevat.entity.Invoice;
+import com.simplevat.entity.invoice.Invoice;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -15,6 +15,7 @@ import java.sql.Date;
 @Data
 public class InvoiceLineItem {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "INVOICE_LINE_ITEM_ID")
     private int invoiceLineItemId;
     @Basic

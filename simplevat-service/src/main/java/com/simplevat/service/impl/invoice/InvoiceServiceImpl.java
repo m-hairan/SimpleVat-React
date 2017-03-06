@@ -1,9 +1,9 @@
-package com.simplevat.service.impl;
+package com.simplevat.service.impl.invoice;
 
 import java.util.List;
-import com.simplevat.dao.InvoiceDao;
-import com.simplevat.entity.Invoice;
-import com.simplevat.service.InvoiceService;
+import com.simplevat.dao.invoice.InvoiceDao;
+import com.simplevat.entity.invoice.Invoice;
+import com.simplevat.service.invoice.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +25,11 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public Invoice getInvoice(String invoiceUUID) {
         return invoiceDao.getInvoice(invoiceUUID);
+    }
+    
+    @Override
+    public void saveInvoice(Invoice invoice){
+        invoiceDao.saveInvoice(invoice);
     }
 
 }

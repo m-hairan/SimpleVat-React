@@ -9,6 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import com.simplevat.service.ExpenseService;
+import com.simplevat.service.invoice.InvoiceService;
 
 @ContextConfiguration({"/spring/applicationContext.xml"})
 public abstract class BaseManagerTest extends AbstractJUnit4SpringContextTests {
@@ -30,5 +31,8 @@ public abstract class BaseManagerTest extends AbstractJUnit4SpringContextTests {
 
 	@Autowired
 	protected ContactService contactService;
+        
+        @Autowired
+        protected InvoiceService invoiceService;
 
 }

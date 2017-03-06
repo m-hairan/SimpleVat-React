@@ -10,8 +10,6 @@
     <ui:define name="content">
         <h:form id="form">
             <div class="ui-g ">
-
-
                 <div class="ui-g-12">
                     <div class="card card-w-title">
                         <h1>Invoices</h1>
@@ -21,34 +19,34 @@
                                      reflow="true"
                                      rowIndexVar="index"
                                      selection="#{invoiceListController.selectedInvoice}"
-                                     rowKey="#{invoice.uuid}" 
+                                     rowKey="#{invoice.invoiceId}" 
                                      paginator="true" rows="5">
                             <f:facet name="header">
                                 Invoices
                             </f:facet>
-                            <p:column headerText="Number" sortBy="#{invoice.invoiceNumber}">
-                                <h:outputText value="#{invoice.invoiceNumber}" />
+                            <p:column headerText="Number" sortBy="#{invoice.invoiceReferenceNumber}">
+                                <h:outputText value="#{invoice.invoiceReferenceNumber}" />
                             </p:column>
 
-                            <p:column headerText="Date" sortBy="#{invoice.date}">
-                                <h:outputText value="#{invoice.date.time}" >
+                            <p:column headerText="Date" sortBy="#{invoice.invoiceDate.time}">
+                                <h:outputText value="#{invoice.invoiceDate.time}" >
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
                                 </h:outputText>
                             </p:column>
 
-                            <p:column headerText="Due Date" sortBy="#{invoice.dueDate}">
-                                <h:outputText value="#{invoice.dueDate.time}">
+                            <p:column headerText="Due Date" sortBy="#{invoice.invoiceDueDate.time}">
+                                <h:outputText value="#{invoice.invoiceDueDate.time}">
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
                                 </h:outputText>
                             </p:column>
 
-                            <p:column headerText="Cust. Name"
-                                      sortBy="#{invoice.customerUUID}">
-                                <h:outputText value="#{invoice.customerUUID}" />
+                            <p:column headerText="Contact Name"
+                                      sortBy="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}">
+                                <h:outputText value="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}" />
                             </p:column>
                             <p:column headerText="No. of Items"
-                                      sortBy="#{invoice.invoiceItems.size()}">
-                                <h:outputText value="#{invoice.invoiceItems.size()}" />
+                                      sortBy="#{invoice.invoiceLineItems.size()}">
+                                <h:outputText value="#{invoice.invoiceLineItems.size()}" />
                             </p:column>
                             <p:column headerText="Total Cost">
                                 <h:outputText value="USD #{300*index}" />
