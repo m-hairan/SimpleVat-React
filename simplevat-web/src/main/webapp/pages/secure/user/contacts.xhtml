@@ -52,7 +52,6 @@
                             <f:facet name="left">
                                 <p:commandButton type="button" value="New" icon="ui-icon-plus" />
 
-                                <p:commandButton type="button" value="Update" icon="ui-icon-update" />
 
                                 <span class="ui-separator" style="padding-right: 5px;">
                                     <span class="fa fa-ellipsis-v SoftGray" />
@@ -60,13 +59,11 @@
 
                                 <p:commandButton type="button" title="Import/Export" icon="ui-icon-import-export" />
                                 <p:commandButton type="button" title="Delete" icon="ui-icon-delete" />
-                                <!--<p:commandButton type="button" title="Print" icon="ui-icon-print" />-->
                             </f:facet>
 
                             <f:facet name="right">
                                 <p:menuButton value="Options">
                                     <p:menuitem value="Import/Export" icon="ui-icon-import-export"/>
-                                    <p:menuitem value="Update" icon="ui-icon-update"/>
                                     <p:menuitem value="Delete" icon="ui-icon-delete"/>
                                     <p:separator />
                                     <p:menuitem value="Homepage" outcome="/pages/secure/user/home" icon="ui-icon-home"/>
@@ -79,7 +76,7 @@
                         <p:dataGrid var="contact" value="#{contactListController.filteredContacts}" columns="6" layout="grid"
                                     paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                     rowsPerPageTemplate="6,12,18,24"
-                                    rows="18" id="contacts" selection="#{contactListController.selectedContacts}" rowKey="#{contact.contactId}">
+                                    rows="18" id="contacts">
                             <f:facet name="header">
 
                                 <p:selectOneButton id="filterChar" value="#{contactListController.selectedFilter}">
