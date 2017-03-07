@@ -25,6 +25,10 @@ public class ContactListController implements Serializable {
 
 	@Getter
     @Setter
+    private Map<Long, Boolean> selectedContactIds = new HashMap<Long, Boolean>();
+
+	@Getter
+    @Setter
     private List<Contact> contacts;
 
 	@Getter
@@ -38,6 +42,10 @@ public class ContactListController implements Serializable {
     @Getter
     @Setter
 	private Contact selectedContact;
+
+    @Getter
+    @Setter
+    private List<Contact> selectedContacts;
 
     @Setter
 	private Map<String,String> filters;
