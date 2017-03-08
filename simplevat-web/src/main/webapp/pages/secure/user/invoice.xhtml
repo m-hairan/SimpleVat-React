@@ -1,0 +1,70 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Invoices</ui:define>
+    <ui:define name="content">
+        <h:form id="invoice">
+            <div class="card card-w-title">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <h1>New Invoice</h1>
+                            <p:panelGrid columns="2" 
+                                         columnClasses="ui-grid-col-2,ui-grid-col-4" 
+                                         layout="grid" 
+                                         styleClass="ui-panelgrid-blank form-group" 
+                                         style="border:0px none; background-color:transparent;">
+                                <p:outputLabel for="invoiceId" value="Invoice Ref No."/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputText id="invoiceId"/>
+                                </h:panelGroup>
+                            </p:panelGrid>
+                            <p:panelGrid columns="4" 
+                                         columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" 
+                                         layout="grid" 
+                                         styleClass="ui-panelgrid-blank form-group" 
+                                         style="border:0px none; background-color:transparent;">
+                                <p:outputLabel for="conatcts" value="Contact"/>
+                                <p:selectOneMenu id="conatcts" 
+                                                 style="margin-bottom:10px;">
+                                    <f:selectItem itemLabel="Select Contact" itemValue="#{null}" />
+                                    <f:selectItem itemLabel="Contact 1" itemValue="#{null}" />
+
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="project" value="Project"/>
+                                <p:selectOneMenu id="project" 
+                                                 style="margin-bottom:10px;">
+                                    <f:selectItem itemLabel="Select Project" itemValue="#{null}" />
+                                    <f:selectItem itemLabel="Project 1" itemValue="#{null}" />
+
+                                </p:selectOneMenu>
+                                <p:outputLabel for="invoiceDate" value="Invoice Date" />
+                                <p:calendar id="invoiceDate" readonlyInput="true" />
+                                <p:outputLabel for="invoiceDueOn" value="Invoice Due On" />
+                                <p:inputText id="invoiceDueOn" placeholder="In Days" />
+                            </p:panelGrid>
+                        </div>
+                    </div>
+                </div>
+
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:button value="Save" icon="ui-icon-save" outcome="/pages/secure/user/invoices" />
+                        <p:button  value="Save &amp; Add More" icon="ui-icon-more" outcome="/pages/secure/user/invoice" />
+                    </f:facet>
+                    <f:facet name="right">
+                        <p:button value="Cancel" icon="ui-icon-cancel" outcome="/pages/secure/user/invoices"/>
+                        <p:button  title="Home" icon="ui-icon-home" outcome="/pages/secure/user/home"/>
+                    </f:facet>
+
+                </p:toolbar>
+            </div>
+
+        </h:form>
+    </ui:define>
+</ui:composition>
