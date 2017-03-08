@@ -1,0 +1,167 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">New Contact</ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            <div class="card card-w-title">
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+                            <h1>New Contact</h1>
+                            <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                <p:outputLabel for="firstName" value="First Name"/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputText id="firstName"/>
+                                    <label>First Name</label>
+                                </h:panelGroup>
+
+                                <p:outputLabel for="middleName" value="Middle Name"/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputText id="middleName"/>
+                                    <label>Middle Name</label>
+                                </h:panelGroup>
+
+                                <p:outputLabel for="lastName" value="Last Name"/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputText id="lastName"/>
+                                    <label>Last Name</label>
+                                </h:panelGroup>
+
+                                <p:outputLabel for="organizationName" value="Organization Name"/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputText id="organizationName"/>
+                                    <label>Organization Name</label>
+                                </h:panelGroup>
+
+                                <p:outputLabel for="email" value="Email"/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputText id="email"/>
+                                    <label>Email</label>
+                                </h:panelGroup>
+
+                                <p:outputLabel for="billingEmail" value="Billing Email"/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputText id="billingEmail"/>
+                                    <label>Billing Email</label>
+                                </h:panelGroup>
+
+                                <p:outputLabel for="telephone" value="Telephone"/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputMask id="telephone" mask="09 999 9999"/>
+                                    <label>Telephone</label>
+                                </h:panelGroup>
+
+                                <p:outputLabel for="mobileNumber" value="Mobile Number"/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputMask id="mobileNumber" mask="+971 99 999 9999"/>
+                                    <label>Mobile Number</label>
+                                </h:panelGroup>
+
+                                <p:outputLabel for="addressLine1" value="Address Line"/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputText id="addressLine1"/>
+                                    <label>Address Line1</label>
+                                </h:panelGroup>
+
+                                <p:outputLabel for="country" value="Country"/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:autoComplete id="country" completeMethod="#{autoCompleteView.completeText}" />
+                                    <label>Country</label>
+                                </h:panelGroup>
+
+                                <p:outputLabel />
+
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputText id="addressLine2"/>
+                                    <label>Address Line2</label>
+                                </h:panelGroup>
+
+                                <p:outputLabel for="state" value="State"/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:autoComplete id="state" completeMethod="#{autoCompleteView.completeText}" />
+                                    <label>State</label>
+                                </h:panelGroup>
+
+                                <p:outputLabel />
+
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputText id="addressLine3"/>
+                                    <label>Address Line3</label>
+                                </h:panelGroup>
+
+                                <p:outputLabel for="city" value="City"/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                <p:autoComplete id="city" completeMethod="#{autoCompleteView.completeText}" />
+                                    <label>City</label>
+                                </h:panelGroup>
+
+                                <p:outputLabel for="poBoxNumber" value="Po Box Number"/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputText id="poBoxNumber" />
+                                    <label>Po Box Number</label>
+                                </h:panelGroup>
+
+                                <p:outputLabel for="postZipCode" value="Post Zip Code"/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputText id="postZipCode" />
+                                    <label>Post Zip Code</label>
+                                </h:panelGroup>
+
+                                <p:outputLabel for="contractPoNumber" value="Contract Po Number"/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputText id="contractPoNumber" />
+                                    <label>Contract Po Number</label>
+                                </h:panelGroup>
+
+                                <p:outputLabel for="vatRegistrationNumber" value="Vat Registration Number"/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputText id="vatRegistrationNumber" />
+                                    <label>Vat Registration Number</label>
+                                </h:panelGroup>
+
+                                <p:outputLabel for="invoiceLanguageCode" value="Invoice Language"/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:autoComplete id="invoiceLanguageCode" completeMethod="#{autoCompleteView.completeText}" />
+                                    <label>Invoice Language</label>
+                                </h:panelGroup>
+
+                                <p:outputLabel for="currencyCode" value="Currency Code"/>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:autoComplete id="currencyCode" completeMethod="#{autoCompleteView.completeText}" />
+                                    <label>Currency Code</label>
+                                </h:panelGroup>
+
+
+                                </p:panelGrid>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:button type="button" value="Save" icon="ui-icon-save" outcome="/pages/secure/contact/contacts" />
+                        <p:button type="button" value="Save &amp; Add More" icon="ui-icon-more" outcome="/pages/secure/contact/contact" />
+
+                        <span class="ui-separator" style="padding-right: 5px;">
+                                    <span class="fa fa-ellipsis-v SoftGray" />
+                                </span>
+
+                        <p:button type="button" title="Cencel" icon="ui-icon-cancel" outcome="/pages/secure/contact/contacts"/>
+                    </f:facet>
+
+                </p:toolbar>
+            </div>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

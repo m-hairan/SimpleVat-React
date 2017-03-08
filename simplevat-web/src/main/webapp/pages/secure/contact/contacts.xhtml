@@ -50,7 +50,7 @@
 
                         <p:toolbar>
                             <f:facet name="left">
-                                <p:commandButton type="button" value="New" icon="ui-icon-plus" />
+                                <p:button type="button" value="New" icon="ui-icon-plus" outcome="/pages/secure/contact/contact" />
 
 
                                 <span class="ui-separator" style="padding-right: 5px;">
@@ -112,6 +112,8 @@
 
 							</div>
                         </p:dataGrid>
+
+
                         <!--</p:selectManyCheckbox>-->
                         <p:dialog header="Contact Info" widgetVar="contactDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
                             <p:outputPanel id="selectedContactDetail" style="text-align:center;">
