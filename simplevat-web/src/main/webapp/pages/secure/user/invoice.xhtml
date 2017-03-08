@@ -55,13 +55,20 @@
                 <p:toolbar>
                     <f:facet name="left">
                         <p:button value="Save" icon="ui-icon-save" outcome="/pages/secure/user/invoices" />
-                        <p:button  value="Save &amp; Add More" icon="ui-icon-more" outcome="/pages/secure/user/invoice" />
-                    </f:facet>
-                    <f:facet name="right">
-                        <p:button value="Cancel" icon="ui-icon-cancel" outcome="/pages/secure/user/invoices"/>
-                        <p:button  title="Home" icon="ui-icon-home" outcome="/pages/secure/user/home"/>
+                        <p:button  value="Save &amp; Add More" icon="ui-icon-forward" outcome="/pages/secure/user/invoice" />
+
+                        <span class="ui-separator" style="padding-right: 5px;">
+                                    <span class="fa fa-ellipsis-v SoftGray" />
+                                </span>
+
+                        <p:button type="button" title="Cencel" icon="ui-icon-cancel" outcome="/pages/secure/user/invoices"/>
                     </f:facet>
 
+                    <f:facet name="right">
+
+                        <p:button type="button" value="Home" icon="ui-icon-home" outcome="/pages/secure/user/home" />
+
+                    </f:facet>
                 </p:toolbar>
             </div>
 

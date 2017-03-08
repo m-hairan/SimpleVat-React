@@ -57,13 +57,15 @@
                                     <span class="fa fa-ellipsis-v SoftGray" />
                                 </span>
 
-                                <p:commandButton type="button" title="Import/Export" icon="ui-icon-import-export" />
+                                <p:commandButton type="button" title="Import" icon="ui-icon-file-download" />
+                                <p:commandButton type="button" title="Export" icon="ui-icon-file-upload" />
                                 <p:commandButton type="button" title="Delete" icon="ui-icon-delete" />
                             </f:facet>
 
                             <f:facet name="right">
                                 <p:menuButton value="Options">
-                                    <p:menuitem value="Import/Export" icon="ui-icon-import-export"/>
+                                    <p:menuitem value="Import" icon="ui-icon-file-download" />
+                                    <p:menuitem  value="Export" icon="ui-icon-file-upload" />
                                     <p:menuitem value="Delete" icon="ui-icon-delete"/>
                                     <p:separator />
                                     <p:menuitem value="Homepage" outcome="/pages/secure/user/home" icon="ui-icon-home"/>
