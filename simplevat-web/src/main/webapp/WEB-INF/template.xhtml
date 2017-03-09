@@ -24,7 +24,7 @@
     <f:loadBundle basename="JSFMessage" var="messages" />
 
     <h:body styleClass="main-body #{guestPreferences.compact ? 'layout-compact' : null}">
-        <ui:param name="expenseMenuLink" value="/pages/secure/user/expenses" />
+        <ui:param name="expenseMenuLink" value="/pages/secure/expense/expenses" />
         <div class="layout-wrapper #{guestPreferences.menuLayout}">
             <ui:include src="./topbar.xhtml" />
             <ui:include src="./menu.xhtml" />

@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * Created by mohsinh on 2/26/2017.
@@ -59,7 +59,7 @@ public class Expense{
     private Date createdDate;
     @Basic
     @Column(name = "LAST_UPDATED_BY")
-    private Date lastUpdatedBy;
+    private Integer lastUpdatedBy;
     @Basic
     @Column(name = "LAST_UPDATE_DATE")
     private Date lastUpdateDate;
