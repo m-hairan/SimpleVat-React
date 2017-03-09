@@ -10,6 +10,7 @@
     <ui:define name="content">
         <h:form>
             <div class="card card-w-title">
+
             <div class="ui-fluid">
                 <div class="ui-g">
                     <div class="ui-g-12">
@@ -19,7 +20,7 @@
                             <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
 
 
-                                <p:selectOneMenu id="contactTitle" title="Title" onfocus="" effect="fold" editable="false" effectSpeed="medium">
+                                <p:selectOneMenu id="contactTitle" title="Title" onfocus="" effect="fold" >
 
                                     <f:selectItem itemLabel="Title" itemValue="#{null}" itemDisabled="true"/>
                                     <f:selectItem itemLabel="Mr" itemValue="Mr" />
@@ -31,15 +32,15 @@
                                 <p:outputLabel />
 
                                 <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="firstName"/>
+                                    <p:inputText id="firstName" value="#{contactController.contact.firstName}"/>
                                     <label>First Name</label>
                                 </h:panelGroup>
                                 <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="middleName"/>
+                                    <p:inputText id="middleName" value="#{contactController.contact.middleName}"/>
                                     <label>Middle Name</label>
                                 </h:panelGroup>
                                 <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="lastName"/>
+                                    <p:inputText id="lastName" value="#{contactController.contact.lastName}"/>
                                     <label>Last Name</label>
                                 </h:panelGroup>
 
@@ -166,7 +167,7 @@
 
                 <p:toolbar>
                     <f:facet name="left">
-                        <p:button type="button" value="Save" icon="ui-icon-save" outcome="/pages/secure/contact/contacts" />
+                        <p:commandButton value="Save" icon="ui-icon-save" action="#{contactController.createNewContact}" />
                         <p:button type="button" value="Save &amp; Add More" icon="ui-icon-forward" outcome="/pages/secure/contact/contact" />
 
                         <span class="ui-separator" style="padding-right: 5px;">

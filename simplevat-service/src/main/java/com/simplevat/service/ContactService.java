@@ -12,4 +12,6 @@ public interface ContactService {
     public List<Contact> getContacts(Integer pageIndex, Integer noOfRecorgs);
 
     public List<Contact> getContacts();
+
+    public Contact createContact(Contact contact);
 }

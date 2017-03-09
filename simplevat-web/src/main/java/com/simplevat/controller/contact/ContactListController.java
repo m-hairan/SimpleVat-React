@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
-@ManagedBean
+@ManagedBean(name = "contactListController")
 @RequestScoped
 public class ContactListController implements Serializable {
 

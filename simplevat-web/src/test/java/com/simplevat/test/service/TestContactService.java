@@ -3,6 +3,7 @@ package com.simplevat.test.service;
 import com.simplevat.entity.Contact;
 import com.simplevat.test.common.BaseManagerTest;
 import org.junit.Test;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Iterator;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 /**
  * Created by mohsin on 3/4/2017.
  */
+
 public class TestContactService extends BaseManagerTest {
 
     @Test
@@ -25,5 +27,17 @@ public class TestContactService extends BaseManagerTest {
             Contact contact = contactIterator.next();
             System.out.println(contact.getContactId()+" - "+contact.getFirstName()+" "+contact.getLastName());
         }
+    }
+
+    @Test
+    public void testCreateContact()
+    {
+        Contact contact = new Contact();
+        contact.setFirstName("Mohsin");
+        contact.setLastName("Hashmi");
+
+        contactService.createContact(contact);
+
+        System.out.println(contact.getContactId()+" - "+contact.getFirstName()+" "+contact.getLastName());
     }
 }

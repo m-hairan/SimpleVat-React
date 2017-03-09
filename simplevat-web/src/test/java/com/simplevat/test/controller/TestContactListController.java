@@ -1,4 +1,4 @@
-package com.simplevat.test.Controller;
+package com.simplevat.test.controller;
 
 import com.simplevat.test.common.BaseManagerTest;
 import org.junit.Test;
