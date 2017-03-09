@@ -1,0 +1,71 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">#{messages.label_expenses}</ui:define>
+
+	<ui:define name="content">
+
+		<h:panelGroup layout="block" id="outerExpensePanel">
+
+			<h:panelGroup layout="block" id="expensePanel"
+				rendered="#{expenseScreenController.showAllExpensePanel}">
+
+				<div class="ui-g ">
+
+					<div class="ui-g-12">
+						<!-- Left Side -->
+						<div class="card card-w-title">
+							<h1>#{messages.label_expenses}</h1>
+							<h:form id="form">
+								<p:toolbar>
+									<f:facet name="left">
+										<p:commandButton value="New" icon="ui-icon-plus"
+											actionListener="#{expenseManageController.createExpense}"
+											update="outerExpensePanel" />
+
+										<span class="ui-separator" style="padding-right: 5px;">
+											<span class="fa fa-ellipsis-v SoftGray" />
+										</span>
+
+										<p:commandButton type="button" title="Import"
+											icon="ui-icon-file-download" />
+										<p:commandButton type="button" title="Export"
+											icon="ui-icon-file-upload" />
+										<p:commandButton type="button" title="Delete"
+											icon="ui-icon-delete" />
+									</f:facet>
+
+									<f:facet name="right">
+										<p:menuButton value="Options">
+											<p:menuitem value="Import" icon="ui-icon-file-download" />
+											<p:menuitem value="Export" icon="ui-icon-file-upload" />
+											<p:menuitem value="Delete" icon="ui-icon-delete" />
+											<p:separator />
+											<p:menuitem value="Homepage"
+												outcome="/pages/secure/user/home" icon="ui-icon-home" />
+										</p:menuButton>
+									</f:facet>
+								</p:toolbar>
+							</h:form>
+
+							<br />
+							<ui:include src="all-expenses.xhtml" />
+
+						</div>
+					</div>
+				</div>
+
+			</h:panelGroup>
+
+			<h:panelGroup layout="block" id="createExpensePanel"
+				rendered="#{expenseScreenController.showNewExpensePanel}">
+				<ui:include src="create-expense.xhtml" />
+			</h:panelGroup>
+
+		</h:panelGroup>
+	</ui:define>
+
+</ui:composition>
