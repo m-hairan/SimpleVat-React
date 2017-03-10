@@ -1,6 +1,5 @@
 package com.simplevat.entity.invoice;
 
-import com.simplevat.entity.invoice.Invoice;
 import lombok.Data;
 
 import javax.persistence.*;
