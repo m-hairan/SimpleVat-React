@@ -55,50 +55,50 @@
                                 <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
 
                                 <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="organizationName"/>
+                                    <p:inputText id="organizationName" value="#{contactController.contact.organization}"/>
                                     <label>Organization Name</label>
                                 </h:panelGroup>
 
                                 <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="poBoxNumber" />
+                                    <p:inputText id="poBoxNumber" value="#{contactController.contact.poBoxNumber}"/>
                                     <label>Po Box Number</label>
                                 </h:panelGroup>
                                 <p:outputLabel />
 
                                 <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="email"/>
+                                    <p:inputText id="email" value="#{contactController.contact.email}"/>
                                     <label>Email</label>
                                 </h:panelGroup>
 
 
                                 <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputMask id="telephone" mask="09 999 9999"/>
+                                    <p:inputMask id="telephone" mask="09 999 9999" value="#{contactController.contact.telephone}"/>
                                     <label>Telephone</label>
                                 </h:panelGroup>
 
                                 <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputMask id="mobileNumber" mask="+971 99 999 9999"/>
+                                    <p:inputMask id="mobileNumber" mask="+971 99 999 9999" value="#{contactController.contact.mobileNumber}"/>
                                     <label>Mobile Number</label>
                                 </h:panelGroup>
 
                                 <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="addressLine1"/>
+                                    <p:inputText id="addressLine1" value="#{contactController.contact.invoicingAddressLine1}"/>
                                     <label>Address Line1</label>
                                 </h:panelGroup>
 
                                 <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="addressLine2"/>
+                                    <p:inputText id="addressLine2" value="#{contactController.contact.invoicingAddressLine2}"/>
                                     <label>Address Line2</label>
                                 </h:panelGroup>
 
                                 <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="addressLine3"/>
+                                    <p:inputText id="addressLine3" value="#{contactController.contact.invoicingAddressLine3}"/>
                                     <label>Address Line3</label>
                                 </h:panelGroup>
 
 
                                 <h:panelGroup styleClass="md-inputfield">
-                                    <p:autoComplete id="country" completeMethod="#{autoCompleteView.completeText}" />
+                                    <p:autoComplete id="country" completeMethod="#{contactController.completeCountry}"  />
                                     <label>Country</label>
                                 </h:panelGroup>
 
@@ -113,7 +113,7 @@
                                 </h:panelGroup>
 
                                 <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="postZipCode" />
+                                    <p:inputText id="postZipCode" value="#{contactController.contact.postZipCode}"/>
                                     <label>Post Zip Code</label>
                                 </h:panelGroup>
 
@@ -130,17 +130,17 @@
 
 
                                 <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="billingEmail"/>
+                                    <p:inputText id="billingEmail" value="#{contactController.contact.billingEmail}"/>
                                     <label>Billing Email</label>
                                 </h:panelGroup>
 
                                 <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="contractPoNumber" />
+                                    <p:inputText id="contractPoNumber" value="#{contactController.contact.contractPoNumber}"/>
                                     <label>Contract Po Number</label>
                                 </h:panelGroup>
 
                                 <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="vatRegistrationNumber" />
+                                    <p:inputText id="vatRegistrationNumber" value="#{contactController.contact.vatRegistrationNumber}"/>
                                     <label>Vat Registration Number</label>
                                 </h:panelGroup>
 

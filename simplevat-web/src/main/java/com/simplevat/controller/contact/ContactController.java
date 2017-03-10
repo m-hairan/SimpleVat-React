@@ -1,7 +1,9 @@
 package com.simplevat.controller.contact;
 
 import com.simplevat.entity.Contact;
+import com.simplevat.entity.Country;
 import com.simplevat.service.ContactService;
+import com.simplevat.service.CountryService;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.log4j.Logger;
@@ -14,6 +16,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by mohsinh on 3/9/2017.
@@ -32,6 +37,13 @@ public class ContactController implements Serializable {
     @Autowired
     private ContactService contactService;
 
+    @Autowired
+    private CountryService countryService;
+
+    @Getter
+    @Setter
+    private List<Country> countries;
+
     @Getter
     @Setter
     private Contact contact;
@@ -39,6 +51,9 @@ public class ContactController implements Serializable {
     @PostConstruct
     public void init() {
         contact = new Contact();
+
+        countries = countryService.getCountries();
+        logger.debug("Loaded Countries :"+countries.size());
     }
 
     public String createNewContact()
@@ -52,6 +67,35 @@ public class ContactController implements Serializable {
         logger.debug("Created contact :"+contact.getContactId() +" Name :"+contact.getFirstName());
         this.init();
         return "/pages/secure/contact/contacts.xhtml";
+    }
+
+
+    public List<String> completeCountry(String countryStr)
+    {
+        List<String> countrySuggestion = new ArrayList<>();
+        Iterator<Country> countryIterator = this.countries.iterator();
+
+        logger.debug(" Size :"+countries.size());
+
+        while (countryIterator.hasNext())
+        {
+            Country country = countryIterator.next();
+            if(country.getCountryName() != null &&
+                        !country.getCountryName().isEmpty() &&
+                            country.getCountryName().toUpperCase().contains(countryStr.toUpperCase()))
+            {
+                countrySuggestion.add(country.getCountryName()+" - ("+country.getIsoAlpha3Code()+")");
+            } else if(country.getIsoAlpha3Code() != null &&
+                    !country.getIsoAlpha3Code().isEmpty() &&
+                    country.getIsoAlpha3Code().toUpperCase().contains(countryStr.toUpperCase()))
+            {
+                countrySuggestion.add(country.getCountryName()+" - ("+country.getIsoAlpha3Code()+")");
+            }
+        }
+
+        logger.debug(" Size :"+countrySuggestion.size());
+
+        return countrySuggestion;
     }
 
 

@@ -11,6 +11,13 @@ import java.util.Collection;
 /**
  * Created by mohsinh on 2/26/2017.
  */
+
+@NamedQueries({
+        @NamedQuery(name="allCountries",
+                query="SELECT c " +
+                        "FROM Country c ")
+})
+
 @Entity
 @Table(name = "COUNTRY")
 @Data
@@ -25,7 +32,7 @@ public class Country {
     @Column(name = "COUNTRY_DESCRIPTION")
     private String countryDescription;
     @Basic
-    @Column(name = "ISO_ALPHA3_CODE")
-    private Character isoAlpha3Code;
+    @Column(name = "ISO_ALPHA3_CODE", length = 3, columnDefinition = "CHAR")
+    private String isoAlpha3Code;
 
 }

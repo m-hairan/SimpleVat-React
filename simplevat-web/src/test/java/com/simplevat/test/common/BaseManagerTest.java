@@ -1,9 +1,8 @@
 package com.simplevat.test.common;
-import com.simplevat.dao.ContactDao;
-import com.simplevat.dao.ExpenseDao;
-import com.simplevat.dao.LanguageDao;
-import com.simplevat.dao.RoleDao;
+import com.simplevat.dao.*;
+import com.simplevat.entity.Country;
 import com.simplevat.service.ContactService;
+import com.simplevat.service.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
@@ -31,8 +30,14 @@ public abstract class BaseManagerTest extends AbstractJUnit4SpringContextTests {
 
 	@Autowired
 	protected ContactService contactService;
-        
-        @Autowired
-        protected InvoiceService invoiceService;
+
+	@Autowired
+    protected InvoiceService invoiceService;
+
+	@Autowired
+	protected CountryService countryService;
+
+	@Autowired
+	protected CountryDao countryDao;
 
 }
