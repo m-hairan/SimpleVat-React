@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  *
  * @author Hiren
  */
-@Service
+@Service("invoiceService")
 public class InvoiceServiceImpl implements InvoiceService {
 
     @Autowired
@@ -26,9 +26,9 @@ public class InvoiceServiceImpl implements InvoiceService {
     public Invoice getInvoice(String invoiceUUID) {
         return invoiceDao.getInvoice(invoiceUUID);
     }
-    
+
     @Override
-    public void saveInvoice(Invoice invoice){
+    public void saveInvoice(Invoice invoice) {
         invoiceDao.saveInvoice(invoice);
     }
 

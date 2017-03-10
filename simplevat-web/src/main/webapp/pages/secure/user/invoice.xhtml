@@ -13,41 +13,131 @@
                     <div class="ui-g">
                         <div class="ui-g-12">
                             <h1>New Invoice</h1>
-                            <p:panelGrid columns="2" 
-                                         columnClasses="ui-grid-col-2,ui-grid-col-4" 
-                                         layout="grid" 
-                                         styleClass="ui-panelgrid-blank form-group" 
-                                         style="border:0px none; background-color:transparent;">
-                                <p:outputLabel for="invoiceId" value="Invoice Ref No."/>
-                                <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="invoiceId"/>
-                                </h:panelGroup>
-                            </p:panelGrid>
-                            <p:panelGrid columns="4" 
-                                         columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" 
-                                         layout="grid" 
-                                         styleClass="ui-panelgrid-blank form-group" 
-                                         style="border:0px none; background-color:transparent;">
-                                <p:outputLabel for="conatcts" value="Contact"/>
-                                <p:selectOneMenu id="conatcts" 
-                                                 style="margin-bottom:10px;">
-                                    <f:selectItem itemLabel="Select Contact" itemValue="#{null}" />
-                                    <f:selectItem itemLabel="Contact 1" itemValue="#{null}" />
 
-                                </p:selectOneMenu>
 
-                                <p:outputLabel for="project" value="Project"/>
-                                <p:selectOneMenu id="project" 
-                                                 style="margin-bottom:10px;">
-                                    <f:selectItem itemLabel="Select Project" itemValue="#{null}" />
-                                    <f:selectItem itemLabel="Project 1" itemValue="#{null}" />
+                            <p:fieldset legend="Contact and Project Details" toggleable="false">
+                                <p:panelGrid columns="4" 
+                                             columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" 
+                                             layout="grid" 
+                                             styleClass="ui-panelgrid-blank form-group" 
+                                             style="border:0px none; background-color:transparent;">
+                                    <p:outputLabel for="conatcts" value="Contact"/>
+                                    <p:selectOneMenu id="conatcts" 
+                                                     style="margin-bottom:10px;">
+                                        <f:selectItem itemLabel="Select Contact" itemValue="#{null}" />
+                                        <f:selectItem itemLabel="Contact 1" itemValue="#{null}" />
 
-                                </p:selectOneMenu>
-                                <p:outputLabel for="invoiceDate" value="Invoice Date" />
-                                <p:calendar id="invoiceDate" readonlyInput="true" />
-                                <p:outputLabel for="invoiceDueOn" value="Invoice Due On" />
-                                <p:inputText id="invoiceDueOn" placeholder="In Days" />
-                            </p:panelGrid>
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel for="project" value="Project"/>
+                                    <p:selectOneMenu id="project" 
+                                                     style="margin-bottom:10px;">
+                                        <f:selectItem itemLabel="Select Project" itemValue="#{null}" />
+                                        <f:selectItem itemLabel="Project 1" itemValue="#{null}" />
+
+                                    </p:selectOneMenu>
+                                </p:panelGrid>
+                            </p:fieldset>
+                            <p:fieldset legend="Invoice Details" toggleSpeed="300">
+                                <p:panelGrid columns="4" 
+                                             columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" 
+                                             layout="grid" 
+                                             styleClass="ui-panelgrid-blank form-group" 
+                                             style="border:0px none; background-color:transparent;">
+
+                                    <p:outputLabel for="invoiceId" value="Invoice Ref No."/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="invoiceId"/>
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="invoiceDate" value="Invoice Date" />
+                                    <p:calendar id="invoiceDate" readonlyInput="true" />
+
+                                    <p:outputLabel for="invoiceDueOn" value="Invoice Due On" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="invoiceDueOn" >
+                                        </p:inputText>
+                                        <label>In Days</label>
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="currency" value="Currency" />
+                                    <p:selectOneMenu id="currency" 
+                                                     style="margin-bottom:10px;">
+                                        <f:selectItem itemLabel="Select Currency" itemValue="#{null}" />
+                                        <f:selectItem itemLabel="Currency 1" itemValue="#{null}" />
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel for="description" value="Invoice Text" />
+                                    <p:inputTextarea rows="5" 
+                                                     id="description"
+                                                     cols="30"
+                                                     maxlength="250"
+                                                     autoResize="false" />
+
+                                </p:panelGrid>
+                            </p:fieldset>
+
+                            <p:fieldset legend="Invoice Item Details" toggleable="true" 
+                                        toggleSpeed="300">
+                                <p:dataTable reflow="true">
+                                    <f:facet name="header">
+                                        Invoice Items
+                                    </f:facet>
+                                    <p:column headerText="Quantity" >
+                                        <h:outputText value="5" />
+                                    </p:column>
+
+                                    <p:column headerText="Unit Price" >
+                                        <h:outputText value="500" />
+                                    </p:column>
+
+                                    <p:column headerText="VAT">
+                                        <h:outputText value="23" />
+                                    </p:column>
+
+                                    <p:column headerText="Description">
+                                        <h:outputText value="Description" />
+                                    </p:column>
+                                    
+                                    <p:column headerText="Subtotal">
+                                        <h:outputText value="Subtotal" />
+                                    </p:column>
+                                </p:dataTable>
+                                <p:commandButton style="width: 10%; margin-top: 3px" value="Add"
+                                                 icon="ui-icon-plus" />
+                            </p:fieldset>
+
+                            <p:fieldset legend="Additional Details" toggleable="true" 
+                                        collapsed="true"
+                                        toggleSpeed="300">
+                                <p:panelGrid columns="4" 
+                                             columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" 
+                                             layout="grid" 
+                                             styleClass="ui-panelgrid-blank form-group" 
+                                             style="border:0px none; background-color:transparent;">
+
+                                    <p:outputLabel for="discountType" value="Discount Type" />
+                                    <p:selectOneMenu id="discountType" 
+                                                     style="margin-bottom:10px;">
+                                        <f:selectItem itemLabel="Select Discount Type" itemValue="#{null}" />
+                                        <f:selectItem itemLabel="Percentage" itemValue="Percentage" />
+                                        <f:selectItem itemLabel="Absolute" itemValue="Absolute" />
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel for="discountValue" value="Discount" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="discountValue" >
+                                        </p:inputText>
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="contractPoNumber" value="Contract PO Number" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="contractPoNumber" >
+                                        </p:inputText>
+                                    </h:panelGroup>
+
+                                </p:panelGrid>
+                            </p:fieldset>
                         </div>
                     </div>
                 </div>
@@ -58,15 +148,15 @@
                         <p:button  value="Save &amp; Add More" icon="ui-icon-forward" outcome="/pages/secure/user/invoice" />
 
                         <span class="ui-separator" style="padding-right: 5px;">
-                                    <span class="fa fa-ellipsis-v SoftGray" />
-                                </span>
+                            <span class="fa fa-ellipsis-v SoftGray" />
+                        </span>
 
-                        <p:button type="button" title="Cencel" icon="ui-icon-cancel" outcome="/pages/secure/user/invoices"/>
+                        <p:button title="Cancel" icon="ui-icon-cancel" outcome="/pages/secure/user/invoices"/>
                     </f:facet>
 
                     <f:facet name="right">
 
-                        <p:button type="button" value="Home" icon="ui-icon-home" outcome="/pages/secure/user/home" />
+                        <p:button value="Home" icon="ui-icon-home" outcome="/pages/secure/user/home" />
 
                     </f:facet>
                 </p:toolbar>

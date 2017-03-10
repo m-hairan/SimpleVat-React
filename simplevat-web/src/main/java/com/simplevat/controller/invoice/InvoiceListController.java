@@ -4,14 +4,12 @@ import com.simplevat.entity.invoice.Invoice;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import lombok.Getter;
 import lombok.Setter;
 import com.simplevat.service.invoice.InvoiceService;
-import java.util.ArrayList;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
 
 /**
  *
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Controller;
  */
 @ViewScoped
 @ManagedBean
-@Controller
 public class InvoiceListController implements Serializable {
 
     private static final long serialVersionUID = 9066359395680732884L;
@@ -32,7 +29,8 @@ public class InvoiceListController implements Serializable {
     @Setter
     private Invoice selectedInvoice;
 
-    @Autowired
+    @ManagedProperty(value = "#{invoiceService}")
+    @Setter
     private InvoiceService invoiceService;
 
     @PostConstruct
