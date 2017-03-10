@@ -99,4 +99,34 @@ public class ContactController implements Serializable {
     }
 
 
+    public List<Country> completeCountryNew(String countryStr)
+    {
+        List<Country> countrySuggestion = new ArrayList<>();
+        Iterator<Country> countryIterator = this.countries.iterator();
+
+        logger.debug(" Size :"+countries.size());
+
+        while (countryIterator.hasNext())
+        {
+            Country country = countryIterator.next();
+            if(country.getCountryName() != null &&
+                    !country.getCountryName().isEmpty() &&
+                    country.getCountryName().toUpperCase().contains(countryStr.toUpperCase()))
+            {
+                countrySuggestion.add(country);
+            } else if(country.getIsoAlpha3Code() != null &&
+                    !country.getIsoAlpha3Code().isEmpty() &&
+                    country.getIsoAlpha3Code().toUpperCase().contains(countryStr.toUpperCase()))
+            {
+                countrySuggestion.add(country);
+            }
+        }
+
+        logger.debug(" Size :"+countrySuggestion.size());
+
+        return countrySuggestion;
+    }
+
+
+
 }

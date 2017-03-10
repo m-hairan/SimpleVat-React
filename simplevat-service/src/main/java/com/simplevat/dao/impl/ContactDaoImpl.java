@@ -33,7 +33,6 @@ public class ContactDaoImpl implements ContactDao {
     }
 
     @Override
-    @Transactional
     public Contact createContact(Contact contact) {
         entityManager.persist(contact);
         return contact;

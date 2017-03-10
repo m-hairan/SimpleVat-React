@@ -70,9 +70,9 @@ public class Contact {
     @Basic
     @Column(name = "PO_BOX_NUMBER")
     private String poBoxNumber;
-    @Basic
-    @Column(name = "COUNTRY_CODE")
-    private Integer countryCode;
+//    @Basic
+//    @Column(name = "COUNTRY_CODE")
+//    private Integer countryCode;
     @Basic
     @Column(name = "CONTRACT_PO_NUMBER")
     private String contractPoNumber;
@@ -103,7 +103,10 @@ public class Contact {
     @Basic
     @Column(name = "VERSION_NUMBER")
     private int versionNumber;
-//    private Country countryByCountryCode;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COUNTRY_CODE")
+    private Country countryByCountryCode;
 //    private Language languageByInvoiceLanguageCode;
 //    private Currency currencyByCurrencyCode;
 //    private Collection<Invoice> invoicesByContactId;

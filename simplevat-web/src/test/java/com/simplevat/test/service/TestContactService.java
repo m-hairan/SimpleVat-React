@@ -15,6 +15,7 @@ import java.util.List;
 public class TestContactService extends BaseManagerTest {
 
     @Test
+    @Transactional
     public void testGetContacts()
     {
         List<Contact> contacts = this.contactService.getContacts(new Integer(0), new Integer(20));
@@ -25,11 +26,12 @@ public class TestContactService extends BaseManagerTest {
         while(contactIterator.hasNext())
         {
             Contact contact = contactIterator.next();
-            System.out.println(contact.getContactId()+" - "+contact.getFirstName()+" "+contact.getLastName());
+            System.out.println(contact.getContactId()+" - "+contact.getFirstName()+" "+contact.getLastName()+" Country :"+contact.getCountryByCountryCode().getCountryName());
         }
     }
 
     @Test
+    @Transactional
     public void testCreateContact()
     {
         Contact contact = new Contact();

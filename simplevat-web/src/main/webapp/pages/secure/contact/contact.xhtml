@@ -17,10 +17,10 @@
                         <div class="card card-w-title">
                             <h1>New Contact</h1>
                             <p:fieldset legend="Contact Name" toggleable="false" toggleSpeed="500">
-                            <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                            <p:panelGrid columns="6" columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
 
-
-                                <p:selectOneMenu id="contactTitle" title="Title" onfocus="" effect="fold" >
+                                <p:outputLabel for="contactTitle"/>
+                                <p:selectOneMenu id="contactTitle" title="Title" onfocus="" effect="fold" required="true" >
 
                                     <f:selectItem itemLabel="Title" itemValue="#{null}" itemDisabled="true"/>
                                     <f:selectItem itemLabel="Mr" itemValue="Mr" />
@@ -30,17 +30,22 @@
 
                                 <p:outputLabel />
                                 <p:outputLabel />
+                                <p:outputLabel />
+                                <p:outputLabel />
 
+                                <p:outputLabel for="firstName" />
                                 <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="firstName" value="#{contactController.contact.firstName}"/>
+                                    <p:inputText id="firstName" value="#{contactController.contact.firstName}" required="true" />
                                     <label>First Name</label>
                                 </h:panelGroup>
+                                <p:outputLabel />
                                 <h:panelGroup styleClass="md-inputfield">
                                     <p:inputText id="middleName" value="#{contactController.contact.middleName}"/>
                                     <label>Middle Name</label>
                                 </h:panelGroup>
+                                <p:outputLabel for="lastName"/>
                                 <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="lastName" value="#{contactController.contact.lastName}"/>
+                                    <p:inputText id="lastName" value="#{contactController.contact.lastName}" required="true"/>
                                     <label>Last Name</label>
                                 </h:panelGroup>
 
@@ -52,107 +57,112 @@
                             </p:fieldset>
                         <br/>
                             <p:fieldset legend="Contact Details" toggleable="true" toggleSpeed="500">
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                <p:panelGrid columns="6" columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
 
-                                <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="organizationName" value="#{contactController.contact.organization}"/>
-                                    <label>Organization Name</label>
-                                </h:panelGroup>
+                                    <p:outputLabel for="organizationName"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="organizationName" value="#{contactController.contact.organization}"/>
+                                        <label>Organization Name</label>
+                                    </h:panelGroup>
+                                    <p:outputLabel for="poBoxNumber" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="poBoxNumber" value="#{contactController.contact.poBoxNumber}"/>
+                                        <label>Po Box Number</label>
+                                    </h:panelGroup>
+                                    <p:outputLabel />
+                                    <p:outputLabel />
 
-                                <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="poBoxNumber" value="#{contactController.contact.poBoxNumber}"/>
-                                    <label>Po Box Number</label>
-                                </h:panelGroup>
-                                <p:outputLabel />
+                                    <p:outputLabel for="email"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="email" value="#{contactController.contact.email}" required="true"/>
+                                        <label>Email</label>
+                                    </h:panelGroup>
+                                    <p:outputLabel for="telephone"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputMask id="telephone" mask="09 999 9999" value="#{contactController.contact.telephone}"/>
+                                        <label>Telephone</label>
+                                    </h:panelGroup>
+                                    <p:outputLabel for="mobileNumber"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputMask id="mobileNumber" mask="+971 99 999 9999" value="#{contactController.contact.mobileNumber}"/>
+                                        <label>Mobile Number</label>
+                                    </h:panelGroup>
 
-                                <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="email" value="#{contactController.contact.email}"/>
-                                    <label>Email</label>
-                                </h:panelGroup>
+                                    <p:outputLabel for="addressLine1"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="addressLine1" value="#{contactController.contact.invoicingAddressLine1}"/>
+                                        <label>Address Line1</label>
+                                    </h:panelGroup>
+                                    <p:outputLabel for="addressLine2"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="addressLine2" value="#{contactController.contact.invoicingAddressLine2}"/>
+                                        <label>Address Line2</label>
+                                    </h:panelGroup>
+                                    <p:outputLabel for="addressLine3"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="addressLine3" value="#{contactController.contact.invoicingAddressLine3}"/>
+                                        <label>Address Line3</label>
+                                    </h:panelGroup>
 
+                                    <p:outputLabel for="country"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="country" completeMethod="#{contactController.completeCountryNew}" value="#{contactController.contact.countryByCountryCode}" var="country" itemValue="country.countryCode" itemLabel="country.countryName" required="true"/>
+                                        <label>Country</label>
+                                    </h:panelGroup>
+                                    <p:outputLabel for="stateRegion"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="stateRegion" value="#{contactController.contact.stateRegion}"  />
+                                        <label>State Region</label>
+                                    </h:panelGroup>
+                                    <p:outputLabel for="city"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputText id="city"  value="#{contactController.contact.city}"/>
+                                        <label>City</label>
+                                    </h:panelGroup>
 
-                                <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputMask id="telephone" mask="09 999 9999" value="#{contactController.contact.telephone}"/>
-                                    <label>Telephone</label>
-                                </h:panelGroup>
+                                    <p:outputLabel for="postZipCode"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="postZipCode" value="#{contactController.contact.postZipCode}"/>
+                                        <label>Post Zip Code</label>
+                                    </h:panelGroup>
 
-                                <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputMask id="mobileNumber" mask="+971 99 999 9999" value="#{contactController.contact.mobileNumber}"/>
-                                    <label>Mobile Number</label>
-                                </h:panelGroup>
-
-                                <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="addressLine1" value="#{contactController.contact.invoicingAddressLine1}"/>
-                                    <label>Address Line1</label>
-                                </h:panelGroup>
-
-                                <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="addressLine2" value="#{contactController.contact.invoicingAddressLine2}"/>
-                                    <label>Address Line2</label>
-                                </h:panelGroup>
-
-                                <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="addressLine3" value="#{contactController.contact.invoicingAddressLine3}"/>
-                                    <label>Address Line3</label>
-                                </h:panelGroup>
-
-
-                                <h:panelGroup styleClass="md-inputfield">
-                                    <p:autoComplete id="country" completeMethod="#{contactController.completeCountry}"  />
-                                    <label>Country</label>
-                                </h:panelGroup>
-
-                                <h:panelGroup styleClass="md-inputfield">
-                                    <p:autoComplete id="state" completeMethod="#{autoCompleteView.completeText}" />
-                                    <label>State</label>
-                                </h:panelGroup>
-
-                                <h:panelGroup styleClass="md-inputfield">
-                                <p:autoComplete id="city" completeMethod="#{autoCompleteView.completeText}" />
-                                    <label>City</label>
-                                </h:panelGroup>
-
-                                <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="postZipCode" value="#{contactController.contact.postZipCode}"/>
-                                    <label>Post Zip Code</label>
-                                </h:panelGroup>
-
-                                <p:outputLabel />
-                                <p:outputLabel />
                                     <p:outputLabel />
                                     <p:outputLabel />
                                     <p:outputLabel />
-                                </p:panelGrid>
+                                    <p:outputLabel />
+                                    <p:outputLabel />
+                                    </p:panelGrid>
                             </p:fieldset>
                             <br/>
                             <p:fieldset legend="Invoicing Details" toggleable="true" toggleSpeed="500">
-                                <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                                <p:panelGrid columns="6" columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
 
+                                    <p:outputLabel />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="billingEmail" value="#{contactController.contact.billingEmail}"/>
+                                        <label>Billing Email</label>
+                                    </h:panelGroup>
+                                    <p:outputLabel />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="contractPoNumber" value="#{contactController.contact.contractPoNumber}"/>
+                                        <label>Contract Po Number</label>
+                                    </h:panelGroup>
+                                    <p:outputLabel />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="vatRegistrationNumber" value="#{contactController.contact.vatRegistrationNumber}"/>
+                                        <label>Vat Registration Number</label>
+                                    </h:panelGroup>
 
-                                <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="billingEmail" value="#{contactController.contact.billingEmail}"/>
-                                    <label>Billing Email</label>
-                                </h:panelGroup>
-
-                                <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="contractPoNumber" value="#{contactController.contact.contractPoNumber}"/>
-                                    <label>Contract Po Number</label>
-                                </h:panelGroup>
-
-                                <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="vatRegistrationNumber" value="#{contactController.contact.vatRegistrationNumber}"/>
-                                    <label>Vat Registration Number</label>
-                                </h:panelGroup>
-
-                                <h:panelGroup styleClass="md-inputfield">
-                                    <p:autoComplete id="invoiceLanguageCode" completeMethod="#{autoCompleteView.completeText}" />
-                                    <label>Invoice Language</label>
-                                </h:panelGroup>
-
-                                <h:panelGroup styleClass="md-inputfield">
-                                    <p:autoComplete id="currencyCode" completeMethod="#{autoCompleteView.completeText}" />
-                                    <label>Currency Code</label>
-                                </h:panelGroup>
+                                    <p:outputLabel />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="invoiceLanguageCode" completeMethod="#{autoCompleteView.completeText}" />
+                                        <label>Invoice Language</label>
+                                    </h:panelGroup>
+                                    <p:outputLabel />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="currencyCode" completeMethod="#{autoCompleteView.completeText}" />
+                                        <label>Currency Code</label>
+                                    </h:panelGroup>
 
                                     <p:outputLabel />
                                     <p:outputLabel />
