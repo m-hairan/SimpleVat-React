@@ -4,6 +4,7 @@ import com.simplevat.entity.BankAccount;
 import com.simplevat.entity.Company;
 import com.simplevat.entity.Contact;
 import lombok.Data;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -34,5 +35,14 @@ public class Country {
     @Basic
     @Column(name = "ISO_ALPHA3_CODE", length = 3, columnDefinition = "CHAR")
     private String isoAlpha3Code;
+
+    @Transient
+    @Setter
+    private String countryFullName;
+
+    public String getCountryFullName(){
+        countryFullName = countryName+" - ("+isoAlpha3Code+")";
+        return countryFullName;
+    }
 
 }

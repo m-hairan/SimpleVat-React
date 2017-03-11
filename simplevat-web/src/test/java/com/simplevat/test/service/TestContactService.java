@@ -1,6 +1,7 @@
 package com.simplevat.test.service;
 
 import com.simplevat.entity.Contact;
+import com.simplevat.entity.Country;
 import com.simplevat.test.common.BaseManagerTest;
 import org.junit.Test;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,17 +27,19 @@ public class TestContactService extends BaseManagerTest {
         while(contactIterator.hasNext())
         {
             Contact contact = contactIterator.next();
-            System.out.println(contact.getContactId()+" - "+contact.getFirstName()+" "+contact.getLastName()+" Country :"+contact.getCountryByCountryCode().getCountryName());
+            System.out.println(contact.getContactId()+" - "+contact.getFirstName()+" "+contact.getLastName()+" Country :"+contact.getCountry().getCountryName());
         }
     }
 
     @Test
-    @Transactional
     public void testCreateContact()
     {
         Contact contact = new Contact();
         contact.setFirstName("Mohsin");
         contact.setLastName("Hashmi");
+        Country country = new Country();
+        country.setCountryCode(10);
+        contact.setCountry(country);
 
         contactService.createContact(contact);
 

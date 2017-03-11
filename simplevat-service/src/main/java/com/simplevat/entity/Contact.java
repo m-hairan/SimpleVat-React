@@ -79,12 +79,12 @@ public class Contact {
     @Basic
     @Column(name = "VAT_REGISTRATION_NUMBER")
     private String vatRegistrationNumber;
-    @Basic
-    @Column(name = "INVOICE_LANGUAGE_CODE")
-    private Integer invoiceLanguageCode;
-    @Basic
-    @Column(name = "CURRENCY_CODE")
-    private Integer currencyCode;
+//    @Basic
+//    @Column(name = "INVOICE_LANGUAGE_CODE")
+//    private Integer invoiceLanguageCode;
+//    @Basic
+//    @Column(name = "CURRENCY_CODE")
+//    private Integer currencyCode;
     @Basic
     @Column(name = "CREATED_BY")
     private Integer createdBy;
@@ -106,9 +106,15 @@ public class Contact {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COUNTRY_CODE")
-    private Country countryByCountryCode;
-//    private Language languageByInvoiceLanguageCode;
-//    private Currency currencyByCurrencyCode;
+    private Country country;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "INVOICE_LANGUAGE_CODE")
+    private Language language;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CURRENCY_CODE")
+    private Currency currency;
 //    private Collection<Invoice> invoicesByContactId;
 //    private Collection<Project> projectsByContactId;
 

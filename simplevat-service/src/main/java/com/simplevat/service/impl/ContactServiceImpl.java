@@ -5,6 +5,7 @@ import com.simplevat.entity.Contact;
 import com.simplevat.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class ContactServiceImpl implements ContactService {
         return this.contactDao.getContacts();
     }
 
+    @Transactional
     @Override
     public Contact createContact(Contact contact) {
         return contactDao.createContact(contact);

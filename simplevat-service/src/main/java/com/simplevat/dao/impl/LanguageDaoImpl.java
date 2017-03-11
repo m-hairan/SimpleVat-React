@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 
 /**
  * Created by mohsin on 3/2/2017.
@@ -20,5 +21,11 @@ public class LanguageDaoImpl implements LanguageDao{
 
     public Language getLanguageById(Integer languageId) {
         return this.entityManager.find(Language.class,languageId);
+    }
+
+    @Override
+    public List<Language> getLanguages() {
+        List<Language> languages = entityManager.createNamedQuery("allLanguages",Language.class).getResultList();
+        return languages;
     }
 }

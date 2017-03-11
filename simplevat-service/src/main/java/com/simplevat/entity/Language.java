@@ -8,6 +8,13 @@ import java.util.Collection;
 /**
  * Created by mohsinh on 2/26/2017.
  */
+
+@NamedQueries({
+        @NamedQuery(name="allLanguages",
+                query="SELECT l " +
+                        "FROM Language l ")
+})
+
 @Entity
 @Table(name = "LANGUAGE")
 @Data

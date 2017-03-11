@@ -38,7 +38,7 @@ public class InvoiceListController implements Serializable {
         this.setInvoices(invoiceService.getInvoices());
     }
 
-    public String redirectToCreateInvoice() {
+    public String redirectToCreateContact() {
         System.out.println("com.simplevat.controller.invoice.InvoiceListController.redirectToCreateInvoice()");
         return "/pages/secure/user/invoice.xhtml";
     }

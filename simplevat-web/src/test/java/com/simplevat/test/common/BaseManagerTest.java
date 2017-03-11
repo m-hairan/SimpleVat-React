@@ -3,6 +3,7 @@ import com.simplevat.dao.*;
 import com.simplevat.entity.Country;
 import com.simplevat.service.ContactService;
 import com.simplevat.service.CountryService;
+import com.simplevat.service.LanguageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
@@ -39,5 +40,8 @@ public abstract class BaseManagerTest extends AbstractJUnit4SpringContextTests {
 
 	@Autowired
 	protected CountryDao countryDao;
+
+	@Autowired
+	protected LanguageService languageService;
 
 }

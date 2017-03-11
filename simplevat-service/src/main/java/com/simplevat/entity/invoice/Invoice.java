@@ -70,8 +70,8 @@ public class Invoice implements Serializable {
     @Column(name = "CREATED_DATE")
     private Calendar createdDate;
 
-    @Column(name = "LAST_UPDATED_BY")
-    private Integer lastUpdatedBy;
+//    @Column(name = "LAST_UPDATED_BY")
+//    private Integer lastUpdatedBy;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "LAST_UPDATE_DATE")

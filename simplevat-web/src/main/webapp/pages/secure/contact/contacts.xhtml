@@ -50,7 +50,8 @@
 
                         <p:toolbar>
                             <f:facet name="left">
-                                <p:button type="button" value="New" icon="ui-icon-plus" outcome="/pages/secure/contact/contact" />
+                                <p:commandButton title="New" value="New" icon="ui-icon-plus"
+                                                 action="#{contactListController.redirectToCreateContact()}" />
 
 
                                 <span class="ui-separator" style="padding-right: 5px;">

@@ -104,4 +104,10 @@ public class ContactListController implements Serializable {
         }
 	    return  returnContacts;
     }
+
+    public String redirectToCreateContact()
+    {
+        logger.debug("Redirecting to create new contact page");
+        return "/pages/secure/contact/contact.xhtml";
+    }
 }
