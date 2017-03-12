@@ -15,4 +15,9 @@ public enum DiscountType {
         this.desc = desc;
     }
 
+    @Override
+    public String toString() {
+        return this.desc;
+    }
+
 }
