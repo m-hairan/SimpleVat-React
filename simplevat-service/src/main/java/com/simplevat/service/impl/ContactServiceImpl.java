@@ -14,7 +14,7 @@ import java.util.List;
  * Created by mohsin on 3/3/2017.
  */
 
-@Service
+@Service("contactService")
 public class ContactServiceImpl implements ContactService {
 
 
