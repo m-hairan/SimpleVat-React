@@ -14,7 +14,7 @@ import java.util.Collection;
 @NamedQueries({
         @NamedQuery(name="allContacts",
                 query="SELECT c " +
-                        "FROM Contact c ")
+                        "FROM Contact c")
 })
 
 @Entity
@@ -115,6 +115,10 @@ public class Contact {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CURRENCY_CODE")
     private Currency currency;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TITLE_CODE")
+    private Title title;
 //    private Collection<Invoice> invoicesByContactId;
 //    private Collection<Project> projectsByContactId;
 

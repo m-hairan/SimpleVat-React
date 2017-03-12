@@ -11,7 +11,19 @@
 
     <context:component-scan base-package="com.simplevat">
     </context:component-scan>
-
+    <!--Empty strings instead of null values in JSF 2 on Tomcat 7-->
+    <!--https://artofcode.wordpress.com/2013/08/21/empty-strings-instead-of-null-values-in-jsf-2-on-tomcat-7/-->
+    <bean id="fixForTomcat"
+          class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" value="#{@systemProperties}"/>
+        <property name="targetMethod" value="setProperty"/>
+        <property name="arguments">
+            <list>
+                <value>org.apache.el.parser.COERCE_TO_ZERO</value>
+                <value>false</value>
+            </list>
+        </property>
+    </bean>
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource" />

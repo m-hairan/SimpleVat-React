@@ -1,13 +1,7 @@
 package com.simplevat.controller.contact;
 
-import com.simplevat.entity.Contact;
-import com.simplevat.entity.Country;
-import com.simplevat.entity.Currency;
-import com.simplevat.entity.Language;
-import com.simplevat.service.ContactService;
-import com.simplevat.service.CountryService;
-import com.simplevat.service.CurrencyService;
-import com.simplevat.service.LanguageService;
+import com.simplevat.entity.*;
+import com.simplevat.service.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.log4j.Logger;
@@ -52,6 +46,9 @@ public class ContactController implements Serializable {
     @Autowired
     private CurrencyService currencyService;
 
+    @Autowired
+    private TitleService titleService;
+
     @Getter
     @Setter
     private List<Country> countries;
@@ -66,6 +63,10 @@ public class ContactController implements Serializable {
 
     @Getter
     @Setter
+    private List<Title> titles;
+
+    @Getter
+    @Setter
     private Contact contact;
 
     @PostConstruct
@@ -75,6 +76,7 @@ public class ContactController implements Serializable {
         countries = countryService.getCountries();
         languages = languageService.getLanguages();
         currencies = currencyService.getCurrencies();
+        titles = titleService.getTitles();
         contactListController = (ContactListController) beanFactory.getBean("contactListController");
 
         logger.debug("Loaded Countries :"+countries.size());

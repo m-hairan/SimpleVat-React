@@ -20,11 +20,10 @@
                             <p:panelGrid columns="6" columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
 
                                 <p:outputLabel for="contactTitle"/>
-                                <p:selectOneMenu id="contactTitle" title="Title" onfocus="" effect="fold" required="true" >
+                                <p:selectOneMenu value="#{contactController.contact.title}" converter="com.simplevat.util.TitleConverter" id="contactTitle" title="Title" effect="fold" >
 
-                                    <f:selectItem itemLabel="Title" itemValue="#{null}" itemDisabled="true"/>
-                                    <f:selectItem itemLabel="Mr" itemValue="Mr" />
-                                    <f:selectItem itemLabel="Miss" itemValue="Miss" />
+                                    <!--<f:selectItem itemLabel="Title" itemValue="1"/>-->
+                                    <f:selectItems value="#{contactController.titles}" var="title" itemLabel="#{title.titleDescription}" itemValue="#{title.titleCode}" />
                                 </p:selectOneMenu>
 
 
@@ -35,7 +34,7 @@
 
                                 <p:outputLabel for="firstName" />
                                 <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="firstName" value="#{contactController.contact.firstName}" required="true" />
+                                    <p:inputText id="firstName" value="#{contactController.contact.firstName}" required="false" />
                                     <label>First Name</label>
                                 </h:panelGroup>
                                 <p:outputLabel />
@@ -45,7 +44,7 @@
                                 </h:panelGroup>
                                 <p:outputLabel for="lastName"/>
                                 <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="lastName" value="#{contactController.contact.lastName}" required="true"/>
+                                    <p:inputText id="lastName" value="#{contactController.contact.lastName}" required="false"/>
                                     <label>Last Name</label>
                                 </h:panelGroup>
 
@@ -74,7 +73,7 @@
 
                                     <p:outputLabel for="email"/>
                                     <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText id="email" value="#{contactController.contact.email}" required="true"/>
+                                        <p:inputText id="email" value="#{contactController.contact.email}" required="false"/>
                                         <label>Email</label>
                                     </h:panelGroup>
                                     <p:outputLabel for="telephone"/>
@@ -108,7 +107,7 @@
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="country" converter="com.simplevat.util.CountryConverter" dropdown="true"
                                                         completeMethod="#{contactController.completeCountry}" value="#{contactController.contact.country}"
-                                                        var="country" itemValue="#{country.countryCode}" itemLabel="#{country.countryFullName}" required="true"/>
+                                                        var="country" itemValue="#{country.countryCode}" itemLabel="#{country.countryFullName}" required="false"/>
                                         <label>Country</label>
                                     </h:panelGroup>
                                     <p:outputLabel for="stateRegion"/>
@@ -158,7 +157,7 @@
                                     <p:outputLabel for="language"/>
                                     <h:panelGroup styleClass="md-inputfield">
 
-                                        <p:autoComplete id="language" dropdown="true" converter="com.simplevat.util.LanguageConverter"
+                                        <p:autoComplete id="language" dropdown="true" converter="com.simplevat.util.LanguageConverter" dropdownMode=""
                                                         completeMethod="#{contactController.completeLanguage}" value="#{contactController.contact.language}"
                                                         var="language" itemValue="#{language.languageCode}" itemLabel="#{language.languageDescription}" />
 
@@ -169,7 +168,7 @@
 
                                         <p:autoComplete id="currency" dropdown="true" converter="com.simplevat.util.CurrencyConverter"
                                                         completeMethod="#{contactController.completeCurrency}" value="#{contactController.contact.currency}"
-                                                        var="currency" itemValue="#{currency.currencyDescription}" itemLabel="#{currency.currencyDescription}" />
+                                                        var="currency" itemValue="#{currency.currencyCode}" itemLabel="#{currency.currencyDescription}" />
 
                                         <label>Currency Code</label>
                                     </h:panelGroup>
