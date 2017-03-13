@@ -27,8 +27,8 @@
                                         <f:selectItem itemLabel="Select Contact" itemValue="#{null}" />
                                         <f:selectItems value="#{invoiceController.contacts}" 
                                                        var="contact"
-                                                       itemLabel="#{contact.contactId}" 
-                                                       itemValue="#{contact.firstName} #{contact.lastName}" />
+                                                       itemValue="#{contact.contactId}" 
+                                                       itemLabel="#{contact.firstName} #{contact.lastName}" />
                                     </p:selectOneMenu>
                                     <p:outputLabel for="project" value="Project"/>
                                     <p:selectOneMenu id="project" 
