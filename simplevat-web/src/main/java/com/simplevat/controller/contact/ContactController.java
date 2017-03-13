@@ -77,6 +77,10 @@ public class ContactController implements Serializable {
         languages = languageService.getLanguages();
         currencies = currencyService.getCurrencies();
         titles = titleService.getTitles();
+
+        contact.setCountry(countries.get(179));
+        contact.setLanguage(languages.get(0));
+        contact.setCurrency(currencies.get(0));
         contactListController = (ContactListController) beanFactory.getBean("contactListController");
 
         logger.debug("Loaded Countries :"+countries.size());
@@ -93,7 +97,27 @@ public class ContactController implements Serializable {
         this.init();
         return "/pages/secure/contact/contacts.xhtml";
     }
+    public List<Title> completeTitle(String titleStr)
+    {
+        List<Title> titleSuggestion = new ArrayList<>();
+        Iterator<Title> titleIterator = this.titles.iterator();
 
+        logger.debug(" Size :"+titles.size());
+
+        while (titleIterator.hasNext())
+        {
+            Title title = titleIterator.next();
+            if(title.getTitleDescription() != null &&
+                    !title.getTitleDescription().isEmpty() &&
+                    title.getTitleDescription().toUpperCase().contains(titleStr.toUpperCase())) {
+                titleSuggestion.add(title);
+            }
+        }
+
+        logger.debug(" Size :"+titleSuggestion.size());
+
+        return titleSuggestion;
+    }
 
     public List<Country> completeCountry(String countryStr)
     {

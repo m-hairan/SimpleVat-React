@@ -20,12 +20,12 @@
                             <p:panelGrid columns="6" columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
 
                                 <p:outputLabel for="contactTitle"/>
-                                <p:selectOneMenu value="#{contactController.contact.title}" converter="com.simplevat.util.TitleConverter" id="contactTitle" title="Title" effect="fold" >
-
-                                    <!--<f:selectItem itemLabel="Title" itemValue="1"/>-->
-                                    <f:selectItems value="#{contactController.titles}" var="title" itemLabel="#{title.titleDescription}" itemValue="#{title.titleCode}" />
-                                </p:selectOneMenu>
-
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:autoComplete id="contactTitle" converter="com.simplevat.util.TitleConverter" dropdown="true" forceSelection="true" effect="fold"
+                                                    completeMethod="#{contactController.completeTitle}" value="#{contactController.contact.title}" var="title" itemValue="#{title.titleCode}" itemLabel="#{title.titleDescription}"
+                                                     required="false"/>
+                                    <label>Title</label>
+                                </h:panelGroup>
 
                                 <p:outputLabel />
                                 <p:outputLabel />
@@ -34,7 +34,7 @@
 
                                 <p:outputLabel for="firstName" />
                                 <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="firstName" value="#{contactController.contact.firstName}" required="false" />
+                                    <p:inputText id="firstName" value="#{contactController.contact.firstName}" required="true" />
                                     <label>First Name</label>
                                 </h:panelGroup>
                                 <p:outputLabel />
@@ -105,7 +105,7 @@
 
                                     <p:outputLabel for="country"/>
                                     <h:panelGroup styleClass="md-inputfield">
-                                        <p:autoComplete id="country" converter="com.simplevat.util.CountryConverter" dropdown="true"
+                                        <p:autoComplete id="country" converter="com.simplevat.util.CountryConverter" dropdown="true" forceSelection="true" effect="fold"
                                                         completeMethod="#{contactController.completeCountry}" value="#{contactController.contact.country}"
                                                         var="country" itemValue="#{country.countryCode}" itemLabel="#{country.countryFullName}" required="false"/>
                                         <label>Country</label>
@@ -157,7 +157,7 @@
                                     <p:outputLabel for="language"/>
                                     <h:panelGroup styleClass="md-inputfield">
 
-                                        <p:autoComplete id="language" dropdown="true" converter="com.simplevat.util.LanguageConverter" dropdownMode=""
+                                        <p:autoComplete id="language" dropdown="true" forceSelection="true" effect="fold" converter="com.simplevat.util.LanguageConverter" dropdownMode=""
                                                         completeMethod="#{contactController.completeLanguage}" value="#{contactController.contact.language}"
                                                         var="language" itemValue="#{language.languageCode}" itemLabel="#{language.languageDescription}" />
 
@@ -166,7 +166,7 @@
                                     <p:outputLabel for="currency"/>
                                     <h:panelGroup styleClass="md-inputfield">
 
-                                        <p:autoComplete id="currency" dropdown="true" converter="com.simplevat.util.CurrencyConverter"
+                                        <p:autoComplete id="currency" dropdown="true" forceSelection="true" effect="fold" converter="com.simplevat.util.CurrencyConverter"
                                                         completeMethod="#{contactController.completeCurrency}" value="#{contactController.contact.currency}"
                                                         var="currency" itemValue="#{currency.currencyCode}" itemLabel="#{currency.currencyDescription}" />
 
