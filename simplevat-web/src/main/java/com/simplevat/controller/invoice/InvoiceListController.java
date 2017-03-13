@@ -10,11 +10,14 @@ import com.simplevat.service.invoice.InvoiceService;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 /**
  *
  * @author Hiren
  */
+@Controller
 @ViewScoped
 @ManagedBean
 public class InvoiceListController implements Serializable {
@@ -29,12 +32,12 @@ public class InvoiceListController implements Serializable {
     @Setter
     private Invoice selectedInvoice;
 
-    @ManagedProperty(value = "#{invoiceService}")
-    @Setter
+    @Autowired
     private InvoiceService invoiceService;
 
     @PostConstruct
     public void listAllInvoices() {
+        System.out.println("Init Method called----");
         this.setInvoices(invoiceService.getInvoices());
     }
 
