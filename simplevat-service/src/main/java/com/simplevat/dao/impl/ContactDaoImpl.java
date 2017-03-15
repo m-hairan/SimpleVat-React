@@ -12,7 +12,6 @@ import java.util.List;
 /**
  * Created by mohsin on 3/3/2017.
  */
-
 @Repository
 public class ContactDaoImpl implements ContactDao {
 
@@ -20,7 +19,7 @@ public class ContactDaoImpl implements ContactDao {
     private EntityManager entityManager;
 
     public List<Contact> getContacts(Integer pageIndex, Integer noOfRecorgs) {
-        List<Contact> contacts = entityManager.createNamedQuery("allContacts",Contact.class)
+        List<Contact> contacts = entityManager.createNamedQuery("allContacts", Contact.class)
                 .setMaxResults(noOfRecorgs)
                 .setFirstResult(pageIndex * noOfRecorgs).getResultList();
         return contacts;
@@ -28,7 +27,16 @@ public class ContactDaoImpl implements ContactDao {
 
     @Override
     public List<Contact> getContacts() {
-        List<Contact> contacts = entityManager.createNamedQuery("allContacts",Contact.class).getResultList();
+        List<Contact> contacts = entityManager.createNamedQuery("allContacts", Contact.class).getResultList();
+        return contacts;
+    }
+
+    @Override
+    public List<Contact> getContacts(final String searchQuery) {
+        List<Contact> contacts = entityManager
+                .createNamedQuery("Contact.contactsByName", Contact.class)
+                .setParameter("name", "%" + searchQuery + "%")
+                .getResultList();
         return contacts;
     }
 

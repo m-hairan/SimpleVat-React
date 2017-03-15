@@ -15,74 +15,92 @@
                             <h1>New Invoice</h1>
 
                             <p:fieldset legend="Contact and Project Details" toggleable="false">
-                                <p:panelGrid columns="4" 
-                                             columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" 
+                                <p:panelGrid columns="6" 
+                                             columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
                                              layout="grid" 
-                                             styleClass="ui-panelgrid-blank form-group" 
+                                             styleClass="ui-panelgrid-blank form-group"
                                              style="border:0px none; background-color:transparent;">
-                                    <p:outputLabel for="conatcts" value="Contact"/>
-                                    <p:selectOneMenu id="conatcts"
-                                                     value="#{invoiceController.invoiceModel.contactId}"
-                                                     style="margin-bottom:10px;">
-                                        <f:selectItem itemLabel="Select Contact" itemValue="#{null}" />
-                                        <f:selectItems value="#{invoiceController.contacts}" 
-                                                       var="contact"
-                                                       itemValue="#{contact.contactId}" 
-                                                       itemLabel="#{contact.firstName} #{contact.lastName}" />
-                                    </p:selectOneMenu>
-                                    <p:outputLabel for="project" value="Project"/>
-                                    <p:selectOneMenu id="project" 
-                                                     value="#{invoiceController.invoiceModel.projectId}"
-                                                     style="margin-bottom:10px;">
-                                        <f:selectItem itemLabel="Select Project" 
-                                                      itemValue="#{null}" />
-                                        <f:selectItem itemLabel="Project 1"
-                                                      itemValue="3333" />
-                                    </p:selectOneMenu>
-                                </p:panelGrid>
-                            </p:fieldset>
 
-                            <p:fieldset legend="Invoice Details" toggleSpeed="300">
-                                <p:panelGrid columns="4" 
-                                             columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" 
-                                             layout="grid" 
-                                             styleClass="ui-panelgrid-blank form-group" 
-                                             style="border:0px none; background-color:transparent;">
-                                    <p:outputLabel for="invoiceId" value="Invoice Ref No."/>
+                                    <p:outputLabel for="invoiceId" />
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="invoiceId"
                                                      maxlength="12"
                                                      value="#{invoiceController.invoiceModel.invoiceRefNo}"/>
+                                        <label>Invoice Ref No.</label>
                                     </h:panelGroup>
-                                    <p:outputLabel for="invoiceDate" value="Invoice Date" />
-                                    <p:calendar id="invoiceDate"
-                                                value="#{invoiceController.invoiceModel.invoiceDate}"
-                                                readonlyInput="true" />
-                                    <p:outputLabel for="invoiceDueOn" value="Invoice Due On" />
+
+                                    <p:outputLabel for="conatcts"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="conatcts" 
+                                                        converter="contactConverter"
+                                                        dropdown="true" 
+                                                        forceSelection="true"
+                                                        effect="fold"
+                                                        completeMethod="#{invoiceController.contacts}" 
+                                                        value="#{invoiceController.invoiceModel.contact}" 
+                                                        var="contact"
+                                                        itemValue="#{contact.contactId}"
+                                                        itemLabel="#{contact.firstName} #{contact.lastName}"/>
+                                        <label>Contact</label>
+
+                                    </h:panelGroup>
+                                    <p:outputLabel for="project"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="project"
+                                                     value="#{invoiceController.invoiceModel.projectId}" 
+                                                     disabled="true"/>
+                                        <label>Project</label>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+                            </p:fieldset>
+
+                            <p:fieldset legend="Invoice Details" toggleSpeed="300">
+                                <p:panelGrid columns="6" 
+                                             columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                                             layout="grid" 
+                                             styleClass="ui-panelgrid-blank form-group"
+                                             style="border:0px none; background-color:transparent;">
+
+                                    <p:outputLabel for="invoiceDate" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:calendar id="invoiceDate"
+                                                    value="#{invoiceController.invoiceModel.invoiceDate}"
+                                                    readonlyInput="true" />
+                                        <label>Invoice Date</label>
+                                    </h:panelGroup>
+                                    <p:outputLabel for="invoiceDueOn" />
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText 
                                             value="#{invoiceController.invoiceModel.invoiceDueOn}"
                                             converterMessage="Please enter numbers only." 
                                             id="invoiceDueOn" >
                                         </p:inputText>
-                                        <label>In Days</label>
+                                        <label>Invoice Due On (Days)</label>
                                     </h:panelGroup>
-                                    <p:outputLabel for="currency" value="Currency" />
-                                    <p:selectOneMenu id="currency" 
-                                                     style="margin-bottom:10px;">
-                                        <f:selectItem itemLabel="Select Currency" itemValue="#{null}" />
-                                        <f:selectItems value="#{invoiceController.currencies}"
-                                                       var="currency"
-                                                       itemLabel="(#{currency.currencySymbol}) #{currency.currencyName}" 
-                                                       itemValue="#{currency.currencyCode}" />
-                                    </p:selectOneMenu>
-                                    <p:outputLabel for="description" value="Invoice Text" />
-                                    <p:inputTextarea rows="5" 
-                                                     id="description"
-                                                     cols="30"
-                                                     value="#{invoiceController.invoiceModel.invoiceText}"
-                                                     maxlength="255"
-                                                     autoResize="false" />
+                                    <p:outputLabel for="currency"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="currency"
+                                                        dropdown="true" 
+                                                        forceSelection="true"
+                                                        effect="fold" 
+                                                        converter="com.simplevat.util.CurrencyConverter"
+                                                        completeMethod="#{invoiceController.completeCurrency}" 
+                                                        value="#{invoiceController.invoiceModel.currencyCode}"
+                                                        var="currency" itemValue="#{currency.currencyCode}"
+                                                        itemLabel="#{currency.currencyDescription}" />
+
+                                        <label>Currency</label>
+                                    </h:panelGroup>
+                                    <p:outputLabel for="description" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputTextarea rows="5" 
+                                                         id="description"
+                                                         cols="30"
+                                                         value="#{invoiceController.invoiceModel.invoiceText}"
+                                                         maxlength="255"
+                                                         autoResize="false" />
+                                        <label>Invoice Text</label>
+                                    </h:panelGroup>
                                 </p:panelGrid>
                             </p:fieldset>
 
@@ -119,36 +137,38 @@
                             <p:fieldset legend="Additional Details" toggleable="true" 
                                         collapsed="true"
                                         toggleSpeed="300">
-                                <p:panelGrid columns="4" 
-                                             columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" 
+                                <p:panelGrid columns="6" 
+                                             columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
                                              layout="grid" 
-                                             styleClass="ui-panelgrid-blank form-group" 
+                                             styleClass="ui-panelgrid-blank form-group"
                                              style="border:0px none; background-color:transparent;">
 
-                                    <p:outputLabel for="discountType" value="Discount Type" />
-                                    <p:selectOneMenu id="discountType" 
-                                                     value="#{invoiceController.invoiceModel.discountType}"
-                                                     style="margin-bottom:10px;">
-                                        <f:selectItem itemLabel="Select Discount Type" itemValue="#{null}" />
-                                        <f:selectItems value="#{invoiceController.discountTypes}"
-                                                       var="discountType"
-                                                       itemLabel="#{discountType.toString()}" itemValue="#{discountType}" />
-                                    </p:selectOneMenu>
+                                    <p:outputLabel for="discountType"  />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="discountType"
+                                                     value="#{invoiceController.invoiceModel.discount}"
+                                                     converterMessage="Please enter digits only.">
+                                        </p:inputText>
+                                        <label>Discount Type</label>
+                                    </h:panelGroup>
 
-                                    <p:outputLabel for="discountValue" value="Discount" />
+                                    <p:outputLabel for="discountValue"  />
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="discountValue"
                                                      value="#{invoiceController.invoiceModel.discount}"
                                                      converterMessage="Please enter digits only.">
                                         </p:inputText>
+                                        <label>Discount</label>
                                     </h:panelGroup>
 
-                                    <p:outputLabel for="contractPoNumber" value="Contract PO Number" />
+                                    <p:outputLabel  for="contractPoNumber" />
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="contractPoNumber"
                                                      value="#{invoiceController.invoiceModel.contractPoNumber}">
                                         </p:inputText>
+                                        <label>Contract PO Number</label>
                                     </h:panelGroup>
+
 
                                 </p:panelGrid>
                             </p:fieldset>

@@ -9,6 +9,8 @@ import com.simplevat.invoice.model.InvoiceModel;
 import com.simplevat.service.ContactService;
 import com.simplevat.service.CurrencyService;
 import com.simplevat.service.invoice.InvoiceService;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
@@ -29,6 +31,10 @@ public class InvoiceController {
     @Getter
     private InvoiceModel invoiceModel;
 
+    @Getter
+    @Setter
+    private List<Currency> currencies;
+
     @Setter
     @ManagedProperty("#{contactService}")
     private ContactService contactService;
@@ -48,6 +54,7 @@ public class InvoiceController {
     @PostConstruct
     public void initInvoice() {
         invoiceModel = new InvoiceModel();
+        currencies = currencyService.getCurrencies();
         addInvoiceItem(new InvoiceItemModel());
     }
 
@@ -55,12 +62,31 @@ public class InvoiceController {
         invoiceModel.addInvoiceItem(invoiceItemModel);
     }
 
-    public List<Contact> getContacts() {
-        return contactService.getContacts();
+    public List<Contact> contacts(final String searchQuery) {
+        return contactService.getContacts(searchQuery);
     }
 
-    public List<Currency> getCurrencies() {
-        return currencyService.getCurrencies();
+    public List<Currency> completeCurrency(String currencyStr) {
+        List<Currency> currencySuggestion = new ArrayList<>();
+        Iterator<Currency> currencyIterator = this.currencies.iterator();
+
+        while (currencyIterator.hasNext()) {
+            Currency currency = currencyIterator.next();
+            if (currency.getCurrencyName() != null
+                    && !currency.getCurrencyName().isEmpty()
+                    && currency.getCurrencyName().toUpperCase().contains(currencyStr.toUpperCase())) {
+                currencySuggestion.add(currency);
+            } else if (currency.getCurrencyDescription() != null
+                    && !currency.getCurrencyDescription().isEmpty()
+                    && currency.getCurrencyDescription().toUpperCase().contains(currencyStr.toUpperCase())) {
+                currencySuggestion.add(currency);
+            } else if (currency.getCurrencyIsoCode() != null
+                    && !currency.getCurrencyIsoCode().isEmpty()
+                    && currency.getCurrencyIsoCode().toUpperCase().contains(currencyStr.toUpperCase())) {
+                currencySuggestion.add(currency);
+            }
+        }
+        return currencySuggestion;
     }
 
     public DiscountType[] getDiscountTypes() {

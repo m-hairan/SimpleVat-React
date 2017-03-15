@@ -1,4 +1,4 @@
-package com.simplevat.util;
+package com.simplevat.converter;
 
 import com.simplevat.entity.Title;
 import org.apache.log4j.Logger;
