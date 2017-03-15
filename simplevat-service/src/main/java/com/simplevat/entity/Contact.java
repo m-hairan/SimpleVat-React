@@ -6,7 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Collection;
-\
+
 /**
  * Created by mohsinh on 2/26/2017.
  */
