@@ -35,6 +35,12 @@ public class InvoiceListController implements Serializable {
     @Autowired
     private InvoiceService invoiceService;
 
+    public InvoiceListController()
+    {
+        System.out.println("Init Method called from constructor----");
+
+    }
+
     @PostConstruct
     public void listAllInvoices() {
         System.out.println("Init Method called----");
