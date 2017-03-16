@@ -12,6 +12,8 @@ public interface ContactService {
     public List<Contact> getContacts(Integer pageIndex, Integer noOfRecorgs);
 
     public List<Contact> getContacts();
+    
+    public List<Contact> getContacts(final String searchQuery);
 
     public Contact createContact(Contact contact);
 }

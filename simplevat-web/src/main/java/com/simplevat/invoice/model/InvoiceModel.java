@@ -1,5 +1,6 @@
 package com.simplevat.invoice.model;
 
+import com.simplevat.entity.Contact;
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.invoice.DiscountType;
 import java.math.BigDecimal;
@@ -19,7 +20,7 @@ import lombok.Setter;
 @Setter
 public class InvoiceModel {
 
-    private String contactId;
+    private Contact contact;
 
     private String projectId;
 

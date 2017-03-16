@@ -36,4 +36,9 @@ public class ContactServiceImpl implements ContactService {
     public Contact createContact(Contact contact) {
         return contactDao.createContact(contact);
     }
+
+    @Override
+    public List<Contact> getContacts(final String searchQuery) {
+        return contactDao.getContacts(searchQuery);
+    }
 }

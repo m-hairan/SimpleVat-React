@@ -10,17 +10,19 @@ import java.util.Collection;
 /**
  * Created by mohsinh on 2/26/2017.
  */
-
 @NamedQueries({
-        @NamedQuery(name="allContacts",
-                query="SELECT c " +
-                        "FROM Contact c")
+    @NamedQuery(name = "allContacts",
+            query = "SELECT c "
+            + "FROM Contact c"),
+    @NamedQuery(name = "Contact.contactsByName",
+            query = "SELECT c FROM Contact c WHERE (c.firstName LIKE :name or c.lastName LIKE :name) ")
 })
 
 @Entity
 @Table(name = "CONTACT")
 @Data
 public class Contact {
+
     @Id
     @Column(name = "CONTACT_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -121,7 +123,5 @@ public class Contact {
     private Title title;
 //    private Collection<Invoice> invoicesByContactId;
 //    private Collection<Project> projectsByContactId;
-
-
 
 }

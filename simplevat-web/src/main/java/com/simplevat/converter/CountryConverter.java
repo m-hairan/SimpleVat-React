@@ -1,7 +1,7 @@
-package com.simplevat.util;
+package com.simplevat.converter;
 
 import com.simplevat.controller.contact.ContactController;
-import com.simplevat.entity.Currency;
+import com.simplevat.entity.Country;
 import org.apache.log4j.Logger;
 
 import javax.faces.component.UIComponent;
@@ -13,19 +13,18 @@ import javax.faces.convert.FacesConverter;
  * Created by mohsin on 3/11/2017.
  */
 
-@FacesConverter( value = "com.simplevat.util.CurrencyConverter")
-public class CurrencyConverter implements Converter {
+@FacesConverter( value = "com.simplevat.util.CountryConverter")
+public class CountryConverter implements Converter {
 
-
-    final static Logger logger = Logger.getLogger(CurrencyConverter.class);
+    final static Logger logger = Logger.getLogger(CountryConverter.class);
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         if (value != null && !value.isEmpty())
         {
-            Currency currency = new Currency();
-            currency.setCurrencyCode(Integer.parseInt(value));
-            return currency;
+            Country country = new Country();
+            country.setCountryCode(Integer.parseInt(value));
+            return country;
         }
 
         return null;
@@ -33,9 +32,9 @@ public class CurrencyConverter implements Converter {
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if (value instanceof Currency) {
-            Currency currency = (Currency) value;
-            return Integer.toString(currency.getCurrencyCode());
+        if (value instanceof Country) {
+            Country country = (Country) value;
+            return Integer.toString(country.getCountryCode());
         }
         return value.toString();
     }

@@ -1,4 +1,4 @@
-package com.simplevat.util;
+package com.simplevat.converter;
 
 import com.simplevat.controller.contact.ContactController;
 import com.simplevat.entity.Country;
