@@ -21,9 +21,11 @@ import org.springframework.stereotype.Controller;
 @RequestScoped
 public class ContactListController implements Serializable {
 
+    private static final long serialVersionUID = 2549403337578048506L;
 	final static Logger logger = Logger.getLogger(ContactListController.class);
 
-	@Getter
+
+    @Getter
     @Setter
     private Map<Long, Boolean> selectedContactIds = new HashMap<Long, Boolean>();
 
