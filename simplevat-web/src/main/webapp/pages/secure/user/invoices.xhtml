@@ -60,8 +60,8 @@
                                 </h:outputText>
                             </p:column>
 
-                            <p:column headerText="Due Date" sortBy="#{invoice.invoiceDueOn}">
-
+                            <p:column headerText="Invoice Due On" sortBy="#{invoice.invoiceDueOn}">
+                                <h:outputText value="#{invoice.invoiceDueOn}" />
                             </p:column>
 
                             <p:column headerText="Contact Name"

@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 import com.simplevat.service.invoice.InvoiceService;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,15 +34,8 @@ public class InvoiceListController implements Serializable {
     @Autowired
     private InvoiceService invoiceService;
 
-    public InvoiceListController()
-    {
-        System.out.println("Init Method called from constructor----");
-
-    }
-
     @PostConstruct
     public void listAllInvoices() {
-        System.out.println("Init Method called----");
         this.setInvoices(invoiceService.getInvoices());
     }
 

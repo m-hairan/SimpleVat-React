@@ -4,6 +4,20 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/template.xhtml">
+    <ui:define name="head">
+        <style>
+            .ui-datatable .ui-state-highlight{
+                background-color: #e8e8e8 !important; 
+            }
+            body .ui-datatable tbody tr.ui-state-highlight .ui-inputfield{
+                color: #009688;
+                border-color: #009688;
+            }
+            body .ui-widget-content .ui-icon{
+                color: #009688;
+            }
+        </style>
+    </ui:define>
 
     <ui:define name="title">Invoices</ui:define>
     <ui:define name="content">
@@ -106,31 +120,75 @@
 
                             <p:fieldset legend="Invoice Item Details" toggleable="true" 
                                         toggleSpeed="300">
-                                <p:dataTable reflow="true">
-                                    <f:facet name="header">
-                                        Invoice Items
-                                    </f:facet>
+                                <p:dataTable value="#{invoiceController.invoiceModel.invoiceItems}"
+                                             var="invoiceItem" 
+                                             editable="true"
+                                             id="invoiceItemTable"
+                                             reflow="true">
+
                                     <p:column headerText="Quantity" >
-                                        <h:outputText value="5" />
+                                        <p:cellEditor>
+                                            <f:facet name="output">
+                                                <h:outputText value="#{invoiceItem.quatity}" />
+                                            </f:facet>
+                                            <f:facet name="input">
+                                                <p:inputText id="quantity" 
+                                                             value="#{invoiceItem.quatity}" 
+                                                             style="width:100%"/>
+                                            </f:facet>
+                                        </p:cellEditor>
                                     </p:column>
 
                                     <p:column headerText="Unit Price" >
-                                        <h:outputText value="500" />
+                                        <p:cellEditor>
+                                            <f:facet name="output">
+                                                <h:outputText value="#{invoiceItem.unitPrice}" />
+                                            </f:facet>
+                                            <f:facet name="input">
+                                                <p:inputText id="unitPrice" 
+                                                             value="#{invoiceItem.unitPrice}" 
+                                                             style="width:100%"/>
+                                            </f:facet>
+                                        </p:cellEditor>
                                     </p:column>
 
                                     <p:column headerText="VAT">
-                                        <h:outputText value="23" />
+                                        <p:cellEditor>
+                                            <f:facet name="output">
+                                                <h:outputText value="#{invoiceItem.vatId}" />
+                                            </f:facet>
+                                            <f:facet name="input">
+                                                <p:inputText id="vatId" 
+                                                             value="#{invoiceItem.vatId}" 
+                                                             style="width:100%"/>
+                                            </f:facet>
+                                        </p:cellEditor>
                                     </p:column>
 
                                     <p:column headerText="Description">
-                                        <h:outputText value="Description" />
+                                        <p:cellEditor>
+                                            <f:facet name="output">
+                                                <h:outputText value="#{invoiceItem.description}" />
+                                            </f:facet>
+                                            <f:facet name="input">
+                                                <p:inputText id="description" 
+                                                             value="#{invoiceItem.description}" 
+                                                             style="width:100%"/>
+                                            </f:facet>
+                                        </p:cellEditor>
                                     </p:column>
 
                                     <p:column headerText="Subtotal">
-                                        <h:outputText value="Subtotal" />
+                                        <h:outputText value="#{invoiceItem.subTotal}" />
+                                    </p:column>
+                                    <p:column style="width:32px">
+                                        <p:rowEditor />
                                     </p:column>
                                 </p:dataTable>
-                                <p:commandButton style="width: 10%; margin-top: 3px" value="Add"
+                                <p:commandButton actionListener="#{invoiceController.addInvoiceItem()}"
+                                                 style="width: 10%; margin-top: 3px" 
+                                                 update="invoiceItemTable"
+                                                 value="Add"
                                                  icon="ui-icon-plus" />
                             </p:fieldset>
 
@@ -145,12 +203,18 @@
 
                                     <p:outputLabel for="discountType"  />
                                     <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText id="discountType"
-                                                     value="#{invoiceController.invoiceModel.discount}"
-                                                     converterMessage="Please enter digits only.">
-                                        </p:inputText>
+                                        <p:autoComplete id="discountType"
+                                                        dropdown="true" 
+                                                        forceSelection="true"
+                                                        effect="fold" 
+                                                        completeMethod="#{invoiceController.discountTypes}" 
+                                                        value="#{invoiceController.invoiceModel.discountType}"
+                                                        var="type" itemValue="#{type}"
+                                                        itemLabel="#{type.toString()}" />
+
                                         <label>Discount Type</label>
                                     </h:panelGroup>
+
 
                                     <p:outputLabel for="discountValue"  />
                                     <h:panelGroup styleClass="md-inputfield">

@@ -16,7 +16,7 @@ public class InvoiceItemModel {
 
     private BigDecimal unitPrice;
 
-    private String vatId;
+    private BigDecimal vatId;
 
     private String description;
 

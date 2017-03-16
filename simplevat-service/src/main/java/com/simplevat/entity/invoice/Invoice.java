@@ -1,6 +1,7 @@
 package com.simplevat.entity.invoice;
 
 import com.simplevat.entity.Contact;
+import com.simplevat.entity.Currency;
 import com.simplevat.entity.Project;
 import java.io.Serializable;
 import lombok.Data;
@@ -48,20 +49,12 @@ public class Invoice implements Serializable {
     @Column(name = "INVOICE_DISCOUNT")
     private BigDecimal invoiceDiscount;
 
-    @Column(name = "CONTACT_FULL_NAME")
-    private String contactFullName;
-
-    @Column(name = "PROJECT_NAME")
-    private String projectName;
-
     @Column(name = "CONTRACT_PO_NUMBER")
     private String contractPoNumber;
 
-    @Column(name = "LANGUAGE_CODE")
-    private Integer languageCode;
-
-    @Column(name = "CURRENCY_CODE")
-    private Integer currencyCode;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CURRENCY_CODE")
+    private Currency currency;
 
     @Column(name = "CREATED_BY")
     private Integer createdBy;
@@ -70,8 +63,8 @@ public class Invoice implements Serializable {
     @Column(name = "CREATED_DATE")
     private Calendar createdDate;
 
-//    @Column(name = "LAST_UPDATED_BY")
-//    private Integer lastUpdatedBy;
+    @Column(name = "LAST_UPDATED_BY")
+    private Integer lastUpdatedBy;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "LAST_UPDATE_DATE")
@@ -83,15 +76,15 @@ public class Invoice implements Serializable {
     @Column(name = "VERSION_NUMBER")
     private int versionNumber;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CONTACT_ID")
     private Contact invoiceContact;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PROJECT_ID")
     private Project invoiceProject;
 
-//    private Language languageByLanguageCode;
-//    private Currency currencyByCurrencyCode;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<InvoiceLineItem> invoiceLineItems;
 
 }

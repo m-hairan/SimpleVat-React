@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  *
  * @author Hiren
  */
-@Service("invoiceService")
+@Service
 public class InvoiceServiceImpl implements InvoiceService {
 
     @Autowired

@@ -12,13 +12,13 @@ import com.simplevat.service.invoice.InvoiceService;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
@@ -26,6 +26,7 @@ import lombok.Setter;
  */
 @ViewScoped
 @ManagedBean
+@Component
 public class InvoiceController {
 
     @Getter
@@ -35,31 +36,27 @@ public class InvoiceController {
     @Setter
     private List<Currency> currencies;
 
-    @Setter
-    @ManagedProperty("#{contactService}")
+    @Autowired
     private ContactService contactService;
 
-    @Setter
-    @ManagedProperty("#{currencyService}")
+    @Autowired
     private CurrencyService currencyService;
 
-    @Setter
-    @ManagedProperty("#{invoiceConverter}")
-    private InvoiceConverter invoiceConverter;
+    @Autowired
+    private InvoiceModelConverter invoiceConverter;
 
-    @Setter
-    @ManagedProperty("#{invoiceService}")
+    @Autowired
     private InvoiceService invoiceService;
 
     @PostConstruct
     public void initInvoice() {
         invoiceModel = new InvoiceModel();
         currencies = currencyService.getCurrencies();
-        addInvoiceItem(new InvoiceItemModel());
+        addInvoiceItem();
     }
 
-    public void addInvoiceItem(@Nonnull final InvoiceItemModel invoiceItemModel) {
-        invoiceModel.addInvoiceItem(invoiceItemModel);
+    public void addInvoiceItem() {
+        invoiceModel.addInvoiceItem(new InvoiceItemModel());
     }
 
     public List<Contact> contacts(final String searchQuery) {
@@ -89,12 +86,21 @@ public class InvoiceController {
         return currencySuggestion;
     }
 
-    public DiscountType[] getDiscountTypes() {
-        return DiscountType.values();
+    public List<DiscountType> discountTypes(final String searchString) {
+        final List<DiscountType> types = new ArrayList<>();
+        for (DiscountType type : DiscountType.values()) {
+            if (null == searchString || searchString.isEmpty()) {
+                return types;
+            }
+            if (type.toString().toLowerCase().contains(searchString.toLowerCase())) {
+                types.add(type);
+            }
+        }
+        return types;
     }
 
     public void saveInvoice() {
-        Invoice invoice = invoiceConverter.convertModelToEntity(invoiceModel);
+        final Invoice invoice = invoiceConverter.convertModelToEntity(invoiceModel);
         invoiceService.saveInvoice(invoice);
     }
 
