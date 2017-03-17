@@ -16,4 +16,6 @@ public interface ContactService {
     public List<Contact> getContacts(final String searchQuery);
 
     public Contact createContact(Contact contact);
+    
+     public Contact getContact(int id);
 }

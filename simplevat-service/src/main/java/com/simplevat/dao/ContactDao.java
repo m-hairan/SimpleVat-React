@@ -16,4 +16,6 @@ public interface ContactDao {
     public List<Contact> getContacts(final String searchQuery);
 
     public Contact createContact(Contact contact);
+    
+    Contact getContact(int id);
 }

@@ -17,6 +17,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -100,8 +101,17 @@ public class InvoiceController {
     }
 
     public void saveInvoice() {
-        final Invoice invoice = invoiceConverter.convertModelToEntity(invoiceModel);
+        final Invoice invoice = invoiceConverter
+                .convertModelToEntity(invoiceModel);
         invoiceService.saveInvoice(invoice);
+    }
+
+    public void updateCurrency() {
+
+        if (null != invoiceModel.getContact()) {
+            final Contact contact = contactService.getContact(invoiceModel.getContact().getContactId());
+            invoiceModel.setCurrencyCode(contact.getCurrency());
+        }
     }
 
 }

@@ -45,4 +45,9 @@ public class ContactDaoImpl implements ContactDao {
         entityManager.persist(contact);
         return contact;
     }
+
+    @Override
+    public Contact getContact(int id) {
+        return entityManager.find(Contact.class, id);
+    }
 }

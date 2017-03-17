@@ -54,7 +54,9 @@
                                                         value="#{invoiceController.invoiceModel.contact}" 
                                                         var="contact"
                                                         itemValue="#{contact.contactId}"
-                                                        itemLabel="#{contact.firstName} #{contact.lastName}"/>
+                                                        itemLabel="#{contact.firstName} #{contact.lastName}">
+                                            <p:ajax event="itemSelect" listener="#{invoiceController.updateCurrency}" update="currency" />
+                                        </p:autoComplete>
                                         <label>Contact</label>
 
                                     </h:panelGroup>
