@@ -1,4 +1,7 @@
-Project coding standards:
+<h1>Simple-Vat Application</h1>
+
+<h3>Project coding standards:</h3>
+
 
 1. Do not display lebels. Use only empty lebels.
 2. Use autocomplete as an alter native for dropdowns.
@@ -25,16 +28,35 @@ Project coding standards:
 19. <Domain>Model naming for model classes
 20. Use One xhtml page for both create/edit functionality. Just render labels based on action.
 
+<h3>Points to be Added/Refactored</h3>
 
-
-Project Milestone & Scope
+- POM Refactoring. Dependency declaration to parent.
+- DriverManager issue
+- Add Validators
+    - Use lombok as much as possible 
+- Spring Security
+- SQL Injection Filter
+- Implement Cache
+- Controller refactor. Use Services
+- Criteria queries better than named Queries. (Some refactoring)
+    - Paging for all get\<Domain>s() calls.
+- Wrappers/DTO/Model for UI object and entity mapper to dto
+- Omit the Unused code
+- Serializable on dto/model. not on Controller 
+- Properties must be injected from Spring
+- Don't use Calendar/ util date/ SQL date time/ timestamp. Use java time api
+- Manage GIT efficiently. Create PRs
+- Use Mockito. Write tests for each method
+- Unit tests rollback
+  
+<h3>Project Milestone & Scope</h3>
 
 1. Alpha Release: 15th June 2017(Release of first version of application.)
 2. Beta Release : 15th October 2017(Production ready version of application.)
 3. Final product Release: 15th December 2017 (Application live on production mode.)
 
 
-Detailed milestone plan
+<h3>Detailed milestone plan</h3>
 
 1. Alpha Release: (Today to 15 June)
 	1. Completion of Contact, Invoice and Expense crud operations. (20th March 2017)
