@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface RoleDao {
 
-    public List<Role> getRoles();
+    List<Role> getRoles();
 
-    public Role getRoleById(Integer roleCode);
+    Role getRoleById(Integer roleCode);
 }

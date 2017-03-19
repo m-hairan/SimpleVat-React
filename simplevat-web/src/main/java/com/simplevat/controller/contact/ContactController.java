@@ -4,7 +4,8 @@ import com.simplevat.entity.*;
 import com.simplevat.service.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.stereotype.Controller;
@@ -26,7 +27,7 @@ import java.util.List;
 @RequestScoped
 public class ContactController implements Serializable {
 
-    final static Logger logger = Logger.getLogger(ContactController.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(ContactController.class);
 
     @Autowired
     private DefaultListableBeanFactory beanFactory;
@@ -83,142 +84,140 @@ public class ContactController implements Serializable {
         contact.setCurrency(currencies.get(0));
         contactListController = (ContactListController) beanFactory.getBean("contactListController");
 
-        logger.debug("Loaded Countries :"+countries.size());
+        LOGGER.debug("Loaded Countries :" + countries.size());
     }
 
-    public String createNewContact()
-    {
-        logger.debug("Creating contact");
+    public String createNewContact() {
+        LOGGER.debug("Creating contact");
         this.contactService.createContact(contact);
 
-        logger.debug("contactListController :"+contactListController);
+        LOGGER.debug("contactListController :" + contactListController);
         contactListController.getContacts().add(contact);
-        logger.debug("Created contact :"+contact.getContactId() +" Name :"+contact.getFirstName());
+        LOGGER.debug("Created contact :" + contact.getContactId() + " Name :" + contact.getFirstName());
         this.init();
         return "/pages/secure/contact/contacts.xhtml";
     }
-    public List<Title> completeTitle(String titleStr)
-    {
+
+    public String editContact() {
+        LOGGER.debug("Update contact");
+        this.contactService.updateContact(contact);
+        contactListController.setContacts(contactService.getContacts());
+        LOGGER.debug("Update contact :" + contact.getContactId() + " Name :" + contact.getFirstName());
+        return "/pages/secure/contact/contacts.xhtml";
+    }
+
+    public List<Title> completeTitle(String titleStr) {
         List<Title> titleSuggestion = new ArrayList<>();
         Iterator<Title> titleIterator = this.titles.iterator();
 
-        logger.debug(" Size :"+titles.size());
+        LOGGER.debug(" Size :" + titles.size());
 
-        while (titleIterator.hasNext())
-        {
+        while (titleIterator.hasNext()) {
             Title title = titleIterator.next();
-            if(title.getTitleDescription() != null &&
+            if (title.getTitleDescription() != null &&
                     !title.getTitleDescription().isEmpty() &&
                     title.getTitleDescription().toUpperCase().contains(titleStr.toUpperCase())) {
                 titleSuggestion.add(title);
             }
         }
 
-        logger.debug(" Size :"+titleSuggestion.size());
+        LOGGER.debug(" Size :" + titleSuggestion.size());
 
         return titleSuggestion;
     }
 
-    public List<Country> completeCountry(String countryStr)
-    {
+    public List<Country> completeCountry(String countryStr) {
         List<Country> countrySuggestion = new ArrayList<>();
         Iterator<Country> countryIterator = this.countries.iterator();
 
-        logger.debug(" Size :"+countries.size());
+        LOGGER.debug(" Size :" + countries.size());
 
-        while (countryIterator.hasNext())
-        {
+        while (countryIterator.hasNext()) {
             Country country = countryIterator.next();
-            if(country.getCountryName() != null &&
+            if (country.getCountryName() != null &&
                     !country.getCountryName().isEmpty() &&
-                    country.getCountryName().toUpperCase().contains(countryStr.toUpperCase()))
-            {
+                    country.getCountryName().toUpperCase().contains(countryStr.toUpperCase())) {
                 countrySuggestion.add(country);
-            } else if(country.getIsoAlpha3Code() != null &&
+            } else if (country.getIsoAlpha3Code() != null &&
                     !country.getIsoAlpha3Code().isEmpty() &&
-                    country.getIsoAlpha3Code().toUpperCase().contains(countryStr.toUpperCase()))
-            {
+                    country.getIsoAlpha3Code().toUpperCase().contains(countryStr.toUpperCase())) {
                 countrySuggestion.add(country);
             }
         }
 
-        logger.debug(" Size :"+countrySuggestion.size());
+        LOGGER.debug(" Size :" + countrySuggestion.size());
 
         return countrySuggestion;
     }
 
-    public List<Language> completeLanguage(String languageStr)
-    {
+    public List<Language> completeLanguage(String languageStr) {
         List<Language> languageSuggestion = new ArrayList<>();
         Iterator<Language> languageIterator = this.languages.iterator();
 
-        logger.debug(" Size :"+languages.size());
+        LOGGER.debug(" Size :" + languages.size());
 
-        while (languageIterator.hasNext())
-        {
+        while (languageIterator.hasNext()) {
             Language language = languageIterator.next();
-            if(language.getLanguageName() != null &&
+            if (language.getLanguageName() != null &&
                     !language.getLanguageName().isEmpty() &&
-                    language.getLanguageName().toUpperCase().contains(languageStr.toUpperCase()))
-            {
-                logger.debug(" Language :"+language.getLanguageDescription());
+                    language.getLanguageName().toUpperCase().contains(languageStr.toUpperCase())) {
+                LOGGER.debug(" Language :" + language.getLanguageDescription());
                 languageSuggestion.add(language);
-            } else if(language.getLanguageDescription()     != null &&
+            } else if (language.getLanguageDescription() != null &&
                     !language.getLanguageDescription().isEmpty() &&
-                    language.getLanguageDescription().toUpperCase().contains(languageStr.toUpperCase()))
-            {
+                    language.getLanguageDescription().toUpperCase().contains(languageStr.toUpperCase())) {
                 languageSuggestion.add(language);
-                logger.debug(" Language :"+language.getLanguageDescription());
+                LOGGER.debug(" Language :" + language.getLanguageDescription());
             }
         }
 
-        logger.debug(" Size :"+languageSuggestion.size());
+        LOGGER.debug(" Size :" + languageSuggestion.size());
 
         return languageSuggestion;
     }
 
 
-    public List<Currency> completeCurrency(String currencyStr)
-    {
+    public List<Currency> completeCurrency(String currencyStr) {
         List<Currency> currencySuggestion = new ArrayList<>();
         Iterator<Currency> currencyIterator = this.currencies.iterator();
 
-        logger.debug(" Size :"+languages.size());
+        LOGGER.debug(" Size :" + languages.size());
 
-        while (currencyIterator.hasNext())
-        {
+        while (currencyIterator.hasNext()) {
             Currency currency = currencyIterator.next();
-            if(currency.getCurrencyName() != null &&
+            if (currency.getCurrencyName() != null &&
                     !currency.getCurrencyName().isEmpty() &&
-                    currency.getCurrencyName().toUpperCase().contains(currencyStr.toUpperCase()))
-            {
-                logger.debug(" Language :"+currency.getCurrencyDescription());
+                    currency.getCurrencyName().toUpperCase().contains(currencyStr.toUpperCase())) {
+                LOGGER.debug(" Language :" + currency.getCurrencyDescription());
                 currencySuggestion.add(currency);
-            } else if(currency.getCurrencyDescription()     != null &&
+            } else if (currency.getCurrencyDescription() != null &&
                     !currency.getCurrencyDescription().isEmpty() &&
-                    currency.getCurrencyDescription().toUpperCase().contains(currencyStr.toUpperCase()))
-            {
+                    currency.getCurrencyDescription().toUpperCase().contains(currencyStr.toUpperCase())) {
                 currencySuggestion.add(currency);
-                logger.debug(" Language :"+currency.getCurrencyDescription());
-            } else if(currency.getCurrencyIsoCode()     != null &&
+                LOGGER.debug(" Language :" + currency.getCurrencyDescription());
+            } else if (currency.getCurrencyIsoCode() != null &&
                     !currency.getCurrencyIsoCode().isEmpty() &&
-                    currency.getCurrencyIsoCode().toUpperCase().contains(currencyStr.toUpperCase()))
-            {
+                    currency.getCurrencyIsoCode().toUpperCase().contains(currencyStr.toUpperCase())) {
                 currencySuggestion.add(currency);
-                logger.debug(" Language :"+currency.getCurrencyIsoCode());
+                LOGGER.debug(" Language :" + currency.getCurrencyIsoCode());
             }
         }
 
-        logger.debug(" Size :"+currencySuggestion.size());
+        LOGGER.debug(" Size :" + currencySuggestion.size());
 
         return currencySuggestion;
     }
 
 
-    public String redirectToContactList()
-    {
-        logger.debug("Redirecting to create new contacts page");
+    public String redirectToContactList() {
+        LOGGER.debug("Redirecting to create new contacts page");
         return "/pages/secure/contact/contacts.xhtml";
     }
 
+    public String redirectToEditContact(Contact contact) {
+
+        this.contact = contact;
+        LOGGER.debug("Redirecting to create new contact page");
+        return "/pages/secure/contact/edit-contact.xhtml";
+    }
 }

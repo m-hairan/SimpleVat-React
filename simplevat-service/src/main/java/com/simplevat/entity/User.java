@@ -1,12 +1,7 @@
 package com.simplevat.entity;
 
-import com.simplevat.entity.Company;
-import com.simplevat.entity.Expense;
-import com.simplevat.entity.Role;
-
 import javax.persistence.*;
 import java.sql.Date;
-import java.util.Collection;
 
 /**
  * Created by mohsinh on 2/26/2017.

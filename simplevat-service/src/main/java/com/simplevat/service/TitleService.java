@@ -9,5 +9,5 @@ import java.util.List;
  */
 public interface TitleService {
 
-    public List<Title> getTitles();
+    List<Title> getTitles();
 }

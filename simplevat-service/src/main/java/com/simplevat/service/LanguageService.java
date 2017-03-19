@@ -9,5 +9,5 @@ import java.util.List;
  */
 public interface LanguageService {
 
-    public List<Language> getLanguages();
+    List<Language> getLanguages();
 }

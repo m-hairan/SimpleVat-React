@@ -1,7 +1,6 @@
 package com.simplevat.converter;
 
 import com.simplevat.entity.Title;
-import org.apache.log4j.Logger;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -11,16 +10,13 @@ import javax.faces.convert.FacesConverter;
 /**
  * Created by mohsin on 3/12/2017.
  */
-@FacesConverter( value = "com.simplevat.util.TitleConverter")
+@FacesConverter(value = "com.simplevat.util.TitleConverter")
 public class TitleConverter implements Converter {
-
-    final static Logger logger = Logger.getLogger(TitleConverter.class);
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
 
-        if (value != null && !value.isEmpty())
-        {
+        if (value != null && !value.isEmpty()) {
             Title title = new Title();
             title.setTitleCode(Integer.parseInt(value));
             return title;
@@ -30,8 +26,7 @@ public class TitleConverter implements Converter {
 
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
-        if (value == null)
-        {
+        if (value == null) {
             return null;
 
         } else if (value instanceof Title) {

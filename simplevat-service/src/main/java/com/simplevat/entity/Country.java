@@ -1,21 +1,17 @@
 package com.simplevat.entity;
 
-import com.simplevat.entity.BankAccount;
-import com.simplevat.entity.Company;
-import com.simplevat.entity.Contact;
 import lombok.Data;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Collection;
 
 /**
  * Created by mohsinh on 2/26/2017.
  */
 
 @NamedQueries({
-        @NamedQuery(name="allCountries",
-                query="SELECT c " +
+        @NamedQuery(name = "allCountries",
+                query = "SELECT c " +
                         "FROM Country c ")
 })
 
@@ -40,8 +36,8 @@ public class Country {
     @Setter
     private String countryFullName;
 
-    public String getCountryFullName(){
-        countryFullName = countryName+" - ("+isoAlpha3Code+")";
+    public String getCountryFullName() {
+        countryFullName = countryName + " - (" + isoAlpha3Code + ")";
         return countryFullName;
     }
 

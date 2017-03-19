@@ -1,13 +1,13 @@
 package com.simplevat.converter;
 
 import com.simplevat.entity.Contact;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 /**
- *
  * @author hiren
  */
 @FacesConverter("contactConverter")

@@ -9,13 +9,15 @@ import java.util.List;
  */
 public interface ContactService {
 
-    public List<Contact> getContacts(Integer pageIndex, Integer noOfRecorgs);
+    List<Contact> getContacts(Integer pageIndex, Integer noOfRecorgs);
 
-    public List<Contact> getContacts();
-    
-    public List<Contact> getContacts(final String searchQuery);
+    List<Contact> getContacts();
 
-    public Contact createContact(Contact contact);
-    
-     public Contact getContact(int id);
+    List<Contact> getContacts(final String searchQuery);
+
+    Contact createContact(Contact contact);
+
+    Contact getContact(int id);
+
+    Contact updateContact(Contact contact);
 }

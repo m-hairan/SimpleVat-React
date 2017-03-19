@@ -1,17 +1,16 @@
 package com.simplevat.expense.model;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 import lombok.Getter;
 import lombok.Setter;
-
 import org.primefaces.model.UploadedFile;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 @Getter
 @Setter
 public class ExpenseModel {
-    
+
     private int expenseId;
     private BigDecimal expenseAmount;
     private Date expenseDate;
@@ -30,5 +29,5 @@ public class ExpenseModel {
     private Date lastUpdateDate;
     private Character deleteFlag;
     private UploadedFile attachmentFile;
-    
+
 }

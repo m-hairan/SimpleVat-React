@@ -2,15 +2,18 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
-        http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context-4.3.xsd
-        http://www.springframework.org/schema/tx 
-        http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans         http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://www.springframework.org/schema/context       http://www.springframework.org/schema/context/spring-context-4.3.xsd
+        http://www.springframework.org/schema/tx            http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 
     <context:component-scan base-package="com.simplevat">
     </context:component-scan>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations" value="classpath:simplevat.properties"/>
+    </bean>
+
     <!--Empty strings instead of null values in JSF 2 on Tomcat 7-->
     <!--https://artofcode.wordpress.com/2013/08/21/empty-strings-instead-of-null-values-in-jsf-2-on-tomcat-7/-->
     <bean id="fixForTomcat"
@@ -26,16 +29,16 @@
     </bean>
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="dataSource" ref="dataSource" />
-        <property name="packagesToScan" value="com.simplevat.entity" />
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="com.simplevat.entity"/>
         <property name="jpaVendorAdapter">
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
         </property>
         <property name="jpaProperties">
             <props>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
-                <prop key = "hibernate.show_sql">true</prop>
+                <prop key="hibernate.show_sql">true</prop>
                 <prop key="hibernate.hbm2ddl.auto">validate</prop>
                 <prop key="hibernate.enable_lazy_load_no_trans">true</prop>
                 <!--<prop key="hibernate.cache.use_query_cache">true</prop>-->
@@ -44,21 +47,19 @@
     </bean>
 
     <!-- Data Source Declaration -->
-    <bean id="dataSource"
-          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://dev-simplevat-bk.c1suvjot86kl.us-west-2.rds.amazonaws.com:3306/simplevat"/>
-        <property name="username" value="simplevatuser"/>
-        <property name="password" value="SimpleVatUser123$"/>
-
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+        <property name="driverClassName"  value="${db.driverClass}"/>
+        <property name="jdbcUrl"          value="${db.url}"/>
+        <property name="username"         value="${db.username}"/>
+        <property name="password"         value="${db.password}"/>
     </bean>
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="entityManagerFactory" />
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
-    <tx:annotation-driven />
+    <tx:annotation-driven/>
 
     <bean id="persistenceExceptionTranslationPostProcessor"
-          class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+          class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
 
 </beans>

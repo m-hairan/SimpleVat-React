@@ -9,8 +9,8 @@ import javax.persistence.*;
  */
 
 @NamedQueries({
-        @NamedQuery(name="allTitles",
-                query="SELECT t " +
+        @NamedQuery(name = "allTitles",
+                query = "SELECT t " +
                         "FROM Title t ")
 })
 

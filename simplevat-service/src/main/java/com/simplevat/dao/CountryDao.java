@@ -9,5 +9,5 @@ import java.util.List;
  */
 public interface CountryDao {
 
-    public List<Country> getContries();
+    List<Country> getCountries();
 }

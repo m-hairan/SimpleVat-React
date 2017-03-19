@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,7 +22,7 @@ public class ContactServiceImpl implements ContactService {
 
     public List<Contact> getContacts(Integer pageIndex, Integer noOfRecorgs) {
 
-        return this.contactDao.getContacts(pageIndex,noOfRecorgs);
+        return this.contactDao.getContacts(pageIndex, noOfRecorgs);
     }
 
     @Override
@@ -41,9 +40,15 @@ public class ContactServiceImpl implements ContactService {
     public List<Contact> getContacts(final String searchQuery) {
         return contactDao.getContacts(searchQuery);
     }
-    
+
     @Override
-    public Contact getContact(final int id){
+    public Contact getContact(final int id) {
         return contactDao.getContact(id);
+    }
+
+    @Override
+    @Transactional
+    public Contact updateContact(Contact contact) {
+        return contactDao.updateContact(contact);
     }
 }

@@ -4,15 +4,14 @@ import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.entity.invoice.InvoiceLineItem;
 import com.simplevat.invoice.model.InvoiceItemModel;
 import com.simplevat.invoice.model.InvoiceModel;
+import org.springframework.stereotype.Component;
+
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.stream.Collectors;
-import org.springframework.stereotype.Component;
 
 /**
- *
  * @author hiren
- *
  */
 @Component
 public class InvoiceModelConverter {
@@ -42,7 +41,7 @@ public class InvoiceModelConverter {
                 .stream()
                 .map((lineModel) -> convertToLineItem(lineModel))
                 .collect(Collectors.toList());
-        
+
         invoice.setInvoiceLineItems(items);
 
         return invoice;
