@@ -228,3 +228,4 @@ pip-log.txt
 .idea/artifacts/simplevat_war_exploded.xml
 *.iml
 simplevat.iml
+/simplevat-web/nb-configuration.xml
