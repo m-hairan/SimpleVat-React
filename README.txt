@@ -23,7 +23,7 @@ Project coding standards:
 17. implement serialVersionUID in all serializable classes with unique long number
 18. Create Model classes per entity in web module
 19. <Domain>Model naming for model classes
-20. 
+20. Use One xhtml page for both create/edit functionality. Just render labels based on action.
 
 
 
