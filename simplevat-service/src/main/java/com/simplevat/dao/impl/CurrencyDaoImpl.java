@@ -12,14 +12,14 @@ import java.util.List;
  * Created by mohsin on 3/11/2017.
  */
 @Repository
-public class CurrencyDaoImpl implements CurrencyDao{
+public class CurrencyDaoImpl implements CurrencyDao {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
     public List<Currency> getCurrencies() {
-        List<Currency> languages = entityManager.createNamedQuery("allCurrencies",Currency.class).getResultList();
+        List<Currency> languages = entityManager.createNamedQuery("allCurrencies", Currency.class).getResultList();
 
         return languages;
     }

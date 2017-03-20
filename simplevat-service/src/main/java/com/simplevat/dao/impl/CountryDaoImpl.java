@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,9 +20,9 @@ public class CountryDaoImpl implements CountryDao {
     private EntityManager entityManager;
 
     @Override
-    public List<Country> getContries() {
+    public List<Country> getCountries() {
 
-        List<Country> countries = entityManager.createNamedQuery("allCountries",Country.class).getResultList();
+        List<Country> countries = entityManager.createNamedQuery("allCountries", Country.class).getResultList();
         return countries;
     }
 }

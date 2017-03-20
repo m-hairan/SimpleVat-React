@@ -3,7 +3,6 @@ package com.simplevat.dao.impl;
 import com.simplevat.dao.ContactDao;
 import com.simplevat.entity.Contact;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -49,5 +48,11 @@ public class ContactDaoImpl implements ContactDao {
     @Override
     public Contact getContact(int id) {
         return entityManager.find(Contact.class, id);
+    }
+
+    @Override
+    public Contact updateContact(Contact contact) {
+        entityManager.merge(contact);
+        return contact;
     }
 }

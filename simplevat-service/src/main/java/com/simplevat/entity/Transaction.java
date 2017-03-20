@@ -1,8 +1,5 @@
 package com.simplevat.entity;
 
-import com.simplevat.entity.BankAccount;
-import com.simplevat.entity.Project;
-import com.simplevat.entity.TransactionCategory;
 import lombok.Data;
 
 import javax.persistence.*;

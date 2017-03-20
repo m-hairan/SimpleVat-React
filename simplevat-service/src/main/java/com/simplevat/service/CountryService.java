@@ -9,5 +9,5 @@ import java.util.List;
  */
 public interface CountryService {
 
-    public List<Country> getCountries();
+    List<Country> getCountries();
 }

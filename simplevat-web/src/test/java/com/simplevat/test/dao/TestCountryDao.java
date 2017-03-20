@@ -14,7 +14,7 @@ public class TestCountryDao extends BaseManagerTest {
     @Test
     public void testGetCountries()
     {
-        List<Country> countries = this.countryDao.getContries();
+        List<Country> countries = this.countryDao.getCountries();
 
         System.out.println("Size :"+ countries.size());
     }

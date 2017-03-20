@@ -9,13 +9,15 @@ import java.util.List;
  */
 public interface ContactDao {
 
-    public List<Contact> getContacts(Integer pageIndex, Integer noOfRecorgs);
+    List<Contact> getContacts(Integer pageIndex, Integer noOfRecorgs);
 
-    public List<Contact> getContacts();
+    List<Contact> getContacts();
 
-    public List<Contact> getContacts(final String searchQuery);
+    List<Contact> getContacts(final String searchQuery);
 
-    public Contact createContact(Contact contact);
-    
+    Contact createContact(Contact contact);
+
     Contact getContact(int id);
+
+    Contact updateContact(Contact contact);
 }

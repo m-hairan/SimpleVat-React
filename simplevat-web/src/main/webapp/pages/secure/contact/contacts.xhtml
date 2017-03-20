@@ -97,10 +97,11 @@
                                     <h:outputText value="#{contact.telephone}" styleClass="phone"/>
                                     <h:outputText value="#{contact.email}" styleClass="email"/>
 
-                                    <h:panelGrid columns="2" style="margin: 0 auto">
-                                        <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" update=":form:selectedContactDetail" oncomplete="PF('contactDialog').show()">
-                                            <f:setPropertyActionListener value="#{contact}" target="#{contactListController.selectedContact}" />
-                                        </p:commandButton>
+                                    <h:panelGrid columns="1" style="margin: 0 auto">
+                                        <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" update=":form:selectedContactDetail" action="#{contactController.redirectToEditContact(contact)}" />
+                                        <!--<p:commandButton icon="ui-icon-edit" styleClass="AquaButton" update=":form:selectedContactDetail" oncomplete="PF('contactDialog').show()">-->
+                                            <!--<f:setPropertyActionListener value="#{contact}" target="#{contactListController.selectedContact}" />-->
+                                        <!--</p:commandButton>-->
 
                                         <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" update=":form:selectedContactDetail" oncomplete="PF('contactDialog').show()">
                                             <f:setPropertyActionListener value="#{contact}" target="#{contactListController.selectedContact}}" />

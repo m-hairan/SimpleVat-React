@@ -9,8 +9,8 @@ import java.util.List;
  */
 public interface LanguageDao {
 
-    public Language getLanguageById(Integer languageId);
+    Language getLanguageById(Integer languageId);
 
-    public List<Language> getLanguages();
+    List<Language> getLanguages();
 }
 

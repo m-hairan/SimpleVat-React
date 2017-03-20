@@ -3,6 +3,7 @@ package com.simplevat.test.service;
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Country;
 import com.simplevat.test.common.BaseManagerTest;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,5 +45,32 @@ public class TestContactService extends BaseManagerTest {
         contactService.createContact(contact);
 
         System.out.println(contact.getContactId()+" - "+contact.getFirstName()+" "+contact.getLastName());
+    }
+
+    @Test
+    public void testUpdateContact() throws Exception {
+        /* Insert new Contact to check edit */
+        Contact contact = new Contact();
+        contact.setFirstName("First Name");
+        contact.setLastName("Last Name");
+        Country country = new Country();
+        country.setCountryCode(10);
+        contact.setCountry(country);
+
+        /*Insert*/
+        final Contact insertedContact = contactService.createContact(contact);
+        Assert.assertNotNull(insertedContact);
+
+        contact.setContactId(insertedContact.getContactId());
+        final String updatedFirstName = "UPDATE NAME";
+        contact.setFirstName(updatedFirstName);
+
+        /*Update*/
+        Contact updatedContact = contactService.updateContact(contact);
+
+        /*Assert*/
+        Assert.assertNotNull(updatedContact);
+        Assert.assertEquals(updatedContact.getFirstName(), updatedFirstName);
+
     }
 }

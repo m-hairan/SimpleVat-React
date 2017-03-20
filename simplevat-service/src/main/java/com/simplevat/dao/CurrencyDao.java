@@ -9,5 +9,5 @@ import java.util.List;
  */
 public interface CurrencyDao {
 
-    public List<Currency> getCurrencies();
+    List<Currency> getCurrencies();
 }

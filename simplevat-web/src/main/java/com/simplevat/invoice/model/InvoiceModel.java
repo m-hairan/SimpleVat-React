@@ -3,17 +3,16 @@ package com.simplevat.invoice.model;
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.invoice.DiscountType;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import javax.annotation.Nonnull;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.annotation.Nonnull;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 /**
- *
  * @author hiren
  */
 @Getter

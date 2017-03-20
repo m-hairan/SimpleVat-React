@@ -13,7 +13,7 @@ import java.util.List;
  */
 
 @Repository
-public class RoleDaoImpl implements RoleDao{
+public class RoleDaoImpl implements RoleDao {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -24,6 +24,6 @@ public class RoleDaoImpl implements RoleDao{
     }
 
     public Role getRoleById(Integer roleCode) {
-        return entityManager.find(Role.class,roleCode);
+        return entityManager.find(Role.class, roleCode);
     }
 }

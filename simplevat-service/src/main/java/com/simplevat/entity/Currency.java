@@ -1,20 +1,16 @@
 package com.simplevat.entity;
 
-import com.simplevat.entity.BankAccount;
-import com.simplevat.entity.Contact;
-import com.simplevat.entity.Expense;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Collection;
 
 /**
  * Created by mohsinh on 2/26/2017.
  */
 
 @NamedQueries({
-        @NamedQuery(name="allCurrencies",
-                query="SELECT c " +
+        @NamedQuery(name = "allCurrencies",
+                query = "SELECT c " +
                         "FROM Currency c ")
 })
 

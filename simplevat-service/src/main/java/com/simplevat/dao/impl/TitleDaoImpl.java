@@ -20,7 +20,7 @@ public class TitleDaoImpl implements TitleDao {
 
     @Override
     public List<Title> getTitles() {
-        List<Title> titles = entityManager.createNamedQuery("allTitles",Title.class).getResultList();
+        List<Title> titles = entityManager.createNamedQuery("allTitles", Title.class).getResultList();
         return titles;
     }
 }

@@ -1,21 +1,19 @@
 package com.simplevat.entity;
 
-import com.simplevat.entity.Language;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.util.Collection;
 
 /**
  * Created by mohsinh on 2/26/2017.
  */
 @NamedQueries({
-    @NamedQuery(name = "allContacts",
-            query = "SELECT c "
-            + "FROM Contact c"),
-    @NamedQuery(name = "Contact.contactsByName",
-            query = "SELECT c FROM Contact c WHERE (c.firstName LIKE :name or c.lastName LIKE :name) ")
+        @NamedQuery(name = "allContacts",
+                query = "SELECT c "
+                        + "FROM Contact c"),
+        @NamedQuery(name = "Contact.contactsByName",
+                query = "SELECT c FROM Contact c WHERE (c.firstName LIKE :name or c.lastName LIKE :name) ")
 })
 
 @Entity
@@ -72,7 +70,7 @@ public class Contact {
     @Basic
     @Column(name = "PO_BOX_NUMBER")
     private String poBoxNumber;
-//    @Basic
+    //    @Basic
 //    @Column(name = "COUNTRY_CODE")
 //    private Integer countryCode;
     @Basic
@@ -81,7 +79,7 @@ public class Contact {
     @Basic
     @Column(name = "VAT_REGISTRATION_NUMBER")
     private String vatRegistrationNumber;
-//    @Basic
+    //    @Basic
 //    @Column(name = "INVOICE_LANGUAGE_CODE")
 //    private Integer invoiceLanguageCode;
 //    @Basic
