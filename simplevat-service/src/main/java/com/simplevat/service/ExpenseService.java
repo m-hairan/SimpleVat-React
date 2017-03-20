@@ -1,13 +1,17 @@
 package com.simplevat.service;
 
+import java.util.List;
+
 import com.simplevat.entity.Expense;
 
 import java.util.List;
 
 public interface ExpenseService {
-
-    Expense saveExpense(Expense expense);
-
-    List<Expense> getExpenseList();
+	
+	public Expense saveExpense(Expense expense);
+	
+	public Expense updateExpense(Expense expense);
+	
+	public List<Expense> getExpenses();
 
 }

@@ -3,16 +3,23 @@ package com.simplevat.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * Created by mohsinh on 2/26/2017.
  */
+@NamedQueries({
+    @NamedQuery(name = "allExpenses",
+            query = "SELECT e "
+            + "FROM Expense e where e.deleteFlag = FALSE")
+})
+
 @Entity
 @Table(name = "EXPENSE")
 @Data
-public class Expense {
+public class Expense{
 
     @Id
     @Column(name = "EXPENSE_ID")
@@ -65,7 +72,7 @@ public class Expense {
     private Date lastUpdateDate;
     @Basic
     @Column(name = "DELETE_FLAG")
-    private Character deleteFlag;
+    private boolean deleteFlag;
 //    private User userByClaimantId;
 //    private TransactionType transactionTypeByTransactionTypeCode;
 //    private TransactionCategory transactionCategoryByTransactionCategoryCode;
