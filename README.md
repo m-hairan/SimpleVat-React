@@ -15,10 +15,10 @@
 10. Plural names for listing and single name for create and edit pages.
 11. Name of the controller = <View Name>Controller
 12. Crud Name
-	a. save<Domain>()
-	b. delete<Domain>()
-	c. get<Domain>ById()
-	d. get<Domain>s()
+    - save<Domain>()
+	- delete<Domain>()
+	- get<Domain>ById()
+	- get<Domain>s()
 13. Named queries in Domain classes. Named queries should be <Domain>.queryname
 14. Package per module in dao, services etc.
 15. common package in dao, services etc. for common classes
