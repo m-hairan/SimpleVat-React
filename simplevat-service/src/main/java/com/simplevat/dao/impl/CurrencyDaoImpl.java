@@ -23,4 +23,8 @@ public class CurrencyDaoImpl implements CurrencyDao {
 
         return languages;
     }
+
+    public Currency getCurrency(final int currencyCode) {
+        return entityManager.find(Currency.class, currencyCode);
+    }
 }

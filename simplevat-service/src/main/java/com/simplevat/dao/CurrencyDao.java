@@ -10,4 +10,6 @@ import java.util.List;
 public interface CurrencyDao {
 
     List<Currency> getCurrencies();
+    
+    Currency getCurrency(final int currencyCode);
 }

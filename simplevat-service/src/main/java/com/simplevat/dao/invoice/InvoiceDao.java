@@ -9,10 +9,12 @@ import java.util.List;
  */
 public interface InvoiceDao {
 
-    Invoice getInvoice(String invoice);
+    Invoice getInvoice(int invoiceId);
 
     List<Invoice> getInvoices();
-    
+
     void saveInvoice(Invoice invoice);
+
+    Invoice updateInvoice(Invoice invoice);
 
 }

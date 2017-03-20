@@ -11,7 +11,6 @@ import java.util.List;
 /**
  * Created by mohsin on 3/11/2017.
  */
-
 @Service("currencyService")
 public class CurrencyServiceImpl implements CurrencyService {
 
@@ -21,5 +20,10 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     public List<Currency> getCurrencies() {
         return CurrencyDao.getCurrencies();
+    }
+
+    @Override
+    public Currency getCurrency(final int currencyCode) {
+        return CurrencyDao.getCurrency(currencyCode);
     }
 }

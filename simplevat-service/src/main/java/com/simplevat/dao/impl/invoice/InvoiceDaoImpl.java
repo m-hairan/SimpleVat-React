@@ -2,14 +2,7 @@ package com.simplevat.dao.impl.invoice;
 
 import com.simplevat.dao.invoice.InvoiceDao;
 import com.simplevat.entity.invoice.Invoice;
-import com.simplevat.entity.invoice.InvoiceLineItem;
-import com.simplevat.entity.invoice.InvoiceStatus;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
@@ -27,7 +20,7 @@ public class InvoiceDaoImpl implements InvoiceDao {
     private EntityManager entityManager;
 
     @Override
-    public Invoice getInvoice(String invoiceId) {
+    public Invoice getInvoice(int invoiceId) {
 
         return entityManager.find(Invoice.class, invoiceId);
 
@@ -35,22 +28,18 @@ public class InvoiceDaoImpl implements InvoiceDao {
 
     @Override
     public List<Invoice> getInvoices() {
-        return entityManager.createQuery("from Invoice i", Invoice.class)
+        return entityManager.createNamedQuery("Invoice.searchInvoices", Invoice.class)
                 .getResultList();
-    }
-
-    private InvoiceStatus randomStatus() {
-        final List<InvoiceStatus> VALUES
-                = Collections.unmodifiableList(Arrays
-                        .asList(InvoiceStatus.values()));
-        final int SIZE = VALUES.size();
-        final Random RANDOM = new Random();
-        return VALUES.get(RANDOM.nextInt(SIZE));
     }
 
     @Override
     public void saveInvoice(Invoice invoice) {
         entityManager.persist(invoice);
+    }
+
+    @Override
+    public Invoice updateInvoice(Invoice invoice) {
+        return entityManager.merge(invoice);
     }
 
 }

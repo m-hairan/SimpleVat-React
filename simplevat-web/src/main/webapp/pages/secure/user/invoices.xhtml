@@ -13,6 +13,7 @@
                 <div class="ui-g-12">
                     <div class="card card-w-title">
                         <h1>Invoices</h1>
+                        <p:messages />
                         <p:toolbar>
                             <f:facet name="left">
                                 <p:commandButton value="New"
@@ -77,11 +78,14 @@
                             </p:column>
 
                             <p:column headerText="Action">
-                                <p:commandButton title="View Invoice"
-                                                 icon="ui-icon-search">
+                                <p:commandButton title="Edit Invoice"
+                                                 icon="ui-icon-edit"
+                                                 actionListener="#{invoiceController.redirectEditInvoice(invoice.invoiceId)}">
                                 </p:commandButton>
                                 <p:commandButton style="margin-left: 7px" 
                                                  title="Delete Invoice" 
+                                                 actionListener="#{invoiceListController.deleteInvoice(invoice)}"
+                                                 update="@form"
                                                  icon="ui-icon-delete">
                                 </p:commandButton>
                             </p:column>

@@ -23,13 +23,18 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public Invoice getInvoice(String invoiceUUID) {
-        return invoiceDao.getInvoice(invoiceUUID);
+    public Invoice getInvoice(int invoiceId) {
+        return invoiceDao.getInvoice(invoiceId);
     }
 
     @Override
     public void saveInvoice(Invoice invoice) {
         invoiceDao.saveInvoice(invoice);
+    }
+
+    @Override
+    public Invoice updateInvoice(Invoice invoice) {
+        return invoiceDao.updateInvoice(invoice);
     }
 
 }

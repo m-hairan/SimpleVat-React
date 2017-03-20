@@ -4,26 +4,41 @@ import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.entity.invoice.InvoiceLineItem;
 import com.simplevat.invoice.model.InvoiceItemModel;
 import com.simplevat.invoice.model.InvoiceModel;
-import org.springframework.stereotype.Component;
-
+import com.simplevat.service.invoice.InvoiceService;
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
- * @author hiren
+ *
+ * @author Hiren
+ *
  */
 @Component
 public class InvoiceModelConverter {
 
-    public Invoice convertModelToEntity(InvoiceModel invoiceModel) {
+    @Autowired
+    private InvoiceService invoiceService;
+
+    @Nonnull
+    public Invoice convertModelToEntity(@Nonnull final InvoiceModel invoiceModel) {
         final Calendar invoiceDate = Calendar.getInstance();
         invoiceDate.setTime(invoiceModel.getInvoiceDate());
 
-        Invoice invoice = new Invoice();
+        Invoice invoice = null;
+
+        if (invoiceModel.getInvoiceId() > 0) {
+            invoice = invoiceService.getInvoice(invoiceModel.getInvoiceId());
+        } else {
+            invoice = new Invoice();
+        }
 
         invoice.setContractPoNumber(invoiceModel.getContractPoNumber());
-        invoice.setCreatedDate(Calendar.getInstance());
         invoice.setCurrency(invoiceModel.getCurrencyCode());
 
         invoice.setInvoiceContact(invoiceModel.getContact());
@@ -33,8 +48,6 @@ public class InvoiceModelConverter {
         invoice.setInvoiceDueOn(invoiceModel.getInvoiceDueOn());
         invoice.setInvoiceReferenceNumber(invoiceModel.getInvoiceRefNo());
         invoice.setInvoiceText(invoiceModel.getInvoiceText());
-
-        invoice.setLastUpdateDate(Calendar.getInstance());
 
         final Collection<InvoiceLineItem> items = invoiceModel
                 .getInvoiceItems()
@@ -47,7 +60,8 @@ public class InvoiceModelConverter {
         return invoice;
     }
 
-    private InvoiceLineItem convertToLineItem(final InvoiceItemModel model) {
+    @Nonnull
+    private InvoiceLineItem convertToLineItem(@Nonnull final InvoiceItemModel model) {
         final InvoiceLineItem item = new InvoiceLineItem();
 
         item.setCreatedDate(Calendar.getInstance());
@@ -60,5 +74,65 @@ public class InvoiceModelConverter {
         item.setLastUpdateDate(Calendar.getInstance());
 
         return item;
+    }
+
+    @Nonnull
+    public InvoiceModel convertEntityToModel(@Nonnull final Invoice invoice) {
+
+        InvoiceModel invoiceModel = new InvoiceModel();
+
+        invoiceModel.setContractPoNumber(invoice.getContractPoNumber());
+        invoiceModel.setCurrencyCode(invoice.getCurrency());
+        invoiceModel.setInvoiceId(invoice.getInvoiceId());
+        invoiceModel.setContact(invoice.getInvoiceContact());
+        invoiceModel.setInvoiceDate(null != invoice.getInvoiceDate() ? invoice.getInvoiceDate().getTime() : null);
+        invoiceModel.setDiscount(invoice.getInvoiceDiscount());
+        invoiceModel.setDiscountType(invoice.getInvoiceDiscountType());
+        invoiceModel.setInvoiceDueOn(invoice.getInvoiceDueOn());
+        invoiceModel.setInvoiceRefNo(invoice.getInvoiceReferenceNumber());
+        invoiceModel.setInvoiceText(invoice.getInvoiceText());
+
+        final List<InvoiceItemModel> items = invoice
+                .getInvoiceLineItems()
+                .stream()
+                .map((lineItem) -> convertToItemModel(lineItem))
+                .collect(Collectors.toList());
+
+        invoiceModel.setInvoiceItems(items);
+
+        return invoiceModel;
+    }
+
+    @Nonnull
+    public InvoiceItemModel convertToItemModel(@Nonnull final InvoiceLineItem invoiceLineItem) {
+
+        final InvoiceItemModel model = new InvoiceItemModel();
+
+        model.setDescription(invoiceLineItem.getInvoiceLineItemDescription());
+        model.setQuatity(invoiceLineItem.getInvoiceLineItemQuantity());
+        model.setUnitPrice(invoiceLineItem.getInvoiceLineItemUnitPrice());
+        model.setVatId(invoiceLineItem.getInvoiceLineItemVat());
+
+        this.updateSubTotal(model);
+
+        return model;
+
+    }
+
+    public void updateSubTotal(@Nonnull final InvoiceItemModel invoiceItemModel) {
+        final int quantity = invoiceItemModel.getQuatity();
+        final BigDecimal unitPrice = invoiceItemModel.getUnitPrice();
+        final BigDecimal vatPer = invoiceItemModel.getVatId();
+        if (null != unitPrice) {
+            final BigDecimal amountWithoutTax = unitPrice.multiply(new BigDecimal(quantity));
+            invoiceItemModel.setSubTotal(amountWithoutTax);
+
+            if (vatPer != null && vatPer.compareTo(BigDecimal.ZERO) >= 1) {
+                final BigDecimal amountWithTax = amountWithoutTax
+                        .add(amountWithoutTax.multiply(vatPer).multiply(new BigDecimal(0.01)));
+                invoiceItemModel.setSubTotal(amountWithTax);
+            }
+        }
+
     }
 }
