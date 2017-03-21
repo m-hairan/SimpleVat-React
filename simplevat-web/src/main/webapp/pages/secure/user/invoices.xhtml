@@ -3,6 +3,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jstl/core"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="title">Invoices</ui:define>
@@ -73,8 +74,14 @@
                                       sortBy="#{invoice.invoiceLineItems.size()}">
                                 <h:outputText value="#{invoice.invoiceLineItems.size()}" />
                             </p:column>
-                            <p:column headerText="Total Cost">
-                                <h:outputText value="USD #{300*index}" />
+                            <c:set value="#{invoiceListController.totalAmount(invoice)}"
+                                   var="total" />
+                            <p:column headerText="Total Cost"
+                                      sortBy="#{total}">
+                                <h:outputText value="#{invoice.currency.currencyIsoCode} " />
+                                <h:outputText value="#{total}" >
+                                    <f:convertNumber maxFractionDigits="2" pattern="#,##0.00" />
+                                </h:outputText>
                             </p:column>
 
                             <p:column headerText="Action">

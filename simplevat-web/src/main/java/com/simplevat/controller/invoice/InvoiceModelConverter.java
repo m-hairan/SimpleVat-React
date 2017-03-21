@@ -119,7 +119,7 @@ public class InvoiceModelConverter {
 
     }
 
-    public void updateSubTotal(@Nonnull final InvoiceItemModel invoiceItemModel) {
+    private void updateSubTotal(@Nonnull final InvoiceItemModel invoiceItemModel) {
         final int quantity = invoiceItemModel.getQuatity();
         final BigDecimal unitPrice = invoiceItemModel.getUnitPrice();
         final BigDecimal vatPer = invoiceItemModel.getVatId();

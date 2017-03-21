@@ -1,13 +1,18 @@
 package com.simplevat.controller.invoice;
 
+import com.simplevat.entity.invoice.DiscountType;
+import static com.simplevat.entity.invoice.DiscountType.ABSOLUTE;
 import com.simplevat.entity.invoice.Invoice;
+import com.simplevat.entity.invoice.InvoiceLineItem;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;
 import com.simplevat.service.invoice.InvoiceService;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import javax.annotation.Nonnull;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -60,4 +65,33 @@ public class InvoiceListController implements Serializable {
                 new FacesMessage("Invoice Deleted SuccessFully"));
     }
 
+    @Nonnull
+    public BigDecimal totalAmount(@Nonnull final Invoice invoice) {
+        
+        final BigDecimal discount = invoice.getInvoiceDiscount();
+        final DiscountType discountType = invoice.getInvoiceDiscountType();
+
+        BigDecimal finalTotal = BigDecimal.ZERO;
+
+        for (InvoiceLineItem item : invoice.getInvoiceLineItems()) {
+            BigDecimal itemAmount = item.getInvoiceLineItemUnitPrice()
+                    .multiply(new BigDecimal(item.getInvoiceLineItemQuantity()));
+            if (null != item.getInvoiceLineItemVat()) {
+                itemAmount = itemAmount.add(itemAmount
+                        .multiply(item.getInvoiceLineItemVat())
+                        .multiply((new BigDecimal(0.01))));
+            }
+            finalTotal = finalTotal.add(itemAmount);
+        }
+
+        if (null != discountType && null != discount) {
+            if (discountType == ABSOLUTE) {
+                finalTotal = finalTotal.subtract(discount);
+            } else {
+                finalTotal = finalTotal.subtract(finalTotal.multiply(discount)
+                        .multiply(new BigDecimal(0.01)));
+            }
+        }
+        return finalTotal;
+    }
 }
