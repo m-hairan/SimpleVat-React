@@ -7,6 +7,47 @@
 	<h:form>
 
 		<div class="card card-w-title">
+
+			<p:dataTable var="expense" 
+					value="#{expenseListController.expenses}"
+					 paginator="true" rows="5">
+					 
+				<f:facet name="header">
+                      #{messages.expenses}
+                </f:facet>
+                
+                <p:column headerText="#{messages.amount}" sortBy="#{expense.expenseAmount}">
+					<h:outputText value="#{expense.expenseAmount}" />
+				</p:column>
+                            
+				<p:column headerText="#{messages.description}" sortBy="#{expense.expenseDescription}">
+					<h:outputText value="#{expense.expenseDescription}" />
+				</p:column>
+				
+				<p:column headerText="#{messages.expense_date}" sortBy="#{expense.expenseDate.time}">
+					 <h:outputText value="#{expense.expenseDate.time}" >
+                           <f:convertDateTime pattern="dd/MM/yyyy" />
+                      </h:outputText>
+				</p:column>
+				
+				<p:column headerText="#{messages.receiptnumber}" sortBy="#{expense.receiptNumber}">
+					<h:outputText value="#{expense.receiptNumber}" />
+				</p:column>
+				
+				<p:column headerText="Action">
+					
+					 <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" action="/pages/secure/expense/create-expense.xhtml">
+                             <f:setPropertyActionListener value="#{expense}" target="#{expenseController.selectedExpenseModel}" />
+                     </p:commandButton>
+                     
+                     <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{expenseController.deleteExpense}">
+						<f:setPropertyActionListener value="#{expense}" target="#{expenseController.selectedExpenseModel}" />
+						<p:confirm header="#{messages.delete}" message="#{messages.are_you_sure_want_to_delete}" icon="ui-icon-alert" />
+					</p:commandButton>
+                                        
+				</p:column>
+
+			</p:dataTable>
 			
 			<h1>Expense Table Panel</h1>
 

@@ -27,7 +27,7 @@ public class ExpenseModel {
     private Date createdDate;
     private Integer lastUpdatedBy;
     private Date lastUpdateDate;
-    private Character deleteFlag;
+    private boolean deleteFlag;
     private UploadedFile attachmentFile;
 
 }

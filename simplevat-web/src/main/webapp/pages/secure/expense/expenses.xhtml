@@ -4,48 +4,43 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
 
-	<ui:define name="title">#{messages.label_expenses}</ui:define>
+	<ui:define name="title">#{messages.expenses}</ui:define>
 
 	<ui:define name="content">
-
-		<h:panelGroup layout="block" id="outerExpensePanel">
-
-			<h:panelGroup layout="block" id="expensePanel"
-				rendered="#{expenseScreenController.showAllExpensePanel}">
 
 				<div class="ui-g ">
 
 					<div class="ui-g-12">
 						<!-- Left Side -->
 						<div class="card card-w-title">
-							<h1>#{messages.label_expenses}</h1>
+							<h1>#{messages.expenses}</h1>
 							<h:form id="form">
 								<p:toolbar>
 									<f:facet name="left">
-										<p:commandButton value="New" icon="ui-icon-plus"
-											actionListener="#{expenseManageController.createExpense}"
-											update="outerExpensePanel" />
-
+										<p:commandButton value="#{messages.button_new}" icon="ui-icon-plus"
+											action="#{expenseController.createExpense()}"
+											 />
+											 
 										<span class="ui-separator" style="padding-right: 5px;">
 											<span class="fa fa-ellipsis-v SoftGray" />
 										</span>
 
-										<p:commandButton type="button" title="Import"
+										<p:commandButton type="button" title="#{messages.button_import}"
 											icon="ui-icon-file-download" />
-										<p:commandButton type="button" title="Export"
+										<p:commandButton type="button" title="#{messages.button_export}"
 											icon="ui-icon-file-upload" />
-										<p:commandButton type="button" title="Delete"
+										<p:commandButton type="button" title="#{messages.delete}"
 											icon="ui-icon-delete" />
 									</f:facet>
 
 									<f:facet name="right">
 										<p:menuButton value="Options">
-											<p:menuitem value="Import" icon="ui-icon-file-download" />
-											<p:menuitem value="Export" icon="ui-icon-file-upload" />
-											<p:menuitem value="Delete" icon="ui-icon-delete" />
+											<p:menuitem value="#{messages.button_import}" icon="ui-icon-file-download" />
+											<p:menuitem value="#{messages.button_export}" icon="ui-icon-file-upload" />
+											<p:menuitem value="#{messages.delete}" icon="ui-icon-delete" />
 											<p:separator />
 											<p:menuitem value="Homepage"
-												outcome="/pages/secure/user/home" icon="ui-icon-home" />
+												outcome="#{homePageLink}" icon="ui-icon-home" />
 										</p:menuButton>
 									</f:facet>
 								</p:toolbar>
@@ -57,15 +52,7 @@
 						</div>
 					</div>
 				</div>
-
-			</h:panelGroup>
-
-			<h:panelGroup layout="block" id="createExpensePanel"
-				rendered="#{expenseScreenController.showNewExpensePanel}">
-				<ui:include src="create-expense.xhtml" />
-			</h:panelGroup>
-
-		</h:panelGroup>
+			
 	</ui:define>
 
 </ui:composition>
