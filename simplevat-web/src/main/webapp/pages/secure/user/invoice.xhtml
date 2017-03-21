@@ -16,17 +16,29 @@
             body .ui-widget-content .ui-icon{
                 color: #009688;
             }
+            body .ui-widget-content .ui-icon-plus {
+                color: #fff; 
+            }
+            body .ui-widget-content .ui-icon-delete{
+                color: #fff; 
+            }
         </style>
     </ui:define>
 
     <ui:define name="title">Invoices</ui:define>
     <ui:define name="content">
         <h:form id="invoice">
+            <p:messages />
             <div class="card card-w-title">
                 <div class="ui-fluid">
                     <div class="ui-g">
                         <div class="ui-g-12">
-                            <h1>New Invoice</h1>
+                            <ui:fragment rendered="#{invoiceController.invoiceModel.invoiceId > 0}">
+                                <h1>Edit Invoice</h1>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{invoiceController.invoiceModel.invoiceId == 0}">
+                                <h1>New Invoice</h1>
+                            </ui:fragment>
 
                             <p:fieldset legend="Contact and Project Details" toggleable="false">
                                 <p:panelGrid columns="6" 
@@ -55,7 +67,9 @@
                                                         var="contact"
                                                         itemValue="#{contact.contactId}"
                                                         itemLabel="#{contact.firstName} #{contact.lastName}">
-                                            <p:ajax event="itemSelect" listener="#{invoiceController.updateCurrency}" update="currency" />
+                                            <p:ajax event="itemSelect"
+                                                    listener="#{invoiceController.updateCurrency}" 
+                                                    update="currency invoiceItemTable" />
                                         </p:autoComplete>
                                         <label>Contact</label>
 
@@ -103,7 +117,11 @@
                                                         completeMethod="#{invoiceController.completeCurrency}" 
                                                         value="#{invoiceController.invoiceModel.currencyCode}"
                                                         var="currency" itemValue="#{currency.currencyCode}"
-                                                        itemLabel="#{currency.currencyDescription}" />
+                                                        itemLabel="#{currency.currencyDescription}" >
+                                            <p:ajax event="itemSelect" 
+                                                    listener="#{invoiceController.updateCurrencyLabel()}" 
+                                                    update="invoiceItemTable" />
+                                        </p:autoComplete>
 
                                         <label>Currency</label>
                                     </h:panelGroup>
@@ -127,6 +145,13 @@
                                              editable="true"
                                              id="invoiceItemTable"
                                              reflow="true">
+                                    <p:column style="width: 32px">
+                                        <p:commandButton title="Delete Invoice" 
+                                                         update="invoiceItemTable"
+                                                         actionListener="#{invoiceController.invoiceModel.invoiceItems.remove(invoiceItem)}"
+                                                         icon="ui-icon-delete">
+                                        </p:commandButton>
+                                    </p:column>
 
                                     <p:column headerText="Quantity" >
                                         <p:cellEditor>
@@ -136,12 +161,16 @@
                                             <f:facet name="input">
                                                 <p:inputText id="quantity" 
                                                              value="#{invoiceItem.quatity}" 
-                                                             style="width:100%"/>
+                                                             style="width:100%">
+                                                    <p:ajax event="change" 
+                                                            listener="#{invoiceController.updateSubTotal(invoiceItem)}" 
+                                                            update="subTotal" />
+                                                </p:inputText>
                                             </f:facet>
                                         </p:cellEditor>
                                     </p:column>
 
-                                    <p:column headerText="Unit Price" >
+                                    <p:column headerText="Unit Price (#{invoiceController.invoiceModel.currencyCode.currencyIsoCode})" >
                                         <p:cellEditor>
                                             <f:facet name="output">
                                                 <h:outputText value="#{invoiceItem.unitPrice}" />
@@ -149,20 +178,28 @@
                                             <f:facet name="input">
                                                 <p:inputText id="unitPrice" 
                                                              value="#{invoiceItem.unitPrice}" 
-                                                             style="width:100%"/>
+                                                             style="width:100%">
+                                                    <p:ajax event="change" 
+                                                            listener="#{invoiceController.updateSubTotal(invoiceItem)}" 
+                                                            update="subTotal" />
+                                                </p:inputText>
                                             </f:facet>
                                         </p:cellEditor>
                                     </p:column>
 
-                                    <p:column headerText="VAT">
+                                    <p:column headerText="VAT (%)">
                                         <p:cellEditor>
                                             <f:facet name="output">
-                                                <h:outputText value="#{invoiceItem.vatId}" />
+                                                <h:outputText value="#{invoiceItem.vatId} %" />
                                             </f:facet>
                                             <f:facet name="input">
                                                 <p:inputText id="vatId" 
                                                              value="#{invoiceItem.vatId}" 
-                                                             style="width:100%"/>
+                                                             style="width:100%">
+                                                    <p:ajax event="change" 
+                                                            listener="#{invoiceController.updateSubTotal(invoiceItem)}" 
+                                                            update="subTotal" />
+                                                </p:inputText>
                                             </f:facet>
                                         </p:cellEditor>
                                     </p:column>
@@ -180,10 +217,12 @@
                                         </p:cellEditor>
                                     </p:column>
 
-                                    <p:column headerText="Subtotal">
-                                        <h:outputText value="#{invoiceItem.subTotal}" />
+                                    <p:column headerText="Subtotal (#{invoiceController.invoiceModel.currencyCode.currencyIsoCode})">
+                                        <h:outputText id="subTotal" value="#{invoiceItem.subTotal}" >
+                                            <f:convertNumber maxFractionDigits="2" pattern="#,##0.00" />
+                                        </h:outputText>
                                     </p:column>
-                                    <p:column style="width:32px">
+                                    <p:column style="width: 32px">
                                         <p:rowEditor />
                                     </p:column>
                                 </p:dataTable>
@@ -191,6 +230,7 @@
                                                  style="width: 10%; margin-top: 3px" 
                                                  update="invoiceItemTable"
                                                  value="Add"
+                                                 process="@form"
                                                  icon="ui-icon-plus" />
                             </p:fieldset>
 
@@ -244,11 +284,25 @@
 
                 <p:toolbar>
                     <f:facet name="left">
-                        <p:commandButton actionListener="#{invoiceController.saveInvoice()}"
-                                         value="Save" 
-                                         icon="ui-icon-save" 
-                                         />
-                        <p:button  value="Save &amp; Add More" icon="ui-icon-forward" outcome="/pages/secure/user/invoice" />
+                        <ui:fragment rendered="#{invoiceController.invoiceModel.invoiceId > 0}">
+                            <p:commandButton actionListener="#{invoiceController.saveInvoice()}"
+                                             value="Update"
+                                             icon="ui-icon-save" />
+                            <p:commandButton actionListener="#{invoiceController.saveAndAddMoreInvoice()}"
+                                             value="Update &amp; Add More"
+                                             update="@form"
+                                             icon="ui-icon-forward" />
+                        </ui:fragment>
+                        <ui:fragment rendered="#{invoiceController.invoiceModel.invoiceId == 0}">
+                            <p:commandButton actionListener="#{invoiceController.saveInvoice()}"
+                                             value="Save"
+                                             icon="ui-icon-save" />
+                            <p:commandButton actionListener="#{invoiceController.saveAndAddMoreInvoice()}"
+                                             value="Save &amp; Add More"
+                                             update="@form"
+                                             icon="ui-icon-forward" />
+                        </ui:fragment>
+
 
                         <span class="ui-separator" style="padding-right: 5px;">
                             <span class="fa fa-ellipsis-v SoftGray" />

@@ -4,8 +4,6 @@
     <persistence-unit name="persistenceUnit">
 
         <properties>
-            <property name="hibernate.connection.url"
-                      value="jdbc:mysql://dev-simpalvat.c1suvjot86kl.us-west-2.rds.amazonaws.com:3306/simplevat"/>
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
         </properties>
     </persistence-unit>

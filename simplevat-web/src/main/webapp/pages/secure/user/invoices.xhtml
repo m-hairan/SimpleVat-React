@@ -3,6 +3,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jstl/core"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="title">Invoices</ui:define>
@@ -13,6 +14,7 @@
                 <div class="ui-g-12">
                     <div class="card card-w-title">
                         <h1>Invoices</h1>
+                        <p:messages />
                         <p:toolbar>
                             <f:facet name="left">
                                 <p:commandButton value="New"
@@ -72,16 +74,25 @@
                                       sortBy="#{invoice.invoiceLineItems.size()}">
                                 <h:outputText value="#{invoice.invoiceLineItems.size()}" />
                             </p:column>
-                            <p:column headerText="Total Cost">
-                                <h:outputText value="USD #{300*index}" />
+                            <c:set value="#{invoiceListController.totalAmount(invoice)}"
+                                   var="total" />
+                            <p:column headerText="Total Cost"
+                                      sortBy="#{total}">
+                                <h:outputText value="#{invoice.currency.currencyIsoCode} " />
+                                <h:outputText value="#{total}" >
+                                    <f:convertNumber maxFractionDigits="2" pattern="#,##0.00" />
+                                </h:outputText>
                             </p:column>
 
                             <p:column headerText="Action">
-                                <p:commandButton title="View Invoice"
-                                                 icon="ui-icon-search">
+                                <p:commandButton title="Edit Invoice"
+                                                 icon="ui-icon-edit"
+                                                 actionListener="#{invoiceController.redirectEditInvoice(invoice.invoiceId)}">
                                 </p:commandButton>
                                 <p:commandButton style="margin-left: 7px" 
                                                  title="Delete Invoice" 
+                                                 actionListener="#{invoiceListController.deleteInvoice(invoice)}"
+                                                 update="@form"
                                                  icon="ui-icon-delete">
                                 </p:commandButton>
                             </p:column>

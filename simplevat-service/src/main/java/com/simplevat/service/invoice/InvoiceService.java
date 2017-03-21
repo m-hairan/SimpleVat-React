@@ -13,6 +13,8 @@ public interface InvoiceService {
 
     List<Invoice> getInvoices();
 
-    Invoice getInvoice(String invoiceUUID);
+    Invoice getInvoice(int invoiceId);
+    
+    Invoice updateInvoice(Invoice invoice);
 
 }

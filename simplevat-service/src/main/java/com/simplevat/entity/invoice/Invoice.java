@@ -19,6 +19,10 @@ import lombok.Setter;
 @Data
 @Entity
 @Table(name = "INVOICE")
+@NamedQueries({
+    @NamedQuery(name = "Invoice.searchInvoices",
+            query = "from Invoice i where i.deleteFlag = 'N' order by i.lastUpdateDate desc")
+})
 public class Invoice implements Serializable {
 
     private static final long serialVersionUID = -8324261801367612269L;
@@ -59,22 +63,23 @@ public class Invoice implements Serializable {
     @Column(name = "CREATED_BY")
     private Integer createdBy;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_DATE")
     private Calendar createdDate;
 
     @Column(name = "LAST_UPDATED_BY")
     private Integer lastUpdatedBy;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "LAST_UPDATE_DATE")
     private Calendar lastUpdateDate;
 
     @Column(name = "DELETE_FLAG")
-    private Character deleteFlag;
+    private Character deleteFlag = 'N';
 
+    @Version
     @Column(name = "VERSION_NUMBER")
-    private int versionNumber;
+    private Integer versionNumber = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CONTACT_ID")
@@ -86,5 +91,16 @@ public class Invoice implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<InvoiceLineItem> invoiceLineItems;
+
+    @PrePersist
+    public void updateDates() {
+        createdDate = Calendar.getInstance();
+        lastUpdateDate = Calendar.getInstance();
+    }
+
+    @PreUpdate
+    public void updateLastUpdatedDate() {
+        lastUpdateDate = Calendar.getInstance();
+    }
 
 }

@@ -54,10 +54,9 @@
 
                         <p:menuitem id="st_project" value="Projects" icon="book" outcome="/pages/secure/user/projects"/>
 
-                        <p:menuitem id="st_invoice" value="Invoices" icon="receipt" outcome="/pages/secure/user/invoices"/>
+                        <p:menuitem id="st_invoice" update="@form invoice" value="Invoices" icon="receipt" outcome="/pages/secure/user/invoices"/>
                         
                         <p:menuitem id="st_expense" value="#{messages.expenses}" icon="exposure" outcome="#{expenseMenuLink}"/>
-
                     </pu:menu>
                 </div>
             </div>
