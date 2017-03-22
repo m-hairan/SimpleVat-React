@@ -6,18 +6,18 @@
                 xmlns:c="http://java.sun.com/jstl/core"
                 template="/WEB-INF/template.xhtml">
 
-    <ui:define name="title">Invoices</ui:define>
+    <ui:define name="title">#{messages.invoices}</ui:define>
 
     <ui:define name="content">
         <h:form id="form">
             <div class="ui-g ">
                 <div class="ui-g-12">
                     <div class="card card-w-title">
-                        <h1>Invoices</h1>
+                        <h1>#{messages.invoices}</h1>
                         <p:messages />
                         <p:toolbar>
                             <f:facet name="left">
-                                <p:commandButton value="New"
+                                <p:commandButton value="#{messages.button_new}"
                                                  icon="ui-icon-plus"
                                                  action="#{invoiceListController.redirectToCreateInvoice()}"/>
 
@@ -25,18 +25,18 @@
                                     <span class="fa fa-ellipsis-v SoftGray" />
                                 </span>
 
-                                <p:commandButton type="button" title="Import" icon="ui-icon-file-download" />
-                                <p:commandButton type="button" title="Export" icon="ui-icon-file-upload" />
-                                <p:commandButton type="button" title="Delete" icon="ui-icon-delete" />
+                                <p:commandButton type="button" title="#{messages.button_import}" icon="ui-icon-file-download" />
+                                <p:commandButton type="button" title="#{messages.button_export}" icon="ui-icon-file-upload" />
+                                <p:commandButton type="button" title="#{messages.delete}" icon="ui-icon-delete" />
                             </f:facet>
 
                             <f:facet name="right">
                                 <p:menuButton value="Options">
-                                    <p:menuitem value="Import" icon="ui-icon-file-download" />
-                                    <p:menuitem  value="Export" icon="ui-icon-file-upload" />
-                                    <p:menuitem value="Delete" icon="ui-icon-delete"/>
+                                    <p:menuitem value="#{messages.button_import}" icon="ui-icon-file-download" />
+                                    <p:menuitem  value="#{messages.button_export}" icon="ui-icon-file-upload" />
+                                    <p:menuitem value="#{messages.delete}" icon="ui-icon-delete"/>
                                     <p:separator />
-                                    <p:menuitem value="Homepage" outcome="/pages/secure/user/home" icon="ui-icon-home"/>
+                                    <p:menuitem value="#{messages.home_page}" outcome="/pages/secure/user/home" icon="ui-icon-home"/>
                                 </p:menuButton>
                             </f:facet>
                         </p:toolbar>
@@ -50,33 +50,33 @@
                                      rowKey="#{invoice.invoiceId}" 
                                      paginator="true" rows="5">
                             <f:facet name="header">
-                                Invoices
+                                #{messages.invoices}
                             </f:facet>
-                            <p:column headerText="Number" sortBy="#{invoice.invoiceReferenceNumber}">
+                            <p:column headerText="#{messages.number}" sortBy="#{invoice.invoiceReferenceNumber}">
                                 <h:outputText value="#{invoice.invoiceReferenceNumber}" />
                             </p:column>
 
-                            <p:column headerText="Date" sortBy="#{invoice.invoiceDate.time}">
+                            <p:column headerText="#{messages.date}" sortBy="#{invoice.invoiceDate.time}">
                                 <h:outputText value="#{invoice.invoiceDate.time}" >
                                     <f:convertDateTime pattern="dd/MM/yyyy" />
                                 </h:outputText>
                             </p:column>
 
-                            <p:column headerText="Invoice Due On" sortBy="#{invoice.invoiceDueOn}">
+                            <p:column headerText="#{messages.invoice_due_on}" sortBy="#{invoice.invoiceDueOn}">
                                 <h:outputText value="#{invoice.invoiceDueOn}" />
                             </p:column>
 
-                            <p:column headerText="Contact Name"
+                            <p:column headerText="#{messages.contact_name}"
                                       sortBy="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}">
                                 <h:outputText value="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}" />
                             </p:column>
-                            <p:column headerText="No. of Items"
+                            <p:column headerText="#{messages.no_of_items}"
                                       sortBy="#{invoice.invoiceLineItems.size()}">
                                 <h:outputText value="#{invoice.invoiceLineItems.size()}" />
                             </p:column>
                             <c:set value="#{invoiceListController.totalAmount(invoice)}"
                                    var="total" />
-                            <p:column headerText="Total Cost"
+                            <p:column headerText="#{messages.total_cost}"
                                       sortBy="#{total}">
                                 <h:outputText value="#{invoice.currency.currencyIsoCode} " />
                                 <h:outputText value="#{total}" >
@@ -84,8 +84,8 @@
                                 </h:outputText>
                             </p:column>
 
-                            <p:column headerText="Action">
-                                <p:commandButton title="Edit Invoice"
+                            <p:column headerText="#{messages.action}">
+                                <p:commandButton title="#{messages.edit_invoice}"
                                                  icon="ui-icon-edit"
                                                  actionListener="#{invoiceController.redirectEditInvoice(invoice.invoiceId)}">
                                 </p:commandButton>

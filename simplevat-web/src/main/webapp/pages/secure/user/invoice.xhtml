@@ -34,10 +34,10 @@
                     <div class="ui-g">
                         <div class="ui-g-12">
                             <ui:fragment rendered="#{invoiceController.invoiceModel.invoiceId > 0}">
-                                <h1>Edit Invoice</h1>
+                                <h1>#{messages.edit_invoice}</h1>
                             </ui:fragment>
                             <ui:fragment rendered="#{invoiceController.invoiceModel.invoiceId == 0}">
-                                <h1>New Invoice</h1>
+                                <h1>#{messages.new_invoice}</h1>
                             </ui:fragment>
 
                             <p:fieldset legend="Contact and Project Details" toggleable="false">
@@ -52,7 +52,7 @@
                                         <p:inputText id="invoiceId"
                                                      maxlength="12"
                                                      value="#{invoiceController.invoiceModel.invoiceRefNo}"/>
-                                        <label>Invoice Ref No.</label>
+                                        <label>#{messages.invoice_ref_no}</label>
                                     </h:panelGroup>
 
                                     <p:outputLabel for="conatcts"/>
@@ -71,15 +71,22 @@
                                                     listener="#{invoiceController.updateCurrency}" 
                                                     update="currency invoiceItemTable" />
                                         </p:autoComplete>
-                                        <label>Contact</label>
+                                        <label>#{messages.contact}</label>
 
                                     </h:panelGroup>
+                                    <p:outputLabel />
+                                    <p:outputLabel value="OR  ">
+                                        <p:commandLink onsuccess="PF('add_contact_popup').show();" 
+                                                       style="color: #009688" 
+                                                       value="Add New Contact" />
+                                    </p:outputLabel>
+
                                     <p:outputLabel for="project"/>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="project"
                                                      value="#{invoiceController.invoiceModel.projectId}" 
                                                      disabled="true"/>
-                                        <label>Project</label>
+                                        <label>#{messages.project}</label>
                                     </h:panelGroup>
                                 </p:panelGrid>
                             </p:fieldset>
@@ -94,9 +101,10 @@
                                     <p:outputLabel for="invoiceDate" />
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:calendar id="invoiceDate"
+                                                    pattern="MM/dd/yyyy"
                                                     value="#{invoiceController.invoiceModel.invoiceDate}"
                                                     readonlyInput="true" />
-                                        <label>Invoice Date</label>
+                                        <label>#{messages.invoice_date}</label>
                                     </h:panelGroup>
                                     <p:outputLabel for="invoiceDueOn" />
                                     <h:panelGroup styleClass="md-inputfield">
@@ -105,7 +113,7 @@
                                             converterMessage="Please enter numbers only." 
                                             id="invoiceDueOn" >
                                         </p:inputText>
-                                        <label>Invoice Due On (Days)</label>
+                                        <label>#{messages.invoice_due_on}</label>
                                     </h:panelGroup>
                                     <p:outputLabel for="currency"/>
                                     <h:panelGroup styleClass="md-inputfield">
@@ -123,7 +131,7 @@
                                                     update="invoiceItemTable" />
                                         </p:autoComplete>
 
-                                        <label>Currency</label>
+                                        <label>#{messages.currency}</label>
                                     </h:panelGroup>
                                     <p:outputLabel for="description" />
                                     <h:panelGroup styleClass="md-inputfield">
@@ -133,7 +141,7 @@
                                                          value="#{invoiceController.invoiceModel.invoiceText}"
                                                          maxlength="255"
                                                          autoResize="false" />
-                                        <label>Invoice Text</label>
+                                        <label>#{messages.invoice_text}</label>
                                     </h:panelGroup>
                                 </p:panelGrid>
                             </p:fieldset>
@@ -254,7 +262,7 @@
                                                         var="type" itemValue="#{type}"
                                                         itemLabel="#{type.toString()}" />
 
-                                        <label>Discount Type</label>
+                                        <label>#{messages.discount_type}</label>
                                     </h:panelGroup>
 
 
@@ -264,7 +272,7 @@
                                                      value="#{invoiceController.invoiceModel.discount}"
                                                      converterMessage="Please enter digits only.">
                                         </p:inputText>
-                                        <label>Discount</label>
+                                        <label>#{messages.discount}</label>
                                     </h:panelGroup>
 
                                     <p:outputLabel  for="contractPoNumber" />
@@ -272,7 +280,7 @@
                                         <p:inputText id="contractPoNumber"
                                                      value="#{invoiceController.invoiceModel.contractPoNumber}">
                                         </p:inputText>
-                                        <label>Contract PO Number</label>
+                                        <label>#{messages.contract_po_number}</label>
                                     </h:panelGroup>
 
 
@@ -295,10 +303,10 @@
                         </ui:fragment>
                         <ui:fragment rendered="#{invoiceController.invoiceModel.invoiceId == 0}">
                             <p:commandButton actionListener="#{invoiceController.saveInvoice()}"
-                                             value="Save"
+                                             value="#{messages.save}"
                                              icon="ui-icon-save" />
                             <p:commandButton actionListener="#{invoiceController.saveAndAddMoreInvoice()}"
-                                             value="Save &amp; Add More"
+                                             value="#{messages.save_and_add_more}"
                                              update="@form"
                                              icon="ui-icon-forward" />
                         </ui:fragment>
@@ -308,7 +316,7 @@
                             <span class="fa fa-ellipsis-v SoftGray" />
                         </span>
 
-                        <p:button title="Cancel" icon="ui-icon-cancel" outcome="/pages/secure/user/invoices"/>
+                        <p:button title="#{messages.cancel}" icon="ui-icon-cancel" outcome="/pages/secure/user/invoices"/>
                     </f:facet>
 
                     <f:facet name="right">
@@ -318,7 +326,7 @@
                     </f:facet>
                 </p:toolbar>
             </div>
-
+            <ui:include src="add-contact-popup.xhtml" />
         </h:form>
     </ui:define>
 </ui:composition>
