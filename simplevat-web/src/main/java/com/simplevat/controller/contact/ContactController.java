@@ -79,9 +79,9 @@ public class ContactController implements Serializable {
         currencies = currencyService.getCurrencies();
         titles = titleService.getTitles();
 
-        contact.setCountry(countries.get(179));
-        contact.setLanguage(languages.get(0));
-        contact.setCurrency(currencies.get(0));
+//        contact.setCountry(countries.get(179));
+//        contact.setLanguage(languages.get(0));
+//        contact.setCurrency(currencies.get(0));
         contactListController = (ContactListController) beanFactory.getBean("contactListController");
 
         LOGGER.debug("Loaded Countries :" + countries.size());

@@ -1,5 +1,6 @@
 package com.simplevat.controller.invoice;
 
+import com.simplevat.contact.model.ContactModel;
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.invoice.DiscountType;
@@ -12,6 +13,7 @@ import com.simplevat.service.invoice.InvoiceService;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -35,6 +37,9 @@ public class InvoiceController {
 
     @Getter
     private InvoiceModel invoiceModel;
+
+    @Getter
+    private ContactModel contactModel;
 
     @Getter
     @Setter
@@ -160,6 +165,29 @@ public class InvoiceController {
         invoiceModel = invoiceConverter.convertEntityToModel(invoice);
         FacesContext.getCurrentInstance().getExternalContext()
                 .redirect("invoice.xhtml?faces-redirect=true");
+    }
+
+    public void initCreateContact() {
+        contactModel = new ContactModel();
+    }
+
+    public void createContact() {
+        
+        final Contact contact = new Contact();
+
+        contact.setBillingEmail(contactModel.getEmailAddress());
+        contact.setDeleteFlag('N');
+        contact.setEmail(contactModel.getEmailAddress());
+        contact.setFirstName(contactModel.getFirstName());
+        contact.setLastName(contactModel.getLastName());
+        contact.setOrganization(contactModel.getOrganizationName());
+        
+        contactModel=new ContactModel();
+        
+        contactService.createContact(contact);
+        
+        invoiceModel.setContact(contact);
+
     }
 
 }

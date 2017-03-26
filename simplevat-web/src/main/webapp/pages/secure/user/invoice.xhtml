@@ -77,6 +77,7 @@
                                     <p:outputLabel />
                                     <p:outputLabel value="OR  ">
                                         <p:commandLink onsuccess="PF('add_contact_popup').show();" 
+                                                       actionListener="#{invoiceController.initCreateContact()}"
                                                        style="color: #009688" 
                                                        value="Add New Contact" />
                                     </p:outputLabel>
@@ -326,7 +327,7 @@
                     </f:facet>
                 </p:toolbar>
             </div>
-            <ui:include src="add-contact-popup.xhtml" />
         </h:form>
+        <ui:include src="add-contact-popup.xhtml" />
     </ui:define>
 </ui:composition>

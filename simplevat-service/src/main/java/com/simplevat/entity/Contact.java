@@ -3,17 +3,17 @@ package com.simplevat.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Calendar;
 
 /**
  * Created by mohsinh on 2/26/2017.
  */
 @NamedQueries({
-        @NamedQuery(name = "allContacts",
-                query = "SELECT c "
-                        + "FROM Contact c"),
-        @NamedQuery(name = "Contact.contactsByName",
-                query = "SELECT c FROM Contact c WHERE (c.firstName LIKE :name or c.lastName LIKE :name) ")
+    @NamedQuery(name = "allContacts",
+            query = "SELECT c "
+            + "FROM Contact c"),
+    @NamedQuery(name = "Contact.contactsByName",
+            query = "SELECT c FROM Contact c WHERE (c.firstName LIKE :name or c.lastName LIKE :name) ")
 })
 
 @Entity
@@ -90,13 +90,17 @@ public class Contact {
     private Integer createdBy;
     @Basic
     @Column(name = "CREATED_DATE")
-    private Date createdDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar createdDate;
+
     @Basic
     @Column(name = "LAST_UPDATED_BY")
-    private Date lastUpdatedBy;
+    private Integer lastUpdatedBy;
+
     @Basic
     @Column(name = "LAST_UPDATE_DATE")
-    private Date lastUpdateDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar lastUpdateDate;
     @Basic
     @Column(name = "DELETE_FLAG")
     private Character deleteFlag;
@@ -121,5 +125,16 @@ public class Contact {
     private Title title;
 //    private Collection<Invoice> invoicesByContactId;
 //    private Collection<Project> projectsByContactId;
+
+    @PrePersist
+    public void updateDates() {
+        createdDate = Calendar.getInstance();
+        lastUpdateDate = Calendar.getInstance();
+    }
+
+    @PreUpdate
+    public void updateLastUpdatedDate() {
+        lastUpdateDate = Calendar.getInstance();
+    }
 
 }
