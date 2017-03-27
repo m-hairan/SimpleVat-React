@@ -1,6 +1,5 @@
 package com.simplevat.test.common;
 import com.simplevat.dao.*;
-import com.simplevat.entity.Country;
 import com.simplevat.service.ContactService;
 import com.simplevat.service.CountryService;
 import com.simplevat.service.LanguageService;

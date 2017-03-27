@@ -66,10 +66,8 @@ public class ContactListController implements Serializable {
     }
 
     public Map<String, String> getFilters() {
-        filters = new TreeMap<String, String>();
-        Iterator<Contact> contactIterator = contacts.iterator();
-        while (contactIterator.hasNext()) {
-            Contact contact = contactIterator.next();
+        filters = new HashMap<>();
+        for (Contact contact : contacts) {
             String filterCharacter = contact.getFirstName().substring(0, 1).toUpperCase();
             filters.put(filterCharacter, filterCharacter);
             LOGGER.debug("Contact Filter Char :" + filterCharacter);
@@ -95,9 +93,7 @@ public class ContactListController implements Serializable {
             LOGGER.debug("Number of contacts :" + contacts.size());
         }
         List<Contact> returnContacts = new ArrayList<Contact>();
-        Iterator<Contact> contactIterator = contacts.iterator();
-        while (contactIterator.hasNext()) {
-            Contact contact = contactIterator.next();
+        for (Contact contact : contacts) {
             if (contact.getFirstName().substring(0, 1).toUpperCase().equals(filterChar.toUpperCase())) {
                 returnContacts.add(contact);
             }

@@ -7,8 +7,7 @@
         http://www.springframework.org/schema/context       http://www.springframework.org/schema/context/spring-context-4.3.xsd
         http://www.springframework.org/schema/tx            http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 
-    <context:component-scan base-package="com.simplevat">
-    </context:component-scan>
+    <context:component-scan base-package="com.simplevat"/>
 
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations" value="classpath:simplevat.properties"/>
@@ -48,10 +47,10 @@
 
     <!-- Data Source Declaration -->
     <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
-        <property name="driverClassName"  value="${db.driverClass}"/>
-        <property name="jdbcUrl"          value="${db.url}"/>
-        <property name="username"         value="${db.username}"/>
-        <property name="password"         value="${db.password}"/>
+        <property name="driverClassName" value="${db.driverClass}"/>
+        <property name="jdbcUrl" value="${db.url}"/>
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
     </bean>
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">

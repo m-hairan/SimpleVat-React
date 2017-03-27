@@ -3,6 +3,7 @@ package com.simplevat.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
 
@@ -12,7 +13,7 @@ import java.sql.Date;
 @Entity
 @Table(name = "PROJECT")
 @Data
-public class Project {
+public class Project implements Serializable{
     @Id
     @Column(name = "PROJECT_ID")
     private int projectId;
@@ -25,18 +26,22 @@ public class Project {
     @Basic
     @Column(name = "CONTRACT_PO_NUMBER")
     private String contractPoNumber;
-    @Basic
-    @Column(name = "CONTACT_ID")
-    private Integer contactId;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "CONTACT_ID")
+    private Contact contact;
     @Basic
     @Column(name = "VAT_REGISTRATION_NUMBER")
     private String vatRegistrationNumber;
-    @Basic
-    @Column(name = "INVOICE_LANGUAGE_CODE")
-    private Integer invoiceLanguageCode;
-    @Basic
-    @Column(name = "CURRENCY_CODE")
-    private Integer currencyCode;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "INVOICE_LANGUAGE_CODE")
+    private Language invoiceLanguageCode;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CURRENCY_CODE")
+    private Currency currency;
+
     @Basic
     @Column(name = "CREATED_BY")
     private Integer createdBy;
