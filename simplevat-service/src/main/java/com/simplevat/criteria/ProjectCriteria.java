@@ -5,13 +5,11 @@ package com.simplevat.criteria;
  */
 public class ProjectCriteria extends AbstractCriteria {
 
-
-
     public enum OrderBy {
 
-        NAME            ("name", OrderByType.STRING),
-        CANONICAL_NAME  ("canonicalName", OrderByType.STRING),
-        ID              ("projectId", OrderByType.STRING),;
+        NAME("name", OrderByType.STRING),
+        CANONICAL_NAME("canonicalName", OrderByType.STRING),
+        ID("projectId", OrderByType.STRING),;
 
         private final String columnName;
 
@@ -33,12 +31,19 @@ public class ProjectCriteria extends AbstractCriteria {
 
     private Integer projectId;
 
-    /*TODO delete flag criteria*/
+    private Boolean active;
 
     private OrderBy orderBy = OrderBy.ID;
 
     private SortOrder sortOrder = SortOrder.ASC;
 
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
 
     public Integer getProjectId() {
         return projectId;

@@ -3,6 +3,7 @@ package com.simplevat.dao.impl;
 import com.simplevat.criteria.ProjectCriteria;
 import com.simplevat.dao.ProjectDao;
 import com.simplevat.entity.Project;
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
@@ -38,6 +39,9 @@ public class ProjectDaoImpl extends AbstractDao implements ProjectDao {
             List<Predicate> predicates = new ArrayList<>();
             if (projectCriteria.getProjectId() != null) {
                 predicates.add(criteriaBuilder.and(criteriaBuilder.equal(projectRoot.<Integer>get("projectId"), projectCriteria.getProjectId())));
+            }
+            if (BooleanUtils.isTrue(projectCriteria.getActive())) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.equal(projectRoot.<Character>get("deleteFlag"), 'Y')));
             }
 
             /* Predicates to Criteria */

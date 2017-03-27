@@ -68,8 +68,9 @@ public class ProjectController {
     }
 
     private List<Project> getProjectFromCriteria() throws Exception {
-        /* TODO Get active projects only */
-        return projectService.getProjectsByCriteria(new ProjectCriteria());
+        ProjectCriteria projectCriteria = new ProjectCriteria();
+        projectCriteria.setActive(Boolean.TRUE);
+        return projectService.getProjectsByCriteria(projectCriteria);
     }
 
     @PostConstruct
@@ -99,7 +100,7 @@ public class ProjectController {
 
 
     public void deleteProject(Project project) throws Exception {
-//        project.setDeleteFlag("TRUE");
+        project.setDeleteFlag('Y');
         projectService.updateOrCreateProject(project);
     }
 
