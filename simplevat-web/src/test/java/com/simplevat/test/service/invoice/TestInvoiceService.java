@@ -4,11 +4,12 @@ import com.simplevat.entity.invoice.DiscountType;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.entity.invoice.InvoiceLineItem;
 import com.simplevat.test.common.BaseManagerTest;
+import org.junit.Test;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import org.junit.Test;
 
 /**
  *

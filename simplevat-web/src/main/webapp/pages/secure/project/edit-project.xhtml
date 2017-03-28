@@ -1,0 +1,165 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="head">
+        <style>
+            .ui-datatable .ui-state-highlight {
+                background-color: #e8e8e8 !important;
+            }
+
+            body .ui-datatable tbody tr.ui-state-highlight .ui-inputfield {
+                color: #009688;
+                border-color: #009688;
+            }
+
+            body .ui-widget-content .ui-icon {
+                color: #009688;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="title">Project</ui:define>
+    <ui:define name="content">
+        <h:form id="project">
+            <div class="card card-w-title">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <h1>Edit Project</h1>
+
+                            <p:fieldset legend="Project Details" toggleable="false">
+                                <p:panelGrid columns="6"
+                                             columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+                                             layout="grid"
+                                             styleClass="ui-panelgrid-blank form-group"
+                                             style="border:0px none; background-color:transparent;">
+
+                                    <p:outputLabel for="projectName"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="projectName"
+                                                     maxlength="12"
+                                                     value="#{projectController.selectedProject.projectName}"/>
+                                        <label>Project Name</label>
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="conatcts"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="conatcts"
+                                                        converter="contactConverter"
+
+                                                        dropdown="true"
+                                                        forceSelection="true"
+                                                        effect="fold"
+                                                        completeMethod="#{projectController.contacts}"
+                                                        value="#{projectController.selectedProject.contact}"
+                                                        var="contact"
+                                                        itemValue="#{contact.contactId}"
+                                                        itemLabel="#{contact.firstName} #{contact.lastName}">
+                                            <!--<p:ajax event="itemSelect" listener="#{projectController.updateCurrency}" update="currency" />-->
+                                        </p:autoComplete>
+                                        <label>Contact</label>
+
+                                    </h:panelGroup>
+
+                                </p:panelGrid>
+                            </p:fieldset>
+
+                            <p:fieldset legend="Project Details" toggleSpeed="300">
+                                <p:panelGrid columns="6"
+                                             columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+                                             layout="grid"
+                                             styleClass="ui-panelgrid-blank form-group"
+                                             style="border:0px none; background-color:transparent;">
+
+                                    <p:outputLabel for="contractPoNumber"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="contractPoNumber"
+                                                     value="#{projectController.selectedProject.contractPoNumber}">
+                                        </p:inputText>
+                                        <label>Contract PO Number</label>
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="vatRegistrationNumber"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="vatRegistrationNumber"
+                                                     value="#{projectController.selectedProject.vatRegistrationNumber}">
+                                        </p:inputText>
+                                        <label>VAT Registration number</label>
+                                    </h:panelGroup>
+
+
+                                    <p:outputLabel for="currency"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="currency"
+                                                        dropdown="true"
+                                                        forceSelection="true"
+                                                        effect="fold"
+                                                        converter="com.simplevat.util.CurrencyConverter"
+                                                        completeMethod="#{projectController.completeCurrency}"
+                                                        value="#{projectController.selectedProject.currency}"
+                                                        var="currency" itemValue="#{currency}"
+                                                        itemLabel="#{currency.currencyDescription}"/>
+
+                                        <label>Currency</label>
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="projectBudget"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="projectBudget"
+                                                     value="#{projectController.selectedProject.projectBudget}">
+                                        </p:inputText>
+                                        <label>Project Budget </label>
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="language"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="language" dropdown="true" forceSelection="true"
+                                                        effect="fold" converter="com.simplevat.util.LanguageConverter"
+                                                        dropdownMode=""
+                                                        completeMethod="#{projectController.completeLanguage}"
+                                                        value="#{projectController.selectedProject.invoiceLanguageCode}"
+                                                        var="language" itemValue="#{language.languageCode}"
+                                                        itemLabel="#{language.languageDescription}"/>
+
+                                        <label>Invoice Language</label>
+                                    </h:panelGroup>
+                                    <p:outputLabel />
+                                    <p:outputLabel />
+
+                                </p:panelGrid>
+
+                            </p:fieldset>
+                        </div>
+                    </div>
+                </div>
+
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:commandButton action="#{projectController.saveProject()}"
+                                         value="Save"
+                                         icon="ui-icon-save"
+                        />
+                        <p:button value="Save &amp; Add More" icon="ui-icon-forward"
+                                  outcome="/pages/secure/project/project"/>
+
+                        <span class="ui-separator" style="padding-right: 5px;">
+                            <span class="fa fa-ellipsis-v SoftGray"/>
+                        </span>
+
+                        <p:button title="Cancel" icon="ui-icon-cancel" outcome="/pages/secure/project/projects"/>
+                    </f:facet>
+
+                    <f:facet name="right">
+
+                        <p:button value="Home" icon="ui-icon-home" outcome="/pages/secure/user/home"/>
+
+                    </f:facet>
+                </p:toolbar>
+            </div>
+
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -52,7 +52,7 @@ public class InvoiceModelConverter {
         final Collection<InvoiceLineItem> items = invoiceModel
                 .getInvoiceItems()
                 .stream()
-                .map((lineModel) -> convertToLineItem(lineModel))
+                .map(this::convertToLineItem)
                 .collect(Collectors.toList());
 
         invoice.setInvoiceLineItems(items);

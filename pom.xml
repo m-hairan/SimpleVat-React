@@ -39,6 +39,10 @@
         <maven-compiler-plugin.target>${maven-compiler-plugin.source}</maven-compiler-plugin.target>
         <jsr305.version>3.0.1</jsr305.version>
         <mysql-connector-java.version>5.1.9</mysql-connector-java.version>
+        <commons-lang3.version>3.5</commons-lang3.version>
+        <commons-collections4.version>4.0</commons-collections4.version>
+        <lombok.version>1.14.8</lombok.version>
+        <hibernate.version>5.2.8.Final</hibernate.version>
     </properties>
 
     <build>
@@ -59,16 +63,6 @@
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>${tomcat7-maven-plugin.version}</version>
             </plugin>
-
-            <!--
-               TODO Mohsin Why we use this? we do not generate automated test reports
-               <plugin>
-                   <groupId>org.apache.maven.plugins</groupId>
-                   <artifactId>maven-surefire-plugin</artifactId>
-                   <configuration>
-                       <skipTests>true</skipTests>
-                   </configuration>
-               </plugin>-->
 
             <plugin>
                 <groupId>org.zeroturnaround</groupId>
@@ -220,27 +214,24 @@
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
             </dependency>
-
-            <!--  &lt;!&ndash; from java.util.logging to log4j &ndash;&gt;
-              <dependency>
-                  <groupId>org.slf4j</groupId>
-                  <artifactId>jul-to-slf4j</artifactId>
-                  <version>${slf4j.version}</version>
-              </dependency>
-
-              &lt;!&ndash; it help to get slf4j and log4j &ndash;&gt;
-              <dependency>
-                  <groupId>org.slf4j</groupId>
-                  <artifactId>slf4j-log4j12</artifactId>
-                  <version>${slf4j.version}</version>
-                  <exclusions>
-                      <exclusion>
-                          <artifactId>log4j</artifactId>
-                          <groupId>log4j</groupId>
-                      </exclusion>
-                  </exclusions>
-              </dependency>-->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${commons-collections4.version}</version>
+            </dependency>
             <!-- JSON Processing dependencies ends -->
+
+
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-core</artifactId>
+                <version>${hibernate.version}</version>
+            </dependency>
 
 
             <!--UTKARSH-->
@@ -317,6 +308,11 @@
                 </exclusions>
             </dependency>
 
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
 
             <!-- HikariCP connection pool -->
             <dependency>
@@ -330,7 +326,6 @@
                         <groupId>org.slf4j</groupId>
                     </exclusion>
                 </exclusions>
-
             </dependency>
 
             <!-- Testing dependencies starts -->

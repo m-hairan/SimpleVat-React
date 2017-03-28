@@ -12,7 +12,7 @@
     </appender>
 
     <appender name="fileAppender" class="ch.qos.logback.core.FileAppender">
-        <param name="file" value="logs.logg"/>
+        <param name="file" value="logs.log"/>
         <param name="append" value="false"/>
         <param name="threshold" value="debug"/>
         <encoder>
