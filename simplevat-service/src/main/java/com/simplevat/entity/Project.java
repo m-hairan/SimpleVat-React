@@ -56,7 +56,7 @@ public class Project implements Serializable{
     private Date lastUpdateDate;
     @Basic
     @Column(name = "DELETE_FLAG")
-    private Character deleteFlag = 'Y';
+    private Character deleteFlag = 'N';
     @Basic
     @Column(name = "VERSION_NUMBER")
     private int versionNumber;
