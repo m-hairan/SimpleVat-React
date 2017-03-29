@@ -1,5 +1,6 @@
 package com.simplevat.entity;
 
+import java.io.Serializable;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,7 +20,9 @@ import java.util.Calendar;
 @Entity
 @Table(name = "CONTACT")
 @Data
-public class Contact {
+public class Contact implements Serializable {
+
+    private static final long serialVersionUID = 6914121175305098995L;
 
     @Id
     @Column(name = "CONTACT_ID")
@@ -70,21 +73,14 @@ public class Contact {
     @Basic
     @Column(name = "PO_BOX_NUMBER")
     private String poBoxNumber;
-    //    @Basic
-//    @Column(name = "COUNTRY_CODE")
-//    private Integer countryCode;
+    
     @Basic
     @Column(name = "CONTRACT_PO_NUMBER")
     private String contractPoNumber;
     @Basic
     @Column(name = "VAT_REGISTRATION_NUMBER")
     private String vatRegistrationNumber;
-    //    @Basic
-//    @Column(name = "INVOICE_LANGUAGE_CODE")
-//    private Integer invoiceLanguageCode;
-//    @Basic
-//    @Column(name = "CURRENCY_CODE")
-//    private Integer currencyCode;
+    
     @Basic
     @Column(name = "CREATED_BY")
     private Integer createdBy;
@@ -123,8 +119,6 @@ public class Contact {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TITLE_CODE")
     private Title title;
-//    private Collection<Invoice> invoicesByContactId;
-//    private Collection<Project> projectsByContactId;
 
     @PrePersist
     public void updateDates() {

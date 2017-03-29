@@ -1,13 +1,13 @@
 package com.simplevat.controller.contact;
 
+import com.simplevat.contact.model.ContactModel;
 import com.simplevat.entity.*;
 import com.simplevat.service.*;
+import java.io.IOException;
 import lombok.Getter;
-import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.stereotype.Controller;
 
 import javax.annotation.PostConstruct;
@@ -17,29 +17,27 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.faces.context.FacesContext;
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.BeanUtils;
 
 /**
  * Created by mohsinh on 3/9/2017.
  */
-
 @Controller
 @ManagedBean(name = "contactController")
 @RequestScoped
 public class ContactController implements Serializable {
 
+    private static final long serialVersionUID = -6783876735681802047L;
+
     private final static Logger LOGGER = LoggerFactory.getLogger(ContactController.class);
-
-    @Autowired
-    private DefaultListableBeanFactory beanFactory;
-
-    private ContactListController contactListController;
 
     @Autowired
     private ContactService contactService;
 
     @Autowired
     private CountryService countryService;
-
 
     @Autowired
     private LanguageService languageService;
@@ -51,58 +49,64 @@ public class ContactController implements Serializable {
     private TitleService titleService;
 
     @Getter
-    @Setter
     private List<Country> countries;
 
     @Getter
-    @Setter
     private List<Language> languages;
 
     @Getter
-    @Setter
     private List<Currency> currencies;
 
     @Getter
-    @Setter
     private List<Title> titles;
 
     @Getter
-    @Setter
-    private Contact contact;
+    private ContactModel contactModel;
 
     @PostConstruct
     public void init() {
-        contact = new Contact();
+        contactModel = new ContactModel();
 
         countries = countryService.getCountries();
         languages = languageService.getLanguages();
         currencies = currencyService.getCurrencies();
         titles = titleService.getTitles();
 
-//        contact.setCountry(countries.get(179));
-//        contact.setLanguage(languages.get(0));
-//        contact.setCurrency(currencies.get(0));
-        contactListController = (ContactListController) beanFactory.getBean("contactListController");
-
+//        contactModel.setCountry(countries.get(179));
+//        contactModel.setLanguage(languages.get(0));
+//        contactModel.setCurrency(currencies.get(0));
         LOGGER.debug("Loaded Countries :" + countries.size());
+    }
+    
+    public String redirectToCreateContact() {
+        contactModel = new ContactModel();
+
+        LOGGER.debug("Redirecting to create new contact page");
+        return "/pages/secure/contact/contact.xhtml";
     }
 
     public String createNewContact() {
         LOGGER.debug("Creating contact");
+        final Contact contact = new Contact();
+        BeanUtils.copyProperties(contactModel, contact);
+        contact.setOrganization(contactModel.getOrganizationName());
+        contact.setEmail(contactModel.getEmailAddress());
         this.contactService.createContact(contact);
 
-        LOGGER.debug("contactListController :" + contactListController);
-        contactListController.getContacts().add(contact);
-        LOGGER.debug("Created contact :" + contact.getContactId() + " Name :" + contact.getFirstName());
+        LOGGER.debug("Created contact Name :" + contactModel.getFirstName());
         this.init();
         return "/pages/secure/contact/contacts.xhtml";
     }
 
     public String editContact() {
+        final Contact contact = new Contact();
+        contact.setOrganization(contactModel.getOrganizationName());
+        contact.setEmail(contactModel.getEmailAddress());
+        BeanUtils.copyProperties(contactModel, contact);
+
         LOGGER.debug("Update contact");
         this.contactService.updateContact(contact);
-        contactListController.setContacts(contactService.getContacts());
-        LOGGER.debug("Update contact :" + contact.getContactId() + " Name :" + contact.getFirstName());
+        LOGGER.debug("Update contact Name :" + contactModel.getFirstName());
         return "/pages/secure/contact/contacts.xhtml";
     }
 
@@ -114,9 +118,9 @@ public class ContactController implements Serializable {
 
         while (titleIterator.hasNext()) {
             Title title = titleIterator.next();
-            if (title.getTitleDescription() != null &&
-                    !title.getTitleDescription().isEmpty() &&
-                    title.getTitleDescription().toUpperCase().contains(titleStr.toUpperCase())) {
+            if (title.getTitleDescription() != null
+                    && !title.getTitleDescription().isEmpty()
+                    && title.getTitleDescription().toUpperCase().contains(titleStr.toUpperCase())) {
                 titleSuggestion.add(title);
             }
         }
@@ -134,13 +138,13 @@ public class ContactController implements Serializable {
 
         while (countryIterator.hasNext()) {
             Country country = countryIterator.next();
-            if (country.getCountryName() != null &&
-                    !country.getCountryName().isEmpty() &&
-                    country.getCountryName().toUpperCase().contains(countryStr.toUpperCase())) {
+            if (country.getCountryName() != null
+                    && !country.getCountryName().isEmpty()
+                    && country.getCountryName().toUpperCase().contains(countryStr.toUpperCase())) {
                 countrySuggestion.add(country);
-            } else if (country.getIsoAlpha3Code() != null &&
-                    !country.getIsoAlpha3Code().isEmpty() &&
-                    country.getIsoAlpha3Code().toUpperCase().contains(countryStr.toUpperCase())) {
+            } else if (country.getIsoAlpha3Code() != null
+                    && !country.getIsoAlpha3Code().isEmpty()
+                    && country.getIsoAlpha3Code().toUpperCase().contains(countryStr.toUpperCase())) {
                 countrySuggestion.add(country);
             }
         }
@@ -158,14 +162,14 @@ public class ContactController implements Serializable {
 
         while (languageIterator.hasNext()) {
             Language language = languageIterator.next();
-            if (language.getLanguageName() != null &&
-                    !language.getLanguageName().isEmpty() &&
-                    language.getLanguageName().toUpperCase().contains(languageStr.toUpperCase())) {
+            if (language.getLanguageName() != null
+                    && !language.getLanguageName().isEmpty()
+                    && language.getLanguageName().toUpperCase().contains(languageStr.toUpperCase())) {
                 LOGGER.debug(" Language :" + language.getLanguageDescription());
                 languageSuggestion.add(language);
-            } else if (language.getLanguageDescription() != null &&
-                    !language.getLanguageDescription().isEmpty() &&
-                    language.getLanguageDescription().toUpperCase().contains(languageStr.toUpperCase())) {
+            } else if (language.getLanguageDescription() != null
+                    && !language.getLanguageDescription().isEmpty()
+                    && language.getLanguageDescription().toUpperCase().contains(languageStr.toUpperCase())) {
                 languageSuggestion.add(language);
                 LOGGER.debug(" Language :" + language.getLanguageDescription());
             }
@@ -176,7 +180,6 @@ public class ContactController implements Serializable {
         return languageSuggestion;
     }
 
-
     public List<Currency> completeCurrency(String currencyStr) {
         List<Currency> currencySuggestion = new ArrayList<>();
         Iterator<Currency> currencyIterator = this.currencies.iterator();
@@ -185,19 +188,19 @@ public class ContactController implements Serializable {
 
         while (currencyIterator.hasNext()) {
             Currency currency = currencyIterator.next();
-            if (currency.getCurrencyName() != null &&
-                    !currency.getCurrencyName().isEmpty() &&
-                    currency.getCurrencyName().toUpperCase().contains(currencyStr.toUpperCase())) {
+            if (currency.getCurrencyName() != null
+                    && !currency.getCurrencyName().isEmpty()
+                    && currency.getCurrencyName().toUpperCase().contains(currencyStr.toUpperCase())) {
                 LOGGER.debug(" Language :" + currency.getCurrencyDescription());
                 currencySuggestion.add(currency);
-            } else if (currency.getCurrencyDescription() != null &&
-                    !currency.getCurrencyDescription().isEmpty() &&
-                    currency.getCurrencyDescription().toUpperCase().contains(currencyStr.toUpperCase())) {
+            } else if (currency.getCurrencyDescription() != null
+                    && !currency.getCurrencyDescription().isEmpty()
+                    && currency.getCurrencyDescription().toUpperCase().contains(currencyStr.toUpperCase())) {
                 currencySuggestion.add(currency);
                 LOGGER.debug(" Language :" + currency.getCurrencyDescription());
-            } else if (currency.getCurrencyIsoCode() != null &&
-                    !currency.getCurrencyIsoCode().isEmpty() &&
-                    currency.getCurrencyIsoCode().toUpperCase().contains(currencyStr.toUpperCase())) {
+            } else if (currency.getCurrencyIsoCode() != null
+                    && !currency.getCurrencyIsoCode().isEmpty()
+                    && currency.getCurrencyIsoCode().toUpperCase().contains(currencyStr.toUpperCase())) {
                 currencySuggestion.add(currency);
                 LOGGER.debug(" Language :" + currency.getCurrencyIsoCode());
             }
@@ -208,16 +211,16 @@ public class ContactController implements Serializable {
         return currencySuggestion;
     }
 
-
     public String redirectToContactList() {
         LOGGER.debug("Redirecting to create new contacts page");
         return "/pages/secure/contact/contacts.xhtml";
     }
 
-    public String redirectToEditContact(Contact contact) {
-
-        this.contact = contact;
+    public void redirectToEditContact(Contact contact) throws IOException {
+        contactModel = new ContactModel();
+        BeanUtils.copyProperties(contact, contactModel);
         LOGGER.debug("Redirecting to create new contact page");
-        return "/pages/secure/contact/edit-contact.xhtml";
+        FacesContext.getCurrentInstance().getExternalContext()
+                .redirect("contact.xhtml");
     }
 }

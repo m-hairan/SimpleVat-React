@@ -50,8 +50,8 @@
 
                         <p:toolbar>
                             <f:facet name="left">
-                                <p:commandButton title="New" value="New" icon="ui-icon-plus"
-                                                 action="#{contactListController.redirectToCreateContact()}" />
+                                <p:commandButton title="New" value="New" update="@form" icon="ui-icon-plus"
+                                                 action="#{contactController.redirectToCreateContact()}" />
 
 
                                 <span class="ui-separator" style="padding-right: 5px;">
@@ -76,45 +76,56 @@
                         <br/>
 
 
-                        <p:dataGrid var="contact" value="#{contactListController.filteredContacts}" columns="6" layout="grid"
-                                    paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                        <p:dataGrid var="contact" 
+                                    value="#{contactListController.filteredContacts}" 
+                                    columns="6" layout="grid"
+                                    paginator="true"
+                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                     rowsPerPageTemplate="6,12,18,24"
                                     rows="18" id="contacts">
                             <f:facet name="header">
 
-                                <p:selectOneButton id="filterChar" value="#{contactListController.selectedFilter}">
-                                    <p:ajax listener="#{contactListController.onContactFilterChange}" update="contacts" />
+                                <p:selectOneButton id="filterChar"
+                                                   value="#{contactListController.selectedFilter}">
+                                    <p:ajax listener="#{contactListController.onContactFilterChange}"
+                                            update="contacts" />
                                     <f:selectItem itemLabel="All" itemValue="" />
                                     <f:selectItems value="#{contactListController.filters}" />
                                 </p:selectOneButton>
                             </f:facet>
 
-							<div class="contacts">
+                            <div class="contacts">
 
-                            <p:panel header="#{contact.firstName} #{contact.lastName}" style="text-align:center">
-                                <h:panelGrid columns="1" style="width:100%">
-                                    <p:graphicImage name="images/user-avtar-icon2.png" library="ultima-layout" width="45"/>
-                                    <h:outputText value="#{contact.telephone}" styleClass="phone"/>
-                                    <h:outputText value="#{contact.email}" styleClass="email"/>
+                                <p:panel header="#{contact.firstName} #{contact.lastName}" 
+                                         style="text-align:center">
+                                    <h:panelGrid columns="1" style="width:100%">
+                                        <p:graphicImage name="images/user-avtar-icon2.png"
+                                                        library="ultima-layout" 
+                                                        width="45"/>
+                                        <h:outputText value="#{contact.telephone}" styleClass="phone"/>
+                                        <h:outputText value="#{contact.email}" styleClass="email"/>
 
-                                    <h:panelGrid columns="1" style="margin: 0 auto">
-                                        <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" update=":form:selectedContactDetail" action="#{contactController.redirectToEditContact(contact)}" />
-                                        <!--<p:commandButton icon="ui-icon-edit" styleClass="AquaButton" update=":form:selectedContactDetail" oncomplete="PF('contactDialog').show()">-->
-                                            <!--<f:setPropertyActionListener value="#{contact}" target="#{contactListController.selectedContact}" />-->
-                                        <!--</p:commandButton>-->
+                                        <h:panelGrid columns="1" style="margin: 0 auto">
+                                            <p:commandButton icon="ui-icon-edit" 
+                                                             styleClass="AquaButton" 
+                                                             update=":form:selectedContactDetail" 
+                                                             action="#{contactController.redirectToEditContact(contact)}" />
+                                            <!--<p:commandButton icon="ui-icon-edit" styleClass="AquaButton" update=":form:selectedContactDetail" oncomplete="PF('contactDialog').show()">-->
+                                                <!--<f:setPropertyActionListener value="#{contact}" target="#{contactListController.selectedContact}" />-->
+                                            <!--</p:commandButton>-->
 
-                                        <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" update=":form:selectedContactDetail" oncomplete="PF('contactDialog').show()">
-                                            <f:setPropertyActionListener value="#{contact}" target="#{contactListController.selectedContact}}" />
-                                        </p:commandButton>
+                                            <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" update=":form:selectedContactDetail" oncomplete="PF('contactDialog').show()">
+                                                <f:setPropertyActionListener value="#{contact}" target="#{contactListController.selectedContact}}" />
+                                            </p:commandButton>
+                                        </h:panelGrid>
+
                                     </h:panelGrid>
+                                    <h:panelGrid columns="1" style="width:100%; text-align: left">
+                                        <h:selectBooleanCheckbox value="#{contactListController.selectedContactIds[contact.contactId]}" />
+                                    </h:panelGrid>
+                                </p:panel>
 
-                                </h:panelGrid>
-                                <h:panelGrid columns="1" style="width:100%; text-align: left">
-                                <h:selectBooleanCheckbox value="#{contactListController.selectedContactIds[contact.contactId]}" />
-                                </h:panelGrid>
-                            </p:panel>
-
-							</div>
+                            </div>
                         </p:dataGrid>
 
 
