@@ -1,5 +1,10 @@
 Following below sequence of execution
 
+while creating db make sure to default character as utf8 
+----- create schema query -----
+CREATE SCHEMA `simplevat` DEFAULT CHARACTER SET utf8 ;
+-------------------------------
+
 
 1_ddl\0_SimbpleVat_DropTableScript.ddl --(Optional if tables already exist)
 1_ddl\1_SimbpleVat_BaseScript.ddl
