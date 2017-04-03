@@ -41,7 +41,7 @@ public class ProjectDaoImpl extends AbstractDao implements ProjectDao {
                 predicates.add(criteriaBuilder.and(criteriaBuilder.equal(projectRoot.<Integer>get("projectId"), projectCriteria.getProjectId())));
             }
             if (BooleanUtils.isTrue(projectCriteria.getActive())) {
-                predicates.add(criteriaBuilder.and(criteriaBuilder.equal(projectRoot.<Character>get("deleteFlag"), 'Y')));
+                predicates.add(criteriaBuilder.and(criteriaBuilder.equal(projectRoot.<Character>get("deleteFlag"), Boolean.TRUE)));
             }
 
             /* Predicates to Criteria */

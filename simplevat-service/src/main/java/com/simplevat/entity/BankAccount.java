@@ -68,7 +68,7 @@ public class BankAccount {
     private Date createdDate;
     @Basic
     @Column(name = "LAST_UPDATED_BY")
-    private Date lastUpdatedBy;
+    private Integer lastUpdatedBy;
     @Basic
     @Column(name = "LAST_UPDATE_DATE")
     private Date lastUpdateDate;

@@ -2,6 +2,7 @@ package com.simplevat.entity;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * Created by mohsinh on 2/26/2017.
@@ -32,16 +33,16 @@ public class User {
     private Integer createdBy;
     @Basic
     @Column(name = "CREATED_DATE")
-    private Date createdDate;
+    private Timestamp createdDate;
     @Basic
     @Column(name = "LAST_UPDATED_BY")
-    private Date lastUpdatedBy;
+    private Integer lastUpdatedBy;
     @Basic
     @Column(name = "LAST_UPDATE_DATE")
-    private Date lastUpdateDate;
+    private Timestamp lastUpdateDate;
     @Basic
     @Column(name = "DELETE_FLAG")
-    private Character deleteFlag;
+    private Boolean deleteFlag;
     @Basic
     @Column(name = "VERSION_NUMBER")
     private int versionNumber;

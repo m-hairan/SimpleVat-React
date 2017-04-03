@@ -48,6 +48,7 @@
 - Manage GIT efficiently. Create PRs
 - Use Mockito. Write tests for each method
 - Unit tests rollback
+- Use Wrapper classes on entity
   
 <h3>Project Milestone & Scope</h3>
 

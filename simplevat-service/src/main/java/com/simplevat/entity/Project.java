@@ -1,11 +1,12 @@
 package com.simplevat.entity;
 
+import com.simplevat.entity.converter.DateConverter;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 /**
  * Created by mohsinh on 2/26/2017.
@@ -16,7 +17,7 @@ import java.sql.Date;
 public class Project implements Serializable{
     @Id
     @Column(name = "PROJECT_ID")
-    private int projectId;
+    private Integer projectId;
     @Basic
     @Column(name = "PROJECT_NAME")
     private String projectName;
@@ -47,16 +48,17 @@ public class Project implements Serializable{
     private Integer createdBy;
     @Basic
     @Column(name = "CREATED_DATE")
-    private Date createdDate;
+    @Convert(converter = DateConverter.class)
+    private LocalDateTime createdDate;
     @Basic
     @Column(name = "LAST_UPDATED_BY")
-    private Date lastUpdatedBy;
+    private Integer lastUpdatedBy;
     @Basic
     @Column(name = "LAST_UPDATE_DATE")
-    private Date lastUpdateDate;
+    private LocalDateTime lastUpdateDate;
     @Basic
     @Column(name = "DELETE_FLAG")
-    private Character deleteFlag = 'N';
+    private Boolean deleteFlag = false;
     @Basic
     @Column(name = "VERSION_NUMBER")
     private int versionNumber;

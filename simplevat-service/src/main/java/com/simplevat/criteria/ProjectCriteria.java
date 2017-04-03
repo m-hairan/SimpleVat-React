@@ -1,15 +1,20 @@
 package com.simplevat.criteria;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Created by Utkarsh Bhavsar on 21/03/17.
  */
+@Getter
+@Setter
 public class ProjectCriteria extends AbstractCriteria {
 
     public enum OrderBy {
 
-        NAME("name", OrderByType.STRING),
-        CANONICAL_NAME("canonicalName", OrderByType.STRING),
-        ID("projectId", OrderByType.STRING),;
+        NAME                ("name", OrderByType.STRING),
+        CANONICAL_NAME      ("canonicalName", OrderByType.STRING),
+        ID                  ("projectId", OrderByType.STRING),;
 
         private final String columnName;
 
@@ -37,37 +42,4 @@ public class ProjectCriteria extends AbstractCriteria {
 
     private SortOrder sortOrder = SortOrder.ASC;
 
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public Integer getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(Integer projectId) {
-        this.projectId = projectId;
-    }
-
-    public OrderBy getOrderBy() {
-        return orderBy;
-    }
-
-    public void setOrderBy(OrderBy orderBy) {
-        this.orderBy = orderBy;
-    }
-
-    @Override
-    public SortOrder getSortOrder() {
-        return sortOrder;
-    }
-
-    @Override
-    public void setSortOrder(SortOrder sortOrder) {
-        this.sortOrder = sortOrder;
-    }
 }
