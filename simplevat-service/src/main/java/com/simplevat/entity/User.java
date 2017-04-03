@@ -1,5 +1,7 @@
 package com.simplevat.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -9,6 +11,7 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name = "USER", schema = "simplevat", catalog = "")
+@Data
 public class User {
     @Id
     @Column(name = "USER_EMAIL_ID")
