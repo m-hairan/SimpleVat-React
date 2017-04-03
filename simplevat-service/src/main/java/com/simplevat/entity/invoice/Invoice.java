@@ -90,7 +90,7 @@ public class Invoice implements Serializable {
     @JoinColumn(name = "PROJECT_ID")
     private Project invoiceProject;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "invoice")
     private Collection<InvoiceLineItem> invoiceLineItems;
 
     @PrePersist

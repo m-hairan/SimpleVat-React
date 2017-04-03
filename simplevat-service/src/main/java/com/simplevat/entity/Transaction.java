@@ -69,7 +69,7 @@ public class Transaction {
     private LocalDateTime lastUpdateDate;
     @Basic
     @Column(name = "DELETE_FLAG")
-    private Character deleteFlag;
+    private Boolean deleteFlag;
     @Basic
     @Column(name = "VERSION_NUMBER")
     private Integer versionNumber;

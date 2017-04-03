@@ -19,46 +19,50 @@ public class InvoiceLineItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "INVOICE_LINE_ITEM_ID")
     private int invoiceLineItemId;
-    
+
     @Basic
     @Column(name = "INVOICE_LINE_ITEM_QUANTITY")
     private Integer invoiceLineItemQuantity;
-    
+
     @Basic
     @Column(name = "INVOICE_LINE_ITEM_DESCRIPTION")
     private String invoiceLineItemDescription;
-    
+
     @Basic
     @Column(name = "INVOICE_LINE_ITEM_UNIT_PRICE")
     private BigDecimal invoiceLineItemUnitPrice;
-    
+
     @Basic
     @Column(name = "INVOICE_LINE_ITEM_VAT")
     private BigDecimal invoiceLineItemVat;
-    
+
     @Basic
     @Column(name = "CREATED_BY")
     private Integer createdBy;
-    
+
     @Basic
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_DATE")
     private Calendar createdDate;
-    
+
     @Basic
     @Column(name = "LAST_UPDATED_BY")
     private Integer lastUpdatedBy;
-    
+
     @Basic
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "LAST_UPDATE_DATE")
     private Calendar lastUpdateDate;
-    
+
     @Basic
     @Column(name = "DELETE_FLAG")
-    private Character deleteFlag;
-    
+    private Boolean deleteFlag;
+
     @Basic
     @Column(name = "VERSION_NUMBER")
-    private int versionNumber;
+    private Integer versionNumber;
+
+    @ManyToOne
+    @JoinColumn(name = "INVOICE_ID")
+    private Invoice invoice;
 }
