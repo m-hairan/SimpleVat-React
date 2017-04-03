@@ -67,9 +67,12 @@ public class InvoiceListController implements Serializable {
 
     @Nonnull
     public BigDecimal totalAmount(@Nonnull final Invoice invoice) {
-        
+
         final BigDecimal discount = invoice.getInvoiceDiscount();
-        final DiscountType discountType = invoice.getInvoiceDiscountType();
+//        final DiscountType discountType = invoice.getInvoiceDiscountType();
+
+// remove this after new table
+        final DiscountType discountType = ABSOLUTE;
 
         BigDecimal finalTotal = BigDecimal.ZERO;
 

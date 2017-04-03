@@ -26,7 +26,7 @@ public class TestInvoiceService extends BaseManagerTest {
 //        invoice.setContactFullName("Hiren");
         invoice.setContractPoNumber("PO-2342");
         invoice.setInvoiceDiscount(new BigDecimal(50));
-        invoice.setInvoiceDiscountType(DiscountType.ABSOLUTE);
+//        invoice.setInvoiceDiscountType(DiscountType.ABSOLUTE);
         invoice.setInvoiceReferenceNumber("INV2323");
         invoice.setInvoiceLineItems(getLineItems(invoice.getInvoiceId()));
         invoice.setDeleteFlag(Boolean.FALSE);

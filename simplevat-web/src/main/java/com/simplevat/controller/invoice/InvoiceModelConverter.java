@@ -46,7 +46,7 @@ public class InvoiceModelConverter {
         invoice.setInvoiceContact(invoiceModel.getContact());
         invoice.setInvoiceDate(invoiceDate);
         invoice.setInvoiceDiscount(invoiceModel.getDiscount());
-        invoice.setInvoiceDiscountType(invoiceModel.getDiscountType());
+//        invoice.setInvoiceDiscountType(invoiceModel.getDiscountType());
         invoice.setInvoiceDueOn(invoiceModel.getInvoiceDueOn());
         invoice.setInvoiceReferenceNumber(invoiceModel.getInvoiceRefNo());
         invoice.setInvoiceText(invoiceModel.getInvoiceText());
@@ -90,7 +90,7 @@ public class InvoiceModelConverter {
 
         invoiceModel.setInvoiceDate(null != invoice.getInvoiceDate() ? Date.from(invoice.getInvoiceDate().atZone(ZoneId.systemDefault()).toInstant()) : null);
         invoiceModel.setDiscount(invoice.getInvoiceDiscount());
-        invoiceModel.setDiscountType(invoice.getInvoiceDiscountType());
+//        invoiceModel.setDiscountType(invoice.getInvoiceDiscountType());
         invoiceModel.setInvoiceDueOn(invoice.getInvoiceDueOn());
         invoiceModel.setInvoiceRefNo(invoice.getInvoiceReferenceNumber());
         invoiceModel.setInvoiceText(invoice.getInvoiceText());

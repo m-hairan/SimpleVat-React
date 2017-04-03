@@ -47,9 +47,9 @@ public class Invoice implements Serializable {
     @Column(name = "INVOICE_TEXT")
     private String invoiceText;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "INVOICE_DISCOUNT_TYPE")
-    private DiscountType invoiceDiscountType;
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "INVOICE_DISCOUNT_TYPE")
+//    private DiscountType invoiceDiscountType;
 
     @Column(name = "INVOICE_DISCOUNT")
     private BigDecimal invoiceDiscount;
