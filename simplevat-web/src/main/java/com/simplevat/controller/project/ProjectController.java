@@ -100,7 +100,7 @@ public class ProjectController {
 
 
     public void deleteProject(Project project) throws Exception {
-        project.setDeleteFlag('Y');
+        project.setDeleteFlag(Boolean.TRUE);
         projectService.updateOrCreateProject(project);
     }
 
