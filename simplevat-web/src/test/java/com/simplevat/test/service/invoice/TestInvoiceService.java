@@ -7,8 +7,8 @@ import com.simplevat.test.common.BaseManagerTest;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -20,8 +20,8 @@ public class TestInvoiceService extends BaseManagerTest {
     @Test
     public void testSaveInvoice() {
         Invoice invoice = new Invoice();
-        invoice.setCreatedDate(Calendar.getInstance());
-        invoice.setInvoiceDate(Calendar.getInstance());
+        invoice.setCreatedDate(LocalDateTime.now());
+        invoice.setInvoiceDate(LocalDateTime.now());
         invoice.setInvoiceDueOn(7);
 //        invoice.setContactFullName("Hiren");
         invoice.setContractPoNumber("PO-2342");
@@ -29,7 +29,7 @@ public class TestInvoiceService extends BaseManagerTest {
         invoice.setInvoiceDiscountType(DiscountType.ABSOLUTE);
         invoice.setInvoiceReferenceNumber("INV2323");
         invoice.setInvoiceLineItems(getLineItems(invoice.getInvoiceId()));
-        invoice.setDeleteFlag((char) 0);
+        invoice.setDeleteFlag(Boolean.FALSE);
         invoiceService.saveInvoice(invoice);
     }
     
