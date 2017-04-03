@@ -410,8 +410,8 @@
                             <source>${maven-compiler-plugin.source}</source>
                             <target>${maven-compiler-plugin.target}</target>
                             <fork>true</fork>
-                            <meminitial>1024m</meminitial>
-                            <maxmem>2024m</maxmem>
+                            <meminitial>2048m</meminitial>
+                            <maxmem>4096m</maxmem>
                         </configuration>
                     </plugin>
                 </plugins>
