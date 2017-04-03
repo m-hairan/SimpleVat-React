@@ -6,8 +6,11 @@ import com.simplevat.invoice.model.InvoiceItemModel;
 import com.simplevat.invoice.model.InvoiceModel;
 import com.simplevat.service.invoice.InvoiceService;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
@@ -27,8 +30,7 @@ public class InvoiceModelConverter {
 
     @Nonnull
     public Invoice convertModelToEntity(@Nonnull final InvoiceModel invoiceModel) {
-        final Calendar invoiceDate = Calendar.getInstance();
-        invoiceDate.setTime(invoiceModel.getInvoiceDate());
+        final LocalDateTime invoiceDate = LocalDateTime.ofInstant(invoiceModel.getInvoiceDate().toInstant(), ZoneId.systemDefault());
 
         Invoice invoice = null;
 
@@ -85,7 +87,8 @@ public class InvoiceModelConverter {
         invoiceModel.setCurrencyCode(invoice.getCurrency());
         invoiceModel.setInvoiceId(invoice.getInvoiceId());
         invoiceModel.setContact(invoice.getInvoiceContact());
-        invoiceModel.setInvoiceDate(null != invoice.getInvoiceDate() ? invoice.getInvoiceDate().getTime() : null);
+
+        invoiceModel.setInvoiceDate(null != invoice.getInvoiceDate() ? Date.from(invoice.getInvoiceDate().atZone(ZoneId.systemDefault()).toInstant()) : null);
         invoiceModel.setDiscount(invoice.getInvoiceDiscount());
         invoiceModel.setDiscountType(invoice.getInvoiceDiscountType());
         invoiceModel.setInvoiceDueOn(invoice.getInvoiceDueOn());

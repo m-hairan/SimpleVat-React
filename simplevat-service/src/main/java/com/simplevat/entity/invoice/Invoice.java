@@ -3,12 +3,13 @@ package com.simplevat.entity.invoice;
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.Project;
+import com.simplevat.entity.converter.DateConverter;
 import java.io.Serializable;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import lombok.AccessLevel;
 import lombok.Setter;
@@ -37,8 +38,8 @@ public class Invoice implements Serializable {
     private String invoiceReferenceNumber;
 
     @Column(name = "INVOICE_DATE")
-    @Temporal(TemporalType.DATE)
-    private Calendar invoiceDate;
+    @Convert(converter = DateConverter.class)
+    private LocalDateTime invoiceDate;
 
     @Column(name = "INVOICE_DUE_ON")
     private Integer invoiceDueOn;
@@ -63,19 +64,19 @@ public class Invoice implements Serializable {
     @Column(name = "CREATED_BY")
     private Integer createdBy;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_DATE")
-    private Calendar createdDate;
+    @Convert(converter = DateConverter.class)
+    private LocalDateTime createdDate;
 
     @Column(name = "LAST_UPDATED_BY")
     private Integer lastUpdatedBy;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "LAST_UPDATE_DATE")
-    private Calendar lastUpdateDate;
+    @Convert(converter = DateConverter.class)
+    private LocalDateTime lastUpdateDate;
 
     @Column(name = "DELETE_FLAG")
-    private Character deleteFlag = 'N';
+    private Boolean deleteFlag = Boolean.FALSE;
 
     @Version
     @Column(name = "VERSION_NUMBER")
@@ -94,13 +95,13 @@ public class Invoice implements Serializable {
 
     @PrePersist
     public void updateDates() {
-        createdDate = Calendar.getInstance();
-        lastUpdateDate = Calendar.getInstance();
+        createdDate = LocalDateTime.now();
+        lastUpdateDate = LocalDateTime.now();
     }
 
     @PreUpdate
     public void updateLastUpdatedDate() {
-        lastUpdateDate = Calendar.getInstance();
+        lastUpdateDate = LocalDateTime.now();
     }
 
 }

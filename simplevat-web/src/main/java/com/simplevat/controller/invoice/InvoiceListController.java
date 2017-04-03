@@ -59,7 +59,7 @@ public class InvoiceListController implements Serializable {
     }
 
     public void deleteInvoice(final Invoice invoice) {
-        invoice.setDeleteFlag('Y');
+        invoice.setDeleteFlag(Boolean.TRUE);
         invoiceService.updateInvoice(invoice);
         FacesContext.getCurrentInstance().addMessage("Invoice Deleted SuccessFully",
                 new FacesMessage("Invoice Deleted SuccessFully"));
