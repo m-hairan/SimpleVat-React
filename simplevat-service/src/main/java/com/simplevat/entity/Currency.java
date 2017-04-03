@@ -30,7 +30,7 @@ public class Currency {
     @Column(name = "CURRENCY_DESCRIPTION")
     private String currencyDescription;
     @Basic
-    @Column(name = "CURRENCY_ISO_CODE")
+    @Column(name = "CURRENCY_ISO_CODE", length = 3, columnDefinition = "CHAR")
     private String currencyIsoCode;
     @Basic
     @Column(name = "CURRENCY_SYMBOL")
