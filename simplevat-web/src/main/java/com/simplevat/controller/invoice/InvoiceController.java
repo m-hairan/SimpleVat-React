@@ -10,21 +10,21 @@ import com.simplevat.invoice.model.InvoiceModel;
 import com.simplevat.service.ContactService;
 import com.simplevat.service.CurrencyService;
 import com.simplevat.service.invoice.InvoiceService;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Iterator;
-import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -176,7 +176,7 @@ public class InvoiceController {
         final Contact contact = new Contact();
 
         contact.setBillingEmail(contactModel.getEmailAddress());
-        contact.setDeleteFlag('N');
+        contact.setDeleteFlag(Boolean.FALSE);
         contact.setEmail(contactModel.getEmailAddress());
         contact.setFirstName(contactModel.getFirstName());
         contact.setLastName(contactModel.getLastName());

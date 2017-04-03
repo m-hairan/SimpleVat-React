@@ -1,9 +1,12 @@
 package com.simplevat.entity;
 
 import java.io.Serializable;
+
+import com.simplevat.entity.converter.DateConverter;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 
 /**
@@ -86,8 +89,8 @@ public class Contact implements Serializable {
     private Integer createdBy;
     @Basic
     @Column(name = "CREATED_DATE")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Calendar createdDate;
+    @Convert(converter = DateConverter.class)
+    private LocalDateTime createdDate;
 
     @Basic
     @Column(name = "LAST_UPDATED_BY")
@@ -95,11 +98,11 @@ public class Contact implements Serializable {
 
     @Basic
     @Column(name = "LAST_UPDATE_DATE")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Calendar lastUpdateDate;
+    @Convert(converter = DateConverter.class)
+    private LocalDateTime lastUpdateDate;
     @Basic
     @Column(name = "DELETE_FLAG")
-    private Character deleteFlag;
+    private Boolean deleteFlag;
     @Basic
     @Column(name = "VERSION_NUMBER")
     private int versionNumber;
@@ -122,13 +125,13 @@ public class Contact implements Serializable {
 
     @PrePersist
     public void updateDates() {
-        createdDate = Calendar.getInstance();
-        lastUpdateDate = Calendar.getInstance();
+        createdDate = LocalDateTime.now();
+        lastUpdateDate = LocalDateTime.now();
     }
 
     @PreUpdate
     public void updateLastUpdatedDate() {
-        lastUpdateDate = Calendar.getInstance();
+        lastUpdateDate = LocalDateTime.now();
     }
 
 }

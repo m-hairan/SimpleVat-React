@@ -22,7 +22,7 @@ public class Currency {
 
     @Id
     @Column(name = "CURRENCY_CODE")
-    private int currencyCode;
+    private Integer currencyCode;
     @Basic
     @Column(name = "CURRENCY_NAME")
     private String currencyName;

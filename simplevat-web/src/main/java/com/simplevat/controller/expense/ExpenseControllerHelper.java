@@ -1,5 +1,10 @@
 package com.simplevat.controller.expense;
 
+import com.simplevat.entity.Expense;
+import com.simplevat.expense.model.ExpenseModel;
+import org.apache.commons.io.FilenameUtils;
+import org.primefaces.model.UploadedFile;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,12 +13,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Properties;
-
-import org.apache.commons.io.FilenameUtils;
-import org.primefaces.model.UploadedFile;
-
-import com.simplevat.entity.Expense;
-import com.simplevat.expense.model.ExpenseModel;
 
 public class ExpenseControllerHelper {
 	
@@ -46,7 +45,7 @@ public class ExpenseControllerHelper {
 		expenseModel.setCreatedBy(entity.getCreatedBy());
 		expenseModel.setCreatedDate(entity.getCreatedDate());
 		expenseModel.setCurrencyCode(entity.getCurrencyCode());
-		expenseModel.setDeleteFlag(entity.isDeleteFlag());
+		expenseModel.setDeleteFlag(entity.getDeleteFlag());
 		expenseModel.setExpenseAmount(entity.getExpenseAmount());
 		expenseModel.setExpenseDate(entity.getExpenseDate());
 		expenseModel.setExpenseDescription(entity.getExpenseDescription());

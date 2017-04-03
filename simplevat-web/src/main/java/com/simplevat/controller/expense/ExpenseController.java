@@ -1,20 +1,18 @@
 package com.simplevat.controller.expense;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-
-import lombok.Getter;
-import lombok.Setter;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-
 import com.simplevat.entity.Expense;
 import com.simplevat.expense.model.ExpenseModel;
 import com.simplevat.service.ExpenseService;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Controller
 @ManagedBean(name = "expenseController")
@@ -46,8 +44,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 		
 		if(expense.getExpenseId() > 0){
 			
-			Date now = new Date();
-			expense.setLastUpdateDate(now);
+			expense.setLastUpdateDate(LocalDateTime.now());
 			expense.setLastUpdatedBy(12345);
 			expense.setDeleteFlag(false);
 			expense.setCreatedBy(null);
@@ -61,9 +58,8 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 			
 		}else{
 			// save expense 
-			Date now = new Date();
-			expense.setCreatedDate(now);
-			expense.setLastUpdateDate(now);
+			expense.setCreatedDate(LocalDateTime.now());
+			expense.setLastUpdateDate(LocalDateTime.now());
 			expense.setLastUpdatedBy(12345);
 			expense.setDeleteFlag(false);
 			expense.setCreatedBy(null);
@@ -88,8 +84,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 		
 		if(expense.getExpenseId() > 0){
 			
-			Date now = new Date();
-			expense.setLastUpdateDate(now);
+			expense.setLastUpdateDate(LocalDateTime.now());
 			expense.setLastUpdatedBy(12345);
 			expense.setDeleteFlag(false);
 			expense.setCreatedBy(null);
@@ -104,8 +99,8 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 		}else{
 			// save expense 
 			Date now = new Date();
-			expense.setCreatedDate(now);
-			expense.setLastUpdateDate(now);
+			expense.setCreatedDate(LocalDateTime.now());
+			expense.setLastUpdateDate(LocalDateTime.now());
 			expense.setLastUpdatedBy(12345);
 			expense.setDeleteFlag(false);
 			expense.setCreatedBy(null);

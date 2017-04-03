@@ -1,5 +1,7 @@
 package com.simplevat.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -9,6 +11,7 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name = "USER", schema = "simplevat", catalog = "")
+@Data
 public class User {
     @Id
     @Column(name = "USER_EMAIL_ID")
@@ -45,7 +48,7 @@ public class User {
     private Boolean deleteFlag;
     @Basic
     @Column(name = "VERSION_NUMBER")
-    private int versionNumber;
+    private Integer versionNumber;
 //    private Collection<Expense> expensesByUserEmailId;
 //    private Company companyByCompanyId;
 //    private Role roleByRoleCode;

@@ -5,7 +5,7 @@ import lombok.Setter;
 import org.primefaces.model.UploadedFile;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -13,7 +13,7 @@ public class ExpenseModel {
 
     private int expenseId;
     private BigDecimal expenseAmount;
-    private Date expenseDate;
+    private LocalDateTime expenseDate;
     private String expenseDescription;
     private String receiptNumber;
     private Integer claimantId;
@@ -24,9 +24,9 @@ public class ExpenseModel {
     private String receiptAttachmentPath;
     private String receiptAttachmentDescription;
     private Integer createdBy;
-    private Date createdDate;
+    private LocalDateTime createdDate;
     private Integer lastUpdatedBy;
-    private Date lastUpdateDate;
+    private LocalDateTime lastUpdateDate;
     private boolean deleteFlag;
     private UploadedFile attachmentFile;
 
