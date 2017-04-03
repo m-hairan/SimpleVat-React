@@ -1,10 +1,11 @@
 package com.simplevat.entity;
 
+import com.simplevat.entity.converter.DateConverter;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 /**
  * Created by mohsinh on 2/26/2017.
@@ -18,7 +19,7 @@ public class Transaction {
     private int transactionId;
     @Basic
     @Column(name = "TRANSACTION_DATE")
-    private Date transactionDate;
+    private LocalDateTime transactionDate;
     @Basic
     @Column(name = "TRANSACTION_DESCRIPTION")
     private String transactionDescription;
@@ -57,19 +58,21 @@ public class Transaction {
     private Integer createdBy;
     @Basic
     @Column(name = "CREATED_DATE")
-    private Date createdDate;
+    @Convert(converter = DateConverter.class)
+    private LocalDateTime createdDate;
     @Basic
     @Column(name = "LAST_UPDATED_BY")
-    private Date lastUpdatedBy;
+    private Integer lastUpdatedBy;
     @Basic
     @Column(name = "LAST_UPDATE_DATE")
-    private Date lastUpdateDate;
+    @Convert(converter = DateConverter.class)
+    private LocalDateTime lastUpdateDate;
     @Basic
     @Column(name = "DELETE_FLAG")
     private Character deleteFlag;
     @Basic
     @Column(name = "VERSION_NUMBER")
-    private int versionNumber;
+    private Integer versionNumber;
 //    private TransactionType transactionTypeByTransactionTypeCode;
 //    private Project projectByExplainedProjectId;
 //    private TransactionCategory transactionCategoryByExplainedTransactionCategoryCode;

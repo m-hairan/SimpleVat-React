@@ -48,7 +48,7 @@ public class User {
     private Boolean deleteFlag;
     @Basic
     @Column(name = "VERSION_NUMBER")
-    private int versionNumber;
+    private Integer versionNumber;
 //    private Collection<Expense> expensesByUserEmailId;
 //    private Company companyByCompanyId;
 //    private Role roleByRoleCode;
