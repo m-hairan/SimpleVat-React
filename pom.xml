@@ -46,7 +46,7 @@
     </properties>
 
     <build>
-        <finalName>simplevat</finalName>
+        <finalName>ROOT</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -366,7 +366,7 @@
         <profile>
             <id>openshift</id>
             <build>
-                <finalName>simplevat</finalName>
+                <finalName>ROOT</finalName>
                 <plugins>
                     <plugin>
                         <artifactId>maven-war-plugin</artifactId>
