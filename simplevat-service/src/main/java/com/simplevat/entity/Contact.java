@@ -7,7 +7,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Calendar;
 
 /**
  * Created by mohsinh on 2/26/2017.
@@ -102,10 +101,12 @@ public class Contact implements Serializable {
     private LocalDateTime lastUpdateDate;
     @Basic
     @Column(name = "DELETE_FLAG")
-    private Boolean deleteFlag;
+    private Boolean deleteFlag = Boolean.FALSE;
+    
     @Basic
+    @Version
     @Column(name = "VERSION_NUMBER")
-    private int versionNumber;
+    private Integer versionNumber = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COUNTRY_CODE")

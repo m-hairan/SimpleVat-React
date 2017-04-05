@@ -181,6 +181,7 @@ public class InvoiceController {
         contact.setFirstName(contactModel.getFirstName());
         contact.setLastName(contactModel.getLastName());
         contact.setOrganization(contactModel.getOrganizationName());
+        contact.setCreatedBy(1);
         
         contactModel=new ContactModel();
         

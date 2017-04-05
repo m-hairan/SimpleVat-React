@@ -91,6 +91,7 @@ public class ContactController implements Serializable {
         BeanUtils.copyProperties(contactModel, contact);
         contact.setOrganization(contactModel.getOrganizationName());
         contact.setEmail(contactModel.getEmailAddress());
+        contact.setCreatedBy(1);
         this.contactService.createContact(contact);
 
         LOGGER.debug("Created contact Name :" + contactModel.getFirstName());

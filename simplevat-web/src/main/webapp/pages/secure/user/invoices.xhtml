@@ -56,9 +56,10 @@
                                 <h:outputText value="#{invoice.invoiceReferenceNumber}" />
                             </p:column>
 
-                            <p:column headerText="#{messages.date}" sortBy="#{invoice.invoiceDate.time}">
-                                <h:outputText value="#{invoice.invoiceDate.time}" >
-                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                            <p:column headerText="#{messages.date}" sortBy="#{invoice.invoiceDate}">
+                                <h:outputText value="#{invoice.invoiceDate}" >
+                                    <f:converter converterId="localDateTimeConverter" />
+                                    <f:attribute name="pattern" value="dd/MM/yyyy" />
                                 </h:outputText>
                             </p:column>
 

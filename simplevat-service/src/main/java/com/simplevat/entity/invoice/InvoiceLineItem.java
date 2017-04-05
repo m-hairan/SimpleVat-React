@@ -56,11 +56,11 @@ public class InvoiceLineItem {
 
     @Basic
     @Column(name = "DELETE_FLAG")
-    private Boolean deleteFlag;
+    private Boolean deleteFlag = Boolean.FALSE;
 
     @Basic
     @Column(name = "VERSION_NUMBER")
-    private Integer versionNumber;
+    private Integer versionNumber = 0;
 
     @ManyToOne
     @JoinColumn(name = "INVOICE_ID")
