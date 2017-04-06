@@ -14,6 +14,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import java.io.Serializable;
 import java.util.*;
+import javax.annotation.Nonnull;
 
 @Controller
 @ManagedBean(name = "contactListController")
@@ -23,17 +24,10 @@ public class ContactListController implements Serializable {
     private static final long serialVersionUID = 2549403337578048506L;
     private final static Logger LOGGER = LoggerFactory.getLogger(ContactListController.class);
 
-
     @Getter
     @Setter
-    private Map<Long, Boolean> selectedContactIds = new HashMap<Long, Boolean>();
+    private Map<Long, Boolean> selectedContactIds = new HashMap<>();
 
-    @Getter
-    @Setter
-    private List<Contact> contacts;
-
-    @Getter
-    @Setter
     private List<Contact> filteredContacts;
 
     @Getter
@@ -51,54 +45,49 @@ public class ContactListController implements Serializable {
     @Setter
     private Map<String, String> filters;
 
-
     @Autowired
     private ContactService contactService;
 
-
     @PostConstruct
     public void init() {
-
-        this.contacts = contactService.getContacts();
-        this.filteredContacts = this.contacts;
-        LOGGER.debug("Fetched Contacts :" + contacts.size());
+        selectedFilter = null;
+        this.filteredContacts = new ArrayList<>();
 
     }
 
     public Map<String, String> getFilters() {
         filters = new HashMap<>();
-        for (Contact contact : contacts) {
-            String filterCharacter = contact.getFirstName().substring(0, 1).toUpperCase();
-            filters.put(filterCharacter, filterCharacter);
-            LOGGER.debug("Contact Filter Char :" + filterCharacter);
-        }
+        filteredContacts.stream()
+                .map((contact) -> contact.getFirstName().substring(0, 1).toUpperCase())
+                .forEach((filterCharacter) -> {
+                    filters.put(filterCharacter, filterCharacter);
+                });
         return filters;
-    }
-
-    public void onContactFilterChange() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Changing Filter to :" + this.selectedFilter);
-        }
-        this.contacts = this.contacts;//contactService.getContacts();
-        if (this.selectedFilter == null || this.selectedFilter.isEmpty()) {
-            this.filteredContacts = contacts;
-        } else {
-            this.filteredContacts = this.getFilteredContacts(this.selectedFilter);
-        }
     }
 
     private List<Contact> getFilteredContacts(String filterChar) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Changing Filter to :" + filterChar);
-            LOGGER.debug("Number of contacts :" + contacts.size());
+            LOGGER.debug("Number of contacts :" + filteredContacts.size());
         }
-        List<Contact> returnContacts = new ArrayList<Contact>();
-        for (Contact contact : contacts) {
+        List<Contact> returnContacts = new ArrayList<>();
+        for (Contact contact : filteredContacts) {
             if (contact.getFirstName().substring(0, 1).toUpperCase().equals(filterChar.toUpperCase())) {
                 returnContacts.add(contact);
             }
         }
         return returnContacts;
+    }
+
+    @Nonnull
+    public List<Contact> getContacts() {
+        if (this.selectedFilter != null && !this.selectedFilter.isEmpty()) {
+            filteredContacts = this.getFilteredContacts(this.selectedFilter);
+        } else {
+            filteredContacts = contactService.getContacts();
+        }
+        return filteredContacts;
+
     }
 
 }

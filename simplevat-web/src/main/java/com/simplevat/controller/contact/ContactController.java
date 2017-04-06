@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.faces.context.FacesContext;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.BeanUtils;
 
 /**
@@ -72,12 +71,12 @@ public class ContactController implements Serializable {
         currencies = currencyService.getCurrencies();
         titles = titleService.getTitles();
 
-//        contactModel.setCountry(countries.get(179));
-//        contactModel.setLanguage(languages.get(0));
-//        contactModel.setCurrency(currencies.get(0));
+        contactModel.setCountry(countries.get(179));
+        contactModel.setLanguage(languages.get(0));
+        contactModel.setCurrency(currencies.get(0));
         LOGGER.debug("Loaded Countries :" + countries.size());
     }
-    
+
     public String redirectToCreateContact() {
         contactModel = new ContactModel();
 
@@ -85,7 +84,7 @@ public class ContactController implements Serializable {
         return "/pages/secure/contact/contact.xhtml";
     }
 
-    public String createNewContact() {
+    public void createNewContact() throws IOException {
         LOGGER.debug("Creating contact");
         final Contact contact = new Contact();
         BeanUtils.copyProperties(contactModel, contact);
@@ -95,8 +94,8 @@ public class ContactController implements Serializable {
         this.contactService.createContact(contact);
 
         LOGGER.debug("Created contact Name :" + contactModel.getFirstName());
-        this.init();
-        return "/pages/secure/contact/contacts.xhtml";
+        FacesContext.getCurrentInstance().getExternalContext()
+                .redirect("contacts.xhtml?faces-redirect=true");
     }
 
     public String editContact() {
