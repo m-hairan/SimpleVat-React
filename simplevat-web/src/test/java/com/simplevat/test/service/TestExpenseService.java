@@ -14,6 +14,7 @@ import org.junit.Ignore;
 public class TestExpenseService extends BaseManagerTest {
 	
 	@Test
+	@Ignore
 	public void testSaveExpense(){
 		
 		Expense expense = new Expense();

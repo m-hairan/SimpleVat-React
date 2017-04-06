@@ -2,6 +2,7 @@ package com.simplevat.test.dao;
 
 import com.simplevat.entity.Expense;
 import com.simplevat.test.common.BaseManagerTest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -10,6 +11,7 @@ import org.junit.Test;
 public class TestExpenseDao extends BaseManagerTest{
 
     @Test
+    @Ignore
     public void testSaveExpense()
     {
         Expense expense = new Expense();
