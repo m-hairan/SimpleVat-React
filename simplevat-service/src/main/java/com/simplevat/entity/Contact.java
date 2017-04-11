@@ -74,7 +74,7 @@ public class Contact implements Serializable {
     private String postZipCode;
     @Basic
     @Column(name = "PO_BOX_NUMBER")
-    private String poBoxNumber
+    private String poBoxNumber;
     
     @Basic
     @Column(name = "CONTRACT_PO_NUMBER")
