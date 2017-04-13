@@ -23,7 +23,6 @@ public class Expense{
 
     @Id
     @Column(name = "EXPENSE_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer expenseId;
     @Basic
     @Column(name = "EXPENSE_AMOUNT")

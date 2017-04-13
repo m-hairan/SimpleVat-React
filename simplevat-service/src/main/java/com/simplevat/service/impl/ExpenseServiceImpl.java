@@ -18,9 +18,6 @@ public class ExpenseServiceImpl implements ExpenseService  {
 	@Autowired
     public ExpenseDao expenseDao;
 	
-	public Expense saveExpense(Expense expense) {
-		return expenseDao.saveExpense(expense);
-	}
 
 	@Override
 	public List<Expense> getExpenses() {
@@ -28,8 +25,8 @@ public class ExpenseServiceImpl implements ExpenseService  {
 	}
 
 	@Override
-	public Expense updateExpense(Expense expense) {
-		return expenseDao.updateExpense(expense);
+	public Expense updateOrCreateExpense(Expense expense) {
+		return expenseDao.updateOrCreateExpense(expense);
 	}
 	
 

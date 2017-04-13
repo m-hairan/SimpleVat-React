@@ -137,6 +137,11 @@
 											<p:fileUpload
 												value="#{expenseController.selectedExpenseModel.attachmentFile}"
 												mode="simple" skinSimple="true" />
+											<h:panelGroup rendered="#{expenseController.selectedExpenseModel.attachmentFileContent != null}">
+												<p:commandButton value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
+													<p:fileDownload value="#{expenseController.selectedExpenseModel.attachmentFileContent}" />
+												</p:commandButton>
+											</h:panelGroup>
 										</h:panelGroup>
 
 										<h:panelGroup />
@@ -158,14 +163,16 @@
 				<p:toolbar>
 					<f:facet name="left">
 						<p:commandButton value="#{messages.save}" icon="ui-icon-save"
-							action="#{expenseController.saveExpense}" />
+							action="#{expenseController.saveExpense}" ajax="false" />
 						<p:commandButton value="#{messages.save_and_add_more}"
 							icon="ui-icon-forward" 
-							action="#{expenseController.saveAndContinueExpense}"/>
+							action="#{expenseController.saveAndContinueExpense}"
+							ajax="false"/>
 
 						<span class="ui-separator" style="padding-right: 5px;"> <span
 							class="fa fa-ellipsis-v SoftGray" />
 						</span>
+						
 
 						<p:commandButton title="#{messages.cancel}" icon="ui-icon-cancel"
 							action="/pages/secure/expense/expenses.xhtml"

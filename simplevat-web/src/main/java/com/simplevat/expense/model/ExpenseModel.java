@@ -2,6 +2,8 @@ package com.simplevat.expense.model;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 import java.math.BigDecimal;
@@ -29,5 +31,6 @@ public class ExpenseModel {
     private LocalDateTime lastUpdateDate;
     private boolean deleteFlag;
     private UploadedFile attachmentFile;
+    private StreamedContent attachmentFileContent;
 
 }

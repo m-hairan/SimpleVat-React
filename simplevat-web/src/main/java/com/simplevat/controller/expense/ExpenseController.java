@@ -1,18 +1,21 @@
 package com.simplevat.controller.expense;
 
-import com.simplevat.entity.Expense;
-import com.simplevat.expense.model.ExpenseModel;
-import com.simplevat.service.ExpenseService;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.Date;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+
+import com.simplevat.entity.Expense;
+import com.simplevat.expense.model.ExpenseModel;
+import com.simplevat.service.ExpenseService;
 
 @Controller
 @ManagedBean(name = "expenseController")
@@ -23,6 +26,9 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 	
 	@Autowired
 	private ExpenseService expenseService;
+	
+	@Value("${file.upload.location}")
+	private String fileLocation;
 	
 	@Getter
 	@Setter
@@ -41,39 +47,22 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 	public String saveExpense(){
 		
 		Expense expense = this.getExpense(this.getSelectedExpenseModel());
+			
+		expense.setLastUpdateDate(LocalDateTime.now());
+		expense.setLastUpdatedBy(12345);
+		expense.setDeleteFlag(false);
+		expense.setCreatedBy(12345);
+		expense.setClaimantId(null);
+		expense.setTransactionCategoryCode(null);
+		expense.setTransactionTypeCode(null);
+		expense.setCurrencyCode(null);
+		expense.setProjectId(null);
 		
-		if(expense.getExpenseId() > 0){
-			
-			expense.setLastUpdateDate(LocalDateTime.now());
-			expense.setLastUpdatedBy(12345);
-			expense.setDeleteFlag(false);
-			expense.setCreatedBy(null);
-			expense.setClaimantId(null);
-			expense.setTransactionCategoryCode(null);
-			expense.setTransactionTypeCode(null);
-			expense.setCurrencyCode(null);
-			expense.setProjectId(null);
-			
-			expenseService.updateExpense(expense);
-			
-		}else{
-			// save expense 
-			expense.setCreatedDate(LocalDateTime.now());
-			expense.setLastUpdateDate(LocalDateTime.now());
-			expense.setLastUpdatedBy(12345);
-			expense.setDeleteFlag(false);
-			expense.setCreatedBy(null);
-			expense.setClaimantId(null);
-			expense.setTransactionCategoryCode(null);
-			expense.setTransactionTypeCode(null);
-			expense.setCurrencyCode(null);
-			expense.setProjectId(null);
-			
-			expenseService.saveExpense(expense);
+		if(this.getSelectedExpenseModel().getAttachmentFile().getSize() > 0){
+			storeUploadedFile(this.getSelectedExpenseModel(), expense, fileLocation);
 		}
-		
-		//storeUploadedFile(this.getSelectedExpenseModel());
-		
+		expenseService.updateOrCreateExpense(expense);
+			
 		return "/pages/secure/expense/expenses.xhtml";
 		
 	}
@@ -82,38 +71,21 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 		
 		Expense expense = this.getExpense(this.getSelectedExpenseModel());
 		
-		if(expense.getExpenseId() > 0){
-			
-			expense.setLastUpdateDate(LocalDateTime.now());
-			expense.setLastUpdatedBy(12345);
-			expense.setDeleteFlag(false);
-			expense.setCreatedBy(null);
-			expense.setClaimantId(null);
-			expense.setTransactionCategoryCode(null);
-			expense.setTransactionTypeCode(null);
-			expense.setCurrencyCode(null);
-			expense.setProjectId(null);
-			
-			expenseService.updateExpense(expense);
-			
-		}else{
-			// save expense 
-			Date now = new Date();
-			expense.setCreatedDate(LocalDateTime.now());
-			expense.setLastUpdateDate(LocalDateTime.now());
-			expense.setLastUpdatedBy(12345);
-			expense.setDeleteFlag(false);
-			expense.setCreatedBy(null);
-			expense.setClaimantId(null);
-			expense.setTransactionCategoryCode(null);
-			expense.setTransactionTypeCode(null);
-			expense.setCurrencyCode(null);
-			expense.setProjectId(null);
-			
-			expenseService.saveExpense(expense);
+		expense.setLastUpdateDate(LocalDateTime.now());
+		expense.setLastUpdatedBy(12345);
+		expense.setDeleteFlag(false);
+		expense.setCreatedBy(12345);
+		expense.setClaimantId(null);
+		expense.setTransactionCategoryCode(null);
+		expense.setTransactionTypeCode(null);
+		expense.setCurrencyCode(null);
+		expense.setProjectId(null);
+		
+		if(this.getSelectedExpenseModel().getAttachmentFile().getSize() > 0){
+			storeUploadedFile(this.getSelectedExpenseModel(), expense, fileLocation);
 		}
 		
-		storeUploadedFile(this.getSelectedExpenseModel());
+		expenseService.updateOrCreateExpense(expense);
 		
 		return "/pages/secure/expense/create-expense.xhtml?faces-redirect=true";
 		
@@ -123,7 +95,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 		
 		Expense expense = this.getExpense(this.getSelectedExpenseModel());
 		expense.setDeleteFlag(true);
-		expenseService.updateExpense(expense);
+		expenseService.updateOrCreateExpense(expense);
 		return "/pages/secure/expense/expenses.xhtml?faces-redirect=true";
 		
 	}

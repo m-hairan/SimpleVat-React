@@ -20,7 +20,8 @@ public class TestExpenseService extends BaseManagerTest {
 		Expense expense = new Expense();
 		expense.setExpenseDescription("test description");
 		
-		Expense newExpense = expenseService.saveExpense(expense);
+		Expense newExpense = expenseService.updateOrCreateExpense(expense);
+		
 	}
 
 }
