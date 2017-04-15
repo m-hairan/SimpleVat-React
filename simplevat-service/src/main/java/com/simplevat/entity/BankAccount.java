@@ -32,11 +32,11 @@ public class BankAccount {
     @Column(name = "BANK_ACCOUNT_STATUS_CODE")
     private Integer bankAccountStatusCode;
     @Basic
-    @Column(name = "PERSONAL_CORPORATE_ACCOUNT_FLAG")
-    private Character personalCorporateAccountFlag;
+    @Column(name = "PERSONAL_CORPORATE_ACCOUNT_IND", length = 1, columnDefinition = "CHAR")
+    private String personalCorporateAccountInd;
     @Basic
     @Column(name = "ISPRIMARY_ACCOUNT_FLAG")
-    private Character isprimaryAccountFlag;
+    private Boolean isprimaryAccountFlag = true;
     @Basic
     @Column(name = "BANK_NAME")
     private String bankName;
