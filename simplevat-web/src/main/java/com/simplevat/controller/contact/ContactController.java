@@ -73,7 +73,7 @@ public class ContactController implements Serializable {
 
         contactModel.setCountry(countries.get(179));
         contactModel.setLanguage(languages.get(0));
-        contactModel.setCurrency(currencies.get(0));
+        contactModel.setCurrency(currencies.get(149));
         LOGGER.debug("Loaded Countries :" + countries.size());
     }
 
