@@ -16,6 +16,24 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>simplevat-service</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-aop</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-expression</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-expression</artifactId>
         </dependency>
         <dependency>
             <groupId>org.primefaces</groupId>
@@ -34,6 +52,34 @@
             <groupId>javax.servlet.jsp</groupId>
             <artifactId>jsp-api</artifactId>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+        </dependency>
+
+        <!--Spring security-->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-expression</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-acl</artifactId>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/javax.el/el-api -->

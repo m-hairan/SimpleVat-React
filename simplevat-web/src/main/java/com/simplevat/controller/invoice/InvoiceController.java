@@ -21,6 +21,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,7 +34,7 @@ import java.util.List;
 @Controller
 @ManagedBean
 @ViewScoped
-public class InvoiceController {
+public class InvoiceController implements Serializable{
 
     @Getter
     private InvoiceModel invoiceModel;
