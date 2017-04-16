@@ -22,6 +22,10 @@
             body .ui-widget-content .ui-icon-delete{
                 color: #fff; 
             }
+            body .ui-datatable tbody tr td.ui-state-highlight .ui-inputfield {
+                color: #000;
+                border-color: #000;
+            }
         </style>
     </ui:define>
 
@@ -151,6 +155,7 @@
                                         toggleSpeed="300">
                                 <p:dataTable value="#{invoiceController.invoiceModel.invoiceItems}"
                                              var="invoiceItem" 
+                                             editMode="cell"
                                              editable="true"
                                              id="invoiceItemTable"
                                              reflow="true">
@@ -231,9 +236,7 @@
                                             <f:convertNumber maxFractionDigits="2" pattern="#,##0.00" />
                                         </h:outputText>
                                     </p:column>
-                                    <p:column style="width: 32px">
-                                        <p:rowEditor />
-                                    </p:column>
+
                                 </p:dataTable>
                                 <p:commandButton actionListener="#{invoiceController.addInvoiceItem()}"
                                                  style="width: 10%; margin-top: 3px" 
@@ -258,10 +261,11 @@
                                                         dropdown="true" 
                                                         forceSelection="true"
                                                         effect="fold" 
+                                                        converter="discountTypeConverter"
                                                         completeMethod="#{invoiceController.discountTypes}" 
                                                         value="#{invoiceController.invoiceModel.discountType}"
-                                                        var="type" itemValue="#{type}"
-                                                        itemLabel="#{type.toString()}" />
+                                                        var="type" itemValue="#{type.discountTypeCode}"
+                                                        itemLabel="#{type.discountTypeName}" />
 
                                         <label>#{messages.discount_type}</label>
                                     </h:panelGroup>

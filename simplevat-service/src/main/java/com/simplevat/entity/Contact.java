@@ -14,9 +14,9 @@ import java.time.LocalDateTime;
 @NamedQueries({
     @NamedQuery(name = "allContacts",
             query = "SELECT c "
-            + "FROM Contact c order by c.firstName"),
+            + "FROM Contact c order by c.firstName, c.lastName"),
     @NamedQuery(name = "Contact.contactsByName",
-            query = "SELECT c FROM Contact c WHERE (c.firstName LIKE :name or c.lastName LIKE :name) order by c.firstName")
+            query = "SELECT c FROM Contact c WHERE (c.firstName LIKE :name or c.lastName LIKE :name) order by c.firstName, c.lastName")
 })
 
 @Entity

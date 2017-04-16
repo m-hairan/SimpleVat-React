@@ -1,7 +1,6 @@
 package com.simplevat.controller.invoice;
 
 import com.simplevat.entity.invoice.DiscountType;
-import static com.simplevat.entity.invoice.DiscountType.ABSOLUTE;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.entity.invoice.InvoiceLineItem;
 import java.io.Serializable;
@@ -69,11 +68,10 @@ public class InvoiceListController implements Serializable {
     public BigDecimal totalAmount(@Nonnull final Invoice invoice) {
 
         final BigDecimal discount = invoice.getInvoiceDiscount();
-//        final DiscountType discountType = invoice.getInvoiceDiscountType();
+        final DiscountType discountType = invoice.getDiscountType();
 
 // remove this after new table
-        final DiscountType discountType = ABSOLUTE;
-
+//        final DiscountType discountType = ABSOLUTE;
         BigDecimal finalTotal = BigDecimal.ZERO;
 
         for (InvoiceLineItem item : invoice.getInvoiceLineItems()) {
@@ -88,7 +86,7 @@ public class InvoiceListController implements Serializable {
         }
 
         if (null != discountType && null != discount) {
-            if (discountType == ABSOLUTE) {
+            if (discountType.getDiscountTypeName().equals("Absolute Discount")) {
                 finalTotal = finalTotal.subtract(discount);
             } else {
                 finalTotal = finalTotal.subtract(finalTotal.multiply(discount)

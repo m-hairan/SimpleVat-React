@@ -46,10 +46,10 @@ public class Invoice implements Serializable {
 
     @Column(name = "INVOICE_TEXT")
     private String invoiceText;
-
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "INVOICE_DISCOUNT_TYPE")
-//    private DiscountType invoiceDiscountType;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "DISCOUNT_TYPE_CODE")
+    private DiscountType discountType;
 
     @Column(name = "INVOICE_DISCOUNT")
     private BigDecimal invoiceDiscount;
@@ -81,7 +81,7 @@ public class Invoice implements Serializable {
     @Version
     @Column(name = "VERSION_NUMBER")
     private Integer versionNumber = 0;
-
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CONTACT_ID")
     private Contact invoiceContact;

@@ -17,6 +17,7 @@ public class ContactDaoImpl implements ContactDao {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Override
     public List<Contact> getContacts(Integer pageIndex, Integer noOfRecorgs) {
         List<Contact> contacts = entityManager.createNamedQuery("allContacts", Contact.class)
                 .setMaxResults(noOfRecorgs)

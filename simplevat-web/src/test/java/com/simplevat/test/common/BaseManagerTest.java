@@ -42,5 +42,8 @@ public abstract class BaseManagerTest extends AbstractJUnit4SpringContextTests {
 
 	@Autowired
 	protected LanguageService languageService;
+        
+        @Autowired
+        protected UserDao userDao;
 
 }

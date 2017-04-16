@@ -9,6 +9,7 @@ import com.simplevat.invoice.model.InvoiceItemModel;
 import com.simplevat.invoice.model.InvoiceModel;
 import com.simplevat.service.ContactService;
 import com.simplevat.service.CurrencyService;
+import com.simplevat.service.DiscountTypeService;
 import com.simplevat.service.invoice.InvoiceService;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,7 +36,7 @@ import java.util.List;
 @Controller
 @ManagedBean
 @ViewScoped
-public class InvoiceController implements Serializable{
+public class InvoiceController implements Serializable {
 
     @Getter
     private InvoiceModel invoiceModel;
@@ -58,12 +60,18 @@ public class InvoiceController implements Serializable{
     @Autowired
     private InvoiceService invoiceService;
 
+    @Autowired
+    private DiscountTypeService discountTypeService;
+
     @PostConstruct
     public void initInvoice() {
 
         invoiceModel = new InvoiceModel();
 
         currencies = currencyService.getCurrencies();
+        invoiceModel.setCurrencyCode(currencies.get(149));
+        invoiceModel.setInvoiceDate(new Date());
+        invoiceModel.setInvoiceDueOn(30);
         addInvoiceItem();
     }
 
@@ -100,9 +108,8 @@ public class InvoiceController implements Serializable{
     }
 
     public List<DiscountType> discountTypes(final String searchString) {
-        final List<DiscountType> types = new ArrayList<>();
-        for (DiscountType type : DiscountType.values()) {
-            types.add(type);
+        final List<DiscountType> types = discountTypeService.getDiscountTypes();
+        for (DiscountType type : types) {
             if (null != searchString
                     && !type.toString().toLowerCase().contains(searchString.toLowerCase())) {
                 types.remove(type);
@@ -173,7 +180,7 @@ public class InvoiceController implements Serializable{
     }
 
     public void createContact() {
-        
+
         final Contact contact = new Contact();
 
         contact.setBillingEmail(contactModel.getEmailAddress());
@@ -183,11 +190,11 @@ public class InvoiceController implements Serializable{
         contact.setLastName(contactModel.getLastName());
         contact.setOrganization(contactModel.getOrganizationName());
         contact.setCreatedBy(1);
-        
-        contactModel=new ContactModel();
-        
+
+        contactModel = new ContactModel();
+
         contactService.createContact(contact);
-        
+
         invoiceModel.setContact(contact);
 
     }
