@@ -68,6 +68,12 @@
         
         <!-- https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api 
         -->
+        <!-- https://mvnrepository.com/artifact/javax.annotation/jsr250-api -->
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>jsr250-api</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>

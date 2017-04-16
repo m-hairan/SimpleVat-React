@@ -272,6 +272,12 @@
                 <scope>provided</scope>
             </dependency>
 
+            <dependency>
+                <groupId>javax.annotation</groupId>
+                <artifactId>jsr250-api</artifactId>
+                <version>1.0</version>
+            </dependency>
+
             <!-- https://mvnrepository.com/artifact/javax.el/el-api -->
             <dependency>
                 <groupId>javax.el</groupId>
