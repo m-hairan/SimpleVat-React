@@ -7,7 +7,7 @@ CREATE SCHEMA `simplevat` DEFAULT CHARACTER SET utf8 ;
 
 
 1_ddl\0_SimbpleVat_DropTableScript.ddl --(Optional if tables already exist)
-1_ddl\1_SimbpleVat_BaseScript.ddl
+
 
 2_dml\1_simplevat_BANK_ACCOUNT_STATUS.sql
 2_dml\2_simplevat_BANK_FEED_STATUS.sql
