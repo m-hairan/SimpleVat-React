@@ -49,7 +49,7 @@ public class UserController {
         user.setCreatedBy(0);
         user.setDateOfBirth(dob);
         user.setDeleteFlag(Boolean.FALSE);
-        user.setEmailId(userModel.getUserEmailId());
+        user.setUserEmail(userModel.getUserEmailId());
         user.setFirstName(userModel.getFirstName());
         user.setLastName(userModel.getLastName());
         user.setLastUpdatedBy(0);
@@ -63,7 +63,7 @@ public class UserController {
 
         // todo: chnage when company module is done.
         userModel.setDateOfBirth(null != user.getDateOfBirth() ? Date.from(user.getDateOfBirth().atZone(ZoneId.systemDefault()).toInstant()) : null);
-        userModel.setUserEmailId(user.getEmailId());
+        userModel.setUserEmailId(user.getUserEmail());
         userModel.setFirstName(user.getFirstName());
         userModel.setLastName(user.getLastName());
         return userModel;

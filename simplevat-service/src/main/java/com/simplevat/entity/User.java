@@ -23,15 +23,15 @@ public class User {
     private String firstName;
 
     @Basic
-    @Column(name = "USER_EMAIL_ID")
-    private String emailId;
+    @Column(name = "USER_EMAIL")
+    private String userEmail;
 
     @Basic
     @Column(name = "LAST_NAME")
     private String lastName;
 
     @Basic
-    @Column(name = "DATA_OF_BIRTH")
+    @Column(name = "DATE_OF_BIRTH")
     @Convert(converter = DateConverter.class)
     private LocalDateTime dateOfBirth;
 
