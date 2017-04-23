@@ -3,10 +3,11 @@ package com.simplevat.service.impl;
 import com.simplevat.dao.UserDao;
 import com.simplevat.entity.User;
 import com.simplevat.service.UserService;
-import javax.annotation.Nonnull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -18,6 +19,11 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
+
+    @Override
+    public User getUserByEmail(String emailAddress){
+        return userDao.getUserByEmail(emailAddress);
+    }
 
     @Override
     public User getUser(@Nonnull final int userId) {

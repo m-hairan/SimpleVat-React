@@ -1,4 +1,4 @@
-package com.simplevat;
+package com.simplevat.security;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,8 +29,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     }
 
 
-    protected void handle(HttpServletRequest request,
-                          HttpServletResponse response, Authentication authentication)
+    protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException {
 
         String targetUrl = determineTargetUrl(authentication);

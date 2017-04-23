@@ -10,6 +10,8 @@ import javax.annotation.Nullable;
  */
 public interface UserService {
 
+    User getUserByEmail(String emailAddress);
+
     @Nullable
     User getUser(@Nonnull final int userId);
 

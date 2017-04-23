@@ -17,4 +17,5 @@ public interface UserDao {
 
     void updateUser(@Nonnull final User user);
 
+    User getUserByEmail(String emailAddress);
 }
