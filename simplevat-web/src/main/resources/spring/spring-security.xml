@@ -25,26 +25,14 @@
 
     <beans:bean id="customAuthenticationSuccessHandler" class="com.simplevat.security.CustomAuthenticationSuccessHandler"/>
 
-    <!--<beans:bean id="userDetailsService" class="com.simplevat.security.CustomUserDetailsService"/>-->
-    <!--<beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>-->
-    <!-- TODO Utkarsh Change when encoded password is used-->
-    <!--<beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder"/>-->
-
+    <beans:bean id="userDetailsService" class="com.simplevat.security.CustomUserDetailsService"/>
+    <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
     <authentication-manager alias="authenticationManager">
-        <authentication-provider>
-            <user-service>
-                <user name="user" authorities="ROLE_USER" password="user"/>
-                <user name="admin" authorities="ROLE_ADMIN" password="admin"/>
-            </user-service>
-        </authentication-provider>
-    </authentication-manager>
-
-    <!--<authentication-manager alias="authenticationManager">
         <authentication-provider user-service-ref="userDetailsService">
             <password-encoder ref="passwordEncoder"/>
         </authentication-provider>
-    </authentication-manager>-->
+    </authentication-manager>
 
     <global-method-security pre-post-annotations="enabled" secured-annotations="enabled" jsr250-annotations="enabled"/>
 

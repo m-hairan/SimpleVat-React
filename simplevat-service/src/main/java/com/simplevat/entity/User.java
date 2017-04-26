@@ -65,6 +65,10 @@ public class User {
     @Column(name = "DELETE_FLAG")
     private Boolean deleteFlag;
 
+    @Basic
+    @Column(name = "IS_ACTIVE")
+    private Boolean isActive;
+
     @Version
     @Column(name = "VERSION_NUMBER")
     private Integer versionNumber;
@@ -72,6 +76,10 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ROLE_CODE", insertable = false, updatable = false)
     private Role role;
+
+    @Basic
+    @Column(name = "USER_PASSWORD")
+    private String password;
 //    private Collection<Expense> expensesByUserEmailId;
 //    private Company companyByCompanyId;
 //    private Role roleByRoleCode;

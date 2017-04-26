@@ -32,13 +32,20 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     private UserDetails mapToUserDetails(User user) {
-        return new org.springframework.security.core.userdetails.User(user.getUserEmail(), "admin",
-                user.getDeleteFlag(), true, true, true, getGrantedAuthorities(user));
+        return new org.springframework.security.core.userdetails.User(
+                user.getUserEmail(),
+                user.getPassword(),
+                user.getIsActive(),
+                true,
+                true,
+                true,
+                getGrantedAuthorities(user)
+        );
     }
 
 
     private List<GrantedAuthority> getGrantedAuthorities(User user) {
-        return new ArrayList<>(Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().getRoleName())));
+        return new ArrayList<>(Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().getRoleName().toUpperCase())));
     }
 
 }
