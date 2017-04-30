@@ -2,6 +2,7 @@ package com.simplevat.dao.impl;
 
 import com.simplevat.dao.UserDao;
 import com.simplevat.entity.User;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Nonnull;
@@ -9,6 +10,8 @@ import javax.annotation.Nullable;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Hiren
@@ -36,9 +39,13 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getUserByEmail(String emailAddress) {
+    public Optional<User> getUserByEmail(String emailAddress) {
         Query query = entityManager.createQuery("SELECT u FROM User AS u WHERE u.userEmail =:email");
         query.setParameter("email", emailAddress);
-        return (User) query.getSingleResult();
+        List resultList = query.getResultList();
+        if (CollectionUtils.isNotEmpty(resultList) && resultList.size() == 1) {
+            return Optional.of((User) resultList.get(0));
+        }
+        return Optional.empty();
     }
 }

@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 public class Project implements Serializable{
     @Id
     @Column(name = "PROJECT_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer projectId;
     @Basic
     @Column(name = "PROJECT_NAME")

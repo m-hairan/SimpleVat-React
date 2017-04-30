@@ -48,10 +48,10 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         Collection<? extends GrantedAuthority> authorities
                 = authentication.getAuthorities();
         for (GrantedAuthority grantedAuthority : authorities) {
-            if (grantedAuthority.getAuthority().equals("ROLE_USER")) {
+            if ("ROLE_EMPLOYEE".equalsIgnoreCase(grantedAuthority.getAuthority())) {
                 isUser = true;
                 break;
-            } else if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
+            } else if ("ROLE_ADMIN".equalsIgnoreCase(grantedAuthority.getAuthority())) {
                 isAdmin = true;
                 break;
             }

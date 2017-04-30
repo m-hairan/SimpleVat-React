@@ -12,18 +12,22 @@
 
     <http auto-config="true" access-denied-page="/pages/public/login.xhtml">
         <intercept-url pattern="/pages/public/login.xhtml" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <intercept-url pattern="/**" access="ROLE_ADMIN,ROLE_USER"/>
+        <intercept-url pattern="/**" access="ROLE_ADMIN,ROLE_EMPLOYEE"/>
         <anonymous/>
         <form-login login-page="/pages/public/login.xhtml"
                     login-processing-url="/j_spring_security_check"
                     default-target-url="/pages/secure/user/home.xhtml"
                     authentication-success-handler-ref="customAuthenticationSuccessHandler"
+                    authentication-failure-handler-ref="authenticationFailureHandler"
                     always-use-default-target="true"/>
         <logout invalidate-session="true" delete-cookies="true"
                 logout-success-url="/pages/public/login.xhtml"/>
     </http>
 
     <beans:bean id="customAuthenticationSuccessHandler" class="com.simplevat.security.CustomAuthenticationSuccessHandler"/>
+    <beans:bean id="authenticationFailureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+        <beans:property name="defaultFailureUrl" value="/pages/public/login.xhtml?error=true"/>
+    </beans:bean>
 
     <beans:bean id="userDetailsService" class="com.simplevat.security.CustomUserDetailsService"/>
     <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>

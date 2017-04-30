@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 
 /**
  *
@@ -21,7 +22,7 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    public User getUserByEmail(String emailAddress){
+    public Optional<User> getUserByEmail(String emailAddress){
         return userDao.getUserByEmail(emailAddress);
     }
 

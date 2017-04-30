@@ -3,6 +3,7 @@ package com.simplevat.service;
 import com.simplevat.entity.User;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 /**
  *
@@ -10,7 +11,7 @@ import javax.annotation.Nullable;
  */
 public interface UserService {
 
-    User getUserByEmail(String emailAddress);
+    Optional<User> getUserByEmail(String emailAddress);
 
     @Nullable
     User getUser(@Nonnull final int userId);

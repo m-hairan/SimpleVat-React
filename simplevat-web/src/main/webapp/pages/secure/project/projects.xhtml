@@ -80,9 +80,11 @@
                                 <h:outputText
                                         value="#{project.contact.firstName} #{project.contact.lastName}"/>
                             </p:column>
+
                             <p:column headerText="Created Date" sortBy="#{project.createdDate}">
                                 <h:outputText value="#{project.createdDate}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                    <f:converter converterId="localDateTimeConverter" />
+                                    <f:attribute name="pattern" value="dd/MM/yyyy"/>
                                 </h:outputText>
                             </p:column>
                             <p:column headerText="Action">

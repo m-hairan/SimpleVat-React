@@ -5,6 +5,8 @@ import com.simplevat.entity.Contact;
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.Language;
 import com.simplevat.entity.Project;
+import com.simplevat.security.ContextUtils;
+import com.simplevat.security.UserContext;
 import com.simplevat.service.ContactService;
 import com.simplevat.service.CurrencyService;
 import com.simplevat.service.LanguageService;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -99,12 +102,17 @@ public class ProjectController {
     }
 
 
-    public void deleteProject(Project project) throws Exception {
+    public String deleteProject(Project project) throws Exception {
         project.setDeleteFlag(Boolean.TRUE);
         projectService.updateOrCreateProject(project);
+        init();
+        return "/pages/secure/project/projects.xhtml";
     }
 
     public String saveProject() throws Exception {
+        UserContext userContext = ContextUtils.getUserContext();
+        selectedProject.setCreatedBy(userContext.getUserId());
+        selectedProject.setCreatedDate(LocalDateTime.now());
         projectService.updateOrCreateProject(selectedProject);
         init();
         return "/pages/secure/project/projects.xhtml";

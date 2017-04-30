@@ -3,6 +3,7 @@ package com.simplevat.dao;
 import com.simplevat.entity.User;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 /**
  *
@@ -17,5 +18,5 @@ public interface UserDao {
 
     void updateUser(@Nonnull final User user);
 
-    User getUserByEmail(String emailAddress);
+    Optional<User> getUserByEmail(String emailAddress);
 }
