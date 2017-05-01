@@ -1,0 +1,233 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">#{messages.new_bank_account}</ui:define>
+
+	<ui:define name="content">
+
+		<h:form id="createBankAccountForm" enctype="multipart/form-data">
+
+			<div class="card card-w-title">
+				<div class="ui-fluid">
+					<div class="ui-g">
+
+						<div class="ui-g-12">
+							<div class="card card-w-title">
+								<p:fieldset legend="#{messages.bank_account}" toggleable="false"
+									toggleSpeed="500">
+									<p:panelGrid columns="6"
+										columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										
+										<h:panelGroup />
+
+										<h:panelGroup styleClass="md-inputfield">
+											<p:inputText
+												value="#{bankAccountController.selectedBankAccount.bankAccountName}" />
+											<label>#{messages.account_name}</label>
+										</h:panelGroup>
+
+										<h:panelGroup />
+
+										<h:panelGroup styleClass="md-inputfield">
+											<p:outputLabel for="bankAccountcurrency" />
+											<p:autoComplete id="bankAccountcurrency" 
+												dropdown="true"
+												forceSelection="true" 
+												effect="fold"
+												converter="com.simplevat.util.CurrencyConverter"
+												completeMethod="#{currencyController.completeCurrency}"
+												value="#{bankAccountController.selectedBankAccount.bankAccountCurrency}"
+												var="currency" 
+												itemValue="#{currency}"
+												itemLabel="#{currency.currencyDescription}" />
+
+											<label>#{messages.currency}</label>
+										</h:panelGroup>
+
+										<h:panelGroup />
+
+										<h:panelGroup styleClass="md-inputfield">
+											<p:outputLabel for="bankAccountStatus"/>
+											<p:autoComplete
+														id="bankAccountStatus"
+                                                        converter="bankAccountStatusConverter"
+                                                        dropdown="true"
+                                                        forceSelection="true"
+                                                        effect="fold"
+                                                        completeMethod="#{bankAccountController.bankAccountStatuses}"
+                                                        value="#{bankAccountController.selectedBankAccount.bankAccountStatus}"
+                                                        var="bankAccountStatus"
+                                                        itemValue="#{bankAccountStatus}"
+                                                        itemLabel="#{bankAccountStatus.bankAccountStatusName}"
+                                                        required="true">
+	                                        </p:autoComplete>
+	                                        <label>#{messages.status}</label>
+										</h:panelGroup>
+										
+										<h:panelGroup />
+
+										<h:panelGroup>
+											<label>#{messages.is_this_your_primary_account}</label>
+											<p:selectOneButton value="#{bankAccountController.selectedBankAccount.isprimaryAccountFlag}">
+									            <f:selectItem itemLabel="Yes" itemValue="true" />
+									            <f:selectItem itemLabel="No" itemValue="false" />
+        									</p:selectOneButton>
+										</h:panelGroup>
+
+										<h:panelGroup />
+
+										<h:panelGroup>
+											<label>#{messages.is_this_your_personal_account}</label>
+											<p:selectOneButton value="#{bankAccountController.selectedBankAccount.personalCorporateAccountInd}">
+									            <f:selectItem itemLabel="Yes" itemValue="C" />
+									            <f:selectItem itemLabel="No" itemValue="P" />
+        									</p:selectOneButton>
+										</h:panelGroup>
+
+										<h:panelGroup />
+
+										<h:panelGroup />
+
+									</p:panelGrid>
+								</p:fieldset>
+								<br />
+								<p:fieldset legend="Optional Details" toggleable="true" toggleSpeed="500">
+									<p:panelGrid columns="6"
+										columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<h:panelGroup />
+
+										<h:panelGroup styleClass="md-inputfield">
+											<p:inputText
+												value="#{bankAccountController.selectedBankAccount.bankName}" />
+											<label>#{messages.bank_name}</label>
+										</h:panelGroup>
+
+										<h:panelGroup />
+
+										<h:panelGroup styleClass="md-inputfield">
+											<p:inputText
+												value="#{bankAccountController.selectedBankAccount.accountNumber}" />
+											<label>#{messages.account_number}</label>
+										</h:panelGroup>
+
+										<h:panelGroup />
+
+										<h:panelGroup styleClass="md-inputfield">
+											<p:inputText
+												value="#{bankAccountController.selectedBankAccount.swiftCode}" />
+											<label>#{messages.swift_code}</label>
+										</h:panelGroup>
+
+									</p:panelGrid>
+								</p:fieldset>
+								
+								<p:fieldset legend="Balance" toggleable="true" toggleSpeed="500">
+									<p:panelGrid columns="6"
+										columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<h:panelGroup />
+
+										<h:panelGroup styleClass="md-inputfield">
+											<p:inputText
+												value="#{bankAccountController.selectedBankAccount.openingBalance}" />
+											<label>#{messages.opening_balance}</label>
+										</h:panelGroup>
+
+										<h:panelGroup />
+
+										<h:panelGroup />
+
+										<h:panelGroup />
+
+										<h:panelGroup />
+
+									</p:panelGrid>
+								</p:fieldset>
+								
+								<p:fieldset legend="More Option" toggleable="true" toggleSpeed="500">
+									<p:panelGrid columns="6"
+										columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<h:panelGroup />
+
+										<h:panelGroup styleClass="md-inputfield">
+											<p:inputText
+												value="#{bankAccountController.selectedBankAccount.ibanNumber}" />
+											<label>#{messages.iban_number}</label>
+										</h:panelGroup>
+
+										<h:panelGroup />
+                                        
+										<h:panelGroup styleClass="md-inputfield">
+											<p:outputLabel for="bankCountry"/>
+											<p:autoComplete id="bankCountry" 
+															converter="com.simplevat.util.CountryConverter" 
+															dropdown="true" 
+															forceSelection="true" 
+															effect="fold"
+                                                            completeMethod="#{countryController.completeCountry}" 
+                                                            value="#{bankAccountController.selectedBankAccount.bankCountry}"
+                                                            var="country" itemValue="#{country.countryCode}" 
+                                                            itemLabel="#{country.countryFullName}" 
+                                                            required="false"/>
+												<label>#{messages.country}</label>
+										</h:panelGroup>
+
+										<h:panelGroup />
+
+										<h:panelGroup />
+
+									</p:panelGrid>
+								</p:fieldset>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<p:toolbar>
+					<f:facet name="left">
+						<p:commandButton value="#{messages.save}" icon="ui-icon-save"
+							action="#{bankAccountController.saveBankAccount}" ajax="false" />
+						<p:commandButton value="#{messages.save_and_add_more}"
+							icon="ui-icon-forward"
+							action="#{bankAccountController.saveAndContinueBankAccount}"
+							ajax="false"/>
+
+						<span class="ui-separator" style="padding-right: 5px;"> <span
+							class="fa fa-ellipsis-v SoftGray" />
+						</span>
+						
+
+						<p:commandButton title="#{messages.cancel}" icon="ui-icon-cancel"
+							action="/pages/secure/bankaccount/bankaccounts.xhtml"
+							 />
+					</f:facet>
+
+					<f:facet name="right">
+
+						<p:button type="button" value="Home" icon="ui-icon-home"
+							outcome="#{homePageLink}" />
+
+					</f:facet>
+
+				</p:toolbar>
+
+			</div>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

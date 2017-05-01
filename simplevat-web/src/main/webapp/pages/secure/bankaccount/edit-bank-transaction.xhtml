@@ -1,0 +1,217 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">#{messages.new_bank_account}</ui:define>
+
+	<ui:define name="content">
+
+		<h:form id="createTransactionForm" enctype="multipart/form-data">
+
+			<div class="card card-w-title">
+				<div class="ui-fluid">
+					<div class="ui-g">
+
+						<div class="ui-g-12">
+							<div class="card card-w-title">
+								<p:fieldset legend="#{messages.select_type}" toggleable="false"
+									toggleSpeed="500">
+									<p:panelGrid columns="6"
+										columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+										
+										<h:panelGroup />
+										
+										
+										<h:panelGroup styleClass="md-inputfield">
+											<p:outputLabel for="transactionType"/>
+											<p:autoComplete
+														id="transactionType"
+                                                        converter="transactionTypeConverter"
+                                                        dropdown="true"
+                                                        forceSelection="true"
+                                                        effect="fold"
+                                                        completeMethod="#{transactionController.transactionTypes}"
+                                                        value="#{transactionController.selectedTransactionModel.transactionType}"
+                                                        var="transactionType"
+                                                        itemValue="#{transactionType}"
+                                                        itemLabel="#{transactionType.transactionTypeName}"
+                                                        required="true">
+	                                        </p:autoComplete>
+	                                        <label>#{messages.type}</label>
+										</h:panelGroup>
+
+										<h:panelGroup />
+
+										<h:panelGroup styleClass="md-inputfield">
+											<p:outputLabel for="transactionDate"/>
+											<p:calendar
+												id="transactionDate"
+												value="#{transactionController.selectedTransactionModel.transactionDate}" />
+											<label>#{messages.date}</label>
+										</h:panelGroup>
+
+										<h:panelGroup />
+
+										<h:panelGroup styleClass="md-inputfield">
+											<p:inputText
+												id="transactionAmount"
+												value="#{transactionController.selectedTransactionModel.transactionAmount}" />
+	                                        <label>#{messages.total_amount}</label>
+										</h:panelGroup>
+
+									</p:panelGrid>
+								</p:fieldset>
+								<br />
+								<p:fieldset legend="#{messages.more_details}" toggleable="true" toggleSpeed="500">
+									<p:panelGrid columns="6"
+										columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<h:panelGroup />
+										
+										<h:panelGroup styleClass="md-inputfield">
+											<p:outputLabel for="transactionCategory"/>
+											<p:autoComplete
+														id="transactionCategory"
+                                                        converter="transactionCategoryConverter"
+                                                        dropdown="true"
+                                                        forceSelection="true"
+                                                        effect="fold"
+                                                        completeMethod="#{transactionController.transactionCategories}"
+                                                        value="#{transactionController.selectedTransactionModel.explainedTransactionCategory}"
+                                                        var="transactionCategory"
+                                                        itemValue="#{transactionCategory}"
+                                                        itemLabel="#{transactionCategory.transactionCategoryName}"
+                                                        >
+	                                        </p:autoComplete>
+	                                        <label>#{messages.category}</label>
+										</h:panelGroup>
+
+										<h:panelGroup />
+
+										<h:panelGroup styleClass="md-inputfield">
+											<p:inputText
+												value="#{transactionController.selectedTransactionModel.transactionDescription}" />
+											<label>#{messages.description}</label>
+										</h:panelGroup>
+
+										<h:panelGroup />
+
+										<h:panelGroup />
+
+									</p:panelGrid>
+								</p:fieldset>
+								<br />
+								<p:fieldset legend="#{messages.optional_references}" toggleable="true" toggleSpeed="500">
+									<p:panelGrid columns="6"
+										columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<h:panelGroup />
+
+										<h:panelGroup>
+											<p:selectOneMenu converter="javax.faces.Integer"
+												value="#{transactionController.selectedTransactionModel.explainedProjectId}" disabled="true">
+												<f:selectItem itemValue="456571" itemLabel="project 1" />
+												<f:selectItem itemValue="456572" itemLabel="project 2" />
+												<f:selectItem itemValue="456573" itemLabel="project 3" />
+												<f:selectItem itemValue="456574" itemLabel="project 4" />
+												<label>#{messages.project}</label>
+											</p:selectOneMenu>
+										</h:panelGroup>
+
+										<h:panelGroup />
+
+										<h:panelGroup />
+
+										<h:panelGroup />
+
+										<h:panelGroup />
+
+									</p:panelGrid>
+								</p:fieldset>
+								<br />
+								<p:fieldset legend="#{messages.attachment}" toggleable="true" toggleSpeed="500">
+									<p:panelGrid columns="6"
+										columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+										layout="grid" styleClass="ui-panelgrid-blank form-group"
+										style="border:0px none; background-color:transparent;">
+
+										<h:panelGroup />
+
+										<h:panelGroup styleClass="md-inputfield">
+											<p:inputText
+												value="#{transactionController.selectedTransactionModel.receiptNumber}" />
+											<label>#{messages.receiptnumber}</label>
+										</h:panelGroup>
+
+										<h:panelGroup />
+
+										<h:panelGroup styleClass="md-inputfield">
+											<p:fileUpload
+												value="#{transactionController.selectedTransactionModel.attachmentFile}"
+												mode="simple" skinSimple="true" />
+											<h:panelGroup rendered="#{transactionController.selectedTransactionModel.attachmentFileContent != null}">
+												<p:commandButton value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
+													<p:fileDownload value="#{transactionController.selectedTransactionModel.attachmentFileContent}" />
+												</p:commandButton>
+											</h:panelGroup>
+										</h:panelGroup>
+
+										<h:panelGroup />
+
+										<h:panelGroup styleClass="md-inputfield">
+											<p:inputText
+												value="#{transactionController.selectedTransactionModel.explainedTransactionAttachementDescription}" />
+											<label>#{messages.attachment_description}</label>
+										</h:panelGroup>
+
+									</p:panelGrid>
+								</p:fieldset>
+								
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<p:toolbar>
+					<f:facet name="left">
+						<p:commandButton value="#{messages.save}" icon="ui-icon-save"
+							action="#{transactionController.saveTransaction}" ajax="false" />
+						<p:commandButton value="#{messages.save_and_add_more}"
+							icon="ui-icon-forward"
+							action="#{transactionController.saveAndContinueTransaction}"
+							ajax="false"/>
+
+						<span class="ui-separator" style="padding-right: 5px;"> <span
+							class="fa fa-ellipsis-v SoftGray" />
+						</span>
+						
+
+						<p:commandButton title="#{messages.cancel}" icon="ui-icon-cancel"
+							action="/pages/secure/bankaccount/bank-transactions.xhtml"
+							 />
+					</f:facet>
+
+					<f:facet name="right">
+
+						<p:button type="button" value="Home" icon="ui-icon-home"
+							outcome="#{homePageLink}" />
+
+					</f:facet>
+
+				</p:toolbar>
+
+			</div>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

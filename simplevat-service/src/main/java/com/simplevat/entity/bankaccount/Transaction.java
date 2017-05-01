@@ -1,9 +1,11 @@
-package com.simplevat.entity;
+package com.simplevat.entity.bankaccount;
 
 import com.simplevat.entity.converter.DateConverter;
+
 import lombok.Data;
 
 import javax.persistence.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -27,8 +29,11 @@ public class Transaction {
     @Column(name = "TRANSACTION_AMOUNT")
     private BigDecimal transactionAmount;
     @Basic
-    @Column(name = "TRANSACTION_TYPE_CODE")
-    private Integer transactionTypeCode;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TRANSACTION_TYPE_CODE")
+    private TransactionType transactionType;
+    
     @Basic
     @Column(name = "RECEIPT_NUMBER")
     private String receiptNumber;
@@ -38,9 +43,11 @@ public class Transaction {
     @Basic
     @Column(name = "EXPLAINED_PROJECT_ID")
     private Integer explainedProjectId;
-    @Basic
-    @Column(name = "EXPLAINED_TRANSACTION_CATEGORY_CODE")
-    private Integer explainedTransactionCategoryCode;
+   
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "EXPLAINED_TRANSACTION_CATEGORY_CODE")
+    private TransactionCategory explainedTransactionCategory;
+    
     @Basic
     @Column(name = "EXPLAINED_TRANSACTION_DESCRIPTION")
     private String explainedTransactionDescription;
@@ -51,8 +58,13 @@ public class Transaction {
     @Column(name = "EXPLAINED_TRANSACTION_ATTACHEMENT_PATH")
     private String explainedTransactionAttachementPath;
     @Basic
-    @Column(name = "BANK_ACCOUNT_ID")
-    private Integer bankAccountId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "BANK_ACCOUNT_ID")
+    private BankAccount bankAccount;
+    
+    @Column(name="CURRENT_BALANCE")
+    private BigDecimal currentBalance = new BigDecimal(123);
+    
     @Basic
     @Column(name = "CREATED_BY")
     private Integer createdBy;
@@ -69,13 +81,23 @@ public class Transaction {
     private LocalDateTime lastUpdateDate;
     @Basic
     @Column(name = "DELETE_FLAG")
-    private Boolean deleteFlag;
+    private Boolean deleteFlag = false;
     @Basic
+    @Version
     @Column(name = "VERSION_NUMBER")
     private Integer versionNumber;
-//    private TransactionType transactionTypeByTransactionTypeCode;
-//    private Project projectByExplainedProjectId;
-//    private TransactionCategory transactionCategoryByExplainedTransactionCategoryCode;
-//    private BankAccount bankAccountByBankAccountId;
+    
+    @PrePersist
+    public void updateDates() {
+        createdDate = LocalDateTime.now();
+        lastUpdateDate = LocalDateTime.now();
+    }
 
+    @PreUpdate
+    public void updateLastUpdatedDate() {
+        lastUpdateDate = LocalDateTime.now();
+    }
+
+	
+    
 }

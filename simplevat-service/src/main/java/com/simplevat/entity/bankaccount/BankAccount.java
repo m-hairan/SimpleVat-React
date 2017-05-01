@@ -1,16 +1,27 @@
-package com.simplevat.entity;
+package com.simplevat.entity.bankaccount;
 
+import com.simplevat.entity.Country;
+import com.simplevat.entity.Currency;
 import com.simplevat.entity.converter.DateConverter;
+
 import lombok.Data;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
  * Created by mohsinh on 2/26/2017.
  */
+@NamedQueries({
+    @NamedQuery(name = "allBankAccounts",
+            query = "SELECT b "
+            + "FROM BankAccount b where b.deleteFlag = FALSE")
+})
+
 @Entity
 @Table(name = "BANK_ACCOUNT")
 @Data
@@ -25,15 +36,18 @@ public class BankAccount {
     @Basic
     @Column(name = "BANK_ACCOUNT_NAME")
     private String bankAccountName;
-    @Basic
-    @Column(name = "BANK_ACCOUNT_CURRENCY_CODE")
-    private Integer bankAccountCurrencyCode;
-    @Basic
-    @Column(name = "BANK_ACCOUNT_STATUS_CODE")
-    private Integer bankAccountStatusCode;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "BANK_ACCOUNT_CURRENCY_CODE")
+    private Currency bankAccountCurrency;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "BANK_ACCOUNT_STATUS_CODE")
+    private BankAccountStatus bankAccountStatus;
+    
     @Basic
     @Column(name = "PERSONAL_CORPORATE_ACCOUNT_IND", length = 1, columnDefinition = "CHAR")
-    private String personalCorporateAccountInd;
+    private String personalCorporateAccountInd = "C";
     @Basic
     @Column(name = "ISPRIMARY_ACCOUNT_FLAG")
     private Boolean isprimaryAccountFlag = true;
@@ -58,9 +72,11 @@ public class BankAccount {
     @Basic
     @Column(name = "BANK_FEED_STATUS_CODE")
     private Integer bankFeedStatusCode;
-    @Basic
-    @Column(name = "BANK_COUNTRY_CODE")
-    private Integer bankCountryCode;
+   
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "BANK_COUNTRY_CODE")
+    private Country bankCountry;
+    
     @Basic
     @Column(name = "CREATED_BY")
     private Integer createdBy;
@@ -79,15 +95,20 @@ public class BankAccount {
     private LocalDateTime lastUpdateDate;
     @Basic
     @Column(name = "DELETE_FLAG")
-    private Boolean deleteFlag;
+    private Boolean deleteFlag = false;
     @Basic
+    @Version
     @Column(name = "VERSION_NUMBER")
     private Integer versionNumber;
-//    private Currency currencyByBankAccountCurrencyCode;
-//    private BankAccountStatus bankAccountStatusByBankAccountStatusCode;
-//    private BankFeedStatus bankFeedStatusByBankFeedStatusCode;
-//    private Country countryByBankCountryCode;
-//    private Collection<ImportedDraftTransacton> importedDraftTransactonsByBankAccountId;
-//    private Collection<Transaction> transactonsByBankAccountId;
 
+    @PrePersist
+    public void updateDates() {
+        createdDate = LocalDateTime.now();
+        lastUpdateDate = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void updateLastUpdatedDate() {
+        lastUpdateDate = LocalDateTime.now();
+    }
 }

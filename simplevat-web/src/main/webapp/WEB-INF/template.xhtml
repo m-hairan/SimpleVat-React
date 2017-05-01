@@ -25,6 +25,7 @@
 
     <h:body styleClass="main-body #{guestPreferences.compact ? 'layout-compact' : null}">
         <ui:param name="expenseMenuLink" value="/pages/secure/expense/expenses" />
+        <ui:param name="bankAccountMenuLink" value="/pages/secure/bankaccount/bankaccounts" />
         <ui:param name="homePageLink" value="/pages/secure/user/home" />
         <div class="layout-wrapper #{guestPreferences.menuLayout}">
             <ui:include src="./topbar.xhtml" />

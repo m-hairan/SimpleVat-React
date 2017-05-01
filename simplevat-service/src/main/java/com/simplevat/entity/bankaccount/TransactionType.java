@@ -1,9 +1,11 @@
-package com.simplevat.entity;
+package com.simplevat.entity.bankaccount;
 
 import com.simplevat.entity.converter.DateConverter;
+
 import lombok.Data;
 
 import javax.persistence.*;
+
 import java.time.LocalDateTime;
 
 /**
@@ -15,7 +17,7 @@ import java.time.LocalDateTime;
 public class TransactionType {
     @Id
     @Column(name = "TRANSACTION_TYPE_CODE")
-    private int transactionTypeCode;
+    private Integer transactionTypeCode;
 
     @Column(name = "TRANSACTION_TYPE_NAME")
     private String transactionTypeName;
@@ -24,33 +26,32 @@ public class TransactionType {
     private String transactionTypeDescription;
 
     @Column(name = "DEBIT_CREDIT_FLAG")
-    private Character DEBIT_CREDIT_FLAG;
+    private Character debitCreditFlag;
 
     @Column(name = "DEFAULT_FLAG")
-    private Character DEFAULT_FLAG;
+    private Character defaltFlag;
 
     @Column(name = "ORDER_SEQUENCE")
-    private Integer ORDER_SEQUENCE;
+    private Integer orderSequence;
 
     @Column(name = "CREATED_BY")
-    private Integer CREATED_BY;
+    private Integer createdBy;
 
     @Column(name = "CREATED_DATE")
     @Convert(converter = DateConverter.class)
-    private LocalDateTime CREATED_DATE;
+    private LocalDateTime createdDate;
 
     @Column(name = "LAST_UPDATED_BY")
-    private Integer LAST_UPDATED_BY;
+    private Integer lateUpdatedBy;
 
     @Column(name = "LAST_UPDATE_DATE")
     @Convert(converter = DateConverter.class)
-    private LocalDateTime LAST_UPDATE_DATE;
+    private LocalDateTime LastUpatedDate;
+    
+    @Column(name = "DELETE_FLAG")
+    private Boolean deleteFlag;
 
     @Column(name = "VERSION_NUMBER")
-    private Integer VERSION_NUMBER;
-
-//    private Collection<Expense> expensesByTransactionTypeCode;
-//    private Collection<TransactionCategory> transactionCategoriesByTransactionTypeCode;
-//    private Collection<Transaction> transactonsByTransactionTypeCode;
+    private Integer versionNumber;
 
 }

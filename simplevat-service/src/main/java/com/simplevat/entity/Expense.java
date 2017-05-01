@@ -74,12 +74,18 @@ public class Expense{
     private LocalDateTime lastUpdateDate;
     @Basic
     @Column(name = "DELETE_FLAG")
-    private Boolean deleteFlag;
-//    private User userByClaimantId;
-//    private TransactionType transactionTypeByTransactionTypeCode;
-//    private TransactionCategory transactionCategoryByTransactionCategoryCode;
-//    private Currency currencyByCurrencyCode;
-//    private Project projectByProjectId;
+    private Boolean deleteFlag = false;
+
+    @PrePersist
+    public void updateDates() {
+        createdDate = LocalDateTime.now();
+        lastUpdateDate = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void updateLastUpdatedDate() {
+        lastUpdateDate = LocalDateTime.now();
+    }
 
 
 }

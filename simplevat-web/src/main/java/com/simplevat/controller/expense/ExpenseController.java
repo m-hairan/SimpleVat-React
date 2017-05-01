@@ -86,7 +86,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 		}
 		
 		expenseService.updateOrCreateExpense(expense);
-		
+		this.setSelectedExpenseModel(new ExpenseModel());
 		return "/pages/secure/expense/create-expense.xhtml?faces-redirect=true";
 		
 	}

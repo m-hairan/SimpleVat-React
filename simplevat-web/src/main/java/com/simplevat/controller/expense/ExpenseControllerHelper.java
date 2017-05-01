@@ -9,8 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 import javax.activation.MimetypesFileTypeMap;
@@ -34,7 +35,12 @@ public class ExpenseControllerHelper {
 		expense.setCurrencyCode(model.getCurrencyCode());
 		expense.setDeleteFlag(model.isDeleteFlag());
 		expense.setExpenseAmount(model.getExpenseAmount());
-		expense.setExpenseDate(model.getExpenseDate());
+		
+		if(model.getExpenseDate() != null){
+			LocalDateTime expenseDate = Instant.ofEpochMilli(model.getExpenseDate().getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
+			expense.setExpenseDate(expenseDate);
+		}
+		
 		expense.setExpenseDescription(model.getExpenseDescription());
 		expense.setLastUpdateDate(model.getLastUpdateDate());
 		expense.setLastUpdatedBy(model.getLastUpdatedBy());
@@ -56,7 +62,12 @@ public class ExpenseControllerHelper {
 		expenseModel.setCurrencyCode(entity.getCurrencyCode());
 		expenseModel.setDeleteFlag(entity.getDeleteFlag());
 		expenseModel.setExpenseAmount(entity.getExpenseAmount());
-		expenseModel.setExpenseDate(entity.getExpenseDate());
+		
+		if(entity.getExpenseDate() != null){
+			Date expenseDate = Date.from(entity.getExpenseDate().atZone(ZoneId.systemDefault()).toInstant());
+			expenseModel.setExpenseDate(expenseDate);
+		}
+		
 		expenseModel.setExpenseDescription(entity.getExpenseDescription());
 		expenseModel.setLastUpdateDate(entity.getLastUpdateDate());
 		expenseModel.setLastUpdatedBy(entity.getLastUpdatedBy());

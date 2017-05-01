@@ -1,4 +1,4 @@
-package com.simplevat.entity;
+package com.simplevat.entity.bankaccount;
 
 import lombok.Data;
 

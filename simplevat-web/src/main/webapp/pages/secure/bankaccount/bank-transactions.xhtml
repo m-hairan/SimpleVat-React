@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">#{messages.bank_accounts}</ui:define>
+
+	<ui:define name="content">
+
+				<div class="ui-g ">
+
+					<div class="ui-g-12">
+						<!-- Left Side -->
+						<div class="card card-w-title">
+							<h1>#{messages.transactions}</h1>
+							<h:form>
+								<p:toolbar>
+									<f:facet name="left">
+										<p:commandButton value="#{messages.button_new}" icon="ui-icon-plus"
+											action="#{transactionController.createTransaction()}"
+											 />
+											 
+										<span class="ui-separator" style="padding-right: 5px;">
+											<span class="fa fa-ellipsis-v SoftGray" />
+										</span>
+
+										<p:commandButton title="#{messages.button_import}"
+											icon="ui-icon-file-download" 
+											action="/pages/secure/bankaccount/import-bank-transactions.xhtml" >
+										</p:commandButton>
+										
+										<p:commandButton type="button" title="#{messages.button_export}"
+											icon="ui-icon-file-upload" />
+										<p:commandButton type="button" title="#{messages.delete}"
+											icon="ui-icon-delete" />
+									</f:facet>
+
+									<f:facet name="right">
+										<p:menuButton value="Options">
+											<p:menuitem value="#{messages.button_import}" icon="ui-icon-file-download" 
+											action="/pages/secure/bankaccount/import-bank-transactions.xhtml" />
+											<p:menuitem value="#{messages.button_export}" icon="ui-icon-file-upload" />
+											<p:menuitem value="Last Upload" outcome="/pages/secure/bankaccount/review-imported-bank-transactions.xhtml" icon="ui-icon-file-upload" />
+											<p:menuitem value="#{messages.delete}" icon="ui-icon-delete" />
+											<p:separator />
+											<p:menuitem value="Homepage"
+												outcome="#{homePageLink}" icon="ui-icon-home" />
+										</p:menuButton>
+									</f:facet>
+								</p:toolbar>
+							</h:form>
+
+							<br />
+							<ui:include src="all-bank-transactions.xhtml" />
+							<h:form>
+								<p:toolbar>
+									<f:facet name="left">
+										
+										<p:commandButton title="#{messages.cancel}" icon="ui-icon-cancel"
+											action="/pages/secure/bankaccount/bankaccounts.xhtml"
+											 />
+									</f:facet>
+
+									<f:facet name="right">
+
+										<p:button type="button" value="Home" icon="ui-icon-home"
+											outcome="#{homePageLink}" />
+
+									</f:facet>
+
+								</p:toolbar>
+							</h:form>
+
+						</div>
+						
+					</div>
+					
+				</div>
+			
+	</ui:define>
+
+</ui:composition>

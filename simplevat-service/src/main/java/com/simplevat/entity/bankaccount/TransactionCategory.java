@@ -1,9 +1,11 @@
-package com.simplevat.entity;
+package com.simplevat.entity.bankaccount;
 
 import com.simplevat.entity.converter.DateConverter;
+
 import lombok.Data;
 
 import javax.persistence.*;
+
 import java.time.LocalDateTime;
 
 /**
@@ -28,6 +30,13 @@ public class TransactionCategory {
     @Basic
     @Column(name = "PARENT_TRANSACTION_CATEGORY_CODE")
     private Integer parentTransactionCategoryCode;
+    
+    @Column(name = "DEFAULT_FLAG")
+    private Character defaltFlag;
+
+    @Column(name = "ORDER_SEQUENCE")
+    private Integer orderSequence;
+    
     @Basic
     @Column(name = "CREATED_BY")
     private Integer createdBy;
@@ -48,11 +57,6 @@ public class TransactionCategory {
     @Basic
     @Column(name = "VERSION_NUMBER")
     private int versionNumber;
-//    private Collection<Expense> expensesByTransactionCategoryCode;
-//    private TransactionType transactionTypeByTransactionTypeCode;
-//    private TransactionCategory transactionCategoryByParentTransactionCategoryCode;
-//    private Collection<TransactionCategory> transactionCategoriesByTransactionCategoryCode;
-//    private Collection<Transaction> transactonsByTransactionCategoryCode;
 
 
 }

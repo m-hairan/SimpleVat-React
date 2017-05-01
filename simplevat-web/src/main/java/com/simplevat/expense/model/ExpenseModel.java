@@ -8,14 +8,19 @@ import org.primefaces.model.UploadedFile;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
 public class ExpenseModel {
 
+	public ExpenseModel(){
+		this.expenseId = 0;
+	}
+	
     private int expenseId;
     private BigDecimal expenseAmount;
-    private LocalDateTime expenseDate;
+    private Date expenseDate;
     private String expenseDescription;
     private String receiptNumber;
     private Integer claimantId;
