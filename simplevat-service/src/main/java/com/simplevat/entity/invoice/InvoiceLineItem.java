@@ -1,5 +1,6 @@
 package com.simplevat.entity.invoice;
 
+import java.io.Serializable;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -12,7 +13,9 @@ import java.util.Calendar;
 @Entity
 @Table(name = "INVOICE_LINE_ITEM")
 @Data
-public class InvoiceLineItem {
+public class InvoiceLineItem implements Serializable {
+
+    private static final long serialVersionUID = 848122185643690684L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

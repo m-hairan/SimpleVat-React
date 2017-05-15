@@ -106,7 +106,7 @@ public class Contact implements Serializable {
     @Basic
     @Version
     @Column(name = "VERSION_NUMBER")
-    private Integer versionNumber = 0;
+    private Integer versionNumber = 1;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COUNTRY_CODE")

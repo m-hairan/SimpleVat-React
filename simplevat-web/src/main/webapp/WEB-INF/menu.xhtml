@@ -12,19 +12,30 @@
                 <div class="nano-content menu-scroll-content">
                     <ui:fragment rendered="#{guestPreferences.profileMode == 'inline' and guestPreferences.menuLayout != 'menu-layout-static menu-layout-horizontal'}">
                         <div class="profile">
-                            <div class="profile-image"></div>
+                            <div class="profile-image">
+                                <ui:fragment rendered="#{not empty userController.profilePic}">
+                                    <p:graphicImage height="60px" width="60px"
+                                                    value="#{userController.profilePic}" />
+                                </ui:fragment>
+
+                                <ui:fragment rendered="#{empty userController.profilePic}">
+                                    <p:graphicImage name="images/user.png" library="ultima-layout" height="60px" width="60px"/>
+                                </ui:fragment>
+                            </div>
                             <a id="profile-options" href="#">
-                                <span class="profile-name">Jane Williams</span>
+                                <span class="profile-name">#{userController.currentUser.firstName} #{userController.currentUser.lastName}</span>
                                 <i class="material-icons">&#xE313;</i>
                             </a>
                         </div>
 
                         <ul id="profile-menu" class="ultima-menu">
                             <li role="menuitem">
-                                <p:commandLink styleClass="ripplelink">
+                                <p:link onclick="#{userController.prefillData()}"
+                                        outcome="/pages/secure/user/profile"
+                                        styleClass="ripplelink">
                                     <i class="material-icons">&#xE7FD;</i>
                                     <span>Profile</span>
-                                </p:commandLink>
+                                </p:link>
                             </li>
                             <li role="menuitem">
                                 <a href="#" class="ripplelink">
@@ -50,16 +61,16 @@
                     <pu:menu widgetVar="me">
                         <p:menuitem id="st_dashboard" value="Home" icon="&#xE871;" outcome="/pages/secure/user/home"/>
 
-                        <p:menuitem id="st_contact" update="@form contactForm" value="Contacs" icon="contacts" outcome="/pages/secure/contact/contacts"/>
+                        <p:menuitem id="st_contact" update="@form contactForm" value="Contacts" icon="contacts" outcome="/pages/secure/contact/contacts"/>
 
                         <p:menuitem id="st_project" value="Projects" icon="book" outcome="/pages/secure/project/projects"/>
 
                         <p:menuitem id="st_invoice" update="@form invoice" value="Invoices" icon="receipt" outcome="/pages/secure/user/invoices"/>
 
                         <p:menuitem id="st_expense" value="#{messages.expenses}" icon="exposure" outcome="#{expenseMenuLink}"/>
-                        
+
                         <p:menuitem id="st_bankaccount" value="#{messages.bank_accounts}" icon="" outcome="#{bankAccountMenuLink}"/>
-                        
+
                     </pu:menu>
                 </div>
             </div>

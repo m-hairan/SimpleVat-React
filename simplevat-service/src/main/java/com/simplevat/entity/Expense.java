@@ -74,7 +74,7 @@ public class Expense{
     private LocalDateTime lastUpdateDate;
     @Basic
     @Column(name = "DELETE_FLAG")
-    private Boolean deleteFlag = false;
+    private Boolean deleteFlag = Boolean.FALSE;
 
     @PrePersist
     public void updateDates() {

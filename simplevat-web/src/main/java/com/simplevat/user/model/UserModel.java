@@ -4,6 +4,8 @@ import com.simplevat.entity.Company;
 import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
@@ -12,6 +14,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserModel {
+
+    private Integer userId;
 
     private String userEmailId;
 
@@ -22,5 +26,11 @@ public class UserModel {
     private Date dateOfBirth;
 
     private Company company;
+
+    private UploadedFile profileImage;
+
+    private StreamedContent profileImageContent;
     
+    private StreamedContent currentProfileImageContent;
+
 }

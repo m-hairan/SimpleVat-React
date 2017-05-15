@@ -38,6 +38,8 @@ import java.util.List;
 @ViewScoped
 public class InvoiceController implements Serializable {
 
+    private static final long serialVersionUID = 6299117288316809011L;
+
     @Getter
     private InvoiceModel invoiceModel;
 

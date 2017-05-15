@@ -63,7 +63,7 @@ public class User {
 
     @Basic
     @Column(name = "DELETE_FLAG")
-    private Boolean deleteFlag;
+    private Boolean deleteFlag = Boolean.FALSE;
 
     @Basic
     @Column(name = "IS_ACTIVE")
@@ -71,7 +71,7 @@ public class User {
 
     @Version
     @Column(name = "VERSION_NUMBER")
-    private Integer versionNumber;
+    private Integer versionNumber = 1;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ROLE_CODE", insertable = false, updatable = false)
@@ -80,6 +80,10 @@ public class User {
     @Basic
     @Column(name = "USER_PASSWORD")
     private String password;
+
+    @Basic
+    @Column(name = "PROFILE_IMAGE_URL")
+    private String profileImagePath;
 //    private Collection<Expense> expensesByUserEmailId;
 //    private Company companyByCompanyId;
 //    private Role roleByRoleCode;

@@ -81,11 +81,11 @@ public class Transaction {
     private LocalDateTime lastUpdateDate;
     @Basic
     @Column(name = "DELETE_FLAG")
-    private Boolean deleteFlag = false;
+    private Boolean deleteFlag = Boolean.FALSE;
     @Basic
     @Version
     @Column(name = "VERSION_NUMBER")
-    private Integer versionNumber;
+    private Integer versionNumber = 1;
     
     @PrePersist
     public void updateDates() {

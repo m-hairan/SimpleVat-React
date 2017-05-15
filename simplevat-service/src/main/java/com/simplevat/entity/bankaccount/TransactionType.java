@@ -49,9 +49,10 @@ public class TransactionType {
     private LocalDateTime LastUpatedDate;
     
     @Column(name = "DELETE_FLAG")
-    private Boolean deleteFlag;
+    private Boolean deleteFlag = Boolean.FALSE;
 
+    @Version
     @Column(name = "VERSION_NUMBER")
-    private Integer versionNumber;
+    private Integer versionNumber = 1;
 
 }

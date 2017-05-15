@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Table(name = "COMPANY")
 @Data
 public class Company {
+
     @Id
     @Column(name = "COMPANY_ID")
     private int companyId;
@@ -80,10 +81,11 @@ public class Company {
     private LocalDateTime lastUpdateDate;
     @Basic
     @Column(name = "DELETE_FLAG")
-    private Boolean deleteFlag;
+    private Boolean deleteFlag = Boolean.FALSE;
     @Basic
+    @Version
     @Column(name = "VERSION_NUMBER")
-    private int versionNumber;
+    private Integer versionNumber = 1;
 //    private CompanyType companyTypeByCompanyTypeCode;
 //    private Country countryByCountryCode;
 //    private Collection<User> usersByCompanyId;

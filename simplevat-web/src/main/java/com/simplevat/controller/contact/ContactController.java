@@ -79,7 +79,9 @@ public class ContactController implements Serializable {
 
     public String redirectToCreateContact() {
         contactModel = new ContactModel();
-
+        contactModel.setCountry(countries.get(179));
+        contactModel.setLanguage(languages.get(0));
+        contactModel.setCurrency(currencies.get(149));
         LOGGER.debug("Redirecting to create new contact page");
         return "/pages/secure/contact/contact.xhtml";
     }
