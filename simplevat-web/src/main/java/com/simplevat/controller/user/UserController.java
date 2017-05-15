@@ -76,18 +76,17 @@ public class UserController {
     }
 
     public void update() throws UnauthorizedException {
-        currentUser = getCurrentUser();
         currentUserEntity = convertToEntity(currentUser);
         if (null != currentUser.getProfileImage()
                 && currentUser.getProfileImage().getSize() > 0) {
             storeUploadedFile(fileLocation);
         }
         userService.updateUser(currentUserEntity);
+        initController();
     }
 
     private void storeUploadedFile(String fileLocation) throws UnauthorizedException {
         String tomcatHome = System.getProperty("catalina.base");
-        currentUser = getCurrentUser();
         String fileUploadAbsolutePath = tomcatHome.concat(fileLocation);
         File filePath = new File(fileUploadAbsolutePath);
         if (!filePath.exists()) {
@@ -116,18 +115,18 @@ public class UserController {
 
     @Nonnull
     private User convertToEntity(@Nonnull final UserModel userModel) {
-        final LocalDateTime dob = LocalDateTime.ofInstant(userModel.getDateOfBirth().toInstant(), ZoneId.systemDefault());
+        final LocalDateTime dob = LocalDateTime
+                .ofInstant(userModel.getDateOfBirth().toInstant(),
+                        ZoneId.systemDefault());
         final User user = userService.getUser(userModel.getUserId());
 
         // todo: change when company module is done.
-        user.setCompanyId(1);
-        user.setCreatedBy(0);
+        user.setCompanyId(userModel.getCompanyId());
         user.setDateOfBirth(dob);
         user.setDeleteFlag(Boolean.FALSE);
         user.setUserEmail(userModel.getUserEmailId());
         user.setFirstName(userModel.getFirstName());
         user.setLastName(userModel.getLastName());
-        user.setLastUpdatedBy(0);
         return user;
     }
 
@@ -136,6 +135,7 @@ public class UserController {
         final UserModel userModel = new UserModel();
 
         userModel.setUserId(user.getUserId());
+        userModel.setCompanyId(user.getCompanyId());
         // todo: chnage when company module is done.
         userModel.setDateOfBirth(null != user.getDateOfBirth() ? Date.from(user.getDateOfBirth().atZone(ZoneId.systemDefault()).toInstant()) : null);
         userModel.setUserEmailId(user.getUserEmail());
@@ -167,9 +167,7 @@ public class UserController {
     }
 
     public UserModel getCurrentUser() throws UnauthorizedException {
-        if (currentUserEntity != null) {
-            currentUser = convertToModel(currentUserEntity);
-        } else {
+        if (currentUser == null) {
             final UserContext context = ContextUtils.getUserContext();
             currentUserEntity = userService.getUser(context.getUserId());
             currentUser = convertToModel(currentUserEntity);

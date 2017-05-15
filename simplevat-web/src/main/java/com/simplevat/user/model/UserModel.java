@@ -25,7 +25,7 @@ public class UserModel {
 
     private Date dateOfBirth;
 
-    private Company company;
+    private Integer companyId;
 
     private UploadedFile profileImage;
 
