@@ -43,7 +43,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserController {
 
-    @Getter
     private UserModel currentUser;
 
     private User currentUserEntity;
@@ -67,7 +66,7 @@ public class UserController {
         if (currentUserEntity != null) {
             currentUser = convertToModel(currentUserEntity);
         } else {
-            currentUser = new UserModel();
+            currentUser = null;
         }
 
     }
@@ -76,7 +75,8 @@ public class UserController {
         initController();
     }
 
-    public void update() {
+    public void update() throws UnauthorizedException {
+        currentUser = getCurrentUser();
         currentUserEntity = convertToEntity(currentUser);
         if (null != currentUser.getProfileImage()
                 && currentUser.getProfileImage().getSize() > 0) {
@@ -85,9 +85,9 @@ public class UserController {
         userService.updateUser(currentUserEntity);
     }
 
-    private void storeUploadedFile(String fileLocation) {
+    private void storeUploadedFile(String fileLocation) throws UnauthorizedException {
         String tomcatHome = System.getProperty("catalina.base");
-
+        currentUser = getCurrentUser();
         String fileUploadAbsolutePath = tomcatHome.concat(fileLocation);
         File filePath = new File(fileUploadAbsolutePath);
         if (!filePath.exists()) {
@@ -142,11 +142,14 @@ public class UserController {
         userModel.setFirstName(user.getFirstName());
         userModel.setLastName(user.getLastName());
 
-        
         return userModel;
     }
-    
-    public StreamedContent getProfilePic(){
+
+    public StreamedContent getProfilePic() throws UnauthorizedException {
+        if (currentUserEntity == null) {
+            final UserContext context = ContextUtils.getUserContext();
+            currentUserEntity = userService.getUser(context.getUserId());
+        }
         final String attachmentPath = currentUserEntity.getProfileImagePath();
         if (attachmentPath != null && !attachmentPath.isEmpty()) {
             String tomcatHome = System.getProperty("catalina.base");
@@ -161,6 +164,17 @@ public class UserController {
             }
         }
         return null;
+    }
+
+    public UserModel getCurrentUser() throws UnauthorizedException {
+        if (currentUserEntity != null) {
+            currentUser = convertToModel(currentUserEntity);
+        } else {
+            final UserContext context = ContextUtils.getUserContext();
+            currentUserEntity = userService.getUser(context.getUserId());
+            currentUser = convertToModel(currentUserEntity);
+        }
+        return currentUser;
     }
 
 }
