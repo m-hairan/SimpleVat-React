@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 @Table(name = "TRANSACTION_CATEGORY")
 @Data
 public class TransactionCategory {
+	
     @Id
     @Column(name = "TRANSACTION_CATEGORY_CODE")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
