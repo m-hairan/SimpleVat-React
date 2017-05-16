@@ -11,6 +11,11 @@ import java.time.LocalDateTime;
 /**
  * Created by mohsinh on 2/26/2017.
  */
+@NamedQueries({
+    @NamedQuery(name = "findAllTransactionType",
+            query = "SELECT t "
+            + "FROM TransactionType t where t.deleteFlag='false'")
+})
 @Entity
 @Table(name = "TRANSACTION_TYPE")
 @Data

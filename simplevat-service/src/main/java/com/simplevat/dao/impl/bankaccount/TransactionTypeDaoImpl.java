@@ -83,5 +83,12 @@ public class TransactionTypeDaoImpl extends AbstractDao implements TransactionTy
 	public TransactionType getTransactionType(Integer id) {
 		return getEntityManager().find(TransactionType.class, id);
 	}
+	@Override
+	public List<TransactionType> findAll() {
+		
+			List<TransactionType> result = getEntityManager().createNamedQuery("findAllTransactionType",
+					TransactionType.class).getResultList();
+			return result;
+	}
 
 }

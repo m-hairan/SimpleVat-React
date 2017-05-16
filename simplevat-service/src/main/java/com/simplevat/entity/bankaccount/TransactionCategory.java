@@ -11,12 +11,18 @@ import java.time.LocalDateTime;
 /**
  * Created by mohsinh on 2/26/2017.
  */
+@NamedQueries({
+    @NamedQuery(name = "findAll",
+            query = "SELECT t "
+            + "FROM TransactionCategory t")
+})
 @Entity
 @Table(name = "TRANSACTION_CATEGORY")
 @Data
 public class TransactionCategory {
     @Id
     @Column(name = "TRANSACTION_CATEGORY_CODE")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int transactionCategoryCode;
     @Basic
     @Column(name = "TRANSACTION_CATEGORY_NAME")
@@ -24,12 +30,21 @@ public class TransactionCategory {
     @Basic
     @Column(name = "TRANSACTION_CATEGORY_DESCRIPTION")
     private String transactionCategoryDescription;
-    @Basic
-    @Column(name = "TRANSACTION_TYPE_CODE")
-    private int transactionTypeCode;
-    @Basic
-    @Column(name = "PARENT_TRANSACTION_CATEGORY_CODE")
-    private Integer parentTransactionCategoryCode;
+//    @Basic
+//    @Column(name = "TRANSACTION_TYPE_CODE")
+//    private int transactionTypeCode;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TRANSACTION_TYPE_CODE")
+    private TransactionType transactionType;
+    
+//    @Basic
+//    @Column(name = "PARENT_TRANSACTION_CATEGORY_CODE")
+//    private Integer parentTransactionCategoryCode;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PARENT_TRANSACTION_CATEGORY_CODE")
+    private TransactionCategory parentTransactionCategory;
     
     @Column(name = "DEFAULT_FLAG")
     private Character defaltFlag;

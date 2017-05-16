@@ -12,5 +12,7 @@ public interface TransactionTypeDao {
 	public TransactionType updateOrCreateTransaction(TransactionType transactionType);
 	
 	public TransactionType getTransactionType(Integer id);
+	
+	public List<TransactionType> findAll();
 
 }

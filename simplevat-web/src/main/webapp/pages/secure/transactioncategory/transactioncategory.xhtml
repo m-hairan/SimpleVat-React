@@ -1,0 +1,30 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:tp = "http://java.sun.com/jsf/composite/common" 
+	template="/WEB-INF/template.xhtml">
+
+	<ui:define name="title">Manage Your Transaction Categories</ui:define>
+
+	<ui:define name="content">
+		<div class="ui-g ">
+
+			<div class="ui-g-12">
+				<!-- Left Side -->
+				<div class="card card-w-title">
+					<h1>Transaction Category</h1>
+					<tp:header createButtonAction="#{transactionCategoryView.createNewCategory()}" ></tp:header>
+
+					<br />
+					<ui:include src="#{transactionCategoryView.LIST_PAGE}" />
+					
+
+				</div>
+			</div>
+		</div>
+	</ui:define>
+
+
+</ui:composition>
