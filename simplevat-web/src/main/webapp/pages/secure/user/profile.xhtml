@@ -22,9 +22,7 @@
                 <div class="ui-fluid">
                     <div class="ui-g">
                         <div class="ui-g-12">
-
                             <h1>#{messages.profile}</h1>
-                            <p:messages globalOnly="true" />
                             <p:fieldset legend="#{messages.basicDetail}" toggleable="false">
 
                                 <div class="profile" style="margin-left: 44%; margin-bottom: 15px;">
@@ -57,31 +55,44 @@
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="firstName"
                                                      maxlength="25"
+                                                     required="true"
+                                                     requiredMessage="Please enter First Name"
                                                      value="#{userController.currentUser.firstName}"/>
                                         <label>#{messages.firstName}</label>
+                                        <p:message for="firstName" />
                                     </h:panelGroup>
 
                                     <p:outputLabel for="lastName" />
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="lastName"
+                                                     required="true"
+                                                     requiredMessage="Please enter Last Name"
                                                      maxlength="25"
                                                      value="#{userController.currentUser.lastName}"/>
                                         <label>#{messages.lastName}</label>
+                                        <p:message for="lastName" />
                                     </h:panelGroup>
 
                                     <p:outputLabel for="emailId" />
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="emailId"
+                                                     required="true"
                                                      maxlength="25"
+                                                     requiredMessage="Please enter email address"
+                                                     validatorMessage="Invalid email format"
                                                      value="#{userController.currentUser.userEmailId}">
+                                            <f:validateRegex
+                                                pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                         </p:inputText>
                                         <label>#{messages.emailId}</label>
+                                        <p:message for="emailId" />
 
                                     </h:panelGroup>
                                     <p:outputLabel for="dob" />
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:calendar id="dob"
                                                     pattern="MM/dd/yyyy"
+                                                    maxdate="#{userController.currentUser.today}"
                                                     value="#{userController.currentUser.dateOfBirth}"
                                                     readonlyInput="true" />
                                         <label>#{messages.dateOfBirth}</label>

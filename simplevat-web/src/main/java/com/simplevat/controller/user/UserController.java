@@ -23,8 +23,10 @@ import java.util.logging.Logger;
 import javax.activation.MimetypesFileTypeMap;
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 import lombok.Getter;
 import org.apache.commons.io.FilenameUtils;
 import org.primefaces.model.DefaultStreamedContent;
@@ -83,6 +85,7 @@ public class UserController {
         }
         userService.updateUser(currentUserEntity);
         initController();
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User Profile updated successfully"));
     }
 
     private void storeUploadedFile(String fileLocation) throws UnauthorizedException {

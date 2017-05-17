@@ -24,6 +24,8 @@ public class UserModel {
     private String lastName;
 
     private Date dateOfBirth;
+    
+    private Date today = new Date();
 
     private Integer companyId;
 

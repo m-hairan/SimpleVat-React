@@ -32,6 +32,10 @@
             <ui:include src="./menu.xhtml" />
             
             <div class="layout-main">
+                <p:growl id="globalGrowl" 
+                         life="10000"
+                         globalOnly="true"
+                         showDetail="true" /> 
                 <ui:insert name="content"/>
                 
                 <ui:include src="./footer.xhtml" />
