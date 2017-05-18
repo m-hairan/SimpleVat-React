@@ -4,13 +4,15 @@ import java.util.List;
 
 
 import com.simplevat.dao.Dao;
+import com.simplevat.service.exceptions.ServiceErrorCode;
+import com.simplevat.service.exceptions.ServiceException;
 
 public interface SimpleVatService<PK,ENTITY> {
 
 	default public ENTITY findByPK(PK pk) {
 		ENTITY returnEntity = getDao().findByPK(pk);
 		if(returnEntity == null) {
-			throw new RuntimeException("Entity does not exists");
+			throw new ServiceException("", ServiceErrorCode.RecordDoesntExists);
 		}
 		return returnEntity;
 	}
@@ -22,7 +24,7 @@ public interface SimpleVatService<PK,ENTITY> {
 	default public void persist(ENTITY entity, PK pk) {
 		ENTITY returnEntity = getDao().findByPK(pk);
 		if(returnEntity != null) {
-			throw new RuntimeException("Entity already exists");
+			throw new ServiceException("", ServiceErrorCode.RecordAlreadyExists);
 		}
 		getDao().persist(entity);
 		
@@ -31,7 +33,7 @@ public interface SimpleVatService<PK,ENTITY> {
 	default public ENTITY update(ENTITY entity, PK pk) {
 		ENTITY returnEntity = getDao().findByPK(pk);
 		if(returnEntity == null) {
-			throw new RuntimeException("Entity does not exists");
+			throw new ServiceException("", ServiceErrorCode.RecordDoesntExists);
 		}
 		return getDao().update(entity);
 	}
@@ -39,7 +41,7 @@ public interface SimpleVatService<PK,ENTITY> {
 	default public void delete(ENTITY entity, PK pk) {
 		ENTITY returnEntity = getDao().findByPK(pk);
 		if(returnEntity == null) {
-			throw new RuntimeException("Entity does not exists");
+			throw new ServiceException("", ServiceErrorCode.RecordDoesntExists);
 		}
 		getDao().delete(entity);
 		

@@ -155,17 +155,21 @@
         <location>/pages/public/login.xhtml</location>
     </error-page>
     <error-page>
-        <exception-type>java.sql.SQLException</exception-type>
-        <location>/pages/public/common/error.xhtml</location>
+        <exception-type>com.simplevat.web.exceptions.WebLayerException</exception-type>
+        <location>/pages/public/common/errorNew.xhtml</location>
     </error-page>
     <error-page>
+        <exception-type>com.simplevat.service.exceptions.ServiceException</exception-type>
+        <location>/pages/public/common/errorNew.xhtml</location>
+    </error-page>    
+    <error-page>
         <exception-type>java.lang.RuntimeException</exception-type>
-        <location>/pages/public/common/error.xhtml</location>
+        <location>/pages/public/common/errorNew.xhtml</location>
     </error-page>
 
     <error-page>
         <exception-type>java.lang.Throwable</exception-type>
-        <location>/pages/public/common/error.xhtml</location>
+        <location>/pages/public/common/errorNew.xhtml</location>
     </error-page>
 
 

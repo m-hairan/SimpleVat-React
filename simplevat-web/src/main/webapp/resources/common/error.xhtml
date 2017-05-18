@@ -1,0 +1,90 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<composite:interface />
+
+
+
+<composite:implementation>
+	<ui:param name="headerText"
+		value="Exception while processing the request!" />
+	<ui:param name="contactMsg"
+		value="Please contact system administrator!" />
+	<h:outputScript name="js/ripple.js" library="ultima-layout" />
+
+	<h:outputStylesheet name="css/ripple.css" library="ultima-layout" />
+	<h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css"
+		library="ultima-layout" />
+
+	<p:ajaxExceptionHandler
+		type="com.simplevat.web.exceptions.WebLayerException"
+		update="baseExceptionDialog"
+		onexception="PF('baseExceptionDialog').show();" />
+
+	<p:ajaxExceptionHandler type="java.lang.Exception"
+		update="exceptionDialog" onexception="PF('exceptionDialog').show();" />
+		
+	<p:ajaxExceptionHandler type="java.lang.Throwable"
+		update="exceptionDialog" onexception="PF('exceptionDialog').show();" />
+
+
+	<p:dialog id="baseExceptionDialog" header="#{headerText}"
+		widgetVar="baseExceptionDialog" height="600px" width="500px"
+		styleClass="exception-body error-page">
+
+		<div class="exception-type">
+			<p:graphicImage name="images/error.svg" library="ultima-layout" />
+		</div>
+
+
+		<p:outputPanel
+			rendered="#{pfExceptionHandler.exception.businessException==true}">
+			<div class="card exception-panel">
+				<i class="material-icons">&#xE000;</i>
+				<div>Error Code :
+					#{pfExceptionHandler.exception.getErrorCode()}</div>
+				<div>Error Description :
+					#{pfExceptionHandler.exception.getErrorDescription()}</div>
+				<div class="exception-detail">#{contactMsg}</div>
+				<p:button outcome="/pages/secure/user/home" value="Homepage"
+					styleClass="secondary" />
+			</div>
+
+		</p:outputPanel>
+
+		<p:outputPanel
+			rendered="#{pfExceptionHandler.exception.businessException==false}">
+			<div class="card exception-panel">
+				<i class="material-icons">&#xE000;</i>
+				<div class="exception-detail">#{contactMsg}</div>
+				<p:button outcome="/pages/secure/user/home" value="Homepage"
+					styleClass="secondary" />
+			</div>
+		</p:outputPanel>
+
+	</p:dialog>
+
+
+	<p:dialog id="exceptionDialog" header="#{headerText}"
+		widgetVar="exceptionDialog" height="600px" width="500px"
+		styleClass="exception-body error-page">
+
+		<div class="exception-type">
+			<p:graphicImage name="images/error.svg" library="ultima-layout" />
+		</div>
+
+		<p:outputPanel>
+			<div class="card exception-panel">
+				<i class="material-icons">&#xE000;</i>
+				<div class="exception-detail">#{contactMsg}</div>
+				<p:button outcome="/pages/secure/user/home" value="Homepage"
+					styleClass="secondary" />
+			</div>
+		</p:outputPanel>
+	</p:dialog>
+</composite:implementation>
+</html>

@@ -2,7 +2,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:tp = "http://java.sun.com/jsf/composite/common" >
 
 	<h:form>
 
@@ -37,7 +38,7 @@
                              <f:setPropertyActionListener value="#{transactionCategory}" target="#{transactionCategoryView.selectedTransactionCategory}" />
                      </p:commandButton>
                      
-                     <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{transactionCategoryView.deleteTransactionCategory}">
+                     <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{transactionCategoryView.deleteTransactionCategory}" ajax="true">
 						<f:setPropertyActionListener value="#{transactionCategory}" target="#{transactionCategoryView.selectedTransactionCategory}" />
 					</p:commandButton>
                                         
@@ -46,7 +47,7 @@
 			</p:dataTable>
 			
 		</div>
-
+		<tp:error/>
 	</h:form>
 
 </ui:composition>
