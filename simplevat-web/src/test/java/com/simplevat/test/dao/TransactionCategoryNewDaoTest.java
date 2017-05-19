@@ -3,11 +3,12 @@ package com.simplevat.test.dao;
 import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -69,6 +70,13 @@ public class TransactionCategoryNewDaoTest extends AbstractJUnit4SpringContextTe
 		assertTrue("Size should be more than 0", listTransactionCategory.size() > 0);
 	}
 	
+	@Test
+	public void testFindByAttribute() {
+		Map<String,String> map = new HashMap<>();
+		map.put("transactionCategoryName", "Category");
+		List<TransactionCategory> listTransactionCategory = dao.findByAttributes(map);
+		assertTrue("findByAttribute Not working ", listTransactionCategory.size()>0);
+	}
 	@Test
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void testNamedQuery() {

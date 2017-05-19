@@ -1,12 +1,19 @@
 package com.simplevat.dao;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 
@@ -65,6 +72,28 @@ public  abstract class AbstractDao<PK,ENTITY> implements Dao<PK, ENTITY> {
 	@Override
 	public EntityManager getEntityManager() {
 		return this.entityManager;
+	}
+	
+	@Override
+	public List<ENTITY> findByAttributes(Map<String, String> attributes) {
+        List<ENTITY> results;
+        //set up the Criteria query
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<ENTITY> cq = cb.createQuery(entityClass);
+        Root<ENTITY> foo = cq.from(entityClass);
+ 
+        List<Predicate> predicates = new ArrayList<Predicate>();
+        for(String s : attributes.keySet())
+        {
+            if(foo.get(s) != null){
+                predicates.add(cb.like((Expression) foo.get(s), "%" + attributes.get(s) + "%" ));
+            }
+        }
+        cq.where(predicates.toArray(new Predicate[]{}));
+        TypedQuery<ENTITY> q = entityManager.createQuery(cq);
+ 
+        results = q.getResultList();
+        return results;
 	}
 
 }
