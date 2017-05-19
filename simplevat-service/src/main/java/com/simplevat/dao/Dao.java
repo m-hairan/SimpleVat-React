@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaQuery;
 
 
 public interface Dao<PK,ENTITY> {
@@ -19,15 +18,11 @@ public interface Dao<PK,ENTITY> {
 	
 	public void delete(ENTITY entity);
 	
-	public List<ENTITY> executeCriteria(int criteriaType);
 	
 	public List<ENTITY> findByAttributes(Map<String, String> attributes);
 	
-	public default CriteriaQuery<ENTITY> getCriteria(int criteriaType) {
-		throw new RuntimeException("Please implement this method to use it");
-	}
+	public List<ENTITY> filter(AbstractFilter<ENTITY> filter);
+	
 	
 	public EntityManager getEntityManager();
-	
-	public List<ENTITY> filter(AbstractFilter<ENTITY> filter);
 }

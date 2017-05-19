@@ -44,8 +44,6 @@ public class TransactionCategoryNewDaoTest extends AbstractJUnit4SpringContextTe
 	public void tearDown() {
 		TransactionCategory transactionCategory = dao.findByPK(PK);
 		if (transactionCategory != null) {
-			transactionCategory = getTransactionCategory();
-			transactionCategory.setTransactionCategoryCode(PK);
 			dao.delete(transactionCategory);
 		}
 	}
@@ -65,11 +63,6 @@ public class TransactionCategoryNewDaoTest extends AbstractJUnit4SpringContextTe
 				transactionCategory.getTransactionCategoryDescription().equals("UPDATED_DESCRIPTION"));
 	}
 
-	@Test
-	public void testCriteria() {
-		List<TransactionCategory> listTransactionCategory = dao.executeCriteria(1);
-		assertTrue("Size should be more than 0", listTransactionCategory.size() > 0);
-	}
 	
 	@Test
 	public void testFindByAttribute() {
@@ -83,9 +76,18 @@ public class TransactionCategoryNewDaoTest extends AbstractJUnit4SpringContextTe
 	public void testFilter() {
 		TransactionCategory transactionCategory = new TransactionCategory();
 		transactionCategory.setDeleteFlag(false);
-		TransactionCategoryFilter filter = new TransactionCategoryFilter(transactionCategory);
+		TransactionCategoryFilter filter = new TransactionCategoryFilter(transactionCategory,0,2);
 		List<TransactionCategory> listTransactionCategory = dao.filter(filter);
-		assertTrue("testFilter Not working ", listTransactionCategory.size()>0);
+		assertTrue("testFilter Not working ", listTransactionCategory.size()==2);
+		int transactionCategoryCode = listTransactionCategory.get(0).getTransactionCategoryCode();
+		System.out.println("55555555555555555555555555555555555555555555555555555555555" + transactionCategoryCode);
+		for(int i=1;i<=listTransactionCategory.size()-1;i++) {
+			int anotherCategory = listTransactionCategory.get(i).getTransactionCategoryCode();
+			System.out.println("77777777777777777777777777777777777777777777777777" + anotherCategory);
+			assertTrue("Not in proper order ", transactionCategoryCode < anotherCategory);
+			transactionCategoryCode = anotherCategory;
+			
+		}
 	}
 	@Test
 	@Transactional(propagation = Propagation.REQUIRES_NEW)

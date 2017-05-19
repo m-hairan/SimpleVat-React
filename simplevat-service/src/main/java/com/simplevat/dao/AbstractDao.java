@@ -7,11 +7,10 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
@@ -61,13 +60,7 @@ public  abstract class AbstractDao<PK,ENTITY> implements Dao<PK, ENTITY> {
 	public void delete(ENTITY entity) {
 		entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));
 	}
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<ENTITY> executeCriteria(int criteriaType) {
-		CriteriaQuery<ENTITY> criteriaQuery = getCriteria(criteriaType);
-		Query query = entityManager.createQuery(criteriaQuery);
-		return query.getResultList();
-	}
+
 	
 	@Override
 	public EntityManager getEntityManager() {
@@ -86,7 +79,7 @@ public  abstract class AbstractDao<PK,ENTITY> implements Dao<PK, ENTITY> {
         for(String s : attributes.keySet())
         {
             if(foo.get(s) != null){
-                predicates.add(cb.like((Expression) foo.get(s), "%" + attributes.get(s) + "%" ));
+                predicates.add(cb.like(foo.get(s), "%" + attributes.get(s) + "%" ));
             }
         }
         cq.where(predicates.toArray(new Predicate[]{}));
@@ -102,9 +95,17 @@ public  abstract class AbstractDao<PK,ENTITY> implements Dao<PK, ENTITY> {
         CriteriaQuery<ENTITY> criteriaQuery = cb.createQuery(entityClass);
         Root<ENTITY> root = criteriaQuery.from(entityClass);
         filter.buildPredicates(root,cb);
+        filter.addOrderCriteria(root, cb);
         List<Predicate> predicates = filter.getPredicates();
-        criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()]));
-        Query query = getEntityManager().createQuery(criteriaQuery);
+        if(predicates != null && predicates.size() > 0) {
+        	criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()]));
+        }
+        List<Order> orders = filter.getOrders();
+        if(orders != null && orders.size() > 0) {
+        	criteriaQuery.orderBy(orders);
+        }
+        TypedQuery<ENTITY> query = getEntityManager().createQuery(criteriaQuery);
+        filter.addPagination(query);
         return query.getResultList();
     	
     }
