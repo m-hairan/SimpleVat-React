@@ -19,8 +19,8 @@ public interface SimpleVatService<PK,ENTITY> {
 		return returnEntity;
 	}
 
-	default public List<ENTITY> findAll() {
-		return getDao().executeNamedQuery("findAll");
+	default public List<ENTITY> executeNamedQuery(String namedQuery) {
+		return getDao().executeNamedQuery(namedQuery);
 	}
 
 	default public void persist(ENTITY entity, PK pk) {
