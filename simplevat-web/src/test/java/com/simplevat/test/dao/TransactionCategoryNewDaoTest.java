@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.simplevat.dao.Dao;
+import com.simplevat.dao.bankaccount.TransactionCategoryFilter;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionType;
 
@@ -76,6 +77,15 @@ public class TransactionCategoryNewDaoTest extends AbstractJUnit4SpringContextTe
 		map.put("transactionCategoryName", "Category");
 		List<TransactionCategory> listTransactionCategory = dao.findByAttributes(map);
 		assertTrue("findByAttribute Not working ", listTransactionCategory.size()>0);
+	}
+	
+	@Test
+	public void testFilter() {
+		TransactionCategory transactionCategory = new TransactionCategory();
+		transactionCategory.setDeleteFlag(false);
+		TransactionCategoryFilter filter = new TransactionCategoryFilter(transactionCategory);
+		List<TransactionCategory> listTransactionCategory = dao.filter(filter);
+		assertTrue("testFilter Not working ", listTransactionCategory.size()>0);
 	}
 	@Test
 	@Transactional(propagation = Propagation.REQUIRES_NEW)

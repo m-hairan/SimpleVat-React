@@ -28,4 +28,6 @@ public interface Dao<PK,ENTITY> {
 	}
 	
 	public EntityManager getEntityManager();
+	
+	public List<ENTITY> filter(AbstractFilter<ENTITY> filter);
 }

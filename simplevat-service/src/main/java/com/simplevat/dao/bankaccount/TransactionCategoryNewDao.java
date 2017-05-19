@@ -17,6 +17,7 @@ import com.simplevat.criteria.AbstractCriteria;
 import com.simplevat.criteria.SortOrder;
 import com.simplevat.criteria.bankaccount.TransactionCategoryCriteria;
 import com.simplevat.dao.AbstractDao;
+import com.simplevat.dao.AbstractFilter;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 
 @Repository
@@ -84,4 +85,5 @@ public class TransactionCategoryNewDao extends AbstractDao<Integer, TransactionC
         }
         return order;
     }
+
 }

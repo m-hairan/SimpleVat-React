@@ -95,5 +95,18 @@ public  abstract class AbstractDao<PK,ENTITY> implements Dao<PK, ENTITY> {
         results = q.getResultList();
         return results;
 	}
+	
+    @Override
+    public List<ENTITY> filter(AbstractFilter<ENTITY> filter){
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<ENTITY> criteriaQuery = cb.createQuery(entityClass);
+        Root<ENTITY> root = criteriaQuery.from(entityClass);
+        filter.buildPredicates(root,cb);
+        List<Predicate> predicates = filter.getPredicates();
+        criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()]));
+        Query query = getEntityManager().createQuery(criteriaQuery);
+        return query.getResultList();
+    	
+    }
 
 }
