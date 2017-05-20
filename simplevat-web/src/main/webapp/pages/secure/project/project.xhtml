@@ -41,7 +41,11 @@
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="projectName"
                                                      maxlength="12"
-                                                     value="#{projectController.selectedProject.projectName}"/>
+                                                     value="#{projectController.selectedProject.projectName}"
+                                                     required="true"
+                                                     requiredMessage="Please enter Project Name"
+                                        />
+                                        <p:message for="projectName"/>
                                         <label>Project Name</label>
                                     </h:panelGroup>
 
@@ -49,7 +53,8 @@
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="conatcts"
                                                         converter="contactConverter"
-
+                                                        required="true"
+                                                        requiredMessage="Please select contact"
                                                         dropdown="true"
                                                         forceSelection="true"
                                                         effect="fold"
@@ -77,7 +82,10 @@
                                     <p:outputLabel for="contractPoNumber"/>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="contractPoNumber"
-                                                     value="#{projectController.selectedProject.contractPoNumber}">
+                                                     value="#{projectController.selectedProject.contractPoNumber}"
+                                                     required="true"
+                                                     requiredMessage="Please enter contact po number"
+                                        >
                                         </p:inputText>
                                         <label>Contract PO Number</label>
                                     </h:panelGroup>
@@ -85,7 +93,10 @@
                                     <p:outputLabel for="vatRegistrationNumber"/>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="vatRegistrationNumber"
-                                                     value="#{projectController.selectedProject.vatRegistrationNumber}">
+                                                     value="#{projectController.selectedProject.vatRegistrationNumber}"
+                                                     required="true"
+                                                     requiredMessage="Please enter Vat Registration number"
+                                        >
                                         </p:inputText>
                                         <label>VAT Registration number</label>
                                     </h:panelGroup>
@@ -101,7 +112,10 @@
                                                         completeMethod="#{projectController.completeCurrency}"
                                                         value="#{projectController.selectedProject.currency}"
                                                         var="currency" itemValue="#{currency}"
-                                                        itemLabel="#{currency.currencyDescription}"/>
+                                                        itemLabel="#{currency.currencyDescription}"
+                                                        required="true"
+                                                        requiredMessage="Please select currency"
+                                        />
 
                                         <label>Currency</label>
                                     </h:panelGroup>
@@ -109,7 +123,9 @@
                                     <p:outputLabel for="projectBudget"/>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="projectBudget"
-                                                     value="#{projectController.selectedProject.projectBudget}">
+                                                     value="#{projectController.selectedProject.projectBudget}"
+                                                     required="true"
+                                                     requiredMessage="Please enter Project budget">
                                         </p:inputText>
                                         <label>Project Budget </label>
                                     </h:panelGroup>
@@ -122,12 +138,15 @@
                                                         completeMethod="#{projectController.completeLanguage}"
                                                         value="#{projectController.selectedProject.invoiceLanguageCode}"
                                                         var="language" itemValue="#{language.languageCode}"
-                                                        itemLabel="#{language.languageDescription}"/>
+                                                        itemLabel="#{language.languageDescription}"
+                                                        required="true"
+                                                        requiredMessage="Please select invoice langualge"
+                                        />
 
                                         <label>Invoice Language</label>
                                     </h:panelGroup>
-                                    <p:outputLabel />
-                                    <p:outputLabel />
+                                    <p:outputLabel/>
+                                    <p:outputLabel/>
 
                                 </p:panelGrid>
 
