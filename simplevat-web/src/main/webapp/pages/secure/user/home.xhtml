@@ -68,7 +68,7 @@
                     <!--<div class="overview-footer">-->
                         <!--&lt;!&ndash;<p:graphicImage name="images/dashboard/views.svg" library="ultima-layout" style="width: 100%" />&ndash;&gt;-->
                     <p:panel header="Cash Flow">
-                        <p:chart type="line" model="#{cashFlowChart.areaModel}" style="height:320px; width: auto"  />
+                        <p:chart type="line" model="#{cashFlowChart.areaModel}" style="height:350px; width: auto" responsive="true" />
                     </p:panel>
                     <!--</div>-->
                 </div>
@@ -146,8 +146,8 @@
                         <i class="material-icons">&#xE86C;</i>
                     </div>
                     <div class="ui-g-8">
-                        <span class="colorbox-name">Cash In</span>
-                        <span class="colorbox-count">50</span>
+                        <span class="colorbox-name">VAT In</span>
+                        <span class="colorbox-count">$3120</span>
                     </div>
                 </div>
             </div>
@@ -157,8 +157,8 @@
                         <i class="material-icons">&#xE8C9;</i>
                     </div>
                     <div class="ui-g-8">
-                        <span class="colorbox-name">Cash Out</span>
-                        <span class="colorbox-count">1200</span>
+                        <span class="colorbox-name">VAT Out</span>
+                        <span class="colorbox-count">$1200</span>
                     </div>
                 </div>
             </div>
@@ -168,8 +168,8 @@
                         <i class="material-icons">&#xE160;</i>
                     </div>
                     <div class="ui-g-8">
-                        <span class="colorbox-name">Balance</span>
-                        <span class="colorbox-count">22</span>
+                        <span class="colorbox-name">VAT Balance</span>
+                        <span class="colorbox-count">$1920</span>
                     </div>
                 </div>
             </div>
@@ -180,7 +180,7 @@
                     </div>
                     <div class="ui-g-8">
                         <span class="colorbox-name">Transactions</span>
-                        <span class="colorbox-count">10</span>
+                        <span class="colorbox-count">82736</span>
                     </div>
                 </div>
             </div>
@@ -222,19 +222,26 @@
                 <!--</p:panel>-->
             <!--</div>-->
 
-        <div class="ui-g-12 ui-md-8">
+        <div class="ui-g-12 ui-md-4">
 
-                <p:panel header="Invoice Expense">
-                    <p:chart type="line" model="#{invoiceExpenseChart.animatedModel1}" style="width:100%;" />
+                <p:panel header="Invoices and Expense">
+                    <p:chart type="line" model="#{invoiceExpenseChart.animatedModel1}" style="width:100%;" responsive="true" />
                 </p:panel>
 
         </div>
 
         <div class="ui-g-12 ui-md-4">
-            <p:panel header="Bank Activity">
-                <p:chart type="bar" model="#{invoiceExpenseChart.animatedModel2}" style="width:100%;" />
+            <p:panel header="Expense Acivity">
+                <p:chart type="pie" model="#{expenseChart.pieModel1}" style="width:auto;height:300px" />
             </p:panel>
         </div>
+
+            <div class="ui-g-12 ui-md-4">
+                <p:panel header="VAT Acivity">
+                    <p:chart type="bar" model="#{invoiceExpenseChart.animatedModel2}" style="width:100%;" responsive="true"/>
+                </p:panel>
+            </div>
+
 
             <!--<div class="ui-g-12 ui-md-6 ui-lg-4 ui-fluid contact-form">-->
                 <!--<p:panel header="Contact Us">-->

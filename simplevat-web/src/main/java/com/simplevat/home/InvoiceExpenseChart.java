@@ -31,7 +31,7 @@ public class InvoiceExpenseChart implements Serializable {
 
     private void createAnimatedModels() {
         animatedModel1 = initLinearModel();
-        animatedModel1.setTitle("Line Chart");
+        animatedModel1.setTitle("Invoices and Expenses");
         animatedModel1.setAnimate(true);
         animatedModel1.setLegendPosition("se");
 //        animatedModel1.setStacked(true);
@@ -43,9 +43,10 @@ public class InvoiceExpenseChart implements Serializable {
         yAxis.setMax(10);
 
         animatedModel2 = initBarModel();
-        animatedModel2.setTitle("Bar Charts");
+        animatedModel2.setTitle("VAT");
         animatedModel2.setAnimate(true);
         animatedModel2.setLegendPosition("ne");
+        animatedModel2.setStacked(true);
 
         yAxis = animatedModel2.getAxis(AxisType.Y);
         yAxis.setMin(0);
@@ -57,7 +58,7 @@ public class InvoiceExpenseChart implements Serializable {
 
         ChartSeries moneyIn = new ChartSeries();
 //        moneyIn.setFill(true);
-        moneyIn.setLabel("Money In");
+        moneyIn.setLabel("VAT Received");
         moneyIn.set("Jan", 120);
         moneyIn.set("Feb", 120);
         moneyIn.set("March", 100);
@@ -69,7 +70,7 @@ public class InvoiceExpenseChart implements Serializable {
 
         ChartSeries moneyOut = new ChartSeries();
 //        moneyOut.setFill(true);
-        moneyOut.setLabel("Money Out");
+        moneyOut.setLabel("VAT Paid");
         moneyOut.set("Jan", 52);
         moneyOut.set("Feb", 52);
         moneyOut.set("March", 60);
