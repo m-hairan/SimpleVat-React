@@ -20,8 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -106,6 +108,7 @@ public class ProjectController {
         project.setDeleteFlag(Boolean.TRUE);
         projectService.updateOrCreateProject(project);
         init();
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Project deleted successfully"));
         return "/pages/secure/project/projects.xhtml";
     }
 
@@ -115,6 +118,7 @@ public class ProjectController {
         selectedProject.setCreatedDate(LocalDateTime.now());
         projectService.updateOrCreateProject(selectedProject);
         init();
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Project saved successfully"));
         return "/pages/secure/project/projects.xhtml";
     }
 
