@@ -50,7 +50,7 @@ public class InvoiceExpenseChart implements Serializable {
 
         yAxis = animatedModel2.getAxis(AxisType.Y);
         yAxis.setMin(0);
-        yAxis.setMax(200);
+        yAxis.setMax(300);
     }
 
     private BarChartModel initBarModel() {
@@ -61,24 +61,32 @@ public class InvoiceExpenseChart implements Serializable {
         moneyIn.setLabel("VAT Received");
         moneyIn.set("Jan", 120);
         moneyIn.set("Feb", 120);
-        moneyIn.set("March", 100);
-        moneyIn.set("April", 120);
+        moneyIn.set("Mar", 100);
+        moneyIn.set("Apr", 120);
         moneyIn.set("May", 100);
-        moneyIn.set("June", 44);
-        moneyIn.set("July", 150);
-        moneyIn.set("Agust", 25);
+        moneyIn.set("Jun", 44);
+        moneyIn.set("Jul", 150);
+        moneyIn.set("Aug", 25);
+        moneyIn.set("Sep", 75);
+        moneyIn.set("Oct", 100);
+        moneyIn.set("Nov", 90);
+        moneyIn.set("Dec",80);
 
         ChartSeries moneyOut = new ChartSeries();
 //        moneyOut.setFill(true);
         moneyOut.setLabel("VAT Paid");
         moneyOut.set("Jan", 52);
         moneyOut.set("Feb", 52);
-        moneyOut.set("March", 60);
-        moneyOut.set("April", 52);
+        moneyOut.set("Mar", 60);
+        moneyOut.set("Apr", 52);
         moneyOut.set("May", 60);
-        moneyOut.set("June", 110);
-        moneyOut.set("July", 90);
-        moneyOut.set("August", 120);
+        moneyOut.set("Jun", 110);
+        moneyOut.set("Jul", 90);
+        moneyOut.set("Aug", 120);
+        moneyOut.set("Sep", 50);
+        moneyOut.set("Oct", 60);
+        moneyOut.set("Nov", 80);
+        moneyOut.set("Dec",80);
 
         model.addSeries(moneyIn);
         model.addSeries(moneyOut);
@@ -95,16 +103,16 @@ public class InvoiceExpenseChart implements Serializable {
 
         invoices.set("Jan", 2);
         invoices.set("Feb", 1);
-        invoices.set("March", 3);
-        invoices.set("April", 6);
+        invoices.set("Mar", 3);
+        invoices.set("Apr", 6);
         invoices.set("May", 8);
-        invoices.set("June",8);
-        invoices.set("July", 2);
-        invoices.set("August", 1);
-        invoices.set("September", 3);
-        invoices.set("October", 6);
-        invoices.set("November", 8);
-        invoices.set("December",8);
+        invoices.set("Jun",8);
+        invoices.set("Jul", 2);
+        invoices.set("Aug", 1);
+        invoices.set("Sep", 3);
+        invoices.set("Oct", 6);
+        invoices.set("Nov", 8);
+        invoices.set("Dec",8);
 
         LineChartSeries expenses = new LineChartSeries();
         expenses.setLabel("Expenses");
@@ -112,16 +120,16 @@ public class InvoiceExpenseChart implements Serializable {
 
         expenses.set("Jan", 6);
         expenses.set("Feb", 3);
-        expenses.set("March", 2);
-        expenses.set("April", 7);
+        expenses.set("Mar", 2);
+        expenses.set("Apr", 7);
         expenses.set("May", 9);
-        expenses.set("June", 6);
-        expenses.set("July", 3);
-        expenses.set("August", 2);
-        expenses.set("September", 7);
-        expenses.set("October", 9);
-        expenses.set("November", 7);
-        expenses.set("December", 9);
+        expenses.set("Jun", 6);
+        expenses.set("Jul", 3);
+        expenses.set("Aug", 2);
+        expenses.set("Sep", 7);
+        expenses.set("Oct", 9);
+        expenses.set("Nov", 7);
+        expenses.set("Dec", 9);
 
         model.addSeries(invoices);
         model.addSeries(expenses);
