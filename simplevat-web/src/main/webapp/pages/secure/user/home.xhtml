@@ -68,14 +68,14 @@
                     <!--<div class="overview-footer">-->
                         <!--&lt;!&ndash;<p:graphicImage name="images/dashboard/views.svg" library="ultima-layout" style="width: 100%" />&ndash;&gt;-->
                     <p:panel header="Cash Flow">
-                        <p:chart type="line" model="#{cashFlowChart.areaModel}" style="height:320px" />
+                        <p:chart type="line" model="#{cashFlowChart.areaModel}" style="height:320px; width: auto"  />
                     </p:panel>
                     <!--</div>-->
                 </div>
             </div>
 
             <div class="ui-g-12 ui-md-4">
-                <p:panel header="Financial Activity" style="height:100%">
+                <p:panel header="Bank Accounts" style="height:100%">
                     <!--<div class="activity-header">-->
                         <!--<div class="ui-g">-->
                             <!--<div class="ui-g-6">-->
@@ -89,24 +89,37 @@
                     <!--</div>-->
                     <ul class="activity-list">
                     <li>
-                        <div class="count" style="background-color:#673AB7">$125</div>
+                        <div class="count" style="background-color:#00bcd4">$125</div>
                         <div class="ui-g">
-                            <div class="ui-g-6">Sales/Invoices</div>
-                            <div class="ui-g-6">55%</div>
+                            <div class="ui-g-6">Emirates NBD Bank
+                                <div style="color: #757575; font-size: 14px;">Saving Account</div>
+                            </div>
+                            <div class="ui-g-6">Last Updated 15 May 2017
+                                <div><p:graphicImage name="images/green-check.png" library="ultima-layout" style="width: 10%" /> Transactions Uptodate</div>
+                            </div>
                         </div>
                     </li>
                     <li>
                         <div class="count" style="background-color:#00bcd4">$250</div>
                         <div class="ui-g">
-                            <div class="ui-g-6">Expenses</div>
-                            <div class="ui-g-6">15%</div>
+                            <div class="ui-g-6">HSBC Bank
+                                <div style="color: #757575; font-size: 14px;">Current Account</div>
+                            </div>
+                            <div class="ui-g-6">Last Updated 20 May 2017
+                                <div><p:graphicImage name="images/warning.png" library="ultima-layout" style="width: 10%" /> 10 Unexplained Transactions</div>
+                            </div>
                         </div>
                     </li>
                         <li>
-                            <div class="count" style="background-color:#ffc107">$250</div>
+                            <div class="count" style="background-color:#00bcd4">$250</div>
                             <div class="ui-g">
-                                <div class="ui-g-6">VAT</div>
-                                <div class="ui-g-6">24%</div>
+                                <div class="ui-g-6">Abu Dhabi Islamic Bank
+                                    <div style="color: #757575; font-size: 14px;">CreditCard Account</div>
+                                </div>
+                                <div class="ui-g-6">Last Updated 1 May 2017
+                                    <div><p:graphicImage name="images/warning.png" library="ultima-layout" style="width: 10%" /> 18 Unexplained Transactions</div>
+                                </div>
+
                             </div>
                         </li>
 
