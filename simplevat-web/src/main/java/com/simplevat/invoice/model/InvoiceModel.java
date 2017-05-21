@@ -2,6 +2,7 @@ package com.simplevat.invoice.model;
 
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Currency;
+import com.simplevat.entity.Project;
 import com.simplevat.entity.invoice.DiscountType;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class InvoiceModel {
 
     private Contact contact;
 
-    private String projectId;
+    private Project project;
 
     private String invoiceRefNo;
 

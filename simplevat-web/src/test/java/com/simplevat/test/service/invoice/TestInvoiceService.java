@@ -32,7 +32,7 @@ public class TestInvoiceService extends BaseManagerTest {
         invoice.setInvoiceReferenceNumber("INV2323");
         invoice.setInvoiceLineItems(getLineItems(invoice.getInvoiceId()));
         invoice.setDeleteFlag(Boolean.FALSE);
-        invoiceService.saveInvoice(invoice);
+        invoiceService.persist(invoice,invoice.getInvoiceId());
     }
     
     private List<InvoiceLineItem> getLineItems(int invoiceId) {

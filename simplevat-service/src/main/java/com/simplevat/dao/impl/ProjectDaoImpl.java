@@ -20,7 +20,6 @@ import java.util.List;
 @Repository
 public class ProjectDaoImpl extends AbstractDao implements ProjectDao {
 
-
     @SuppressWarnings("unchecked")
     @Override
     public List<Project> getProjectsByCriteria(ProjectCriteria projectCriteria) throws Exception {
@@ -39,6 +38,9 @@ public class ProjectDaoImpl extends AbstractDao implements ProjectDao {
             List<Predicate> predicates = new ArrayList<>();
             if (projectCriteria.getProjectId() != null) {
                 predicates.add(criteriaBuilder.and(criteriaBuilder.equal(projectRoot.<Integer>get("projectId"), projectCriteria.getProjectId())));
+            }
+            if (projectCriteria.getProjectName() != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.like(criteriaBuilder.upper(projectRoot.<String>get("projectName")), "%" + projectCriteria.getProjectName().toUpperCase() + "%")));
             }
             if (BooleanUtils.isTrue(projectCriteria.getActive())) {
                 predicates.add(criteriaBuilder.and(criteriaBuilder.equal(projectRoot.<Character>get("deleteFlag"), !projectCriteria.getActive())));
@@ -60,7 +62,6 @@ public class ProjectDaoImpl extends AbstractDao implements ProjectDao {
                         )
                 );
             }
-
 
             Query query = getEntityManager().createQuery(criteriaQuery);
 

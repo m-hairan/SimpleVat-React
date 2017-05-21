@@ -1,21 +1,12 @@
 package com.simplevat.service.invoice;
 
 import com.simplevat.entity.invoice.Invoice;
-
-import java.util.List;
+import com.simplevat.service.SimpleVatService;
 
 /**
  *
  * @author Hiren
  */
-public interface InvoiceService {
-    
-    void saveInvoice(Invoice invoice);
-
-    List<Invoice> getInvoices();
-
-    Invoice getInvoice(int invoiceId);
-    
-    Invoice updateInvoice(Invoice invoice);
+public interface InvoiceService<Integer, Invoice> extends SimpleVatService<Integer, Invoice> {
 
 }

@@ -1,16 +1,20 @@
 package com.simplevat.controller.invoice;
 
+import com.simplevat.dao.invoice.InvoiceFilter;
 import com.simplevat.entity.invoice.DiscountType;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.entity.invoice.InvoiceLineItem;
+import com.simplevat.service.impl.invoice.InvoiceServiceImpl;
+import com.simplevat.service.invoice.InvoiceService;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;
-import com.simplevat.service.invoice.InvoiceService;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -38,15 +42,17 @@ public class InvoiceListController implements Serializable {
     private Invoice selectedInvoice;
 
     @Autowired
-    private InvoiceService invoiceService;
+    private InvoiceService<Integer, Invoice> invoiceService;
 
     @PostConstruct
     public void initInvoices() {
         invoices = new ArrayList<>();
     }
 
+    @Nonnull
     public List<Invoice> getInvoices() {
-        return invoiceService.getInvoices();
+        final InvoiceFilter invoiceFilter = new InvoiceFilter();
+        return invoiceService.filter(invoiceFilter);
     }
 
     public String redirectToCreateInvoice() {
@@ -59,8 +65,8 @@ public class InvoiceListController implements Serializable {
 
     public void deleteInvoice(final Invoice invoice) {
         invoice.setDeleteFlag(Boolean.TRUE);
-        invoiceService.updateInvoice(invoice);
-        FacesContext.getCurrentInstance().addMessage("Invoice Deleted SuccessFully",
+        invoiceService.update(invoice, invoice.getInvoiceId());
+        FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage("Invoice Deleted SuccessFully"));
     }
 

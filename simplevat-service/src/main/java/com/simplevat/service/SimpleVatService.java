@@ -9,64 +9,66 @@ import com.simplevat.dao.Dao;
 import com.simplevat.service.exceptions.ServiceErrorCode;
 import com.simplevat.service.exceptions.ServiceException;
 
-public interface SimpleVatService<PK,ENTITY> {
+public interface SimpleVatService<PK, ENTITY> {
 
-	default public ENTITY findByPK(PK pk) {
-		ENTITY returnEntity = getDao().findByPK(pk);
-		if(returnEntity == null) {
-			throw new ServiceException("", ServiceErrorCode.RecordDoesntExists);
-		}
-		return returnEntity;
-	}
+    default public ENTITY findByPK(PK pk) {
+        ENTITY returnEntity = getDao().findByPK(pk);
+        if (returnEntity == null) {
+            throw new ServiceException("", ServiceErrorCode.RecordDoesntExists);
+        }
+        return returnEntity;
+    }
 
-	default public List<ENTITY> executeNamedQuery(String namedQuery) {
-		return getDao().executeNamedQuery(namedQuery);
-	}
+    default public List<ENTITY> executeNamedQuery(String namedQuery) {
+        return getDao().executeNamedQuery(namedQuery);
+    }
 
-	default public void persist(ENTITY entity, PK pk) {
-		ENTITY returnEntity = getDao().findByPK(pk);
-		if(returnEntity != null) {
-			throw new ServiceException("", ServiceErrorCode.RecordAlreadyExists);
-		}
-		getDao().persist(entity);
-		
-	}
+    default public void persist(ENTITY entity, PK pk) {
+        ENTITY returnEntity = getDao().findByPK(pk);
+        if (returnEntity != null) {
+            throw new ServiceException("", ServiceErrorCode.RecordAlreadyExists);
+        }
+        getDao().persist(entity);
 
-	default public ENTITY update(ENTITY entity, PK pk) {
-		ENTITY returnEntity = getDao().findByPK(pk);
-		if(returnEntity == null) {
-			throw new ServiceException("", ServiceErrorCode.RecordDoesntExists);
-		}
-		return getDao().update(entity);
-	}
+    }
 
-	default public void delete(ENTITY entity, PK pk) {
-		ENTITY returnEntity = getDao().findByPK(pk);
-		if(returnEntity == null) {
-			throw new ServiceException("", ServiceErrorCode.RecordDoesntExists);
-		}
-		getDao().delete(entity);
-		
-	}
-	default public List<ENTITY> findByAttributes(Map<String, String> attributes) {
-		List<ENTITY> listEntity = new ArrayList<>();
-		
-		if(attributes != null && attributes.size() > 0) {
-			listEntity = getDao().findByAttributes(attributes);
-		}
-		
-		return listEntity;
-	}
-	
-	default public List<ENTITY> filter(AbstractFilter<ENTITY> filter) {
-		List<ENTITY> listEntity = new ArrayList<>();
-		if(filter != null) {
-			listEntity = getDao().filter(filter);
-		}
-		return listEntity;
-		
-	}
-	
-	public Dao<PK, ENTITY> getDao();
-	
+    default public ENTITY update(ENTITY entity, PK pk) {
+        // commenting this as we are calling update for save and update method both
+//		ENTITY returnEntity = getDao().findByPK(pk);
+//		if(returnEntity == null) {
+//			throw new ServiceException("", ServiceErrorCode.RecordDoesntExists);
+//		}
+        return getDao().update(entity);
+    }
+
+    default public void delete(ENTITY entity, PK pk) {
+        ENTITY returnEntity = getDao().findByPK(pk);
+        if (returnEntity == null) {
+            throw new ServiceException("", ServiceErrorCode.RecordDoesntExists);
+        }
+        getDao().delete(entity);
+
+    }
+
+    default public List<ENTITY> findByAttributes(Map<String, String> attributes) {
+        List<ENTITY> listEntity = new ArrayList<>();
+
+        if (attributes != null && attributes.size() > 0) {
+            listEntity = getDao().findByAttributes(attributes);
+        }
+
+        return listEntity;
+    }
+
+    default public List<ENTITY> filter(AbstractFilter<ENTITY> filter) {
+        List<ENTITY> listEntity = new ArrayList<>();
+        if (filter != null) {
+            listEntity = getDao().filter(filter);
+        }
+        return listEntity;
+
+    }
+
+    public Dao<PK, ENTITY> getDao();
+
 }

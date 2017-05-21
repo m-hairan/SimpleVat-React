@@ -4,17 +4,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Created by Utkarsh Bhavsar on 21/03/17.
+ *
+ * @author hiren
+ * @since 19 May, 2017 1:34:52 PM
  */
 @Getter
 @Setter
-public class ProjectCriteria extends AbstractCriteria {
+public class InvoiceCriteria extends AbstractCriteria {
 
     public enum OrderBy {
 
-        NAME                ("name", OrderByType.STRING),
-        CANONICAL_NAME      ("canonicalName", OrderByType.STRING),
-        ID                  ("projectId", OrderByType.STRING),;
+        NAME("name", OrderByType.STRING),
+        CANONICAL_NAME("canonicalName", OrderByType.STRING),
+        ID("invoiceId", OrderByType.STRING),
+        ORDER_SEQUENCE("orderSequence", OrderByType.STRING);
 
         private final String columnName;
 
@@ -34,14 +37,12 @@ public class ProjectCriteria extends AbstractCriteria {
         }
     }
 
-    private Integer projectId;
+    private Integer invoiceId;
 
     private Boolean active;
 
-    private OrderBy orderBy = OrderBy.ID;
+    private OrderBy orderBy = OrderBy.ORDER_SEQUENCE;
 
     private SortOrder sortOrder = SortOrder.ASC;
-    
-    private String projectName;
 
 }

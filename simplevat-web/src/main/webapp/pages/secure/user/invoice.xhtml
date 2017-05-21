@@ -32,7 +32,6 @@
     <ui:define name="title">Invoices</ui:define>
     <ui:define name="content">
         <h:form id="invoice">
-            <p:messages />
             <div class="card card-w-title">
                 <div class="ui-fluid">
                     <div class="ui-g">
@@ -88,9 +87,18 @@
 
                                     <p:outputLabel for="project"/>
                                     <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText id="project"
-                                                     value="#{invoiceController.invoiceModel.projectId}" 
-                                                     disabled="true"/>
+                                        <p:autoComplete id="project" 
+                                                        converter="projectConverter"
+                                                        dropdown="true" 
+                                                        forceSelection="true"
+                                                        effect="fold"
+                                                        completeMethod="#{invoiceController.projects}" 
+                                                        value="#{invoiceController.invoiceModel.project}" 
+                                                        var="project"
+                                                        itemValue="#{project.projectId}"
+                                                        itemLabel="#{project.projectName}">
+
+                                        </p:autoComplete>
                                         <label>#{messages.project}</label>
                                     </h:panelGroup>
                                 </p:panelGrid>

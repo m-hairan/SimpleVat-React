@@ -1,8 +1,11 @@
 package com.simplevat.controller.invoice;
 
+import static com.mysql.jdbc.StringUtils.isNullOrEmpty;
 import com.simplevat.contact.model.ContactModel;
+import com.simplevat.criteria.ProjectCriteria;
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Currency;
+import com.simplevat.entity.Project;
 import com.simplevat.entity.invoice.DiscountType;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.invoice.model.InvoiceItemModel;
@@ -10,6 +13,8 @@ import com.simplevat.invoice.model.InvoiceModel;
 import com.simplevat.service.ContactService;
 import com.simplevat.service.CurrencyService;
 import com.simplevat.service.DiscountTypeService;
+import com.simplevat.service.ProjectService;
+import com.simplevat.service.impl.invoice.InvoiceServiceImpl;
 import com.simplevat.service.invoice.InvoiceService;
 import lombok.Getter;
 import lombok.Setter;
@@ -60,10 +65,13 @@ public class InvoiceController implements Serializable {
     private InvoiceModelConverter invoiceConverter;
 
     @Autowired
-    private InvoiceService invoiceService;
+    private InvoiceService<Integer, Invoice> invoiceService;
 
     @Autowired
     private DiscountTypeService discountTypeService;
+
+    @Autowired
+    private ProjectService projectService;
 
     @PostConstruct
     public void initInvoice() {
@@ -84,6 +92,15 @@ public class InvoiceController implements Serializable {
 
     public List<Contact> contacts(final String searchQuery) {
         return contactService.getContacts(searchQuery.trim());
+    }
+
+    public List<Project> projects(final String searchQuery) throws Exception {
+        ProjectCriteria criteria = new ProjectCriteria();
+        criteria.setActive(Boolean.TRUE);
+        if (!isNullOrEmpty(searchQuery)) {
+            criteria.setProjectName(searchQuery);
+        }
+        return projectService.getProjectsByCriteria(criteria);
     }
 
     public List<Currency> completeCurrency(String currencyStr) {
@@ -123,7 +140,14 @@ public class InvoiceController implements Serializable {
     public void saveInvoice() throws IOException {
         final Invoice invoice = invoiceConverter
                 .convertModelToEntity(invoiceModel);
-        invoiceService.updateInvoice(invoice);
+        invoiceService.update(invoice, invoice.getInvoiceId());
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        if (invoiceModel.getInvoiceId() > 0) {
+            context.addMessage(null, new FacesMessage("Invoice Updated SuccessFully"));
+        } else {
+            context.addMessage(null, new FacesMessage("Invoice Added SuccessFully"));
+        }
         initInvoice();
         FacesContext.getCurrentInstance().getExternalContext()
                 .redirect("invoices.xhtml?faces-redirect=true");
@@ -132,9 +156,16 @@ public class InvoiceController implements Serializable {
     public void saveAndAddMoreInvoice() {
         final Invoice invoice = invoiceConverter
                 .convertModelToEntity(invoiceModel);
-        invoiceService.updateInvoice(invoice);
+        invoiceService.update(invoice, invoice.getInvoiceId());
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        if (invoiceModel.getInvoiceId() > 0) {
+            context.addMessage(null, new FacesMessage("Invoice Updated SuccessFully"));
+        } else {
+            context.addMessage(null, new FacesMessage("Invoice Added SuccessFully"));
+        }
         initInvoice();
-        FacesContext.getCurrentInstance().addMessage("Invoice Added SuccessFully", new FacesMessage("Invoice Added SuccessFully"));
+
     }
 
     public void updateCurrency() {
@@ -171,7 +202,7 @@ public class InvoiceController implements Serializable {
 
     public void redirectEditInvoice(int invoiceId) throws IOException {
 
-        final Invoice invoice = invoiceService.getInvoice(invoiceId);
+        final Invoice invoice = (Invoice) invoiceService.findByPK(invoiceId);
         invoiceModel = invoiceConverter.convertEntityToModel(invoice);
         FacesContext.getCurrentInstance().getExternalContext()
                 .redirect("invoice.xhtml?faces-redirect=true");
