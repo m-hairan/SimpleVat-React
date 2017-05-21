@@ -24,8 +24,10 @@
                 logout-success-url="/pages/public/login.xhtml"/>
     </http>
 
-    <beans:bean id="customAuthenticationSuccessHandler" class="com.simplevat.security.CustomAuthenticationSuccessHandler"/>
-    <beans:bean id="authenticationFailureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+    <beans:bean id="customAuthenticationSuccessHandler"
+                class="com.simplevat.security.CustomAuthenticationSuccessHandler"/>
+    <beans:bean id="authenticationFailureHandler"
+                class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
         <beans:property name="defaultFailureUrl" value="/pages/public/login.xhtml?error=true"/>
     </beans:bean>
 

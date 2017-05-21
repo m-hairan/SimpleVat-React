@@ -13,7 +13,7 @@
         <component-type>org.primefaces.component.UltimaMenu</component-type>
         <component-class>org.primefaces.ultima.component.menu.UltimaMenu</component-class>
     </component>
-    
+
     <render-kit>
         <renderer>
             <component-family>org.primefaces.component</component-family>
@@ -55,6 +55,9 @@
         </navigation-case>
     </navigation-rule>
 
+    <lifecycle>
+        <phase-listener id="nocache">com.simplevat.CacheControlPhaseListener</phase-listener>
+    </lifecycle>
 
 
 </faces-config>

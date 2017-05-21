@@ -24,22 +24,23 @@
                 </div>
                 <div class="ui-g-12">
                     <h:panelGroup styleClass="md-inputfield">
-                        <p:inputText id="j_username" value="#{securityBean.userName}" autocomplete="off"/>
+                        <p:inputText id="j_username" value="#{securityBean.username}" autocomplete="off" required="true" requiredMessage="Username is mandatory"/>
                         <label>Username</label>
                     </h:panelGroup>
                 </div>
                 <div class="ui-g-12">
                     <h:panelGroup styleClass="md-inputfield">
-                        <p:password id="j_password" value="#{securityBean.password}" autocomplete="off"/>
+                        <p:password id="j_password" value="#{securityBean.password}" autocomplete="off" required="true" requiredMessage="Password is mandatory"/>
                         <label>Password</label>
                     </h:panelGroup>
                 </div>
                 <div class="ui-g-12">
-                    <p:commandButton id="btnLogin" value="Sign In" action="#{securityBean.doLogincheck}" ajax="false"
+                    <p:commandButton id="btnLogin" value="Sign In" action="#{securityBean.login()}"
+                                     ajax="false"
                                      icon="ui-icon-person"/>
-                    <p:button outcome="/pages/sample/dashboard" value="Forgot Password" icon="ui-icon-help"
-                              styleClass="secondary"/>
+                    <p:button outcome="/pages/sample/dashboard" value="Forgot Password" icon="ui-icon-help" styleClass="secondary"/>
                 </div>
+                <p:growl showDetail="true"/>
             </div>
         </div>
     </h:form>

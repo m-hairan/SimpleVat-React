@@ -1,6 +1,15 @@
 package com.simplevat.controller;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
@@ -8,16 +17,10 @@ import org.springframework.stereotype.Controller;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import java.io.IOException;
 import java.io.Serializable;
 
 
@@ -27,10 +30,21 @@ import java.io.Serializable;
 //@Qualifier("securityBean")
 public class SecurityBean implements PhaseListener, Serializable {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(SecurityBean.class);
+
     private static final long serialVersionUID = -7388960716549948523L;
 
-    private String userName;
+    @Getter
+    @Setter
+    private String username;
+    @Getter
+    @Setter
     private String password;
+
+    @Autowired
+    @Qualifier("authenticationManager")
+    private AuthenticationManager authenticationManager;
+
 
     @Override
     public void afterPhase(PhaseEvent event) {
@@ -56,47 +70,19 @@ public class SecurityBean implements PhaseListener, Serializable {
         return PhaseId.RENDER_RESPONSE;
     }
 
-    public String doLogincheck() throws IOException, ServletException {
-        ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-        RequestDispatcher dispatcher = ((ServletRequest) context.getRequest())
-                .getRequestDispatcher("/j_spring_security_check");
-        dispatcher.forward((ServletRequest) context.getRequest(),
-                (ServletResponse) context.getResponse());
-        FacesContext.getCurrentInstance().responseComplete();
+    public String login() {
+        LOGGER.info("Starting login from LoginManagedBean");
+        try {
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+            Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authenticate);
+            return "/pages/secure/user/home.xhtml";
+        } catch (final Exception e) {
+            LOGGER.error("Error log in " + e);
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                            "Invalid login", "Bad Credential. Try again"));
+        }
         return null;
-    }
-
-    public String doLogout() throws IOException, ServletException {
-        ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-        RequestDispatcher dispatcher = ((ServletRequest) context.getRequest())
-                .getRequestDispatcher("/j_spring_security_logout");
-        dispatcher.forward((ServletRequest) context.getRequest(),
-                (ServletResponse) context.getResponse());
-        FacesContext.getCurrentInstance().responseComplete();
-        return null;
-    }
-
-    public String cancel() {
-        return null;
-    }
-
-    public String getUserNameInfo() {
-        return SecurityContextHolder.getContext().getAuthentication().getName();
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }
