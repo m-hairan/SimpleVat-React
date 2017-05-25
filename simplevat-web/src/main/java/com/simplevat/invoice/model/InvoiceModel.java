@@ -19,7 +19,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class InvoiceModel {
-    
+
     private int invoiceId;
 
     private Contact contact;

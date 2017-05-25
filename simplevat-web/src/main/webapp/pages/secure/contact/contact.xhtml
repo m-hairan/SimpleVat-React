@@ -193,7 +193,7 @@
                                             <p:autoComplete id="currency" dropdown="true" 
                                                             forceSelection="true"
                                                             effect="fold" 
-                                                            converter="com.simplevat.util.CurrencyConverter"
+                                                            converter="#{currencyConverter}"
                                                             completeMethod="#{contactController.completeCurrency}"
                                                             value="#{contactController.contactModel.currency}"
                                                             var="currency" 

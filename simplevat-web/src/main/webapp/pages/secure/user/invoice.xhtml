@@ -42,7 +42,6 @@
                             <ui:fragment rendered="#{invoiceController.invoiceModel.invoiceId == 0}">
                                 <h1>#{messages.new_invoice}</h1>
                             </ui:fragment>
-
                             <p:fieldset legend="Contact and Project Details" toggleable="false">
                                 <p:panelGrid columns="6" 
                                              columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
@@ -54,17 +53,22 @@
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="invoiceId"
                                                      maxlength="12"
+                                                     required="true"
+                                                     requiredMessage="Please enter Invoice Ref. No."
                                                      value="#{invoiceController.invoiceModel.invoiceRefNo}"/>
                                         <label>#{messages.invoice_ref_no}</label>
+                                        <p:message for="invoiceId" />
                                     </h:panelGroup>
 
                                     <p:outputLabel for="conatcts"/>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="conatcts" 
-                                                        converter="contactConverter"
+                                                        converter="#{contactConverter}"
                                                         dropdown="true" 
                                                         forceSelection="true"
                                                         effect="fold"
+                                                        required="true"
+                                                        requiredMessage="Please select Contact"
                                                         completeMethod="#{invoiceController.contacts}" 
                                                         value="#{invoiceController.invoiceModel.contact}" 
                                                         var="contact"
@@ -75,6 +79,7 @@
                                                     update="currency invoiceItemTable" />
                                         </p:autoComplete>
                                         <label>#{messages.contact}</label>
+                                        <p:message for="conatcts" />
 
                                     </h:panelGroup>
                                     <p:outputLabel />
@@ -88,8 +93,10 @@
                                     <p:outputLabel for="project"/>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="project" 
-                                                        converter="projectConverter"
+                                                        converter="#{projectConverter}"
                                                         dropdown="true" 
+                                                        required="true"
+                                                        requiredMessage="Please select Project"
                                                         forceSelection="true"
                                                         effect="fold"
                                                         completeMethod="#{invoiceController.projects}" 
@@ -100,6 +107,7 @@
 
                                         </p:autoComplete>
                                         <label>#{messages.project}</label>
+                                        <p:message for="project" />
                                     </h:panelGroup>
                                 </p:panelGrid>
                             </p:fieldset>
@@ -114,27 +122,35 @@
                                     <p:outputLabel for="invoiceDate" />
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:calendar id="invoiceDate"
+                                                    required="true"
+                                                    requiredMessage="Please enter Invoice Date"
                                                     pattern="MM/dd/yyyy"
                                                     value="#{invoiceController.invoiceModel.invoiceDate}"
                                                     readonlyInput="true" />
                                         <label>#{messages.invoice_date}</label>
+                                        <p:message for="invoiceDate" />
                                     </h:panelGroup>
                                     <p:outputLabel for="invoiceDueOn" />
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText 
                                             value="#{invoiceController.invoiceModel.invoiceDueOn}"
+                                            required="true"
+                                            requiredMessage="Please enter Invoice Due On"
                                             converterMessage="Please enter numbers only." 
                                             id="invoiceDueOn" >
                                         </p:inputText>
                                         <label>#{messages.invoice_due_on}</label>
+                                        <p:message for="invoiceDueOn" />
                                     </h:panelGroup>
                                     <p:outputLabel for="currency"/>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="currency"
                                                         dropdown="true" 
+                                                        required="true"
+                                                        requiredMessage="Please select Currency"
                                                         forceSelection="true"
                                                         effect="fold" 
-                                                        converter="com.simplevat.util.CurrencyConverter"
+                                                        converter="#{currencyConverter}"
                                                         completeMethod="#{invoiceController.completeCurrency}" 
                                                         value="#{invoiceController.invoiceModel.currencyCode}"
                                                         var="currency" itemValue="#{currency.currencyCode}"
@@ -145,6 +161,7 @@
                                         </p:autoComplete>
 
                                         <label>#{messages.currency}</label>
+                                        <p:message for="currency" />
                                     </h:panelGroup>
                                     <p:outputLabel for="description" />
                                     <h:panelGroup styleClass="md-inputfield">
@@ -161,6 +178,7 @@
 
                             <p:fieldset legend="Invoice Item Details" toggleable="true" 
                                         toggleSpeed="300">
+                                <p:messages autoUpdate="true" id="validationId" closable="true" for="validationId" />
                                 <p:dataTable value="#{invoiceController.invoiceModel.invoiceItems}"
                                              var="invoiceItem" 
                                              editMode="cell"
@@ -168,8 +186,9 @@
                                              id="invoiceItemTable"
                                              reflow="true">
                                     <p:column style="width: 32px">
-                                        <p:commandButton title="Delete Invoice" 
+                                        <p:commandButton title="Delete Invoice Item" 
                                                          update="invoiceItemTable"
+                                                         process="@this"
                                                          actionListener="#{invoiceController.invoiceModel.invoiceItems.remove(invoiceItem)}"
                                                          icon="ui-icon-delete">
                                         </p:commandButton>
@@ -182,6 +201,8 @@
                                             </f:facet>
                                             <f:facet name="input">
                                                 <p:inputText id="quantity" 
+                                                             validator="positiveNumberValidator"
+                                                             validatorMessage="Please enter Quantity more then 0"
                                                              value="#{invoiceItem.quatity}" 
                                                              style="width:100%">
                                                     <p:ajax event="change" 
@@ -199,6 +220,8 @@
                                             </f:facet>
                                             <f:facet name="input">
                                                 <p:inputText id="unitPrice" 
+                                                             validator="positiveNumberValidator"
+                                                             validatorMessage="Please enter Price more then 0"
                                                              value="#{invoiceItem.unitPrice}" 
                                                              style="width:100%">
                                                     <p:ajax event="change" 
@@ -252,7 +275,7 @@
                                                  style="width: 10%; margin-top: 3px" 
                                                  update="invoiceItemTable"
                                                  value="Add"
-                                                 process="@form"
+                                                 process="@this"
                                                  icon="ui-icon-plus" />
                             </p:fieldset>
 
@@ -310,19 +333,25 @@
                         <ui:fragment rendered="#{invoiceController.invoiceModel.invoiceId > 0}">
                             <p:commandButton actionListener="#{invoiceController.saveInvoice()}"
                                              value="Update"
+                                             update="@form"
+                                             validateClient="true"
                                              icon="ui-icon-save" />
                             <p:commandButton actionListener="#{invoiceController.saveAndAddMoreInvoice()}"
                                              value="Update &amp; Add More"
                                              update="@form"
+                                             validateClient="true"
                                              icon="ui-icon-forward" />
                         </ui:fragment>
                         <ui:fragment rendered="#{invoiceController.invoiceModel.invoiceId == 0}">
                             <p:commandButton actionListener="#{invoiceController.saveInvoice()}"
                                              value="#{messages.save}"
+                                             validateClient="true"
+                                             update="@form"
                                              icon="ui-icon-save" />
                             <p:commandButton actionListener="#{invoiceController.saveAndAddMoreInvoice()}"
                                              value="#{messages.save_and_add_more}"
                                              update="@form"
+                                             validateClient="true"
                                              icon="ui-icon-forward" />
                         </ui:fragment>
 

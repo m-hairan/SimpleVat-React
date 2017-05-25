@@ -39,7 +39,7 @@
 												dropdown="true"
 												forceSelection="true" 
 												effect="fold"
-												converter="com.simplevat.util.CurrencyConverter"
+												converter="#{currencyConverter}"
 												completeMethod="#{currencyController.completeCurrency}"
 												value="#{bankAccountController.selectedBankAccount.bankAccountCurrency}"
 												var="currency" 

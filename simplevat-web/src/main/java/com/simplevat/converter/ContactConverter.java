@@ -1,23 +1,27 @@
 package com.simplevat.converter;
 
 import com.simplevat.entity.Contact;
+import com.simplevat.service.ContactService;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.FacesConverter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author hiren
  */
-@FacesConverter("contactConverter")
+@Service
 public class ContactConverter implements Converter {
+
+    @Autowired
+    private ContactService contactService;
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
         if (string != null && !string.isEmpty()) {
-            Contact contact = new Contact();
-            contact.setContactId(Integer.parseInt(string));
+            Contact contact = contactService.getContact(Integer.parseInt(string));
             return contact;
         }
         return null;

@@ -182,7 +182,7 @@
                                         <p:outputLabel for="currency"/>
                                         <h:panelGroup styleClass="md-inputfield">
 
-                                            <p:autoComplete id="currency" dropdown="true" forceSelection="true" effect="fold" converter="com.simplevat.util.CurrencyConverter"
+                                            <p:autoComplete id="currency" dropdown="true" forceSelection="true" effect="fold" converter="#{currencyConverter}"
                                                             completeMethod="#{contactController.completeCurrency}" value="#{contactController.contact.currency}"
                                                             var="currency" itemValue="#{currency.currencyCode}" itemLabel="#{currency.currencyDescription}" />
 

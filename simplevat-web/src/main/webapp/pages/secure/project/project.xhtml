@@ -52,7 +52,7 @@
                                     <p:outputLabel for="conatcts"/>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="conatcts"
-                                                        converter="contactConverter"
+                                                        converter="#{contactConverter}"
                                                         required="true"
                                                         requiredMessage="Please select contact"
                                                         dropdown="true"
@@ -108,7 +108,7 @@
                                                         dropdown="true"
                                                         forceSelection="true"
                                                         effect="fold"
-                                                        converter="com.simplevat.util.CurrencyConverter"
+                                                        converter="#{currencyConverter}"
                                                         completeMethod="#{projectController.completeCurrency}"
                                                         value="#{projectController.selectedProject.currency}"
                                                         var="currency" itemValue="#{currency}"
