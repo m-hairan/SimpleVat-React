@@ -4,12 +4,14 @@ import com.simplevat.criteria.ProjectCriteria;
 import com.simplevat.dao.ProjectDao;
 import com.simplevat.entity.Project;
 import com.simplevat.service.ProjectService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+
 import java.util.List;
 
 /**
@@ -34,4 +36,9 @@ public class ProjectServiceImpl implements ProjectService {
     public Project updateOrCreateProject(Project project) {
         return projectDao.updateOrCreateProject(project);
     }
+
+	@Override
+	public Project getProject(Integer id) {
+		return projectDao.getProject(id);
+	}
 }

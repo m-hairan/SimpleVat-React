@@ -13,9 +13,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
+import com.simplevat.entity.Currency;
 import com.simplevat.entity.Expense;
+import com.simplevat.entity.Project;
+import com.simplevat.entity.User;
+import com.simplevat.entity.bankaccount.TransactionCategory;
+import com.simplevat.entity.bankaccount.TransactionType;
 import com.simplevat.expense.model.ExpenseModel;
+import com.simplevat.service.CurrencyService;
 import com.simplevat.service.ExpenseService;
+import com.simplevat.service.ProjectService;
+import com.simplevat.service.UserServiceNew;
+import com.simplevat.service.bankaccount.TransactionCategoryService;
+import com.simplevat.service.bankaccount.TransactionTypeService;
 
 @Controller
 @ManagedBean(name = "expenseController")
@@ -26,6 +36,21 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 	
 	@Autowired
 	private ExpenseService expenseService;
+	
+	@Autowired
+	private TransactionTypeService transactionTypeService;
+	
+	@Autowired
+	private TransactionCategoryService transactionCategoryService;
+	
+	@Autowired
+	private CurrencyService currencyService;
+	
+	@Autowired
+    private ProjectService projectService;
+	
+	@Autowired
+	private UserServiceNew<Integer, User> userServiceNew;
 	
 	@Value("${file.upload.location}")
 	private String fileLocation;
@@ -52,11 +77,27 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 		expense.setLastUpdatedBy(12345);
 		expense.setDeleteFlag(false);
 		expense.setCreatedBy(12345);
-		expense.setClaimantId(null);
-		expense.setTransactionCategoryCode(null);
-		expense.setTransactionTypeCode(null);
-		expense.setCurrencyCode(null);
-		expense.setProjectId(null);
+		
+		if(selectedExpenseModel.getTransactionType() != null){
+			TransactionType transactionType = transactionTypeService.getTransactionType(selectedExpenseModel.getTransactionType().getTransactionTypeCode());
+			expense.setTransactionType(transactionType);
+		}
+		if(selectedExpenseModel.getTransactionCategory() != null){
+			TransactionCategory transactionCategory = transactionCategoryService.getTransactionCategory(selectedExpenseModel.getTransactionCategory().getTransactionCategoryCode());
+			expense.setTransactionCategory(transactionCategory);
+		}
+		if(selectedExpenseModel.getCurrency() != null){
+			Currency currency = currencyService.getCurrency(selectedExpenseModel.getCurrency().getCurrencyCode());
+			expense.setCurrency(currency);
+		}
+		if(selectedExpenseModel.getProject() != null){
+			Project project = projectService.getProject(selectedExpenseModel.getProject().getProjectId());
+			expense.setProject(project);
+		}
+		if(selectedExpenseModel.getUser() != null){
+			User user = userServiceNew.getDao().findByPK(selectedExpenseModel.getUser().getUserId());
+			expense.setUser(user);
+		}
 		
 		if(this.getSelectedExpenseModel().getAttachmentFile().getSize() > 0){
 			storeUploadedFile(this.getSelectedExpenseModel(), expense, fileLocation);
@@ -75,11 +116,27 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 		expense.setLastUpdatedBy(12345);
 		expense.setDeleteFlag(false);
 		expense.setCreatedBy(12345);
-		expense.setClaimantId(null);
-		expense.setTransactionCategoryCode(null);
-		expense.setTransactionTypeCode(null);
-		expense.setCurrencyCode(null);
-		expense.setProjectId(null);
+		
+		if(selectedExpenseModel.getTransactionType() != null){
+			TransactionType transactionType = transactionTypeService.getTransactionType(selectedExpenseModel.getTransactionType().getTransactionTypeCode());
+			expense.setTransactionType(transactionType);
+		}
+		if(selectedExpenseModel.getTransactionCategory() != null){
+			TransactionCategory transactionCategory = transactionCategoryService.getTransactionCategory(selectedExpenseModel.getTransactionCategory().getTransactionCategoryCode());
+			expense.setTransactionCategory(transactionCategory);
+		}
+		if(selectedExpenseModel.getCurrency() != null){
+			Currency currency = currencyService.getCurrency(selectedExpenseModel.getCurrency().getCurrencyCode());
+			expense.setCurrency(currency);
+		}
+		if(selectedExpenseModel.getProject() != null){
+			Project project = projectService.getProject(selectedExpenseModel.getProject().getProjectId());
+			expense.setProject(project);
+		}
+		if(selectedExpenseModel.getUser() != null){
+			User user = userServiceNew.getDao().findByPK(selectedExpenseModel.getUser().getUserId());
+			expense.setUser(user);
+		}
 		
 		if(this.getSelectedExpenseModel().getAttachmentFile().getSize() > 0){
 			storeUploadedFile(this.getSelectedExpenseModel(), expense, fileLocation);
@@ -99,5 +156,6 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 		return "/pages/secure/expense/expenses.xhtml?faces-redirect=true";
 		
 	}
+	
 
 }

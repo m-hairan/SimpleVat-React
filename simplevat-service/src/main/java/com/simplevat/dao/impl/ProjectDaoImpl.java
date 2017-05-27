@@ -1,18 +1,20 @@
 package com.simplevat.dao.impl;
 
-import com.simplevat.criteria.ProjectCriteria;
-import com.simplevat.dao.ProjectDao;
-import com.simplevat.entity.Project;
-import org.apache.commons.lang3.BooleanUtils;
-import org.springframework.stereotype.Repository;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.List;
+
+import org.apache.commons.lang3.BooleanUtils;
+import org.springframework.stereotype.Repository;
+
+import com.simplevat.criteria.ProjectCriteria;
+import com.simplevat.dao.ProjectDao;
+import com.simplevat.entity.Project;
 
 /**
  * Created by Utkarsh Bhavsar on 20/03/17.
@@ -79,4 +81,9 @@ public class ProjectDaoImpl extends AbstractDao implements ProjectDao {
         getEntityManager().merge(project);
         return project;
     }
+
+	@Override
+	public Project getProject(Integer id) {
+		return getEntityManager().find(Project.class, id);
+	}
 }

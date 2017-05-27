@@ -10,5 +10,7 @@ public interface ProjectService {
     List<Project> getProjectsByCriteria(ProjectCriteria projectCriteria) throws Exception;
 
     Project updateOrCreateProject(Project project);
+    
+    Project getProject(Integer id);
 
 }

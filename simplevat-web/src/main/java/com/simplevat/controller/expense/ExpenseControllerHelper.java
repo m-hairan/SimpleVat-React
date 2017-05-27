@@ -29,10 +29,10 @@ public class ExpenseControllerHelper {
 	public Expense getExpense(ExpenseModel model){
 		Expense expense = new Expense();
 		expense.setExpenseId(model.getExpenseId());
-		expense.setClaimantId(model.getClaimantId());
+		expense.setUser(model.getUser());
 		expense.setCreatedBy(model.getCreatedBy());
 		expense.setCreatedDate(model.getCreatedDate());
-		expense.setCurrencyCode(model.getCurrencyCode());
+		expense.setCurrency(model.getCurrency());
 		expense.setDeleteFlag(model.isDeleteFlag());
 		expense.setExpenseAmount(model.getExpenseAmount());
 		
@@ -44,22 +44,22 @@ public class ExpenseControllerHelper {
 		expense.setExpenseDescription(model.getExpenseDescription());
 		expense.setLastUpdateDate(model.getLastUpdateDate());
 		expense.setLastUpdatedBy(model.getLastUpdatedBy());
-		expense.setProjectId(model.getProjectId());
+		expense.setProject(model.getProject());
 		expense.setReceiptAttachmentDescription(model.getReceiptAttachmentDescription());
 		expense.setReceiptAttachmentPath(model.getReceiptAttachmentPath());
 		expense.setReceiptNumber(model.getReceiptNumber());
-		expense.setTransactionCategoryCode(model.getTransactionCategoryCode());
-		expense.setTransactionTypeCode(model.getTransactionTypeCode());
+		expense.setTransactionCategory(model.getTransactionCategory());
+		expense.setTransactionType(model.getTransactionType());
 		return expense;
 	}
 	
 	public ExpenseModel getExpenseModel(Expense entity){
 		ExpenseModel expenseModel = new ExpenseModel();
 		expenseModel.setExpenseId(entity.getExpenseId());
-		expenseModel.setClaimantId(entity.getClaimantId());
+		expenseModel.setUser(entity.getUser());
 		expenseModel.setCreatedBy(entity.getCreatedBy());
 		expenseModel.setCreatedDate(entity.getCreatedDate());
-		expenseModel.setCurrencyCode(entity.getCurrencyCode());
+		expenseModel.setCurrency(entity.getCurrency());
 		expenseModel.setDeleteFlag(entity.getDeleteFlag());
 		expenseModel.setExpenseAmount(entity.getExpenseAmount());
 		
@@ -71,12 +71,12 @@ public class ExpenseControllerHelper {
 		expenseModel.setExpenseDescription(entity.getExpenseDescription());
 		expenseModel.setLastUpdateDate(entity.getLastUpdateDate());
 		expenseModel.setLastUpdatedBy(entity.getLastUpdatedBy());
-		expenseModel.setProjectId(entity.getProjectId());
+		expenseModel.setProject(entity.getProject());
 		expenseModel.setReceiptAttachmentDescription(entity.getReceiptAttachmentDescription());
 		expenseModel.setReceiptAttachmentPath(entity.getReceiptAttachmentPath());
 		expenseModel.setReceiptNumber(entity.getReceiptNumber());
-		expenseModel.setTransactionCategoryCode(entity.getTransactionCategoryCode());
-		expenseModel.setTransactionTypeCode(entity.getTransactionTypeCode());
+		expenseModel.setTransactionCategory(entity.getTransactionCategory());
+		expenseModel.setTransactionType(entity.getTransactionType());
 		
 		String attachmentPath = entity.getReceiptAttachmentPath();
 		if(attachmentPath != null && !attachmentPath.isEmpty()){

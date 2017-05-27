@@ -25,39 +25,64 @@
 										
 										<h:panelGroup />
 
-										<h:panelGroup>
-											<p:selectOneMenu converter="javax.faces.Integer"
-												value="#{expenseController.selectedExpenseModel.claimantId}" disabled="true">
-												<f:selectItem itemValue="456571" itemLabel="Bhavin Panchani" />
-												<f:selectItem itemValue="456572" itemLabel="Hiren Sheth" />
-												<f:selectItem itemValue="456573" itemLabel="Mohsin Hashmi" />
-												<label>#{messages.claimant}</label>
-											</p:selectOneMenu>
+										<h:panelGroup styleClass="md-inputfield">
+											<p:outputLabel for="expenseClaimantId"/>
+											<p:autoComplete
+														id="expenseClaimantId"
+                                                        converter="userConverter"
+                                                        dropdown="true"
+                                                        forceSelection="true"
+                                                        effect="fold"
+                                                        completeMethod="#{userController.users}"
+                                                        value="#{expenseController.selectedExpenseModel.user}"
+                                                        var="user"
+                                                        itemValue="#{user}"
+                                                        itemLabel="#{user.firstName}"
+                                                        required="true">
+	                                        </p:autoComplete>
+	                                        <label>#{messages.claimant}</label>
 										</h:panelGroup>
 
 										<h:panelGroup />
 
-										<h:panelGroup>
-											<p:selectOneMenu converter="javax.faces.Integer"
-												value="#{expenseController.selectedExpenseModel.transactionTypeCode}" disabled="true">
-												<f:selectItem itemValue="456571" itemLabel="Payment" />
-												<f:selectItem itemValue="456572" itemLabel="Refund" />
-												<label>#{messages.type}</label>
-											</p:selectOneMenu>
+										<h:panelGroup styleClass="md-inputfield">
+											<p:outputLabel for="expenseTransactionType"/>
+											<p:autoComplete
+														id="expenseTransactionType"
+                                                        converter="transactionTypeConverter"
+                                                        dropdown="true"
+                                                        forceSelection="true"
+                                                        effect="fold"
+                                                        completeMethod="#{transactionController.transactionTypes}"
+                                                        value="#{expenseController.selectedExpenseModel.transactionType}"
+                                                        var="transactionType"
+                                                        itemValue="#{transactionType}"
+                                                        itemLabel="#{transactionType.transactionTypeName}"
+                                                        required="true">
+	                                        </p:autoComplete>
+	                                        <label>#{messages.type}</label>
 										</h:panelGroup>
 
 										<h:panelGroup />
 
-										<h:panelGroup>
-											<p:selectOneMenu converter="javax.faces.Integer"
-												value="#{expenseController.selectedExpenseModel.transactionCategoryCode}" disabled="true">
-												<f:selectItem itemValue="456571" itemLabel="Category 1" />
-												<f:selectItem itemValue="456572" itemLabel="Category 2" />
-												<f:selectItem itemValue="456573" itemLabel="Category 3" />
-												<f:selectItem itemValue="456574" itemLabel="Category 4" />
-												<label>#{messages.category}</label>
-											</p:selectOneMenu>
+										<h:panelGroup styleClass="md-inputfield">
+											<p:outputLabel for="expenseTransactionCategory"/>
+											<p:autoComplete
+														id="expenseTransactionCategory"
+                                                        converter="transactionCategoryConverter"
+                                                        dropdown="true"
+                                                        forceSelection="true"
+                                                        effect="fold"
+                                                        completeMethod="#{transactionController.transactionCategories}"
+                                                        value="#{expenseController.selectedExpenseModel.transactionCategory}"
+                                                        var="transactionCategory"
+                                                        itemValue="#{transactionCategory}"
+                                                        itemLabel="#{transactionCategory.transactionCategoryName}"
+                                                        >
+	                                        </p:autoComplete>
+	                                        <label>#{messages.category}</label>
 										</h:panelGroup>
+										
 										<h:panelGroup />
 
 										<h:panelGroup styleClass="md-inputfield">
@@ -76,15 +101,19 @@
 
 										<h:panelGroup />
 
-										<h:panelGroup>
-											<p:selectOneMenu converter="javax.faces.Integer"
-												value="#{expenseController.selectedExpenseModel.currencyCode}" disabled="true">
-												<f:selectItem itemValue="456571" itemLabel="currency 1" />
-												<f:selectItem itemValue="456572" itemLabel="currency 2" />
-												<f:selectItem itemValue="456573" itemLabel="currency 3" />
-												<f:selectItem itemValue="456574" itemLabel="currency 4" />
-												<label>#{messages.currency_code}</label>
-											</p:selectOneMenu>
+										<h:panelGroup styleClass="md-inputfield">
+											<p:outputLabel for="expenseCurrency" />
+											<p:autoComplete id="expenseCurrency" 
+												dropdown="true"
+												forceSelection="true" 
+												effect="fold"
+												converter="#{currencyConverter}"
+												completeMethod="#{currencyController.completeCurrency}"
+												value="#{expenseController.selectedExpenseModel.currency}"
+												var="currency" 
+												itemValue="#{currency}"
+												itemLabel="#{currency.currencyDescription}" />
+											<label>#{messages.currency}</label>
 										</h:panelGroup>
 
 										<h:panelGroup />
@@ -100,15 +129,23 @@
 										</h:panelGroup>
 
 										<h:panelGroup />
-										<h:panelGroup>
-											<p:selectOneMenu converter="javax.faces.Integer"
-												value="#{expenseController.selectedExpenseModel.projectId}" disabled="true">
-												<f:selectItem itemValue="456571" itemLabel="project 1" />
-												<f:selectItem itemValue="456572" itemLabel="project 2" />
-												<f:selectItem itemValue="456573" itemLabel="project 3" />
-												<f:selectItem itemValue="456574" itemLabel="project 4" />
-												<label>#{messages.project}</label>
-											</p:selectOneMenu>
+										
+										<h:panelGroup styleClass="md-inputfield">
+											<p:outputLabel for="expenseProject"/>
+											<p:autoComplete
+														id="expenseProject"
+                                                        converter="#{projectConverter}"
+                                                        dropdown="true"
+                                                        forceSelection="true"
+                                                        effect="fold"
+                                                        completeMethod="#{projectController.projects}"
+                                                        value="#{expenseController.selectedExpenseModel.project}"
+                                                        var="project"
+                                                        itemValue="#{project}"
+                                                        itemLabel="#{project.projectName}"
+                                                        >
+	                                        </p:autoComplete>
+	                                        <label>#{messages.project}</label>
 										</h:panelGroup>
 
 										<h:panelGroup />

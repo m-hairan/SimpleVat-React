@@ -1,18 +1,22 @@
 package com.simplevat.controller.project;
 
 import com.simplevat.criteria.ProjectCriteria;
+import com.simplevat.criteria.bankaccount.TransactionCategoryCriteria;
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.Language;
 import com.simplevat.entity.Project;
+import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.security.ContextUtils;
 import com.simplevat.security.UserContext;
 import com.simplevat.service.ContactService;
 import com.simplevat.service.CurrencyService;
 import com.simplevat.service.LanguageService;
 import com.simplevat.service.ProjectService;
+
 import lombok.Getter;
 import lombok.Setter;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +28,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -180,6 +185,10 @@ public class ProjectController {
         return currencySuggestion;
     }
 
-
+    public List<Project> projects(final String searchQuery) throws Exception {
+		ProjectCriteria projectCriteria = new ProjectCriteria();
+		projectCriteria.setActive(Boolean.TRUE);
+		return projectService.getProjectsByCriteria(projectCriteria);
+	}
 
 }

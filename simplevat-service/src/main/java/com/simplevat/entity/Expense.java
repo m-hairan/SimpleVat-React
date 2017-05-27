@@ -1,9 +1,13 @@
 package com.simplevat.entity;
 
+import com.simplevat.entity.bankaccount.TransactionCategory;
+import com.simplevat.entity.bankaccount.TransactionType;
 import com.simplevat.entity.converter.DateConverter;
+
 import lombok.Data;
 
 import javax.persistence.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -37,21 +41,29 @@ public class Expense{
     @Basic
     @Column(name = "RECEIPT_NUMBER")
     private String receiptNumber;
+    
     @Basic
-    @Column(name = "CLAIMANT_ID")
-    private Integer claimantId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CLAIMANT_ID")
+    private User user;
+    
     @Basic
-    @Column(name = "TRANSACTION_TYPE_CODE")
-    private Integer transactionTypeCode;
-    @Basic
-    @Column(name = "TRANSACTION_CATEGORY_CODE")
-    private Integer transactionCategoryCode;
-    @Basic
-    @Column(name = "CURRENCY_CODE")
-    private Integer currencyCode;
-    @Basic
-    @Column(name = "PROJECT_ID")
-    private Integer projectId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TRANSACTION_TYPE_CODE")
+    private TransactionType transactionType;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TRANSACTION_CATEGORY_CODE")
+    private TransactionCategory transactionCategory;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CURRENCY_CODE")
+    private Currency currency;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PROJECT_ID")
+    private Project project;
+    
     @Basic
     @Column(name = "RECEIPT_ATTACHMENT_PATH")
     private String receiptAttachmentPath;

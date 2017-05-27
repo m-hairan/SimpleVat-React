@@ -1,14 +1,21 @@
 package com.simplevat.entity;
 
 import com.simplevat.entity.converter.DateConverter;
+
 import lombok.Data;
 
 import javax.persistence.*;
+
 import java.time.LocalDateTime;
 
 /**
  * Created by mohsinh on 2/26/2017.
  */
+@NamedQueries({
+    @NamedQuery(name = "findAllUsers",
+            query = "SELECT u "
+            + "FROM User u where u.deleteFlag = FALSE and u.isActive = TRUE ")
+})
 @Entity
 @Table(name = "USER", schema = "simplevat", catalog = "")
 @Data
