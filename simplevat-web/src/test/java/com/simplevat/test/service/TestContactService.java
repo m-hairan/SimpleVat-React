@@ -3,13 +3,12 @@ package com.simplevat.test.service;
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Country;
 import com.simplevat.test.common.BaseManagerTest;
+import java.util.Iterator;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created by mohsin on 3/4/2017.
@@ -44,7 +43,7 @@ public class TestContactService extends BaseManagerTest {
         country.setCountryCode(10);
         contact.setCountry(country);
 
-        contactService.createContact(contact);
+        contactService.createOrUpdateContact(contact);
 
         System.out.println(contact.getContactId()+" - "+contact.getFirstName()+" "+contact.getLastName());
     }
@@ -61,7 +60,7 @@ public class TestContactService extends BaseManagerTest {
         contact.setCountry(country);
 
         /*Insert*/
-        final Contact insertedContact = contactService.createContact(contact);
+        final Contact insertedContact = contactService.createOrUpdateContact(contact);
         Assert.assertNotNull(insertedContact);
 
         contact.setContactId(insertedContact.getContactId());
@@ -69,7 +68,7 @@ public class TestContactService extends BaseManagerTest {
         contact.setFirstName(updatedFirstName);
 
         /*Update*/
-        Contact updatedContact = contactService.updateContact(contact);
+        Contact updatedContact = contactService.createOrUpdateContact(contact);
 
         /*Assert*/
         Assert.assertNotNull(updatedContact);

@@ -1,24 +1,26 @@
 package com.simplevat.converter;
 
 import com.simplevat.entity.Language;
-
+import com.simplevat.service.LanguageService;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.FacesConverter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by mohsin on 3/11/2017.
  */
-
-@FacesConverter(value = "com.simplevat.util.LanguageConverter")
+@Service
 public class LanguageConverter implements Converter {
+
+    @Autowired
+    private LanguageService languageService;
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         if (value != null && !value.isEmpty()) {
-            Language language = new Language();
-            language.setLanguageCode(Integer.parseInt(value));
+            Language language = languageService.getLanguage(Integer.parseInt(value));
             return language;
         }
 

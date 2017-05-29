@@ -18,6 +18,8 @@ public class ContactModel implements Serializable {
 
     private static final long serialVersionUID = -7492170073928262949L;
 
+    private Integer contactId = 0;
+
     private String firstName;
 
     private String middleName;

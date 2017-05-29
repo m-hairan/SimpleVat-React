@@ -4,21 +4,21 @@ import com.simplevat.contact.model.ContactModel;
 import com.simplevat.entity.*;
 import com.simplevat.service.*;
 import java.io.IOException;
-import lombok.Getter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 /**
  * Created by mohsinh on 3/9/2017.
@@ -86,30 +86,41 @@ public class ContactController implements Serializable {
         return "/pages/secure/contact/contact.xhtml";
     }
 
-    public void createNewContact() throws IOException {
+    public void createOrUpdateContact() throws IOException {
         LOGGER.debug("Creating contact");
         final Contact contact = new Contact();
         BeanUtils.copyProperties(contactModel, contact);
         contact.setOrganization(contactModel.getOrganizationName());
         contact.setEmail(contactModel.getEmailAddress());
         contact.setCreatedBy(1);
-        this.contactService.createContact(contact);
+        this.contactService.createOrUpdateContact(contact);
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        if (contactModel.getContactId() > 0) {
+            context.addMessage(null, new FacesMessage("Contact Updated SuccessFully"));
+        } else {
+            context.addMessage(null, new FacesMessage("Contact Created SuccessFully"));
+        }
 
-        LOGGER.debug("Created contact Name :" + contactModel.getFirstName());
         FacesContext.getCurrentInstance().getExternalContext()
                 .redirect("contacts.xhtml?faces-redirect=true");
     }
 
-    public String editContact() {
+    public void createOrUpdateAndAddMore() {
         final Contact contact = new Contact();
+        BeanUtils.copyProperties(contactModel, contact);
         contact.setOrganization(contactModel.getOrganizationName());
         contact.setEmail(contactModel.getEmailAddress());
-        BeanUtils.copyProperties(contactModel, contact);
-
-        LOGGER.debug("Update contact");
-        this.contactService.updateContact(contact);
-        LOGGER.debug("Update contact Name :" + contactModel.getFirstName());
-        return "/pages/secure/contact/contacts.xhtml";
+        contact.setCreatedBy(1);
+        this.contactService.createOrUpdateContact(contact);
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        if (contactModel.getContactId() > 0) {
+            context.addMessage(null, new FacesMessage("Contact Updated SuccessFully"));
+        } else {
+            context.addMessage(null, new FacesMessage("Contact Created SuccessFully"));
+        }
+        init();
     }
 
     public List<Title> completeTitle(String titleStr) {
@@ -221,8 +232,14 @@ public class ContactController implements Serializable {
     public void redirectToEditContact(Contact contact) throws IOException {
         contactModel = new ContactModel();
         BeanUtils.copyProperties(contact, contactModel);
+        contactModel.setEmailAddress(contact.getEmail());
+        contactModel.setOrganizationName(contact.getOrganization());
         LOGGER.debug("Redirecting to create new contact page");
         FacesContext.getCurrentInstance().getExternalContext()
                 .redirect("contact.xhtml");
+    }
+
+    public void updateBillingEmail() {
+        contactModel.setBillingEmail(contactModel.getEmailAddress());
     }
 }

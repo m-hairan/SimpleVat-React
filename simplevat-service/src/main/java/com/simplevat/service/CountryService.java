@@ -1,7 +1,6 @@
 package com.simplevat.service;
 
 import com.simplevat.entity.Country;
-
 import java.util.List;
 
 /**
@@ -10,4 +9,6 @@ import java.util.List;
 public interface CountryService {
 
     List<Country> getCountries();
+    
+    Country getCountry(Integer countryId);
 }

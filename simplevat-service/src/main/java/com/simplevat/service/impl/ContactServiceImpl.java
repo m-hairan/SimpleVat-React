@@ -3,17 +3,17 @@ package com.simplevat.service.impl;
 import com.simplevat.dao.ContactDao;
 import com.simplevat.entity.Contact;
 import com.simplevat.service.ContactService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * Created by mohsin on 3/3/2017.
  */
 
 @Service("contactService")
+@Transactional
 public class ContactServiceImpl implements ContactService {
 
 
@@ -32,8 +32,8 @@ public class ContactServiceImpl implements ContactService {
 
     @Transactional
     @Override
-    public Contact createContact(Contact contact) {
-        return contactDao.createContact(contact);
+    public Contact createOrUpdateContact(Contact contact) {
+        return contactDao.updateContact(contact);
     }
 
     @Override
@@ -46,9 +46,4 @@ public class ContactServiceImpl implements ContactService {
         return contactDao.getContact(id);
     }
 
-    @Override
-    @Transactional
-    public Contact updateContact(Contact contact) {
-        return contactDao.updateContact(contact);
-    }
 }

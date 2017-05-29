@@ -258,7 +258,7 @@ public class InvoiceController implements Serializable {
 
         contactModel = new ContactModel();
 
-        contactService.createContact(contact);
+        contactService.createOrUpdateContact(contact);
 
         invoiceModel.setContact(contact);
 

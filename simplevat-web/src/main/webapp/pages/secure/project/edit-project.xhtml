@@ -129,7 +129,7 @@
                                     <p:outputLabel for="language"/>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="language" dropdown="true" forceSelection="true"
-                                                        effect="fold" converter="com.simplevat.util.LanguageConverter"
+                                                        effect="fold" converter="#{languageConverter}"
                                                         dropdownMode=""
                                                         completeMethod="#{projectController.completeLanguage}"
                                                         value="#{projectController.selectedProject.invoiceLanguageCode}"

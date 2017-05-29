@@ -1,7 +1,6 @@
 package com.simplevat.service;
 
 import com.simplevat.entity.Contact;
-
 import java.util.List;
 
 /**
@@ -15,9 +14,8 @@ public interface ContactService {
 
     List<Contact> getContacts(final String searchQuery);
 
-    Contact createContact(Contact contact);
+    Contact createOrUpdateContact(Contact contact);
 
     Contact getContact(int id);
 
-    Contact updateContact(Contact contact);
 }

@@ -1,24 +1,27 @@
 package com.simplevat.converter;
 
 import com.simplevat.entity.Title;
-
+import com.simplevat.service.TitleService;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.FacesConverter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by mohsin on 3/12/2017.
  */
-@FacesConverter(value = "com.simplevat.util.TitleConverter")
+@Service
 public class TitleConverter implements Converter {
+
+    @Autowired
+    private TitleService titleService;
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
 
         if (value != null && !value.isEmpty()) {
-            Title title = new Title();
-            title.setTitleCode(Integer.parseInt(value));
+            Title title = (Title) titleService.findByPK(Integer.parseInt(value));
             return title;
         }
         return null;

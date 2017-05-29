@@ -1,12 +1,10 @@
 package com.simplevat.entity;
 
-import java.io.Serializable;
-
 import com.simplevat.entity.converter.DateConverter;
-import lombok.Data;
-
-import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import javax.persistence.*;
+import lombok.Data;
 
 /**
  * Created by mohsinh on 2/26/2017.
@@ -29,7 +27,7 @@ public class Contact implements Serializable {
     @Id
     @Column(name = "CONTACT_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int contactId;
+    private Integer contactId;
     @Basic
     @Column(name = "FIRST_NAME")
     private String firstName;
@@ -75,14 +73,14 @@ public class Contact implements Serializable {
     @Basic
     @Column(name = "PO_BOX_NUMBER")
     private String poBoxNumber;
-    
+
     @Basic
     @Column(name = "CONTRACT_PO_NUMBER")
     private String contractPoNumber;
     @Basic
     @Column(name = "VAT_REGISTRATION_NUMBER")
     private String vatRegistrationNumber;
-    
+
     @Basic
     @Column(name = "CREATED_BY")
     private Integer createdBy;
@@ -102,7 +100,7 @@ public class Contact implements Serializable {
     @Basic
     @Column(name = "DELETE_FLAG")
     private Boolean deleteFlag = Boolean.FALSE;
-    
+
     @Basic
     @Version
     @Column(name = "VERSION_NUMBER")

@@ -10,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  *
  * @author Hiren
- * @param <Integer>
- * @param <Invoice>
  */
 @Service
 @Transactional

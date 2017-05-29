@@ -121,7 +121,7 @@
 
                                         <p:outputLabel for="country"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:autoComplete id="country" converter="com.simplevat.util.CountryConverter" dropdown="true" forceSelection="true" effect="fold"
+                                            <p:autoComplete id="country" converter="#{countryConverter}" dropdown="true" forceSelection="true" effect="fold"
                                                             completeMethod="#{contactController.completeCountry}" value="#{contactController.contact.country}"
                                                             var="country" itemValue="#{country.countryCode}" itemLabel="#{country.countryFullName}" required="false"/>
                                             <label>Country</label>
@@ -173,7 +173,7 @@
                                         <p:outputLabel for="language"/>
                                         <h:panelGroup styleClass="md-inputfield">
 
-                                            <p:autoComplete id="language" dropdown="true" forceSelection="true" effect="fold" converter="com.simplevat.util.LanguageConverter" dropdownMode=""
+                                            <p:autoComplete id="language" dropdown="true" forceSelection="true" effect="fold" converter="#{languageConverter}" dropdownMode=""
                                                             completeMethod="#{contactController.completeLanguage}" value="#{contactController.contact.language}"
                                                             var="language" itemValue="#{language.languageCode}" itemLabel="#{language.languageDescription}" />
 

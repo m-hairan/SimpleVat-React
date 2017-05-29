@@ -1,28 +1,30 @@
 package com.simplevat.converter;
 
 import com.simplevat.entity.Country;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.simplevat.service.CountryService;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.FacesConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by mohsin on 3/11/2017.
  */
-
-@FacesConverter(value = "com.simplevat.util.CountryConverter")
+@Service
 public class CountryConverter implements Converter {
+
+    @Autowired
+    private CountryService countryService;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(CountryConverter.class);
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         if (value != null && !value.isEmpty()) {
-            Country country = new Country();
-            country.setCountryCode(Integer.parseInt(value));
+            Country country = countryService.getCountry(Integer.parseInt(value));
             return country;
         }
 

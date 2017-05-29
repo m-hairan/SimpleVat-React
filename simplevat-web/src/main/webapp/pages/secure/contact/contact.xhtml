@@ -21,16 +21,19 @@
 
                                         <p:outputLabel for="contactTitle"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:autoComplete id="contactTitle" converter="com.simplevat.util.TitleConverter"
-                                                            dropdown="true" forceSelection="true"
+                                            <p:autoComplete id="contactTitle" converter="#{titleConverter}"
+                                                            dropdown="true" 
+                                                            forceSelection="true"
                                                             effect="fold"
+                                                            required="true"
+                                                            requiredMessage="Please select Title"
                                                             completeMethod="#{contactController.completeTitle}"
                                                             value="#{contactController.contactModel.title}" 
                                                             var="title" 
                                                             itemValue="#{title.titleCode}" 
-                                                            itemLabel="#{title.titleDescription}"
-                                                            required="false"/>
+                                                            itemLabel="#{title.titleDescription}"/>
                                             <label>Title</label>
+                                            <p:message for="contactTitle" />
                                         </h:panelGroup>
 
                                         <p:outputLabel />
@@ -42,8 +45,10 @@
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText id="firstName" 
                                                          value="#{contactController.contactModel.firstName}"
-                                                         required="true" />
+                                                         required="true" 
+                                                         requiredMessage="Please enter First Name"/>
                                             <label>First Name</label>
+                                            <p:message for="firstName" />
                                         </h:panelGroup>
                                         <p:outputLabel />
                                         <h:panelGroup styleClass="md-inputfield">
@@ -55,8 +60,10 @@
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText id="lastName"
                                                          value="#{contactController.contactModel.lastName}"
-                                                         required="false"/>
+                                                         required="true" 
+                                                         requiredMessage="Please enter Last Name"/>
                                             <label>Last Name</label>
+                                            <p:message for="lastName" />
                                         </h:panelGroup>
 
                                         <p:outputLabel />
@@ -71,12 +78,14 @@
 
                                         <p:outputLabel for="organizationName"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="organizationName" value="#{contactController.contactModel.organizationName}"/>
+                                            <p:inputText id="organizationName"
+                                                         value="#{contactController.contactModel.organizationName}"/>
                                             <label>Organization Name</label>
                                         </h:panelGroup>
                                         <p:outputLabel for="poBoxNumber" />
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="poBoxNumber" value="#{contactController.contactModel.poBoxNumber}"/>
+                                            <p:inputText id="poBoxNumber"
+                                                         value="#{contactController.contactModel.poBoxNumber}"/>
                                             <label>Po Box Number</label>
                                         </h:panelGroup>
                                         <p:outputLabel />
@@ -84,9 +93,19 @@
 
                                         <p:outputLabel for="email"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="email" value="#{contactController.contactModel.emailAddress}" 
-                                                         required="false"/>
+                                            <p:inputText id="email"
+                                                         value="#{contactController.contactModel.emailAddress}" 
+                                                         required="true"
+                                                         requiredMessage="Please enter email address"
+                                                         validatorMessage="Invalid email format" >
+                                                <p:ajax update="contactForm:billingEmail emailMessage" 
+                                                        event="change" 
+                                                        listener="#{contactController.updateBillingEmail()}" />
+                                                <f:validateRegex
+                                                    pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                            </p:inputText>
                                             <label>Email</label>
+                                            <p:message id="emailMessage" for="email" />
                                         </h:panelGroup>
                                         <p:outputLabel for="telephone"/>
                                         <h:panelGroup styleClass="md-inputfield">
@@ -117,10 +136,20 @@
 
                                         <p:outputLabel for="country"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:autoComplete id="country" converter="com.simplevat.util.CountryConverter" dropdown="true" forceSelection="true" effect="fold"
-                                                            completeMethod="#{contactController.completeCountry}" value="#{contactController.contactModel.country}"
-                                                            var="country" itemValue="#{country.countryCode}" itemLabel="#{country.countryFullName}" required="false"/>
+                                            <p:autoComplete id="country"
+                                                            converter="#{countryConverter}" 
+                                                            dropdown="true" 
+                                                            forceSelection="true" 
+                                                            effect="fold"
+                                                            completeMethod="#{contactController.completeCountry}"
+                                                            value="#{contactController.contactModel.country}"
+                                                            var="country"
+                                                            itemValue="#{country.countryCode}"
+                                                            itemLabel="#{country.countryFullName}" 
+                                                            required="true"
+                                                            requiredMessage="Please select Country"/>
                                             <label>Country</label>
+                                            <p:message for="country" />
                                         </h:panelGroup>
                                         <p:outputLabel for="stateRegion"/>
                                         <h:panelGroup styleClass="md-inputfield">
@@ -154,9 +183,16 @@
 
                                         <p:outputLabel for="billingEmail" />
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="billingEmail" 
-                                                         value="#{contactController.contactModel.billingEmail}"/>
+                                            <p:inputText id="billingEmail"
+                                                         required="true"
+                                                         requiredMessage="Please enter Billing Email"
+                                                         value="#{contactController.contactModel.billingEmail}"
+                                                         validatorMessage="Invalid email format" >
+                                                <f:validateRegex
+                                                    pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                            </p:inputText>
                                             <label>Billing Email</label>
+                                            <p:message for="billingEmail" />
                                         </h:panelGroup>
                                         <p:outputLabel for="contractPoNumber"/>
                                         <h:panelGroup styleClass="md-inputfield">
@@ -178,7 +214,9 @@
                                                             dropdown="true" 
                                                             forceSelection="true"
                                                             effect="fold"
-                                                            converter="com.simplevat.util.LanguageConverter" 
+                                                            required="true"
+                                                            requiredMessage="Please select Invoice Language"
+                                                            converter="#{languageConverter}" 
                                                             completeMethod="#{contactController.completeLanguage}"
                                                             value="#{contactController.contactModel.language}"
                                                             var="language"
@@ -186,6 +224,7 @@
                                                             itemLabel="#{language.languageDescription}" />
 
                                             <label>Invoice Language</label>
+                                            <p:message for="language" />
                                         </h:panelGroup>
                                         <p:outputLabel for="currency"/>
                                         <h:panelGroup styleClass="md-inputfield">
@@ -193,6 +232,8 @@
                                             <p:autoComplete id="currency" dropdown="true" 
                                                             forceSelection="true"
                                                             effect="fold" 
+                                                            required="true"
+                                                            requiredMessage="Please select Currency"
                                                             converter="#{currencyConverter}"
                                                             completeMethod="#{contactController.completeCurrency}"
                                                             value="#{contactController.contactModel.currency}"
@@ -201,6 +242,7 @@
                                                             itemLabel="#{currency.currencyDescription} - #{currency.currencySymbol}" />
 
                                             <label>Currency Code</label>
+                                            <p:message for="currency" />
                                         </h:panelGroup>
 
                                         <p:outputLabel />
@@ -216,9 +258,31 @@
 
                 <p:toolbar>
                     <f:facet name="left">
-                        <p:commandButton title="Save" value="Save"  icon="ui-icon-save"
-                                         action="#{contactController.createNewContact()}" />
-                        <p:button value="Save &amp; Add More" icon="ui-icon-forward" outcome="/pages/secure/contact/contact" />
+                        <ui:fragment rendered="#{contactController.contactModel.contactId > 0}">
+                            <p:commandButton title="Update"
+                                             update="@form"
+                                             value="Update" 
+                                             icon="ui-icon-save"
+                                             action="#{contactController.createOrUpdateContact()}" />
+                            <p:commandButton actionListener="#{contactController.createOrUpdateAndAddMore()}"
+                                             value="Update &amp; Add More"
+                                             update="@form"
+                                             validateClient="true"
+                                             icon="ui-icon-forward" />
+                        </ui:fragment>
+                        
+                        <ui:fragment rendered="#{contactController.contactModel.contactId == 0}">
+                            <p:commandButton title="Save"
+                                             update="@form"
+                                             value="Save" 
+                                             icon="ui-icon-save"
+                                             action="#{contactController.createOrUpdateContact()}" />
+                            <p:commandButton actionListener="#{contactController.createOrUpdateAndAddMore()}"
+                                             value="Save &amp; Add More"
+                                             update="@form"
+                                             validateClient="true"
+                                             icon="ui-icon-forward" />
+                        </ui:fragment>
 
                         <span class="ui-separator" style="padding-right: 5px;">
                             <span class="fa fa-ellipsis-v SoftGray" />
