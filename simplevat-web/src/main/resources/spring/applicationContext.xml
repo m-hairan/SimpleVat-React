@@ -15,6 +15,7 @@
 
     <!--TODO Utkarsh Enable the security and update web.xml-->
     <import resource="spring-security.xml"/>
+    <import resource="mail-config.xml"/>
 
     <!--Empty strings instead of null values in JSF 2 on Tomcat 7-->
     <!--https://artofcode.wordpress.com/2013/08/21/empty-strings-instead-of-null-values-in-jsf-2-on-tomcat-7/-->
