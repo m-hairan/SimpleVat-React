@@ -8,8 +8,8 @@
 	http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <http pattern="/javax.faces.resource/**" security="none"/>
-    <http pattern="/pages/public/*" security="none"/>
-    <http pattern="/pages/public/common/*" security="none"/>
+    <http pattern="/pages/public/common/error.xhtml" security="none"/>
+    <http pattern="/pages/public/forget-password.xhtml" security="none"/>
 
     <http auto-config="true" access-denied-page="/pages/public/login.xhtml">
         <intercept-url pattern="/pages/public/login.xhtml" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
