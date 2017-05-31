@@ -82,10 +82,7 @@
                                     <p:outputLabel for="contractPoNumber"/>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="contractPoNumber"
-                                                     value="#{projectController.selectedProject.contractPoNumber}"
-                                                     required="true"
-                                                     requiredMessage="Please enter contact po number"
-                                        >
+                                                     value="#{projectController.selectedProject.contractPoNumber}">
                                         </p:inputText>
                                         <label>Contract PO Number</label>
                                     </h:panelGroup>
@@ -93,10 +90,7 @@
                                     <p:outputLabel for="vatRegistrationNumber"/>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="vatRegistrationNumber"
-                                                     value="#{projectController.selectedProject.vatRegistrationNumber}"
-                                                     required="true"
-                                                     requiredMessage="Please enter Vat Registration number"
-                                        >
+                                                     value="#{projectController.selectedProject.vatRegistrationNumber}">
                                         </p:inputText>
                                         <label>VAT Registration number</label>
                                     </h:panelGroup>
@@ -123,9 +117,7 @@
                                     <p:outputLabel for="projectBudget"/>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="projectBudget"
-                                                     value="#{projectController.selectedProject.projectBudget}"
-                                                     required="true"
-                                                     requiredMessage="Please enter Project budget">
+                                                     value="#{projectController.selectedProject.projectBudget}">
                                         </p:inputText>
                                         <label>Project Budget </label>
                                     </h:panelGroup>
@@ -139,8 +131,6 @@
                                                         value="#{projectController.selectedProject.invoiceLanguageCode}"
                                                         var="language" itemValue="#{language.languageCode}"
                                                         itemLabel="#{language.languageDescription}"
-                                                        required="true"
-                                                        requiredMessage="Please select invoice langualge"
                                         />
 
                                         <label>Invoice Language</label>
