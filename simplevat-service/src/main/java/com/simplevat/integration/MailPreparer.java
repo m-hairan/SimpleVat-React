@@ -12,20 +12,19 @@ import java.util.Map;
 public final class MailPreparer {
 
     private static final String USER_PLACEHOLDER = "user";
-    private static final String FORGOT_PASSWORD_LINK = "forgotPasswordLink";
+    private static final String NEW_PASSWORD = "newPassword";
 
     public static String resolveTemplate(@Nonnull String content, @Nonnull Map<String, String> templateVars) {
         if (StringUtils.isEmpty(content)) {
             return content;
         }
-        Map<String, String> valueMap = new HashMap<>();
-        StrSubstitutor contentSubstitutor = new StrSubstitutor(valueMap, "${", "}");
+        StrSubstitutor contentSubstitutor = new StrSubstitutor(templateVars, "${", "}");
         return contentSubstitutor.replace(content);
     }
 
-    public static Mail generateForgotPasswordMail(@Nonnull String from, @Nonnull String fromName, @Nonnull String receiverMail, @Nonnull String receiverName, @Nonnull String forgotPasswordLink, @Nonnull MailEnum mailEnum) {
+    public static Mail generateForgotPasswordMail(@Nonnull String from, @Nonnull String fromName, @Nonnull String receiverMail, @Nonnull String receiverName, @Nonnull String newPassword, @Nonnull MailEnum mailEnum) {
 
-        Map<String, String> placeHolders = preparePlaceholders(fromName, forgotPasswordLink);
+        Map<String, String> placeHolders = preparePlaceholders(receiverName, newPassword);
         Mail mail = new Mail();
         mail.setFrom(from);
         mail.setFromName(fromName);
@@ -35,10 +34,10 @@ public final class MailPreparer {
         return mail;
     }
 
-    private static Map<String, String> preparePlaceholders(@Nonnull String fromName, @Nonnull String forgotPasswordLink) {
+    private static Map<String, String> preparePlaceholders(@Nonnull String toName, @Nonnull String newPassword) {
         Map<String, String> placeHolders = new HashMap<>();
-        placeHolders.put(USER_PLACEHOLDER, fromName);
-        placeHolders.put(FORGOT_PASSWORD_LINK, forgotPasswordLink);
+        placeHolders.put(USER_PLACEHOLDER, toName);
+        placeHolders.put(NEW_PASSWORD, newPassword);
         return placeHolders;
     }
 }
