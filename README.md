@@ -28,27 +28,29 @@
 19. <Domain>Model naming for model classes
 20. Use One xhtml page for both create/edit functionality. Just render labels based on action.
 
-<h3>Points to be Added/Refactored</h3>
+<h3>~~Points to be Added/Refactored completed~~</h3>
 
-- POM Refactoring. Dependency declaration to parent.
-- DriverManager issue
-- Add Validators
-    - Use lombok as much as possible 
-- Spring Security
-- SQL Injection Filter
+- ~~POM Refactoring. Dependency declaration to parent.~~
+- ~~DriverManager issue~~
+- ~~Add Validators~~
+    - ~~Use lombok as much as possible ~~
+- ~~Spring Security~~
+- ~~SQL Injection Filter~~
+- ~~Use Wrapper classes on entity~~
+- ~~Serializable on dto/model. not on Controller ~~
+- ~~Properties must be injected from Spring~~
+<h3>Points to be Added/Refactored Remaining </h3>
 - Implement Cache
 - Controller refactor. Use Services
 - Criteria queries better than named Queries. (Some refactoring)
     - Paging for all get\<Domain>s() calls.
 - Wrappers/DTO/Model for UI object and entity mapper to dto
 - Omit the Unused code
-- Serializable on dto/model. not on Controller 
-- Properties must be injected from Spring
 - Don't use Calendar/ util date/ SQL date time/ timestamp. Use java time api
 - Manage GIT efficiently. Create PRs
 - Use Mockito. Write tests for each method
 - Unit tests rollback
-- Use Wrapper classes on entity
+
   
 <h3>Project Milestone & Scope</h3>
 
