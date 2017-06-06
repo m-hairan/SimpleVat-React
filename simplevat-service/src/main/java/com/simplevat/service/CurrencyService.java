@@ -12,4 +12,6 @@ public interface CurrencyService {
     List<Currency> getCurrencies();
     
     Currency getCurrency(final int currencyCode);
+
+    Currency getDefaultCurrency();
 }

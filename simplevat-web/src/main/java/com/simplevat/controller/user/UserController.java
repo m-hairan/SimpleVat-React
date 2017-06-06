@@ -31,8 +31,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -63,7 +61,7 @@ public class UserController {
             final UserContext context = ContextUtils.getUserContext();
             currentUserEntity = userService.getUser(context.getUserId());
         } catch (UnauthorizedException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+//            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         if (currentUserEntity != null) {

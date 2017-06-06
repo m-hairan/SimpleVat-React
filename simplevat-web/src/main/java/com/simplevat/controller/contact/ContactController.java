@@ -3,22 +3,23 @@ package com.simplevat.controller.contact;
 import com.simplevat.contact.model.ContactModel;
 import com.simplevat.entity.*;
 import com.simplevat.service.*;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.context.FacesContext;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by mohsinh on 3/9/2017.
@@ -66,6 +67,8 @@ public class ContactController implements Serializable {
     public void init() {
         contactModel = new ContactModel();
 
+        setDefaultCurrency();
+
         countries = countryService.getCountries();
         languages = languageService.getLanguages();
         currencies = currencyService.getCurrencies();
@@ -73,15 +76,21 @@ public class ContactController implements Serializable {
 
         contactModel.setCountry(countries.get(179));
         contactModel.setLanguage(languages.get(0));
-        contactModel.setCurrency(currencies.get(149));
         LOGGER.debug("Loaded Countries :" + countries.size());
+    }
+
+    private void setDefaultCurrency() {
+        Currency defaultCurrency = currencyService.getDefaultCurrency();
+        if (defaultCurrency != null) {
+            contactModel.setCurrency(defaultCurrency);
+        }
     }
 
     public String redirectToCreateContact() {
         contactModel = new ContactModel();
         contactModel.setCountry(countries.get(179));
         contactModel.setLanguage(languages.get(0));
-        contactModel.setCurrency(currencies.get(149));
+        setDefaultCurrency();
         LOGGER.debug("Redirecting to create new contact page");
         return "/pages/secure/contact/contact.xhtml";
     }
