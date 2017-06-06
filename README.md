@@ -37,7 +37,7 @@
 - ~~Spring Security~~
 - ~~SQL Injection Filter~~
 - ~~Use Wrapper classes on entity~~
-- ~~Serializable on dto/model. not on Controller ~~
+- ~~Serializable on dto/model. not on Controller~~
 - ~~Properties must be injected from Spring~~
 
 <h3>Points to be Added/Refactored Remaining </h3>
