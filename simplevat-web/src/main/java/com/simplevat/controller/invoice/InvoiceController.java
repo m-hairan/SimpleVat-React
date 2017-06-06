@@ -35,7 +35,6 @@ import java.util.List;
 import static com.mysql.jdbc.StringUtils.isNullOrEmpty;
 
 /**
- *
  * @author Hiren
  */
 @Controller
@@ -254,6 +253,7 @@ public class InvoiceController implements Serializable {
     }
 
     public void createContact() {
+        Currency defaultCurrency = currencyService.getDefaultCurrency();
 
         final Contact contact = new Contact();
 
@@ -264,8 +264,13 @@ public class InvoiceController implements Serializable {
         contact.setLastName(contactModel.getLastName());
         contact.setOrganization(contactModel.getOrganizationName());
         contact.setCreatedBy(1);
+        contact.setCurrency(defaultCurrency);
 
         contactModel = new ContactModel();
+
+        if (defaultCurrency != null) {
+            contactModel.setCurrency(defaultCurrency);
+        }
 
         contactService.createOrUpdateContact(contact);
 
