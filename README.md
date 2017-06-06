@@ -28,7 +28,7 @@
 19. <Domain>Model naming for model classes
 20. Use One xhtml page for both create/edit functionality. Just render labels based on action.
 
-<h3>~~Points to be Added/Refactored completed~~</h3>
+~~<h3>Points to be Added/Refactored completed</h3>~~
 
 - ~~POM Refactoring. Dependency declaration to parent.~~
 - ~~DriverManager issue~~
@@ -39,7 +39,9 @@
 - ~~Use Wrapper classes on entity~~
 - ~~Serializable on dto/model. not on Controller ~~
 - ~~Properties must be injected from Spring~~
+
 <h3>Points to be Added/Refactored Remaining </h3>
+
 - Implement Cache
 - Controller refactor. Use Services
 - Criteria queries better than named Queries. (Some refactoring)
