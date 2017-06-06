@@ -106,22 +106,14 @@ public class SecurityBean implements PhaseListener, Serializable {
 
 
     public String forgotPassword() throws Exception {
-
+        MailEnum mailEnum = MailEnum.FORGOT_PASSWORD;
+        String summary = "Password reset successfully. Please check your mail for further details";
         Optional<User> user = userService.getUserByEmail(username);
         if (user.isPresent()) {
             User userObj = user.get();
+            String firstName = userObj.getFirstName();
             String randomPassword = updatedUserPassword(userObj);
-            Mail mail = MailPreparer.generateForgotPasswordMail(
-                    ADMIN_EMAIL,
-                    ADMIN_USERNAME,
-                    username,
-                    userObj.getFirstName(),
-                    randomPassword,
-                    MailEnum.FORGOT_PASSWORD
-            );
-            mailIntegration.sendHtmlMail(mail);
-//            FacesContext.getCurrentInstance().getExternalContext().redirect("pages/public/login.xhtml");
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Password reset successfully. Please check your mail for further details"));
+            sendPasswordNotificationMail(mailEnum, summary, randomPassword, firstName, username);
             return "/pages/public/login.xhtml";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Email address provided."));
@@ -129,9 +121,32 @@ public class SecurityBean implements PhaseListener, Serializable {
         return null;
     }
 
+    //TODO Use it for user creation
+    // do the appropriate changes to user update or send random password to parameters
+    // if the password is provided, user will not get updated
+    public void userCreation(String userName, String randomPassword) throws Exception {
+        MailEnum mailEnum = MailEnum.SIGN_UP_VERIFICATION;
+        String summary = "User created successfully Please check your mail for further details";
+        sendPasswordNotificationMail(mailEnum, summary, randomPassword, userName, username);
+    }
+
+    private void sendPasswordNotificationMail(MailEnum mailEnum, String summary, String randomPassword, String firstName, String senderMailAddress) throws Exception {
+        Mail mail = MailPreparer.generateForgotPasswordMail(
+                ADMIN_EMAIL,
+                ADMIN_USERNAME,
+                senderMailAddress,
+                firstName,
+                randomPassword,
+                mailEnum
+        );
+        mailIntegration.sendHtmlMail(mail);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(summary));
+    }
+
     private String updatedUserPassword(User userObj) {
         String randomPassword = new SessionIdentifierGenerator().randomPassword();
         userObj.setPassword(passwordEncoder.encode(randomPassword));
+        userObj.setIsActive(true);
         userService.updateUser(userObj);
         return randomPassword;
     }
