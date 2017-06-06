@@ -124,7 +124,7 @@ public class SecurityBean implements PhaseListener, Serializable {
     //TODO Use it for user creation
     // do the appropriate changes to user update or send random password to parameters
     // if the password is provided, user will not get updated
-    public void userCreation(String userName, String randomPassword) throws Exception {
+    public void signupPasswordMailNotification(String userName, String randomPassword) throws Exception {
         MailEnum mailEnum = MailEnum.SIGN_UP_VERIFICATION;
         String summary = "User created successfully Please check your mail for further details";
         sendPasswordNotificationMail(mailEnum, summary, randomPassword, userName, username);
