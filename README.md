@@ -28,12 +28,12 @@
 19. <Domain>Model naming for model classes
 20. Use One xhtml page for both create/edit functionality. Just render labels based on action.
 
-~~<h3>Points to be Added/Refactored completed</h3>~~
+<h3>Points to be Added/Refactored completed</h3>
 
 - ~~POM Refactoring. Dependency declaration to parent.~~
 - ~~DriverManager issue~~
 - ~~Add Validators~~
-    - ~~Use lombok as much as possible ~~
+    - ~~Use lombok as much as possible~~
 - ~~Spring Security~~
 - ~~SQL Injection Filter~~
 - ~~Use Wrapper classes on entity~~
