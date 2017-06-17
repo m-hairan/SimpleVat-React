@@ -115,7 +115,7 @@ public class TransactionController extends TransactionControllerHelper{
 		if(selectedTransactionModel.getTransactionStatus() == null ||
 		   selectedTransactionModel.getTransactionStatus().getExplainationStatusCode() == 0){
 			Map<String,String> map = new HashMap<>();
-			map.put("explainationStatusName", "Explained");
+			map.put("explainationStatusName", "EXPLAINED");
 			TransactionStatus transactionStatus  = transactionStatusService.findByAttributes(map).get(0);
 			transaction.setTransactionStatus(transactionStatus);
 		}
@@ -142,11 +142,13 @@ public class TransactionController extends TransactionControllerHelper{
 			transaction.setDebitCreditFlag(transactionType.getDebitCreditFlag());
 		}
 		
+		BankAccount bankAccount = bankAccountService.getBankAccount(selectedBankAccount.getBankAccountId());
 		if(transaction.getDebitCreditFlag() == 'C'){
-			selectedBankAccount.setCurrentBalance(selectedBankAccount.getCurrentBalance().add(transaction.getTransactionAmount()));
+			bankAccount.setCurrentBalance(bankAccount.getCurrentBalance().add(transaction.getTransactionAmount()));
 		} else if (transaction.getDebitCreditFlag() == 'D'){
-			selectedBankAccount.setCurrentBalance(selectedBankAccount.getCurrentBalance().subtract(transaction.getTransactionAmount()));
+			bankAccount.setCurrentBalance(bankAccount.getCurrentBalance().subtract(transaction.getTransactionAmount()));
 		}
+		
 		if(selectedTransactionModel.getExplainedTransactionCategory() != null){
 			TransactionCategory transactionCategory = transactionCategoryService.getTransactionCategory(selectedTransactionModel.getExplainedTransactionCategory().getTransactionCategoryCode());
 			transaction.setExplainedTransactionCategory(transactionCategory);
@@ -159,7 +161,7 @@ public class TransactionController extends TransactionControllerHelper{
 		
 		if(selectedTransactionModel.getTransactionStatus().getExplainationStatusCode() == 0){
 			Map<String,String> map = new HashMap<>();
-			map.put("explainationStatusName", "Unexplained");
+			map.put("explainationStatusName", "EXPLAINED");
 			TransactionStatus transactionStatus  = transactionStatusService.findByAttributes(map).get(0);
 			transaction.setTransactionStatus(transactionStatus);
 		}
@@ -167,7 +169,7 @@ public class TransactionController extends TransactionControllerHelper{
 		if(selectedTransactionModel.getAttachmentFile().getSize() > 0){
 			storeUploadedFile(selectedTransactionModel, transaction, fileLocation);
 		}
-		bankAccountService.createOrUpdateBankAccount(selectedBankAccount);
+		bankAccountService.createOrUpdateBankAccount(bankAccount);
 		transactionService.updateOrCreateTransaction(transaction);
 		this.setSelectedTransactionModel(new TransactionModel());
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transaction saved successfully"));

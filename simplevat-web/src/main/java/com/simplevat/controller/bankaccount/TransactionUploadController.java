@@ -175,7 +175,7 @@ public class TransactionUploadController {
 		List<ImportedDraftTransaction> importedDraftTransactions = importedDraftTransactonService.getImportedDraftTransactionsByCriteria(importedDraftTransactonCriteria);
 		
         Map<String,String> map = new HashMap<>();
-		map.put("explainationStatusName", "Unexplained");
+		map.put("explainationStatusName", "UNEXPLAINED");
 		TransactionStatus transactionStatus  = transactionStatusService.findByAttributes(map).get(0);
 		
 		for(ImportedDraftTransaction importedDraftTransaction : importedDraftTransactions){
