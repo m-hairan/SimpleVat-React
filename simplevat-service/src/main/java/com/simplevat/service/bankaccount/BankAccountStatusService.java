@@ -10,4 +10,6 @@ public interface BankAccountStatusService {
 	
 	public BankAccountStatus getBankAccountStatus(Integer id);
 	
+	public BankAccountStatus getBankAccountStatusByName(String status);
+	
 }

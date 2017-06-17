@@ -30,4 +30,14 @@ public class BankAccountStatusDaoImpl implements BankAccountStatusDao{
 		return entityManager.find(BankAccountStatus.class, id);
 	}
 
+	@Override
+	public BankAccountStatus getBankAccountStatusByName(String status) {
+		
+		BankAccountStatus bankAccounStatus = entityManager
+                .createNamedQuery("findBankAccountStatusByName", BankAccountStatus.class)
+                .setParameter("status", status)
+                .getResultList().get(0);
+		return bankAccounStatus;
+	}
+
 }

@@ -10,6 +10,7 @@
 
 			<p:dataTable var="expense" 
 					value="#{expenseListController.expenses}"
+					id="expensesTable"
 					 paginator="true" rows="5">
 					 
 				<f:facet name="header">
@@ -40,7 +41,7 @@
                              <f:setPropertyActionListener value="#{expense}" target="#{expenseController.selectedExpenseModel}" />
                      </p:commandButton>
                      
-                     <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{expenseController.deleteExpense}">
+                     <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{expenseController.deleteExpense}" update="expensesTable">
 						<f:setPropertyActionListener value="#{expense}" target="#{expenseController.selectedExpenseModel}" />
 						<p:confirm header="#{messages.delete}" message="#{messages.are_you_sure_want_to_delete}" icon="ui-icon-alert" />
 					</p:commandButton>

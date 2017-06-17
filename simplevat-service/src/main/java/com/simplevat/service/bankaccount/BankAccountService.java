@@ -9,5 +9,7 @@ public interface BankAccountService {
 	public List<BankAccount> getBankAccounts();
 
 	public BankAccount createOrUpdateBankAccount(BankAccount bankAccount);
+	
+	public BankAccount getBankAccount(Integer id);
 
 }

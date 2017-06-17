@@ -40,12 +40,13 @@ public class TransactionControllerHelper {
 		transaction.setTransactionType(model.getTransactionType());
 		transaction.setReceiptNumber(model.getReceiptNumber());
 		transaction.setDebitCreditFlag(model.getDebitCreditFlag());
-		transaction.setExplainedProjectId(model.getExplainedProjectId());
+		transaction.setProject(model.getProject());
 		transaction.setExplainedTransactionCategory(model.getExplainedTransactionCategory());
 		transaction.setExplainedTransactionDescription(model.getExplainedTransactionDescription());
 		transaction.setExplainedTransactionAttachementDescription(model.getExplainedTransactionAttachementDescription());
 		transaction.setExplainedTransactionAttachementPath(model.getExplainedTransactionAttachementPath());
 		transaction.setBankAccount(model.getBankAccount());
+		transaction.setTransactionStatus(model.getTransactionStatus());
 		transaction.setCurrentBalance(model.getCurrentBalance());
 		transaction.setCreatedBy(model.getCreatedBy());
 		transaction.setLastUpdatedBy(model.getLastUpdatedBy());
@@ -69,11 +70,12 @@ public class TransactionControllerHelper {
 		transactionModel.setTransactionType(entity.getTransactionType());
 		transactionModel.setReceiptNumber(entity.getReceiptNumber());
 		transactionModel.setDebitCreditFlag(entity.getDebitCreditFlag());
-		transactionModel.setExplainedProjectId(entity.getExplainedProjectId());
+		transactionModel.setProject(entity.getProject());
 		transactionModel.setExplainedTransactionCategory(entity.getExplainedTransactionCategory());
 		transactionModel.setExplainedTransactionDescription(entity.getExplainedTransactionDescription());
 		transactionModel.setExplainedTransactionAttachementDescription(entity.getExplainedTransactionAttachementDescription());
 		transactionModel.setExplainedTransactionAttachementPath(entity.getExplainedTransactionAttachementPath());
+		transactionModel.setTransactionStatus(entity.getTransactionStatus());
 		transactionModel.setBankAccount(entity.getBankAccount());
 		transactionModel.setCurrentBalance(entity.getCurrentBalance());
 		transactionModel.setCreatedBy(entity.getCreatedBy());

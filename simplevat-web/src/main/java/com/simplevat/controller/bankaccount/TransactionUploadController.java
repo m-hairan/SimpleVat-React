@@ -14,17 +14,23 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import org.apache.commons.io.FilenameUtils;
 import org.primefaces.model.UploadedFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -32,13 +38,18 @@ import com.simplevat.criteria.bankaccount.ImportedDraftTransactionCriteria;
 import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.entity.bankaccount.ImportedDraftTransaction;
 import com.simplevat.entity.bankaccount.Transaction;
+import com.simplevat.entity.bankaccount.TransactionStatus;
+import com.simplevat.service.bankaccount.BankAccountService;
 import com.simplevat.service.bankaccount.ImportedDraftTransactonService;
 import com.simplevat.service.bankaccount.TransactionService;
+import com.simplevat.service.bankaccount.TransactionStatusService;
 
 @Controller
 @ManagedBean(name = "transactionUploadController")
 @RequestScoped
 public class TransactionUploadController {
+	
+	private final static Logger LOGGER = LoggerFactory.getLogger(TransactionUploadController.class);
 	
 	@Autowired
 	private ImportedDraftTransactonService importedDraftTransactonService;
@@ -49,9 +60,15 @@ public class TransactionUploadController {
 	@Autowired
 	private TransactionController transactionController;
 	
+	@Autowired
+	private TransactionStatusService<Integer, TransactionStatus> transactionStatusService;
+	
 	@Getter
 	@Setter
 	private ImportedDraftTransaction selectedImportedDraftTransaction;
+	
+	@Autowired
+	private BankAccountService bankAccountService;
 	
 	@Getter
 	@Setter
@@ -106,22 +123,16 @@ public class TransactionUploadController {
 					
 					if(istransactionLineGood){
 						
-						
-						System.out.println("transactionDate-->"+transactionDate);
-						System.out.println("transactionDescription-->"+transactionDescription);
-						System.out.println("debitAmount-->"+debitAmount);
-						System.out.println("creditAmount-->"+creditAmount);
-						
 						ImportedDraftTransaction importedDraftTransacton = new ImportedDraftTransaction();
 						importedDraftTransacton.setImportedTransactionDate(transactionDate);
 						importedDraftTransacton.setImportedTransactionDescription(transactionDescription);
 						
 						if(debitAmount != null && !debitAmount.trim().isEmpty()){
 							importedDraftTransacton.setImportedDebitCreditFlag('D');
-							importedDraftTransacton.setImportedTransactionAmount(new BigDecimal(debitAmount));
+							importedDraftTransacton.setImportedTransactionAmount(new BigDecimal(debitAmount.trim()));
 						} else if (creditAmount != null && !creditAmount.trim().isEmpty()) {
 							importedDraftTransacton.setImportedDebitCreditFlag('C');
-							importedDraftTransacton.setImportedTransactionAmount(new BigDecimal(creditAmount));
+							importedDraftTransacton.setImportedTransactionAmount(new BigDecimal(creditAmount.trim()));
 						} else {
 							importedDraftTransacton.setImportedDebitCreditFlag('D');
 						}
@@ -130,7 +141,7 @@ public class TransactionUploadController {
 						try{
 							importedDraftTransactonService.updateOrCreateImportedDraftTransaction(importedDraftTransacton);
 						} catch (Exception e){
-							e.printStackTrace();
+							LOGGER.error(e.getMessage());
 						}
 						
 					}
@@ -139,11 +150,11 @@ public class TransactionUploadController {
 					
 				}
 			} else {
-				System.out.println("please upload expected file");
+				LOGGER.error("please upload file in expected formate");
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("please upload file in expected formate"));
+				return "/pages/secure/bankaccount/review-imported-bank-transactions.xhtml";
 			}
-			System.out.println("filename-->"+file.getName());
-			System.out.println("filename-->"+file.length());
-			
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transactions uploaded successfully"));
 			return "/pages/secure/bankaccount/review-imported-bank-transactions.xhtml";
 			
 		}
@@ -154,6 +165,7 @@ public class TransactionUploadController {
 	public void deleteImportedDraftTransaction(){
 		selectedImportedDraftTransaction.setDeleteFlag(true);
 		importedDraftTransactonService.updateOrCreateImportedDraftTransaction(selectedImportedDraftTransaction);
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transaction deleted successfully"));
 	}
 	
 	public String saveTransactions() throws Exception{
@@ -162,18 +174,34 @@ public class TransactionUploadController {
 		importedDraftTransactonCriteria.setActive(Boolean.TRUE);
 		List<ImportedDraftTransaction> importedDraftTransactions = importedDraftTransactonService.getImportedDraftTransactionsByCriteria(importedDraftTransactonCriteria);
 		
+        Map<String,String> map = new HashMap<>();
+		map.put("explainationStatusName", "Unexplained");
+		TransactionStatus transactionStatus  = transactionStatusService.findByAttributes(map).get(0);
+		
 		for(ImportedDraftTransaction importedDraftTransaction : importedDraftTransactions){
 			Transaction transaction = new Transaction();
+			transaction.setTransactionStatus(transactionStatus);
 			transaction.setTransactionDate(importedDraftTransaction.getImportedTransactionDate());
 			transaction.setTransactionDescription(importedDraftTransaction.getImportedTransactionDescription());
 			transaction.setDebitCreditFlag(importedDraftTransaction.getImportedDebitCreditFlag());
 			transaction.setTransactionAmount(importedDraftTransaction.getImportedTransactionAmount());
 			transaction.setLastUpdatedBy(12345);
 			transaction.setCreatedBy(12345);
-			transaction.setBankAccount(importedDraftTransaction.getBankAccount());
+			
+			BankAccount bankAccount = bankAccountService.getBankAccount(importedDraftTransaction.getBankAccount().getBankAccountId());
+			if(importedDraftTransaction.getImportedDebitCreditFlag() == 'C' && importedDraftTransaction.getImportedTransactionAmount() != null){
+				bankAccount.setCurrentBalance(bankAccount.getCurrentBalance().add(importedDraftTransaction.getImportedTransactionAmount()));
+			} else if (importedDraftTransaction.getImportedDebitCreditFlag() == 'D' && importedDraftTransaction.getImportedTransactionAmount() != null){
+				bankAccount.setCurrentBalance(bankAccount.getCurrentBalance().subtract(importedDraftTransaction.getImportedTransactionAmount()));
+			}
+			bankAccount = bankAccountService.createOrUpdateBankAccount(bankAccount);
+			transaction.setCurrentBalance(bankAccount.getCurrentBalance());
+			transaction.setBankAccount(bankAccount);
 			transactionService.updateOrCreateTransaction(transaction);
 		}
 		
+		importedDraftTransactonService.deleteImportedDraftTransaction(transactionController.getSelectedBankAccount().getBankAccountId());
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transactions imported successfully"));
 		return "/pages/secure/bankaccount/bank-transactions.xhtml";
 		
 	}

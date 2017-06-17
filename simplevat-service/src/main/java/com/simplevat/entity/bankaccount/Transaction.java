@@ -1,5 +1,6 @@
 package com.simplevat.entity.bankaccount;
 
+import com.simplevat.entity.Project;
 import com.simplevat.entity.converter.DateConverter;
 
 import lombok.Data;
@@ -40,9 +41,10 @@ public class Transaction {
     @Basic
     @Column(name = "DEBIT_CREDIT_FLAG")
     private Character debitCreditFlag;
-    @Basic
-    @Column(name = "EXPLAINED_PROJECT_ID")
-    private Integer explainedProjectId;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "EXPLAINED_PROJECT_ID")
+    private Project project;
    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EXPLAINED_TRANSACTION_CATEGORY_CODE")
@@ -61,6 +63,10 @@ public class Transaction {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BANK_ACCOUNT_ID")
     private BankAccount bankAccount;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "EXPLANATION_STATUS_CODE")
+    private TransactionStatus transactionStatus;
     
     @Column(name="CURRENT_BALANCE")
     private BigDecimal currentBalance = new BigDecimal(123);

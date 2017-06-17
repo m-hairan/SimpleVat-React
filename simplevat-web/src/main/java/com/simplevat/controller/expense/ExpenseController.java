@@ -3,8 +3,10 @@ package com.simplevat.controller.expense;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -103,12 +105,13 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 			storeUploadedFile(this.getSelectedExpenseModel(), expense, fileLocation);
 		}
 		expenseService.updateOrCreateExpense(expense);
-			
+		
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense saved successfully"));
 		return "/pages/secure/expense/expenses.xhtml";
 		
 	}
 	
-	public String saveAndContinueExpense(){
+	public void saveAndContinueExpense(){
 		
 		Expense expense = this.getExpense(this.getSelectedExpenseModel());
 		
@@ -144,16 +147,16 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 		
 		expenseService.updateOrCreateExpense(expense);
 		this.setSelectedExpenseModel(new ExpenseModel());
-		return "/pages/secure/expense/create-expense.xhtml?faces-redirect=true";
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense saved successfully"));
 		
 	}
 	
-	public String deleteExpense(){
+	public void deleteExpense(){
 		
 		Expense expense = this.getExpense(this.getSelectedExpenseModel());
 		expense.setDeleteFlag(true);
 		expenseService.updateOrCreateExpense(expense);
-		return "/pages/secure/expense/expenses.xhtml?faces-redirect=true";
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense deleted successfully"));
 		
 	}
 	

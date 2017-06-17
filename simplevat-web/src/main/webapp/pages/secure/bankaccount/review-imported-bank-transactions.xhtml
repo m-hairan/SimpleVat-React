@@ -41,10 +41,6 @@
 										<h:outputText value="#{transaction.importedTransactionAmount}" rendered="#{transaction.importedDebitCreditFlag.toString() eq 'D'}" />
 									</p:column>
 									
-									<p:column headerText="#{messages.current_balance}">
-										<h:outputText value="-" />
-									</p:column>
-									
 									<p:column headerText="Action">
 										
 										<p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{transactionUploadController.deleteImportedDraftTransaction}" update="importedDraftTransactionsTable">
@@ -61,7 +57,7 @@
 								<f:facet name="left">
 									
 									<p:commandButton value="import" icon="ui-icon-save" action="#{transactionUploadController.saveTransactions}">
-										<p:confirm header="#{messages.delete}" message="#{messages.are_you_sure_want_to_delete}" icon="ui-icon-alert" />
+										<p:confirm header="#{messages.delete}" message="#{messages.are_you_sure_want_to_import}" icon="ui-icon-alert" />
 									</p:commandButton>
 									
 									<span class="ui-separator" style="padding-right: 5px;"> <span
