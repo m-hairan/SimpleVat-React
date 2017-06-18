@@ -10,5 +10,7 @@ public interface ImportedDraftTransactonService {
 	 List<ImportedDraftTransaction> getImportedDraftTransactionsByCriteria(ImportedDraftTransactionCriteria importedDraftTransactonCriteria) throws Exception;
 
 	 ImportedDraftTransaction updateOrCreateImportedDraftTransaction(ImportedDraftTransaction importedDraftTransacton);
+	 
+	 boolean deleteImportedDraftTransaction(Integer bankAcccountId);
 
 }

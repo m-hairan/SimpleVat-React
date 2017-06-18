@@ -10,8 +10,10 @@ import lombok.Setter;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
+import com.simplevat.entity.Project;
 import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.entity.bankaccount.TransactionCategory;
+import com.simplevat.entity.bankaccount.TransactionStatus;
 import com.simplevat.entity.bankaccount.TransactionType;
 
 @Getter
@@ -29,12 +31,13 @@ public class TransactionModel {
     private TransactionType transactionType;
     private String receiptNumber;
     private Character debitCreditFlag;
-    private Integer explainedProjectId;
+    private Project project;
     private TransactionCategory explainedTransactionCategory;
     private String explainedTransactionDescription;
     private String explainedTransactionAttachementDescription;
     private String explainedTransactionAttachementPath;
     private BankAccount bankAccount;
+    private TransactionStatus transactionStatus;
     private BigDecimal currentBalance = new BigDecimal(123);
     private Integer createdBy;
     private LocalDateTime createdDate;

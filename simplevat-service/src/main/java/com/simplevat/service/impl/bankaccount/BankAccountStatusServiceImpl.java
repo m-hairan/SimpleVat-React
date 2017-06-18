@@ -25,4 +25,9 @@ public class BankAccountStatusServiceImpl implements BankAccountStatusService {
 		return bankAccountStatusDao.getBankAccountStatus(id);
 	}
 
+	@Override
+	public BankAccountStatus getBankAccountStatusByName(String status) {
+		return bankAccountStatusDao.getBankAccountStatusByName(status);
+	}
+
 }

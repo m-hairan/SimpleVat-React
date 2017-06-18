@@ -8,13 +8,24 @@
 
 		<div class="card card-w-title">
 
-			<p:dataTable var="transaction" 
+			<p:dataTable var="transaction"
+					id="transactionsTable"
 					value="#{transactionListController.transactions}"
 					 paginator="true" rows="5">
 					 
 				<f:facet name="header">
                       #{transactionController.selectedBankAccount.bankAccountName}
                 </f:facet>
+                
+                <p:column>
+					<h:panelGroup rendered="#{transaction.transactionStatus.defaltFlag.toString() eq 'E'}">
+						<i class="fa fa-check" style="color: green;"></i>
+					</h:panelGroup>
+					<h:panelGroup rendered="#{transaction.transactionStatus.defaltFlag.toString() eq 'U'}">
+						<i class="fa fa-close" style="color: red;"></i>
+					</h:panelGroup>
+					
+				</p:column>
                 
                 <p:column headerText="#{messages.date}" sortBy="#{transaction.transactionDate.time}">
 					 <h:outputText value="#{transaction.transactionDate.time}" >
@@ -35,7 +46,7 @@
 				</p:column>
 				
 				<p:column headerText="#{messages.current_balance}">
-					<h:outputText value="-" />
+					<h:outputText value="#{transaction.currentBalance}" />
 				</p:column>
 				
 				<p:column headerText="Action">
@@ -44,7 +55,7 @@
                          <f:setPropertyActionListener value="#{transaction}" target="#{transactionController.selectedTransactionModel}" />
                     </p:commandButton>
                      
-                    <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{transactionController.deleteTransaction}">
+                    <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{transactionController.deleteTransaction}" update="transactionsTable">
 						<f:setPropertyActionListener value="#{transaction}" target="#{transactionController.selectedTransactionModel}" />
 						<p:confirm header="#{messages.delete}" message="#{messages.are_you_sure_want_to_delete}" icon="ui-icon-alert" />
 					</p:commandButton>

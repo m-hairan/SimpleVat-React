@@ -33,4 +33,9 @@ public class ImportedDraftTransactonServiceImpl implements
 		return importedDraftTransactonDao.updateOrCreateImportedDraftTransaction(importedDraftTransacton);
 	}
 
+	@Override
+	public boolean deleteImportedDraftTransaction(Integer bankAcccountId) {
+		return importedDraftTransactonDao.deleteImportedDraftTransaction(bankAcccountId);
+	}
+
 }

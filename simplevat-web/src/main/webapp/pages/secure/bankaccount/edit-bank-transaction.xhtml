@@ -23,11 +23,8 @@
 										layout="grid" styleClass="ui-panelgrid-blank form-group"
 										style="border:0px none; background-color:transparent;">
 										
-										<h:panelGroup />
-										
-										
+										<p:outputLabel for="transactionType"/>
 										<h:panelGroup styleClass="md-inputfield">
-											<p:outputLabel for="transactionType"/>
 											<p:autoComplete
 														id="transactionType"
                                                         converter="transactionTypeConverter"
@@ -44,22 +41,21 @@
 	                                        <label>#{messages.type}</label>
 										</h:panelGroup>
 
-										<h:panelGroup />
-
+										<p:outputLabel for="transactionDate"/>
 										<h:panelGroup styleClass="md-inputfield">
-											<p:outputLabel for="transactionDate"/>
 											<p:calendar
 												id="transactionDate"
-												value="#{transactionController.selectedTransactionModel.transactionDate}" />
+												value="#{transactionController.selectedTransactionModel.transactionDate}"
+												required="true" />
 											<label>#{messages.date}</label>
 										</h:panelGroup>
 
-										<h:panelGroup />
-
+										<p:outputLabel for="transactionAmount"/>
 										<h:panelGroup styleClass="md-inputfield">
 											<p:inputText
 												id="transactionAmount"
-												value="#{transactionController.selectedTransactionModel.transactionAmount}" />
+												value="#{transactionController.selectedTransactionModel.transactionAmount}"
+												required="true" />
 	                                        <label>#{messages.total_amount}</label>
 										</h:panelGroup>
 
@@ -72,10 +68,8 @@
 										layout="grid" styleClass="ui-panelgrid-blank form-group"
 										style="border:0px none; background-color:transparent;">
 
-										<h:panelGroup />
-										
+										<p:outputLabel for="transactionCategory"/>
 										<h:panelGroup styleClass="md-inputfield">
-											<p:outputLabel for="transactionCategory"/>
 											<p:autoComplete
 														id="transactionCategory"
                                                         converter="transactionCategoryConverter"
@@ -100,9 +94,23 @@
 											<label>#{messages.description}</label>
 										</h:panelGroup>
 
-										<h:panelGroup />
-
-										<h:panelGroup />
+										<p:outputLabel for="transactionStatus" rendered="#{transactionController.selectedTransactionModel.transactionId > 0}"/>
+										<h:panelGroup styleClass="md-inputfield" rendered="#{transactionController.selectedTransactionModel.transactionId > 0}">
+											<p:autoComplete
+														id="transactionStatus"
+                                                        converter="transactionStatusConverter"
+                                                        dropdown="true"
+                                                        forceSelection="true"
+                                                        effect="fold"
+                                                        completeMethod="#{transactionController.transactionStatuses}"
+                                                        value="#{transactionController.selectedTransactionModel.transactionStatus}"
+                                                        var="transactionStatus"
+                                                        itemValue="#{transactionStatus}"
+                                                        itemLabel="#{transactionStatus.explainationStatusName}"
+                                                        required="true">
+	                                        </p:autoComplete>
+	                                        <label>#{messages.status}</label>
+										</h:panelGroup>
 
 									</p:panelGrid>
 								</p:fieldset>
@@ -112,18 +120,23 @@
 										columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
 										layout="grid" styleClass="ui-panelgrid-blank form-group"
 										style="border:0px none; background-color:transparent;">
-
-										<h:panelGroup />
-
-										<h:panelGroup>
-											<p:selectOneMenu converter="javax.faces.Integer"
-												value="#{transactionController.selectedTransactionModel.explainedProjectId}" disabled="true">
-												<f:selectItem itemValue="456571" itemLabel="project 1" />
-												<f:selectItem itemValue="456572" itemLabel="project 2" />
-												<f:selectItem itemValue="456573" itemLabel="project 3" />
-												<f:selectItem itemValue="456574" itemLabel="project 4" />
-												<label>#{messages.project}</label>
-											</p:selectOneMenu>
+										
+										<p:outputLabel for="bankAccountProject"/>
+										<h:panelGroup styleClass="md-inputfield">
+											<p:autoComplete
+														id="bankAccountProject"
+                                                        converter="#{projectConverter}"
+                                                        dropdown="true"
+                                                        forceSelection="true"
+                                                        effect="fold"
+                                                        completeMethod="#{projectController.projects}"
+                                                        value="#{transactionController.selectedTransactionModel.project}"
+                                                        var="project"
+                                                        itemValue="#{project}"
+                                                        itemLabel="#{project.projectName}"
+                                                        >
+	                                        </p:autoComplete>
+	                                        <label>#{messages.project}</label>
 										</h:panelGroup>
 
 										<h:panelGroup />
@@ -188,7 +201,8 @@
 						<p:commandButton value="#{messages.save_and_add_more}"
 							icon="ui-icon-forward"
 							action="#{transactionController.saveAndContinueTransaction}"
-							ajax="false"/>
+							ajax="false"
+							update="createTransactionForm"/>
 
 						<span class="ui-separator" style="padding-right: 5px;"> <span
 							class="fa fa-ellipsis-v SoftGray" />
@@ -197,6 +211,7 @@
 
 						<p:commandButton title="#{messages.cancel}" icon="ui-icon-cancel"
 							action="/pages/secure/bankaccount/bank-transactions.xhtml"
+							immmedidate="true"
 							 />
 					</f:facet>
 

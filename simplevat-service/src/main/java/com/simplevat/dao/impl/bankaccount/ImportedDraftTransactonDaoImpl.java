@@ -81,4 +81,14 @@ public class ImportedDraftTransactonDaoImpl extends AbstractDao implements Impor
 		 return getEntityManager().merge(importedDraftTransacton);
 	}
 
+	@Override
+	public boolean deleteImportedDraftTransaction(Integer bankAcccountId) {
+		
+		Query updateQuery = getEntityManager().createNativeQuery("UPDATE IMPORTED_DRAFT_TRANSACTON idt SET idt.DELETE_FLAG=1 WHERE idt.BANK_ACCOUNT_ID= :bankAccountId");
+		updateQuery.setParameter("bankAccountId", bankAcccountId);
+		updateQuery.executeUpdate();
+		
+		return true;
+	}
+
 }

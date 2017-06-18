@@ -82,6 +82,9 @@ public class UserController {
                 && currentUser.getProfileImage().getSize() > 0) {
             storeUploadedFile(fileLocation);
         }
+        //TODO Dear Hiren you cannot simple update the password like this in database
+        // you have to encode with BCrypEncoder and then you have to save it.
+        // BTW it is not necessary that every time password is updated
         userService.updateUser(currentUserEntity);
         initController();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User Profile updated successfully"));

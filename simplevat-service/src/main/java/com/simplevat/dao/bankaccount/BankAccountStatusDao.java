@@ -9,5 +9,7 @@ public interface BankAccountStatusDao {
 	public List<BankAccountStatus> getBankAccountStatuses();
 	
 	public BankAccountStatus getBankAccountStatus(Integer id);
+	
+	public BankAccountStatus getBankAccountStatusByName(String status);
 
 }

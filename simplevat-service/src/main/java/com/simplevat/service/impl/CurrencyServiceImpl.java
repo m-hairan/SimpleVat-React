@@ -15,15 +15,20 @@ import java.util.List;
 public class CurrencyServiceImpl implements CurrencyService {
 
     @Autowired
-    CurrencyDao CurrencyDao;
+    CurrencyDao currencyDao;
 
     @Override
     public List<Currency> getCurrencies() {
-        return CurrencyDao.getCurrencies();
+        return currencyDao.getCurrencies();
     }
 
     @Override
     public Currency getCurrency(final int currencyCode) {
-        return CurrencyDao.getCurrency(currencyCode);
+        return currencyDao.getCurrency(currencyCode);
+    }
+
+    @Override
+    public Currency getDefaultCurrency() {
+        return currencyDao.getDefaultCurrency();
     }
 }

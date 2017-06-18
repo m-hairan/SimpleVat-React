@@ -1,6 +1,5 @@
 package com.simplevat.controller.invoice;
 
-import static com.mysql.jdbc.StringUtils.isNullOrEmpty;
 import com.simplevat.contact.model.ContactModel;
 import com.simplevat.criteria.ProjectCriteria;
 import com.simplevat.entity.Contact;
@@ -15,6 +14,16 @@ import com.simplevat.service.CurrencyService;
 import com.simplevat.service.DiscountTypeService;
 import com.simplevat.service.ProjectService;
 import com.simplevat.service.invoice.InvoiceService;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -22,18 +31,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.context.FacesContext;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+
+import static com.mysql.jdbc.StringUtils.isNullOrEmpty;
 
 /**
- *
  * @author Hiren
  */
 @Controller
@@ -77,11 +78,18 @@ public class InvoiceController implements Serializable {
         invoiceModel = new InvoiceModel();
 
         currencies = currencyService.getCurrencies();
-        invoiceModel.setCurrencyCode(currencies.get(149));
+        setDefaultCurrency();
         invoiceModel.setInvoiceDate(new Date());
         invoiceModel.setInvoiceDueOn(30);
         updateCurrencyLabel();
         invoiceModel.addInvoiceItem(new InvoiceItemModel());
+    }
+
+    private void setDefaultCurrency() {
+        Currency defaultCurrency = currencyService.getDefaultCurrency();
+        if (defaultCurrency != null) {
+            invoiceModel.setCurrencyCode(defaultCurrency);
+        }
     }
 
     public void addInvoiceItem() {
@@ -201,7 +209,7 @@ public class InvoiceController implements Serializable {
     }
 
     public void updateCurrency() {
-        invoiceModel.setCurrencyCode(currencies.get(149));
+        setDefaultCurrency();
         if (null != invoiceModel.getContact()) {
             final Contact contact = contactService
                     .getContact(invoiceModel.getContact().getContactId());
@@ -234,7 +242,7 @@ public class InvoiceController implements Serializable {
 
     public void redirectEditInvoice(int invoiceId) throws IOException {
 
-        final Invoice invoice = (Invoice) invoiceService.findByPK(invoiceId);
+        final Invoice invoice = invoiceService.findByPK(invoiceId);
         invoiceModel = invoiceConverter.convertEntityToModel(invoice);
         FacesContext.getCurrentInstance().getExternalContext()
                 .redirect("invoice.xhtml?faces-redirect=true");
@@ -245,6 +253,7 @@ public class InvoiceController implements Serializable {
     }
 
     public void createContact() {
+        Currency defaultCurrency = currencyService.getDefaultCurrency();
 
         final Contact contact = new Contact();
 
@@ -255,8 +264,13 @@ public class InvoiceController implements Serializable {
         contact.setLastName(contactModel.getLastName());
         contact.setOrganization(contactModel.getOrganizationName());
         contact.setCreatedBy(1);
+        contact.setCurrency(defaultCurrency);
 
         contactModel = new ContactModel();
+
+        if (defaultCurrency != null) {
+            contactModel.setCurrency(defaultCurrency);
+        }
 
         contactService.createOrUpdateContact(contact);
 

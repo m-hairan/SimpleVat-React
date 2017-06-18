@@ -11,7 +11,7 @@ import javax.persistence.*;
 @NamedQueries({
         @NamedQuery(name = "allCurrencies",
                 query = "SELECT c " +
-                        "FROM Currency c ")
+                        "FROM Currency c ORDER BY c.defaultFlag DESC , c.orderSequence ASC ")
 })
 
 
@@ -35,4 +35,11 @@ public class Currency {
     @Basic
     @Column(name = "CURRENCY_SYMBOL")
     private String currencySymbol;
+
+    @Column(name = "DEFAULT_FLAG")
+    private Character defaultFlag;
+
+    @Column(name = "ORDER_SEQUENCE")
+    private Integer orderSequence;
+
 }
