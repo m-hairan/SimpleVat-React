@@ -2,19 +2,20 @@ package com.simplevat.controller.contact;
 
 import com.simplevat.entity.Contact;
 import com.simplevat.service.ContactService;
+import java.io.Serializable;
+import java.util.*;
+import javax.annotation.Nonnull;
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import java.io.Serializable;
-import java.util.*;
-import javax.annotation.Nonnull;
 
 @Controller
 @ManagedBean(name = "contactListController")
@@ -88,6 +89,14 @@ public class ContactListController implements Serializable {
         }
         return filteredContacts;
 
+    }
+
+    public void deleteContact(@Nonnull final Contact contact) {
+        contact.setDeleteFlag(Boolean.TRUE);
+        contactService.createOrUpdateContact(contact);
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        context.addMessage(null, new FacesMessage("Contact deleted SuccessFully"));
     }
 
 }

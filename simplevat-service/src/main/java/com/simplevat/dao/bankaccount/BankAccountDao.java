@@ -11,4 +11,6 @@ public interface BankAccountDao {
 	public BankAccount createOrUpdateBankAccount(BankAccount bankAccount);
 	
 	public List<BankAccount> getBankAccountByUser(int userId);
+	public BankAccount getBankAccount(Integer id);
+	
 }

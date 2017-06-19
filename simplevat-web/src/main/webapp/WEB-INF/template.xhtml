@@ -43,6 +43,11 @@
             </div>
         </div>
         
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		</p:confirmDialog>
+        
         <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
            <f:facet name="start">
                <i class="fa fa-circle-o-notch fa-spin ajax-loader" aria-hidden="true"></i>

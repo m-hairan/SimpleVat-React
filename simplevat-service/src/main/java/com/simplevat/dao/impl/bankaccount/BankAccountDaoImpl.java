@@ -49,4 +49,9 @@ public class BankAccountDaoImpl implements BankAccountDao {
 	
 	
 
+	@Override
+	public BankAccount getBankAccount(Integer id) {
+		return entityManager.find(BankAccount.class, id);
+	}
+
 }

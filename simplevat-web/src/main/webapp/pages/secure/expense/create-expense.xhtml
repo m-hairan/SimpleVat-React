@@ -23,10 +23,8 @@
 										layout="grid" styleClass="ui-panelgrid-blank form-group"
 										style="border:0px none; background-color:transparent;">
 										
-										<h:panelGroup />
-
+										<p:outputLabel for="expenseClaimantId"/>
 										<h:panelGroup styleClass="md-inputfield">
-											<p:outputLabel for="expenseClaimantId"/>
 											<p:autoComplete
 														id="expenseClaimantId"
                                                         converter="userConverter"
@@ -38,15 +36,14 @@
                                                         var="user"
                                                         itemValue="#{user}"
                                                         itemLabel="#{user.firstName}"
-                                                        required="true">
+                                                        required="true"
+                                                        requiredMessage="Please select Claimant">
 	                                        </p:autoComplete>
 	                                        <label>#{messages.claimant}</label>
 										</h:panelGroup>
 
-										<h:panelGroup />
-
+										<p:outputLabel for="expenseTransactionType"/>
 										<h:panelGroup styleClass="md-inputfield">
-											<p:outputLabel for="expenseTransactionType"/>
 											<p:autoComplete
 														id="expenseTransactionType"
                                                         converter="transactionTypeConverter"
@@ -58,15 +55,14 @@
                                                         var="transactionType"
                                                         itemValue="#{transactionType}"
                                                         itemLabel="#{transactionType.transactionTypeName}"
-                                                        required="true">
+                                                        required="true"
+                                                        requiredMessage="Please select expense Type">
 	                                        </p:autoComplete>
 	                                        <label>#{messages.type}</label>
 										</h:panelGroup>
 
-										<h:panelGroup />
-
+										<p:outputLabel for="expenseTransactionCategory"/>
 										<h:panelGroup styleClass="md-inputfield">
-											<p:outputLabel for="expenseTransactionCategory"/>
 											<p:autoComplete
 														id="expenseTransactionCategory"
                                                         converter="transactionCategoryConverter"
@@ -83,26 +79,29 @@
 	                                        <label>#{messages.category}</label>
 										</h:panelGroup>
 										
-										<h:panelGroup />
-
+										<p:outputLabel for="expenseDate"/>
 										<h:panelGroup styleClass="md-inputfield">
 											<p:calendar
-												value="#{expenseController.selectedExpenseModel.expenseDate}" />
+												id="expenseDate"
+												value="#{expenseController.selectedExpenseModel.expenseDate}" 
+												required="true"
+												requiredMessage="Please select expense date"/>
 											<label>#{messages.expense_date}</label>
 										</h:panelGroup>
 
-										<h:panelGroup />
-
+										
+										<p:outputLabel for="expenseAmount"/>
 										<h:panelGroup styleClass="md-inputfield">
 											<p:inputText
-												value="#{expenseController.selectedExpenseModel.expenseAmount}" />
+												id="expenseAmount"
+												value="#{expenseController.selectedExpenseModel.expenseAmount}"
+												required="true" 
+												requiredMessage="Please enter expense amount"/>
 											<label>#{messages.amount}</label>
 										</h:panelGroup>
 
-										<h:panelGroup />
-
+										<p:outputLabel for="expenseCurrency" />
 										<h:panelGroup styleClass="md-inputfield">
-											<p:outputLabel for="expenseCurrency" />
 											<p:autoComplete id="expenseCurrency" 
 												dropdown="true"
 												forceSelection="true" 
@@ -112,14 +111,16 @@
 												value="#{expenseController.selectedExpenseModel.currency}"
 												var="currency" 
 												itemValue="#{currency}"
-												itemLabel="#{currency.currencyDescription}" />
+												itemLabel="#{currency.currencyDescription}" 
+												required="true"
+												requiredMessage="Please select currency"/>
 											<label>#{messages.currency}</label>
 										</h:panelGroup>
 
-										<h:panelGroup />
-
+										<p:outputLabel for="expenseDescription" />
 										<h:panelGroup styleClass="md-inputfield">
 											<p:inputTextarea
+												id="expenseDescription"
 												value="#{expenseController.selectedExpenseModel.expenseDescription}"
 												rows="5" cols="30" counter="counterValue" maxlength="100"
 												counterTemplate="{0} characters remaining."
@@ -128,10 +129,8 @@
 											<label>#{messages.description}</label>
 										</h:panelGroup>
 
-										<h:panelGroup />
-										
+										<p:outputLabel for="expenseProject"/>
 										<h:panelGroup styleClass="md-inputfield">
-											<p:outputLabel for="expenseProject"/>
 											<p:autoComplete
 														id="expenseProject"
                                                         converter="#{projectConverter}"
@@ -160,10 +159,10 @@
 										layout="grid" styleClass="ui-panelgrid-blank form-group"
 										style="border:0px none; background-color:transparent;">
 
-										<h:panelGroup />
-
+										<p:outputLabel for="expenseReceiptNumber"/>
 										<h:panelGroup styleClass="md-inputfield">
 											<p:inputText
+												id="expenseReceiptNumber"
 												value="#{expenseController.selectedExpenseModel.receiptNumber}" />
 											<label>#{messages.receiptnumber}</label>
 										</h:panelGroup>
@@ -181,10 +180,10 @@
 											</h:panelGroup>
 										</h:panelGroup>
 
-										<h:panelGroup />
-
+										<p:outputLabel for="expenseAttachmentDescription"/>
 										<h:panelGroup styleClass="md-inputfield">
 											<p:inputText
+												id="expenseAttachmentDescription"
 												value="#{expenseController.selectedExpenseModel.receiptAttachmentDescription}" />
 											<label>#{messages.attachment_description}</label>
 										</h:panelGroup>
@@ -204,7 +203,8 @@
 						<p:commandButton value="#{messages.save_and_add_more}"
 							icon="ui-icon-forward" 
 							action="#{expenseController.saveAndContinueExpense}"
-							ajax="false"/>
+							ajax="false"
+							update="createExpenseForm"/>
 
 						<span class="ui-separator" style="padding-right: 5px;"> <span
 							class="fa fa-ellipsis-v SoftGray" />
@@ -213,6 +213,7 @@
 
 						<p:commandButton title="#{messages.cancel}" icon="ui-icon-cancel"
 							action="/pages/secure/expense/expenses.xhtml"
+							immediate="true"
 							 />
 					</f:facet>
 

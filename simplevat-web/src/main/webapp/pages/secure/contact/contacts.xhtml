@@ -113,8 +113,10 @@
                                                 <!--<f:setPropertyActionListener value="#{contact}" target="#{contactListController.selectedContact}" />-->
                                             <!--</p:commandButton>-->
 
-                                            <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" >
-                                                
+                                            <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" 
+                                                             update="@form"
+                                                             action="#{contactListController.deleteContact(contact)}">
+
                                             </p:commandButton>
                                         </h:panelGrid>
 

@@ -10,5 +10,7 @@ public interface ImportedDraftTransactonDao {
 	 List<ImportedDraftTransaction> getImportedDraftTransactionsByCriteria(ImportedDraftTransactionCriteria importedDraftTransactonCriteria) throws Exception;
 
 	 ImportedDraftTransaction updateOrCreateImportedDraftTransaction(ImportedDraftTransaction ismportedDraftTransacton);
+	 
+	 boolean deleteImportedDraftTransaction(Integer bankAcccountId);
 	    
 }
