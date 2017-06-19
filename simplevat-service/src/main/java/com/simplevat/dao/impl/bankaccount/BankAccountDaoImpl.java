@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,5 +30,23 @@ public class BankAccountDaoImpl implements BankAccountDao {
 	public BankAccount createOrUpdateBankAccount(BankAccount bankAccount) {
 		return entityManager.merge(bankAccount);
 	}
+	
+	@Override
+	public List<BankAccount>  getBankAccountByUser(int userId) {
+		List<BankAccount> resultList = null;
+		try{
+		String hql = "from BankAccount where createdBy = :userId";
+		Query query = entityManager.createQuery(hql);
+        query.setParameter("userId", userId);
+         resultList = query.getResultList();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+        return resultList;
+	
+	}
+	
+	
+	
 
 }
