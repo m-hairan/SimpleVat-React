@@ -31,6 +31,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.transaction.TransactionRequiredException;
 
 /**
  *
@@ -77,17 +80,23 @@ public class UserController {
     }
 
     public void update() throws UnauthorizedException {
-        currentUserEntity = convertToEntity(currentUser);
-        if (null != currentUser.getProfileImage()
-                && currentUser.getProfileImage().getSize() > 0) {
-            storeUploadedFile(fileLocation);
+        try {
+            currentUserEntity = convertToEntity(currentUser);
+            if (null != currentUser.getProfileImage()
+                    && currentUser.getProfileImage().getSize() > 0) {
+                storeUploadedFile(fileLocation);
+            }
+            //TODO Dear Hiren you cannot simple update the password like this in database
+            // you have to encode with BCrypEncoder and then you have to save it.
+            // BTW it is not necessary that every time password is updated
+            userService.updateUser(currentUserEntity);
+            initController();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User Profile updated successfully"));
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransactionRequiredException ex) {
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //TODO Dear Hiren you cannot simple update the password like this in database
-        // you have to encode with BCrypEncoder and then you have to save it.
-        // BTW it is not necessary that every time password is updated
-        userService.updateUser(currentUserEntity);
-        initController();
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User Profile updated successfully"));
     }
 
     private void storeUploadedFile(String fileLocation) throws UnauthorizedException {

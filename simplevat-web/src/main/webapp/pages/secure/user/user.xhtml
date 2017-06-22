@@ -1,0 +1,213 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+    <ui:define name="head">
+        <style>
+            .ui-fluid .ui-calendar input {
+                width: 90%;
+            }
+            .ui-fileupload-content{
+                display:none !important;  
+            }
+        </style>
+        <h:outputScript name="js/ripple.js" library="ultima-layout" />
+        <h:outputScript name="js/layout.js" library="ultima-layout" />
+    </ui:define>
+
+    <ui:define name="title">#{messages.profile}</ui:define>
+    <ui:define name="content">
+        <f:metadata>
+            <f:viewAction action="#{userControllerNew.init}" immediate="true"/>
+        </f:metadata>
+        <h:form id="profile" enctype="multipart/form-data">
+            <div class="card card-w-title">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <h1>#{messages.profile}</h1>
+                            <p:fieldset legend="#{messages.basicDetail}" toggleable="false">
+
+                                <h:panelGroup id="profilepic" layout="block" styleClass="profile" style="margin-left: 44%; margin-bottom: 15px;">
+                                    <div>
+                                        <ui:fragment rendered="#{not empty userControllerNew.profilePic}">
+                                            <p:graphicImage height="140px" width="140px"
+                                                            value="#{userControllerNew.profilePic}" />
+                                        </ui:fragment>
+                                        <ui:fragment rendered="#{empty userControllerNew.profilePic}">
+                                            <p:graphicImage name="images/user-avtar-icon1.png" library="ultima-layout" height="140px" width="140px"/>
+
+                                        </ui:fragment>
+
+                                        <div style="width:140px">
+                                            <p:fileUpload fileUploadListener="#{userControllerNew.handleFileUpload}" mode="advanced"
+                                                          label="Upload Profile" update="profilepic" auto="true" sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+                                        </div>
+
+                                    </div>
+
+                                </h:panelGroup>
+                                <p:panelGrid columns="6" 
+                                             columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                                             layout="grid" 
+                                             styleClass="ui-panelgrid-blank form-group"
+                                             style="border:0px none; background-color:transparent;">
+
+                                    <p:outputLabel for="firstName" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="firstName"
+                                                     maxlength="25"
+                                                     required="true"
+                                                     requiredMessage="Please enter First Name"
+                                                     value="#{userControllerNew.selectedUser.firstName}"/>
+                                        <label>#{messages.firstName}</label>
+                                        <p:message for="firstName" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="lastName" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="lastName"
+                                                     required="true"
+                                                     requiredMessage="Please enter Last Name"
+                                                     maxlength="25"
+                                                     value="#{userControllerNew.selectedUser.lastName}"/>
+                                        <label>#{messages.lastName}</label>
+                                        <p:message for="lastName" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="emailId" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="emailId"
+                                                     required="true"
+                                                     maxlength="25"
+                                                     requiredMessage="Please enter email address"
+                                                     validatorMessage="Invalid email format"
+                                                     value="#{userControllerNew.selectedUser.userEmail}">
+                                            <f:validateRegex
+                                                pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                        </p:inputText>
+                                        <label>#{messages.emailId}</label>
+                                        <p:message for="emailId" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="dob" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:calendar id="dob"
+                                                    pattern="dd/MM/yyyy"
+                                                    required="true"
+                                                    requiredMessage="Please enter Date of Birth"
+                                                    value="#{userControllerNew.selectedUser.displayDOB}">
+                                        </p:calendar>
+                                        <label>Date of Birth</label>
+                                        <p:message for="dob" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="role" />
+                                    <h:panelGroup>
+                                        <p:selectOneMenu value="#{userControllerNew.selectedUser.roleCode}" id="role"
+                                                         required="true"
+                                                         requiredMessage="Please select Role">
+                                            <f:selectItems value="#{userControllerNew.roleList}" var="role" itemLabel="#{role.roleName}" itemValue="#{role.roleCode}"/>
+                                        </p:selectOneMenu>
+                                        <p:message for="role" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="active" />
+                                    <h:panelGroup>
+                                        <p:selectOneMenu value="#{userControllerNew.selectedUser.isActive}" id="active">
+                                            <f:selectItem itemLabel="Active" itemValue="true"/>
+                                            <f:selectItem itemLabel="InActive" itemValue="false"/>
+                                        </p:selectOneMenu>
+                                        <p:message for="active" />
+                                    </h:panelGroup>
+                                </p:panelGrid>
+                            </p:fieldset>
+
+                            <p:fieldset legend="Password" toggleable="false" rendered="#{!userControllerNew.editMode}">
+                                <p:panelGrid columns="6" 
+                                             columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                                             layout="grid" 
+                                             styleClass="ui-panelgrid-blank form-group"
+                                             style="border:0px none; background-color:transparent;">
+
+                                    <p:outputLabel for="password"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:password id="password"
+                                                    value="#{userControllerNew.password}"
+                                                    required="true" 
+                                                    requiredMessage="Please enter Password"/>
+                                        <label>Password</label>
+                                        <p:message for="password" />
+                                    </h:panelGroup>
+                                    <p:outputLabel for="cpassword"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:password id="cpassword"
+                                                    required="true"
+                                                    requiredMessage="Please enter Confirm Password"/>
+                                        <label>Confirm Password</label>
+                                        <h:panelGroup>
+                                            <p:message for="cpassword" />
+                                            <o:validateEqual components="password cpassword"
+                                                             message="Passwords are not equal" showMessageFor="password" />
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+                            </p:fieldset>
+
+                            <p:fieldset legend="Password" toggleable="false" rendered="#{userControllerNew.editMode}">
+                                <p:panelGrid columns="6" 
+                                             columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                                             layout="grid" 
+                                             styleClass="ui-panelgrid-blank form-group"
+                                             style="border:0px none; background-color:transparent;">
+                                    <p:outputLabel for="epassword"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="epassword"
+                                                     value="#{userControllerNew.password}"/>
+                                        <label>Password</label>
+                                        <p:message for="epassword" />
+                                    </h:panelGroup>
+                                    <p:outputLabel for="ecpassword"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="ecpassword"/>
+                                        <label>Confirm Password</label>
+                                        <h:panelGroup>
+                                            <p:message for="ecpassword" />
+                                            <o:validateEqual id="equal" components="epassword ecpassword"
+                                                             message="Passwords are not equal" showMessageFor="epassword" />
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+                            </p:fieldset>
+                        </div>
+                    </div>
+                </div>
+                <p:toolbar>
+                    <f:facet name="left">
+
+                        <p:commandButton action="#{userControllerNew.save()}"
+                                         value="Save"
+                                         update="@form"
+                                         icon="ui-icon-save" />
+
+                        <span class="ui-separator" style="padding-right: 5px;">
+                            <span class="fa fa-ellipsis-v SoftGray" />
+                        </span>
+
+                        <p:button title="#{messages.cancel}" icon="ui-icon-cancel" outcome="/pages/secure/user/home"/>
+                    </f:facet>
+
+                    <f:facet name="right">
+
+                        <p:button value="Home" icon="ui-icon-home" outcome="/pages/secure/user/home" />
+
+                    </f:facet>
+                </p:toolbar>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

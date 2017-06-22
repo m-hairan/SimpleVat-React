@@ -30,7 +30,8 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import java.io.Serializable;
 import java.util.Optional;
-
+import java.util.logging.Level;
+import javax.transaction.TransactionRequiredException;
 
 @Controller
 @ManagedBean(name = "securityBean")
@@ -104,7 +105,6 @@ public class SecurityBean implements PhaseListener, Serializable {
         return null;
     }
 
-
     public String forgotPassword() throws Exception {
         MailEnum mailEnum = MailEnum.FORGOT_PASSWORD;
         String summary = "Password reset successfully. Please check your mail for further details";
@@ -145,11 +145,16 @@ public class SecurityBean implements PhaseListener, Serializable {
 
     private String updatedUserPassword(User userObj) {
         String randomPassword = new SessionIdentifierGenerator().randomPassword();
-        userObj.setPassword(passwordEncoder.encode(randomPassword));
-        userObj.setIsActive(true);
-        userService.updateUser(userObj);
+        try {
+            userObj.setPassword(passwordEncoder.encode(randomPassword));
+            userObj.setIsActive(true);
+            userService.updateUser(userObj);
+        } catch (IllegalArgumentException ex) {
+            java.util.logging.Logger.getLogger(SecurityBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransactionRequiredException ex) {
+            java.util.logging.Logger.getLogger(SecurityBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return randomPassword;
     }
-
 
 }
