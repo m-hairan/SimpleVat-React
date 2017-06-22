@@ -7,6 +7,11 @@ import javax.persistence.*;
 /**
  * Created by mohsinh on 2/26/2017.
  */
+
+@NamedQueries({
+    @NamedQuery(name = "Role.FindAllRole",
+            query = "SELECT r FROM Role r")
+})
 @Entity
 @Table(name = "ROLE")
 @Data

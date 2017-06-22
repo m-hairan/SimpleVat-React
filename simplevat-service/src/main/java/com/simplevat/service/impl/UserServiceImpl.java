@@ -3,12 +3,14 @@ package com.simplevat.service.impl;
 import com.simplevat.dao.UserDao;
 import com.simplevat.entity.User;
 import com.simplevat.service.UserService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
+import javax.transaction.TransactionRequiredException;
 
 /**
  *
@@ -37,8 +39,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(@Nonnull final User user) {
+    public void updateUser(@Nonnull final User user) throws IllegalArgumentException, TransactionRequiredException{
         userDao.updateUser(user);
     }
+    
+    @Override
+    public List<User> findAll() {
+        return userDao.findAll();
+    }
 
+    @Override
+    public void deleteUser(@Nonnull final User user){
+        userDao.deleteUser(user);
+    }
 }

@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
  * Created by mohsinh on 2/26/2017.
  */
 @NamedQueries({
-        @NamedQuery(name = "findAllUsers",
-                query = "SELECT u "
-                        + "FROM User u where u.deleteFlag = FALSE and u.isActive = TRUE ")
+    @NamedQuery(name = "findAllUsers",
+            query = "SELECT u "
+            + "FROM User u where u.deleteFlag = FALSE and u.isActive = TRUE ")
 })
 @Entity
 @Table(name = "USER", schema = "simplevat", catalog = "")
@@ -89,8 +89,15 @@ public class User {
     @Basic
     @Column(name = "PROFILE_IMAGE_URL")
     private String profileImagePath;
-//    private Collection<Expense> expensesByUserEmailId;
-//    private Company companyByCompanyId;
-//    private Role roleByRoleCode;
 
+    @PrePersist
+    public void updateDates() {
+        createdDate = LocalDateTime.now();
+        lastUpdateDate = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void updateLastUpdatedDate() {
+        lastUpdateDate = LocalDateTime.now();
+    }
 }

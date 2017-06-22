@@ -1,9 +1,12 @@
 package com.simplevat.service;
 
 import com.simplevat.entity.User;
+import java.sql.SQLException;
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
+import javax.transaction.TransactionRequiredException;
 
 /**
  *
@@ -18,6 +21,9 @@ public interface UserService {
 
     void saveUser(@Nonnull final User user);
 
-    void updateUser(@Nonnull final User user);
-
+    void updateUser(@Nonnull final User user)throws IllegalArgumentException, TransactionRequiredException;
+    
+    void deleteUser(@Nonnull final User userId);
+    
+    List<User> findAll();
 }

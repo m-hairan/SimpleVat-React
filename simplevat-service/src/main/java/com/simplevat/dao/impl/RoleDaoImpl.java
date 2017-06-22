@@ -2,6 +2,7 @@ package com.simplevat.dao.impl;
 
 import com.simplevat.dao.RoleDao;
 import com.simplevat.entity.Role;
+import com.simplevat.entity.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -19,10 +20,12 @@ public class RoleDaoImpl implements RoleDao {
     private EntityManager entityManager;
 
 
+    @Override
     public List<Role> getRoles() {
-        return null;
+        return entityManager.createNamedQuery("Role.FindAllRole", Role.class).getResultList();
     }
 
+    @Override
     public Role getRoleById(Integer roleCode) {
         return entityManager.find(Role.class, roleCode);
     }

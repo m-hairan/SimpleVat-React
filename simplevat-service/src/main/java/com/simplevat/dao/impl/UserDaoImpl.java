@@ -2,6 +2,8 @@ package com.simplevat.dao.impl;
 
 import com.simplevat.dao.UserDao;
 import com.simplevat.entity.User;
+import com.simplevat.entity.bankaccount.BankAccount;
+import java.sql.SQLException;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +14,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
+import javax.transaction.TransactionRequiredException;
 
 /**
  * @author Hiren
@@ -34,7 +37,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void updateUser(@Nonnull final User user) {
+    public void updateUser(@Nonnull final User user)throws IllegalArgumentException, TransactionRequiredException {
         entityManager.merge(user);
     }
 
@@ -47,5 +50,16 @@ public class UserDaoImpl implements UserDao {
             return Optional.of((User) resultList.get(0));
         }
         return Optional.empty();
+    }
+
+    @Override
+    public List<User> findAll() {
+        List<User> users = entityManager.createNamedQuery("findAllUsers", User.class).getResultList();
+        return users;
+    }
+
+    @Override
+    public void deleteUser(@Nonnull final User user) {
+        entityManager.remove(user);
     }
 }
