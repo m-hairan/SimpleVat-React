@@ -9,6 +9,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.stereotype.Repository;
 
@@ -16,6 +17,7 @@ import com.simplevat.criteria.bankaccount.TransactionCategoryCriteria;
 import com.simplevat.dao.bankaccount.TransactionCategoryDao;
 import com.simplevat.dao.impl.AbstractDao;
 import com.simplevat.entity.bankaccount.TransactionCategory;
+import com.simplevat.entity.bankaccount.TransactionType;
 
 @Repository
 public class TransactionCategoryDaoImpl extends AbstractDao implements TransactionCategoryDao {
@@ -82,6 +84,19 @@ public class TransactionCategoryDaoImpl extends AbstractDao implements Transacti
 	@Override
 	public TransactionCategory getTransactionCategory(Integer id) {
 		return getEntityManager().find(TransactionCategory.class, id);
+	}
+
+	@Override
+	public TransactionCategory getDefaultTransactionCategory() {
+		
+		List<TransactionCategory> transactionCategories = getEntityManager().createNamedQuery("findAllTransactionCategory",
+				TransactionCategory.class).getResultList();
+		
+		if (CollectionUtils.isNotEmpty(transactionCategories)) {
+            return transactionCategories.get(0);
+        }
+		return null;
+		
 	}
 
 }

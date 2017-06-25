@@ -26,4 +26,9 @@ public class CountryServiceImpl implements CountryService {
     public Country getCountry(Integer countryId) {
         return countryDao.getCountry(countryId);
     }
+
+	@Override
+	public Country getDefaultCountry() {
+		return countryDao.getDefaultCountry();
+	}
 }

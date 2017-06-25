@@ -11,6 +11,7 @@ import javax.faces.context.FacesContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import com.simplevat.entity.Country;
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.entity.bankaccount.BankAccountStatus;
@@ -58,10 +59,20 @@ public class BankAccountController {
 		return banks;
 	}
 
-	public String createBankAccount() {
-		this.selectedBankAccount = new BankAccount();
-
-		return "/pages/secure/bankaccount/edit-bankaccount.xhtml";
+	public String createBankAccount(){
+		 this.selectedBankAccount = new BankAccount();
+		 
+		 Currency defaultCurrency = currencyService.getDefaultCurrency();
+		 if(defaultCurrency != null){
+			 this.selectedBankAccount.setBankAccountCurrency(defaultCurrency);
+		 }
+		 
+		 Country defaultCountry = countryService.getDefaultCountry();
+		 if(defaultCountry != null){
+			 this.selectedBankAccount.setBankCountry(defaultCountry);
+		 }
+		 
+		 return "/pages/secure/bankaccount/edit-bankaccount.xhtml";
 	}
 
 	public String saveBankAccount() {

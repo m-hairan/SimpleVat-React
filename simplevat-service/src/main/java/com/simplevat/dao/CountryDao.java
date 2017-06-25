@@ -11,4 +11,6 @@ public interface CountryDao {
     List<Country> getCountries();
     
     Country getCountry(Integer countryId);
+
+	Country getDefaultCountry();
 }

@@ -19,6 +19,7 @@ import com.simplevat.entity.Currency;
 import com.simplevat.entity.Expense;
 import com.simplevat.entity.Project;
 import com.simplevat.entity.User;
+import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionType;
 import com.simplevat.expense.model.ExpenseModel;
@@ -65,6 +66,19 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 		
 		ExpenseModel expenseModel = new ExpenseModel();
 		expenseModel.setExpenseId(0);
+		
+		Currency defaultCurrency = currencyService.getDefaultCurrency();
+        if (defaultCurrency != null) {
+        	expenseModel.setCurrency(defaultCurrency);
+        }
+        TransactionType transactionType = transactionTypeService.getDefaultTransactionType();
+        if(transactionType != null){
+        	expenseModel.setTransactionType(transactionType);
+        }
+        TransactionCategory transactionCategory = transactionCategoryService.getDefaultTransactionCategory();
+        if(transactionCategory != null){
+        	expenseModel.setTransactionCategory(transactionCategory);
+        }
 		this.setSelectedExpenseModel(expenseModel);
 		
 		return "/pages/secure/expense/create-expense.xhtml";

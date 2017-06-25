@@ -18,10 +18,11 @@
                 </f:facet>
                 
                 <p:column>
-					<h:panelGroup rendered="#{transaction.transactionStatus.defaltFlag.toString() eq 'E'}">
+					
+					<h:panelGroup rendered="#{transaction.transactionStatus.explainationStatusName eq 'EXPLAINED'}">
 						<i class="fa fa-check" style="color: green;"></i>
 					</h:panelGroup>
-					<h:panelGroup rendered="#{transaction.transactionStatus.defaltFlag.toString() eq 'U'}">
+					<h:panelGroup rendered="#{transaction.transactionStatus.explainationStatusName eq 'UNEXPLAINED'}">
 						<i class="fa fa-close" style="color: red;"></i>
 					</h:panelGroup>
 					

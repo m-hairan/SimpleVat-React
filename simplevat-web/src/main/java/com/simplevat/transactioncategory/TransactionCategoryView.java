@@ -57,7 +57,7 @@ public class TransactionCategoryView {
 
 	@PostConstruct
 	public void init() {
-		this.transactionCategories = transactionCategoryService.executeNamedQuery("findAll");
+		this.transactionCategories = transactionCategoryService.executeNamedQuery("findAllTransactionCategory");
 		this.transactionTypes = transactionTypeService.findAll();
 	}
 	
@@ -89,7 +89,7 @@ public class TransactionCategoryView {
 	public String deleteTransactionCategory() {
 		transactionCategoryService.delete(selectedTransactionCategory,
 				selectedTransactionCategory.getTransactionCategoryCode());
-		this.transactionCategories = transactionCategoryService.executeNamedQuery("findAll");
+		this.transactionCategories = transactionCategoryService.executeNamedQuery("findAllTransactionCategory");
 		return TRANSACTION_CATEGORY + HOME_PAGE + "?faces-redirect=true";
 	}
 

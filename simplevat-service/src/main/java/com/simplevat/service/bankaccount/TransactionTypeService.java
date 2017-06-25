@@ -13,6 +13,8 @@ public interface TransactionTypeService {
 	
 	public TransactionType getTransactionType(Integer id);
 	
+	public TransactionType getDefaultTransactionType();
+	
 	public List<TransactionType> findAll();
 
 }

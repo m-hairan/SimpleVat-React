@@ -38,4 +38,9 @@ public class TransactionTypeServiceImpl implements TransactionTypeService {
 	public List<TransactionType> findAll() {
 		return transactionTypeDao.findAll();
 	}
+
+	@Override
+	public TransactionType getDefaultTransactionType() {
+		return transactionTypeDao.getDefaultTransactionType();
+	}
 }

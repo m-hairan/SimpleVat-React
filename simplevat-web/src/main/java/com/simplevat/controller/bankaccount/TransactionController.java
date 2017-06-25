@@ -69,6 +69,15 @@ public class TransactionController extends TransactionControllerHelper{
 	public String createTransaction(){
 		 this.selectedTransactionModel = new TransactionModel();
 		 
+		TransactionType transactionType = transactionTypeService.getDefaultTransactionType();
+		if (transactionType != null) {
+			selectedTransactionModel.setTransactionType(transactionType);
+		}
+		TransactionCategory transactionCategory = transactionCategoryService.getDefaultTransactionCategory();
+		if (transactionCategory != null) {
+			selectedTransactionModel.setExplainedTransactionCategory(transactionCategory);
+		}
+		 
 		 return "/pages/secure/bankaccount/edit-bank-transaction.xhtml";
 	}
 

@@ -34,4 +34,9 @@ public class TransactionCategoryServiceImpl implements TransactionCategoryServic
 		return transactionCategoryDao.getTransactionCategory(id);
 	}
 
+	@Override
+	public TransactionCategory getDefaultTransactionCategory() {
+		return transactionCategoryDao.getDefaultTransactionCategory();
+	}
+
 }

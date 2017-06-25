@@ -9,6 +9,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.stereotype.Repository;
 
@@ -89,6 +90,15 @@ public class TransactionTypeDaoImpl extends AbstractDao implements TransactionTy
 			List<TransactionType> result = getEntityManager().createNamedQuery("findAllTransactionType",
 					TransactionType.class).getResultList();
 			return result;
+	}
+
+	@Override
+	public TransactionType getDefaultTransactionType() {
+		List<TransactionType> transactoinTypes = findAll();
+		if (CollectionUtils.isNotEmpty(transactoinTypes)) {
+            return transactoinTypes.get(0);
+        }
+		return null;
 	}
 
 }

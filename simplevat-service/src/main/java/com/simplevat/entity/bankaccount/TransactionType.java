@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NamedQueries({
     @NamedQuery(name = "findAllTransactionType",
             query = "SELECT t "
-            + "FROM TransactionType t where t.deleteFlag='false'")
+            + "FROM TransactionType t where t.deleteFlag='false' ORDER BY t.defaltFlag DESC , t.orderSequence ASC")
 })
 @Entity
 @Table(name = "TRANSACTION_TYPE")

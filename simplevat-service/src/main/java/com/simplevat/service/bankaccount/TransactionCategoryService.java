@@ -11,6 +11,8 @@ public interface TransactionCategoryService {
 
 	public TransactionCategory updateOrCreateTransaction(TransactionCategory transactionCategory);
 	
+	public TransactionCategory getDefaultTransactionCategory();
+	
 	public TransactionCategory getTransactionCategory(Integer id);
 
 }

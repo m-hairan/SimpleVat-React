@@ -13,4 +13,6 @@ public interface TransactionCategoryDao {
 	
 	public TransactionCategory getTransactionCategory(Integer id);
 
+	public TransactionCategory getDefaultTransactionCategory();
+
 }

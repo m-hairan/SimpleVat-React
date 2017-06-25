@@ -13,6 +13,8 @@ public interface TransactionTypeDao {
 	
 	public TransactionType getTransactionType(Integer id);
 	
+	public TransactionType getDefaultTransactionType();
+	
 	public List<TransactionType> findAll();
 
 }

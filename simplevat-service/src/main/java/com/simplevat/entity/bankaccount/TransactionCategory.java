@@ -12,9 +12,9 @@ import java.time.LocalDateTime;
  * Created by mohsinh on 2/26/2017.
  */
 @NamedQueries({
-    @NamedQuery(name = "findAll",
+    @NamedQuery(name = "findAllTransactionCategory",
             query = "SELECT t "
-            + "FROM TransactionCategory t")
+            + "FROM TransactionCategory t where t.deleteFlag='false' ORDER BY t.defaltFlag DESC , t.orderSequence ASC")
 })
 @Entity
 @Table(name = "TRANSACTION_CATEGORY")
@@ -31,18 +31,11 @@ public class TransactionCategory {
     @Basic
     @Column(name = "TRANSACTION_CATEGORY_DESCRIPTION")
     private String transactionCategoryDescription;
-//    @Basic
-//    @Column(name = "TRANSACTION_TYPE_CODE")
-//    private int transactionTypeCode;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TRANSACTION_TYPE_CODE")
     private TransactionType transactionType;
-    
-//    @Basic
-//    @Column(name = "PARENT_TRANSACTION_CATEGORY_CODE")
-//    private Integer parentTransactionCategoryCode;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_TRANSACTION_CATEGORY_CODE")
     private TransactionCategory parentTransactionCategory;
