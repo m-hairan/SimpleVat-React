@@ -25,4 +25,9 @@ public class LanguageServiceImpl implements LanguageService {
     public Language getLanguage(Integer languageId) {
         return languageDao.getLanguageById(languageId);
     }
+
+    @Override
+    public Language getDefaultLanguage() {
+        return languageDao.getDefaultLanguage();
+    }
 }

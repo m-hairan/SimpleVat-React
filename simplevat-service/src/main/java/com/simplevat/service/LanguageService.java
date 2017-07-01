@@ -11,4 +11,6 @@ public interface LanguageService {
     List<Language> getLanguages();
 
     Language getLanguage(Integer languageId);
+    
+    Language getDefaultLanguage();
 }

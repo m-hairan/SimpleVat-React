@@ -1,19 +1,16 @@
 package com.simplevat.entity;
 
-import lombok.Data;
-
 import javax.persistence.*;
+import lombok.Data;
 
 /**
  * Created by mohsinh on 2/26/2017.
  */
-
 @NamedQueries({
-        @NamedQuery(name = "allCurrencies",
-                query = "SELECT c " +
-                        "FROM Currency c ORDER BY c.defaultFlag DESC , c.orderSequence ASC ")
+    @NamedQuery(name = "allCurrencies",
+            query = "SELECT c "
+            + "FROM Currency c ORDER BY c.defaultFlag DESC, c.orderSequence ASC ")
 })
-
 
 @Entity
 @Table(name = "CURRENCY")

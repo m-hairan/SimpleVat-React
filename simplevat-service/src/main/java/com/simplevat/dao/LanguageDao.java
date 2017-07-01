@@ -1,7 +1,6 @@
 package com.simplevat.dao;
 
 import com.simplevat.entity.Language;
-
 import java.util.List;
 
 /**
@@ -12,5 +11,6 @@ public interface LanguageDao {
     Language getLanguageById(Integer languageId);
 
     List<Language> getLanguages();
-}
 
+    Language getDefaultLanguage();
+}

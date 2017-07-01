@@ -1,17 +1,15 @@
 package com.simplevat.entity;
 
-import lombok.Data;
-
 import javax.persistence.*;
+import lombok.Data;
 
 /**
  * Created by mohsin on 3/12/2017.
  */
-
 @NamedQueries({
-        @NamedQuery(name = "allTitles",
-                query = "SELECT t " +
-                        "FROM Title t ")
+    @NamedQuery(name = "allTitles",
+            query = "SELECT t "
+            + "FROM Title t ")
 })
 
 @Entity
