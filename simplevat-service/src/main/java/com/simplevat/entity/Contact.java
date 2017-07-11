@@ -21,6 +21,7 @@ import lombok.Data;
 @Table(name = "CONTACT")
 @Data
 public class Contact implements Serializable {
+	
 
     private static final long serialVersionUID = 6914121175305098995L;
 
