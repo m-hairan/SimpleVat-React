@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by mohsin on 3/3/2017.
  */
-public interface ContactDao {
+public interface ContactDao extends Dao<Integer, Contact>{
 
     List<Contact> getContacts(Integer pageIndex, Integer noOfRecorgs);
 
@@ -15,9 +15,9 @@ public interface ContactDao {
 
     List<Contact> getContacts(final String searchQuery);
 
-    Contact createContact(Contact contact);
+ /*   Contact createContact(Contact contact);
 
     Contact getContact(int id);
 
-    Contact updateContact(Contact contact);
+    Contact updateContact(Contact contact);*/
 }

@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by mohsin on 3/3/2017.
  */
-public interface ContactService {
+public interface ContactService extends SimpleVatService <Integer, Contact> {
 
     List<Contact> getContacts(Integer pageIndex, Integer noOfRecorgs);
 

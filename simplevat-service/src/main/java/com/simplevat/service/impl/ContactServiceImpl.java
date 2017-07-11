@@ -1,11 +1,13 @@
 package com.simplevat.service.impl;
 
 import com.simplevat.dao.ContactDao;
+import com.simplevat.dao.Dao;
 import com.simplevat.entity.Contact;
 import com.simplevat.service.ContactService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -30,10 +32,15 @@ public class ContactServiceImpl implements ContactService {
         return this.contactDao.getContacts();
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public Contact createOrUpdateContact(Contact contact) {
-        return contactDao.updateContact(contact);
+    	Contact contactTemp;
+    	System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx " + contact.getContactId() + ", " + contact.getVersionNumber());
+    	contactTemp =  contactDao.update(contact);
+    	System.out.println("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY " + contact.getContactId() + ", " + contact.getVersionNumber());
+        //return contactDao.updateContact(contact);
+    	return contactTemp;
     }
 
     @Override
@@ -43,7 +50,14 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public Contact getContact(final int id) {
-        return contactDao.getContact(id);
+    	return contactDao.findByPK(id);
+        //return contactDao.getContact(id);
     }
+
+	@Override
+	public Dao<Integer, Contact> getDao() {
+		return this.contactDao;
+		// TODO Auto-generated method stub
+	}
 
 }
