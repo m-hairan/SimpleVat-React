@@ -39,20 +39,5 @@ public class ContactDaoImpl extends AbstractDao<Integer, Contact> implements Con
         return contacts;
     }
 
-/*    @Override
-    public Contact createContact(Contact contact) {
-        entityManager.persist(contact);
-        return contact;
-    }
 
-    @Override
-    public Contact getContact(int id) {
-        return entityManager.find(Contact.class, id);
-    }
-
-    @Override
-    public Contact updateContact(Contact contact) {
-        entityManager.merge(contact);
-        return contact;
-    }*/
 }
