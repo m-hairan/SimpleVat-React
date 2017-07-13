@@ -14,7 +14,6 @@ public class TestExpenseDao extends BaseManagerTest{
     @Ignore
     public void testSaveExpense()
     {
-    	
         Expense expense = new Expense();
         expense.setExpenseDescription("Test Expense");
         Expense newExpense = this.expenseDao.update(expense);
