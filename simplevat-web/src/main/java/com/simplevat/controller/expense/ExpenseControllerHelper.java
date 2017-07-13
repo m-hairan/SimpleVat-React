@@ -50,6 +50,7 @@ public class ExpenseControllerHelper {
 		expense.setReceiptNumber(model.getReceiptNumber());
 		expense.setTransactionCategory(model.getTransactionCategory());
 		expense.setTransactionType(model.getTransactionType());
+		expense.setVersionNumber(model.getVersionNumber());
 		return expense;
 	}
 	
@@ -77,6 +78,7 @@ public class ExpenseControllerHelper {
 		expenseModel.setReceiptNumber(entity.getReceiptNumber());
 		expenseModel.setTransactionCategory(entity.getTransactionCategory());
 		expenseModel.setTransactionType(entity.getTransactionType());
+		expenseModel.setVersionNumber(entity.getVersionNumber());
 		
 		String attachmentPath = entity.getReceiptAttachmentPath();
 		if(attachmentPath != null && !attachmentPath.isEmpty()){

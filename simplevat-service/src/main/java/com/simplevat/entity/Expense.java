@@ -87,6 +87,11 @@ public class Expense{
     @Basic
     @Column(name = "DELETE_FLAG")
     private Boolean deleteFlag = Boolean.FALSE;
+    
+    @Basic
+    @Version
+    @Column(name = "VERSION_NUMBER")
+    private Integer versionNumber;
 
     @PrePersist
     public void updateDates() {

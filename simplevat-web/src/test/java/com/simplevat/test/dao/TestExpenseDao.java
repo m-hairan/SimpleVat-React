@@ -16,7 +16,7 @@ public class TestExpenseDao extends BaseManagerTest{
     {
         Expense expense = new Expense();
         expense.setExpenseDescription("Test Expense");
-        Expense newExpense = this.expenseDao.updateOrCreateExpense(expense);
+        Expense newExpense = this.expenseDao.update(expense);
 
         System.out.println(" New Expense id is :" + newExpense.getExpenseId());
     }

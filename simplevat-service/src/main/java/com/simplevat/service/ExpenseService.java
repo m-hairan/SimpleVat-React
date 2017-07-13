@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.simplevat.entity.Expense;
 
-public interface ExpenseService {
+public interface ExpenseService extends SimpleVatService<Integer, Expense> {
 	
 	public List<Expense> getExpenses();
 	

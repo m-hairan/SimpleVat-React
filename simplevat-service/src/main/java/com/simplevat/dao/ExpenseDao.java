@@ -4,10 +4,8 @@ import java.util.List;
 
 import com.simplevat.entity.Expense;
 
-public interface ExpenseDao {
+public interface ExpenseDao extends Dao<Integer, Expense>{
 	
-	public List<Expense> getExpenses();
+	public List<Expense> getAllExpenses();
 	
-	public Expense updateOrCreateExpense(Expense expense);
-
 }

@@ -23,7 +23,6 @@ public class ExpenseModel {
 	public ExpenseModel(){
 		this.expenseId = 0;
 	}
-	
     private int expenseId;
     private BigDecimal expenseAmount;
     private Date expenseDate;
@@ -43,5 +42,6 @@ public class ExpenseModel {
     private boolean deleteFlag =  false;
     private UploadedFile attachmentFile;
     private StreamedContent attachmentFileContent;
+    private Integer versionNumber;
 
 }

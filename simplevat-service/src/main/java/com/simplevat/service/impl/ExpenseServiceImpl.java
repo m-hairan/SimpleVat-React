@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.simplevat.dao.Dao;
 import com.simplevat.dao.ExpenseDao;
 import com.simplevat.entity.Expense;
 import com.simplevat.service.ExpenseService;
@@ -21,12 +22,18 @@ public class ExpenseServiceImpl implements ExpenseService  {
 
 	@Override
 	public List<Expense> getExpenses() {
-		return expenseDao.getExpenses();
+		return expenseDao.getAllExpenses();
 	}
 
 	@Override
 	public Expense updateOrCreateExpense(Expense expense) {
-		return expenseDao.updateOrCreateExpense(expense);
+		return this.update(expense, expense.getExpenseId());
+	}
+
+	@Override
+	public Dao<Integer, Expense> getDao() {
+		// TODO Auto-generated method stub
+		return expenseDao;
 	}
 	
 
