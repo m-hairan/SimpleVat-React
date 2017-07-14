@@ -8,12 +8,12 @@ import java.util.List;
 /**
  * Created by Utkarsh Bhavsar on 20/03/17.
  */
-public interface ProjectDao {
+public interface ProjectDao extends Dao<Integer, Project> {
 
-    List<Project> getProjectsByCriteria(ProjectCriteria projectCriteria) throws Exception;
+/*    List<Project> getProjectsByCriteria(ProjectCriteria projectCriteria) throws Exception;
 
     Project updateOrCreateProject(Project project);
     
-    Project getProject(Integer id);
+    Project getProject(Integer id);*/
 
 }

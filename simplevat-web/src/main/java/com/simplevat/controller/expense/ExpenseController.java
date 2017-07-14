@@ -107,7 +107,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 			expense.setCurrency(currency);
 		}
 		if(selectedExpenseModel.getProject() != null){
-			Project project = projectService.getProject(selectedExpenseModel.getProject().getProjectId());
+			Project project = projectService.findByPK(selectedExpenseModel.getProject().getProjectId());
 			expense.setProject(project);
 		}
 		if(selectedExpenseModel.getUser() != null){
@@ -147,7 +147,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 			expense.setCurrency(currency);
 		}
 		if(selectedExpenseModel.getProject() != null){
-			Project project = projectService.getProject(selectedExpenseModel.getProject().getProjectId());
+			Project project = projectService.findByPK(selectedExpenseModel.getProject().getProjectId());
 			expense.setProject(project);
 		}
 		if(selectedExpenseModel.getUser() != null){

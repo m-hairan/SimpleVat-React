@@ -108,7 +108,7 @@ public class TransactionController extends TransactionControllerHelper{
 		}
 		
 		if(selectedTransactionModel.getProject() != null){
-			Project project = projectService.getProject(selectedTransactionModel.getProject().getProjectId());
+			Project project = projectService.findByPK(selectedTransactionModel.getProject().getProjectId());
 			transaction.setProject(project);
 		}
 		

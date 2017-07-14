@@ -1,18 +1,20 @@
 package com.simplevat.service.impl;
 
-import com.simplevat.criteria.ProjectCriteria;
-import com.simplevat.dao.ProjectDao;
-import com.simplevat.entity.Project;
-import com.simplevat.service.ProjectService;
+import java.util.List;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-
-import java.util.List;
+import com.simplevat.criteria.ProjectCriteria;
+import com.simplevat.criteria.ProjectFilter;
+import com.simplevat.dao.Dao;
+import com.simplevat.dao.ProjectDao;
+import com.simplevat.entity.Project;
+import com.simplevat.service.ProjectService;
 
 /**
  * Created by Utkarsh Bhavsar on 21/03/17.
@@ -20,7 +22,7 @@ import java.util.List;
 @Service
 @ManagedBean(name = "projectService")
 @SessionScoped
-public class ProjectServiceImpl implements ProjectService {
+public class ProjectServiceImpl   implements ProjectService {
 
     @Autowired
     private ProjectDao projectDao;
@@ -28,17 +30,13 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     @Transactional(readOnly = true)
     public List<Project> getProjectsByCriteria(ProjectCriteria projectCriteria) throws Exception {
-        return projectDao.getProjectsByCriteria(projectCriteria);
+    	ProjectFilter filter = new ProjectFilter(projectCriteria);
+        return getDao().filter(filter);
     }
 
-    @Override
-    @Transactional
-    public Project updateOrCreateProject(Project project) {
-        return projectDao.updateOrCreateProject(project);
-    }
 
 	@Override
-	public Project getProject(Integer id) {
-		return projectDao.getProject(id);
+	public Dao<Integer, Project> getDao() {
+			return projectDao;
 	}
 }

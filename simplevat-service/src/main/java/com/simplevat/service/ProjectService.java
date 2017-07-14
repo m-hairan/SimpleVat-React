@@ -5,12 +5,9 @@ import com.simplevat.entity.Project;
 
 import java.util.List;
 
-public interface ProjectService {
+public interface ProjectService extends SimpleVatService<Integer, Project> {
 
     List<Project> getProjectsByCriteria(ProjectCriteria projectCriteria) throws Exception;
 
-    Project updateOrCreateProject(Project project);
-    
-    Project getProject(Integer id);
 
 }

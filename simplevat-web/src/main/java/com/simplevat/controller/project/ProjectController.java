@@ -110,7 +110,7 @@ public class ProjectController {
 
     public String deleteProject(Project project) throws Exception {
         project.setDeleteFlag(Boolean.TRUE);
-        projectService.updateOrCreateProject(project);
+        projectService.update(project, project.getProjectId());
         init();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Project deleted successfully"));
         return "/pages/secure/project/projects.xhtml";
@@ -120,7 +120,7 @@ public class ProjectController {
         UserContext userContext = ContextUtils.getUserContext();
         selectedProject.setCreatedBy(userContext.getUserId());
         selectedProject.setCreatedDate(LocalDateTime.now());
-        projectService.updateOrCreateProject(selectedProject);
+        projectService.update(selectedProject, selectedProject.getProjectId());
         init();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Project saved successfully"));
         return "/pages/secure/project/projects.xhtml";
