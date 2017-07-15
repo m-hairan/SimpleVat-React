@@ -62,7 +62,7 @@ public class TransactionUploadController {
 	private TransactionController transactionController;
 	
 	@Autowired
-	private TransactionStatusService<Integer, TransactionStatus> transactionStatusService;
+	private TransactionStatusService transactionStatusService;
 	
 	@Getter
 	@Setter

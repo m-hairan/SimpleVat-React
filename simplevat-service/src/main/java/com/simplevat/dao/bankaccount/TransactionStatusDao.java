@@ -1,11 +1,11 @@
 package com.simplevat.dao.bankaccount;
 
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
-import com.simplevat.dao.AbstractDao;
 import com.simplevat.entity.bankaccount.TransactionStatus;
+import com.simplevat.dao.Dao;
 
-@Repository(value = "transactionStatusDao")
-public class TransactionStatusDao extends AbstractDao<Integer, TransactionStatus> {
+public interface TransactionStatusDao  extends Dao<Integer, TransactionStatus> {
 
+	public List<TransactionStatus> findAllTransactionStatues();
 }

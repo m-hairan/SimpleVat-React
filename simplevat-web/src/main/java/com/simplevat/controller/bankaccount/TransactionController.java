@@ -53,7 +53,7 @@ public class TransactionController extends TransactionControllerHelper{
     private ProjectService projectService;
 	
 	@Autowired
-	private TransactionStatusService<Integer, TransactionStatus> transactionStatusService;
+	private TransactionStatusService transactionStatusService;
 	
 	@Value("${file.upload.location}")
 	private String fileLocation;
@@ -210,6 +210,6 @@ public class TransactionController extends TransactionControllerHelper{
 	}
 	
 	public List<TransactionStatus> transactionStatuses(final String searchQuery) throws Exception {
-		return transactionStatusService.executeNamedQuery("findAllTransactionStatues");
+		return transactionStatusService.findAllTransactionStatues();
 	}
 }
