@@ -14,7 +14,7 @@ import com.simplevat.service.TransactionCategoryServiceNew;
 public class TransactionCategoryConverter implements Converter {
 
 	@Autowired
-	private TransactionCategoryServiceNew<Integer, TransactionCategory> transactionCategoryService;
+	private TransactionCategoryServiceNew transactionCategoryService;
 	
 	@Override
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {
