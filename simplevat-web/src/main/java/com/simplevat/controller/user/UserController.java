@@ -5,7 +5,7 @@ import com.simplevat.exception.UnauthorizedException;
 import com.simplevat.security.ContextUtils;
 import com.simplevat.security.UserContext;
 import com.simplevat.service.UserService;
-import com.simplevat.service.UserServiceNew;
+import com.simplevat.service.impl.UserServiceNewImpl;
 import com.simplevat.user.model.UserModel;
 import org.apache.commons.io.FilenameUtils;
 import org.primefaces.model.DefaultStreamedContent;
@@ -52,7 +52,7 @@ public class UserController {
     private UserService userService;
     
     @Autowired
-	private UserServiceNew<Integer, User> userServiceNew;
+	private UserServiceNewImpl userServiceNew;
 
     @Value("${file.upload.location}")
     private String fileLocation;
@@ -190,7 +190,7 @@ public class UserController {
     }
     
     public List<User> users(final String searchQuery) throws Exception {
-		return userServiceNew.executeNamedQuery("findAllUsers");
+		return userServiceNew.findAllUsers();
 	}
 
 }

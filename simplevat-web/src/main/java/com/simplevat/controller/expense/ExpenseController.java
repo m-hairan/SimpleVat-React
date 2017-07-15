@@ -8,9 +8,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -19,7 +16,6 @@ import com.simplevat.entity.Currency;
 import com.simplevat.entity.Expense;
 import com.simplevat.entity.Project;
 import com.simplevat.entity.User;
-import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionType;
 import com.simplevat.expense.model.ExpenseModel;
@@ -29,6 +25,9 @@ import com.simplevat.service.ProjectService;
 import com.simplevat.service.UserServiceNew;
 import com.simplevat.service.bankaccount.TransactionCategoryService;
 import com.simplevat.service.bankaccount.TransactionTypeService;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Controller
 @ManagedBean(name = "expenseController")
@@ -53,7 +52,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
     private ProjectService projectService;
 	
 	@Autowired
-	private UserServiceNew<Integer, User> userServiceNew;
+	private UserServiceNew userServiceNew;
 	
 	@Value("${file.upload.location}")
 	private String fileLocation;
