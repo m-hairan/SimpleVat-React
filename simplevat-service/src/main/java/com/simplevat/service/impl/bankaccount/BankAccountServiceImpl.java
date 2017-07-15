@@ -20,23 +20,19 @@ public class BankAccountServiceImpl implements BankAccountService{
     
 	@Override
 	public List<BankAccount> getBankAccounts() {
-		return bankAccountDao.getBankAccounts();
+		return getDao().getBankAccounts();
 	}
 
 	@Override
-	public BankAccount createOrUpdateBankAccount(BankAccount bankAccount) {
-		return bankAccountDao.createOrUpdateBankAccount(bankAccount);
-	}
-
-	@Override
-
 	public List<BankAccount> getBankAccountByUser(int userId) {
 		return bankAccountDao.getBankAccountByUser(userId);
 	}
 
-	public BankAccount getBankAccount(Integer id) {
-		return bankAccountDao.getBankAccount(id);
-
+	@Override
+	public BankAccountDao getDao() {
+		return this.bankAccountDao;
 	}
+	
+	
 
 }

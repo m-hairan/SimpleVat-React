@@ -3,17 +3,15 @@ package com.simplevat.service.bankaccount;
 import java.util.List;
 
 import com.simplevat.entity.bankaccount.BankAccount;
+import com.simplevat.service.SimpleVatService;
 
-public interface BankAccountService {
+public interface BankAccountService extends SimpleVatService<Integer,BankAccount> {
 	
 	public List<BankAccount> getBankAccounts();
 
-	public BankAccount createOrUpdateBankAccount(BankAccount bankAccount);
-	
 
 	public List<BankAccount>  getBankAccountByUser(int userId);
 
-	public BankAccount getBankAccount(Integer id);
 
 
 }

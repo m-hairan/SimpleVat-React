@@ -95,7 +95,7 @@ public class BankAccountController {
 				BankAccountStatus bankAccountStatus = bankAccountStatusService.getBankAccountStatusByName("ACTIVE");
 				selectedBankAccount.setBankAccountStatus(bankAccountStatus);
 			}
-			bankAccountService.createOrUpdateBankAccount(selectedBankAccount);
+			bankAccountService.update(selectedBankAccount,selectedBankAccount.getBankAccountId());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -122,7 +122,7 @@ public class BankAccountController {
 				BankAccountStatus bankAccountStatus = bankAccountStatusService.getBankAccountStatusByName("ACTIVE");
 				selectedBankAccount.setBankAccountStatus(bankAccountStatus);
 			}
-			bankAccountService.createOrUpdateBankAccount(selectedBankAccount);
+			bankAccountService.update(selectedBankAccount,selectedBankAccount.getBankAccountId());
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -134,7 +134,7 @@ public class BankAccountController {
 	
 	public void deleteBankAccount(){
 		selectedBankAccount.setDeleteFlag(true);
-		bankAccountService.createOrUpdateBankAccount(selectedBankAccount);
+		bankAccountService.update(selectedBankAccount, selectedBankAccount.getBankAccountId());
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("BankAccount deleted successfully"));
 
 	}

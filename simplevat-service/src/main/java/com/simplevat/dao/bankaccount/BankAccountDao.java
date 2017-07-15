@@ -2,15 +2,16 @@ package com.simplevat.dao.bankaccount;
 
 import java.util.List;
 
+import com.simplevat.dao.Dao;
 import com.simplevat.entity.bankaccount.BankAccount;
 
-public interface BankAccountDao {
+public interface BankAccountDao extends Dao<Integer, BankAccount> {
 	
 	public List<BankAccount> getBankAccounts();
 
-	public BankAccount createOrUpdateBankAccount(BankAccount bankAccount);
+	//public BankAccount createOrUpdateBankAccount(BankAccount bankAccount);
 	
 	public List<BankAccount> getBankAccountByUser(int userId);
-	public BankAccount getBankAccount(Integer id);
+	//public BankAccount getBankAccount(Integer id);
 	
 }

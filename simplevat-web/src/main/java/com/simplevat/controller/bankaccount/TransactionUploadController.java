@@ -188,13 +188,13 @@ public class TransactionUploadController {
 			transaction.setLastUpdatedBy(12345);
 			transaction.setCreatedBy(12345);
 			
-			BankAccount bankAccount = bankAccountService.getBankAccount(importedDraftTransaction.getBankAccount().getBankAccountId());
+			BankAccount bankAccount = bankAccountService.findByPK(importedDraftTransaction.getBankAccount().getBankAccountId());
 			if(importedDraftTransaction.getImportedDebitCreditFlag() == 'C' && importedDraftTransaction.getImportedTransactionAmount() != null){
 				bankAccount.setCurrentBalance(bankAccount.getCurrentBalance().add(importedDraftTransaction.getImportedTransactionAmount()));
 			} else if (importedDraftTransaction.getImportedDebitCreditFlag() == 'D' && importedDraftTransaction.getImportedTransactionAmount() != null){
 				bankAccount.setCurrentBalance(bankAccount.getCurrentBalance().subtract(importedDraftTransaction.getImportedTransactionAmount()));
 			}
-			bankAccount = bankAccountService.createOrUpdateBankAccount(bankAccount);
+			bankAccount = bankAccountService.update(bankAccount,bankAccount.getBankAccountId());
 			transaction.setCurrentBalance(bankAccount.getCurrentBalance());
 			transaction.setBankAccount(bankAccount);
 			transactionService.updateOrCreateTransaction(transaction);

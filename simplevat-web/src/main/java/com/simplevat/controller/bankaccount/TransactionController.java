@@ -95,7 +95,7 @@ public class TransactionController extends TransactionControllerHelper{
 			transaction.setDebitCreditFlag(transactionType.getDebitCreditFlag());
 		}
 		
-		BankAccount bankAccount = bankAccountService.getBankAccount(selectedBankAccount.getBankAccountId());
+		BankAccount bankAccount = bankAccountService.findByPK(selectedBankAccount.getBankAccountId());
 		if(transaction.getDebitCreditFlag() == 'C'){
 			bankAccount.setCurrentBalance(bankAccount.getCurrentBalance().add(transaction.getTransactionAmount()));
 		} else if (transaction.getDebitCreditFlag() == 'D'){
@@ -128,7 +128,7 @@ public class TransactionController extends TransactionControllerHelper{
 			TransactionStatus transactionStatus  = transactionStatusService.findByAttributes(map).get(0);
 			transaction.setTransactionStatus(transactionStatus);
 		}
-		bankAccountService.createOrUpdateBankAccount(bankAccount);
+		bankAccountService.update(bankAccount, bankAccount.getBankAccountId());
 		transaction.setCurrentBalance(bankAccount.getCurrentBalance());
 		transactionService.updateOrCreateTransaction(transaction);
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transaction saved successfully"));
@@ -151,7 +151,7 @@ public class TransactionController extends TransactionControllerHelper{
 			transaction.setDebitCreditFlag(transactionType.getDebitCreditFlag());
 		}
 		
-		BankAccount bankAccount = bankAccountService.getBankAccount(selectedBankAccount.getBankAccountId());
+		BankAccount bankAccount = bankAccountService.findByPK(selectedBankAccount.getBankAccountId());
 		if(transaction.getDebitCreditFlag() == 'C'){
 			bankAccount.setCurrentBalance(bankAccount.getCurrentBalance().add(transaction.getTransactionAmount()));
 		} else if (transaction.getDebitCreditFlag() == 'D'){
@@ -178,7 +178,7 @@ public class TransactionController extends TransactionControllerHelper{
 		if(selectedTransactionModel.getAttachmentFile().getSize() > 0){
 			storeUploadedFile(selectedTransactionModel, transaction, fileLocation);
 		}
-		bankAccountService.createOrUpdateBankAccount(bankAccount);
+		bankAccountService.update(bankAccount,bankAccount.getBankAccountId());
 		transactionService.updateOrCreateTransaction(transaction);
 		this.setSelectedTransactionModel(new TransactionModel());
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transaction saved successfully"));
