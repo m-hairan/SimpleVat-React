@@ -81,6 +81,7 @@ public class TransactionController extends TransactionControllerHelper{
 		 return "/pages/secure/bankaccount/edit-bank-transaction.xhtml";
 	}
 
+	
 	public String saveTransaction(){
 
 		Transaction transaction = getTransaction(selectedTransactionModel);

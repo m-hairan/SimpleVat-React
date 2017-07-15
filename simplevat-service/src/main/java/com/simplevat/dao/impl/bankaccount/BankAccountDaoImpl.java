@@ -14,7 +14,6 @@ import com.simplevat.entity.bankaccount.BankAccount;
 @Repository
 @Transactional
 public class BankAccountDaoImpl extends AbstractDao<Integer, BankAccount>implements BankAccountDao {
-
 	
 	@Override
 	public List<BankAccount> getBankAccounts() {

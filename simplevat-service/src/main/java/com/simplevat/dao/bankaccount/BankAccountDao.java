@@ -9,7 +9,6 @@ public interface BankAccountDao extends Dao<Integer, BankAccount> {
 	
 	public List<BankAccount> getBankAccounts();
 
-	
 	public List<BankAccount> getBankAccountByUser(int userId);
 	
 }
