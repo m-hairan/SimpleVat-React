@@ -1,12 +1,13 @@
 package com.simplevat.dao;
 
-import com.simplevat.entity.Country;
 import java.util.List;
+
+import com.simplevat.entity.Country;
 
 /**
  * Created by mohsinh on 3/10/2017.
  */
-public interface CountryDao {
+public interface CountryDao extends Dao<Integer, Country> {
 
     List<Country> getCountries();
     

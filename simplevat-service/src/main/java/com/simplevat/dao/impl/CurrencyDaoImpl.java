@@ -1,27 +1,24 @@
 package com.simplevat.dao.impl;
 
-import com.simplevat.dao.CurrencyDao;
-import com.simplevat.entity.Currency;
+import java.util.List;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.List;
+import com.simplevat.dao.CurrencyDao;
+import com.simplevat.entity.Currency;
+import com.simplevat.dao.AbstractDao; 
 
 /**
  * Created by mohsin on 3/11/2017.
  */
 @Repository
-public class CurrencyDaoImpl implements CurrencyDao {
+public class CurrencyDaoImpl extends AbstractDao<Integer, Currency> implements CurrencyDao {
 
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @Override
     public List<Currency> getCurrencies() {
-        List<Currency> languages = entityManager.createNamedQuery("allCurrencies", Currency.class).getResultList();
-
+        List<Currency> languages = this.executeNamedQuery("allCurrencies");
         return languages;
     }
 
@@ -36,6 +33,6 @@ public class CurrencyDaoImpl implements CurrencyDao {
     }
 
     public Currency getCurrency(final int currencyCode) {
-        return entityManager.find(Currency.class, currencyCode);
+        return this.findByPK(currencyCode);
     }
 }

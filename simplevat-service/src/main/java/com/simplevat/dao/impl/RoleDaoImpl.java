@@ -1,32 +1,28 @@
 package com.simplevat.dao.impl;
 
-import com.simplevat.dao.RoleDao;
-import com.simplevat.entity.Role;
-import com.simplevat.entity.User;
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.List;
+import com.simplevat.dao.RoleDao;
+import com.simplevat.entity.Role;
+import com.simplevat.dao.AbstractDao;
 
 /**
  * Created by mohsin on 3/3/2017.
  */
 
 @Repository
-public class RoleDaoImpl implements RoleDao {
-
-    @PersistenceContext
-    private EntityManager entityManager;
+public class RoleDaoImpl extends AbstractDao<Integer, Role> implements RoleDao {
 
 
     @Override
     public List<Role> getRoles() {
-        return entityManager.createNamedQuery("Role.FindAllRole", Role.class).getResultList();
+        return this.executeNamedQuery("Role.FindAllRole");
     }
 
     @Override
     public Role getRoleById(Integer roleCode) {
-        return entityManager.find(Role.class, roleCode);
+        return this.findByPK(roleCode);
     }
 }

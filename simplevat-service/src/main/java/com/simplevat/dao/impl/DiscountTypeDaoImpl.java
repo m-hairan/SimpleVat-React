@@ -1,29 +1,27 @@
 package com.simplevat.dao.impl;
 
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import org.springframework.stereotype.Repository;
+
 import com.simplevat.dao.DiscountTypeDao;
 import com.simplevat.entity.invoice.DiscountType;
-import java.util.List;
-import javax.annotation.Nonnull;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import org.springframework.stereotype.Repository;
+import com.simplevat.dao.AbstractDao;
 
 /**
  *
  * @author hiren
  */
 @Repository
-public class DiscountTypeDaoImpl implements DiscountTypeDao {
+public class DiscountTypeDaoImpl extends AbstractDao<Integer, DiscountType> implements DiscountTypeDao {
 
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @Override
     @Nonnull
     public List<DiscountType> getDiscountTypes() {
-        final List<DiscountType> discountTypes = entityManager
-                .createNamedQuery("DiscountType.discountTypes", DiscountType.class)
-                .getResultList();
+        final List<DiscountType> discountTypes = this.executeNamedQuery("DiscountType.discountTypes");
         return discountTypes;
     }
 

@@ -10,10 +10,4 @@ import java.util.List;
  */
 public interface ProjectDao extends Dao<Integer, Project> {
 
-/*    List<Project> getProjectsByCriteria(ProjectCriteria projectCriteria) throws Exception;
-
-    Project updateOrCreateProject(Project project);
-    
-    Project getProject(Integer id);*/
-
 }

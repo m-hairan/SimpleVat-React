@@ -18,17 +18,22 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     public List<Country> getCountries() {
-        List<Country> countries = countryDao.getCountries();
+        List<Country> countries = getDao().getCountries();
         return countries;
     }
 
     @Override
     public Country getCountry(Integer countryId) {
-        return countryDao.getCountry(countryId);
+        return getDao().getCountry(countryId);
     }
 
 	@Override
 	public Country getDefaultCountry() {
-		return countryDao.getDefaultCountry();
+		return getDao().getDefaultCountry();
+	}
+
+	@Override
+	public CountryDao getDao() {
+		return countryDao;
 	}
 }

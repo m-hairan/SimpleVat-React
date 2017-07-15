@@ -19,16 +19,21 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     @Override
     public List<Currency> getCurrencies() {
-        return currencyDao.getCurrencies();
+        return getDao().getCurrencies();
     }
 
     @Override
     public Currency getCurrency(final int currencyCode) {
-        return currencyDao.getCurrency(currencyCode);
+        return getDao().getCurrency(currencyCode);
     }
 
     @Override
     public Currency getDefaultCurrency() {
-        return currencyDao.getDefaultCurrency();
+        return getDao().getDefaultCurrency();
     }
+
+	@Override
+	public CurrencyDao getDao() {
+		return currencyDao;
+	}
 }

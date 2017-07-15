@@ -23,7 +23,12 @@ public class DiscountTypeServiceImpl implements DiscountTypeService {
     @Nonnull
     @Override
     public List<DiscountType> getDiscountTypes() {
-        return discountTypeDao.getDiscountTypes();
+        return getDao().getDiscountTypes();
     }
+
+	@Override
+	public DiscountTypeDao getDao() {
+		return this.discountTypeDao;
+	}
 
 }

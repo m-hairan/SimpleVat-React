@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by mohsin on 3/3/2017.
  */
-public interface RoleDao {
+public interface RoleDao extends Dao<Integer, Role> {
 
     List<Role> getRoles();
 

@@ -5,31 +5,25 @@ import com.simplevat.entity.Country;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
+import com.simplevat.dao.AbstractDao;
 
 /**
  * Created by mohsinh on 3/10/2017.
  */
 @Repository
-public class CountryDaoImpl implements CountryDao {
-
-    @PersistenceContext
-    private EntityManager entityManager;
+public class CountryDaoImpl extends AbstractDao<Integer, Country> implements CountryDao {
 
     @Override
     public List<Country> getCountries() {
-
-        List<Country> countries = entityManager.createNamedQuery("allCountries", Country.class).getResultList();
+        List<Country> countries = this.executeNamedQuery("allCountries");
         return countries;
     }
 
     @Override
     public Country getCountry(Integer countryId) {
-        return entityManager.find(Country.class, countryId);
+        return this.findByPK(countryId);
     }
 
 	@Override

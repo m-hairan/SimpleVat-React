@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by mohsin on 3/11/2017.
  */
-public interface CurrencyDao {
+public interface CurrencyDao extends Dao<Integer, Currency> {
 
     List<Currency> getCurrencies();
     

@@ -2,9 +2,6 @@ package com.simplevat.service.impl;
 
 import java.util.List;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,9 +16,7 @@ import com.simplevat.service.ProjectService;
 /**
  * Created by Utkarsh Bhavsar on 21/03/17.
  */
-@Service
-@ManagedBean(name = "projectService")
-@SessionScoped
+@Service("projectService")
 public class ProjectServiceImpl   implements ProjectService {
 
     @Autowired

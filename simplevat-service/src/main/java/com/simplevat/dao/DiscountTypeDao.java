@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
  *
  * @author hiren
  */
-public interface DiscountTypeDao {
+public interface DiscountTypeDao extends Dao<Integer, DiscountType> {
     
     
     @Nonnull

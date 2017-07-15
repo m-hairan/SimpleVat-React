@@ -18,16 +18,21 @@ public class LanguageServiceImpl implements LanguageService {
 
     @Override
     public List<Language> getLanguages() {
-        return languageDao.getLanguages();
+        return getDao().getLanguages();
     }
 
     @Override
     public Language getLanguage(Integer languageId) {
-        return languageDao.getLanguageById(languageId);
+        return getDao().getLanguageById(languageId);
     }
 
     @Override
     public Language getDefaultLanguage() {
-        return languageDao.getDefaultLanguage();
+        return getDao().getDefaultLanguage();
     }
+
+	@Override
+	public LanguageDao getDao() {
+		return languageDao;
+	}
 }

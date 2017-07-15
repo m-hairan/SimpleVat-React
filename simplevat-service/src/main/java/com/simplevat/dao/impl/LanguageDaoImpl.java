@@ -1,30 +1,29 @@
 package com.simplevat.dao.impl;
 
-import com.simplevat.dao.LanguageDao;
-import com.simplevat.entity.Language;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
+
+import com.simplevat.dao.LanguageDao;
+import com.simplevat.entity.Language;
+import com.simplevat.dao.AbstractDao;
 
 /**
  * Created by mohsin on 3/2/2017.
  */
 @Repository
-public class LanguageDaoImpl implements LanguageDao {
+public class LanguageDaoImpl extends AbstractDao<Integer, Language> implements LanguageDao {
 
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @Override
     public Language getLanguageById(Integer languageId) {
-        return this.entityManager.find(Language.class, languageId);
+        return this.findByPK(languageId);
     }
 
     @Override
     public List<Language> getLanguages() {
-        List<Language> languages = entityManager.createNamedQuery("allLanguages", Language.class).getResultList();
+        List<Language> languages = this.executeNamedQuery("allLanguages");
         return languages;
     }
 

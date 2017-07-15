@@ -1,6 +1,6 @@
 package com.simplevat.service.impl;
 
-import com.simplevat.dao.ContactDao;
+import com.simplevat.dao.Dao;
 import com.simplevat.dao.RoleDao;
 import com.simplevat.entity.Role;
 import com.simplevat.service.RoleService;
@@ -29,4 +29,9 @@ public class RoleServiceImpl implements RoleService {
     public Role getRoleById(Integer roleCode){
         return roleDao.getRoleById(roleCode);
     }
+
+	@Override
+	public Dao<Integer, Role> getDao() {
+		return roleDao;
+	}
 }

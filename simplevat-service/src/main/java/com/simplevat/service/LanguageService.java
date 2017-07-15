@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by mohsin on 3/11/2017.
  */
-public interface LanguageService {
+public interface LanguageService extends SimpleVatService<Integer,Language> {
 
     List<Language> getLanguages();
 
