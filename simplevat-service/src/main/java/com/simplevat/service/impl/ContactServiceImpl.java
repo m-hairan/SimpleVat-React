@@ -36,10 +36,7 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public Contact createOrUpdateContact(Contact contact) {
     	Contact contactTemp;
-    	System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx " + contact.getContactId() + ", " + contact.getVersionNumber());
     	contactTemp =  contactDao.update(contact);
-    	System.out.println("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY " + contact.getContactId() + ", " + contact.getVersionNumber());
-        //return contactDao.updateContact(contact);
     	return contactTemp;
     }
 

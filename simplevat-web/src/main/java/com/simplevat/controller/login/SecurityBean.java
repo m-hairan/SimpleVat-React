@@ -1,13 +1,18 @@
 package com.simplevat.controller.login;
 
-import com.simplevat.entity.Mail;
-import com.simplevat.entity.MailEnum;
-import com.simplevat.entity.User;
-import com.simplevat.integration.MailIntegration;
-import com.simplevat.integration.MailPreparer;
-import com.simplevat.service.UserService;
-import lombok.Getter;
-import lombok.Setter;
+import java.io.Serializable;
+import java.util.Optional;
+import java.util.logging.Level;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseEvent;
+import javax.faces.event.PhaseId;
+import javax.faces.event.PhaseListener;
+import javax.transaction.TransactionRequiredException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,17 +26,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseEvent;
-import javax.faces.event.PhaseId;
-import javax.faces.event.PhaseListener;
-import java.io.Serializable;
-import java.util.Optional;
-import java.util.logging.Level;
-import javax.transaction.TransactionRequiredException;
+import com.simplevat.entity.Mail;
+import com.simplevat.entity.MailEnum;
+import com.simplevat.entity.User;
+import com.simplevat.integration.MailIntegration;
+import com.simplevat.integration.MailPreparer;
+import com.simplevat.service.UserServiceNew;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Controller
 @ManagedBean(name = "securityBean")
@@ -60,7 +63,7 @@ public class SecurityBean implements PhaseListener, Serializable {
     private MailIntegration mailIntegration;
 
     @Autowired
-    private UserService userService;
+    private UserServiceNew userService;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -148,10 +151,8 @@ public class SecurityBean implements PhaseListener, Serializable {
         try {
             userObj.setPassword(passwordEncoder.encode(randomPassword));
             userObj.setIsActive(true);
-            userService.updateUser(userObj);
+            userService.update(userObj, userObj.getUserId());
         } catch (IllegalArgumentException ex) {
-            java.util.logging.Logger.getLogger(SecurityBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (TransactionRequiredException ex) {
             java.util.logging.Logger.getLogger(SecurityBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         return randomPassword;

@@ -21,7 +21,6 @@ public class TransactionCategoryConverter implements Converter {
 		if(arg2 == null || arg2.length() == 0 || arg2.equals("")) {
 			return null;
 		}
-		System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxxx " + arg2);
 		TransactionCategory category = transactionCategoryService.findByPK(Integer.parseInt(arg2));
 		return category;
 	}

@@ -80,10 +80,8 @@ public class TransactionCategoryNewDaoTest extends AbstractJUnit4SpringContextTe
 		List<TransactionCategory> listTransactionCategory = dao.filter(filter);
 		assertTrue("testFilter Not working ", listTransactionCategory.size()==2);
 		int transactionCategoryCode = listTransactionCategory.get(0).getTransactionCategoryCode();
-		System.out.println("55555555555555555555555555555555555555555555555555555555555" + transactionCategoryCode);
 		for(int i=1;i<=listTransactionCategory.size()-1;i++) {
 			int anotherCategory = listTransactionCategory.get(i).getTransactionCategoryCode();
-			System.out.println("77777777777777777777777777777777777777777777777777" + anotherCategory);
 			assertTrue("Not in proper order ", transactionCategoryCode < anotherCategory);
 			transactionCategoryCode = anotherCategory;
 			

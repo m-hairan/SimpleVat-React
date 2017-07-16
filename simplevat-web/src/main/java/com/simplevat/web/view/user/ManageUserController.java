@@ -1,5 +1,15 @@
 package com.simplevat.web.view.user;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.annotation.RequestScope;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -8,17 +18,11 @@ package com.simplevat.web.view.user;
 
 
 import com.simplevat.entity.User;
-import com.simplevat.service.UserService;
+import com.simplevat.service.UserServiceNew;
 import com.simplevat.web.model.user.UserDTO;
-import java.util.ArrayList;
-import java.util.List;
-import javax.annotation.PostConstruct;
+
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.context.annotation.RequestScope;
 
 /**
  *
@@ -29,7 +33,7 @@ import org.springframework.web.context.annotation.RequestScope;
 public class ManageUserController {
 
     @Autowired
-    private UserService userService;
+    private UserServiceNew userService;
     
     @Setter
     @Getter
@@ -56,6 +60,6 @@ public class ManageUserController {
     }
     
     public void deleteUser(){
-        userService.deleteUser(selectedUser);
+        userService.delete(selectedUser, selectedUser.getUserId());
     }
 }

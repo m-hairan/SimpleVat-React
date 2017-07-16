@@ -1,10 +1,9 @@
 package com.simplevat.dao;
 
-import org.springframework.stereotype.Repository;
+import java.util.Optional;
 
 import com.simplevat.entity.User;
 
-@Repository(value = "userDao")
-public class UserNewDao extends AbstractDao<Integer, User> {
-
+public interface UserNewDao extends Dao<Integer, User> {
+	public Optional<User> getUserByEmail(String emailAddress);
 }

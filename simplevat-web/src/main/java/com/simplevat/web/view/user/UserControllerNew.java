@@ -1,14 +1,5 @@
 package com.simplevat.web.view.user;
 
-import com.simplevat.entity.Role;
-import com.simplevat.entity.Title;
-import com.simplevat.entity.User;
-import com.simplevat.exception.UnauthorizedException;
-import com.simplevat.security.ContextUtils;
-import com.simplevat.security.UserContext;
-import com.simplevat.service.RoleService;
-import com.simplevat.service.UserService;
-import com.simplevat.web.model.user.UserDTO;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,13 +14,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.activation.MimetypesFileTypeMap;
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.transaction.TransactionRequiredException;
-import lombok.Getter;
-import lombok.Setter;
+
 import org.apache.commons.io.FilenameUtils;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
@@ -42,6 +31,19 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.annotation.SessionScope;
 
+import com.simplevat.entity.Role;
+import com.simplevat.entity.Title;
+import com.simplevat.entity.User;
+import com.simplevat.exception.UnauthorizedException;
+import com.simplevat.security.ContextUtils;
+import com.simplevat.security.UserContext;
+import com.simplevat.service.RoleService;
+import com.simplevat.service.UserServiceNew;
+import com.simplevat.web.model.user.UserDTO;
+
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  *
  * @author Uday
@@ -51,7 +53,7 @@ import org.springframework.web.context.annotation.SessionScope;
 public class UserControllerNew {
 
     @Autowired
-    private UserService userService;
+    private UserServiceNew userService;
 
     @Autowired
     private RoleService roleService;
@@ -88,7 +90,7 @@ public class UserControllerNew {
         selectedUser.setRole(new Role());
         String userId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("user");
         if (userId != null) {
-            User user = userService.getUser(Integer.parseInt(userId));
+            User user = userService.findByPK(Integer.parseInt(userId));
             BeanUtils.copyProperties(user, selectedUser);
             editMode = true;
         }
@@ -158,10 +160,10 @@ public class UserControllerNew {
             user.setCreatedBy(userContext.getUserId());
             user.setLastUpdatedBy(userContext.getUserId());
             if (!editMode) {
-                userService.saveUser(user);
+                userService.persist(user, user.getUserId());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User Profile added successfully"));
             } else {
-                userService.updateUser(user);
+                userService.update(user, user.getUserId());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User Profile updated successfully"));
             }
             return "manage-user?faces-redirect=true";

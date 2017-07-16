@@ -1,28 +1,10 @@
 package com.simplevat.controller.user;
 
-import com.simplevat.entity.User;
-import com.simplevat.exception.UnauthorizedException;
-import com.simplevat.security.ContextUtils;
-import com.simplevat.security.UserContext;
-import com.simplevat.service.UserService;
-import com.simplevat.service.impl.UserServiceNewImpl;
-import com.simplevat.user.model.UserModel;
-import org.apache.commons.io.FilenameUtils;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
-import org.primefaces.model.UploadedFile;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import javax.activation.MimetypesFileTypeMap;
-import javax.annotation.Nonnull;
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.context.FacesContext;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,7 +15,30 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.activation.MimetypesFileTypeMap;
+import javax.annotation.Nonnull;
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.transaction.TransactionRequiredException;
+
+import org.apache.commons.io.FilenameUtils;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import com.simplevat.entity.User;
+import com.simplevat.exception.UnauthorizedException;
+import com.simplevat.security.ContextUtils;
+import com.simplevat.security.UserContext;
+import com.simplevat.service.UserServiceNew;
+import com.simplevat.user.model.UserModel;
 
 /**
  *
@@ -47,12 +52,9 @@ public class UserController {
     private UserModel currentUser;
 
     private User currentUserEntity;
-
-    @Autowired
-    private UserService userService;
     
     @Autowired
-	private UserServiceNewImpl userServiceNew;
+	private UserServiceNew userService;
 
     @Value("${file.upload.location}")
     private String fileLocation;
@@ -62,7 +64,7 @@ public class UserController {
 
         try {
             final UserContext context = ContextUtils.getUserContext();
-            currentUserEntity = userService.getUser(context.getUserId());
+            currentUserEntity = userService.findByPK(context.getUserId());
         } catch (UnauthorizedException ex) {
 //            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -89,14 +91,12 @@ public class UserController {
             //TODO Dear Hiren you cannot simple update the password like this in database
             // you have to encode with BCrypEncoder and then you have to save it.
             // BTW it is not necessary that every time password is updated
-            userService.updateUser(currentUserEntity);
+            userService.update(currentUserEntity, currentUserEntity.getUserId());
             initController();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User Profile updated successfully"));
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (TransactionRequiredException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
     }
 
     private void storeUploadedFile(String fileLocation) throws UnauthorizedException {
@@ -132,7 +132,7 @@ public class UserController {
         final LocalDateTime dob = LocalDateTime
                 .ofInstant(userModel.getDateOfBirth().toInstant(),
                         ZoneId.systemDefault());
-        final User user = userService.getUser(userModel.getUserId());
+        final User user = userService.findByPK(userModel.getUserId());
 
         // todo: change when company module is done.
         user.setCompanyId(userModel.getCompanyId());
@@ -162,7 +162,7 @@ public class UserController {
     public StreamedContent getProfilePic() throws UnauthorizedException {
         if (currentUserEntity == null) {
             final UserContext context = ContextUtils.getUserContext();
-            currentUserEntity = userService.getUser(context.getUserId());
+            currentUserEntity = userService.findByPK(context.getUserId());
         }
         final String attachmentPath = currentUserEntity.getProfileImagePath();
         if (attachmentPath != null && !attachmentPath.isEmpty()) {
@@ -183,14 +183,14 @@ public class UserController {
     public UserModel getCurrentUser() throws UnauthorizedException {
         if (currentUser == null) {
             final UserContext context = ContextUtils.getUserContext();
-            currentUserEntity = userService.getUser(context.getUserId());
+            currentUserEntity = userService.findByPK(context.getUserId());
             currentUser = convertToModel(currentUserEntity);
         }
         return currentUser;
     }
     
     public List<User> users(final String searchQuery) throws Exception {
-		return userServiceNew.findAllUsers();
+		return userService.findAll();
 	}
 
 }
