@@ -9,9 +9,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -26,11 +23,14 @@ import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionStatus;
 import com.simplevat.entity.bankaccount.TransactionType;
 import com.simplevat.service.ProjectService;
+import com.simplevat.service.TransactionCategoryServiceNew;
 import com.simplevat.service.bankaccount.BankAccountService;
-import com.simplevat.service.bankaccount.TransactionCategoryService;
 import com.simplevat.service.bankaccount.TransactionService;
 import com.simplevat.service.bankaccount.TransactionStatusService;
 import com.simplevat.service.bankaccount.TransactionTypeService;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Controller
 @ManagedBean(name = "transactionController")
@@ -44,7 +44,7 @@ public class TransactionController extends TransactionControllerHelper{
 	private TransactionTypeService transactionTypeService;
 	
 	@Autowired
-	private TransactionCategoryService transactionCategoryService;
+	private TransactionCategoryServiceNew transactionCategoryService;
 	
 	@Autowired
 	private BankAccountService bankAccountService;
@@ -104,7 +104,7 @@ public class TransactionController extends TransactionControllerHelper{
 		}
 		
 		if(selectedTransactionModel.getExplainedTransactionCategory() != null){
-			TransactionCategory transactionCategory = transactionCategoryService.getTransactionCategory(selectedTransactionModel.getExplainedTransactionCategory().getTransactionCategoryCode());
+			TransactionCategory transactionCategory = transactionCategoryService.findByPK(selectedTransactionModel.getExplainedTransactionCategory().getTransactionCategoryCode());
 			transaction.setExplainedTransactionCategory(transactionCategory);
 		}
 		
@@ -160,7 +160,7 @@ public class TransactionController extends TransactionControllerHelper{
 		}
 		
 		if(selectedTransactionModel.getExplainedTransactionCategory() != null){
-			TransactionCategory transactionCategory = transactionCategoryService.getTransactionCategory(selectedTransactionModel.getExplainedTransactionCategory().getTransactionCategoryCode());
+			TransactionCategory transactionCategory = transactionCategoryService.findByPK(selectedTransactionModel.getExplainedTransactionCategory().getTransactionCategoryCode());
 			transaction.setExplainedTransactionCategory(transactionCategory);
 		}
 		
@@ -206,7 +206,7 @@ public class TransactionController extends TransactionControllerHelper{
 	public List<TransactionCategory> transactionCategories(final String searchQuery) throws Exception {
 		TransactionCategoryCriteria transactionCategoryCriteria = new TransactionCategoryCriteria();
 		transactionCategoryCriteria.setActive(Boolean.TRUE);
-		return transactionCategoryService.getTransactionCategoriesByCriteria(transactionCategoryCriteria);
+		return transactionCategoryService.getCategoriesByComplexCriteria(transactionCategoryCriteria);
 	}
 	
 	public List<TransactionStatus> transactionStatuses(final String searchQuery) throws Exception {

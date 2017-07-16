@@ -22,8 +22,8 @@ import com.simplevat.expense.model.ExpenseModel;
 import com.simplevat.service.CurrencyService;
 import com.simplevat.service.ExpenseService;
 import com.simplevat.service.ProjectService;
+import com.simplevat.service.TransactionCategoryServiceNew;
 import com.simplevat.service.UserServiceNew;
-import com.simplevat.service.bankaccount.TransactionCategoryService;
 import com.simplevat.service.bankaccount.TransactionTypeService;
 
 import lombok.Getter;
@@ -43,7 +43,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 	private TransactionTypeService transactionTypeService;
 	
 	@Autowired
-	private TransactionCategoryService transactionCategoryService;
+	private TransactionCategoryServiceNew transactionCategoryService;
 	
 	@Autowired
 	private CurrencyService currencyService;
@@ -98,7 +98,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 			expense.setTransactionType(transactionType);
 		}
 		if(selectedExpenseModel.getTransactionCategory() != null){
-			TransactionCategory transactionCategory = transactionCategoryService.getTransactionCategory(selectedExpenseModel.getTransactionCategory().getTransactionCategoryCode());
+			TransactionCategory transactionCategory = transactionCategoryService.findByPK(selectedExpenseModel.getTransactionCategory().getTransactionCategoryCode());
 			expense.setTransactionCategory(transactionCategory);
 		}
 		if(selectedExpenseModel.getCurrency() != null){
@@ -138,7 +138,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 			expense.setTransactionType(transactionType);
 		}
 		if(selectedExpenseModel.getTransactionCategory() != null){
-			TransactionCategory transactionCategory = transactionCategoryService.getTransactionCategory(selectedExpenseModel.getTransactionCategory().getTransactionCategoryCode());
+			TransactionCategory transactionCategory = transactionCategoryService.findByPK(selectedExpenseModel.getTransactionCategory().getTransactionCategoryCode());
 			expense.setTransactionCategory(transactionCategory);
 		}
 		if(selectedExpenseModel.getCurrency() != null){
