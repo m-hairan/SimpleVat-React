@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.simplevat.criteria.bankaccount.ImportedDraftTransactionCriteria;
+import com.simplevat.criteria.bankaccount.ImportedDraftTransactionFilter;
 import com.simplevat.dao.bankaccount.ImportedDraftTransactonDao;
 import com.simplevat.entity.bankaccount.ImportedDraftTransaction;
 import com.simplevat.service.bankaccount.ImportedDraftTransactonService;
@@ -24,7 +25,8 @@ public class ImportedDraftTransactonServiceImpl implements
 	public List<ImportedDraftTransaction> getImportedDraftTransactionsByCriteria(
 			ImportedDraftTransactionCriteria importedDraftTransactonCriteria)
 			throws Exception {
-		return importedDraftTransactonDao.getImportedDraftTransactionsByCriteria(importedDraftTransactonCriteria);
+		ImportedDraftTransactionFilter filter = new ImportedDraftTransactionFilter(importedDraftTransactonCriteria);
+		return importedDraftTransactonDao.filter(filter);
 	}
 
 	@Override
@@ -36,6 +38,11 @@ public class ImportedDraftTransactonServiceImpl implements
 	@Override
 	public boolean deleteImportedDraftTransaction(Integer bankAcccountId) {
 		return importedDraftTransactonDao.deleteImportedDraftTransaction(bankAcccountId);
+	}
+
+	@Override
+	public ImportedDraftTransactonDao getDao() {
+		return this.importedDraftTransactonDao;
 	}
 
 }

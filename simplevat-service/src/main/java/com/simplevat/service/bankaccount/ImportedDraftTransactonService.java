@@ -4,8 +4,9 @@ import java.util.List;
 
 import com.simplevat.criteria.bankaccount.ImportedDraftTransactionCriteria;
 import com.simplevat.entity.bankaccount.ImportedDraftTransaction;
+import com.simplevat.service.SimpleVatService;
 
-public interface ImportedDraftTransactonService {
+public interface ImportedDraftTransactonService extends SimpleVatService<Integer, ImportedDraftTransaction> {
 	
 	 List<ImportedDraftTransaction> getImportedDraftTransactionsByCriteria(ImportedDraftTransactionCriteria importedDraftTransactonCriteria) throws Exception;
 
