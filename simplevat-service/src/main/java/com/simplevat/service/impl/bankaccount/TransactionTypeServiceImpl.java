@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.simplevat.criteria.bankaccount.TransactionTypeCriteria;
+import com.simplevat.criteria.bankaccount.TransactionTypeFilter;
 import com.simplevat.dao.bankaccount.TransactionTypeDao;
 import com.simplevat.entity.bankaccount.TransactionType;
 import com.simplevat.service.bankaccount.TransactionTypeService;
@@ -19,7 +20,8 @@ public class TransactionTypeServiceImpl implements TransactionTypeService {
 	@Override
 	public List<TransactionType> getTransactionTypesByCriteria(
 			TransactionTypeCriteria transactionTypeCriteria) throws Exception {
-		return transactionTypeDao.getTransactionTypesByCriteria(transactionTypeCriteria);
+		TransactionTypeFilter filter = new TransactionTypeFilter(transactionTypeCriteria);
+		return transactionTypeDao.filter(filter);
 	}
 
 	@Override
@@ -42,5 +44,10 @@ public class TransactionTypeServiceImpl implements TransactionTypeService {
 	@Override
 	public TransactionType getDefaultTransactionType() {
 		return transactionTypeDao.getDefaultTransactionType();
+	}
+
+	@Override
+	public TransactionTypeDao getDao() {
+		return this.transactionTypeDao;
 	}
 }

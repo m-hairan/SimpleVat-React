@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 public class InvoiceModelConverter {
 
     @Autowired
-    private InvoiceService<Integer, Invoice> invoiceService;
+    private InvoiceService invoiceService;
 
     @Nonnull
     public Invoice convertModelToEntity(@Nonnull final InvoiceModel invoiceModel) {

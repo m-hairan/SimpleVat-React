@@ -4,8 +4,9 @@ import java.util.List;
 
 import com.simplevat.criteria.bankaccount.TransactionTypeCriteria;
 import com.simplevat.entity.bankaccount.TransactionType;
+import com.simplevat.service.SimpleVatService;
 
-public interface TransactionTypeService {
+public interface TransactionTypeService extends SimpleVatService<Integer, TransactionType> {
 	
 	public List<TransactionType> getTransactionTypesByCriteria(TransactionTypeCriteria transactionTypeCriteria) throws Exception;
 

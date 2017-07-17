@@ -90,7 +90,7 @@ public class TransactionCategoryNewDaoTest extends AbstractJUnit4SpringContextTe
 	@Test
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void testNamedQuery() {
-		List<TransactionCategory> listTransactionCategory = dao.executeNamedQuery("findAll");
+		List<TransactionCategory> listTransactionCategory = dao.executeNamedQuery("findAllTransactionCategory");
 		assertTrue("Size should be more than 0", listTransactionCategory.size() > 0);
 	}
 

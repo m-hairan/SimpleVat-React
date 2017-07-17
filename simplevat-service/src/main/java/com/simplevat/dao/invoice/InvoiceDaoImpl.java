@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
  * @author Hiren
  */
 @Repository
-public class InvoiceDaoImpl extends AbstractDao<Integer, Invoice> implements InvoiceDao<Integer, Invoice>{
+public class InvoiceDaoImpl extends AbstractDao<Integer, Invoice> implements InvoiceDao{
 
     
 }

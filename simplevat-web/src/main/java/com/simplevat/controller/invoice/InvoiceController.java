@@ -64,7 +64,7 @@ public class InvoiceController implements Serializable {
     private InvoiceModelConverter invoiceConverter;
 
     @Autowired
-    private InvoiceService<Integer, Invoice> invoiceService;
+    private InvoiceService invoiceService;
 
     @Autowired
     private DiscountTypeService discountTypeService;

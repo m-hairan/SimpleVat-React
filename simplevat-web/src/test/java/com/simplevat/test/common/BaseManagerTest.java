@@ -8,7 +8,7 @@ import com.simplevat.dao.CountryDao;
 import com.simplevat.dao.ExpenseDao;
 import com.simplevat.dao.LanguageDao;
 import com.simplevat.dao.RoleDao;
-import com.simplevat.dao.UserNewDaoImpl;
+import com.simplevat.dao.UserNewDao;
 import com.simplevat.service.ContactService;
 import com.simplevat.service.CountryService;
 import com.simplevat.service.ExpenseService;
@@ -48,7 +48,7 @@ public abstract class BaseManagerTest extends AbstractJUnit4SpringContextTests {
 	@Autowired
 	protected LanguageService languageService;
         
-        @Autowired
-        protected UserNewDaoImpl userDao;
+	@Autowired
+    protected UserNewDao userDao;
 
 }

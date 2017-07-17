@@ -2,7 +2,6 @@ package com.simplevat.service.impl.bankaccount;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.simplevat.criteria.bankaccount.TransactionCriteria;
+import com.simplevat.criteria.bankaccount.TransactionFilter;
 import com.simplevat.dao.bankaccount.TransactionDao;
 import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.service.bankaccount.TransactionService;
@@ -26,7 +26,8 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Override
 	public List<Transaction> getTransactionsByCriteria(TransactionCriteria transactionCriteria) throws Exception {
-		return transactionDao.getTransactionsByCriteria(transactionCriteria);
+		TransactionFilter filter = new TransactionFilter(transactionCriteria);
+		return transactionDao.filter(filter);
 	}
 
 	@Override
@@ -86,7 +87,6 @@ public class TransactionServiceImpl implements TransactionService {
 		List<Number> list = new ArrayList<Number>();
 		list.addAll(cashOutMap.values());
 		list.addAll(cashInMap.values());
-		Number min = 1;
 		Number max = 0;
 		for (int i = 0; i < list.size(); i++) {
 			Number number = list.get(i);
@@ -97,5 +97,10 @@ public class TransactionServiceImpl implements TransactionService {
 		int y = max.intValue() + 50;
 		int value = y - ((y % 50));
 		return value;
+	}
+
+	@Override
+	public TransactionDao getDao() {
+		return this.transactionDao;
 	}
 }

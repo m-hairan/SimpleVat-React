@@ -42,7 +42,7 @@ public class InvoiceListController implements Serializable {
     private Invoice selectedInvoice;
 
     @Autowired
-    private InvoiceService<Integer, Invoice> invoiceService;
+    private InvoiceService invoiceService;
 
     @PostConstruct
     public void initInvoices() {

@@ -1,19 +1,22 @@
 package com.simplevat.dao.impl;
 
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
 import com.simplevat.dao.TitleDao;
 import com.simplevat.entity.Title;
-import java.util.List;
-import org.springframework.stereotype.Repository;
+import com.simplevat.dao.AbstractDao;
 
 /**
  * Created by mohsin on 3/12/2017.
  */
 @Repository
-public class TitleDaoImpl extends com.simplevat.dao.AbstractDao<Integer, Title> implements TitleDao<Integer, Title> {
+public class TitleDaoImpl extends AbstractDao<Integer, Title> implements TitleDao {
 
     @Override
     public List<Title> getTitles() {
-        List<Title> titles = getEntityManager().createNamedQuery("allTitles", Title.class).getResultList();
+        List<Title> titles = this.executeNamedQuery("allTitles");
         return titles;
     }
 }

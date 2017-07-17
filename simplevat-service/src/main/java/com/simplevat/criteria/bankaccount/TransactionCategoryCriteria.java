@@ -5,8 +5,6 @@ import lombok.Setter;
 
 import com.simplevat.criteria.AbstractCriteria;
 import com.simplevat.criteria.SortOrder;
-import com.simplevat.criteria.AbstractCriteria.OrderByType;
-import com.simplevat.entity.bankaccount.BankAccount;
 
 
 @Getter
