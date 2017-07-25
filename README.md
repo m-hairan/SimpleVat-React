@@ -3,7 +3,7 @@
 <h3>Project coding standards:</h3>
 
 
-1. Do not display lebels. Use only empty lebels
+1. Do not display lebels. Use only empty lebels.
 2. Use autocomplete as an alter native for dropdowns.
 3. Accordian for grouping of atrributes.
 4. Form within a panel and tool par outside panel
