@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-
     <!-- Spring Context Configuration' s Path definition -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
@@ -8,29 +7,22 @@
             classpath:spring/applicationContext.xml
         </param-value>
     </context-param>
-
     <!--Empty strings instead of null values in JSF 2 on Tomcat 7-->
     <!--https://artofcode.wordpress.com/2013/08/21/empty-strings-instead-of-null-values-in-jsf-2-on-tomcat-7/-->
-
     <context-param>
         <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
         <param-value>true</param-value>
     </context-param>
-
     <!-- The Bootstrap listener to start up and shut down Spring's root WebApplicationContext. It is registered to Servlet Container -->
     <listener>
         <listener-class>
             org.springframework.web.context.ContextLoaderListener
         </listener-class>
     </listener>
-
-
     <!-- Project Stage Level -->
-
     <welcome-file-list>
         <welcome-file>pages/secure/user/home.xhtml</welcome-file>
     </welcome-file-list>
-
     <context-param>
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
         <param-value>server</param-value>
@@ -49,31 +41,35 @@
     </context-param>
     <context-param>
         <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
-        <param-value>/WEB-INF/primefaces-ultima.taglib.xml</param-value>
+        <param-value>/WEB-INF/taglib/primefaces-ultima.taglib.xml</param-value>
     </context-param>
-
     <listener>
         <listener-class>com.sun.faces.config.ConfigureListener</listener-class>
     </listener>
-
     <filter>
         <filter-name>Character Encoding Filter</filter-name>
-        <filter-class>org.primefaces.ultima.filter.CharacterEncodingFilter</filter-class>
+        <filter-class>com.simplevat.web.filter.CharacterEncodingFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>Character Encoding Filter</filter-name>
         <servlet-name>Faces Servlet</servlet-name>
     </filter-mapping>
-    
     <filter>
-	    <filter-name>PrimeFaces FileUpload Filter</filter-name>
-	    <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
-	</filter>
+        <filter-name>Basic Url Filter</filter-name>
+        <filter-class>com.simplevat.web.filter.BasicUrlFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>Basic Url Filter</filter-name>
+        <servlet-name>Faces Servlet</servlet-name>
+    </filter-mapping>
+    <filter>
+        <filter-name>PrimeFaces FileUpload Filter</filter-name>
+        <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+    </filter>
     <filter>
         <filter-name>springSecurityFilterChain</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
     </filter>
-
     <filter-mapping>
         <filter-name>springSecurityFilterChain</filter-name>
         <url-pattern>/*</url-pattern>
@@ -81,14 +77,12 @@
         <dispatcher>REQUEST</dispatcher>
     </filter-mapping>
     <filter-mapping>
-	    <filter-name>PrimeFaces FileUpload Filter</filter-name>
-	    <servlet-name>Faces Servlet</servlet-name>
-	</filter-mapping>
-
+        <filter-name>PrimeFaces FileUpload Filter</filter-name>
+        <servlet-name>Faces Servlet</servlet-name>
+    </filter-mapping>
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>
-
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -102,7 +96,6 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
-
     <mime-mapping>
         <extension>ttf</extension>
         <mime-type>application/font-sfnt</mime-type>
@@ -147,9 +140,7 @@
         <extension>svg#fontawesomeregular</extension>
         <mime-type>image/svg+xml</mime-type>
     </mime-mapping>
-
     <!-- Error Page -->
-
     <error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
         <location>/pages/public/login.xhtml</location>
@@ -161,17 +152,13 @@
     <error-page>
         <exception-type>com.simplevat.service.exceptions.ServiceException</exception-type>
         <location>/pages/public/common/errorNew.xhtml</location>
-    </error-page>    
+    </error-page>
     <error-page>
         <exception-type>java.lang.RuntimeException</exception-type>
         <location>/pages/public/common/errorNew.xhtml</location>
     </error-page>
-
     <error-page>
         <exception-type>java.lang.Throwable</exception-type>
         <location>/pages/public/common/errorNew.xhtml</location>
     </error-page>
-
-
-
 </web-app>

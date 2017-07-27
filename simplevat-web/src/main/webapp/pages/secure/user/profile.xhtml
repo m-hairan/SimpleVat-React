@@ -3,7 +3,9 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                template="/WEB-INF/template.xhtml">
+                xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
+                template="/WEB-INF/templates/template.xhtml">
+
     <ui:define name="head">
         <style>
             .ui-fluid .ui-calendar input {
@@ -27,18 +29,18 @@
 
                                 <div class="profile" style="margin-left: 44%; margin-bottom: 15px;">
                                     <div>
-                                        <ui:fragment rendered="#{not empty userController.profilePic}">
+                                        <ui:fragment rendered="#{not empty userProfileController.profilePic}">
                                             <p:graphicImage height="140px" width="140px"
-                                                            value="#{userController.profilePic}" />
+                                                            value="#{userProfileController.profilePic}" />
                                         </ui:fragment>
-                                        <ui:fragment rendered="#{empty userController.profilePic}">
+                                        <ui:fragment rendered="#{empty userProfileController.profilePic}">
                                             <p:graphicImage name="images/user-avtar-icon1.png" library="ultima-layout" height="140px" width="140px"/>
 
                                         </ui:fragment>
 
                                         <div style="width:140px">
                                             <p:fileUpload
-                                                value="#{userController.currentUser.profileImage}"
+                                                value="#{userProfileController.currentUser.profileImage}"
                                                 mode="simple" skinSimple="true" />
                                         </div>
 
@@ -57,7 +59,7 @@
                                                      maxlength="25"
                                                      required="true"
                                                      requiredMessage="Please enter First Name"
-                                                     value="#{userController.currentUser.firstName}"/>
+                                                     value="#{userProfileController.currentUser.firstName}"/>
                                         <label>#{messages.firstName}</label>
                                         <p:message for="firstName" />
                                     </h:panelGroup>
@@ -68,7 +70,7 @@
                                                      required="true"
                                                      requiredMessage="Please enter Last Name"
                                                      maxlength="25"
-                                                     value="#{userController.currentUser.lastName}"/>
+                                                     value="#{userProfileController.currentUser.lastName}"/>
                                         <label>#{messages.lastName}</label>
                                         <p:message for="lastName" />
                                     </h:panelGroup>
@@ -80,7 +82,7 @@
                                                      maxlength="25"
                                                      requiredMessage="Please enter email address"
                                                      validatorMessage="Invalid email format"
-                                                     value="#{userController.currentUser.userEmailId}">
+                                                     value="#{userProfileController.currentUser.userEmailId}">
                                             <f:validateRegex
                                                 pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                         </p:inputText>
@@ -92,8 +94,8 @@
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:calendar id="dob"
                                                     pattern="MM/dd/yyyy"
-                                                    maxdate="#{userController.currentUser.today}"
-                                                    value="#{userController.currentUser.dateOfBirth}"
+                                                    maxdate="#{userProfileController.currentUser.today}"
+                                                    value="#{userProfileController.currentUser.dateOfBirth}"
                                                     readonlyInput="true" />
                                         <label>#{messages.dateOfBirth}</label>
                                     </h:panelGroup>
@@ -105,7 +107,7 @@
                 <p:toolbar>
                     <f:facet name="left">
 
-                        <p:commandButton actionListener="#{userController.update()}"
+                        <p:commandButton actionListener="#{userProfileController.update()}"
                                          value="Save"
                                          ajax="false"
                                          update="@form"
@@ -114,14 +116,11 @@
                         <span class="ui-separator" style="padding-right: 5px;">
                             <span class="fa fa-ellipsis-v SoftGray" />
                         </span>
-
-                        <p:button title="#{messages.cancel}" icon="ui-icon-cancel" outcome="/pages/secure/user/home"/>
+                        <si:cbutton type="cancel" outcome="/pages/secure/home"/>
                     </f:facet>
 
                     <f:facet name="right">
-
-                        <p:button value="Home" icon="ui-icon-home" outcome="/pages/secure/user/home" />
-
+                    <si:cbutton type="home"/>
                     </f:facet>
                 </p:toolbar>
             </div>

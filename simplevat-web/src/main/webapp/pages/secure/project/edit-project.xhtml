@@ -3,7 +3,8 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                template="/WEB-INF/template.xhtml">
+                xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
+                template="/WEB-INF/templates/template.xhtml">
     <ui:define name="head">
         <style>
             .ui-datatable .ui-state-highlight {
@@ -155,14 +156,11 @@
                         <span class="ui-separator" style="padding-right: 5px;">
                             <span class="fa fa-ellipsis-v SoftGray"/>
                         </span>
-
-                        <p:button title="Cancel" icon="ui-icon-cancel" outcome="/pages/secure/project/projects"/>
+                        <si:cbutton type="cancel"/>
                     </f:facet>
 
                     <f:facet name="right">
-
-                        <p:button value="Home" icon="ui-icon-home" outcome="/pages/secure/user/home"/>
-
+                        <si:cbutton type="home"/>
                     </f:facet>
                 </p:toolbar>
             </div>

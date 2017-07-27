@@ -1,6 +1,6 @@
 package com.simplevat.security;
 
-import com.simplevat.exception.UnauthorizedException;
+import com.simplevat.web.exception.UnauthorizedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public class ContextUtils {

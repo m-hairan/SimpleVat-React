@@ -4,7 +4,9 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:o="http://omnifaces.org/ui"
-                template="/WEB-INF/template.xhtml">
+                xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
+                template="/WEB-INF/templates/template.xhtml">
+>
     <ui:define name="head">
         <style>
             .ui-fluid .ui-calendar input {
@@ -21,7 +23,7 @@
     <ui:define name="title">#{messages.profile}</ui:define>
     <ui:define name="content">
         <f:metadata>
-            <f:viewAction action="#{userControllerNew.init}" immediate="true"/>
+            <f:viewAction action="#{userController.init}" immediate="true"/>
         </f:metadata>
         <h:form id="profile" enctype="multipart/form-data">
             <div class="card card-w-title">
@@ -33,17 +35,17 @@
 
                                 <h:panelGroup id="profilepic" layout="block" styleClass="profile" style="margin-left: 44%; margin-bottom: 15px;">
                                     <div>
-                                        <ui:fragment rendered="#{not empty userControllerNew.profilePic}">
+                                        <ui:fragment rendered="#{not empty userController.profilePic}">
                                             <p:graphicImage height="140px" width="140px"
-                                                            value="#{userControllerNew.profilePic}" />
+                                                            value="#{userController.profilePic}" />
                                         </ui:fragment>
-                                        <ui:fragment rendered="#{empty userControllerNew.profilePic}">
+                                        <ui:fragment rendered="#{empty userController.profilePic}">
                                             <p:graphicImage name="images/user-avtar-icon1.png" library="ultima-layout" height="140px" width="140px"/>
 
                                         </ui:fragment>
 
                                         <div style="width:140px">
-                                            <p:fileUpload fileUploadListener="#{userControllerNew.handleFileUpload}" mode="advanced"
+                                            <p:fileUpload fileUploadListener="#{userController.handleFileUpload}" mode="advanced"
                                                           label="Upload Profile" update="profilepic" auto="true" sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
                                         </div>
 
@@ -62,7 +64,7 @@
                                                      maxlength="25"
                                                      required="true"
                                                      requiredMessage="Please enter First Name"
-                                                     value="#{userControllerNew.selectedUser.firstName}"/>
+                                                     value="#{userController.selectedUser.firstName}"/>
                                         <label>#{messages.firstName}</label>
                                         <p:message for="firstName" />
                                     </h:panelGroup>
@@ -73,7 +75,7 @@
                                                      required="true"
                                                      requiredMessage="Please enter Last Name"
                                                      maxlength="25"
-                                                     value="#{userControllerNew.selectedUser.lastName}"/>
+                                                     value="#{userController.selectedUser.lastName}"/>
                                         <label>#{messages.lastName}</label>
                                         <p:message for="lastName" />
                                     </h:panelGroup>
@@ -85,7 +87,7 @@
                                                      maxlength="25"
                                                      requiredMessage="Please enter email address"
                                                      validatorMessage="Invalid email format"
-                                                     value="#{userControllerNew.selectedUser.userEmail}">
+                                                     value="#{userController.selectedUser.userEmail}">
                                             <f:validateRegex
                                                 pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                         </p:inputText>
@@ -99,7 +101,7 @@
                                                     pattern="dd/MM/yyyy"
                                                     required="true"
                                                     requiredMessage="Please enter Date of Birth"
-                                                    value="#{userControllerNew.selectedUser.displayDOB}">
+                                                    value="#{userController.selectedUser.displayDOB}">
                                         </p:calendar>
                                         <label>Date of Birth</label>
                                         <p:message for="dob" />
@@ -107,17 +109,17 @@
 
                                     <p:outputLabel for="role" />
                                     <h:panelGroup>
-                                        <p:selectOneMenu value="#{userControllerNew.selectedUser.roleCode}" id="role"
+                                        <p:selectOneMenu value="#{userController.selectedUser.roleCode}" id="role"
                                                          required="true"
                                                          requiredMessage="Please select Role">
-                                            <f:selectItems value="#{userControllerNew.roleList}" var="role" itemLabel="#{role.roleName}" itemValue="#{role.roleCode}"/>
+                                            <f:selectItems value="#{userController.roleList}" var="role" itemLabel="#{role.roleName}" itemValue="#{role.roleCode}"/>
                                         </p:selectOneMenu>
                                         <p:message for="role" />
                                     </h:panelGroup>
 
                                     <p:outputLabel for="active" />
                                     <h:panelGroup>
-                                        <p:selectOneMenu value="#{userControllerNew.selectedUser.isActive}" id="active">
+                                        <p:selectOneMenu value="#{userController.selectedUser.isActive}" id="active">
                                             <f:selectItem itemLabel="Active" itemValue="true"/>
                                             <f:selectItem itemLabel="InActive" itemValue="false"/>
                                         </p:selectOneMenu>
@@ -126,7 +128,7 @@
                                 </p:panelGrid>
                             </p:fieldset>
 
-                            <p:fieldset legend="Password" toggleable="false" rendered="#{!userControllerNew.editMode}">
+                            <p:fieldset legend="Password" toggleable="false" rendered="#{!userController.editMode}">
                                 <p:panelGrid columns="6" 
                                              columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
                                              layout="grid" 
@@ -136,7 +138,7 @@
                                     <p:outputLabel for="password"/>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:password id="password"
-                                                    value="#{userControllerNew.password}"
+                                                    value="#{userController.password}"
                                                     required="true" 
                                                     requiredMessage="Please enter Password"/>
                                         <label>Password</label>
@@ -157,7 +159,7 @@
                                 </p:panelGrid>
                             </p:fieldset>
 
-                            <p:fieldset legend="Password" toggleable="false" rendered="#{userControllerNew.editMode}">
+                            <p:fieldset legend="Password" toggleable="false" rendered="#{userController.editMode}">
                                 <p:panelGrid columns="6" 
                                              columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
                                              layout="grid" 
@@ -166,7 +168,7 @@
                                     <p:outputLabel for="epassword"/>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="epassword"
-                                                     value="#{userControllerNew.password}"/>
+                                                     value="#{userController.password}"/>
                                         <label>Password</label>
                                         <p:message for="epassword" />
                                     </h:panelGroup>
@@ -188,7 +190,7 @@
                 <p:toolbar>
                     <f:facet name="left">
 
-                        <p:commandButton action="#{userControllerNew.save()}"
+                        <p:commandButton action="#{userController.save()}"
                                          value="Save"
                                          update="@form"
                                          icon="ui-icon-save" />
@@ -196,14 +198,11 @@
                         <span class="ui-separator" style="padding-right: 5px;">
                             <span class="fa fa-ellipsis-v SoftGray" />
                         </span>
-
-                        <p:button title="#{messages.cancel}" icon="ui-icon-cancel" outcome="/pages/secure/user/home"/>
+                        <si:cbutton type="cancel"/>
                     </f:facet>
 
                     <f:facet name="right">
-
-                        <p:button value="Home" icon="ui-icon-home" outcome="/pages/secure/user/home" />
-
+                        <si:cbutton type="home"/>
                     </f:facet>
                 </p:toolbar>
             </div>

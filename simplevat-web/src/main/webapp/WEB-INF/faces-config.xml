@@ -28,9 +28,14 @@
         <locale-config>
             <default-locale>en</default-locale>
         </locale-config>
-        <message-bundle>
-            JSFMessage
-        </message-bundle>
+         <!-- To override default faces messages, message-bundle is needed -->
+        <message-bundle>JSFMessage</message-bundle>
+        
+        <!-- Global reference so we don't need "f:loadBundle" on each page -->
+        <resource-bundle>
+            <base-name>JSFMessage</base-name>
+            <var>messages</var>
+        </resource-bundle>
 
         <el-resolver>org.primefaces.application.exceptionhandler.PrimeExceptionHandlerELResolver</el-resolver>
     </application>
@@ -56,7 +61,7 @@
     </navigation-rule>
 
     <lifecycle>
-        <phase-listener id="nocache">com.simplevat.CacheControlPhaseListener</phase-listener>
+        <phase-listener id="nocache">com.simplevat.web.listener.CacheControlPhaseListener</phase-listener>
     </lifecycle>
 
 

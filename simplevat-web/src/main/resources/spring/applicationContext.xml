@@ -8,6 +8,7 @@
         http://www.springframework.org/schema/tx            http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 
     <context:component-scan base-package="com.simplevat"/>
+    <context:annotation-config/>
 
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations" value="classpath:simplevat.properties"/>
@@ -64,5 +65,16 @@
 
     <bean id="persistenceExceptionTranslationPostProcessor"
           class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+    <bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor" />
+          
+    <bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+        <property name="scopes">
+            <map>
+                <entry key="view">
+                    <bean class="com.simplevat.web.spring.scope.ViewScope"/>
+                </entry>
+            </map>
+        </property>
+    </bean>
 
 </beans>

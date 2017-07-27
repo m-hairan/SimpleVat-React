@@ -1,0 +1,163 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="head">
+        <style type="text/css">
+            .contacts-datalist .text-column p:last-child{
+                color:#757575;
+            }
+
+            .contacts-datalist .contact-item i, .contacts-datalist .contact-item .contact-details {
+                display: inline-block;
+                vertical-align: middle;
+            }
+
+            .contacts-datalist .contact-item button {
+                float: right;
+            }
+
+            .contacts-datalist ul {
+                margin: 0;
+                padding: 0;
+            }
+
+            .ui-contact-display td:last-child {
+                font-weight: 700;
+            }
+
+            @media (max-width:640px) {
+                .contacts-datalist .text-column {
+                    text-align: center;
+                }
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="title">Contacts</ui:define>
+
+    <ui:define name="content">
+        <h:form id="form">
+            <div class="ui-g ">
+
+                <div class="ui-g-12">
+                    <!-- Left Side -->
+                    <div class="card card-w-title">
+                        <h1>Contacts</h1>
+
+                        <p:toolbar>
+                            <f:facet name="left">
+                                <p:commandButton title="New" value="New" update="@form" icon="ui-icon-plus"
+                                                 action="#{contactController.redirectToCreateContact()}" />
+
+
+                                <span class="ui-separator" style="padding-right: 5px;">
+                                    <span class="fa fa-ellipsis-v SoftGray" />
+                                </span>
+
+                                <p:commandButton type="button" title="Import" icon="ui-icon-file-download" />
+                                <p:commandButton type="button" title="Export" icon="ui-icon-file-upload" />
+                                <p:commandButton type="button" title="Delete" icon="ui-icon-delete" />
+                            </f:facet>
+
+                            <f:facet name="right">
+                                <p:menuButton value="Options">
+                                    <p:menuitem value="Import" icon="ui-icon-file-download" />
+                                    <p:menuitem  value="Export" icon="ui-icon-file-upload" />
+                                    <p:menuitem value="Delete" icon="ui-icon-delete"/>
+                                    <p:separator />
+                                    <p:menuitem value="Homepage" outcome="/pages/secure/home" icon="ui-icon-home"/>
+                                </p:menuButton>
+                            </f:facet>
+                        </p:toolbar>
+                        <br/>
+
+
+                        <p:dataGrid var="contact" 
+                                    value="#{contactListController.contacts}" 
+                                    columns="6" layout="grid"
+                                    paginator="true"
+                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    rowsPerPageTemplate="6,12,18,24"
+                                    rows="18" id="contacts">
+                            <f:facet name="header">
+
+                                <p:selectOneButton id="filterChar"
+                                                   value="#{contactListController.selectedFilter}">
+                                    <p:ajax update="contacts" />
+                                    <f:selectItem itemLabel="All" itemValue="" />
+                                    <f:selectItems value="#{contactListController.filters}" />
+                                </p:selectOneButton>
+                            </f:facet>
+
+                            <div class="contacts">
+
+                                <p:panel header="#{contact.firstName} #{contact.lastName}" 
+                                         style="text-align:center">
+                                    <h:panelGrid columns="1" style="width:100%">
+                                        <p:graphicImage name="images/user-avtar-icon2.png"
+                                                        library="ultima-layout" 
+                                                        width="45"/>
+                                        <h:outputText value="#{contact.telephone}" styleClass="phone"/>
+                                        <h:outputText value="#{contact.email}" styleClass="email"/>
+
+                                        <h:panelGrid columns="1" style="margin: 0 auto">
+                                            <p:commandButton icon="ui-icon-edit" 
+                                                             styleClass="AquaButton" 
+                                                             update=":form:selectedContactDetail" 
+                                                             action="#{contactController.redirectToEditContact(contact)}" />
+                                            <!--<p:commandButton icon="ui-icon-edit" styleClass="AquaButton" update=":form:selectedContactDetail" oncomplete="PF('contactDialog').show()">-->
+                                                <!--<f:setPropertyActionListener value="#{contact}" target="#{contactListController.selectedContact}" />-->
+                                            <!--</p:commandButton>-->
+
+                                            <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" 
+                                                             update="@form"
+                                                             action="#{contactListController.deleteContact(contact)}">
+
+                                            </p:commandButton>
+                                        </h:panelGrid>
+
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="1" style="width:100%; text-align: left">
+                                        <h:selectBooleanCheckbox value="#{contactListController.selectedContactIds[contact.contactId]}" />
+                                    </h:panelGrid>
+                                </p:panel>
+
+                            </div>
+                        </p:dataGrid>
+
+
+                        <!--</p:selectManyCheckbox>-->
+                        <p:dialog header="Contact Info" widgetVar="contactDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
+                            <p:outputPanel id="selectedContactDetail" style="text-align:center;">
+                                <p:panelGrid  columns="2" rendered="#{not empty contactListController.selectedContact}" columnClasses="label,value">
+                                    <f:facet name="header">
+                                        <p:graphicImage name="images/user-avtar-icon2.png" library="ultima-layout" width="250"/>
+                                    </f:facet>
+
+                                    <h:outputText value="Id:" />
+                                    <h:outputText value="#{contactListController.selectedContact.contactId}" />
+
+                                    <h:outputText value="First Name:" />
+                                    <h:outputText value="#{contactListController.selectedContact.firstName}" />
+
+                                    <h:outputText value="Last Name:" />
+                                    <h:outputText value="#{contactListController.selectedContact.lastName}" />
+
+                                    <h:outputText value="Email" />
+                                    <h:outputText value="\$#{contactListController.selectedContact.email}" />
+                                </p:panelGrid>
+                            </p:outputPanel>
+                        </p:dialog>
+                    </div>
+                </div>
+
+            </div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>
