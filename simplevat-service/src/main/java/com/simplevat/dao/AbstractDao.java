@@ -18,6 +18,7 @@ import javax.transaction.Transactional;
 
 public  abstract class AbstractDao<PK,ENTITY> implements Dao<PK, ENTITY> {
 	
+	
 	protected Class<ENTITY> entityClass;
 	
     @PersistenceContext
