@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.FlushModeType;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -15,6 +18,8 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 public  abstract class AbstractDao<PK,ENTITY> implements Dao<PK, ENTITY> {
 	
@@ -23,6 +28,9 @@ public  abstract class AbstractDao<PK,ENTITY> implements Dao<PK, ENTITY> {
 	
     @PersistenceContext
     private EntityManager entityManager;
+    
+    @Autowired
+    private EntityManagerFactory emf;
 
     @SuppressWarnings("unchecked")
 	public AbstractDao() {
@@ -110,5 +118,53 @@ public  abstract class AbstractDao<PK,ENTITY> implements Dao<PK, ENTITY> {
         return query.getResultList();
     	
     }
+    
+    @Override
+	public void importData(List<ENTITY> entities) {
+    	EntityManager entityManager = emf.createEntityManager();
+    	entityManager.setFlushMode(FlushModeType.COMMIT);
+    	EntityTransaction transaction = null;
+    	int entityCount = entities.size();
+    	int batchSize = 10;
+    	try {
+    	 
+    	    transaction = entityManager.getTransaction();
+    	    transaction.begin();
+    	 
+    	    for ( int i = 0; i < entityCount; i++ ) {
+    	        if ( i > 0 && i % batchSize == 0 ) {
+    	        	 
+    	            entityManager.flush();
+    	            entityManager.clear();
+    	            transaction.commit();
+    	            transaction.begin();
+    	        }
+    	        ENTITY entity = entities.get(i);
+    	        entityManager.persist( entity );
+    	    }
+    	 
+    	    transaction.commit();
+    	} catch (RuntimeException e) {
+    	    if ( transaction != null && transaction.isActive()) {
+    	        transaction.rollback();
+    	    }
+    	    throw e;
+    	} finally {
+    	    if (entityManager != null) {
+    	        entityManager.close();
+    	    }
+    	}    	
+		
+	}
+    
+    @Override
+	public List<ENTITY> dumpData() {
+		@SuppressWarnings("unchecked")
+		List<ENTITY> resultList = entityManager.createQuery("Select t from " + entityClass.getSimpleName() + " t").getResultList();
+		return  resultList;
+    }
+	
+    
+    
 
 }

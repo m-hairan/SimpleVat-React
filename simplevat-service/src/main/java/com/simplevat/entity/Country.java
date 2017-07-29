@@ -25,6 +25,7 @@ import com.simplevat.entity.converter.DateConverter;
 public class Country {
     @Id
     @Column(name = "COUNTRY_CODE")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int countryCode;
     @Basic
     @Column(name = "COUNTRY_NAME")
@@ -63,7 +64,7 @@ public class Country {
     @Basic
     @Version
     @Column(name = "VERSION_NUMBER")
-    private Integer versionNumber = 1;
+    private Integer versionNumber;
 
     @Transient
     @Setter
