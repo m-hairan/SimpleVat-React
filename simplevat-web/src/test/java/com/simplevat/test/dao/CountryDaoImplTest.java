@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,7 +23,7 @@ public class CountryDaoImplTest extends BaseManagerTest {
 	CountryDao dao;
 	private static final String PREFIX = "TEST";
 	private static final int TEST_SIZE=12;
-	
+	@Ignore
 	@Test
 	public void importDataTest() {
 		List<Country> countries = getTestData();
@@ -36,7 +37,7 @@ public class CountryDaoImplTest extends BaseManagerTest {
 			assertTrue("Name Not matching ", country.getCountryName().contains(PREFIX+ "_NAME_"));
 		}
 	}
-	
+	@Ignore
 	@Test
 	public void testDumpData() {
 		List<Country> countries = dao.dumpData();
