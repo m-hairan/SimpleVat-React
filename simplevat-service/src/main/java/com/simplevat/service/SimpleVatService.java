@@ -41,6 +41,19 @@ public interface SimpleVatService<PK, ENTITY> {
         return getDao().update(entity);
     }
 
+    default public void delete(ENTITY entity) {
+        getDao().delete(entity);
+    }
+
+    
+    default public void persist(ENTITY entity) {
+        getDao().persist(entity);
+    }
+
+    default public ENTITY update(ENTITY entity) {
+        return getDao().update(entity);
+    }
+
     default public void delete(ENTITY entity, PK pk) {
         ENTITY returnEntity = getDao().findByPK(pk);
         if (returnEntity == null) {
@@ -49,7 +62,6 @@ public interface SimpleVatService<PK, ENTITY> {
         getDao().delete(entity);
 
     }
-
     default public List<ENTITY> findByAttributes(Map<String, String> attributes) {
         List<ENTITY> listEntity = new ArrayList<>();
 
