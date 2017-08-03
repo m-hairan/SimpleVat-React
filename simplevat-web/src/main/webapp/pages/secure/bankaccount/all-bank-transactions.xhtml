@@ -1,72 +1,72 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
 
-	<h:form>
+    <h:form>
 
-		<div class="card card-w-title">
+        <div class="card card-w-title">
 
-			<p:dataTable var="transaction"
-					id="transactionsTable"
-					value="#{transactionListController.transactions}"
-					 paginator="true" rows="5">
-					 
-				<f:facet name="header">
-                      #{transactionController.selectedBankAccount.bankAccountName}
+            <p:dataTable var="transaction"
+                         id="transactionsTable"
+                         value="#{transactionListController.transactions}"
+                         paginator="true" rows="5">
+
+                <f:facet name="header">
+                    #{transactionListController.selectedBankAccountModel.bankAccountName}
                 </f:facet>
-                
+
                 <p:column>
-					
-					<h:panelGroup rendered="#{transaction.transactionStatus.explainationStatusName eq 'EXPLAINED'}">
-						<i class="fa fa-check" style="color: green;"></i>
-					</h:panelGroup>
-					<h:panelGroup rendered="#{transaction.transactionStatus.explainationStatusName eq 'UNEXPLAINED'}">
-						<i class="fa fa-close" style="color: red;"></i>
-					</h:panelGroup>
-					
-				</p:column>
-                
+
+                    <h:panelGroup rendered="#{transaction.transactionStatus.explainationStatusName eq 'EXPLAINED'}">
+                        <i class="fa fa-check" style="color: green;"></i>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{transaction.transactionStatus.explainationStatusName eq 'UNEXPLAINED'}">
+                        <i class="fa fa-close" style="color: red;"></i>
+                    </h:panelGroup>
+
+                </p:column>
+
                 <p:column headerText="#{messages.date}" sortBy="#{transaction.transactionDate.time}">
-					 <h:outputText value="#{transaction.transactionDate.time}" >
-                           <f:convertDateTime pattern="dd/MM/yyyy" />
-                      </h:outputText>
-				</p:column>
-				
+                    <h:outputText value="#{transaction.transactionDate.time}" >
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </p:column>
+
                 <p:column headerText="#{messages.description}" >
-					<h:outputText value="#{transaction.transactionDescription}" />
-				</p:column>
-                            
-				<p:column headerText="#{messages.credit}" sortBy="#{transaction.transactionAmount}">
-					<h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString() eq 'C'}" />
-				</p:column>
-				
-				<p:column headerText="#{messages.debit}" sortBy="#{transaction.transactionAmount}">
-					<h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString() eq 'D'}" />
-				</p:column>
-				
-				<p:column headerText="#{messages.current_balance}">
-					<h:outputText value="#{transaction.currentBalance}" />
-				</p:column>
-				
-				<p:column headerText="Action">
-					
-					<p:commandButton icon="ui-icon-edit" styleClass="AquaButton" action="/pages/secure/bankaccount/edit-bank-transaction.xhtml">
-                         <f:setPropertyActionListener value="#{transaction}" target="#{transactionController.selectedTransactionModel}" />
+                    <h:outputText value="#{transaction.transactionDescription}" />
+                </p:column>
+
+                <p:column headerText="#{messages.credit}" sortBy="#{transaction.transactionAmount}">
+                    <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString() eq 'C'}" />
+                </p:column>
+
+                <p:column headerText="#{messages.debit}" sortBy="#{transaction.transactionAmount}">
+                    <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString() eq 'D'}" />
+                </p:column>
+
+                <p:column headerText="#{messages.current_balance}">
+                    <h:outputText value="#{transaction.currentBalance}" />
+                </p:column>
+
+                <p:column headerText="Action">
+
+                    <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" action="/pages/secure/bankaccount/edit-bank-transaction.xhtml">
+                        <f:setPropertyActionListener value="#{transaction}" target="#{transactionController.selectedTransactionModel}" />
                     </p:commandButton>
-                     
+
                     <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{transactionController.deleteTransaction}" update="transactionsTable">
-						<f:setPropertyActionListener value="#{transaction}" target="#{transactionController.selectedTransactionModel}" />
-						<p:confirm header="#{messages.delete}" message="#{messages.are_you_sure_want_to_delete}" icon="ui-icon-alert" />
-					</p:commandButton>
-                                        
-				</p:column>
+                        <f:setPropertyActionListener value="#{transaction}" target="#{transactionController.selectedTransactionModel}" />
+                        <p:confirm header="#{messages.delete}" message="#{messages.are_you_sure_want_to_delete}" icon="ui-icon-alert" />
+                    </p:commandButton>
 
-			</p:dataTable>
-			
-		</div>
+                </p:column>
 
-	</h:form>
+            </p:dataTable>
+
+        </div>
+
+    </h:form>
 
 </ui:composition>

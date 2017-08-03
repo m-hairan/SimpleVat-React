@@ -46,7 +46,7 @@
 										<h:panelGroup styleClass="md-inputfield">
 											<p:calendar
 												id="transactionDate"
-												value="#{transactionController.selectedTransactionModel.transactionDate}"
+                                                                                                value="#{transactionController.selectedTransactionModel.transactionDate}"
 												required="true" />
 											<label>#{messages.date}</label>
 										</h:panelGroup>
@@ -198,7 +198,7 @@
 				<p:toolbar>
 					<f:facet name="left">
 						<p:commandButton value="#{messages.save}" icon="ui-icon-save"
-							action="#{transactionController.saveTransaction}" ajax="false" />
+							action="#{transactionController.saveTransaction}"/>
 						<p:commandButton value="#{messages.save_and_add_more}"
 							icon="ui-icon-forward"
 							action="#{transactionController.saveAndContinueTransaction}"

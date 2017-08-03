@@ -36,7 +36,7 @@ public class CurrencyController {
 	private CurrencyService currencyService;
 	
 	@PostConstruct
-    public void init() throws Exception {
+    public void init()  {
         this.currencies = currencyService.getCurrencies();
     }
 	

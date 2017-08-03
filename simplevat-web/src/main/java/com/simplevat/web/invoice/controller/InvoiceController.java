@@ -181,7 +181,7 @@ public class InvoiceController implements Serializable {
         }
         final Invoice invoice = invoiceConverter
                 .convertModelToEntity(invoiceModel);
-        invoiceService.persist(invoice, 0);
+        invoiceService.persist(invoice);
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
         if (invoiceModel.getInvoiceId() > 0) {
@@ -249,6 +249,8 @@ public class InvoiceController implements Serializable {
         contactModel = new ContactModel();
     }
 
+
+    
     public void createContact() {
         Currency defaultCurrency = currencyService.getDefaultCurrency();
 

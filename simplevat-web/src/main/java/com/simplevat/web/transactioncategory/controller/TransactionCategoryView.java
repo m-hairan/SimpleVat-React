@@ -68,6 +68,9 @@ public class TransactionCategoryView {
 	}
 
 	public List<TransactionCategory> getParentTransactionCategories(String q) {
+            if(q == null){
+                return this.transactionCategories;
+            }
 		List<TransactionCategory> filterList = new ArrayList<>();
 		for(TransactionCategory transactionCategory : transactionCategories) {
 			StringBuilder strbld = new StringBuilder();
@@ -104,8 +107,7 @@ public class TransactionCategoryView {
 		selectedTransactionCategory.setOrderSequence(1);
 		selectedTransactionCategory.setCreatedDate(LocalDateTime.now());
 		selectedTransactionCategory.setLastUpdateDate(LocalDateTime.now());
-		transactionCategoryService.persist(selectedTransactionCategory,
-				selectedTransactionCategory.getTransactionCategoryCode());
+		transactionCategoryService.persist(selectedTransactionCategory, selectedTransactionCategory.getTransactionCategoryCode());
 		selectedTransactionCategory = new TransactionCategory();
 		return TRANSACTION_CATEGORY + CREATE_PAGE + "?faces-redirect=true";
 	}
@@ -118,11 +120,10 @@ public class TransactionCategoryView {
 		selectedTransactionCategory.setOrderSequence(1);
 		selectedTransactionCategory.setCreatedDate(LocalDateTime.now());
 		selectedTransactionCategory.setLastUpdateDate(LocalDateTime.now());
-		transactionCategoryService.persist(selectedTransactionCategory,
-				selectedTransactionCategory.getTransactionCategoryCode());
-		init();
-		// FacesContext.getCurrentInstance().getExternalContext().redirect("transactioncategory.xhtml?faces-redirect=true");
-		return TRANSACTION_CATEGORY + HOME_PAGE + "?faces-redirect=true";
+		transactionCategoryService.persist(selectedTransactionCategory, selectedTransactionCategory.getTransactionCategoryCode());
+                init();
+		//FacesContext.getCurrentInstance().getExternalContext().redirect("transactioncategory.xhtml?faces-redirect=true");
+		return TRANSACTION_CATEGORY + LIST_PAGE + "?faces-redirect=true";
 	}
 
 	public String update() throws UnauthorizedException {

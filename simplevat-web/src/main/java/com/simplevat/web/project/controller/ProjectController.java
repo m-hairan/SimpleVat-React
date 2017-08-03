@@ -112,13 +112,13 @@ public class ProjectController {
             throw new Exception("Invalid Project Id");
         }
         this.selectedProject = projects.get(0);
-        return "/pages/secure/project/project.xhtml";
+        return "/pages/secure/project/project.xhtml?faces-redirect=true";
     }
 
 
     public String deleteProject(Project project) throws Exception {
         project.setDeleteFlag(Boolean.TRUE);
-        projectService.persist(project, 0);
+        projectService.persist(project);
         init();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Project deleted successfully"));
         return "/pages/secure/project/projects.xhtml";
@@ -128,10 +128,10 @@ public class ProjectController {
         UserContext userContext = ContextUtils.getUserContext();
         selectedProject.setCreatedBy(userContext.getUserId());
         selectedProject.setCreatedDate(LocalDateTime.now());
-        projectService.persist(selectedProject, 0);
+        projectService.persist(selectedProject);
         init();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Project saved successfully"));
-        return "/pages/secure/project/projects.xhtml";
+        return "/pages/secure/project/projects.xhtml?faces-redirect=true";
     }
     public List<Language> completeLanguage(String languageStr) {
         List<Language> languageSuggestion = new ArrayList<>();

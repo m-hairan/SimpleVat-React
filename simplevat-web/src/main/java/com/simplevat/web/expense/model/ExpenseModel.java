@@ -20,10 +20,6 @@ import java.util.Date;
 @Setter
 public class ExpenseModel {
 
-	public ExpenseModel(){
-		this.expenseId = 0;
-	}
-	
     private int expenseId;
     private BigDecimal expenseAmount;
     private Date expenseDate;

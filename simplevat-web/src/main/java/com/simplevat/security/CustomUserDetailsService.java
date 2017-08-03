@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import javax.faces.context.FacesContext;
 
 @Service("customUserDetailsService")
 public class CustomUserDetailsService implements UserDetailsService {
@@ -23,6 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         Optional<User> user = userService.getUserByEmail(emailAddress);
 
         if (user.isPresent()) {
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loggedInUser", user.get());
             return new UserContext(user.get());
         } else {
             throw new UsernameNotFoundException("Email not found");

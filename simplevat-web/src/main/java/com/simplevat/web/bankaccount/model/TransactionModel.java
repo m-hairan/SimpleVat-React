@@ -19,12 +19,8 @@ import com.simplevat.entity.bankaccount.TransactionType;
 @Getter
 @Setter
 public class TransactionModel {
-	
-	public TransactionModel(){
-		this.transactionId = 0;
-	}
-	
-    private int transactionId;
+		
+    private Integer transactionId;
     private Date transactionDate;
     private String transactionDescription;
     private BigDecimal transactionAmount;

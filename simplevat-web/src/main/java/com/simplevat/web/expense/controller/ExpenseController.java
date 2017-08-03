@@ -28,12 +28,14 @@ import com.simplevat.service.ProjectService;
 import com.simplevat.service.TransactionCategoryServiceNew;
 import com.simplevat.service.UserServiceNew;
 import com.simplevat.service.bankaccount.TransactionTypeService;
+import com.simplevat.web.utils.FacesUtil;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.context.annotation.SessionScope;
 
 @Controller
-@SessionScope
+@Scope("view")
 public class ExpenseController extends ExpenseControllerHelper implements Serializable {
 
     private static final long serialVersionUID = 5366159429842989755L;
@@ -63,37 +65,59 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
     @Setter
     private ExpenseModel selectedExpenseModel;
 
+    @PostConstruct
+    public void init() {
+        ExpenseModel expenseModel = new ExpenseModel();
+        Object objSelectedExpenseModel = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("selectedExpenseModel");
+        if (objSelectedExpenseModel == null) {
+            Currency defaultCurrency = currencyService.getDefaultCurrency();
+            if (defaultCurrency != null) {
+                expenseModel.setCurrency(defaultCurrency);
+            }
+            TransactionType transactionType = transactionTypeService.getDefaultTransactionType();
+            if (transactionType != null) {
+                expenseModel.setTransactionType(transactionType);
+            }
+            TransactionCategory transactionCategory = (TransactionCategory) transactionCategoryService.getDefaultTransactionCategory();
+            if (transactionCategory != null) {
+                expenseModel.setTransactionCategory(transactionCategory);
+            }
+        }else{
+            expenseModel = (ExpenseModel)objSelectedExpenseModel;
+        }
+        selectedExpenseModel = expenseModel;
+    }
+
     public String createExpense() {
 
-        ExpenseModel expenseModel = new ExpenseModel();
-        expenseModel.setExpenseId(0);
-
-        Currency defaultCurrency = currencyService.getDefaultCurrency();
-        if (defaultCurrency != null) {
-            expenseModel.setCurrency(defaultCurrency);
-        }
-        TransactionType transactionType = transactionTypeService.getDefaultTransactionType();
-        if (transactionType != null) {
-            expenseModel.setTransactionType(transactionType);
-        }
-        TransactionCategory transactionCategory = (TransactionCategory) transactionCategoryService.getDefaultTransactionCategory();
-        if (transactionCategory != null) {
-            expenseModel.setTransactionCategory(transactionCategory);
-        }
-        this.setSelectedExpenseModel(expenseModel);
-
+//        ExpenseModel expenseModel = new ExpenseModel();
+//        expenseModel.setExpenseId(0);
+//
+//        Currency defaultCurrency = currencyService.getDefaultCurrency();
+//        if (defaultCurrency != null) {
+//            expenseModel.setCurrency(defaultCurrency);
+//        }
+//        TransactionType transactionType = transactionTypeService.getDefaultTransactionType();
+//        if (transactionType != null) {
+//            expenseModel.setTransactionType(transactionType);
+//        }
+//        TransactionCategory transactionCategory = (TransactionCategory) transactionCategoryService.getDefaultTransactionCategory();
+//        if (transactionCategory != null) {
+//            expenseModel.setTransactionCategory(transactionCategory);
+//        }
+//        this.setSelectedExpenseModel(expenseModel);
         return "/pages/secure/expense/create-expense.xhtml?faces-redirect=true";
 
     }
 
     public String saveExpense() {
-
+        User loggedInUser = FacesUtil.getLoggedInUser();
         Expense expense = this.getExpense(this.getSelectedExpenseModel());
 
         expense.setLastUpdateDate(LocalDateTime.now());
-        expense.setLastUpdatedBy(12345);
+        expense.setLastUpdatedBy(loggedInUser.getUserId());
         expense.setDeleteFlag(false);
-        expense.setCreatedBy(12345);
+        expense.setCreatedBy(loggedInUser.getUserId());
 
         if (selectedExpenseModel.getTransactionType() != null) {
             TransactionType transactionType = transactionTypeService.getTransactionType(selectedExpenseModel.getTransactionType().getTransactionTypeCode());
@@ -112,29 +136,33 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
             expense.setProject(project);
         }
         if (selectedExpenseModel.getUser() != null) {
-            User user = userServiceNew.getDao().findByPK(selectedExpenseModel.getUser().getUserId());
+            User user = userServiceNew.findByPK(selectedExpenseModel.getUser().getUserId());
             expense.setUser(user);
         }
 
-        if (this.getSelectedExpenseModel().getAttachmentFile()!= null && this.getSelectedExpenseModel().getAttachmentFile().getSize() > 0) {
+        if (this.getSelectedExpenseModel().getAttachmentFile() != null && this.getSelectedExpenseModel().getAttachmentFile().getSize() > 0) {
             storeUploadedFile(this.getSelectedExpenseModel(), expense, fileLocation);
         }
-        expense.setExpenseId(null);
-        expenseService.persist(expense, 0);
-
+        
+        if (expense.getExpenseId() == null || expense.getExpenseId() == 0) {
+            expense.setExpenseId(null);
+            expenseService.persist(expense);
+        } else {
+            expenseService.update(expense, expense.getExpenseId());
+        }
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense saved successfully"));
         return "/pages/secure/expense/expenses.xhtml?faces-redirect=true";
 
     }
 
     public void saveAndContinueExpense() {
-
+        User loggedInUser = FacesUtil.getLoggedInUser();
         Expense expense = this.getExpense(this.getSelectedExpenseModel());
 
         expense.setLastUpdateDate(LocalDateTime.now());
-        expense.setLastUpdatedBy(12345);
+        expense.setLastUpdatedBy(loggedInUser.getUserId());
         expense.setDeleteFlag(false);
-        expense.setCreatedBy(12345);
+        expense.setCreatedBy(loggedInUser.getUserId());
 
         if (selectedExpenseModel.getTransactionType() != null) {
             TransactionType transactionType = transactionTypeService.getTransactionType(selectedExpenseModel.getTransactionType().getTransactionTypeCode());
@@ -161,7 +189,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
             storeUploadedFile(this.getSelectedExpenseModel(), expense, fileLocation);
         }
 
-        expenseService.persist(expense, 0);
+        expenseService.persist(expense);
         this.setSelectedExpenseModel(new ExpenseModel());
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense saved successfully"));
 
@@ -175,12 +203,9 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense deleted successfully"));
 
     }
-    
+
     public List<User> users(final String searchQuery) throws Exception {
         return userServiceNew.executeNamedQuery("findAllUsers");
-       
+
     }
 }
-    
-
-    

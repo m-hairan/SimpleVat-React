@@ -65,7 +65,7 @@
 															forceSelection="true" 
 															dropdown="true"
                                                             completeMethod="#{transactionCategoryView.getParentTransactionCategories}" 
-                                                            var="transactionCategory" itemLabel="#{transactionCategory.parentTransactionCategory}"  itemValue="#{transactionCategory.parentTransactionCategory}"
+                                                            var="transactionCategory" itemLabel="#{transactionCategory.transactionCategoryName}"  itemValue="#{transactionCategory.transactionCategoryName}"
                                                             converter="#{transactionCategoryConverter}"
                                                             required="false"/>
 												<label>Parent Category Code</label>

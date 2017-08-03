@@ -29,7 +29,7 @@ public class TestUserDao extends BaseManagerTest {
         user.setRoleCode(1);
         user.setUserId(1);
         user.setVersionNumber(1);
-        userDao.persist(user);
+        userDao.saveUser(user);
         
     }
 }

@@ -19,6 +19,8 @@ import com.simplevat.service.CountryService;
 import com.simplevat.service.CurrencyService;
 import com.simplevat.service.bankaccount.BankAccountService;
 import com.simplevat.service.bankaccount.BankAccountStatusService;
+import com.simplevat.web.bankaccount.model.BankAccountModel;
+import com.simplevat.web.utils.FacesUtil;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -26,8 +28,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.web.context.annotation.SessionScope;
 
 @Controller
-@SessionScope
-public class BankAccountController {
+@Scope("view")
+public class BankAccountController extends BankAccountHelper{
 
 	@Autowired
 	private BankAccountService bankAccountService;
@@ -45,7 +47,7 @@ public class BankAccountController {
 	@Setter
 	private BankAccount selectedBankAccount;
 
-	/**
+       /**
 	 * @return List<BankAccount>
 	 * 
 	 * Return list of all banks
@@ -62,7 +64,6 @@ public class BankAccountController {
 
 	public String createBankAccount(){
 		 this.selectedBankAccount = new BankAccount();
-		 
 		 Currency defaultCurrency = currencyService.getDefaultCurrency();
 		 if(defaultCurrency != null){
 			 this.selectedBankAccount.setBankAccountCurrency(defaultCurrency);
@@ -76,8 +77,8 @@ public class BankAccountController {
 		 return "/pages/secure/bankaccount/edit-bankaccount.xhtml";
 	}
 
-	public String saveBankAccount() {
-		try {
+	public String saveBankAccount() {          
+		try{
 			selectedBankAccount.setCreatedBy(12345);
 
 			if (selectedBankAccount.getBankAccountStatus() != null) {
@@ -96,7 +97,7 @@ public class BankAccountController {
 				BankAccountStatus bankAccountStatus = bankAccountStatusService.getBankAccountStatusByName("ACTIVE");
 				selectedBankAccount.setBankAccountStatus(bankAccountStatus);
 			}
-			bankAccountService.persist(selectedBankAccount, 0);
+			bankAccountService.persist(selectedBankAccount);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -140,6 +141,11 @@ public class BankAccountController {
 
 	}
 
+        public String redirectToTransaction(){
+            FacesUtil.setSelectedBankAccount(getBankAccountModel(selectedBankAccount));
+            return "bank-transactions?faces-redirect=true";
+        }
+        
 	public List<BankAccountStatus> bankAccountStatuses(final String searchQuery) {
 		return bankAccountStatusService.getBankAccountStatuses();
 	}

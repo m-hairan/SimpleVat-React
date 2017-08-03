@@ -49,7 +49,7 @@ import org.springframework.web.context.annotation.SessionScope;
  * @author Uday
  */
 @Controller
-@SessionScope
+@Scope("view")
 public class UserController {
 
     @Autowired
@@ -160,13 +160,13 @@ public class UserController {
             user.setCreatedBy(userContext.getUserId());
             user.setLastUpdatedBy(userContext.getUserId());
             if (!editMode) {
-                userService.persist(user, 0);
+                userService.persist(user);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User Profile added successfully"));
             } else {
                 userService.update(user, user.getUserId());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User Profile updated successfully"));
             }
-            return "manage-user?faces-redirect=true";
+            return "list?faces-redirect=true";
         } catch (Exception ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -115,7 +115,7 @@ public class ContactController implements Serializable {
         contactModel.setLanguage(languages.get(0));
         setDefaultCurrency();
         LOGGER.debug("Redirecting to create new contact page");
-        return "/pages/secure/contact/contact.xhtml";
+        return "/pages/secure/contact/contact.xhtml?faces-redirect=true";
     }
 
     public void createOrUpdateContact() throws IOException {
@@ -135,7 +135,7 @@ public class ContactController implements Serializable {
         }
 
         FacesContext.getCurrentInstance().getExternalContext()
-                .redirect("contacts.xhtml?faces-redirect=true");
+                .redirect("list.xhtml?faces-redirect=true");
     }
 
     public void createOrUpdateAndAddMore() {

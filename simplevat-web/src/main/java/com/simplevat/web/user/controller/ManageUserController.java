@@ -19,15 +19,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.context.annotation.RequestScope;
-import org.springframework.web.context.annotation.SessionScope;
 
 /**
  *
  * @author Uday
  */
 @Controller
-@SessionScope
+@Scope("view")
 public class ManageUserController {
 
     @Autowired
