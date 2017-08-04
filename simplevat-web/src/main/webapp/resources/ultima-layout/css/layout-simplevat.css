@@ -429,7 +429,7 @@
       display: inline-block;
       vertical-align: middle;
       width: 200px;
-      height: 30px;
+      height: 50px;
       background: url("#{resource['ultima-layout:images/logo.png']}") top left no-repeat; }
     .landing-wrapper #header .header-top #menu {
       float: right;
