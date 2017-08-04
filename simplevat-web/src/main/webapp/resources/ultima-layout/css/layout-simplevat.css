@@ -429,7 +429,7 @@
       display: inline-block;
       vertical-align: middle;
       width: 200px;
-      height: 50px;
+      height: 30px;
       background: url("#{resource['ultima-layout:images/logo.png']}") top left no-repeat; }
     .landing-wrapper #header .header-top #menu {
       float: right;
@@ -895,6 +895,7 @@ body {
       width: 60px;
       height: 60px;
       margin: 0 auto 5px auto;
+      background: url("#{resource['ultima-layout:images/avatar2x.png']}") top left no-repeat;
       background-size: 60px 60px; }
     .layout-wrapper .layout-menu .profile .profile-name {
       display: inline-block;
@@ -1987,3 +1988,13 @@ body.layout-compact .ui-widget-content .email {
 body.layout-compact .ui-widget-content .phone {
   font-size: 14px;
   color: #757575; }
+
+.landing-wrapper #header .header-top .logo {
+  width: 200px;
+  height: 50px; }
+
+.layout-wrapper .topbar .logo {
+  width: 200px;
+  height: 50px; }
+
+/*# sourceMappingURL=layout-simplevat.css.map */
