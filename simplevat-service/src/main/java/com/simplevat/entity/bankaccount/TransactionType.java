@@ -58,6 +58,6 @@ public class TransactionType {
 
     @Version
     @Column(name = "VERSION_NUMBER")
-    private Integer versionNumber = 1;
+    private Integer versionNumber;
 
 }

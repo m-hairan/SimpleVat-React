@@ -76,7 +76,7 @@ public class User {
 
     @Version
     @Column(name = "VERSION_NUMBER")
-    private Integer versionNumber = 1;
+    private Integer versionNumber;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ROLE_CODE", insertable = false, updatable = false)

@@ -66,7 +66,7 @@ public class Project implements Serializable {
 
     @Version
     @Column(name = "VERSION_NUMBER")
-    private Integer versionNumber = 1;
+    private Integer versionNumber;
 //    private Collection<Expense> expensesByProjectId;
 //    private Collection<Invoice> invoicesByProjectId;
 //    private Contact contactByContactId;

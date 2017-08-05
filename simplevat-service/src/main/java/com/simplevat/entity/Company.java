@@ -85,7 +85,7 @@ public class Company {
     @Basic
     @Version
     @Column(name = "VERSION_NUMBER")
-    private Integer versionNumber = 1;
+    private Integer versionNumber;
 //    private CompanyType companyTypeByCompanyTypeCode;
 //    private Country countryByCountryCode;
 //    private Collection<User> usersByCompanyId;
