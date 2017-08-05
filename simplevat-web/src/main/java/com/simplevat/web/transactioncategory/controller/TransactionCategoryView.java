@@ -120,7 +120,7 @@ public class TransactionCategoryView {
 		selectedTransactionCategory.setOrderSequence(1);
 		selectedTransactionCategory.setCreatedDate(LocalDateTime.now());
 		selectedTransactionCategory.setLastUpdateDate(LocalDateTime.now());
-		transactionCategoryService.persist(selectedTransactionCategory, selectedTransactionCategory.getTransactionCategoryCode());
+                transactionCategoryService.persist(selectedTransactionCategory, selectedTransactionCategory.getTransactionCategoryCode());
                 init();
 		//FacesContext.getCurrentInstance().getExternalContext().redirect("transactioncategory.xhtml?faces-redirect=true");
 		return TRANSACTION_CATEGORY + LIST_PAGE + "?faces-redirect=true";

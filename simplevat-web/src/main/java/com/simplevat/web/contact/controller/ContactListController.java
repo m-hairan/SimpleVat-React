@@ -59,11 +59,11 @@ public class ContactListController implements Serializable {
 
     public Map<String, String> getFilters() {
         filters = new HashMap<>();
-        filteredContacts.stream()
-                .map((contact) -> contact.getFirstName().substring(0, 1).toUpperCase())
-                .forEach((filterCharacter) -> {
-                    filters.put(filterCharacter, filterCharacter);
-                });
+//        filteredContacts.stream()
+//                .map((contact) -> contact.getFirstName().substring(0, 1).toUpperCase())
+//                .forEach((filterCharacter) -> {
+//                    filters.put(filterCharacter, filterCharacter);
+//                });
         return filters;
     }
 

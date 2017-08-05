@@ -6,12 +6,11 @@ import javax.faces.component.FacesComponent;
 import javax.faces.component.NamingContainer;
 import javax.faces.component.UIInput;
 import javax.faces.component.UINamingContainer;
-import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 
 import com.simplevat.web.filter.Breadcrumb;
 
-@FacesComponent("com.simplevat.cButtonComponent")
+@FacesComponent("com.simplevat.web.ccomposite.cButtonComponent")
 public class CButtonComponent extends UIInput implements NamingContainer {
 	
 	private String title;

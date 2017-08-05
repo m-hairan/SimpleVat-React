@@ -11,7 +11,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
@@ -25,19 +24,18 @@ import com.simplevat.web.constant.BankAccountConstant;
 import com.simplevat.web.bankaccount.model.TransactionModel;
 import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.web.bankaccount.model.BankAccountModel;
+import java.time.LocalDateTime;
 
 public class TransactionControllerHelper {
 
     public Transaction getTransaction(TransactionModel model) {
-        System.out.println("model :"+model);
+        System.out.println("model :" + model);
         Transaction transaction = new Transaction();
         transaction.setTransactionId(model.getTransactionId());
-
         if (model.getTransactionDate() != null) {
             LocalDateTime transactionDate = Instant.ofEpochMilli(model.getTransactionDate().getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
             transaction.setTransactionDate(transactionDate);
         }
-
         transaction.setTransactionDescription(model.getTransactionDescription());
         transaction.setTransactionAmount(model.getTransactionAmount());
         transaction.setTransactionType(model.getTransactionType());
@@ -52,6 +50,7 @@ public class TransactionControllerHelper {
         transaction.setTransactionStatus(model.getTransactionStatus());
         transaction.setCurrentBalance(model.getCurrentBalance());
         transaction.setCreatedBy(model.getCreatedBy());
+        transaction.setCreatedDate(model.getCreatedDate());
         transaction.setLastUpdatedBy(model.getLastUpdatedBy());
         transaction.setLastUpdateDate(model.getLastUpdateDate());
         transaction.setDeleteFlag(model.getDeleteFlag());
@@ -82,6 +81,7 @@ public class TransactionControllerHelper {
         transactionModel.setBankAccount(entity.getBankAccount());
         transactionModel.setCurrentBalance(entity.getCurrentBalance());
         transactionModel.setCreatedBy(entity.getCreatedBy());
+        transactionModel.setCreatedDate(entity.getCreatedDate());
         transactionModel.setLastUpdatedBy(entity.getLastUpdatedBy());
         transactionModel.setLastUpdateDate(entity.getLastUpdateDate());
         transactionModel.setDeleteFlag(entity.getDeleteFlag());

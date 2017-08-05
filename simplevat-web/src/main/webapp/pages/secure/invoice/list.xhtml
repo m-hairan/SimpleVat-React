@@ -3,112 +3,75 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
                 template="/WEB-INF/templates/template.xhtml">
 
     <ui:define name="title">#{messages.invoices}</ui:define>
 
     <ui:define name="content">
-    <f:metadata>
-        <f:viewAction action="#{invoiceListController.initInvoices}"/>
-    </f:metadata>
-        <h:form id="form">
-            <div class="ui-g ">
-                <div class="ui-g-12">
-                    <div class="card card-w-title">
-                        <h1>#{messages.invoices}</h1>
-                        <p:toolbar>
-                            <f:facet name="left">
-                                <p:commandButton value="#{messages.button_new}"
-                                                 icon="ui-icon-plus"
-                                                 action="#{invoiceListController.redirectToCreateInvoice()}"/>
+         <si:cdataPanel newAction="#{invoiceListController.redirectToCreateInvoice()}">
+            <h:form>
+                <p:dataTable var="invoice" 
+                             value="#{invoiceListController.invoices}"
+                             selectionMode="single"
+                             reflow="true"
+                             rowIndexVar="index"
+                             selection="#{invoiceListController.selectedInvoice}"
+                             rowKey="#{invoice.invoiceId}" 
+                             paginator="true" rows="10"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}"
+                             >
+                    <f:facet name="{TableHeader}">
+                        <p:outputLabel styleClass="tableCustomHeader" value="#{messages.invoices}" />
+                    </f:facet>
+                    <p:column headerText="#{messages.number}" sortBy="#{invoice.invoiceReferenceNumber}">
+                        <h:outputText value="#{invoice.invoiceReferenceNumber}" />
+                    </p:column>
 
-                                <span class="ui-separator" style="padding-right: 5px;">
-                                    <span class="fa fa-ellipsis-v SoftGray" />
-                                </span>
+                    <p:column headerText="#{messages.date}" sortBy="#{invoice.invoiceDate}">
+                        <h:outputText value="#{invoice.invoiceDate}" >
+                            <f:converter converterId="localDateTimeConverter" />
+                            <f:attribute name="pattern" value="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
 
-                                <p:commandButton type="button" title="#{messages.button_import}" icon="ui-icon-file-download" />
-                                <p:commandButton type="button" title="#{messages.button_export}" icon="ui-icon-file-upload" />
-                                <p:commandButton type="button" title="#{messages.delete}" icon="ui-icon-delete" />
-                            </f:facet>
+                    <p:column headerText="#{messages.invoice_due_on}" sortBy="#{invoice.invoiceDueOn}">
+                        <h:outputText value="#{invoice.invoiceDueOn}" />
+                    </p:column>
 
-                            <f:facet name="right">
-                                <p:menuButton value="Options">
-                                    <p:menuitem value="#{messages.button_import}" icon="ui-icon-file-download" />
-                                    <p:menuitem  value="#{messages.button_export}" icon="ui-icon-file-upload" />
-                                    <p:menuitem value="#{messages.delete}" icon="ui-icon-delete"/>
-                                    <p:separator />
-                                    <p:menuitem value="#{messages.home_page}" outcome="/pages/secure/home" icon="ui-icon-home"/>
-                                </p:menuButton>
-                            </f:facet>
-                        </p:toolbar>
-                        <br/>
-                        <p:dataTable var="invoice" 
-                                     value="#{invoiceListController.invoices}"
-                                     selectionMode="single"
-                                     reflow="true"
-                                     rowIndexVar="index"
-                                     selection="#{invoiceListController.selectedInvoice}"
-                                     rowKey="#{invoice.invoiceId}" 
-                                     paginator="true" rows="5">
-                            <f:facet name="header">
-                                #{messages.invoices}
-                            </f:facet>
-                            <p:column headerText="#{messages.number}" sortBy="#{invoice.invoiceReferenceNumber}">
-                                <h:outputText value="#{invoice.invoiceReferenceNumber}" />
-                            </p:column>
+                    <p:column headerText="#{messages.contact_name}"
+                              sortBy="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}">
+                        <h:outputText value="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}" />
+                    </p:column>
+                    <p:column headerText="#{messages.no_of_items}"
+                              sortBy="#{invoice.invoiceLineItems.size()}">
+                        <h:outputText value="#{invoice.invoiceLineItems.size()}" />
+                    </p:column>
+                    <c:set value="#{invoiceListController.totalAmount(invoice)}"
+                           var="total" />
+                    <p:column headerText="#{messages.total_cost}"
+                              sortBy="#{total}">
+                        <h:outputText value="#{invoice.currency.currencyIsoCode} " />
+                        <h:outputText value="#{total}" >
+                            <f:convertNumber maxFractionDigits="2" pattern="#,##0.00" />
+                        </h:outputText>
+                    </p:column>
 
-                            <p:column headerText="#{messages.date}" sortBy="#{invoice.invoiceDate}">
-                                <h:outputText value="#{invoice.invoiceDate}" >
-                                    <f:converter converterId="localDateTimeConverter" />
-                                    <f:attribute name="pattern" value="dd/MM/yyyy" />
-                                </h:outputText>
-                            </p:column>
-
-                            <p:column headerText="#{messages.invoice_due_on}" sortBy="#{invoice.invoiceDueOn}">
-                                <h:outputText value="#{invoice.invoiceDueOn}" />
-                            </p:column>
-
-                            <p:column headerText="#{messages.contact_name}"
-                                      sortBy="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}">
-                                <h:outputText value="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}" />
-                            </p:column>
-                            <p:column headerText="#{messages.no_of_items}"
-                                      sortBy="#{invoice.invoiceLineItems.size()}">
-                                <h:outputText value="#{invoice.invoiceLineItems.size()}" />
-                            </p:column>
-                            <c:set value="#{invoiceListController.totalAmount(invoice)}"
-                                   var="total" />
-                            <p:column headerText="#{messages.total_cost}"
-                                      sortBy="#{total}">
-                                <h:outputText value="#{invoice.currency.currencyIsoCode} " />
-                                <h:outputText value="#{total}" >
-                                    <f:convertNumber maxFractionDigits="2" pattern="#,##0.00" />
-                                </h:outputText>
-                            </p:column>
-
-                            <p:column headerText="#{messages.action}">
-<!--                                <p:commandButton title="#{messages.edit_invoice}"
-                                                 icon="ui-icon-edit"
-                                                 actionListener="#{invoiceListController.redirectEditInvoice(invoiceId)}">
-                                </p:commandButton>-->
-                                 <p:commandButton title="#{messages.edit_invoice}" icon="ui-icon-edit" styleClass="AquaButton" action="/pages/secure/invoice/invoice.xhtml?faces-redirect=true">
-                                     <f:setPropertyActionListener value="#{invoiceModelConverter.convertEntityToModel(invoice)}" target="#{invoiceListController.selectedInvoice}" />
-                     </p:commandButton>
-                                <p:commandButton style="margin-left: 7px" 
-                                                 title="Delete Invoice" 
-                                                 actionListener="#{invoiceListController.deleteInvoice(invoice)}"
-                                                 update="@form"
-                                                 icon="ui-icon-delete">
-                                </p:commandButton>
-                            </p:column>
-                        </p:dataTable>
-                    </div>
-                </div>
-
-            </div>
-        </h:form>
-
+                    <p:column headerText="#{messages.action}">
+                        <p:commandButton title="#{messages.edit_invoice}" icon="ui-icon-edit" styleClass="AquaButton" action="#{invoiceListController.redirectToCreateInvoice}">
+                            <f:setPropertyActionListener value="#{invoiceModelConverter.convertEntityToModel(invoice)}" target="#{invoiceListController.selectedInvoice}" />
+                        </p:commandButton>
+                        <p:commandButton style="margin-left: 7px" 
+                                         title="Delete Invoice" 
+                                         actionListener="#{invoiceListController.deleteInvoice(invoice)}"
+                                         update="@form"
+                                         icon="ui-icon-delete">
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </si:cdataPanel>
     </ui:define>
 
 </ui:composition>

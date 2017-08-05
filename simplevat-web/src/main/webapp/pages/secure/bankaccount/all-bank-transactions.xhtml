@@ -52,7 +52,7 @@
 
                 <p:column headerText="Action">
 
-                    <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" action="/pages/secure/bankaccount/edit-bank-transaction.xhtml">
+                    <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" action="#{transactionController.editTransection}">
                         <f:setPropertyActionListener value="#{transaction}" target="#{transactionController.selectedTransactionModel}" />
                     </p:commandButton>
 

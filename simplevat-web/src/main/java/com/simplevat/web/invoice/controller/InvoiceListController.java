@@ -35,7 +35,7 @@ import org.springframework.web.context.annotation.SessionScope;
  * @author Hiren
  */
 @Controller
-@SessionScope
+@Scope("view")
 public class InvoiceListController implements Serializable {
 
     private static final long serialVersionUID = 9066359395680732884L;
@@ -63,11 +63,10 @@ public class InvoiceListController implements Serializable {
 //    public List<Invoice> getInvoices() {
 //        return invoices;
 //    }
-public InvoiceModel getSelectedInvoice() {
-    
-        return selectedInvoice;
-    }
     public String redirectToCreateInvoice() {
+        if(selectedInvoice != null){
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("invoiceId", selectedInvoice.getInvoiceId());
+        }
         return "invoice.xhtml?faces-redirect=true?faces-redirect=true";
     }
 
@@ -124,7 +123,7 @@ public InvoiceModel getSelectedInvoice() {
     }
     
 
-    public String redirectEditInvoice(int invoiceId){
-        return "invoice.xhtml?faces-redirect=true&invoiceId"+invoiceId;
+    public String redirectEditInvoice(){
+        return "invoice.xhtml?faces-redirect=true&invoiceId"+selectedInvoice.getInvoiceId();
     }
 }

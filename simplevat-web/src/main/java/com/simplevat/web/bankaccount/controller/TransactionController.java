@@ -33,14 +33,16 @@ import com.simplevat.service.bankaccount.TransactionService;
 import com.simplevat.service.bankaccount.TransactionStatusService;
 import com.simplevat.service.bankaccount.TransactionTypeService;
 import com.simplevat.web.bankaccount.model.BankAccountModel;
+import com.simplevat.web.constant.TransactionStatusConstant;
 import com.simplevat.web.utils.FacesUtil;
+import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.context.annotation.SessionScope;
 
 @Controller
 @Scope("view")
-public class TransactionController extends TransactionControllerHelper {
+public class TransactionController extends TransactionControllerHelper implements Serializable {
 
     @Autowired
     private TransactionService transactionService;
@@ -78,15 +80,21 @@ public class TransactionController extends TransactionControllerHelper {
     @PostConstruct
     public void init() {
 
-        selectedTransactionModel = new TransactionModel();
-        selectedBankAccountModel=FacesUtil.getSelectedBankAccount();
-        TransactionType transactionType = transactionTypeService.getDefaultTransactionType();
-        if (transactionType != null) {
-            selectedTransactionModel.setTransactionType(transactionType);
-        }
-        TransactionCategory transactionCategory = transactionCategoryService.getDefaultTransactionCategory();
-        if (transactionCategory != null) {
-            selectedTransactionModel.setExplainedTransactionCategory(transactionCategory);
+        selectedBankAccountModel = FacesUtil.getSelectedBankAccount();
+        Object objselectedTransactionModel = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedTransactionId");
+
+        if (objselectedTransactionModel != null) {
+            selectedTransactionModel = getTransactionModel(transactionService.findByPK(Integer.parseInt(objselectedTransactionModel.toString())));
+        } else {
+            selectedTransactionModel = new TransactionModel();
+            TransactionType transactionType = transactionTypeService.getDefaultTransactionType();
+            if (transactionType != null) {
+                selectedTransactionModel.setTransactionType(transactionType);
+            }
+            TransactionCategory transactionCategory = transactionCategoryService.getDefaultTransactionCategory();
+            if (transactionCategory != null) {
+                selectedTransactionModel.setExplainedTransactionCategory(transactionCategory);
+            }
         }
 
     }
@@ -106,15 +114,20 @@ public class TransactionController extends TransactionControllerHelper {
         return "/pages/secure/bankaccount/edit-bank-transaction.xhtml";
     }
 
+    public String editTransection() {
+        System.out.println("selectedM :" + selectedTransactionModel);
+        //FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put("selectedTransactionId", String.valueOf(selectedTransactionModel.getTransactionId()));
+        return "edit-bank-transaction?faces-redirect=true&selectedTransactionId=" + selectedTransactionModel.getTransactionId();
+    }
+
     public String saveTransaction() {
         User loggedInUser = FacesUtil.getLoggedInUser();
-        System.out.println("selectedTransactionModel :"+selectedTransactionModel);
+        System.out.println("selectedTransactionModel :" + selectedTransactionModel);
         Transaction transaction = getTransaction(selectedTransactionModel);
         selectedBankAccount = getBankAccount(selectedBankAccountModel);
         transaction.setLastUpdatedBy(loggedInUser.getUserId());
         transaction.setCreatedBy(loggedInUser.getUserId());
         transaction.setBankAccount(selectedBankAccount);
-
         if (selectedTransactionModel.getTransactionType() != null) {
             TransactionType transactionType = transactionTypeService.getTransactionType(selectedTransactionModel.getTransactionType().getTransactionTypeCode());
             transaction.setTransactionType(transactionType);
@@ -137,7 +150,7 @@ public class TransactionController extends TransactionControllerHelper {
             Project project = projectService.findByPK(selectedTransactionModel.getProject().getProjectId());
             transaction.setProject(project);
         }
-
+        
         if (selectedTransactionModel.getTransactionStatus() != null) {
             TransactionStatus transactionStatus = transactionStatusService.findByPK(selectedTransactionModel.getTransactionStatus().getExplainationStatusCode());
             transaction.setTransactionStatus(transactionStatus);
@@ -146,23 +159,33 @@ public class TransactionController extends TransactionControllerHelper {
         if (selectedTransactionModel.getAttachmentFile() != null && selectedTransactionModel.getAttachmentFile().getSize() > 0) {
             storeUploadedFile(selectedTransactionModel, transaction, fileLocation);
         }
-
-        if (selectedTransactionModel.getTransactionStatus() == null
-                || selectedTransactionModel.getTransactionStatus().getExplainationStatusCode() == 0) {
-            Map<String, String> map = new HashMap<>();
-            map.put("explainationStatusName", "EXPLAINED");
-            TransactionStatus transactionStatus = transactionStatusService.findByAttributes(map).get(0);
-            transaction.setTransactionStatus(transactionStatus);
+         System.out.println("before inside if :"+transaction.getTransactionStatus());
+                
+        if (selectedTransactionModel.getTransactionType() != null && selectedTransactionModel.getExplainedTransactionCategory() != null){
+            if(selectedTransactionModel.getTransactionStatus() == null
+                || selectedTransactionModel.getTransactionStatus().getExplainationStatusCode() == 0){
+                System.out.println("inside if :"+transaction.getTransactionStatus());
+                TransactionStatus transactionStatus = transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED);
+                transaction.setTransactionStatus(transactionStatus);
+            }
+        }else {
+            
+              System.out.println("inside inside if :"+transaction.getTransactionStatus());
+            if(selectedTransactionModel.getTransactionStatus() == null
+                || selectedTransactionModel.getTransactionStatus().getExplainationStatusCode() == 0){
+                TransactionStatus transactionStatus = transactionStatusService.findByPK(TransactionStatusConstant.UNEXPLIANED);
+                transaction.setTransactionStatus(transactionStatus);
+            }
         }
-
-//                if (transaction.getTransactionId() == null || transaction.getTransactionId() == 0) {
-//                   transaction.setTransactionId(null);
-//                   transactionService.persist(transaction, 0);
-//                }else{
-//                   transactionService.update(transaction, transaction.getTransactionId());
-//                }
+              System.out.println("after inside if :"+transaction.getTransactionStatus());
+       
+        bankAccountService.update(bankAccount);
         transaction.setCurrentBalance(bankAccount.getCurrentBalance());
-        transactionService.persist(transaction);
+        if (transaction.getTransactionId() == null) {
+            transactionService.persist(transaction);
+        } else {
+            transactionService.update(transaction, transaction.getTransactionId());
+        }
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transaction saved successfully"));
         return "bank-transactions?faces-redirect=true";
@@ -170,11 +193,11 @@ public class TransactionController extends TransactionControllerHelper {
     }
 
     public String saveAndContinueTransaction() {
-
+        User loggedInUser = FacesUtil.getLoggedInUser();
         Transaction transaction = getTransaction(selectedTransactionModel);
 
-        transaction.setLastUpdatedBy(12345);
-        transaction.setCreatedBy(12345);
+        transaction.setLastUpdatedBy(loggedInUser.getUserId());
+        transaction.setCreatedBy(loggedInUser.getUserId());
         transaction.setBankAccount(selectedBankAccount);
 
         if (selectedTransactionModel.getTransactionType() != null) {
@@ -218,14 +241,14 @@ public class TransactionController extends TransactionControllerHelper {
 
     }
 
-    public void deleteTransaction() {
+    public String deleteTransaction() {
 
         Transaction transaction = getTransaction(selectedTransactionModel);
         transaction.setDeleteFlag(true);
         transactionService.updateOrCreateTransaction(transaction);
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transaction deleted successfully"));
-
+        return "bank-transactions?faces-redirect=true";
     }
 
     public List<TransactionType> transactionTypes(final String searchQuery) throws Exception {

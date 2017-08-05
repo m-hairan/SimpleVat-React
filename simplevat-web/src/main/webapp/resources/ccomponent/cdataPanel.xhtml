@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:si="http://java.sun.com/jsf/composite/ccomponent">
+
+    <cc:interface> 
+        <cc:interface>
+            <cc:attribute name="newAction" method-signature="void new(java.lang.String)"/>
+            <cc:attribute name="importAction" method-signature="void import(java.lang.String)" />
+            <cc:attribute name="exportAction" method-signature="void import(java.lang.String)" />
+            <cc:attribute name="deleteAction" method-signature="void import(java.lang.String)" />
+        </cc:interface>
+    </cc:interface>
+
+    <cc:implementation>
+        <si:cpanel>
+            <h:form>
+                <si:ctoolbar deleteAction="#{cc.attrs.deleteAction}" 
+                             exportAction="#{cc.attrs.exportAction}"
+                             importAction="#{cc.attrs.importAction}"
+                             newAction="#{cc.attrs.newAction}"/>              
+            </h:form>
+            <p:spacer height="5"/>
+            <cc:insertChildren />
+            <p:spacer height="5"/>
+            <h:form>
+                <si:ctoolbar deleteAction="#{cc.attrs.deleteAction}" 
+                             exportAction="#{cc.attrs.exportAction}"
+                             importAction="#{cc.attrs.importAction}"
+                             newAction="#{cc.attrs.newAction}"/>                
+            </h:form>
+        </si:cpanel>
+    </cc:implementation>
+</html>

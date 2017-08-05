@@ -31,7 +31,7 @@ import org.springframework.web.context.annotation.SessionScope;
  */
 @Controller
 @SessionScope
-public class ContactController implements Serializable {
+public class ContactController extends ContactHelper implements Serializable {
 
     private static final long serialVersionUID = -6783876735681802047L;
 
@@ -69,23 +69,28 @@ public class ContactController implements Serializable {
 
     @PostConstruct
     public void init() {
-        contactModel = new ContactModel();
 
-        currencies = currencyService.getCurrencies();
+        Object objContactModel = FacesContext.getCurrentInstance().getExternalContext().getFlash().get("selectedContactId");
+        if (objContactModel != null) {
+                contactModel=getContactModel(contactService.findByPK(Integer.parseInt(objContactModel.toString())));
+        } else {
+            contactModel = new ContactModel();
+            currencies = currencyService.getCurrencies();
 
-        setDefaultCurrency();
+            setDefaultCurrency();
 
-        countries = countryService.getCountries();
+            countries = countryService.getCountries();
 
-        setDefaultCountry();
+            setDefaultCountry();
 
-        languages = languageService.getLanguages();
+            languages = languageService.getLanguages();
 
-        setDefaultLanguage();
+            setDefaultLanguage();
 
-        titles = titleService.getTitles();
+            titles = titleService.getTitles();
 
-        LOGGER.debug("Loaded Countries :" + countries.size());
+            LOGGER.debug("Loaded Countries :" + countries.size());
+        }
     }
 
     private void setDefaultCurrency() {
@@ -115,27 +120,31 @@ public class ContactController implements Serializable {
         contactModel.setLanguage(languages.get(0));
         setDefaultCurrency();
         LOGGER.debug("Redirecting to create new contact page");
-        return "/pages/secure/contact/contact.xhtml?faces-redirect=true";
+        return "contact?faces-redirect=true";
     }
 
-    public void createOrUpdateContact() throws IOException {
+    public String createOrUpdateContact() throws IOException {
         LOGGER.debug("Creating contact");
         final Contact contact = new Contact();
         BeanUtils.copyProperties(contactModel, contact);
         contact.setOrganization(contactModel.getOrganizationName());
         contact.setEmail(contactModel.getEmailAddress());
         contact.setCreatedBy(1);
-        this.contactService.createOrUpdateContact(contact);
+        //this.contactService.createOrUpdateContact(contact);
+        if(contact.getContactId() == null ){
+            contactService.persist(contact);
+        }else{
+            contactService.update(contact, contact.getContactId());
+        }
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        if (contactModel.getContactId() > 0) {
+        if (contactModel.getContactId() != null) {
             context.addMessage(null, new FacesMessage("Contact Updated SuccessFully"));
         } else {
             context.addMessage(null, new FacesMessage("Contact Created SuccessFully"));
         }
 
-        FacesContext.getCurrentInstance().getExternalContext()
-                .redirect("list.xhtml?faces-redirect=true");
+        return "list?faces-redirect=true";
     }
 
     public void createOrUpdateAndAddMore() {
@@ -147,7 +156,7 @@ public class ContactController implements Serializable {
         this.contactService.createOrUpdateContact(contact);
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        if (contactModel.getContactId() > 0) {
+        if (contactModel.getContactId() != null) {
             context.addMessage(null, new FacesMessage("Contact Updated SuccessFully"));
         } else {
             context.addMessage(null, new FacesMessage("Contact Created SuccessFully"));
@@ -258,17 +267,21 @@ public class ContactController implements Serializable {
 
     public String redirectToContactList() {
         LOGGER.debug("Redirecting to create new contacts page");
-        return "/pages/secure/contact/contacts.xhtml";
+        return "/pages/secure/contact/list.xhtml?faces-redirect=true";
     }
 
-    public void redirectToEditContact(Contact contact) throws IOException {
+    public String redirectToEditContact(Contact contact) throws IOException {
         contactModel = new ContactModel();
         BeanUtils.copyProperties(contact, contactModel);
         contactModel.setEmailAddress(contact.getEmail());
         contactModel.setOrganizationName(contact.getOrganization());
         LOGGER.debug("Redirecting to create new contact page");
-        FacesContext.getCurrentInstance().getExternalContext()
-                .redirect("contact.xhtml");
+//        if(contact.getContactId() == null){
+//            contactService.persist(contact);
+//        }else{
+//            contactService.update(contact, contact.getContactId());
+//        }
+       return "contact?faces-redirect=true&selectedContactId"+contactModel.getContactId();
     }
 
     public void updateBillingEmail() {

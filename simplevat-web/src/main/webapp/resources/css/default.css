@@ -1,0 +1,22 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 5 Aug, 2017, 12:57:25 PM
+    Author     : uday
+*/
+
+.tableCustomHeader{
+    float:left;
+}
+.ui-paginator-bottom .tableCustomHeader{
+    display:none;
+}
+.ui-paginator{
+    text-align: right !important;
+}
+body.layout-compact .ui-datatable tbody tr.ui-widget-content td {
+    padding: 3px 10px;
+}
