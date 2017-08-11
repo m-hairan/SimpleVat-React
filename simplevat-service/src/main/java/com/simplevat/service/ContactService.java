@@ -14,8 +14,6 @@ public interface ContactService extends SimpleVatService <Integer, Contact> {
 
     List<Contact> getContacts(final String searchQuery);
 
-    Contact createOrUpdateContact(Contact contact);
-
     Contact getContact(int id);
 
 }

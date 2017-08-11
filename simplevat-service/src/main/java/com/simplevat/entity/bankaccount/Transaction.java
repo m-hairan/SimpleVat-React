@@ -70,7 +70,7 @@ public class Transaction {
     private TransactionStatus transactionStatus;
     
     @Column(name="CURRENT_BALANCE")
-    private BigDecimal currentBalance = new BigDecimal(123);
+    private BigDecimal currentBalance;
     
     @Basic
     @Column(name = "CREATED_BY")

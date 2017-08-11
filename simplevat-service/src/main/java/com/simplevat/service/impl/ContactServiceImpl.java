@@ -13,31 +13,20 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Created by mohsin on 3/3/2017.
  */
-
 @Service("contactService")
 @Transactional
 public class ContactServiceImpl implements ContactService {
-
 
     @Autowired
     private ContactDao contactDao;
 
     public List<Contact> getContacts(Integer pageIndex, Integer noOfRecorgs) {
-
         return this.contactDao.getContacts(pageIndex, noOfRecorgs);
     }
 
     @Override
     public List<Contact> getContacts() {
         return this.contactDao.getContacts();
-    }
-
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    @Override
-    public Contact createOrUpdateContact(Contact contact) {
-    	Contact contactTemp;
-    	contactTemp =  contactDao.update(contact);
-    	return contactTemp;
     }
 
     @Override
@@ -47,14 +36,12 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public Contact getContact(final int id) {
-    	return contactDao.findByPK(id);
-        //return contactDao.getContact(id);
+        return contactDao.findByPK(id);
     }
 
-	@Override
-	public Dao<Integer, Contact> getDao() {
-		return this.contactDao;
-		// TODO Auto-generated method stub
-	}
+    @Override
+    public Dao<Integer, Contact> getDao() {
+        return this.contactDao;
+    }
 
 }

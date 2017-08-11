@@ -34,7 +34,7 @@ public class Invoice implements Serializable {
     @Setter(AccessLevel.NONE)
     @Column(name = "INVOICE_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int invoiceId;
+    private Integer invoiceId;
 
     @Column(name = "INVOICE_REFERENCE_NUMBER")
     private String invoiceReferenceNumber;
@@ -82,7 +82,7 @@ public class Invoice implements Serializable {
 
     @Version
     @Column(name = "VERSION_NUMBER")
-    private Integer versionNumber = 0;
+    private Integer versionNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CONTACT_ID")

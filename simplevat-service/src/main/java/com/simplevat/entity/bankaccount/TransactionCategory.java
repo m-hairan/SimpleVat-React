@@ -24,7 +24,7 @@ public class TransactionCategory {
     @Id
     @Column(name = "TRANSACTION_CATEGORY_CODE")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private int transactionCategoryCode;
+    private Integer transactionCategoryCode;
     @Basic
     @Column(name = "TRANSACTION_CATEGORY_NAME")
     private String transactionCategoryName;
