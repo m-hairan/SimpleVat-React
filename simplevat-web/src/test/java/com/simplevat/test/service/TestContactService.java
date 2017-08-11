@@ -42,9 +42,6 @@ public class TestContactService extends BaseManagerTest {
         Country country = new Country();
         country.setCountryCode(10);
         contact.setCountry(country);
-
-        contactService.createOrUpdateContact(contact);
-
         System.out.println(contact.getContactId()+" - "+contact.getFirstName()+" "+contact.getLastName());
     }
 
@@ -58,21 +55,6 @@ public class TestContactService extends BaseManagerTest {
         Country country = new Country();
         country.setCountryCode(10);
         contact.setCountry(country);
-
-        /*Insert*/
-        final Contact insertedContact = contactService.createOrUpdateContact(contact);
-        Assert.assertNotNull(insertedContact);
-
-        contact.setContactId(insertedContact.getContactId());
-        final String updatedFirstName = "UPDATE NAME";
-        contact.setFirstName(updatedFirstName);
-
-        /*Update*/
-        Contact updatedContact = contactService.createOrUpdateContact(contact);
-
-        /*Assert*/
-        Assert.assertNotNull(updatedContact);
-        Assert.assertEquals(updatedContact.getFirstName(), updatedFirstName);
 
     }
 }
