@@ -34,11 +34,6 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public Transaction updateOrCreateTransaction(Transaction transaction) {
-		return transactionDao.updateOrCreateTransaction(transaction);
-	}
-
-	@Override
 	public Map<Object, Number> getCashOutData() {
 		List<Object[]> rows = transactionDao.getCashOutData(getStartDate().getTime(),getEndDate().getTime());
 		return getCashMap(rows);
