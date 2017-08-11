@@ -12,6 +12,8 @@ public interface TransactionService extends SimpleVatService<Integer, Transactio
 	public List<Transaction> getTransactionsByCriteria(
 			TransactionCriteria transactionCriteria) throws Exception;
 
+	public Transaction updateOrCreateTransaction(Transaction transaction);
+	
 	public Map<Object, Number> getCashOutData();
 	
 	public Map<Object, Number> getCashInData();
