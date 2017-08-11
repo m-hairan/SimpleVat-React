@@ -18,7 +18,7 @@ public class TestTransactionDao extends BaseManagerTest{
 	
 	@Test
 	public void getRecords(){
-		transactionDao.getCashInData();
+		//transactionDao.getCashInData();
 	}
 	
 
