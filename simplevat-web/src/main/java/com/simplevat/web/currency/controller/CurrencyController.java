@@ -1,12 +1,11 @@
 package com.simplevat.web.currency.controller;
 
+import com.github.javaplugs.jsf.SpringScopeView;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,11 +18,9 @@ import org.springframework.stereotype.Controller;
 import com.simplevat.web.project.controller.ProjectController;
 import com.simplevat.entity.Currency;
 import com.simplevat.service.CurrencyService;
-import org.springframework.context.annotation.Scope;
-import org.springframework.web.context.annotation.SessionScope;
 
 @Controller
-@SessionScope
+@SpringScopeView
 public class CurrencyController {
 	
 	private final static Logger LOGGER = LoggerFactory.getLogger(ProjectController.class);

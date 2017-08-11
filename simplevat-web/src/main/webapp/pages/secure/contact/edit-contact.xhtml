@@ -61,7 +61,7 @@
                                         </h:panelGroup>
                                         <p:outputLabel for="lastName"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="lastName" value="#{contactController.contact.lastName}" required="false"/>
+                                            <p:inputText id="lastName" value="#{contactController.contactModel.lastName}" required="false"/>
                                             <label>Last Name</label>
                                         </h:panelGroup>
 
@@ -77,12 +77,12 @@
 
                                         <p:outputLabel for="organizationName"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="organizationName" value="#{contactController.contact.organization}"/>
+                                            <p:inputText id="organizationName" value="#{contactController.contactModel.organization}"/>
                                             <label>Organization Name</label>
                                         </h:panelGroup>
                                         <p:outputLabel for="poBoxNumber" />
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="poBoxNumber" value="#{contactController.contact.poBoxNumber}"/>
+                                            <p:inputText id="poBoxNumber" value="#{contactController.contactModel.poBoxNumber}"/>
                                             <label>Po Box Number</label>
                                         </h:panelGroup>
                                         <p:outputLabel />
@@ -90,57 +90,57 @@
 
                                         <p:outputLabel for="email"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="email" value="#{contactController.contact.email}" required="false"/>
+                                            <p:inputText id="email" value="#{contactController.contactModel.email}" required="false"/>
                                             <label>Email</label>
                                         </h:panelGroup>
                                         <p:outputLabel for="telephone"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputMask id="telephone" mask="09 999 9999" value="#{contactController.contact.telephone}"/>
+                                            <p:inputMask id="telephone" mask="09 999 9999" value="#{contactController.contactModel.telephone}"/>
                                             <label>Telephone</label>
                                         </h:panelGroup>
                                         <p:outputLabel for="mobileNumber"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputMask id="mobileNumber" mask="+971 99 999 9999" value="#{contactController.contact.mobileNumber}"/>
+                                            <p:inputMask id="mobileNumber" mask="+971 99 999 9999" value="#{contactController.contactModel.mobileNumber}"/>
                                             <label>Mobile Number</label>
                                         </h:panelGroup>
 
                                         <p:outputLabel for="addressLine1"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="addressLine1" value="#{contactController.contact.invoicingAddressLine1}"/>
+                                            <p:inputText id="addressLine1" value="#{contactController.contactModel.invoicingAddressLine1}"/>
                                             <label>Address Line1</label>
                                         </h:panelGroup>
                                         <p:outputLabel for="addressLine2"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="addressLine2" value="#{contactController.contact.invoicingAddressLine2}"/>
+                                            <p:inputText id="addressLine2" value="#{contactController.contactModel.invoicingAddressLine2}"/>
                                             <label>Address Line2</label>
                                         </h:panelGroup>
                                         <p:outputLabel for="addressLine3"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="addressLine3" value="#{contactController.contact.invoicingAddressLine3}"/>
+                                            <p:inputText id="addressLine3" value="#{contactController.contactModel.invoicingAddressLine3}"/>
                                             <label>Address Line3</label>
                                         </h:panelGroup>
 
                                         <p:outputLabel for="country"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete id="country" converter="#{countryConverter}" dropdown="true" forceSelection="true" effect="fold"
-                                                            completeMethod="#{contactController.completeCountry}" value="#{contactController.contact.country}"
+                                                            completeMethod="#{contactController.completeCountry}" value="#{contactController.contactModel.country}"
                                                             var="country" itemValue="#{country.countryCode}" itemLabel="#{country.countryFullName}" required="false"/>
                                             <label>Country</label>
                                         </h:panelGroup>
                                         <p:outputLabel for="stateRegion"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="stateRegion" value="#{contactController.contact.stateRegion}"  />
+                                            <p:inputText id="stateRegion" value="#{contactController.contactModel.stateRegion}"  />
                                             <label>State Region</label>
                                         </h:panelGroup>
                                         <p:outputLabel for="city"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="city"  value="#{contactController.contact.city}"/>
+                                            <p:inputText id="city"  value="#{contactController.contactModel.city}"/>
                                             <label>City</label>
                                         </h:panelGroup>
 
                                         <p:outputLabel for="postZipCode"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="postZipCode" value="#{contactController.contact.postZipCode}"/>
+                                            <p:inputText id="postZipCode" value="#{contactController.contactModel.postZipCode}"/>
                                             <label>Post Zip Code</label>
                                         </h:panelGroup>
 
@@ -157,17 +157,17 @@
 
                                         <p:outputLabel for="billingEmail" />
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="billingEmail" value="#{contactController.contact.billingEmail}"/>
+                                            <p:inputText id="billingEmail" value="#{contactController.contactModel.billingEmail}"/>
                                             <label>Billing Email</label>
                                         </h:panelGroup>
                                         <p:outputLabel for="contractPoNumber"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="contractPoNumber" value="#{contactController.contact.contractPoNumber}"/>
+                                            <p:inputText id="contractPoNumber" value="#{contactController.contactModel.contractPoNumber}"/>
                                             <label>Contract Po Number</label>
                                         </h:panelGroup>
                                         <p:outputLabel for="vatRegistrationNumber"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="vatRegistrationNumber" value="#{contactController.contact.vatRegistrationNumber}"/>
+                                            <p:inputText id="vatRegistrationNumber" value="#{contactController.contactModel.vatRegistrationNumber}"/>
                                             <label>Vat Registration Number</label>
                                         </h:panelGroup>
 
@@ -175,7 +175,7 @@
                                         <h:panelGroup styleClass="md-inputfield">
 
                                             <p:autoComplete id="language" dropdown="true" forceSelection="true" effect="fold" converter="#{languageConverter}" dropdownMode=""
-                                                            completeMethod="#{contactController.completeLanguage}" value="#{contactController.contact.language}"
+                                                            completeMethod="#{contactController.completeLanguage}" value="#{contactController.contactModel.language}"
                                                             var="language" itemValue="#{language.languageCode}" itemLabel="#{language.languageDescription}" />
 
                                             <label>Invoice Language</label>
@@ -184,7 +184,7 @@
                                         <h:panelGroup styleClass="md-inputfield">
 
                                             <p:autoComplete id="currency" dropdown="true" forceSelection="true" effect="fold" converter="#{currencyConverter}"
-                                                            completeMethod="#{contactController.completeCurrency}" value="#{contactController.contact.currency}"
+                                                            completeMethod="#{contactController.completeCurrency}" value="#{contactController.contactModel.currency}"
                                                             var="currency" itemValue="#{currency.currencyCode}" itemLabel="#{currency.currencyDescription}" />
 
                                             <label>Currency Code</label>
@@ -206,7 +206,7 @@
                         <p:commandButton title="Update" value="Update"  icon="ui-icon-save"
                                          action="#{contactController.redirectToEditContact}" />
                         <p:button type="button" value="Add New" icon="ui-icon-forward" action="#{contactListController.redirectToCreateContact()}" />
-
+                   
                         <span class="ui-separator" style="padding-right: 5px;">
                             <span class="fa fa-ellipsis-v SoftGray" />
                         </span>

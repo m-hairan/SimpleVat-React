@@ -1,9 +1,8 @@
 package com.simplevat.web.bankaccount.controller;
 
+import com.github.javaplugs.jsf.SpringScopeView;
 import java.util.List;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,11 +10,9 @@ import org.springframework.stereotype.Controller;
 import com.simplevat.criteria.bankaccount.ImportedDraftTransactionCriteria;
 import com.simplevat.entity.bankaccount.ImportedDraftTransaction;
 import com.simplevat.service.bankaccount.ImportedDraftTransactonService;
-import org.springframework.context.annotation.Scope;
-import org.springframework.web.context.annotation.SessionScope;
 
 @Controller
-@SessionScope
+@SpringScopeView
 public class ImportedDraftTransactionListController extends TransactionControllerHelper{
 	
 	@Autowired

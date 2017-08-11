@@ -1,5 +1,6 @@
 package com.simplevat.web.login.controller;
 
+import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.Mail;
 import com.simplevat.entity.MailEnum;
 import com.simplevat.entity.User;
@@ -23,8 +24,6 @@ import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
@@ -32,13 +31,10 @@ import javax.faces.event.PhaseListener;
 import java.io.Serializable;
 import java.util.Optional;
 import java.util.logging.Level;
-import javax.transaction.TransactionRequiredException;
-import org.springframework.context.annotation.Scope;
-import org.springframework.web.context.annotation.SessionScope;
 
 @Controller
 //@ManagedBean(name = "securityBean")
-@SessionScope
+@SpringScopeView
 //@Qualifier("securityBean")
 public class SecurityBean implements PhaseListener, Serializable {
 

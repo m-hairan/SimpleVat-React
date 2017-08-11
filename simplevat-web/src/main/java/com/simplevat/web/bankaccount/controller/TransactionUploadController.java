@@ -1,5 +1,6 @@
 package com.simplevat.web.bankaccount.controller;
 
+import com.github.javaplugs.jsf.SpringScopeView;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -20,8 +21,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
 import lombok.Getter;
@@ -43,11 +42,9 @@ import com.simplevat.service.bankaccount.BankAccountService;
 import com.simplevat.service.bankaccount.ImportedDraftTransactonService;
 import com.simplevat.service.bankaccount.TransactionService;
 import com.simplevat.service.bankaccount.TransactionStatusService;
-import org.springframework.context.annotation.Scope;
-import org.springframework.web.context.annotation.SessionScope;
 
 @Controller
-@SessionScope
+@SpringScopeView
 public class TransactionUploadController {
 	
 	private final static Logger LOGGER = LoggerFactory.getLogger(TransactionUploadController.class);

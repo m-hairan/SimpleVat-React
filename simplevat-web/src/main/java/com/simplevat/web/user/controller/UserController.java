@@ -1,5 +1,6 @@
 package com.simplevat.web.user.controller;
 
+import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.Role;
 import com.simplevat.entity.Title;
 import com.simplevat.entity.User;
@@ -22,7 +23,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.activation.MimetypesFileTypeMap;
@@ -38,18 +38,15 @@ import org.primefaces.model.UploadedFile;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Scope;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.context.annotation.SessionScope;
-import org.springframework.web.context.annotation.SessionScope;
 
 /**
  *
  * @author Uday
  */
 @Controller
-@Scope("view")
+@SpringScopeView
 public class UserController {
 
     @Autowired

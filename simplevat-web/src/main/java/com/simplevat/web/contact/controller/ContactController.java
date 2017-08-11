@@ -1,8 +1,10 @@
 package com.simplevat.web.contact.controller;
 
+import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.*;
 import com.simplevat.service.*;
 import com.simplevat.web.contact.model.ContactModel;
+import com.simplevat.web.utils.FacesUtil;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -12,25 +14,22 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.context.annotation.SessionScope;
 
 /**
  * Created by mohsinh on 3/9/2017.
  */
 @Controller
-@SessionScope
+@SpringScopeView
 public class ContactController extends ContactHelper implements Serializable {
 
     private static final long serialVersionUID = -6783876735681802047L;
@@ -65,14 +64,22 @@ public class ContactController extends ContactHelper implements Serializable {
     private List<Title> titles;
 
     @Getter
+    @Setter
     private ContactModel contactModel;
+
+    @Getter
+    @Setter
+    private Contact selectedContact;
 
     @PostConstruct
     public void init() {
-
-        Object objContactModel = FacesContext.getCurrentInstance().getExternalContext().getFlash().get("selectedContactId");
-        if (objContactModel != null) {
-                contactModel=getContactModel(contactService.findByPK(Integer.parseInt(objContactModel.toString())));
+        selectedContact = new Contact();
+        contactModel = new ContactModel();
+        Object objContactId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedContactId");
+        System.out.println("selected : :" + objContactId);
+        if (objContactId != null) {
+            BeanUtils.copyProperties(contactService.findByPK(Integer.parseInt(objContactId.toString())), contactModel);
+            BeanUtils.copyProperties("selectedContact", selectedContact);
         } else {
             contactModel = new ContactModel();
             currencies = currencyService.getCurrencies();
@@ -124,36 +131,50 @@ public class ContactController extends ContactHelper implements Serializable {
     }
 
     public String createOrUpdateContact() throws IOException {
-        LOGGER.debug("Creating contact");
-        final Contact contact = new Contact();
-        BeanUtils.copyProperties(contactModel, contact);
-        contact.setOrganization(contactModel.getOrganizationName());
-        contact.setEmail(contactModel.getEmailAddress());
-        contact.setCreatedBy(1);
-        //this.contactService.createOrUpdateContact(contact);
-        if(contact.getContactId() == null ){
-            contactService.persist(contact);
-        }else{
-            contactService.update(contact, contact.getContactId());
+        User loggedInUser = FacesUtil.getLoggedInUser();
+
+        BeanUtils.copyProperties(contactModel, selectedContact);
+
+        System.out.println("Creating contact " + selectedContact.getContactId());
+        selectedContact.setOrganization(contactModel.getOrganization());
+        selectedContact.setEmail(contactModel.getEmail());
+
+        selectedContact.setCreatedBy(loggedInUser.getUserId());
+        if (selectedContact.getContactId() != null && selectedContact.getContactId() > 0) {
+            this.contactService.update(selectedContact, selectedContact.getContactId());
+        } else {
+            this.contactService.persist(selectedContact);
         }
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        if (contactModel.getContactId() != null) {
-            context.addMessage(null, new FacesMessage("Contact Updated SuccessFully"));
-        } else {
-            context.addMessage(null, new FacesMessage("Contact Created SuccessFully"));
-        }
-
+//        if(selectedContact.getContactId() != null){
+//            contactService.update(selectedContact);
+//            context.addMessage(null, new FacesMessage("Contact Updated SuccessFully"));
+//       }else{
+//            contactService.persist(selectedContact);
+//            context.addMessage(null, new FacesMessage("Contact Created SuccessFully"));
+//       }
+//        if (contactModel.getContactId() != null) {
+//            context.addMessage(null, new FacesMessage("Contact Updated SuccessFully"));
+//        } else {
+//            context.addMessage(null, new FacesMessage("Contact Created SuccessFully"));
+//        }
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Contact saved successfully"));
         return "list?faces-redirect=true";
     }
 
     public void createOrUpdateAndAddMore() {
+        User loggedInUser = FacesUtil.getLoggedInUser();
         final Contact contact = new Contact();
         BeanUtils.copyProperties(contactModel, contact);
-        contact.setOrganization(contactModel.getOrganizationName());
-        contact.setEmail(contactModel.getEmailAddress());
-        contact.setCreatedBy(1);
-        this.contactService.createOrUpdateContact(contact);
+        contact.setOrganization(contactModel.getOrganization());
+        contact.setEmail(contactModel.getEmail());
+        contact.setCreatedBy(loggedInUser.getUserId());
+        if (selectedContact.getContactId() > 0) {
+            this.contactService.update(contact);
+        } else {
+            this.contactService.persist(contact);
+        }
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
         if (contactModel.getContactId() != null) {
@@ -267,24 +288,26 @@ public class ContactController extends ContactHelper implements Serializable {
 
     public String redirectToContactList() {
         LOGGER.debug("Redirecting to create new contacts page");
-        return "/pages/secure/contact/list.xhtml?faces-redirect=true";
+        return "list?faces-redirect=true";
     }
 
-    public String redirectToEditContact(Contact contact) throws IOException {
-        contactModel = new ContactModel();
-        BeanUtils.copyProperties(contact, contactModel);
-        contactModel.setEmailAddress(contact.getEmail());
-        contactModel.setOrganizationName(contact.getOrganization());
-        LOGGER.debug("Redirecting to create new contact page");
+    public String redirectToEditContact(int contactId) throws IOException {
+//        contactModel = new ContactModel();
+//        BeanUtils.copyProperties(contact, contactModel);
+//        contactModel.setEmailAddress(contact.getEmail());
+//        contactModel.setOrganization(contact.getOrganization());
+//        LOGGER.debug("Redirecting to create new contact page");
 //        if(contact.getContactId() == null){
 //            contactService.persist(contact);
 //        }else{
 //            contactService.update(contact, contact.getContactId());
 //        }
-       return "contact?faces-redirect=true&selectedContactId"+contactModel.getContactId();
+        System.out.println("selectedContact.getContactId() :" + contactId);
+        // System.out.println("id___________-----"+selectedContact.getContactId());
+        return "contact?faces-redirect=true&selectedContactId=" + contactId;
     }
 
     public void updateBillingEmail() {
-        contactModel.setBillingEmail(contactModel.getEmailAddress());
+        contactModel.setBillingEmail(contactModel.getEmail());
     }
 }

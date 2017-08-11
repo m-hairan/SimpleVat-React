@@ -1,59 +1,59 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/templates/template.xhtml">
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
+                xmlns:p="http://primefaces.org/ui" 
+                template="/WEB-INF/templates/template.xhtml">
 
-	<ui:define name="title">#{messages.expenses}</ui:define>
+    <ui:define name="title">#{messages.expenses}</ui:define>
+    <ui:define name="content">
+        <si:cdataPanel newAction="#{expenseController.createExpense()}">
+            <h:form id="form">
+                <p:dataTable var="expense" 
+                             value="#{expenseListController.expenses}"
+                             id="expensesTable"
+                             paginator="true" rows="10"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}">
 
-	<ui:define name="content">
+                    <f:facet name="{TableHeader}">
+                        <p:outputLabel styleClass="tableCustomHeader" value="#{messages.expenses}" />
+                    </f:facet>
 
-				<div class="ui-g ">
+                    <p:column headerText="#{messages.amount}" sortBy="#{expense.expenseAmount}">
+                        <h:outputText value="#{expense.expenseAmount}" />
+                    </p:column>
 
-					<div class="ui-g-12">
-						<!-- Left Side -->
-						<div class="card card-w-title">
-							<h1>#{messages.expenses}</h1>
-							<h:form id="form">
-								<p:toolbar>
-									<f:facet name="left">
-										<p:commandButton value="#{messages.button_new}" icon="ui-icon-plus"
-											action="#{expenseController.createExpense()}"
-											 />
-											 
-										<span class="ui-separator" style="padding-right: 5px;">
-											<span class="fa fa-ellipsis-v SoftGray" />
-										</span>
+                    <p:column headerText="#{messages.description}" sortBy="#{expense.expenseDescription}">
+                        <h:outputText value="#{expense.expenseDescription}" />
+                    </p:column>
 
-					
-                                                                                    <p:commandButton type="button" title="#{messages.button_import}"
-											icon="ui-icon-file-download" />
-										<p:commandButton type="button" title="#{messages.button_export}"
-											icon="ui-icon-file-upload" />
-										<p:commandButton type="button" title="#{messages.delete}"
-											icon="ui-icon-delete" />
-									</f:facet>
+                    <p:column headerText="#{messages.expense_date}" sortBy="#{expense.expenseDate.time}">
+                        <h:outputText value="#{expense.expenseDate.time}" >
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
 
-									<f:facet name="right">
-										<p:menuButton value="Options">
-											<p:menuitem value="#{messages.button_import}" icon="ui-icon-file-download" />
-											<p:menuitem value="#{messages.button_export}" icon="ui-icon-file-upload" />
-											<p:menuitem value="#{messages.delete}" icon="ui-icon-delete" />
-											<p:separator />
-											<p:menuitem value="Homepage"
-												outcome="#{homePageLink}" icon="ui-icon-home" />
-										</p:menuButton>
-									</f:facet>
-								</p:toolbar>
-							</h:form>
+                    <p:column headerText="#{messages.receiptnumber}" sortBy="#{expense.receiptNumber}">
+                        <h:outputText value="#{expense.receiptNumber}" />
+                    </p:column>
 
-							<br />
-							<ui:include src="all-expenses.xhtml" />
+                    <p:column headerText="Action">
 
-						</div>
-					</div>
-				</div>
-			
-	</ui:define>
+                        <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" action="#{expenseListController.redirectToEdit}">
+                            <f:setPropertyActionListener value="#{expense}" target="#{expenseListController.selectedExpenseModel}" />
+                        </p:commandButton>
+
+                        <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{expenseController.deleteExpense}" update="expensesTable">
+                            <f:setPropertyActionListener value="#{expense}" target="#{expenseController.selectedExpenseModel}" />
+                            <p:confirm header="#{messages.delete}" message="#{messages.are_you_sure_want_to_delete}" icon="ui-icon-alert" />
+                        </p:commandButton>
+
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+        </si:cdataPanel>
+    </ui:define>
 
 </ui:composition>

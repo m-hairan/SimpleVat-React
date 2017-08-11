@@ -1,5 +1,6 @@
 package com.simplevat.web.invoice.controller;
 
+import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.criteria.ProjectCriteria;
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Currency;
@@ -34,22 +35,21 @@ import java.util.Iterator;
 import java.util.List;
 
 import static com.mysql.jdbc.StringUtils.isNullOrEmpty;
-import org.springframework.context.annotation.Scope;
 
 /**
  * @author Hiren
  */
 @Controller
-@Scope("view")
-public class InvoiceController implements Serializable {
+@SpringScopeView
+public class InvoiceController extends InvoiceModelHelper implements Serializable {
 
     private static final long serialVersionUID = 6299117288316809011L;
 
     @Getter
-    private InvoiceModel invoiceModel;
+    private InvoiceModel selectedInvoiceModel;
 
     @Getter
-    private Invoice invoice;
+    private Invoice selectedInvoice;
 
     @Getter
     @Setter
@@ -66,9 +66,6 @@ public class InvoiceController implements Serializable {
     private CurrencyService currencyService;
 
     @Autowired
-    private InvoiceModelConverter invoiceConverter;
-
-    @Autowired
     private InvoiceService invoiceService;
 
     @Autowired
@@ -80,25 +77,26 @@ public class InvoiceController implements Serializable {
     @PostConstruct
     public void init() {
         Object objSelectedInvoice = FacesContext.getCurrentInstance().getExternalContext().getFlash().get("invoiceId");
-        System.out.println("objSelectedInvoice :"+objSelectedInvoice);
+        System.out.println("objSelectedInvoice :" + objSelectedInvoice);
         if (objSelectedInvoice != null) {
-            invoice = invoiceService.findByPK(Integer.parseInt(objSelectedInvoice.toString()));
+            selectedInvoice = invoiceService.findByPK(Integer.parseInt(objSelectedInvoice.toString()));
+            selectedInvoiceModel = getInvoiceModel(selectedInvoice);
         } else {
-            invoiceModel = new InvoiceModel();
+            selectedInvoiceModel = new InvoiceModel();
             contactModel = new ContactModel();
             currencies = currencyService.getCurrencies();
             setDefaultCurrency();
-            invoiceModel.setInvoiceDate(new Date());
-            invoiceModel.setInvoiceDueOn(30);
+            selectedInvoiceModel.setInvoiceDate(new Date());
+            selectedInvoiceModel.setInvoiceDueOn(30);
             updateCurrencyLabel();
-            invoiceModel.addInvoiceItem(new InvoiceItemModel());
+            selectedInvoiceModel.addInvoiceItem(new InvoiceItemModel());
         }
     }
 
     private void setDefaultCurrency() {
         Currency defaultCurrency = currencyService.getDefaultCurrency();
         if (defaultCurrency != null) {
-            invoiceModel.setCurrencyCode(defaultCurrency);
+            selectedInvoiceModel.setCurrencyCode(defaultCurrency);
         }
     }
 
@@ -106,14 +104,14 @@ public class InvoiceController implements Serializable {
         boolean validated = validateInvoiceLineItems();
         if (validated) {
             updateCurrencyLabel();
-            invoiceModel.addInvoiceItem(new InvoiceItemModel());
+            selectedInvoiceModel.addInvoiceItem(new InvoiceItemModel());
         }
 
     }
 
     private boolean validateInvoiceLineItems() {
         boolean validated = true;
-        for (InvoiceItemModel lastItem : invoiceModel.getInvoiceItems()) {
+        for (InvoiceItemModel lastItem : selectedInvoiceModel.getInvoiceItems()) {
             if (lastItem.getQuatity() < 1 || lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0) {
                 FacesMessage message = new FacesMessage("Please enter proper detail for all invoice items.");
                 message.setSeverity(FacesMessage.SEVERITY_ERROR);
@@ -125,7 +123,7 @@ public class InvoiceController implements Serializable {
     }
 
     private boolean validateAtLeastOneItem() {
-        if (invoiceModel.getInvoiceItems().size() < 1) {
+        if (selectedInvoiceModel.getInvoiceItems().size() < 1) {
             FacesMessage message = new FacesMessage("Please add atleast one item to create Invoice.");
             message.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("validationId", message);
@@ -185,12 +183,15 @@ public class InvoiceController implements Serializable {
         if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
             return "";
         }
-//        final Invoice invoice = invoiceConverter
-//                .convertModelToEntity(invoiceModel);
-        invoiceService.persist(invoice);
+        selectedInvoice = getInvoiceEntity(selectedInvoiceModel);
+        if (selectedInvoice.getInvoiceId() != null && selectedInvoice.getInvoiceId() > 0) {
+            invoiceService.update(selectedInvoice);
+        } else {
+            invoiceService.persist(selectedInvoice);
+        }
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        if (invoiceModel.getInvoiceId() > 0) {
+        if (selectedInvoiceModel.getInvoiceId() > 0) {
             context.addMessage(null, new FacesMessage("Invoice Updated SuccessFully"));
         } else {
             context.addMessage(null, new FacesMessage("Invoice Added SuccessFully"));
@@ -203,12 +204,11 @@ public class InvoiceController implements Serializable {
         if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
             return;
         }
-        final Invoice invoice = invoiceConverter
-                .convertModelToEntity(invoiceModel);
+        Invoice invoice = getInvoiceEntity(selectedInvoiceModel);
         invoiceService.update(invoice, invoice.getInvoiceId());
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        if (invoiceModel.getInvoiceId() > 0) {
+        if (selectedInvoiceModel.getInvoiceId() > 0) {
             context.addMessage(null, new FacesMessage("Invoice Updated SuccessFully"));
         } else {
             context.addMessage(null, new FacesMessage("Invoice Added SuccessFully"));
@@ -219,16 +219,16 @@ public class InvoiceController implements Serializable {
 
     public void updateCurrency() {
         setDefaultCurrency();
-        if (null != invoiceModel.getContact()) {
+        if (null != selectedInvoiceModel.getContact()) {
             final Contact contact = contactService
-                    .getContact(invoiceModel.getContact().getContactId());
-            invoiceModel.setCurrencyCode(contact.getCurrency());
+                    .getContact(selectedInvoiceModel.getContact().getContactId());
+            selectedInvoiceModel.setCurrencyCode(contact.getCurrency());
         }
     }
 
     public void updateCurrencyLabel() {
-        if (null != invoiceModel.getCurrencyCode()) {
-            invoiceModel.setCurrencyCode(currencyService.getCurrency(invoiceModel.getCurrencyCode().getCurrencyCode()));
+        if (null != selectedInvoiceModel.getCurrencyCode()) {
+            selectedInvoiceModel.setCurrencyCode(currencyService.getCurrency(selectedInvoiceModel.getCurrencyCode().getCurrencyCode()));
         }
     }
 
@@ -258,12 +258,12 @@ public class InvoiceController implements Serializable {
 
         final Contact contact = new Contact();
 
-        contact.setBillingEmail(contactModel.getEmailAddress());
+        contact.setBillingEmail(contactModel.getEmail());
         contact.setDeleteFlag(Boolean.FALSE);
-        contact.setEmail(contactModel.getEmailAddress());
+        contact.setEmail(contactModel.getEmail());
         contact.setFirstName(contactModel.getFirstName());
         contact.setLastName(contactModel.getLastName());
-        contact.setOrganization(contactModel.getOrganizationName());
+        contact.setOrganization(contactModel.getOrganization());
         contact.setCreatedBy(1);
         contact.setCurrency(defaultCurrency);
 
@@ -272,10 +272,13 @@ public class InvoiceController implements Serializable {
         if (defaultCurrency != null) {
             contactModel.setCurrency(defaultCurrency);
         }
+        if (contact.getContactId() > 0) {
+            contactService.update(contact);
+        } else {
+            contactService.persist(contact);
+        }
 
-        contactService.createOrUpdateContact(contact);
-
-        invoiceModel.setContact(contact);
+        selectedInvoiceModel.setContact(contact);
 
     }
 

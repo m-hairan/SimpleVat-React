@@ -1,85 +1,78 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui"
-         template="/WEB-INF/templates/template.xhtml">
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
+                template="/WEB-INF/templates/template.xhtml">
 
-	<ui:define name="title">#{messages.bank_accounts}</ui:define>
+    <ui:define name="title">#{messages.bank_accounts}</ui:define>
 
-	<ui:define name="content">
+    <ui:define name="content">
 
-				<div class="ui-g ">
+        <si:cdataPanel newAction= "#{transactionController.createTransaction()}" >
+            <h:form>
+                <p:dataTable var="transaction"
+                             id="transactionsTable"
+                             value="#{transactionListController.transactions}"
+                             paginator="true" rows="10"
+                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}">
+                    
+                    <f:facet name="{TableHeader}">
+                        <p:outputLabel styleClass="tableCustomHeader" value="#{transactionListController.selectedBankAccountModel.bankAccountName}" />
+                    </f:facet>
 
-					<div class="ui-g-12">
-						<!-- Left Side -->
-						<div class="card card-w-title">
-							<h1>#{messages.transactions}</h1>
-							<h:form>
-								<p:toolbar>
-									<f:facet name="left">
-										<p:commandButton value="#{messages.button_new}" icon="ui-icon-plus"
-											action="#{transactionController.createTransaction()}"
-                                                                                       />
-											 
-										<span class="ui-separator" style="padding-right: 5px;">
-											<span class="fa fa-ellipsis-v SoftGray" />
-										</span>
+                    <p:column>
 
-										<p:commandButton title="#{messages.button_import}"
-											icon="ui-icon-file-download" 
-											action="/pages/secure/bankaccount/import-bank-transactions.xhtml" >
-										</p:commandButton>
-										
-										<p:commandButton type="button" title="#{messages.button_export}"
-											icon="ui-icon-file-upload" />
-										<p:commandButton type="button" title="#{messages.delete}"
-											icon="ui-icon-delete" />
-									</f:facet>
+                        <h:panelGroup rendered="#{transaction.transactionStatus.explainationStatusName eq 'EXPLAINED'}">
+                            <i class="fa fa-check" style="color: green;"></i>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{transaction.transactionStatus.explainationStatusName eq 'UNEXPLAINED'}">
+                            <i class="fa fa-close" style="color: red;"></i>
+                        </h:panelGroup>
 
-									<f:facet name="right">
-										<p:menuButton value="Options">
-											<p:menuitem value="#{messages.button_import}" icon="ui-icon-file-download" 
-											action="/pages/secure/bankaccount/import-bank-transactions.xhtml" />
-											<p:menuitem value="#{messages.button_export}" icon="ui-icon-file-upload" />
-											<p:menuitem value="Last Upload" outcome="/pages/secure/bankaccount/review-imported-bank-transactions.xhtml" icon="ui-icon-file-upload" />
-											<p:menuitem value="#{messages.delete}" icon="ui-icon-delete" />
-											<p:separator />
-											<p:menuitem value="Homepage"
-												outcome="#{homePageLink}" icon="ui-icon-home" />
-										</p:menuButton>
-									</f:facet>
-								</p:toolbar>
-							</h:form>
+                    </p:column>
 
-							<br />
-							<ui:include src="all-bank-transactions.xhtml" />
-							<h:form>
-								<p:toolbar>
-									<f:facet name="left">
-										
-										<p:commandButton title="#{messages.cancel}" icon="ui-icon-cancel"
-											action="/pages/secure/bankaccount/bankaccounts.xhtml?faces-redirect=true"
-											 />
-									</f:facet>
+                    <p:column headerText="#{messages.date}" sortBy="#{transaction.transactionDate.time}">
+                        <h:outputText value="#{transaction.transactionDate.time}" >
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
 
-									<f:facet name="right">
+                    <p:column headerText="#{messages.description}" >
+                        <h:outputText value="#{transaction.transactionDescription}" />
+                    </p:column>
 
-										<p:button 
-                                                                                    type="button" value="Home" icon="ui-icon-home"
-											outcome="#{homePageLink}" />
+                    <p:column headerText="#{messages.credit}" sortBy="#{transaction.transactionAmount}">
+                        <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString() eq 'C'}" />
+                    </p:column>
 
-									</f:facet>
+                    <p:column headerText="#{messages.debit}" sortBy="#{transaction.transactionAmount}">
+                        <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString() eq 'D'}" />
+                    </p:column>
 
-								</p:toolbar>
-							</h:form>
+                    <p:column headerText="#{messages.current_balance}">
+                        <h:outputText value="#{transaction.currentBalance}" />
+                    </p:column>
 
-						</div>
-						
-					</div>
-					
-				</div>
-			
-	</ui:define>
+                    <p:column headerText="Action">
+
+                        <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" action="#{transactionController.editTransection}">
+                            <f:setPropertyActionListener value="#{transaction}" target="#{transactionController.selectedTransactionModel}" />
+                        </p:commandButton>
+
+                        <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{transactionController.deleteTransaction}" update="transactionsTable">
+                            <f:setPropertyActionListener value="#{transaction}" target="#{transactionController.selectedTransactionModel}" />
+                            <p:confirm header="#{messages.delete}" message="#{messages.are_you_sure_want_to_delete}" icon="ui-icon-alert" />
+                        </p:commandButton>
+
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+
+        </si:cdataPanel>
+
+    </ui:define>
 
 </ui:composition>

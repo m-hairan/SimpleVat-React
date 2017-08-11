@@ -80,7 +80,7 @@
                                         <p:outputLabel for="organizationName"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText id="organizationName"
-                                                         value="#{contactController.contactModel.organizationName}"/>
+                                                         value="#{contactController.contactModel.organization}"/>
                                             <label>Organization Name</label>
                                         </h:panelGroup>
                                         <p:outputLabel for="poBoxNumber" />
@@ -95,7 +95,7 @@
                                         <p:outputLabel for="email"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText id="email"
-                                                         value="#{contactController.contactModel.emailAddress}" 
+                                                         value="#{contactController.contactModel.email}" 
                                                          required="true"
                                                          requiredMessage="Please enter email address"
                                                          validatorMessage="Invalid email format" >
@@ -259,36 +259,21 @@
 
                 <p:toolbar>
                     <f:facet name="left">
-<!--                        <ui:fragment rendered="#{contactController.contactModel.contactId > 0}">
-                            <p:commandButton title="Update"
-                                             update="@form"
-                                             value="Update" 
-                                             icon="ui-icon-save"
-                                             action="#{contactController.createOrUpdateContact()}" />
-                            <p:commandButton actionListener="#{contactController.createOrUpdateAndAddMore()}"
-                                             value="Update &amp; Add More"
-                                             update="@form"
-                                             validateClient="true"
-                                             icon="ui-icon-forward" />
-                        </ui:fragment>
-                        
-                        <ui:fragment rendered="#{contactController.contactModel.contactId == 0}">-->
-                            <p:commandButton title="Save"
-                                             update="@form"
-                                             value="Save" 
-                                             icon="ui-icon-save"
-                                             action="#{contactController.createOrUpdateContact()}" />
-                            <p:commandButton actionListener="#{contactController.createOrUpdateAndAddMore()}"
-                                             value="Save &amp; Add More"
-                                             update="@form"
-                                             validateClient="true"
-                                             icon="ui-icon-forward" />
-<!--                        </ui:fragment>-->
+                        <p:commandButton action="#{contactController.createOrUpdateContact()}"
+                                         title="Save"
+                                         update="@form"
+                                         value="Save" 
+                                         icon="ui-icon-save" />
+                        <p:commandButton action="#{contactController.createOrUpdateAndAddMore()}"
+                                         value="Save &amp; Add More"
+                                         update="@form"
+                                         validateClient="true"
+                                         icon="ui-icon-forward" />
 
                         <span class="ui-separator" style="padding-right: 5px;">
                             <span class="fa fa-ellipsis-v SoftGray" />
                         </span>
-                         <si:cbutton type="cancel"/>
+                        <si:cbutton type="cancel"/>
                     </f:facet>
 
                     <f:facet name="right">

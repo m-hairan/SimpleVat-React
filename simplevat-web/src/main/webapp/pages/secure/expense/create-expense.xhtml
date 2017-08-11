@@ -1,234 +1,234 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.org/ui" template="/WEB-INF/templates/template.xhtml">
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" template="/WEB-INF/templates/template.xhtml">
 
-	<ui:define name="title">New Expense</ui:define>
+    <ui:define name="title">New Expense</ui:define>
 
-	<ui:define name="content">
+    <ui:define name="content">
 
-		<h:form id="createExpenseForm" enctype="multipart/form-data">
+        <h:form id="createExpenseForm" enctype="multipart/form-data">
 
-			<div class="card card-w-title">
-				<div class="ui-fluid">
-					<div class="ui-g">
+            <div class="card card-w-title">
+                <div class="ui-fluid">
+                    <div class="ui-g">
 
-						<div class="ui-g-12">
-							<div class="card card-w-title">
-								<p:fieldset legend="Expense Details" toggleable="false"
-									toggleSpeed="500">
-									<p:panelGrid columns="6"
-										columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
-										layout="grid" styleClass="ui-panelgrid-blank form-group"
-										style="border:0px none; background-color:transparent;">
-										
-										<p:outputLabel for="expenseClaimantId"/>
-										<h:panelGroup styleClass="md-inputfield">
-											<p:autoComplete
-														id="expenseClaimantId"
-                                                        converter="userConverter"
-                                                        dropdown="true"
-                                                        forceSelection="true"
-                                                        effect="fold"
-                                                        completeMethod="#{expenseController.users}"
-                                                        value="#{expenseController.selectedExpenseModel.user}"
-                                                        var="user"
-                                                        itemValue="#{user}"
-                                                        itemLabel="#{user.firstName}"
-                                                        required="true"
-                                                        requiredMessage="Please select Claimant">
-	                                        </p:autoComplete>
-	                                        <label>#{messages.claimant}</label>
-										</h:panelGroup>
+                        <div class="ui-g-12">
+                            <div class="card card-w-title">
+                                <p:fieldset legend="Expense Details" toggleable="false"
+                                            toggleSpeed="500">
+                                    <p:panelGrid columns="6"
+                                                 columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+                                                 layout="grid" styleClass="ui-panelgrid-blank form-group"
+                                                 style="border:0px none; background-color:transparent;">
 
-										<p:outputLabel for="expenseTransactionType"/>
-										<h:panelGroup styleClass="md-inputfield">
-											<p:autoComplete
-														id="expenseTransactionType"
-                                                        converter="transactionTypeConverter"
-                                                        dropdown="true"
-                                                        forceSelection="true"
-                                                        effect="fold"
-                                                        completeMethod="#{transactionController.transactionTypes}"
-                                                        value="#{expenseController.selectedExpenseModel.transactionType}"
-                                                        var="transactionType"
-                                                        itemValue="#{transactionType}"
-                                                        itemLabel="#{transactionType.transactionTypeName}"
-                                                        required="true"
-                                                        requiredMessage="Please select expense Type">
-	                                        </p:autoComplete>
-	                                        <label>#{messages.type}</label>
-										</h:panelGroup>
+                                        <p:outputLabel for="expenseClaimantId"/>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:autoComplete
+                                                id="expenseClaimantId"
+                                                converter="userConverter"
+                                                dropdown="true"
+                                                forceSelection="true"
+                                                effect="fold"
+                                                completeMethod="#{expenseController.users}"
+                                                value="#{expenseController.selectedExpenseModel.user}"
+                                                var="user"
+                                                itemValue="#{user}"
+                                                itemLabel="#{user.firstName}"
+                                                required="true"
+                                                requiredMessage="Please select Claimant">
+                                            </p:autoComplete>
+                                            <label>#{messages.claimant}</label>
+                                        </h:panelGroup>
 
-										<p:outputLabel for="expenseTransactionCategory"/>
-										<h:panelGroup styleClass="md-inputfield">
-											<p:autoComplete
-														id="expenseTransactionCategory"
-                                                        converter="transactionCategoryConverter"
-                                                        dropdown="true"
-                                                        forceSelection="true"
-                                                        effect="fold"
-                                                        completeMethod="#{transactionController.transactionCategories}"
-                                                        value="#{expenseController.selectedExpenseModel.transactionCategory}"
-                                                        var="transactionCategory"
-                                                        itemValue="#{transactionCategory}"
-                                                        itemLabel="#{transactionCategory.transactionCategoryName}"
-                                                        >
-	                                        </p:autoComplete>
-	                                        <label>#{messages.category}</label>
-										</h:panelGroup>
-										
-										<p:outputLabel for="expenseDate"/>
-										<h:panelGroup styleClass="md-inputfield">
-											<p:calendar
-												id="expenseDate"
-												value="#{expenseController.selectedExpenseModel.expenseDate}" 
-												required="true"
-												requiredMessage="Please select expense date"/>
-											<label>#{messages.expense_date}</label>
-										</h:panelGroup>
+                                        <p:outputLabel for="expenseTransactionType"/>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:autoComplete
+                                                id="expenseTransactionType"
+                                                converter="transactionTypeConverter"
+                                                dropdown="true"
+                                                forceSelection="true"
+                                                effect="fold"
+                                                completeMethod="#{transactionController.transactionTypes}"
+                                                value="#{expenseController.selectedExpenseModel.transactionType}"
+                                                var="transactionType"
+                                                itemValue="#{transactionType}"
+                                                itemLabel="#{transactionType.transactionTypeName}"
+                                                required="true"
+                                                requiredMessage="Please select expense Type">
+                                            </p:autoComplete>
+                                            <label>#{messages.type}</label>
+                                        </h:panelGroup>
 
-										
-										<p:outputLabel for="expenseAmount"/>
-										<h:panelGroup styleClass="md-inputfield">
-											<p:inputText
-												id="expenseAmount"
-												value="#{expenseController.selectedExpenseModel.expenseAmount}"
-												required="true" 
-												requiredMessage="Please enter expense amount"/>
-											<label>#{messages.amount}</label>
-										</h:panelGroup>
+                                        <p:outputLabel for="expenseTransactionCategory"/>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:autoComplete
+                                                id="expenseTransactionCategory"
+                                                converter="transactionCategoryConverter"
+                                                dropdown="true"
+                                                forceSelection="true"
+                                                effect="fold"
+                                                completeMethod="#{transactionController.transactionCategories}"
+                                                value="#{expenseController.selectedExpenseModel.transactionCategory}"
+                                                var="transactionCategory"
+                                                itemValue="#{transactionCategory}"
+                                                itemLabel="#{transactionCategory.transactionCategoryName}"
+                                                >
+                                            </p:autoComplete>
+                                            <label>#{messages.category}</label>
+                                        </h:panelGroup>
 
-										<p:outputLabel for="expenseCurrency" />
-										<h:panelGroup styleClass="md-inputfield">
-											<p:autoComplete id="expenseCurrency" 
-												dropdown="true"
-												forceSelection="true" 
-												effect="fold"
-												converter="#{currencyConverter}"
-												completeMethod="#{currencyController.completeCurrency}"
-												value="#{expenseController.selectedExpenseModel.currency}"
-												var="currency" 
-												itemValue="#{currency}"
-												itemLabel="#{currency.currencyDescription}" 
-												required="true"
-												requiredMessage="Please select currency"/>
-											<label>#{messages.currency}</label>
-										</h:panelGroup>
+                                        <p:outputLabel for="expenseDate"/>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:calendar
+                                                id="expenseDate"
+                                                value="#{expenseController.selectedExpenseModel.expenseDate}" 
+                                                required="true"
+                                                requiredMessage="Please select expense date"/>
+                                            <label>#{messages.expense_date}</label>
+                                        </h:panelGroup>
 
-										<p:outputLabel for="expenseDescription" />
-										<h:panelGroup styleClass="md-inputfield">
-											<p:inputTextarea
-												id="expenseDescription"
-												value="#{expenseController.selectedExpenseModel.expenseDescription}"
-												rows="5" cols="30" counter="counterValue" maxlength="100"
-												counterTemplate="{0} characters remaining."
-												autoResize="false" />
-											<h:outputText id="counterValue" />
-											<label>#{messages.description}</label>
-										</h:panelGroup>
 
-										<p:outputLabel for="expenseProject"/>
-										<h:panelGroup styleClass="md-inputfield">
-											<p:autoComplete
-														id="expenseProject"
-                                                        converter="#{projectConverter}"
-                                                        dropdown="true"
-                                                        forceSelection="true"
-                                                        effect="fold"
-                                                        completeMethod="#{projectController.projects}"
-                                                        value="#{expenseController.selectedExpenseModel.project}"
-                                                        var="project"
-                                                        itemValue="#{project}"
-                                                        itemLabel="#{project.projectName}"
-                                                        >
-	                                        </p:autoComplete>
-	                                        <label>#{messages.project}</label>
-										</h:panelGroup>
+                                        <p:outputLabel for="expenseAmount"/>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText
+                                                id="expenseAmount"
+                                                value="#{expenseController.selectedExpenseModel.expenseAmount}"
+                                                required="true" 
+                                                requiredMessage="Please enter expense amount"/>
+                                            <label>#{messages.amount}</label>
+                                        </h:panelGroup>
 
-										<h:panelGroup />
-										<h:panelGroup />
+                                        <p:outputLabel for="expenseCurrency" />
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:autoComplete id="expenseCurrency" 
+                                                            dropdown="true"
+                                                            forceSelection="true" 
+                                                            effect="fold"
+                                                            converter="#{currencyConverter}"
+                                                            completeMethod="#{currencyController.completeCurrency}"
+                                                            value="#{expenseController.selectedExpenseModel.currency}"
+                                                            var="currency" 
+                                                            itemValue="#{currency}"
+                                                            itemLabel="#{currency.currencyDescription}" 
+                                                            required="true"
+                                                            requiredMessage="Please select currency"/>
+                                            <label>#{messages.currency}</label>
+                                        </h:panelGroup>
 
-									</p:panelGrid>
-								</p:fieldset>
-								<br />
-								<p:fieldset legend="Receipt" toggleable="true" toggleSpeed="500">
-									<p:panelGrid columns="6"
-										columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
-										layout="grid" styleClass="ui-panelgrid-blank form-group"
-										style="border:0px none; background-color:transparent;">
+                                        <p:outputLabel for="expenseDescription" />
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputTextarea
+                                                id="expenseDescription"
+                                                value="#{expenseController.selectedExpenseModel.expenseDescription}"
+                                                rows="5" cols="30" counter="counterValue" maxlength="100"
+                                                counterTemplate="{0} characters remaining."
+                                                autoResize="false" />
+                                            <h:outputText id="counterValue" />
+                                            <label>#{messages.description}</label>
+                                        </h:panelGroup>
 
-										<p:outputLabel for="expenseReceiptNumber"/>
-										<h:panelGroup styleClass="md-inputfield">
-											<p:inputText
-												id="expenseReceiptNumber"
-												value="#{expenseController.selectedExpenseModel.receiptNumber}" />
-											<label>#{messages.receiptnumber}</label>
-										</h:panelGroup>
+                                        <p:outputLabel for="expenseProject"/>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:autoComplete
+                                                id="expenseProject"
+                                                converter="#{projectConverter}"
+                                                dropdown="true"
+                                                forceSelection="true"
+                                                effect="fold"
+                                                completeMethod="#{projectController.projects}"
+                                                value="#{expenseController.selectedExpenseModel.project}"
+                                                var="project"
+                                                itemValue="#{project}"
+                                                itemLabel="#{project.projectName}"
+                                                >
+                                            </p:autoComplete>
+                                            <label>#{messages.project}</label>
+                                        </h:panelGroup>
 
-										<h:panelGroup />
+                                        <h:panelGroup />
+                                        <h:panelGroup />
 
-										<h:panelGroup styleClass="md-inputfield">
-											<p:fileUpload
-												value="#{expenseController.selectedExpenseModel.attachmentFile}"
-												mode="simple" skinSimple="true" />
-											<h:panelGroup rendered="#{expenseController.selectedExpenseModel.attachmentFileContent != null}">
-												<p:commandButton value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
-													<p:fileDownload value="#{expenseController.selectedExpenseModel.attachmentFileContent}" />
-												</p:commandButton>
-											</h:panelGroup>
-										</h:panelGroup>
+                                    </p:panelGrid>
+                                </p:fieldset>
+                                <br />
+                                <p:fieldset legend="Receipt" toggleable="true" toggleSpeed="500">
+                                    <p:panelGrid columns="6"
+                                                 columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+                                                 layout="grid" styleClass="ui-panelgrid-blank form-group"
+                                                 style="border:0px none; background-color:transparent;">
 
-										<p:outputLabel for="expenseAttachmentDescription"/>
-										<h:panelGroup styleClass="md-inputfield">
-											<p:inputText
-												id="expenseAttachmentDescription"
-												value="#{expenseController.selectedExpenseModel.receiptAttachmentDescription}" />
-											<label>#{messages.attachment_description}</label>
-										</h:panelGroup>
+                                        <p:outputLabel for="expenseReceiptNumber"/>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText
+                                                id="expenseReceiptNumber"
+                                                value="#{expenseController.selectedExpenseModel.receiptNumber}" />
+                                            <label>#{messages.receiptnumber}</label>
+                                        </h:panelGroup>
 
-									</p:panelGrid>
-								</p:fieldset>
+                                        <h:panelGroup />
 
-							</div>
-						</div>
-					</div>
-				</div>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:fileUpload
+                                                value="#{expenseController.selectedExpenseModel.attachmentFile}"
+                                                mode="simple" skinSimple="true" />
+                                            <h:panelGroup rendered="#{expenseController.selectedExpenseModel.attachmentFileContent != null}">
+                                                <p:commandButton value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
+                                                    <p:fileDownload value="#{expenseController.selectedExpenseModel.attachmentFileContent}" />
+                                                </p:commandButton>
+                                            </h:panelGroup>
+                                        </h:panelGroup>
 
-				<p:toolbar>
-					<f:facet name="left">
-						<p:commandButton value="#{messages.save}" icon="ui-icon-save"
-							action="#{expenseController.saveExpense}" />
-						<p:commandButton value="#{messages.save_and_add_more}"
-							icon="ui-icon-forward" 
-							action="#{expenseController.saveAndContinueExpense}"
-							ajax="false"
-							update="createExpenseForm"/>
+                                        <p:outputLabel for="expenseAttachmentDescription"/>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText
+                                                id="expenseAttachmentDescription"
+                                                value="#{expenseController.selectedExpenseModel.receiptAttachmentDescription}" />
+                                            <label>#{messages.attachment_description}</label>
+                                        </h:panelGroup>
 
-						<span class="ui-separator" style="padding-right: 5px;"> <span
-							class="fa fa-ellipsis-v SoftGray" />
-						</span>
-						
+                                    </p:panelGrid>
+                                </p:fieldset>
 
-						<p:commandButton title="#{messages.cancel}" icon="ui-icon-cancel"
-							action="/pages/secure/expense/expenses.xhtml"
-							immediate="true"
-							 />
-					</f:facet>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-					<f:facet name="right">
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:commandButton value="#{messages.save}" icon="ui-icon-save"
+                                         action="#{expenseController.saveExpense}" />
+                        <p:commandButton value="#{messages.save_and_add_more}"
+                                         icon="ui-icon-forward" 
+                                         action="#{expenseController.saveAndContinueExpense}"
+                                         ajax="false"
+                                         update="createExpenseForm"/>
 
-						<p:button type="button" value="Home" icon="ui-icon-home"
-							outcome="#{homePageLink}" />
+                        <span class="ui-separator" style="padding-right: 5px;"> <span
+                                class="fa fa-ellipsis-v SoftGray" />
+                        </span>
 
-					</f:facet>
 
-				</p:toolbar>
+                        <p:commandButton title="#{messages.cancel}" icon="ui-icon-cancel"
+                                         action="/pages/secure/expense/expenses.xhtml"
+                                         immediate="true"
+                                         />
+                    </f:facet>
 
-			</div>
+                    <f:facet name="right">
 
-		</h:form>
-	</ui:define>
+                        <p:button type="button" value="Home" icon="ui-icon-home"
+                                  outcome="#{homePageLink}" />
+
+                    </f:facet>
+
+                </p:toolbar>
+
+            </div>
+
+        </h:form>
+    </ui:define>
 
 </ui:composition>

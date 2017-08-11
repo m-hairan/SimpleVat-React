@@ -10,7 +10,7 @@
     <ui:define name="title">#{messages.invoices}</ui:define>
 
     <ui:define name="content">
-         <si:cdataPanel newAction="#{invoiceListController.redirectToCreateInvoice()}">
+        <si:cdataPanel newAction="#{invoiceListController.redirectToCreateInvoice()}">
             <h:form>
                 <p:dataTable var="invoice" 
                              value="#{invoiceListController.invoices}"
@@ -60,7 +60,7 @@
 
                     <p:column headerText="#{messages.action}">
                         <p:commandButton title="#{messages.edit_invoice}" icon="ui-icon-edit" styleClass="AquaButton" action="#{invoiceListController.redirectToCreateInvoice}">
-                            <f:setPropertyActionListener value="#{invoiceModelConverter.convertEntityToModel(invoice)}" target="#{invoiceListController.selectedInvoice}" />
+                            <f:setPropertyActionListener value="#{invoice}" target="#{invoiceListController.selectedInvoice}" />
                         </p:commandButton>
                         <p:commandButton style="margin-left: 7px" 
                                          title="Delete Invoice" 
@@ -68,6 +68,13 @@
                                          update="@form"
                                          icon="ui-icon-delete">
                         </p:commandButton>
+                        <p:media value="" player="pdf" width="200" height="200">
+                            <f:param name="pdf" value="false"/>
+                            <object type="application/pdf" data="/simplevat-web/Web Pages/resources/pdf/codeconventions-150003.pdf?pfdrid_c=true" width="100%" height="300px">
+                                Your browser can't display pdf <a href="/Web Pages/resources/pdf/codeconventions-150003.pdf">click</a> to download pdf instead.
+                            </object>
+                        </p:media>
+
                     </p:column>
                 </p:dataTable>
             </h:form>

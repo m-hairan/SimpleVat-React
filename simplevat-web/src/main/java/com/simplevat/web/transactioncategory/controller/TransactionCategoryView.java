@@ -1,12 +1,11 @@
 package com.simplevat.web.transactioncategory.controller;
 
+import com.github.javaplugs.jsf.SpringScopeView;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,16 +16,15 @@ import com.simplevat.web.exception.UnauthorizedException;
 import com.simplevat.security.ContextUtils;
 import com.simplevat.service.TransactionCategoryServiceNew;
 import com.simplevat.service.bankaccount.TransactionTypeService;
+import java.io.Serializable;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.context.annotation.Scope;
-import org.springframework.web.context.annotation.SessionScope;
 
 @Controller
 //@ManagedBean(name = "transactionCategoryView")
-@SessionScope
-public class TransactionCategoryView {
+@SpringScopeView
+public class TransactionCategoryView implements Serializable{
 
 	
 	@Getter
@@ -59,7 +57,8 @@ public class TransactionCategoryView {
 
 	@PostConstruct
 	public void init() {
-		this.transactionCategories = transactionCategoryService.executeNamedQuery("findAllTransactionCategory");
+                selectedTransactionCategory = new TransactionCategory();
+		this.transactionCategories = transactionCategoryService.findAllTransactionCategory();
 		this.transactionTypes = transactionTypeService.findAll();
 	}
 	
@@ -85,9 +84,6 @@ public class TransactionCategoryView {
 	}
 
 	public String createNewCategory() {
-		editMode = false;
-		selectedTransactionCategory = new TransactionCategory();
-		this.transactionTypes = transactionTypeService.findAll();
 		return TRANSACTION_CATEGORY + CREATE_PAGE + "?faces-redirect=true";
 	}
 
@@ -120,7 +116,8 @@ public class TransactionCategoryView {
 		selectedTransactionCategory.setOrderSequence(1);
 		selectedTransactionCategory.setCreatedDate(LocalDateTime.now());
 		selectedTransactionCategory.setLastUpdateDate(LocalDateTime.now());
-                transactionCategoryService.persist(selectedTransactionCategory, selectedTransactionCategory.getTransactionCategoryCode());
+                System.out.println("selected type : : "+ selectedTransactionCategory.getTransactionType());
+                transactionCategoryService.persist(selectedTransactionCategory);
                 init();
 		//FacesContext.getCurrentInstance().getExternalContext().redirect("transactioncategory.xhtml?faces-redirect=true");
 		return TRANSACTION_CATEGORY + LIST_PAGE + "?faces-redirect=true";

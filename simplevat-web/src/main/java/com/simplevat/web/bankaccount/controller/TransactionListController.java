@@ -1,5 +1,6 @@
 package com.simplevat.web.bankaccount.controller;
 
+import com.github.javaplugs.jsf.SpringScopeView;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,10 +19,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import lombok.Getter;
-import org.springframework.context.annotation.Scope;
 
 @Controller
-@Scope("view")
+@SpringScopeView
 public class TransactionListController extends TransactionControllerHelper implements Serializable{
 
     @Autowired

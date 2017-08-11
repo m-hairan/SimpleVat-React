@@ -7,6 +7,7 @@ package com.simplevat.web.user.controller;
  */
 
 
+import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.User;
 import com.simplevat.service.UserServiceNew;
 import com.simplevat.web.user.model.UserDTO;
@@ -17,7 +18,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -25,7 +25,7 @@ import org.springframework.stereotype.Controller;
  * @author Uday
  */
 @Controller
-@Scope("view")
+@SpringScopeView
 public class ManageUserController {
 
     @Autowired

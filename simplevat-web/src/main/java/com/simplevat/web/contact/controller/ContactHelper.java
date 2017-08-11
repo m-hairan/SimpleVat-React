@@ -22,7 +22,7 @@ public class ContactHelper {
         contactModel.setContractPoNumber(contact.getContractPoNumber());
         contactModel.setCountry(contact.getCountry());
         contactModel.setCurrency(contact.getCurrency());
-        contactModel.setEmailAddress(contact.getEmail());
+        contactModel.setEmail(contact.getEmail());
         contactModel.setFirstName(contact.getFirstName());
         contactModel.setInvoicingAddressLine1(contact.getInvoicingAddressLine1());
         contactModel.setInvoicingAddressLine2(contact.getInvoicingAddressLine2());
@@ -31,13 +31,19 @@ public class ContactHelper {
         contactModel.setLastName(contact.getLastName());
         contactModel.setMiddleName(contact.getMiddleName());
         contactModel.setMobileNumber(contact.getMobileNumber());
-        contactModel.setOrganizationName(contact.getOrganization());
+        contactModel.setOrganization(contact.getOrganization());
         contactModel.setPoBoxNumber(contact.getPoBoxNumber());
         contactModel.setPostZipCode(contact.getPostZipCode());
         contactModel.setStateRegion(contact.getStateRegion());
         contactModel.setTelephone(contact.getTelephone());
         contactModel.setTitle(contact.getTitle());
         contactModel.setVatRegistrationNumber(contact.getVatRegistrationNumber());
+        contactModel.setVersionNumber(contact.getVersionNumber());
+        contactModel.setCreatedBy(contact.getCreatedBy());
+        contactModel.setCreatedDate(contact.getCreatedDate());
+        contactModel.setLastUpdateDate(contact.getLastUpdateDate());
+        contactModel.setLastUpdatedBy(contact.getLastUpdatedBy());
+        contactModel.setDeleteFlag(contact.getDeleteFlag()); 
         return contactModel;
     }
 }

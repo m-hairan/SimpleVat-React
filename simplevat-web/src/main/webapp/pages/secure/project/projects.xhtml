@@ -3,109 +3,75 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
                 template="/WEB-INF/templates/template.xhtml"> 
 
     <ui:define name="title">Projects</ui:define>
-
     <ui:define name="content">
-        <h:form id="form">
-            <div class="ui-g ">
-                <div class="ui-g-12">
-                    <div class="card card-w-title">
-                        <h1>projects</h1>
-                        <p:toolbar>
-                            <f:facet name="left">
-                                <!--<p:commandButton value="New"-->
-                                                 <!--icon="ui-icon-plus" outcome="/pages/secure/project/project"/>-->
+        <si:cdataPanel newAction="#{projectListController.redirectToCreateProject()}">
+            <h:form id="form">
+                <p:dataTable var="project" id="projectListTable"
+                             value="#{projectListController.getProjects()}"
+                             selectionMode="single"
+                             reflow="true"
+                             rowIndexVar="index"
+                             selection="#{projectListController.selectedProject}"
+                             rowKey="#{project.projectId}"
+                             paginator="true" rows="10"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}">
+                     <f:facet name="{TableHeader}">
+                         <p:outputLabel styleClass="tableCustomHeader" value="#{messages.projects}" />
+                    </f:facet>
+                    <p:column headerText="Project Id" sortBy="#{project.projectId}">
+                        <h:outputText value="#{project.projectId}"/>
+                    </p:column>
 
-                                <p:commandButton title="New" value="New" icon="ui-icon-plus"
-                                                 action="#{projectController.redirectToCreateProject()}" />
+                    <p:column headerText="Project Name" sortBy="#{project.projectName}">
+                        <h:outputText value="#{project.projectName}"/>
+                    </p:column>
 
-                                <span class="ui-separator" style="padding-right: 5px;">
-                                    <span class="fa fa-ellipsis-v SoftGray"/>
-                                </span>
+                    <p:column headerText="Project Budget" sortBy="#{project.projectBudget}">
+                        <h:outputText value="#{project.projectBudget}"/>
+                    </p:column>
+                    <p:column headerText="VAT Registration Number" sortBy="#{project.vatRegistrationNumber}">
+                        <h:outputText value="#{project.vatRegistrationNumber}"/>
+                    </p:column>
+                    <p:column headerText="Invoice Language Code" sortBy="#{project.invoiceLanguageCode.languageDescription}">
+                        <h:outputText value="#{project.invoiceLanguageCode.languageDescription}"/>
+                    </p:column>
+                    <p:column headerText="Currency Code" sortBy="#{project.currency.currencyCode}">
+                        <h:outputText value="#{project.currency.currencyCode}"/>
+                    </p:column>
+                    <p:column headerText="Created By" sortBy="#{project.createdBy}">
+                        <h:outputText value="#{project.createdBy}"/>
+                    </p:column>
+                    <p:column headerText="Contact Name"
+                              sortBy="#{project.contact.firstName} #{project.contact.lastName}">
+                        <h:outputText
+                            value="#{project.contact.firstName} #{project.contact.lastName}"/>
+                    </p:column>
 
-                                <p:commandButton type="button" title="Import" icon="ui-icon-file-download"/>
-                                <p:commandButton type="button" title="Export" icon="ui-icon-file-upload"/>
-                                <p:commandButton type="button" title="Delete" icon="ui-icon-delete"/>
-                            </f:facet>
+                    <p:column headerText="Created Date" sortBy="#{project.createdDate}">
+                        <h:outputText value="#{project.createdDate}">
+                            <f:converter converterId="localDateTimeConverter" />
+                            <f:attribute name="pattern" value="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Action">
+                        <p:commandButton title="View project"
+                                         icon="ui-icon-edit"
+                                         action="#{projectListController.redirectToEditProject()}">
+                            <f:setPropertyActionListener value="#{project}" target="#{projectListController.selectedProject}" />
+                        </p:commandButton>
+                        <p:commandButton style="margin-left: 7px"
+                                         title="Delete project" update="projectListTable"
+                                         icon="ui-icon-delete" action="#{projectListController.deleteProject(project)}">
+                        </p:commandButton>
+                    </p:column>
 
-                            <f:facet name="right">
-                                <p:menuButton value="Options">
-                                    <p:menuitem value="Import" icon="ui-icon-file-download"/>
-                                    <p:menuitem value="Export" icon="ui-icon-file-upload"/>
-                                    <p:menuitem value="Delete" icon="ui-icon-delete"/>
-                                    <p:separator/>
-                                    <p:menuitem value="Homepage" outcome="/pages/secure/home" icon="ui-icon-home"/>
-                                </p:menuButton>
-                            </f:facet>
-                        </p:toolbar>
-                        <br/>
-                        <p:dataTable var="project"
-                                     value="#{projectController.getProjects()}"
-                                     selectionMode="single"
-                                     reflow="true"
-                                     rowIndexVar="index"
-                                     selection="#{projectController.selectedProject}"
-                                     rowKey="#{project.projectId}"
-                                     paginator="true" rows="5">
-                            <f:facet name="header">
-                                Projects
-                            </f:facet>
-                            <p:column headerText="Project Id" sortBy="#{project.projectId}">
-                                <h:outputText value="#{project.projectId}"/>
-                            </p:column>
-
-                            <p:column headerText="Project Name" sortBy="#{project.projectName}">
-                                <h:outputText value="#{project.projectName}"/>
-                            </p:column>
-
-                            <p:column headerText="Project Budget" sortBy="#{project.projectBudget}">
-                                <h:outputText value="#{project.projectBudget}"/>
-                            </p:column>
-                            <p:column headerText="VAT Registration Number" sortBy="#{project.vatRegistrationNumber}">
-                                <h:outputText value="#{project.vatRegistrationNumber}"/>
-                            </p:column>
-                            <p:column headerText="Invoice Language Code" sortBy="#{project.invoiceLanguageCode.languageDescription}">
-                                <h:outputText value="#{project.invoiceLanguageCode.languageDescription}"/>
-                            </p:column>
-                            <p:column headerText="Currency Code" sortBy="#{project.currency.currencyCode}">
-                                <h:outputText value="#{project.currency.currencyCode}"/>
-                            </p:column>
-                            <p:column headerText="Created By" sortBy="#{project.createdBy}">
-                                <h:outputText value="#{project.createdBy}"/>
-                            </p:column>
-                            <p:column headerText="Contact Name"
-                                      sortBy="#{project.contact.firstName} #{project.contact.lastName}">
-                                <h:outputText
-                                        value="#{project.contact.firstName} #{project.contact.lastName}"/>
-                            </p:column>
-
-                            <p:column headerText="Created Date" sortBy="#{project.createdDate}">
-                                <h:outputText value="#{project.createdDate}">
-                                    <f:converter converterId="localDateTimeConverter" />
-                                    <f:attribute name="pattern" value="dd/MM/yyyy"/>
-                                </h:outputText>
-                            </p:column>
-                            <p:column headerText="Action">
-                                <p:commandButton title="View project"
-                                                 icon="ui-icon-edit"
-                                                 action="#{projectController.redirectToEditProject(project)}"
-                                >
-                                </p:commandButton>
-                                <p:commandButton style="margin-left: 7px"
-                                                 title="Delete project"
-                                                 icon="ui-icon-delete" action="#{projectController.deleteProject(project)}">
-                                </p:commandButton>
-                            </p:column>
-
-                        </p:dataTable>
-                    </div>
-                </div>
-
-            </div>
-        </h:form>
-
+                </p:dataTable>
+            </h:form>
+        </si:cdataPanel>
     </ui:define>
 
 </ui:composition>

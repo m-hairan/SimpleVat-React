@@ -1,9 +1,8 @@
 package com.simplevat.web.home.controller;
 
+import com.github.javaplugs.jsf.SpringScopeView;
 import java.util.Map;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
@@ -15,15 +14,13 @@ import org.springframework.stereotype.Controller;
 
 import com.simplevat.service.bankaccount.BankAccountService;
 import com.simplevat.service.bankaccount.TransactionService;
-import org.springframework.context.annotation.Scope;
-import org.springframework.web.context.annotation.SessionScope;
 
 /**
  * Created by mohsin on 5/12/2017.
  */
 
 @Controller
-@SessionScope
+@SpringScopeView
 public class CashFlowChart {
 
 	@Autowired

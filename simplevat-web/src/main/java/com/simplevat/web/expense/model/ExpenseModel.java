@@ -20,7 +20,7 @@ import java.util.Date;
 @Setter
 public class ExpenseModel {
 
-    private int expenseId;
+    private Integer expenseId;
     private BigDecimal expenseAmount;
     private Date expenseDate;
     private String expenseDescription;
@@ -39,5 +39,6 @@ public class ExpenseModel {
     private boolean deleteFlag =  false;
     private UploadedFile attachmentFile;
     private StreamedContent attachmentFileContent;
-
+    private Integer versionNumber;
+    
 }

@@ -1,12 +1,11 @@
 package com.simplevat.web.country.controller;
 
+import com.github.javaplugs.jsf.SpringScopeView;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 
 import lombok.Getter;
 
@@ -18,11 +17,9 @@ import org.springframework.stereotype.Controller;
 import com.simplevat.entity.Country;
 import com.simplevat.service.CountryService;
 import com.simplevat.web.contact.controller.ContactController;
-import org.springframework.context.annotation.Scope;
-import org.springframework.web.context.annotation.SessionScope;
 
 @Controller
-@SessionScope
+@SpringScopeView
 public class CountryController {
 	
 	private final static Logger LOGGER = LoggerFactory.getLogger(ContactController.class);

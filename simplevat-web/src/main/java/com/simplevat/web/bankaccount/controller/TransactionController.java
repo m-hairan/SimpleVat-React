@@ -1,12 +1,11 @@
 package com.simplevat.web.bankaccount.controller;
 
+import com.github.javaplugs.jsf.SpringScopeView;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
 import lombok.Getter;
@@ -37,11 +36,9 @@ import com.simplevat.web.constant.TransactionStatusConstant;
 import com.simplevat.web.utils.FacesUtil;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
-import org.springframework.context.annotation.Scope;
-import org.springframework.web.context.annotation.SessionScope;
 
 @Controller
-@Scope("view")
+@SpringScopeView
 public class TransactionController extends TransactionControllerHelper implements Serializable {
 
     @Autowired

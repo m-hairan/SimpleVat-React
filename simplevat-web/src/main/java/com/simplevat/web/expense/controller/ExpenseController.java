@@ -1,11 +1,10 @@
 package com.simplevat.web.expense.controller;
 
+import com.github.javaplugs.jsf.SpringScopeView;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
 import lombok.Getter;
@@ -31,11 +30,9 @@ import com.simplevat.service.bankaccount.TransactionTypeService;
 import com.simplevat.web.utils.FacesUtil;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import org.springframework.context.annotation.Scope;
-import org.springframework.web.context.annotation.SessionScope;
 
 @Controller
-@Scope("view")
+@SpringScopeView
 public class ExpenseController extends ExpenseControllerHelper implements Serializable {
 
     private static final long serialVersionUID = 5366159429842989755L;
@@ -67,29 +64,30 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 
     @PostConstruct
     public void init() {
-        ExpenseModel expenseModel = new ExpenseModel();
-        Object objSelectedExpenseModel = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("selectedExpenseModel");
+        Object objSelectedExpenseModel = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedExpenseModelId");
         if (objSelectedExpenseModel == null) {
+            selectedExpenseModel = new ExpenseModel();
             Currency defaultCurrency = currencyService.getDefaultCurrency();
             if (defaultCurrency != null) {
-                expenseModel.setCurrency(defaultCurrency);
+                selectedExpenseModel.setCurrency(defaultCurrency);
             }
             TransactionType transactionType = transactionTypeService.getDefaultTransactionType();
             if (transactionType != null) {
-                expenseModel.setTransactionType(transactionType);
+                selectedExpenseModel.setTransactionType(transactionType);
             }
             TransactionCategory transactionCategory = (TransactionCategory) transactionCategoryService.getDefaultTransactionCategory();
             if (transactionCategory != null) {
-                expenseModel.setTransactionCategory(transactionCategory);
+                selectedExpenseModel.setTransactionCategory(transactionCategory);
             }
-        }else{
-            expenseModel = (ExpenseModel)objSelectedExpenseModel;
+        } else {
+            Expense expense = expenseService.findByPK(Integer.parseInt(objSelectedExpenseModel.toString()));
+            selectedExpenseModel = getExpenseModel(expense);
         }
-        selectedExpenseModel = expenseModel;
+        
+
     }
 
     public String createExpense() {
-
 //        ExpenseModel expenseModel = new ExpenseModel();
 //        expenseModel.setExpenseId(0);
 //
@@ -111,14 +109,15 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
     }
 
     public String saveExpense() {
+        System.out.println("selected Model : :"+selectedExpenseModel.getExpenseId());
         User loggedInUser = FacesUtil.getLoggedInUser();
-        Expense expense = this.getExpense(this.getSelectedExpenseModel());
-
+        Expense expense = getExpense(selectedExpenseModel);
         expense.setLastUpdateDate(LocalDateTime.now());
         expense.setLastUpdatedBy(loggedInUser.getUserId());
         expense.setDeleteFlag(false);
         expense.setCreatedBy(loggedInUser.getUserId());
-
+        expense.setUser(loggedInUser);
+        System.out.println("agdjadgajhdg : :" +expense.getUser().getUserEmail());
         if (selectedExpenseModel.getTransactionType() != null) {
             TransactionType transactionType = transactionTypeService.getTransactionType(selectedExpenseModel.getTransactionType().getTransactionTypeCode());
             expense.setTransactionType(transactionType);
@@ -143,9 +142,8 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
         if (this.getSelectedExpenseModel().getAttachmentFile() != null && this.getSelectedExpenseModel().getAttachmentFile().getSize() > 0) {
             storeUploadedFile(this.getSelectedExpenseModel(), expense, fileLocation);
         }
-        
+
         if (expense.getExpenseId() == null || expense.getExpenseId() == 0) {
-            expense.setExpenseId(null);
             expenseService.persist(expense);
         } else {
             expenseService.update(expense, expense.getExpenseId());
@@ -156,8 +154,9 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
     }
 
     public void saveAndContinueExpense() {
+        System.out.println("selected Model : :"+selectedExpenseModel.getExpenseId());
         User loggedInUser = FacesUtil.getLoggedInUser();
-        Expense expense = this.getExpense(this.getSelectedExpenseModel());
+        Expense expense = getExpense(selectedExpenseModel);
 
         expense.setLastUpdateDate(LocalDateTime.now());
         expense.setLastUpdatedBy(loggedInUser.getUserId());
@@ -189,17 +188,21 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
             storeUploadedFile(this.getSelectedExpenseModel(), expense, fileLocation);
         }
 
-        expenseService.persist(expense);
+        if (expense.getExpenseId() == null || expense.getExpenseId() == 0) {
+            expenseService.persist(expense);
+        } else {
+            expenseService.update(expense, expense.getExpenseId());
+        }
         this.setSelectedExpenseModel(new ExpenseModel());
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense saved successfully"));
 
     }
 
     public void deleteExpense() {
-
-        Expense expense = this.getExpense(this.getSelectedExpenseModel());
+        System.out.println("selected Model : :"+selectedExpenseModel.getExpenseId());
+        Expense expense = getExpense(selectedExpenseModel);
         expense.setDeleteFlag(true);
-        expenseService.updateOrCreateExpense(expense);
+        expenseService.update(expense);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense deleted successfully"));
 
     }

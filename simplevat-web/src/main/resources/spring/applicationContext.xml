@@ -77,4 +77,5 @@
         </property>
     </bean>
 
+    <import resource="classpath:/com/github/javaplugs/jsf/jsfSpringScope.xml"/>
 </beans>

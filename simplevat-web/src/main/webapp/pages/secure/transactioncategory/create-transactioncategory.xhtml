@@ -1,133 +1,133 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:p="http://primefaces.org/ui"
-         template="/WEB-INF/templates/template.xhtml">
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/template.xhtml">
 
-	<ui:define name="title">New #{message.transactioncategory}</ui:define>
+    <ui:define name="title">New #{message.transactioncategory}</ui:define>
 
-	<ui:define name="content">
+    <ui:define name="content">
 
-		<h:form id="createTransactionCategoryForm"
-                            enctype="multipart/form-data">
+        <h:form id="createTransactionCategoryForm"
+                enctype="multipart/form-data">
 
-			<div class="card card-w-title">
-				<div class="ui-fluid">
-					<div class="ui-g">
+            <div class="card card-w-title">
+                <div class="ui-fluid">
+                    <div class="ui-g">
 
-						<div class="ui-g-12">
-							<div class="card card-w-title">
-								<p:fieldset legend="Transaction Category Details"
-									toggleable="false" toggleSpeed="500">
-									<p:panelGrid columns="4"
-										columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
-										layout="grid" styleClass="ui-panelgrid-blank form-group"
-										style="border:0px none; background-color:transparent;">
+                        <div class="ui-g-12">
+                            <div class="card card-w-title">
+                                <p:fieldset legend="Transaction Category Details"
+                                            toggleable="false" toggleSpeed="500">
+                                    <p:panelGrid columns="4"
+                                                 columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+                                                 layout="grid" styleClass="ui-panelgrid-blank form-group"
+                                                 style="border:0px none; background-color:transparent;">
 
-										<h:panelGroup />
+                                        <h:panelGroup />
 
-										<h:panelGroup styleClass="md-inputfield">
-											<p:inputText
-												value="#{transactionCategoryView.selectedTransactionCategory.transactionCategoryName}" />
-											<label>#{messages.transactionCategoryName}</label>
-										</h:panelGroup>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText
+                                                value="#{transactionCategoryView.selectedTransactionCategory.transactionCategoryName}" />
+                                            <label>#{messages.transactionCategoryName}</label>
+                                        </h:panelGroup>
 
-										<h:panelGroup />
-										
-										<h:panelGroup styleClass="md-inputfield">
-											<p:inputText
-												value="#{transactionCategoryView.selectedTransactionCategory.transactionCategoryDescription}" />
-											<label>#{messages.transactionCategoryDescription}</label>
-										</h:panelGroup>
+                                        <h:panelGroup />
 
-										<h:panelGroup />
-										
-										<h:panelGroup styleClass="md-inputfield">
-											<p:outputLabel for="categoryCode"/>
-											<p:autoComplete id="categoryCode" 
-                                                                                                        value="#{transactionCategoryView.selectedTransactionCategory.transactionType}"
-															forceSelection="true" 
-															dropdown="true"
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText
+                                                value="#{transactionCategoryView.selectedTransactionCategory.transactionCategoryDescription}" />
+                                            <label>#{messages.transactionCategoryDescription}</label>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup />
+
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:outputLabel for="categoryCode"/>
+                                            <p:autoComplete id="categoryCode" 
+                                                            value="#{transactionCategoryView.selectedTransactionCategory.transactionType}"
+                                                            forceSelection="true" 
+                                                            dropdown="true"
                                                             completeMethod="#{transactionCategoryView.getAllTransactionType}" 
-                                                            var="transactionType" itemLabel="#{transactionType.transactionTypeName}"  itemValue="#{transactionType.transactionTypeName}"
-                                                            converter="#{transactionTypeConverter}"
+                                                            var="transactionType" itemLabel="#{transactionType.transactionTypeName}"  itemValue="#{transactionType}"
+                                                            converter="transactionTypeConverter"
                                                             required="false"/>
-												<label>Transaction Type</label>
-										</h:panelGroup>
+                                            <label>Transaction Type</label>
+                                        </h:panelGroup>
 
-										<h:panelGroup />
-										
-										<h:panelGroup styleClass="md-inputfield">
-											<p:outputLabel for="parentCategoryCode"/>
-											<p:autoComplete id="parentCategoryCode" 
-															value="#{transactionCategoryView.selectedTransactionCategory.parentTransactionCategory}"
-															forceSelection="true" 
-															dropdown="true"
+                                        <h:panelGroup />
+
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:outputLabel for="parentCategoryCode"/>
+                                            <p:autoComplete id="parentCategoryCode" 
+                                                            value="#{transactionCategoryView.selectedTransactionCategory.parentTransactionCategory}"
+                                                            forceSelection="true" 
+                                                            dropdown="true"
                                                             completeMethod="#{transactionCategoryView.getParentTransactionCategories}" 
-                                                            var="transactionCategory" itemLabel="#{transactionCategory.transactionCategoryName}"  itemValue="#{transactionCategory.transactionCategoryName}"
-                                                            converter="#{transactionCategoryConverter}"
+                                                            var="transactionCategory" itemLabel="#{transactionCategory.transactionCategoryName}"  itemValue="#{transactionCategory}"
+                                                            converter="transactionCategoryConverter"
                                                             required="false"/>
-												<label>Parent Category Code</label>
-										</h:panelGroup>
-										
-										<h:panelGroup />
-										
-										
-										<h:panelGroup styleClass="md-inputfield">
-											<p:inputText
-												value="#{transactionCategoryView.selectedTransactionCategory.defaltFlag}" />
-											<label>#{messages.defaltFlag}</label>
-										</h:panelGroup>
-										
-										<h:panelGroup />
-										
-									</p:panelGrid>
-								</p:fieldset>
-								<br />
+                                            <label>Parent Category Code</label>
+                                        </h:panelGroup>
 
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<p:toolbar>
-					<f:facet name="left">
-					<ui:fragment rendered="#{transactionCategoryView.selectedTransactionCategory.transactionCategoryCode == 0}">
-						<p:commandButton value="#{messages.save}" icon="ui-icon-save"
-							action="#{transactionCategoryView.save}" ajax="false" />
-						<p:commandButton value="#{messages.save_and_add_more}"
-							icon="ui-icon-forward"
-							action="#{transactionCategoryView.saveAndContinue}" ajax="false" />
-					</ui:fragment>
-					<ui:fragment rendered="#{transactionCategoryView.selectedTransactionCategory.transactionCategoryCode > 0}">
-						<p:commandButton value="#{messages.update}" icon="ui-icon-save"
-							action="#{transactionCategoryView.update}" ajax="false" />
-						<p:commandButton value="#{messages.update_and_add_more}"
-							icon="ui-icon-forward"
-							action="#{transactionCategoryView.updateAndContinue}" ajax="false" />
-					</ui:fragment>
-						<span class="ui-separator" style="padding-right: 5px;"> <span
-							class="fa fa-ellipsis-v SoftGray" />
-						</span>
+                                        <h:panelGroup />
 
 
-						<p:commandButton title="#{messages.cancel}" icon="ui-icon-cancel"
-							action="/pages/secure/transactioncategory/transactioncategory.xhtml" />
-					</f:facet>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText
+                                                value="#{transactionCategoryView.selectedTransactionCategory.defaltFlag}" />
+                                            <label>#{messages.defaltFlag}</label>
+                                        </h:panelGroup>
 
-					<f:facet name="right">
+                                        <h:panelGroup />
 
-						<p:button type="button" value="Home" icon="ui-icon-home"
-							outcome="#{homePageLink}" />
+                                    </p:panelGrid>
+                                </p:fieldset>
+                                <br />
 
-					</f:facet>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-				</p:toolbar>
+                <p:toolbar>
+                    <f:facet name="left">
+                        <ui:fragment rendered="#{transactionCategoryView.selectedTransactionCategory.transactionCategoryCode == null}">
+                            <p:commandButton value="#{messages.save}" icon="ui-icon-save"
+                                             action="#{transactionCategoryView.save}" ajax="false" />
+                            <p:commandButton value="#{messages.save_and_add_more}"
+                                             icon="ui-icon-forward"
+                                             action="#{transactionCategoryView.saveAndContinue}" ajax="false" />
+                        </ui:fragment>
+                        <ui:fragment rendered="#{transactionCategoryView.selectedTransactionCategory.transactionCategoryCode > 0}">
+                            <p:commandButton value="#{messages.update}" icon="ui-icon-save"
+                                             action="#{transactionCategoryView.update}" ajax="false" />
+                            <p:commandButton value="#{messages.update_and_add_more}"
+                                             icon="ui-icon-forward"
+                                             action="#{transactionCategoryView.updateAndContinue}" ajax="false" />
+                        </ui:fragment>
+                        <span class="ui-separator" style="padding-right: 5px;"> <span
+                                class="fa fa-ellipsis-v SoftGray" />
+                        </span>
 
-			</div>
 
-		</h:form>
-	</ui:define>
+                        <p:commandButton title="#{messages.cancel}" icon="ui-icon-cancel"
+                                         action="/pages/secure/transactioncategory/transactioncategory.xhtml" />
+                    </f:facet>
+
+                    <f:facet name="right">
+
+                        <p:button type="button" value="Home" icon="ui-icon-home"
+                                  outcome="#{homePageLink}" />
+
+                    </f:facet>
+
+                </p:toolbar>
+
+            </div>
+
+        </h:form>
+    </ui:define>
 
 </ui:composition>

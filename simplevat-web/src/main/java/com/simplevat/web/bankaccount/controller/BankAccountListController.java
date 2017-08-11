@@ -1,20 +1,17 @@
 package com.simplevat.web.bankaccount.controller;
 
+import com.github.javaplugs.jsf.SpringScopeView;
 import java.util.List;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.service.bankaccount.BankAccountService;
-import org.springframework.context.annotation.Scope;
-import org.springframework.web.context.annotation.SessionScope;
 
 @Controller
-@SessionScope
+@SpringScopeView
 public class BankAccountListController {
 
 	@Autowired

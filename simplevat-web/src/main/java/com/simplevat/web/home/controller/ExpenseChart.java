@@ -1,12 +1,10 @@
 package com.simplevat.web.home.controller;
 
+import com.github.javaplugs.jsf.SpringScopeView;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
-import javax.faces.bean.ManagedBean;
 import org.primefaces.model.chart.PieChartModel;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.context.annotation.SessionScope;
 
 /**
  * Created by mohsin on 5/20/2017.
@@ -14,7 +12,7 @@ import org.springframework.web.context.annotation.SessionScope;
 
 
 @Controller
-@SessionScope
+@SpringScopeView
 //@ManagedBean
 public class ExpenseChart implements Serializable {
 

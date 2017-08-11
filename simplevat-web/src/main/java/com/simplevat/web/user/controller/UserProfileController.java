@@ -1,11 +1,10 @@
 package com.simplevat.web.user.controller;
 
+import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.User;
 import com.simplevat.web.exception.UnauthorizedException;
 import com.simplevat.security.ContextUtils;
 import com.simplevat.security.UserContext;
-import com.simplevat.service.UserServiceNew;
-import com.simplevat.service.UserServiceNew;
 import com.simplevat.service.UserServiceNew;
 import com.simplevat.user.model.UserModel;
 import org.apache.commons.io.FilenameUtils;
@@ -14,14 +13,11 @@ import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import java.io.*;
 import java.nio.file.Files;
@@ -31,21 +27,16 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.transaction.TransactionRequiredException;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.context.annotation.SessionScope;
-import org.springframework.web.context.annotation.SessionScope;
 
 /**
  *
  * @author Uday
  */
 @Controller
-@SessionScope
+@SpringScopeView
 public class UserProfileController {
 
     private UserModel currentUser;

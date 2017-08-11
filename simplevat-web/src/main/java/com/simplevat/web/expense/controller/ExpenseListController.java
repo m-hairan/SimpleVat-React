@@ -1,32 +1,29 @@
 package com.simplevat.web.expense.controller;
 
+import com.github.javaplugs.jsf.SpringScopeView;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
 import com.simplevat.entity.Expense;
 import com.simplevat.web.expense.model.ExpenseModel;
 import com.simplevat.service.ExpenseService;
-import javax.faces.context.FacesContext;
-import org.springframework.context.annotation.Scope;
-import org.springframework.web.context.annotation.SessionScope;
+import java.io.Serializable;
 
 @Controller
-@SessionScope
-public class ExpenseListController extends ExpenseControllerHelper {
+@SpringScopeView
+public class ExpenseListController extends ExpenseControllerHelper implements Serializable{
 
     @Autowired
     private ExpenseService expenseService;
+    @Getter
+    @Setter
     private ExpenseModel selectedExpenseModel;
 
     private List<ExpenseModel> expenses;
@@ -49,19 +46,22 @@ public class ExpenseListController extends ExpenseControllerHelper {
         this.expenses = expenses;
     }
 
-    /**
-     * @return the selectedExpenseModel
-     */
-    public ExpenseModel getSelectedExpenseModel() {
-        return selectedExpenseModel;
-    }
-
-    /**
-     * @param selectedExpenseModel the selectedExpenseModel to set
-     */
-    public void setSelectedExpenseModel(ExpenseModel selectedExpenseModel) {
-        this.selectedExpenseModel = selectedExpenseModel;
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("selectedExpenseModel", selectedExpenseModel);
+//    /**
+//     * @return the selectedExpenseModel
+//     */
+//    public ExpenseModel getSelectedExpenseModel() {
+//        return selectedExpenseModel;
+//    }
+//
+//    /**
+//     * @param selectedExpenseModel the selectedExpenseModel to set
+//     */
+//    public void setSelectedExpenseModel(ExpenseModel selectedExpenseModel) {
+//        this.selectedExpenseModel = selectedExpenseModel;
+//    }
+    
+    public String redirectToEdit(){
+        return "create-expense?faces-redirect=true&selectedExpenseModelId="+selectedExpenseModel.getExpenseId();
     }
 
 }

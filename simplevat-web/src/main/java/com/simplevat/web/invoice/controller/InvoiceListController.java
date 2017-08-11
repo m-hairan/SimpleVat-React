@@ -1,7 +1,6 @@
 package com.simplevat.web.invoice.controller;
 
-import com.simplevat.criteria.InvoiceCriteria;
-import com.simplevat.criteria.ProjectCriteria;
+import com.github.javaplugs.jsf.SpringScopeView;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -19,23 +18,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.simplevat.dao.invoice.InvoiceFilter;
-import com.simplevat.entity.Project;
 import com.simplevat.entity.invoice.DiscountType;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.entity.invoice.InvoiceLineItem;
 import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.web.invoice.model.InvoiceModel;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Scope;
-import org.springframework.web.context.annotation.SessionScope;
 
 /**
  *
  * @author Hiren
  */
 @Controller
-@Scope("view")
+@SpringScopeView
 public class InvoiceListController implements Serializable {
 
     private static final long serialVersionUID = 9066359395680732884L;
@@ -46,7 +40,11 @@ public class InvoiceListController implements Serializable {
 
     @Getter
     @Setter
-    private InvoiceModel selectedInvoice;
+    private InvoiceModel selectedInvoiceModel;
+    
+    @Getter
+    @Setter
+    private Invoice selectedInvoice;
 
     @Autowired
     private InvoiceService invoiceService;
@@ -124,6 +122,6 @@ public class InvoiceListController implements Serializable {
     
 
     public String redirectEditInvoice(){
-        return "invoice.xhtml?faces-redirect=true&invoiceId"+selectedInvoice.getInvoiceId();
+        return "invoice.xhtml?faces-redirect=true&invoiceId"+selectedInvoiceModel.getInvoiceId();
     }
 }

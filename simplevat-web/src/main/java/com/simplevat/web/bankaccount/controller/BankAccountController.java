@@ -1,11 +1,10 @@
 package com.simplevat.web.bankaccount.controller;
 
+import com.github.javaplugs.jsf.SpringScopeView;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,17 +19,15 @@ import com.simplevat.service.CountryService;
 import com.simplevat.service.CurrencyService;
 import com.simplevat.service.bankaccount.BankAccountService;
 import com.simplevat.service.bankaccount.BankAccountStatusService;
-import com.simplevat.web.bankaccount.model.BankAccountModel;
 import com.simplevat.web.utils.FacesUtil;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.context.annotation.Scope;
 
 @Controller
-@Scope("view")
+@SpringScopeView
 public class BankAccountController extends BankAccountHelper implements Serializable {
 
     @Autowired
@@ -129,8 +126,9 @@ public class BankAccountController extends BankAccountHelper implements Serializ
             }
             if (selectedBankAccount.getBankAccountId() == null) {
                 bankAccountService.persist(selectedBankAccount);
+            } else {
+            bankAccountService.update(selectedBankAccount);
             }
-            bankAccountService.update(selectedBankAccount, selectedBankAccount.getBankAccountId());
         } catch (Exception e) {
             e.printStackTrace();
         }

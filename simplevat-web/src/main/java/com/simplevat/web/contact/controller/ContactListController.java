@@ -1,26 +1,24 @@
 package com.simplevat.web.contact.controller;
 
+import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.Contact;
 import com.simplevat.service.ContactService;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.context.annotation.SessionScope;
 
 @Controller
-@SessionScope
+@SpringScopeView
 public class ContactListController implements Serializable {
 
     private static final long serialVersionUID = 2549403337578048506L;
@@ -59,11 +57,11 @@ public class ContactListController implements Serializable {
 
     public Map<String, String> getFilters() {
         filters = new HashMap<>();
-//        filteredContacts.stream()
-//                .map((contact) -> contact.getFirstName().substring(0, 1).toUpperCase())
-//                .forEach((filterCharacter) -> {
-//                    filters.put(filterCharacter, filterCharacter);
-//                });
+        filteredContacts.stream()
+                .map((contact) -> contact.getFirstName().substring(0, 1).toUpperCase())
+               .forEach((filterCharacter) -> {
+                   filters.put(filterCharacter, filterCharacter);
+                });
         return filters;
     }
 
@@ -91,10 +89,23 @@ public class ContactListController implements Serializable {
         return filteredContacts;
 
     }
-
-    public void deleteContact(@Nonnull final Contact contact) {
+ 
+    public String redirectToEditContact() throws IOException {
+//        contactModel = new ContactModel();
+//        BeanUtils.copyProperties(contact, contactModel);
+//        contactModel.setEmailAddress(contact.getEmail());
+//        contactModel.setOrganizationName(contact.getOrganization());
+//        LOGGER.debug("Redirecting to create new contact page");
+//        if(contact.getContactId() == null){
+//            contactService.persist(contact);
+//        }else{
+//            contactService.update(contact, contact.getContactId());
+//        }
+       return "contact?faces-redirect=true&selectedContactId="+selectedContact.getContactId();
+    }
+    public void deleteContact(Contact contact) {
         contact.setDeleteFlag(Boolean.TRUE);
-        contactService.createOrUpdateContact(contact);
+        contactService.update(contact);
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
         context.addMessage(null, new FacesMessage("Contact deleted SuccessFully"));
