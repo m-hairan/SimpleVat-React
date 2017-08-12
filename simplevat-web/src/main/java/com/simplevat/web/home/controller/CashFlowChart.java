@@ -63,7 +63,7 @@ public class CashFlowChart {
 			Axis yAxis = areaModel.getAxis(AxisType.Y);
 			yAxis.setLabel("Cash Amount");
 			yAxis.setMin(0);
-			int maxValue = transactionService.getMaxTransactionValue();
+			int maxValue = transactionService.getMaxTransactionValue(cashInDataMap,cashOutDataMap);
 			yAxis.setMax(maxValue);
 		}
 		return areaModel;

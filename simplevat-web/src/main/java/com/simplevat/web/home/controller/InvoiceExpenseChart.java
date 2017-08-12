@@ -1,11 +1,23 @@
 package com.simplevat.web.home.controller;
 
-import com.github.javaplugs.jsf.SpringScopeView;
-import javax.annotation.PostConstruct;
 import java.io.Serializable;
+import java.util.Map;
 
-import org.primefaces.model.chart.*;
+import javax.annotation.PostConstruct;
+
+import org.primefaces.model.chart.Axis;
+import org.primefaces.model.chart.AxisType;
+import org.primefaces.model.chart.BarChartModel;
+import org.primefaces.model.chart.CategoryAxis;
+import org.primefaces.model.chart.ChartSeries;
+import org.primefaces.model.chart.LineChartModel;
+import org.primefaces.model.chart.LineChartSeries;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import com.github.javaplugs.jsf.SpringScopeView;
+import com.simplevat.service.ExpenseService;
+import com.simplevat.service.invoice.InvoiceService;
 
 /**
  * Created by mohsin on 5/12/2017.
@@ -17,6 +29,12 @@ public class InvoiceExpenseChart implements Serializable {
 
     private LineChartModel animatedModel1;
     private BarChartModel animatedModel2;
+    
+    @Autowired
+    private InvoiceService invoiceService;
+    
+    @Autowired
+    private ExpenseService expenseService;
 
     @PostConstruct
     public void init() {
@@ -32,7 +50,9 @@ public class InvoiceExpenseChart implements Serializable {
     }
 
     private void createAnimatedModels() {
-        animatedModel1 = initLinearModel();
+    	Map<Object,Number> invoiseData = invoiceService.getInvoicePerMonth();
+    	Map<Object,Number> expesneData = expenseService.getExpensePerMonth();
+        animatedModel1 = initLinearModel(invoiseData,expesneData);
         animatedModel1.setTitle("Invoices and Expenses");
         animatedModel1.setAnimate(true);
         animatedModel1.setLegendPosition("se");
@@ -42,7 +62,12 @@ public class InvoiceExpenseChart implements Serializable {
         animatedModel1.getAxes().put(AxisType.X, xAxis);
         Axis yAxis = animatedModel1.getAxis(AxisType.Y);
         yAxis.setMin(0);
-        yAxis.setMax(10);
+        if(invoiceService.getMaxValue(invoiseData) >= expenseService.getMaxValue(expesneData)) {
+        	yAxis.setMax(invoiceService.getMaxValue(invoiseData));
+        } else {
+        	yAxis.setMax(invoiceService.getMaxValue(expesneData));
+        }
+        
 
         animatedModel2 = initBarModel();
         animatedModel2.setTitle("VAT");
@@ -96,43 +121,17 @@ public class InvoiceExpenseChart implements Serializable {
         return model;
     }
 
-    private LineChartModel initLinearModel() {
+    private LineChartModel initLinearModel(Map<Object,Number> invoiceData, Map<Object,Number> expenseData) {
         LineChartModel model = new LineChartModel();
 
         LineChartSeries invoices = new LineChartSeries();
+        invoices.setData(invoiceData);
         invoices.setLabel("Invoices");
-//        invoices.setFill(true);
-
-        invoices.set("Jan", 2);
-        invoices.set("Feb", 1);
-        invoices.set("Mar", 3);
-        invoices.set("Apr", 6);
-        invoices.set("May", 8);
-        invoices.set("Jun",8);
-        invoices.set("Jul", 2);
-        invoices.set("Aug", 1);
-        invoices.set("Sep", 3);
-        invoices.set("Oct", 6);
-        invoices.set("Nov", 8);
-        invoices.set("Dec",8);
 
         LineChartSeries expenses = new LineChartSeries();
         expenses.setLabel("Expenses");
-//        expenses.setFill(true);
-
-        expenses.set("Jan", 6);
-        expenses.set("Feb", 3);
-        expenses.set("Mar", 2);
-        expenses.set("Apr", 7);
-        expenses.set("May", 9);
-        expenses.set("Jun", 6);
-        expenses.set("Jul", 3);
-        expenses.set("Aug", 2);
-        expenses.set("Sep", 7);
-        expenses.set("Oct", 9);
-        expenses.set("Nov", 7);
-        expenses.set("Dec", 9);
-
+        expenses.setData(expenseData);
+        
         model.addSeries(invoices);
         model.addSeries(expenses);
 

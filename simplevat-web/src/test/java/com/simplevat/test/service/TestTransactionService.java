@@ -68,11 +68,11 @@ public class TestTransactionService extends BaseManagerTest {
 			
 		}
 	}
-	@Test
+/*	@Test
 	public void getMaxValue(){
 		int d = transactionService.getMaxTransactionValue();
 		System.out.println("Max Value is ::::::::::::::::::::::::  "+d);
-	}
+	}*/
 	
 	/**
 	 * this method is used to generate the sample data for Transaction.

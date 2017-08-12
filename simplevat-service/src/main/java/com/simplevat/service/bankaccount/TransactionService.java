@@ -18,6 +18,6 @@ public interface TransactionService extends SimpleVatService<Integer, Transactio
 	
 	public Map<Object, Number> getCashInData();
 	
-	public int getMaxTransactionValue();
+	public int getMaxTransactionValue(Map<Object, Number> cashInMap, Map<Object, Number> cashOutMap);
 
 }
