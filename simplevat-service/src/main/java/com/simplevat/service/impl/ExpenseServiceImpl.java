@@ -57,7 +57,7 @@ public class ExpenseServiceImpl implements ExpenseService  {
 	}
 
 	@Override
-	public Number getVatOutQuartly() {
+	public int getVatOutQuartly() {
 		List<Object[]> rows = expenseDao.getVatOutPerMonthWise(util.getStartDate(Calendar.MONTH,-4).getTime(),util.getEndDate().getTime());
 		return util.addAmount(rows); 
 	}

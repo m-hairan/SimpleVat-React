@@ -3,6 +3,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui" 
+	xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
 	template="/WEB-INF/templates/template.xhtml">
 
 
@@ -135,7 +136,7 @@
 			<!--</div>-->
 			<!--</div>-->
 
-			<div class="ui-g-12 ui-md-6 ui-lg-3">
+<!-- 			<div class="ui-g-12 ui-md-6 ui-lg-3">
 				<div class="ui-g card colorbox colorbox-1">
 					<div class="ui-g-4">
 						<i class="material-icons">&#xE86C;</i>
@@ -145,8 +146,9 @@
 							class="colorbox-count">$3120</span>
 					</div>
 				</div>
-			</div>
-			<div class="ui-g-12 ui-md-6 ui-lg-3">
+			</div> -->
+			<si:cbox name="Vat In" icon="&#xE86C;" amount="#{vatCalculator.vatIn}" currency="$"/>
+<!-- 			<div class="ui-g-12 ui-md-6 ui-lg-3">
 				<div class="ui-g card colorbox colorbox-2">
 					<div class="ui-g-4">
 						<i class="material-icons">&#xE8C9;</i>
@@ -156,8 +158,9 @@
 							class="colorbox-count">$1200</span>
 					</div>
 				</div>
-			</div>
-			<div class="ui-g-12 ui-md-6 ui-lg-3">
+			</div> -->
+			<si:cbox name="Vat Out" icon="&#xE8C9;" amount="#{vatCalculator.vatOut}" currency="$"/>
+<!-- 			<div class="ui-g-12 ui-md-6 ui-lg-3">
 				<div class="ui-g card colorbox colorbox-3">
 					<div class="ui-g-4">
 						<i class="material-icons">&#xE160;</i>
@@ -167,8 +170,9 @@
 							class="colorbox-count">$1920</span>
 					</div>
 				</div>
-			</div>
-			<div class="ui-g-12 ui-md-6 ui-lg-3">
+			</div> -->
+			<si:cbox name="Vat Balance" icon="&#xE160;" amount="#{vatCalculator.vatBalance}" currency="$"/>
+<!-- 			<div class="ui-g-12 ui-md-6 ui-lg-3">
 				<div class="ui-g card colorbox colorbox-4">
 					<div class="ui-g-4">
 						<i class="material-icons">&#xE0BE;</i>
@@ -178,8 +182,8 @@
 							class="colorbox-count">82736</span>
 					</div>
 				</div>
-			</div>
-
+			</div> -->
+			<si:cbox name="Transactions" icon="&#xE0BE;" amount="#{vatCalculator.numberOfTransaction}" currency=""/>
 			<!--<div class="ui-g-12 ui-md-6 ui-lg-4 task-list">-->
 			<!--<p:panel header="Tasks">-->
 			<!--<ul>-->
