@@ -60,6 +60,7 @@ public class InvoiceExpenseChart implements Serializable {
         animatedModel1.setAnimate(true);
         animatedModel1.setLegendPosition("se");
         Axis xAxis = new CategoryAxis("Months");
+        xAxis.setTickAngle(45);
         animatedModel1.getAxes().put(AxisType.X, xAxis);
         Axis yAxis = animatedModel1.getAxis(AxisType.Y);
         yAxis.setMin(0);
@@ -79,6 +80,7 @@ public class InvoiceExpenseChart implements Serializable {
 
         yAxis = animatedModel2.getAxis(AxisType.Y);
         yAxis.setMin(0);
+        animatedModel2.getAxes().put(AxisType.X, xAxis);
         int maxValue = getMaxForVat(vatInData, vatOutData);
         yAxis.setMax(maxValue);
     }
