@@ -16,4 +16,6 @@ public interface InvoiceService extends SimpleVatService<Integer, Invoice> {
 	public int getMaxValue(Map<Object, Number> data);
 	
 	public Map<Object, Number> getVatInPerMonth();
+	
+	public int getVatInQuartly();
 }

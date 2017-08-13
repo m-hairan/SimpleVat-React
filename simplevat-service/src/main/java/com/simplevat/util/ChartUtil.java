@@ -41,6 +41,15 @@ public class ChartUtil {
 		return chartDatas;
 	}
 	
+	public int addAmount(List<Object[]> rows) {
+		int amount = 0;
+		List<ChartData> chartDatas = convert(rows);
+		for(ChartData chartData : chartDatas) {
+			amount=amount + chartData.getMonth();
+		}
+		return amount;
+	}
+	
 	private List<ChartData> populateForAlltheMonths(List<ChartData> chartDatas) {
 		List<ChartData> emptyChartDatas = getEmptyChartData();
 		if(chartDatas == null || chartDatas.size() ==0) {
@@ -58,9 +67,9 @@ public class ChartUtil {
 		
 	}
 	
-	public Calendar getStartDate() {
+	public Calendar getStartDate(int calendarField, int value) {
 		Calendar prevYear = Calendar.getInstance();
-		prevYear.add(Calendar.YEAR, -1);
+		prevYear.add(calendarField, value);
 		prevYear.set(Calendar.DAY_OF_MONTH, 1);
 		return prevYear;
 	}
@@ -76,7 +85,7 @@ public class ChartUtil {
 	private List<ChartData> getEmptyChartData() {
 		List<ChartData> emptyChartDatas = new ArrayList<ChartData>();
 		for(int i=0;i<12;i++) {
-			Calendar calendar = getStartDate();
+			Calendar calendar = getStartDate(Calendar.YEAR,-1);
 			calendar.add(Calendar.MONTH, i);
 			ChartData chartData = new ChartData(calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR),0);
 			emptyChartDatas.add(chartData);

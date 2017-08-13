@@ -1,5 +1,6 @@
 package com.simplevat.service.impl;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -41,18 +42,24 @@ public class ExpenseServiceImpl implements ExpenseService  {
 
 	@Override
 	public Map<Object, Number> getExpensePerMonth() {
-		List<Object[]> rows = expenseDao.getExpensePerMonth(util.getStartDate().getTime(),util.getEndDate().getTime());
+		List<Object[]> rows = expenseDao.getExpensePerMonth(util.getStartDate(Calendar.YEAR,-1).getTime(),util.getEndDate().getTime());
 		return util.getCashMap(rows);
 	}
 
 	@Override
 	public Map<Object,Number> getVatOutPerMonth() {
-		List<Object[]> rows = expenseDao.getVatOutPerMonthWise(util.getStartDate().getTime(),util.getEndDate().getTime());
+		List<Object[]> rows = expenseDao.getVatOutPerMonthWise(util.getStartDate(Calendar.YEAR,-1).getTime(),util.getEndDate().getTime());
 		return util.getCashMap(rows);
 	}
 	@Override
 	public int getMaxValue(Map<Object, Number> data) {
 		return util.getMaxValue(data);
+	}
+
+	@Override
+	public Number getVatOutQuartly() {
+		List<Object[]> rows = expenseDao.getVatOutPerMonthWise(util.getStartDate(Calendar.MONTH,-4).getTime(),util.getEndDate().getTime());
+		return util.addAmount(rows); 
 	}
 	
 

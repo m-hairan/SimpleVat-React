@@ -1,5 +1,6 @@
 package com.simplevat.service.impl.bankaccount;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,13 +40,13 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Override
 	public Map<Object, Number> getCashOutData() {
-		List<Object[]> rows = transactionDao.getCashOutData(util.getStartDate().getTime(),util.getEndDate().getTime());
+		List<Object[]> rows = transactionDao.getCashOutData(util.getStartDate(Calendar.YEAR,-1).getTime(),util.getEndDate().getTime());
 		return util.getCashMap(rows);
 	}
 
 	@Override
 	public Map<Object, Number> getCashInData() {
-		List<Object[]> rows = transactionDao.getCashInData(util.getStartDate().getTime(),util.getEndDate().getTime());
+		List<Object[]> rows = transactionDao.getCashInData(util.getStartDate(Calendar.YEAR,-1).getTime(),util.getEndDate().getTime());
 		return util.getCashMap(rows);
 	}
 

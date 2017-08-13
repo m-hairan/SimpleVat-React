@@ -1,5 +1,6 @@
 package com.simplevat.service.impl.invoice;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +33,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
 	@Override
 	public Map<Object, Number> getInvoicePerMonth() {
-		List<Object[]> rows = dao.getInvocePerMonth(util.getStartDate().getTime(),util.getEndDate().getTime());
+		List<Object[]> rows = dao.getInvocePerMonth(util.getStartDate(Calendar.YEAR,-1).getTime(),util.getEndDate().getTime());
 		return util.getCashMap(rows);
 	}
 	@Override
@@ -42,8 +43,14 @@ public class InvoiceServiceImpl implements InvoiceService {
 
 	@Override
 	public Map<Object, Number> getVatInPerMonth() {
-		List<Object[]> rows = dao.getVatInPerMonth(util.getStartDate().getTime(),util.getEndDate().getTime());
+		List<Object[]> rows = dao.getVatInPerMonth(util.getStartDate(Calendar.YEAR,-1).getTime(),util.getEndDate().getTime());
 		return util.getCashMap(rows);
+	}
+
+	@Override
+	public int getVatInQuartly() {
+		List<Object[]> rows =  dao.getVatInPerMonth(util.getStartDate(Calendar.MONTH,-4).getTime(),util.getEndDate().getTime());
+		return util.addAmount(rows);
 	}
 
 }
