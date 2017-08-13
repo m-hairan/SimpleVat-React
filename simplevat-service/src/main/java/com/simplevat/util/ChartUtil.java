@@ -33,9 +33,8 @@ public class ChartUtil {
 	private List<ChartData> convert(List<Object[]> rows) {
 		List<ChartData> chartDatas = new ArrayList<ChartData>();
 		for (Object[] row : rows) {
-			
-			String[] transactionDate = ((String) row[1]).split(" ");
-			ChartData chartData = new ChartData(Integer.parseInt(transactionDate[0]), Integer.parseInt(transactionDate[1]),(Number) row[0] );
+			String[] transactionDate = ((String) row[1]).split("-");
+			ChartData chartData = new ChartData(Integer.parseInt(transactionDate[0])-1, Integer.parseInt(transactionDate[1]),(Number) row[0] );
 			chartDatas.add(chartData);
 		}
 		
@@ -91,13 +90,17 @@ public class ChartUtil {
 		Number max = 0;
 		for (int i = 0; i < list.size(); i++) {
 			Number number = list.get(i);
-			if (number.intValue() > max.intValue()) {
+			if (number.doubleValue()> max.doubleValue()) {
 				max = number;
 			}
 		}
-		int y = max.intValue() + 50;
-		int value = y - ((y % 50));
-		return value;
+		int maxValue = 0;
+		if(max.doubleValue() < 10) {
+			maxValue = max.intValue()*2;
+		}else {
+			maxValue = max.intValue() + max.intValue()*1/5;
+		}
+		return maxValue;
 		
 	}
 

@@ -46,6 +46,11 @@ public class ExpenseServiceImpl implements ExpenseService  {
 	}
 
 	@Override
+	public Map<Object,Number> getVatOutPerMonth() {
+		List<Object[]> rows = expenseDao.getVatOutPerMonthWise(util.getStartDate().getTime(),util.getEndDate().getTime());
+		return util.getCashMap(rows);
+	}
+	@Override
 	public int getMaxValue(Map<Object, Number> data) {
 		return util.getMaxValue(data);
 	}

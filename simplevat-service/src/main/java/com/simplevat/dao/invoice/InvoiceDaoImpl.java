@@ -25,12 +25,33 @@ public class InvoiceDaoImpl extends AbstractDao<Integer, Invoice> implements Inv
 		try {
 			String queryString = "select "
 					+ "sum(li.invoiceLineItemUnitPrice*li.invoiceLineItemQuantity) as invoiceTotal, "
-					//+ "sum(li.invoiceLineItemVat*li.invoiceLineItemQuantity) as vatIn, "
-					+ "CONCAT(MONTH(i.invoiceDate),' ' , Year(i.invoiceDate)) as month "
+					+ "CONCAT(MONTH(i.invoiceDate),'-', Year(i.invoiceDate)) as month "
 					+ "from Invoice i JOIN i.invoiceLineItems li "
 					+ "where i.deleteFlag = 'false' and li.deleteFlag= 'false' "
 					+ "and i.invoiceDate BETWEEN :startDate AND :endDate "
-					+ "group by CONCAT(MONTH(i.invoiceDate),' ' , Year(i.invoiceDate))";
+					+ "group by CONCAT(MONTH(i.invoiceDate),'-' , Year(i.invoiceDate))";
+
+			Query query = getEntityManager().createQuery(queryString)
+					.setParameter("startDate", startDate, TemporalType.DATE)
+					.setParameter("endDate", endDate, TemporalType.DATE);
+			invoices = query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return invoices;
+	}
+
+	@Override
+	public List<Object[]> getVatInPerMonth(Date startDate, Date endDate) {
+		List<Object[]> invoices = new ArrayList<>(0);
+		try {
+			String queryString = "select "
+					+ "sum((li.invoiceLineItemUnitPrice*li.invoiceLineItemQuantity*li.invoiceLineItemVat)/100) as vatInTotal, "
+					+ "CONCAT(MONTH(i.invoiceDate),'-' , Year(i.invoiceDate)) as month "
+					+ "from Invoice i JOIN i.invoiceLineItems li "
+					+ "where i.deleteFlag = 'false' and li.deleteFlag= 'false' "
+					+ "and i.invoiceDate BETWEEN :startDate AND :endDate "
+					+ "group by CONCAT(MONTH(i.invoiceDate),'-' , Year(i.invoiceDate))";
 
 			Query query = getEntityManager().createQuery(queryString)
 					.setParameter("startDate", startDate, TemporalType.DATE)

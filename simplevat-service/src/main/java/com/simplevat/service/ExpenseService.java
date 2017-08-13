@@ -13,6 +13,8 @@ public interface ExpenseService extends SimpleVatService<Integer, Expense> {
 	
 	public Map<Object, Number> getExpensePerMonth();
 	
+	public Map<Object,Number> getVatOutPerMonth();
+	
 	public int getMaxValue(Map<Object, Number> data);
 
 }

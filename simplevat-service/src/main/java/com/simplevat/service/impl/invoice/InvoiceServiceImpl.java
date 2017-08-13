@@ -40,4 +40,10 @@ public class InvoiceServiceImpl implements InvoiceService {
 		return util.getMaxValue(data);
 	}
 
+	@Override
+	public Map<Object, Number> getVatInPerMonth() {
+		List<Object[]> rows = dao.getVatInPerMonth(util.getStartDate().getTime(),util.getEndDate().getTime());
+		return util.getCashMap(rows);
+	}
+
 }

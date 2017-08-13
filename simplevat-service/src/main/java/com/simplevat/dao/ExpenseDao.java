@@ -10,4 +10,6 @@ public interface ExpenseDao extends Dao<Integer, Expense>{
 	public List<Expense> getAllExpenses();
 	
 	public List<Object[]> getExpensePerMonth(Date startDate, Date endDate);
+	
+	public List<Object[]> getVatOutPerMonthWise(Date startDate, Date endDate);
 }

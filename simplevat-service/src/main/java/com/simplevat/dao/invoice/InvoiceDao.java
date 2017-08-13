@@ -13,6 +13,21 @@ import com.simplevat.entity.invoice.Invoice;
  */
 public interface InvoiceDao extends Dao<Integer, Invoice> {
 	
+	/**
+	 * This methods take date duration and calculate Invoices per month wise
+	 * @param startDate
+	 * @param endDate
+	 * @return List Of Invoice, month wise
+	 */
 	public List<Object[]> getInvocePerMonth(Date startDate, Date endDate);
+	
+	/**
+	 * This methods take date duration and calculate VatIn per month wise
+	 * @param startDate
+	 * @param endDate
+	 * @return List Of Invoice, month wise
+	 */
+	public List<Object[]> getVatInPerMonth(Date startDate, Date endDate);
+	
 
 }

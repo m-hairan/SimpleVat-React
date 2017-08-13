@@ -27,10 +27,10 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
 		List<Object[]> cashInData = new ArrayList<>(0);
 		try {
 			String queryString = "select "
-					+ "sum(transactionAmount) as total, CONCAT(MONTH(transactionDate),' ' , Year(transactionDate)) as month "
+					+ "sum(transactionAmount) as total, CONCAT(MONTH(transactionDate),'-' , Year(transactionDate)) as month "
 					+ "from Transaction "
 					+ "where debitCreditFlag = 'd' and transactionDate BETWEEN :startDate AND :endDate "
-					+ "group by CONCAT(MONTH(transactionDate),' ' , Year(transactionDate))";
+					+ "group by CONCAT(MONTH(transactionDate),'-' , Year(transactionDate))";
 
 			Query query = getEntityManager().createQuery(queryString)
 					.setParameter("startDate", startDate, TemporalType.DATE)
@@ -47,10 +47,10 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
 		List<Object[]> cashOutData = new ArrayList<>(0);
 		try {
 			String queryString = "select "
-					+ "sum(transactionAmount) as total, CONCAT(MONTH(transactionDate),' ' , Year(transactionDate)) as month "
+					+ "sum(transactionAmount) as total, CONCAT(MONTH(transactionDate),'-' , Year(transactionDate)) as month "
 					+ "from Transaction "
 					+ "where debitCreditFlag = 'c' and transactionDate BETWEEN :startDate AND :endDate "
-					+ "group by CONCAT(MONTH(transactionDate),' ' , Year(transactionDate))";
+					+ "group by CONCAT(MONTH(transactionDate),'-' , Year(transactionDate))";
 			Query query = getEntityManager().createQuery(queryString)
 					.setParameter("startDate", startDate, TemporalType.DATE)
 					.setParameter("endDate", endDate, TemporalType.DATE);

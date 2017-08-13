@@ -38,34 +38,34 @@ public class CashFlowChart {
 		LineChartSeries cashIn = new LineChartSeries();
 		cashIn.setFill(true);
 
-		if (null != transactionService) {
-			Map<Object, Number> cashInDataMap = transactionService.getCashInData();
-			cashIn.setData(cashInDataMap);
-			cashIn.setLabel("Cash In");
 
-			LineChartSeries cashOut = new LineChartSeries();
-			cashOut.setFill(true);
-			cashOut.setLabel("Cash Out");
-			Map<Object, Number> cashOutDataMap = transactionService.getCashOutData();
-			cashOut.setData(cashOutDataMap);
+		Map<Object, Number> cashInDataMap = transactionService.getCashInData();
+		cashIn.setData(cashInDataMap);
+		cashIn.setLabel("Cash In");
 
-			areaModel.addSeries(cashIn);
-			areaModel.addSeries(cashOut);
+		LineChartSeries cashOut = new LineChartSeries();
+		cashOut.setFill(true);
+		cashOut.setLabel("Cash Out");
+		Map<Object, Number> cashOutDataMap = transactionService.getCashOutData();
+		cashOut.setData(cashOutDataMap);
 
-			areaModel.setTitle("Cash Flow");
-			areaModel.setLegendPosition("ne");
-			areaModel.setStacked(true);
-			areaModel.setShowPointLabels(true);
-			areaModel.setAnimate(true);
+		areaModel.addSeries(cashIn);
+		areaModel.addSeries(cashOut);
 
-			Axis xAxis = new CategoryAxis("Months");
-			areaModel.getAxes().put(AxisType.X, xAxis);
-			Axis yAxis = areaModel.getAxis(AxisType.Y);
-			yAxis.setLabel("Cash Amount");
-			yAxis.setMin(0);
-			int maxValue = transactionService.getMaxTransactionValue(cashInDataMap,cashOutDataMap);
-			yAxis.setMax(maxValue);
-		}
+		areaModel.setTitle("Cash Flow");
+		areaModel.setLegendPosition("ne");
+		//areaModel.setStacked(true);
+		areaModel.setShowPointLabels(true);
+		areaModel.setAnimate(true);
+
+		Axis xAxis = new CategoryAxis("Months");
+		areaModel.getAxes().put(AxisType.X, xAxis);
+		Axis yAxis = areaModel.getAxis(AxisType.Y);
+		yAxis.setLabel("Cash Amount");
+		yAxis.setMin(0);
+		int maxValue = transactionService.getMaxTransactionValue(cashInDataMap,cashOutDataMap);
+		yAxis.setMax(maxValue);
+
 		return areaModel;
 
 	}

@@ -30,7 +30,7 @@ public class ChartData implements Comparable<ChartData> {
 	}
 	
 	public String getKey() {
-		String key = DateUtils.getMonthForInt(this.month) +  " " + String.valueOf(this.year).substring(2, 4);
+		String key = DateUtils.getMonthForInt(this.month) +  "-" + String.valueOf(this.year).substring(2, 4);
 		return key;
 	}
 	public int getMonth() {
