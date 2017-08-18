@@ -1,6 +1,7 @@
 package com.simplevat.dao.invoice;
 
 import com.simplevat.dao.AbstractDao;
+import com.simplevat.entity.Event;
 import com.simplevat.entity.invoice.Invoice;
 
 import java.util.ArrayList;
@@ -58,6 +59,25 @@ public class InvoiceDaoImpl extends AbstractDao<Integer, Invoice> implements Inv
 					.setParameter("endDate", endDate, TemporalType.DATE);
 			invoices = query.getResultList();
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return invoices;
+	}
+
+	@Override
+	public List<Object[]> getInvoiceDue(Date startDate, Date endDate) {
+		List<Object[]> invoices = new ArrayList<>(0);
+		try {
+			String queryString = "select "
+					+ "invoiceReferenceNumber, invoiceText, invoiceDate, invoiceDueOn "
+					+ "from Invoice i "
+					+ "where i.deleteFlag = 'false' "
+					+ "and i.invoiceDate BETWEEN :startDate AND :endDate ";
+			Query query = getEntityManager().createQuery(queryString)
+					.setParameter("startDate", startDate, TemporalType.DATE)
+					.setParameter("endDate", endDate, TemporalType.DATE);
+			invoices = query.getResultList();			
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		return invoices;

@@ -29,5 +29,13 @@ public interface InvoiceDao extends Dao<Integer, Invoice> {
 	 */
 	public List<Object[]> getVatInPerMonth(Date startDate, Date endDate);
 	
+	/**
+	 * This methods return list of event due for given date range
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
+	public List<Object[]> getInvoiceDue(Date startDate, Date endDate);
+	
 
 }

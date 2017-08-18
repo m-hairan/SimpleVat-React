@@ -411,11 +411,16 @@
 			<!--</h:form>-->
 			<!--</div>-->
 
-			<div class="ui-g-12 ui-md-8">
+<!-- 			<div class="ui-g-12 ui-md-8">
 				<p:panel header="Calendar" style="height:100%">
 					<p:schedule value="#{scheduleView.eventModel}" />
 				</p:panel>
-			</div>
+			</div> -->
+ 			<div class="ui-g-12 ui-md-8">
+				<p:panel header="Calendar" style="height:100%">
+					<p:schedule value="#{eventCalendar.eventModel}" />
+				</p:panel>
+			</div>			
 			<div class="ui-g-12 ui-md-4">
 				<p:panel header="Activity" style="height:100%">
 					<div class="activity-header">
