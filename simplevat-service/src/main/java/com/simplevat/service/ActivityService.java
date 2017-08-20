@@ -1,9 +1,10 @@
 package com.simplevat.service;
 
-import com.simplevat.entity.Activity;
-import com.simplevat.entity.ActivityId;
+import java.util.List;
 
-public abstract class ActivityService extends SimpleVatService<ActivityId, Activity> {
+import com.simplevat.entity.Activity;
+
+public interface  ActivityService {
 	
-	  public abstract void logActivity(Activity activity);
+	  public List<Activity>  getLatestActivites(int maxActiviyCount);
 }

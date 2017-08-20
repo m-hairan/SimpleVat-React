@@ -146,6 +146,9 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
     }
 
     public List<Currency> completeCurrency(String currencyStr) {
+    	if(this.currencies == null) {
+    		this.currencies = currencyService.getCurrencies();
+    	}
         List<Currency> currencySuggestion = new ArrayList<>();
         Iterator<Currency> currencyIterator = this.currencies.iterator();
 

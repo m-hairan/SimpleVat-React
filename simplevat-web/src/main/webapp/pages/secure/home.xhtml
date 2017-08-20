@@ -2,7 +2,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" 
+	xmlns:p="http://primefaces.org/ui"
 	xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
 	template="/WEB-INF/templates/template.xhtml">
 
@@ -11,34 +11,34 @@
 
 	<ui:define name="head">
 		<script type="text/javascript">
-            //<![CDATA[
-            function skinChart() {
-                this.cfg.shadow = false;
-                this.cfg.title = '';
-                this.cfg.seriesColors = ['#FFC107', '#03A9F4'];
-                this.cfg.grid = {
-                    background: '#ffffff',
-                    borderColor: '#ffffff',
-                    gridLineColor: '#EEEEEE',
-                    shadow: false
-                };
-                this.cfg.axesDefaults = {
-                    rendererOptions: {
-                        textColor: '#212121'
-                    }
-                };
-                this.cfg.seriesDefaults = {
-                    shadow: false,
-                    lineWidth: 1,
-                    markerOptions: {
-                        shadow: false,
-                        size: 7,
-                        style: 'circle'
-                    }
-                }
-            }
-            //]]>
-        </script>
+			//<![CDATA[
+			function skinChart() {
+				this.cfg.shadow = false;
+				this.cfg.title = '';
+				this.cfg.seriesColors = [ '#FFC107', '#03A9F4' ];
+				this.cfg.grid = {
+					background : '#ffffff',
+					borderColor : '#ffffff',
+					gridLineColor : '#EEEEEE',
+					shadow : false
+				};
+				this.cfg.axesDefaults = {
+					rendererOptions : {
+						textColor : '#212121'
+					}
+				};
+				this.cfg.seriesDefaults = {
+					shadow : false,
+					lineWidth : 1,
+					markerOptions : {
+						shadow : false,
+						size : 7,
+						style : 'circle'
+					}
+				}
+			}
+			//]]>
+		</script>
 		<style type="text/css">
 .main-content {
 	padding: 0;
@@ -78,14 +78,17 @@
 			</div>
 
 			<div class="ui-g-12 ui-md-4">
-				<p:scrollPanel header="Bank Accounts" mode="native" style="height:400px">
-				<ul class="activity-list">
-					<ui:repeat value="#{bankAccountController.populateAccountDetails()}" var="value">
-						<!--#{value.bankAccountId} -->
-						
+				<p:scrollPanel header="Bank Accounts" mode="native"
+					style="height:400px">
+					<ul class="activity-list">
+						<ui:repeat
+							value="#{bankAccountController.populateAccountDetails()}"
+							var="value">
+							<!--#{value.bankAccountId} -->
+
 							<li>
 								<div class="count" style="background-color: #00bcd4">
-								#{value.bankAccountCurrency.currencySymbol}#{value.currentBalance}</div>
+									#{value.bankAccountCurrency.currencySymbol}#{value.currentBalance}</div>
 								<div class="ui-g">
 									<div class="ui-g-6">
 										#{value.bankName}
@@ -103,10 +106,10 @@
 								</div>
 							</li>
 
-						
 
-					</ui:repeat>
-						</ul>
+
+						</ui:repeat>
+					</ul>
 
 					<!--<div class="activity-header">-->
 					<!--<div class="ui-g">-->
@@ -136,7 +139,7 @@
 			<!--</div>-->
 			<!--</div>-->
 
-<!-- 			<div class="ui-g-12 ui-md-6 ui-lg-3">
+			<!-- 			<div class="ui-g-12 ui-md-6 ui-lg-3">
 				<div class="ui-g card colorbox colorbox-1">
 					<div class="ui-g-4">
 						<i class="material-icons">&#xE86C;</i>
@@ -147,8 +150,9 @@
 					</div>
 				</div>
 			</div> -->
-			<si:cbox name="Vat In" icon="&#xE86C;" amount="#{vatCalculator.vatIn}" currency="$"/>
-<!-- 			<div class="ui-g-12 ui-md-6 ui-lg-3">
+			<si:cbox name="Vat In" icon="&#xE86C;"
+				amount="#{vatCalculator.vatIn}" currency="$" />
+			<!-- 			<div class="ui-g-12 ui-md-6 ui-lg-3">
 				<div class="ui-g card colorbox colorbox-2">
 					<div class="ui-g-4">
 						<i class="material-icons">&#xE8C9;</i>
@@ -159,8 +163,9 @@
 					</div>
 				</div>
 			</div> -->
-			<si:cbox name="Vat Out" icon="&#xE8C9;" amount="#{vatCalculator.vatOut}" currency="$"/>
-<!-- 			<div class="ui-g-12 ui-md-6 ui-lg-3">
+			<si:cbox name="Vat Out" icon="&#xE8C9;"
+				amount="#{vatCalculator.vatOut}" currency="$" />
+			<!-- 			<div class="ui-g-12 ui-md-6 ui-lg-3">
 				<div class="ui-g card colorbox colorbox-3">
 					<div class="ui-g-4">
 						<i class="material-icons">&#xE160;</i>
@@ -171,8 +176,9 @@
 					</div>
 				</div>
 			</div> -->
-			<si:cbox name="Vat Balance" icon="&#xE160;" amount="#{vatCalculator.vatBalance}" currency="$"/>
-<!-- 			<div class="ui-g-12 ui-md-6 ui-lg-3">
+			<si:cbox name="Vat Balance" icon="&#xE160;"
+				amount="#{vatCalculator.vatBalance}" currency="$" />
+			<!-- 			<div class="ui-g-12 ui-md-6 ui-lg-3">
 				<div class="ui-g card colorbox colorbox-4">
 					<div class="ui-g-4">
 						<i class="material-icons">&#xE0BE;</i>
@@ -183,7 +189,8 @@
 					</div>
 				</div>
 			</div> -->
-			<si:cbox name="Transactions" icon="&#xE0BE;" amount="#{vatCalculator.numberOfTransaction}" currency=""/>
+			<si:cbox name="Transactions" icon="&#xE0BE;"
+				amount="#{vatCalculator.numberOfTransaction}" currency="" />
 			<!--<div class="ui-g-12 ui-md-6 ui-lg-4 task-list">-->
 			<!--<p:panel header="Tasks">-->
 			<!--<ul>-->
@@ -411,23 +418,23 @@
 			<!--</h:form>-->
 			<!--</div>-->
 
-<!-- 			<div class="ui-g-12 ui-md-8">
+			<!-- 			<div class="ui-g-12 ui-md-8">
 				<p:panel header="Calendar" style="height:100%">
 					<p:schedule value="#{scheduleView.eventModel}" />
 				</p:panel>
 			</div> -->
- 			<div class="ui-g-12 ui-md-8">
+			<div class="ui-g-12 ui-md-8">
 				<p:panel header="Calendar" style="height:100%">
 					<p:schedule value="#{eventCalendar.eventModel}" />
 				</p:panel>
-			</div>			
+			</div>
 			<div class="ui-g-12 ui-md-4">
 				<p:panel header="Activity" style="height:100%">
 					<div class="activity-header">
 						<div class="ui-g">
 							<div class="ui-g-6">
 								<span style="font-weight: bold">Last Activity</span>
-								<p>Updated 1 minute ago</p>
+								<!-- <p>Updated 1 minute ago</p> -->
 							</div>
 							<div class="ui-g-6" style="text-align: right">
 								<p:commandButton type="button" icon="ui-icon-update" />
@@ -435,48 +442,19 @@
 						</div>
 					</div>
 					<ul class="activity-list">
-						<li>
-							<div class="count">$900</div>
-							<div class="ui-g">
-								<div class="ui-g-6">Income</div>
-								<div class="ui-g-6">95%</div>
-							</div>
-						</li>
-						<li>
-							<div class="count" style="background-color: #ffc107">$250</div>
-							<div class="ui-g">
-								<div class="ui-g-6">Tax</div>
-								<div class="ui-g-6">24%</div>
-							</div>
-						</li>
-						<li>
-							<div class="count" style="background-color: #673AB7">$125</div>
-							<div class="ui-g">
-								<div class="ui-g-6">Invoices</div>
-								<div class="ui-g-6">55%</div>
-							</div>
-						</li>
-						<li>
-							<div class="count" style="background-color: #00bcd4">$250</div>
-							<div class="ui-g">
-								<div class="ui-g-6">Expenses</div>
-								<div class="ui-g-6">15%</div>
-							</div>
-						</li>
-						<li>
-							<div class="count" style="background-color: #607D8B">$350</div>
-							<div class="ui-g">
-								<div class="ui-g-6">Bonus</div>
-								<div class="ui-g-6">5%</div>
-							</div>
-						</li>
-						<li>
-							<div class="count" style="background-color: #FF5722">$500</div>
-							<div class="ui-g">
-								<div class="ui-g-6">Revenue</div>
-								<div class="ui-g-6">25%</div>
-							</div>
-						</li>
+						<ui:repeat var="activity" value="#{activityController.activities}">
+							<li>
+								<!-- <div class="count">#{activity.field1}</div> -->
+								<div class="ui-g">
+									<div class="ui-g-6">#{activity.field3}</div>
+									<div class="ui-g-6">#{activityController.getLastUpdatedTime(activity)}</div>
+								</div>								
+								<div class="ui-g">
+									<div class="ui-g-6">#{activity.field1}</div>
+									<div class="ui-g-6">#{activity.field2}</div>
+								</div>								
+							</li>
+						</ui:repeat>
 					</ul>
 				</p:panel>
 			</div>

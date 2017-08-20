@@ -11,5 +11,7 @@ public abstract class BankAccountService extends SimpleVatService<Integer,BankAc
 
 
 	public abstract  List<BankAccount>  getBankAccountByUser(int userId);
+	
+	
 
 }

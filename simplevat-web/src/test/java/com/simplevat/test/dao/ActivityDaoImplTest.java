@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.simplevat.dao.ActivityDao;
 import com.simplevat.entity.Activity;
-import com.simplevat.entity.ActivityId;
 import com.simplevat.test.common.BaseManagerTest;
 
 @Ignore
@@ -23,25 +22,28 @@ public class ActivityDaoImplTest extends BaseManagerTest {
 	
 	private static final String MODULE_CODE="MODULE_CODE";
 	private static final String ACTIVITY_CODE="ACTIVITY_CODE";
+	private int activityId;
 	
 	@Before
 	public void setUp() {
-		activityDao.update(getActivity());
-		Activity activity = activityDao.findByPK(getActivity().getActivityId());
+		Activity activity = activityDao.update(getActivity());
+		activityId = activity.getActivityId();
+		activity = activityDao.findByPK(activityId);
 		assertNotNull(activity);
 	}
 	
 	
 	@After
 	public void tearDown() {
-		activityDao.delete(getActivity());
-		Activity activity = activityDao.findByPK(getActivity().getActivityId());
+		Activity activity = activityDao.findByPK(activityId);
+		activityDao.delete(activity);
+		activity = activityDao.findByPK(activityId);
 		assertNull(activity);
 	}
 
 	@Test
 	public void testUpdate() {
-		Activity activity = getActivity();
+		Activity activity = activityDao.findByPK(activityId);
 		activity.setField1("CHANGED");
 		activity = activityDao.update(activity);
 		assertNotNull(activity);
@@ -50,14 +52,12 @@ public class ActivityDaoImplTest extends BaseManagerTest {
 	
 	private Activity getActivity() {
 		Activity activity = new Activity();
+		activity.setModuleCode(MODULE_CODE);
+		activity.setActivityCode(ACTIVITY_CODE);
 		activity.setField1("FIELD_1");
 		activity.setField2("FIELD_2");
 		activity.setField3("FIELD_3");
 		activity.setUpdatedBy(3);
-		ActivityId id = new ActivityId();
-		id.setActivityCode(ACTIVITY_CODE);
-		id.setModuleCode(MODULE_CODE);
-		activity.setActivityId(id);
 		return activity;
 		
 	}

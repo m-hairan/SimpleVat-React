@@ -13,13 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.simplevat.dao.invoice.InvoiceDao;
 import com.simplevat.entity.Activity;
-import com.simplevat.entity.ActivityId;
 import com.simplevat.entity.Event;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.entity.invoice.InvoiceLineItem;
-import com.simplevat.service.ActivityService;
 import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.util.ChartUtil;
 
@@ -33,31 +30,19 @@ public class InvoiceServiceImpl extends InvoiceService {
 
 	
 	private static final String MODULE_CODE = "Invoice";
-	
-    @Autowired
-    public InvoiceDao dao;
     
     @Autowired
     ChartUtil util;
     
-/*    @Autowired
-    ActivityService activityService;*/
-
-    @Override
-    public InvoiceDao getDao() {
-        return dao;
-    }
-    
     @Override
     public Invoice update(Invoice invoice) {
-    	Invoice updatedInvoice = getDao().update(invoice);
-    	//activityService.logActivity(getActivityInstance(invoice));
+    	Invoice updatedInvoice = super.update(invoice,null, getActivity(invoice));
     	return updatedInvoice;
     }
 
 	@Override
 	public Map<Object, Number> getInvoicePerMonth() {
-		List<Object[]> rows = dao.getInvocePerMonth(util.getStartDate(Calendar.YEAR,-1).getTime(),util.getEndDate().getTime());
+		List<Object[]> rows = getDao().getInvocePerMonth(util.getStartDate(Calendar.YEAR,-1).getTime(),util.getEndDate().getTime());
 		return util.getCashMap(rows);
 	}
 	@Override
@@ -67,19 +52,19 @@ public class InvoiceServiceImpl extends InvoiceService {
 
 	@Override
 	public Map<Object, Number> getVatInPerMonth() {
-		List<Object[]> rows = dao.getVatInPerMonth(util.getStartDate(Calendar.YEAR,-1).getTime(),util.getEndDate().getTime());
+		List<Object[]> rows = getDao().getVatInPerMonth(util.getStartDate(Calendar.YEAR,-1).getTime(),util.getEndDate().getTime());
 		return util.getCashMap(rows);
 	}
 
 	@Override
 	public int getVatInQuartly() {
-		List<Object[]> rows =  dao.getVatInPerMonth(util.getStartDate(Calendar.MONTH,-4).getTime(),util.getEndDate().getTime());
+		List<Object[]> rows =  getDao().getVatInPerMonth(util.getStartDate(Calendar.MONTH,-4).getTime(),util.getEndDate().getTime());
 		return util.addAmount(rows);
 	}
 
 	@Override
 	public List<Event> getInvoiceAsEvent() {
-		List<Object[]> rows =  dao.getInvoiceDue(util.getStartDate(Calendar.MONTH,-6).getTime(), util.getStartDate(Calendar.MONTH,6).getTime());
+		List<Object[]> rows =  getDao().getInvoiceDue(util.getStartDate(Calendar.MONTH,-6).getTime(), util.getStartDate(Calendar.MONTH,6).getTime());
 		return convertEvents(rows);
 	}
 	
@@ -113,10 +98,12 @@ public class InvoiceServiceImpl extends InvoiceService {
 		return events;
 	}
 	
-	
-	private Activity getActivityInstance(Invoice invoice) {
+	@Override
+	protected Activity getActivity(Invoice invoice) {
 		Activity activity = new Activity();
-		activity.setActivityId(new ActivityId(MODULE_CODE, "UPDATE"));
+		activity.setLoggingRequired(true);
+		activity.setModuleCode(MODULE_CODE);
+		activity.setActivityCode(" Updated ");
 		Collection<InvoiceLineItem> lineItems = invoice.getInvoiceLineItems();
 		long amount = 0;
 		for(InvoiceLineItem lineItem : lineItems) {
@@ -125,12 +112,13 @@ public class InvoiceServiceImpl extends InvoiceService {
 		String currency = invoice.getCurrency().getCurrencySymbol();
 		String field1 = currency + amount;
 		
-		String field2 = "Invoice Updated ";
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MM dd");
-		String field3 = "Invoice Date " + invoice.getInvoiceDate().format(formatter);
-		activity.setField1(field1);
+		String field3 = "Invoice Updated (" + invoice.getInvoiceReferenceNumber() + ")";
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
+		String field2 = "Invoice Date: " + invoice.getInvoiceDate().format(formatter);
+		activity.setField1("Invoice Amount: " + field1);
 		activity.setField2(field2);
 		activity.setField3(field3);
+		activity.setLastUpdateDate(LocalDateTime.now());
 		return activity;
 	}
 

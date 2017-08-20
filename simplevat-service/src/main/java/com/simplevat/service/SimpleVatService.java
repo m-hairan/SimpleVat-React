@@ -1,15 +1,23 @@
 package com.simplevat.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.simplevat.dao.AbstractFilter;
+import com.simplevat.dao.ActivityDao;
 import com.simplevat.dao.Dao;
+import com.simplevat.entity.Activity;
 import com.simplevat.service.exceptions.ServiceErrorCode;
 import com.simplevat.service.exceptions.ServiceException;
 
 public abstract class SimpleVatService<PK, ENTITY> {
+	
+	@Autowired
+	private ActivityDao activityDao;
 
 	public ENTITY findByPK(PK pk) {
 		ENTITY returnEntity = getDao().findByPK(pk);
@@ -24,41 +32,63 @@ public abstract class SimpleVatService<PK, ENTITY> {
 	}
 
 	public void persist(ENTITY entity, PK pk) {
-		ENTITY returnEntity = getDao().findByPK(pk);
-		if (returnEntity != null) {
-			throw new ServiceException("", ServiceErrorCode.RecordAlreadyExists);
-		}
-		getDao().persist(entity);
+		persist(entity,pk,null);
 
 	}
+	
+	protected void persist(ENTITY entity,  PK pk, Activity activity) {
+		if(pk != null) {
+			ENTITY returnEntity = getDao().findByPK(pk);
+			if (returnEntity != null) {
+				throw new ServiceException("", ServiceErrorCode.RecordAlreadyExists);
+			}
+		}
 
+		getDao().persist(entity);
+		persistActivity(entity, activity, " Created ");
+	}
+	
+	public void persist(ENTITY entity) {
+		persist(entity, null);
+	}
 	public ENTITY update(ENTITY entity, PK pk) {
+		return update(entity,  pk, null);
+	}
+	
+	public ENTITY update(ENTITY entity) {
+		return update(entity,null);
+	}
+	
+	protected ENTITY update(ENTITY entity,  PK pk, Activity activity) {
 		// commenting this as we are calling update for save and update method both
 		// ENTITY returnEntity = getDao().findByPK(pk);
 		// if(returnEntity == null) {
 		// throw new ServiceException("", ServiceErrorCode.RecordDoesntExists);
 		// }
-		return getDao().update(entity);
+		entity = getDao().update(entity);
+		persistActivity(entity,activity, " Updated ");
+		return entity;
 	}
 
 	public void delete(ENTITY entity) {
-		getDao().delete(entity);
+		delete(entity,null);
 	}
 
-	public void persist(ENTITY entity) {
-		getDao().persist(entity);
-	}
-
-	public ENTITY update(ENTITY entity) {
-		return getDao().update(entity);
-	}
 
 	public void delete(ENTITY entity, PK pk) {
-		ENTITY returnEntity = getDao().findByPK(pk);
-		if (returnEntity == null) {
-			throw new ServiceException("", ServiceErrorCode.RecordDoesntExists);
+		delete(entity, pk, null);
+	}
+
+
+	protected void delete(ENTITY entity, PK pk, Activity activity) {
+		if(pk != null) {
+			ENTITY returnEntity = getDao().findByPK(pk);
+			if (returnEntity == null) {
+				throw new ServiceException("", ServiceErrorCode.RecordDoesntExists);
+			}		
 		}
 		getDao().delete(entity);
+		persistActivity(entity, activity, " Removed ");
 
 	}
 
@@ -82,5 +112,32 @@ public abstract class SimpleVatService<PK, ENTITY> {
 	}
 
 	protected abstract Dao<PK, ENTITY> getDao();
+	
+	protected Activity getActivity(ENTITY entity) {
+		return null;
+	}
+	
+	private Activity getDefaultLogActivity(ENTITY entity, String activityCode) {
+		String moduleCode = entity.getClass().getSimpleName();
+		Activity activity = new Activity();
+		activity.setModuleCode(moduleCode);
+		activity.setActivityCode(activityCode);
+		activity.setField1("");
+		activity.setField2("");
+		activity.setField3(moduleCode + " " + activityCode);
+		activity.setLoggingRequired(true);
+		activity.setLastUpdateDate(LocalDateTime.now());
+		return activity;
+	}
+	
+	
+	private void persistActivity(ENTITY entity, Activity activity, String activityCode) {
+		if( activity == null) {
+			activity = getDefaultLogActivity(entity, activityCode);
+		}
+		if(activity.isLoggingRequired()) {
+			activityDao.persist(activity);
+		}
+	}
 
 }
