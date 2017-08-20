@@ -5,18 +5,18 @@ import java.util.Map;
 
 import com.simplevat.entity.Expense;
 
-public interface ExpenseService extends SimpleVatService<Integer, Expense> {
+public abstract class ExpenseService extends SimpleVatService<Integer, Expense> {
 	
-	public List<Expense> getExpenses();
+	public abstract  List<Expense> getExpenses();
 	
-	public Expense updateOrCreateExpense(Expense expense);
+	public abstract  Expense updateOrCreateExpense(Expense expense);
 	
-	public Map<Object, Number> getExpensePerMonth();
+	public abstract  Map<Object, Number> getExpensePerMonth();
 	
-	public Map<Object,Number> getVatOutPerMonth();
+	public abstract  Map<Object,Number> getVatOutPerMonth();
 	
-	public int getVatOutQuartly();
+	public abstract  int getVatOutQuartly();
 	
-	public int getMaxValue(Map<Object, Number> data);
+	public abstract  int getMaxValue(Map<Object, Number> data);
 
 }

@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service("contactService")
 @Transactional
-public class ContactServiceImpl implements ContactService {
+public class ContactServiceImpl extends ContactService {
 
     @Autowired
     private ContactDao contactDao;

@@ -15,7 +15,7 @@ import com.simplevat.service.bankaccount.ImportedDraftTransactonService;
 
 @Service("importedDraftTransactonService")
 @Transactional(propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
-public class ImportedDraftTransactonServiceImpl implements
+public class ImportedDraftTransactonServiceImpl extends
 		ImportedDraftTransactonService {
 	
 	@Autowired

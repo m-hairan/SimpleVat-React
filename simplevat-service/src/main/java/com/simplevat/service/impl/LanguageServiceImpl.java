@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  * Created by mohsin on 3/11/2017.
  */
 @Service
-public class LanguageServiceImpl implements LanguageService {
+public class LanguageServiceImpl extends LanguageService {
 
     @Autowired
     LanguageDao languageDao;

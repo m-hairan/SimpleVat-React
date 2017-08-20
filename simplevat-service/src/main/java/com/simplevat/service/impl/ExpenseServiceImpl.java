@@ -17,7 +17,7 @@ import com.simplevat.util.ChartUtil;
 
 @Service("expenseService")
 @Transactional(propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
-public class ExpenseServiceImpl implements ExpenseService  {
+public class ExpenseServiceImpl extends ExpenseService  {
 
 	@Autowired
     public ExpenseDao expenseDao;

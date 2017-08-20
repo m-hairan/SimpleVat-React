@@ -5,11 +5,11 @@ import java.util.List;
 import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.service.SimpleVatService;
 
-public interface BankAccountService extends SimpleVatService<Integer,BankAccount> {
+public abstract class BankAccountService extends SimpleVatService<Integer,BankAccount> {
 	
-	public List<BankAccount> getBankAccounts();
+	public abstract  List<BankAccount> getBankAccounts();
 
 
-	public List<BankAccount>  getBankAccountByUser(int userId);
+	public abstract  List<BankAccount>  getBankAccountByUser(int userId);
 
 }

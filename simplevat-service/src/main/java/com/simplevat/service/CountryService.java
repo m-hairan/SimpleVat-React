@@ -6,11 +6,11 @@ import java.util.List;
 /**
  * Created by mohsinh on 3/10/2017.
  */
-public interface CountryService extends SimpleVatService<Integer, Country> {
+public abstract class CountryService extends SimpleVatService<Integer, Country> {
 
-    List<Country> getCountries();
+	public abstract List<Country> getCountries();
     
-    Country getCountry(Integer countryId);
+	public abstract Country getCountry(Integer countryId);
     
-    Country getDefaultCountry();
+	public abstract Country getDefaultCountry();
 }

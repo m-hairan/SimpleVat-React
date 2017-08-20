@@ -12,7 +12,7 @@ import com.simplevat.entity.User;
 import com.simplevat.service.UserServiceNew;
 
 @Service("userServiceNew")
-public class UserServiceNewImpl implements UserServiceNew {
+public class UserServiceNewImpl extends UserServiceNew {
 
 	@Autowired
     @Qualifier(value = "userDao")

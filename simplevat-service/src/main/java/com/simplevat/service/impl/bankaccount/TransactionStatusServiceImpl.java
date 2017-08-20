@@ -11,7 +11,7 @@ import com.simplevat.entity.bankaccount.TransactionStatus;
 import com.simplevat.service.bankaccount.TransactionStatusService;
 
 @Service("transactionStatusService")
-public class TransactionStatusServiceImpl implements TransactionStatusService {
+public class TransactionStatusServiceImpl extends TransactionStatusService {
 
 	@Autowired
     @Qualifier(value = "transactionStatusDao")

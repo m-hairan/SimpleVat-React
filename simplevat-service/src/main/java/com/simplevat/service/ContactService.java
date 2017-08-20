@@ -6,14 +6,14 @@ import java.util.List;
 /**
  * Created by mohsin on 3/3/2017.
  */
-public interface ContactService extends SimpleVatService <Integer, Contact> {
+public abstract class ContactService extends SimpleVatService <Integer, Contact> {
 
-    List<Contact> getContacts(Integer pageIndex, Integer noOfRecorgs);
+    public abstract List<Contact> getContacts(Integer pageIndex, Integer noOfRecorgs);
 
-    List<Contact> getContacts();
+    public abstract List<Contact> getContacts();
 
-    List<Contact> getContacts(final String searchQuery);
+    public abstract List<Contact> getContacts(final String searchQuery);
 
-    Contact getContact(int id);
+    public abstract Contact getContact(int id);
 
 }

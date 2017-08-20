@@ -12,7 +12,7 @@ import java.util.List;
  * Created by mohsin on 3/11/2017.
  */
 @Service("currencyService")
-public class CurrencyServiceImpl implements CurrencyService {
+public class CurrencyServiceImpl extends CurrencyService {
 
     @Autowired
     CurrencyDao currencyDao;

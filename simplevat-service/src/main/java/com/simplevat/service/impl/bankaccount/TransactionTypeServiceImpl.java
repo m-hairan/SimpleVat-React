@@ -12,7 +12,7 @@ import com.simplevat.entity.bankaccount.TransactionType;
 import com.simplevat.service.bankaccount.TransactionTypeService;
 
 @Service("transactionTypeService")
-public class TransactionTypeServiceImpl implements TransactionTypeService {
+public class TransactionTypeServiceImpl extends TransactionTypeService {
 
 	@Autowired
 	private TransactionTypeDao transactionTypeDao;

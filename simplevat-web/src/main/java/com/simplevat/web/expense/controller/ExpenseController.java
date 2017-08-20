@@ -180,7 +180,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
             expense.setProject(project);
         }
         if (selectedExpenseModel.getUser() != null) {
-            User user = userServiceNew.getDao().findByPK(selectedExpenseModel.getUser().getUserId());
+            User user = userServiceNew.findByPK(selectedExpenseModel.getUser().getUserId());
             expense.setUser(user);
         }
 

@@ -6,12 +6,12 @@ import com.simplevat.criteria.bankaccount.ImportedDraftTransactionCriteria;
 import com.simplevat.entity.bankaccount.ImportedDraftTransaction;
 import com.simplevat.service.SimpleVatService;
 
-public interface ImportedDraftTransactonService extends SimpleVatService<Integer, ImportedDraftTransaction> {
+public abstract class ImportedDraftTransactonService extends SimpleVatService<Integer, ImportedDraftTransaction> {
 	
-	 List<ImportedDraftTransaction> getImportedDraftTransactionsByCriteria(ImportedDraftTransactionCriteria importedDraftTransactonCriteria) throws Exception;
+	public abstract List<ImportedDraftTransaction> getImportedDraftTransactionsByCriteria(ImportedDraftTransactionCriteria importedDraftTransactonCriteria) throws Exception;
 
-	 ImportedDraftTransaction updateOrCreateImportedDraftTransaction(ImportedDraftTransaction importedDraftTransacton);
+	public abstract ImportedDraftTransaction updateOrCreateImportedDraftTransaction(ImportedDraftTransaction importedDraftTransacton);
 	 
-	 boolean deleteImportedDraftTransaction(Integer bankAcccountId);
+	public abstract boolean deleteImportedDraftTransaction(Integer bankAcccountId);
 
 }

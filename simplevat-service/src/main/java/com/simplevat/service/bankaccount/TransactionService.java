@@ -7,17 +7,17 @@ import com.simplevat.criteria.bankaccount.TransactionCriteria;
 import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.service.SimpleVatService;
 
-public interface TransactionService extends SimpleVatService<Integer, Transaction> {
+public abstract class TransactionService extends SimpleVatService<Integer, Transaction> {
 	
-	public List<Transaction> getTransactionsByCriteria(
+	public abstract  List<Transaction> getTransactionsByCriteria(
 			TransactionCriteria transactionCriteria) throws Exception;
 
-	public Transaction updateOrCreateTransaction(Transaction transaction);
+	public abstract  Transaction updateOrCreateTransaction(Transaction transaction);
 	
-	public Map<Object, Number> getCashOutData();
+	public abstract  Map<Object, Number> getCashOutData();
 	
-	public Map<Object, Number> getCashInData();
+	public abstract  Map<Object, Number> getCashInData();
 	
-	public int getMaxTransactionValue(Map<Object, Number> cashInMap, Map<Object, Number> cashOutMap);
+	public abstract  int getMaxTransactionValue(Map<Object, Number> cashInMap, Map<Object, Number> cashOutMap);
 
 }

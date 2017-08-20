@@ -5,9 +5,9 @@ import com.simplevat.entity.Project;
 
 import java.util.List;
 
-public interface ProjectService extends SimpleVatService<Integer, Project> {
+public abstract class ProjectService extends SimpleVatService<Integer, Project> {
 
-    List<Project> getProjectsByCriteria(ProjectCriteria projectCriteria) throws Exception;
+	public abstract List<Project> getProjectsByCriteria(ProjectCriteria projectCriteria) throws Exception;
 
 
 }

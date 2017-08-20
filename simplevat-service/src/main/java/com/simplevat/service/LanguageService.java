@@ -6,11 +6,11 @@ import java.util.List;
 /**
  * Created by mohsin on 3/11/2017.
  */
-public interface LanguageService extends SimpleVatService<Integer,Language> {
+public abstract class LanguageService extends SimpleVatService<Integer,Language> {
 
-    List<Language> getLanguages();
+	public abstract List<Language> getLanguages();
 
-    Language getLanguage(Integer languageId);
+	public abstract Language getLanguage(Integer languageId);
     
-    Language getDefaultLanguage();
+	public abstract Language getDefaultLanguage();
 }

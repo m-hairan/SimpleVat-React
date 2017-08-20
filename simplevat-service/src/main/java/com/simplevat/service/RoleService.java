@@ -7,9 +7,9 @@ import java.util.List;
  *
  * @author Uday
  */
-public interface RoleService extends SimpleVatService<Integer,Role> {
+public abstract class RoleService extends SimpleVatService<Integer,Role> {
 
-    public List<Role> getRoles();
+	public abstract  List<Role> getRoles();
 
-    public Role getRoleById(Integer roleCode);
+	public abstract  Role getRoleById(Integer roleCode);
 }

@@ -19,7 +19,7 @@ import com.simplevat.util.ChartUtil;
 
 @Service("transactionService")
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-public class TransactionServiceImpl implements TransactionService {
+public class TransactionServiceImpl extends TransactionService {
 	
 	@Autowired
 	ChartUtil util;

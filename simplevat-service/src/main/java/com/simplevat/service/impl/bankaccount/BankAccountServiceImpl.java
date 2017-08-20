@@ -13,7 +13,7 @@ import com.simplevat.service.bankaccount.BankAccountService;
 
 @Service("bankAccountService")
 @Transactional(propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
-public class BankAccountServiceImpl implements BankAccountService{
+public class BankAccountServiceImpl extends BankAccountService{
 
 	@Autowired
     public BankAccountDao bankAccountDao;

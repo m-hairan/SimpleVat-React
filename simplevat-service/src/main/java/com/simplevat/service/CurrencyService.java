@@ -7,11 +7,11 @@ import java.util.List;
 /**
  * Created by mohsin on 3/11/2017.
  */
-public interface CurrencyService extends SimpleVatService<Integer, Currency> {
+public abstract class CurrencyService extends SimpleVatService<Integer, Currency> {
 
-    List<Currency> getCurrencies();
+	public abstract List<Currency> getCurrencies();
     
-    Currency getCurrency(final int currencyCode);
+	public abstract Currency getCurrency(final int currencyCode);
 
-    Currency getDefaultCurrency();
+	public abstract Currency getDefaultCurrency();
 }

@@ -16,7 +16,7 @@ import com.simplevat.service.TransactionCategoryServiceNew;
 
 @Service("transactionCategoryService")
 @Transactional
-public class TransactionCategoryServiceNewImpl implements TransactionCategoryServiceNew {
+public class TransactionCategoryServiceNewImpl extends TransactionCategoryServiceNew {
 
 
     @Autowired

@@ -17,7 +17,7 @@ import com.simplevat.service.ProjectService;
  * Created by Utkarsh Bhavsar on 21/03/17.
  */
 @Service("projectService")
-public class ProjectServiceImpl   implements ProjectService {
+public class ProjectServiceImpl   extends ProjectService {
 
     @Autowired
     private ProjectDao projectDao;

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  * Created by mohsin on 3/12/2017.
  */
 @Service
-public class TitleServiceImpl implements TitleService<Integer, Title> {
+public class TitleServiceImpl extends TitleService<Integer, Title> {
 
     @Autowired
     private TitleDao dao;

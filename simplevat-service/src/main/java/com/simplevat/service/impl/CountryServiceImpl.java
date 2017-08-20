@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class CountryServiceImpl implements CountryService {
+public class CountryServiceImpl extends CountryService {
 
     @Autowired
     CountryDao countryDao;

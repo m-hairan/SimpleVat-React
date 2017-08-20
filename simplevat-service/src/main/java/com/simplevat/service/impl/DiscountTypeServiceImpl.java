@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class DiscountTypeServiceImpl implements DiscountTypeService {
+public class DiscountTypeServiceImpl extends DiscountTypeService {
 
     @Autowired
     private DiscountTypeDao discountTypeDao;

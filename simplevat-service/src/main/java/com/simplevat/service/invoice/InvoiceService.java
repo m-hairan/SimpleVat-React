@@ -11,15 +11,15 @@ import com.simplevat.service.SimpleVatService;
  *
  * @author Hiren
  */
-public interface InvoiceService extends SimpleVatService<Integer, Invoice> {
+public abstract class InvoiceService extends SimpleVatService<Integer, Invoice> {
 	
-	public Map<Object, Number> getInvoicePerMonth();
+	public abstract  Map<Object, Number> getInvoicePerMonth();
 	
-	public int getMaxValue(Map<Object, Number> data);
+	public abstract  int getMaxValue(Map<Object, Number> data);
 	
-	public Map<Object, Number> getVatInPerMonth();
+	public abstract  Map<Object, Number> getVatInPerMonth();
 	
-	public int getVatInQuartly();
+	public abstract  int getVatInQuartly();
 	
-	public List<Event> getInvoiceAsEvent();
+	public abstract  List<Event> getInvoiceAsEvent();
 }

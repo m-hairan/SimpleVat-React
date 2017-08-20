@@ -10,9 +10,9 @@ import com.simplevat.entity.invoice.DiscountType;
  *
  * @author hiren
  */
-public interface DiscountTypeService extends SimpleVatService<Integer, DiscountType> {
+public abstract class DiscountTypeService extends SimpleVatService<Integer, DiscountType> {
     
     @Nonnull
-    List<DiscountType> getDiscountTypes();
+    public abstract List<DiscountType> getDiscountTypes();
     
 }

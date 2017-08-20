@@ -6,16 +6,16 @@ import com.simplevat.criteria.bankaccount.TransactionTypeCriteria;
 import com.simplevat.entity.bankaccount.TransactionType;
 import com.simplevat.service.SimpleVatService;
 
-public interface TransactionTypeService extends SimpleVatService<Integer, TransactionType> {
+public abstract class TransactionTypeService extends SimpleVatService<Integer, TransactionType> {
 	
-	public List<TransactionType> getTransactionTypesByCriteria(TransactionTypeCriteria transactionTypeCriteria) throws Exception;
+	public abstract  List<TransactionType> getTransactionTypesByCriteria(TransactionTypeCriteria transactionTypeCriteria) throws Exception;
 
-	public TransactionType updateOrCreateTransaction(TransactionType transactionType);
+	public abstract  TransactionType updateOrCreateTransaction(TransactionType transactionType);
 	
-	public TransactionType getTransactionType(Integer id);
+	public abstract  TransactionType getTransactionType(Integer id);
 	
-	public TransactionType getDefaultTransactionType();
+	public abstract  TransactionType getDefaultTransactionType();
 	
-	public List<TransactionType> findAll();
+	public abstract  List<TransactionType> findAll();
 
 }
