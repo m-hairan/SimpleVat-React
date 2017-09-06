@@ -27,7 +27,7 @@ public class ReportConfigUtil {
 
 	public static String compileReport(String compileDir, String filename) {
 		try {
-			String jrxmlFile = compileDir + "\\" + filename + ".jrxml";
+			String jrxmlFile = compileDir + "/" + filename + ".jrxml";
 			System.out.println("jrxmlFile  " + jrxmlFile);
 			URL url = ReportConfigUtil.class.getClassLoader().getResource(jrxmlFile);
 			File file = Paths.get(url.toURI()).toFile();
