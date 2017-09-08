@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.simplevat.dao.Dao;
 import com.simplevat.entity.bankaccount.Transaction;
+import java.time.LocalDateTime;
 
 public interface TransactionDao extends Dao<Integer, Transaction> {
 
@@ -13,5 +14,9 @@ public interface TransactionDao extends Dao<Integer, Transaction> {
 	 public List<Object[]> getCashInData(Date startDate, Date endDate);
 	 
 	 public List<Object[]> getCashOutData(Date startDate, Date endDate);
+
+         public Transaction getBeforeTransaction(Transaction transaction);
+         
+         public List<Transaction> getAfterTransaction(Transaction transaction);
 	    
 }
