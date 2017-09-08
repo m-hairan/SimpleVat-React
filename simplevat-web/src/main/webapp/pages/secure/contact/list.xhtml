@@ -41,7 +41,8 @@
     <ui:define name="title">#{messages.contact}</ui:define>
 
     <ui:define name="content">
-        <si:cdataPanel newAction= "#{contactController.redirectToCreateContact()}" >
+
+        <si:cdataPanel newAction= "#{contactController.redirectToCreateContact()}" deleteAction="#{contactListController.delete()}" process="@form" >
             <h:form id="form">
                 <p:dataGrid var="contact" 
                             value="#{contactListController.contacts}" 
@@ -89,7 +90,7 @@
 
                             </h:panelGrid>
                             <h:panelGrid columns="1" style="width:100%; text-align: left">
-                                <h:selectBooleanCheckbox value="#{contactListController.selectedContactIds[contact.contactId]}" />
+                                <h:selectBooleanCheckbox value="#{contact.selected}" />
                             </h:panelGrid>
                         </p:panel>
 

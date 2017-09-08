@@ -75,5 +75,7 @@ public class ContactModel implements Serializable {
     private Currency currency;
 
     private Title title;
+    
+    private Boolean selected;
 
 }

@@ -3,6 +3,7 @@ package com.simplevat.web.contact.controller;
 import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.Contact;
 import com.simplevat.service.ContactService;
+import com.simplevat.web.contact.model.ContactModel;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
@@ -14,21 +15,22 @@ import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
 @SpringScopeView
-public class ContactListController implements Serializable {
+public class ContactListController extends ContactHelper implements Serializable {
 
     private static final long serialVersionUID = 2549403337578048506L;
     private final static Logger LOGGER = LoggerFactory.getLogger(ContactListController.class);
 
     @Getter
     @Setter
-    private Map<Long, Boolean> selectedContactIds = new HashMap<>();
+    private Map<Integer, Boolean> selectedContactIds = new HashMap<>();
 
-    private List<Contact> filteredContacts;
+    private List<ContactModel> filteredContacts;
 
     @Getter
     @Setter
@@ -52,26 +54,25 @@ public class ContactListController implements Serializable {
     public void init() {
         selectedFilter = null;
         this.filteredContacts = new ArrayList<>();
-
     }
 
     public Map<String, String> getFilters() {
         filters = new HashMap<>();
         filteredContacts.stream()
                 .map((contact) -> contact.getFirstName().substring(0, 1).toUpperCase())
-               .forEach((filterCharacter) -> {
-                   filters.put(filterCharacter, filterCharacter);
+                .forEach((filterCharacter) -> {
+                    filters.put(filterCharacter, filterCharacter);
                 });
         return filters;
     }
 
-    private List<Contact> getFilteredContacts(String filterChar) {
+    private List<ContactModel> getFilteredContacts(String filterChar) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Changing Filter to :" + filterChar);
             LOGGER.debug("Number of contacts :" + filteredContacts.size());
         }
-        List<Contact> returnContacts = new ArrayList<>();
-        for (Contact contact : filteredContacts) {
+        List<ContactModel> returnContacts = new ArrayList<>();
+        for (ContactModel contact : filteredContacts) {
             if (contact.getFirstName().substring(0, 1).toUpperCase().equals(filterChar.toUpperCase())) {
                 returnContacts.add(contact);
             }
@@ -79,17 +80,30 @@ public class ContactListController implements Serializable {
         return returnContacts;
     }
 
+    public void delete() {
+        for(ContactModel contactModel : getContacts()){
+           if(contactModel.getSelected()){
+               Contact contact = getContact(contactModel);
+               contactService.update(contact);
+           }
+        }
+       init();
+    }
+
     @Nonnull
-    public List<Contact> getContacts() {
+    public List<ContactModel> getContacts() {
         if (this.selectedFilter != null && !this.selectedFilter.isEmpty()) {
             filteredContacts = this.getFilteredContacts(this.selectedFilter);
         } else {
-            filteredContacts = contactService.getContacts();
+            for(Contact contact :contactService.getContacts()){
+                ContactModel contactModel = getContactModel(contact);
+            filteredContacts.add(contactModel);
+            }
         }
         return filteredContacts;
 
     }
- 
+
     public String redirectToEditContact() throws IOException {
 //        contactModel = new ContactModel();
 //        BeanUtils.copyProperties(contact, contactModel);
@@ -101,8 +115,9 @@ public class ContactListController implements Serializable {
 //        }else{
 //            contactService.update(contact, contact.getContactId());
 //        }
-       return "contact?faces-redirect=true&selectedContactId="+selectedContact.getContactId();
+        return "contact?faces-redirect=true&selectedContactId=" + selectedContact.getContactId();
     }
+
     public void deleteContact(Contact contact) {
         contact.setDeleteFlag(Boolean.TRUE);
         contactService.update(contact);
@@ -111,4 +126,7 @@ public class ContactListController implements Serializable {
         context.addMessage(null, new FacesMessage("Contact deleted SuccessFully"));
     }
 
+//    public void setSelectedContactIds(Long key, Boolean Value){
+//        selectedContactIds.put(key,Value);
+//    }
 }

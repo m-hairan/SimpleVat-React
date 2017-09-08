@@ -46,11 +46,11 @@
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:outputLabel for="categoryCode"/>
                                             <p:autoComplete id="categoryCode" 
-                                                            value="#{transactionCategoryView.selectedTransactionCategory.transactionType}"
+                                                            value="#{transactionCategoryView.selectedTransactionCategory.transactionType.transactionTypeCode}"
                                                             forceSelection="true" 
                                                             dropdown="true"
                                                             completeMethod="#{transactionCategoryView.getAllTransactionType}" 
-                                                            var="transactionType" itemLabel="#{transactionType.transactionTypeName}"  itemValue="#{transactionType}"
+                                                            var="transactionType" itemLabel="#{transactionType.transactionTypeName}"  itemValue="#{transactionType.transactionTypeCode}"
                                                             converter="transactionTypeConverter"
                                                             required="false"/>
                                             <label>Transaction Type</label>

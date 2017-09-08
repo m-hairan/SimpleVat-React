@@ -1,6 +1,7 @@
 package com.simplevat.web.bankaccount.controller;
 
 import com.github.javaplugs.jsf.SpringScopeView;
+import com.simplevat.criteria.ProjectCriteria;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,9 +33,12 @@ import com.simplevat.service.bankaccount.TransactionService;
 import com.simplevat.service.bankaccount.TransactionStatusService;
 import com.simplevat.service.bankaccount.TransactionTypeService;
 import com.simplevat.web.bankaccount.model.BankAccountModel;
+import com.simplevat.web.constant.BankAccountConstant;
 import com.simplevat.web.constant.TransactionStatusConstant;
 import com.simplevat.web.utils.FacesUtil;
 import java.io.Serializable;
+import java.time.ZoneId;
+import java.util.Date;
 import javax.annotation.PostConstruct;
 
 @Controller
@@ -131,13 +135,6 @@ public class TransactionController extends TransactionControllerHelper implement
             transaction.setDebitCreditFlag(transactionType.getDebitCreditFlag());
         }
 
-        BankAccount bankAccount = bankAccountService.findByPK(selectedBankAccount.getBankAccountId());
-        if (transaction.getDebitCreditFlag() == 'C') {
-            bankAccount.setCurrentBalance(bankAccount.getCurrentBalance().add(transaction.getTransactionAmount()));
-        } else if (transaction.getDebitCreditFlag() == 'D') {
-            bankAccount.setCurrentBalance(bankAccount.getCurrentBalance().subtract(transaction.getTransactionAmount()));
-        }
-
         if (selectedTransactionModel.getExplainedTransactionCategory() != null) {
             TransactionCategory transactionCategory = transactionCategoryService.findByPK(selectedTransactionModel.getExplainedTransactionCategory().getTransactionCategoryCode());
             transaction.setExplainedTransactionCategory(transactionCategory);
@@ -147,7 +144,7 @@ public class TransactionController extends TransactionControllerHelper implement
             Project project = projectService.findByPK(selectedTransactionModel.getProject().getProjectId());
             transaction.setProject(project);
         }
-        
+
         if (selectedTransactionModel.getTransactionStatus() != null) {
             TransactionStatus transactionStatus = transactionStatusService.findByPK(selectedTransactionModel.getTransactionStatus().getExplainationStatusCode());
             transaction.setTransactionStatus(transactionStatus);
@@ -156,32 +153,30 @@ public class TransactionController extends TransactionControllerHelper implement
         if (selectedTransactionModel.getAttachmentFile() != null && selectedTransactionModel.getAttachmentFile().getSize() > 0) {
             storeUploadedFile(selectedTransactionModel, transaction, fileLocation);
         }
-         System.out.println("before inside if :"+transaction.getTransactionStatus());
-                
-        if (selectedTransactionModel.getTransactionType() != null && selectedTransactionModel.getExplainedTransactionCategory() != null){
-            if(selectedTransactionModel.getTransactionStatus() == null
-                || selectedTransactionModel.getTransactionStatus().getExplainationStatusCode() == 0){
-                System.out.println("inside if :"+transaction.getTransactionStatus());
+        System.out.println("before inside if :" + transaction.getTransactionStatus());
+
+        if (selectedTransactionModel.getTransactionType() != null && selectedTransactionModel.getExplainedTransactionCategory() != null) {
+            if (selectedTransactionModel.getTransactionStatus() == null
+                    || selectedTransactionModel.getTransactionStatus().getExplainationStatusCode() == 0) {
+                System.out.println("inside if :" + transaction.getTransactionStatus());
                 TransactionStatus transactionStatus = transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED);
                 transaction.setTransactionStatus(transactionStatus);
             }
-        }else {
-            
-              System.out.println("inside inside if :"+transaction.getTransactionStatus());
-            if(selectedTransactionModel.getTransactionStatus() == null
-                || selectedTransactionModel.getTransactionStatus().getExplainationStatusCode() == 0){
+        } else {
+
+            System.out.println("inside inside if :" + transaction.getTransactionStatus());
+            if (selectedTransactionModel.getTransactionStatus() == null
+                    || selectedTransactionModel.getTransactionStatus().getExplainationStatusCode() == 0) {
                 TransactionStatus transactionStatus = transactionStatusService.findByPK(TransactionStatusConstant.UNEXPLIANED);
                 transaction.setTransactionStatus(transactionStatus);
             }
         }
-              System.out.println("after inside if :"+transaction.getTransactionStatus());
-       
-        bankAccountService.update(bankAccount);
-        transaction.setCurrentBalance(bankAccount.getCurrentBalance());
+        System.out.println("after inside if :" + transaction.getTransactionStatus());
+
         if (transaction.getTransactionId() == null) {
-            transactionService.persist(transaction);
+                transactionService.persist(transaction);
         } else {
-            transactionService.update(transaction, transaction.getTransactionId());
+            transactionService.update(transaction);
         }
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transaction saved successfully"));
@@ -201,13 +196,6 @@ public class TransactionController extends TransactionControllerHelper implement
             TransactionType transactionType = transactionTypeService.getTransactionType(selectedTransactionModel.getTransactionType().getTransactionTypeCode());
             transaction.setTransactionType(transactionType);
             transaction.setDebitCreditFlag(transactionType.getDebitCreditFlag());
-        }
-
-        BankAccount bankAccount = bankAccountService.findByPK(selectedBankAccount.getBankAccountId());
-        if (transaction.getDebitCreditFlag() == 'C') {
-            bankAccount.setCurrentBalance(bankAccount.getCurrentBalance().add(transaction.getTransactionAmount()));
-        } else if (transaction.getDebitCreditFlag() == 'D') {
-            bankAccount.setCurrentBalance(bankAccount.getCurrentBalance().subtract(transaction.getTransactionAmount()));
         }
 
         if (selectedTransactionModel.getExplainedTransactionCategory() != null) {
@@ -230,19 +218,30 @@ public class TransactionController extends TransactionControllerHelper implement
         if (selectedTransactionModel.getAttachmentFile().getSize() > 0) {
             storeUploadedFile(selectedTransactionModel, transaction, fileLocation);
         }
-        bankAccountService.persist(bankAccount);
-        transactionService.updateOrCreateTransaction(transaction);
+        if (transaction.getTransactionId() == null) {
+                transactionService.persist(transaction);
+        } else {
+            transactionService.update(transaction);
+        }
+
         this.setSelectedTransactionModel(new TransactionModel());
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transaction saved successfully"));
         return "/pages/secure/bankaccount/edit-bank-transaction.xhtml?faces-redirect=true";
 
     }
+    
+      public List<Project> completeProjects() throws Exception {
+        ProjectCriteria projectCriteria = new ProjectCriteria();
+        projectCriteria.setActive(Boolean.TRUE);
+        return projectService.getProjectsByCriteria(projectCriteria);
+    }
 
+      
     public String deleteTransaction() {
 
         Transaction transaction = getTransaction(selectedTransactionModel);
         transaction.setDeleteFlag(true);
-        transactionService.updateOrCreateTransaction(transaction);
+        transactionService.deleteTransaction(transaction);
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transaction deleted successfully"));
         return "bank-transactions?faces-redirect=true";

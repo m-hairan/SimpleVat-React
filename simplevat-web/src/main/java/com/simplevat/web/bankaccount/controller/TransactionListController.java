@@ -15,6 +15,7 @@ import com.simplevat.service.bankaccount.TransactionService;
 import com.simplevat.web.bankaccount.model.BankAccountModel;
 import com.simplevat.web.utils.FacesUtil;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -43,11 +44,11 @@ public class TransactionListController extends TransactionControllerHelper imple
             List<Transaction> transactionList = transactionService.getTransactionsByCriteria(transactionCriteria);
             
             transactions = new ArrayList<TransactionModel>();
-            
             for (Transaction transaction : transactionList) {
                 TransactionModel model = this.getTransactionModel(transaction);
                 transactions.add(model);
             }
+            Collections.sort(transactions);
         } catch (Exception ex) {
             Logger.getLogger(TransactionListController.class.getName()).log(Level.SEVERE, null, ex);
         }

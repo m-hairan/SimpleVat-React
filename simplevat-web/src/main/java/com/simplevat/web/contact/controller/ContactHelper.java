@@ -46,4 +46,37 @@ public class ContactHelper {
         contactModel.setDeleteFlag(contact.getDeleteFlag()); 
         return contactModel;
     }
+    
+    public Contact getContact(ContactModel contactModel) {
+        Contact contact = new Contact();
+        contact.setContactId(contactModel.getContactId());
+        contact.setBillingEmail(contactModel.getBillingEmail());
+        contact.setCity(contactModel.getCity());
+        contact.setContractPoNumber(contactModel.getContractPoNumber());
+        contact.setCountry(contactModel.getCountry());
+        contact.setCurrency(contactModel.getCurrency());
+        contact.setEmail(contactModel.getEmail());
+        contact.setFirstName(contactModel.getFirstName());
+        contact.setInvoicingAddressLine1(contactModel.getInvoicingAddressLine1());
+        contact.setInvoicingAddressLine2(contactModel.getInvoicingAddressLine2());
+        contact.setInvoicingAddressLine3(contactModel.getInvoicingAddressLine3());
+        contact.setLanguage(contactModel.getLanguage());
+        contact.setLastName(contactModel.getLastName());
+        contact.setMiddleName(contactModel.getMiddleName());
+        contact.setMobileNumber(contactModel.getMobileNumber());
+        contact.setOrganization(contactModel.getOrganization());
+        contact.setPoBoxNumber(contactModel.getPoBoxNumber());
+        contact.setPostZipCode(contactModel.getPostZipCode());
+        contact.setStateRegion(contactModel.getStateRegion());
+        contact.setTelephone(contactModel.getTelephone());
+        contact.setTitle(contactModel.getTitle());
+        contact.setVatRegistrationNumber(contactModel.getVatRegistrationNumber());
+        contact.setVersionNumber(contactModel.getVersionNumber());
+        contact.setCreatedBy(contactModel.getCreatedBy());
+        contact.setCreatedDate(contactModel.getCreatedDate());
+        contact.setLastUpdateDate(contactModel.getLastUpdateDate());
+        contact.setLastUpdatedBy(contactModel.getLastUpdatedBy());
+        contact.setDeleteFlag(contactModel.getDeleteFlag()); 
+        return contact;
+    }
 }

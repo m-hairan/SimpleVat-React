@@ -18,8 +18,8 @@ import com.simplevat.entity.bankaccount.TransactionType;
 
 @Getter
 @Setter
-public class TransactionModel {
-		
+public class TransactionModel implements Comparable<TransactionModel> {
+
     private Integer transactionId;
     private Date transactionDate;
     private String transactionDescription;
@@ -39,9 +39,14 @@ public class TransactionModel {
     private LocalDateTime createdDate;
     private Integer lastUpdatedBy;
     private LocalDateTime lastUpdateDate;
-    private Boolean deleteFlag =  false;
+    private Boolean deleteFlag = false;
     private UploadedFile attachmentFile;
     private StreamedContent attachmentFileContent;
     private Integer versionNumber;
+
+    @Override
+    public int compareTo(TransactionModel o) {
+        return transactionDate.compareTo(o.transactionDate);
+    }
 
 }

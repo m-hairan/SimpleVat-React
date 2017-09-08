@@ -38,7 +38,7 @@ public class InvoiceModelHelper {
 
         Invoice invoice;
 
-        if (invoiceModel.getInvoiceId() > 0) {
+        if (invoiceModel.getInvoiceId() != null && invoiceModel.getInvoiceId() > 0) {
             invoice = invoiceService.findByPK(invoiceModel.getInvoiceId());
         } else {
             invoice = new Invoice();

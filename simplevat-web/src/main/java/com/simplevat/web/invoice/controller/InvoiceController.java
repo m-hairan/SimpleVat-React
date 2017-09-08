@@ -194,9 +194,9 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
         }
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        if (selectedInvoiceModel.getInvoiceId() > 0) {
-            context.addMessage(null, new FacesMessage("Invoice Updated SuccessFully"));
-        } else {
+         if (selectedInvoiceModel.getInvoiceId() != null && selectedInvoiceModel.getInvoiceId() > 0) {
+          context.addMessage(null, new FacesMessage("Invoice Updated SuccessFully"));
+		 } else {
             context.addMessage(null, new FacesMessage("Invoice Added SuccessFully"));
         }
         init();
