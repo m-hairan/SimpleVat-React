@@ -171,7 +171,7 @@ public class BankAccountController extends BankAccountHelper implements Serializ
     }
 
     public String redirectToTransaction() {
-        FacesUtil.setSelectedBankAccount(getBankAccountModel(selectedBankAccount));
+        FacesUtil.setSelectedBankAccountId(selectedBankAccount.getBankAccountId());
         return "bank-transactions?faces-redirect=true";
     }
 

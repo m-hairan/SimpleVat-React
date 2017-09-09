@@ -14,11 +14,17 @@ public class FacesUtil {
     public static Object getDataFromSessionMap(String key){
        return FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(key);
     } 
-    public static BankAccountModel getSelectedBankAccount(){
-        return (BankAccountModel)getDataFromSessionMap(SESSION_KEY_BANK_ACCOUNT);
+//    public static BankAccountModel getSelectedBankAccount(){
+//        return (BankAccountModel)getDataFromSessionMap(SESSION_KEY_BANK_ACCOUNT);
+//    }
+//    public static void setSelectedBankAccount(BankAccountModel bankAccountModel){
+//        setDataIntoSessionMap(SESSION_KEY_BANK_ACCOUNT, bankAccountModel);
+//    }
+     public static Integer getSelectedBankAccountId(){
+        return (Integer)getDataFromSessionMap(SESSION_KEY_BANK_ACCOUNT);
     }
-    public static void setSelectedBankAccount(BankAccountModel bankAccountModel){
-        setDataIntoSessionMap(SESSION_KEY_BANK_ACCOUNT, bankAccountModel);
+    public static void setSelectedBankAccountId(Integer bankAccountId){
+        setDataIntoSessionMap(SESSION_KEY_BANK_ACCOUNT, bankAccountId);
     }
     
     public static String getSelectedBankAccountFromFlash(FacesContext facesContext){

@@ -81,7 +81,9 @@ public class TransactionController extends TransactionControllerHelper implement
     @PostConstruct
     public void init() {
 
-        selectedBankAccountModel = FacesUtil.getSelectedBankAccount();
+        Integer bankAccountId = FacesUtil.getSelectedBankAccountId();
+        BankAccount bankAccount = bankAccountService.findByPK(bankAccountId);
+        selectedBankAccountModel = new BankAccountHelper().getBankAccountModel(bankAccount);
         Object objselectedTransactionModel = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedTransactionId");
 
         if (objselectedTransactionModel != null) {
@@ -101,18 +103,7 @@ public class TransactionController extends TransactionControllerHelper implement
     }
 
     public String createTransaction() {
-//		 this.selectedTransactionModel = new TransactionModel();
-//		 
-//		TransactionType transactionType = transactionTypeService.getDefaultTransactionType();
-//		if (transactionType != null) {
-//			selectedTransactionModel.setTransactionType(transactionType);
-//		}
-//		TransactionCategory transactionCategory = transactionCategoryService.getDefaultTransactionCategory();
-//		if (transactionCategory != null) {
-//			selectedTransactionModel.setExplainedTransactionCategory(transactionCategory);
-//		}
-
-        return "/pages/secure/bankaccount/edit-bank-transaction.xhtml";
+        return "/pages/secure/bankaccount/edit-bank-transaction.xhtml?faces-redirect=true";
     }
 
     public String editTransection() {
@@ -126,6 +117,7 @@ public class TransactionController extends TransactionControllerHelper implement
         System.out.println("selectedTransactionModel :" + selectedTransactionModel);
         Transaction transaction = getTransaction(selectedTransactionModel);
         selectedBankAccount = getBankAccount(selectedBankAccountModel);
+        System.out.println("selectedBankAccount :" + selectedBankAccount);
         transaction.setLastUpdatedBy(loggedInUser.getUserId());
         transaction.setCreatedBy(loggedInUser.getUserId());
         transaction.setBankAccount(selectedBankAccount);
@@ -174,7 +166,7 @@ public class TransactionController extends TransactionControllerHelper implement
         System.out.println("after inside if :" + transaction.getTransactionStatus());
 
         if (transaction.getTransactionId() == null) {
-                transactionService.persist(transaction);
+            transactionService.persist(transaction);
         } else {
             transactionService.update(transaction);
         }
@@ -219,7 +211,7 @@ public class TransactionController extends TransactionControllerHelper implement
             storeUploadedFile(selectedTransactionModel, transaction, fileLocation);
         }
         if (transaction.getTransactionId() == null) {
-                transactionService.persist(transaction);
+            transactionService.persist(transaction);
         } else {
             transactionService.update(transaction);
         }
@@ -229,14 +221,13 @@ public class TransactionController extends TransactionControllerHelper implement
         return "/pages/secure/bankaccount/edit-bank-transaction.xhtml?faces-redirect=true";
 
     }
-    
-      public List<Project> completeProjects() throws Exception {
+
+    public List<Project> completeProjects() throws Exception {
         ProjectCriteria projectCriteria = new ProjectCriteria();
         projectCriteria.setActive(Boolean.TRUE);
         return projectService.getProjectsByCriteria(projectCriteria);
     }
 
-      
     public String deleteTransaction() {
 
         Transaction transaction = getTransaction(selectedTransactionModel);

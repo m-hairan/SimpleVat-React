@@ -10,7 +10,9 @@ import org.springframework.stereotype.Controller;
 
 import com.simplevat.web.bankaccount.model.TransactionModel;
 import com.simplevat.criteria.bankaccount.TransactionCriteria;
+import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.entity.bankaccount.Transaction;
+import com.simplevat.service.bankaccount.BankAccountService;
 import com.simplevat.service.bankaccount.TransactionService;
 import com.simplevat.web.bankaccount.model.BankAccountModel;
 import com.simplevat.web.utils.FacesUtil;
@@ -27,7 +29,8 @@ public class TransactionListController extends TransactionControllerHelper imple
 
     @Autowired
     private TransactionService transactionService;
-
+    @Autowired
+    private BankAccountService bankAccountService;
     private List<TransactionModel> transactions;
     
     @Getter
@@ -36,7 +39,9 @@ public class TransactionListController extends TransactionControllerHelper imple
     @PostConstruct
     public void init(){
         try {
-            selectedBankAccountModel = FacesUtil.getSelectedBankAccount();
+            Integer bankAccountId = FacesUtil.getSelectedBankAccountId();
+            BankAccount bankAccount = bankAccountService.findByPK(bankAccountId);
+            selectedBankAccountModel = new BankAccountHelper().getBankAccountModel(bankAccount);
             BankAccountHelper bankAccountHelper = new BankAccountHelper();
             TransactionCriteria transactionCriteria = new TransactionCriteria();
             transactionCriteria.setActive(Boolean.TRUE);
