@@ -124,24 +124,26 @@ public class TransactionServiceImpl extends TransactionService {
 
     @Override
     public Transaction update(Transaction transaction) {
-        Transaction previousTransaction = transactionDao.getBeforeTransaction(transaction);
+        Transaction currentTransaction = transactionDao.findByPK(transaction.getTransactionId());
         BigDecimal differenceAmount = new BigDecimal(0);
         BigDecimal balanceAmount = transaction.getBankAccount().getCurrentBalance();
-        if (Objects.equals(previousTransaction.getDebitCreditFlag(), transaction.getDebitCreditFlag())) {
-            differenceAmount = transaction.getTransactionAmount().subtract(previousTransaction.getTransactionAmount());
+        if (Objects.equals(currentTransaction.getDebitCreditFlag(), transaction.getDebitCreditFlag())) {
+            differenceAmount = transaction.getTransactionAmount().subtract(currentTransaction.getTransactionAmount());
         } else {
-            differenceAmount = transaction.getTransactionAmount().add(previousTransaction.getTransactionAmount());
+            differenceAmount = transaction.getTransactionAmount().add(currentTransaction.getTransactionAmount());
         }
-        if (transaction.getDebitCreditFlag() == 'D') {
-            balanceAmount = balanceAmount.subtract(differenceAmount);
-            transaction.setCurrentBalance(transaction.getCurrentBalance().subtract(differenceAmount));
-        } else {
-            balanceAmount = balanceAmount.add(differenceAmount);
-            transaction.setCurrentBalance(transaction.getCurrentBalance().add(differenceAmount));
+        if (differenceAmount.compareTo(new BigDecimal(0)) != 0) {
+            if (transaction.getDebitCreditFlag() == 'D') {
+                balanceAmount = balanceAmount.subtract(differenceAmount);
+                transaction.setCurrentBalance(transaction.getCurrentBalance().subtract(differenceAmount));
+            } else {
+                balanceAmount = balanceAmount.add(differenceAmount);
+                transaction.setCurrentBalance(transaction.getCurrentBalance().add(differenceAmount));
+            }
+            updateLatestTransaction(differenceAmount, transaction);
+            updateAccountBalance(balanceAmount, transaction);
         }
-        transactionDao.update(transaction);
-        updateLatestTransaction(differenceAmount, transaction);
-        updateAccountBalance(balanceAmount, transaction);
+        transaction = transactionDao.update(transaction);
         return transaction;
     }
 

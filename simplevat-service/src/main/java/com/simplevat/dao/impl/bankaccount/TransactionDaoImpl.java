@@ -63,11 +63,12 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
 
     @Override
     public Transaction getBeforeTransaction(Transaction transaction) {
-        TypedQuery<Transaction> query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.transactionDate <= :transactionDate and t.deleteFlag = false and t.bankAccount.bankAccountId = :bankAccountId ORDER BY t.transactionDate DESC", Transaction.class);
+        TypedQuery<Transaction> query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.transactionDate <= :transactionDate and t.transactionId < :transactionId and t.deleteFlag = false and t.bankAccount.bankAccountId = :bankAccountId ORDER BY t.transactionDate DESC", Transaction.class);
         query.setParameter("transactionDate", transaction.getTransactionDate());
         query.setParameter("bankAccountId", transaction.getBankAccount().getBankAccountId());
+        query.setParameter("transactionId", transaction.getTransactionId());
         if (query.getResultList() != null && !query.getResultList().isEmpty()) {
-            return query.getResultList().get(0);
+            return query.getResultList().get(query.getResultList().size() - 1);
         }
         return null;
     }
