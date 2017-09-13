@@ -39,10 +39,9 @@
     </ui:define>
 
     <ui:define name="title">#{messages.contact}</ui:define>
-
     <ui:define name="content">
+        <si:cdataPanel newAction= "#{contactController.redirectToCreateContact()}" deleteAction="#{contactListController.delete()}" process="@form">
 
-        <si:cdataPanel newAction= "#{contactController.redirectToCreateContact()}" deleteAction="#{contactListController.delete()}" process="@form" >
             <h:form id="form">
                 <p:dataGrid var="contact" 
                             value="#{contactListController.contacts}" 
@@ -57,14 +56,12 @@
                     <f:facet name="header">
                         <p:selectOneButton id="filterChar"
                                            value="#{contactListController.selectedFilter}">
-                            <p:ajax update="contacts" />
+                            <p:ajax update="contacts" listener="#{contactListController.populateContactList}"/>
                             <f:selectItem itemLabel="All" itemValue="" />
                             <f:selectItems value="#{contactListController.filters}" />
                         </p:selectOneButton>
                     </f:facet>
-
                     <div class="contacts">
-
                         <p:panel header="#{contact.firstName} #{contact.lastName}" 
                                  style="text-align:center">
                             <h:panelGrid columns="1" style="width:100%">
@@ -93,7 +90,6 @@
                                 <h:selectBooleanCheckbox value="#{contact.selected}" />
                             </h:panelGrid>
                         </p:panel>
-
                     </div>
                 </p:dataGrid>
                 <p:dialog header="Contact Info" widgetVar="contactDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" responsive="true">
@@ -120,5 +116,4 @@
             </h:form>
         </si:cdataPanel>
     </ui:define>
-
 </ui:composition>

@@ -2,8 +2,11 @@ package com.simplevat.web.contact.controller;
 
 import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.Contact;
+
 import com.simplevat.service.ContactService;
+
 import com.simplevat.web.contact.model.ContactModel;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
@@ -15,7 +18,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -44,6 +46,7 @@ public class ContactListController extends ContactHelper implements Serializable
     @Setter
     private List<Contact> selectedContacts;
 
+    @Getter
     @Setter
     private Map<String, String> filters;
 
@@ -54,16 +57,31 @@ public class ContactListController extends ContactHelper implements Serializable
     public void init() {
         selectedFilter = null;
         this.filteredContacts = new ArrayList<>();
+        populateContactList();
+        populateFilters();
     }
 
-    public Map<String, String> getFilters() {
+    public void populateContactList() {
+        if (this.selectedFilter != null && !this.selectedFilter.isEmpty()) {
+            filteredContacts = this.getFilteredContacts(this.selectedFilter);
+        } else {
+            for (Contact contact : contactService.getContacts()) {
+                ContactModel contactModel = getContactModel(contact);
+                filteredContacts.add(contactModel);
+            }
+        }
+    }
+
+    private void populateFilters() {
         filters = new HashMap<>();
-        filteredContacts.stream()
-                .map((contact) -> contact.getFirstName().substring(0, 1).toUpperCase())
-                .forEach((filterCharacter) -> {
-                    filters.put(filterCharacter, filterCharacter);
-                });
-        return filters;
+        filteredContacts.stream().forEach(contact -> {
+            if (contact.getFirstName() != null && !contact.getFirstName().isEmpty()) {
+                String firstChar = contact.getFirstName().substring(0, 1).toUpperCase();
+                if (!filters.containsKey(firstChar)) {
+                    filters.put(firstChar, firstChar);
+                }
+            }
+        });
     }
 
     private List<ContactModel> getFilteredContacts(String filterChar) {
@@ -73,35 +91,28 @@ public class ContactListController extends ContactHelper implements Serializable
         }
         List<ContactModel> returnContacts = new ArrayList<>();
         for (ContactModel contact : filteredContacts) {
-            if (contact.getFirstName().substring(0, 1).toUpperCase().equals(filterChar.toUpperCase())) {
-                returnContacts.add(contact);
+            if (contact.getFirstName() != null && !contact.getFirstName().isEmpty()) {
+                if (contact.getFirstName().substring(0, 1).toUpperCase().equals(filterChar.toUpperCase())) {
+                    returnContacts.add(contact);
+                }
             }
         }
         return returnContacts;
     }
 
     public void delete() {
-        for(ContactModel contactModel : getContacts()){
-           if(contactModel.getSelected()){
-               Contact contact = getContact(contactModel);
-               contactService.update(contact);
-           }
+        for (ContactModel contactModel : getContacts()) {
+            if (contactModel.getSelected()) {
+                Contact contact = getContact(contactModel);
+                contactService.update(contact);
+            }
         }
-       init();
+        init();
     }
 
     @Nonnull
     public List<ContactModel> getContacts() {
-        if (this.selectedFilter != null && !this.selectedFilter.isEmpty()) {
-            filteredContacts = this.getFilteredContacts(this.selectedFilter);
-        } else {
-            for(Contact contact :contactService.getContacts()){
-                ContactModel contactModel = getContactModel(contact);
-            filteredContacts.add(contactModel);
-            }
-        }
         return filteredContacts;
-
     }
 
     public String redirectToEditContact() throws IOException {
