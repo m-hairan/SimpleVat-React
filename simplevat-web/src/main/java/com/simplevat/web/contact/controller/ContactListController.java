@@ -42,12 +42,11 @@ public class ContactListController extends ContactHelper implements Serializable
     @Getter
     @Setter
     private Contact selectedContact;
-    
+
     @Getter
     @Setter
     private ContactModel contact;
 
-    
     @Getter
     @Setter
     private List<Contact> selectedContacts;
@@ -72,10 +71,13 @@ public class ContactListController extends ContactHelper implements Serializable
         if (this.selectedFilter != null && !this.selectedFilter.isEmpty()) {
             filteredContacts = this.getFilteredContacts(this.selectedFilter);
         } else {
+            contactList.clear();
             for (Contact contact : contactService.getContacts()) {
                 ContactModel contactModel = getContactModel(contact);
                 contactList.add(contactModel);
             }
+            filteredContacts.clear();
+            filteredContacts.addAll(contactList);
         }
     }
 
@@ -122,29 +124,24 @@ public class ContactListController extends ContactHelper implements Serializable
         return filteredContacts;
     }
 
-    public String redirectToEditContact(){
-       
-        
-       
-      //  return "contact?faces-redirect=true&selectedContactId=" + selectedContact.getContactId();
-     return "contact?faces-redirect=true&selectedContactId=" + contact.getContactId();
-    
+    public String redirectToEditContact() {
+
+        //  return "contact?faces-redirect=true&selectedContactId=" + selectedContact.getContactId();
+        return "contact?faces-redirect=true&selectedContactId=" + contact.getContactId();
+
     }
 
-    
-    
     public void deleteContact() {
-        
-        
+
         contact.setDeleteFlag(Boolean.TRUE);
-        
-        selectedContact= getContact(contact);
-        
+
+        selectedContact = getContact(contact);
+
         contactService.update(selectedContact);
-        
+
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        
+
         context.addMessage(null, new FacesMessage("Contact deleted SuccessFully"));
     }
 
