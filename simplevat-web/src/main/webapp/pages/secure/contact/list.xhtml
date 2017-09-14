@@ -76,13 +76,18 @@
                                                      styleClass="AquaButton" 
                                                      update="@form:selectedContactDetail" 
                                                      action="#{contactListController.redirectToEditContact}" >
-                                        <f:setPropertyActionListener value="#{contact}" target="#{contactListController.selectedContact}" />
+                                        <f:setPropertyActionListener value="#{contact}" target="#{contactListController.contact}" />
                                     </p:commandButton>
                                     <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" 
-                                                     update="@form"
-                                                     action="#{contactListController.deleteContact(contact)}">
-
+                                                     update="@form" 
+                                                     action="#{contactListController.deleteContact()}">
+                                        
+                                
+                                        <f:setPropertyActionListener value="#{contact}" target="#{contactListController.contact}" />
+                                        <p:confirm header="Delete contact" message="Are you sure you want to delete?" icon="ui-icon-alert" />
+                       
                                     </p:commandButton>
+
                                 </h:panelGrid>
 
                             </h:panelGrid>
@@ -109,7 +114,7 @@
                             <h:outputText value="#{contactListController.selectedContact.lastName}" />
 
                             <h:outputText value="Email" />
-                            <h:outputText value="\$#{contactListController.selectedContact.email}" />
+                            <h:outputText value="#{contactListController.selectedContact.email}" />
                         </p:panelGrid>
                     </p:outputPanel>
                 </p:dialog>

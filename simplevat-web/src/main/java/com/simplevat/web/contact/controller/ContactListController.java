@@ -33,6 +33,7 @@ public class ContactListController extends ContactHelper implements Serializable
     private Map<Integer, Boolean> selectedContactIds = new HashMap<>();
 
     private List<ContactModel> filteredContacts;
+    private List<ContactModel> contactList;
 
     @Getter
     @Setter
@@ -41,7 +42,12 @@ public class ContactListController extends ContactHelper implements Serializable
     @Getter
     @Setter
     private Contact selectedContact;
+    
+    @Getter
+    @Setter
+    private ContactModel contact;
 
+    
     @Getter
     @Setter
     private List<Contact> selectedContacts;
@@ -56,6 +62,7 @@ public class ContactListController extends ContactHelper implements Serializable
     @PostConstruct
     public void init() {
         selectedFilter = null;
+        contactList = new ArrayList<>();
         this.filteredContacts = new ArrayList<>();
         populateContactList();
         populateFilters();
@@ -67,7 +74,7 @@ public class ContactListController extends ContactHelper implements Serializable
         } else {
             for (Contact contact : contactService.getContacts()) {
                 ContactModel contactModel = getContactModel(contact);
-                filteredContacts.add(contactModel);
+                contactList.add(contactModel);
             }
         }
     }
@@ -87,10 +94,10 @@ public class ContactListController extends ContactHelper implements Serializable
     private List<ContactModel> getFilteredContacts(String filterChar) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Changing Filter to :" + filterChar);
-            LOGGER.debug("Number of contacts :" + filteredContacts.size());
+            LOGGER.debug("Number of contacts :" + contactList.size());
         }
         List<ContactModel> returnContacts = new ArrayList<>();
-        for (ContactModel contact : filteredContacts) {
+        for (ContactModel contact : contactList) {
             if (contact.getFirstName() != null && !contact.getFirstName().isEmpty()) {
                 if (contact.getFirstName().substring(0, 1).toUpperCase().equals(filterChar.toUpperCase())) {
                     returnContacts.add(contact);
@@ -115,25 +122,29 @@ public class ContactListController extends ContactHelper implements Serializable
         return filteredContacts;
     }
 
-    public String redirectToEditContact() throws IOException {
-//        contactModel = new ContactModel();
-//        BeanUtils.copyProperties(contact, contactModel);
-//        contactModel.setEmailAddress(contact.getEmail());
-//        contactModel.setOrganizationName(contact.getOrganization());
-//        LOGGER.debug("Redirecting to create new contact page");
-//        if(contact.getContactId() == null){
-//            contactService.persist(contact);
-//        }else{
-//            contactService.update(contact, contact.getContactId());
-//        }
-        return "contact?faces-redirect=true&selectedContactId=" + selectedContact.getContactId();
+    public String redirectToEditContact(){
+       
+        
+       
+      //  return "contact?faces-redirect=true&selectedContactId=" + selectedContact.getContactId();
+     return "contact?faces-redirect=true&selectedContactId=" + contact.getContactId();
+    
     }
 
-    public void deleteContact(Contact contact) {
+    
+    
+    public void deleteContact() {
+        
+        
         contact.setDeleteFlag(Boolean.TRUE);
-        contactService.update(contact);
+        
+        selectedContact= getContact(contact);
+        
+        contactService.update(selectedContact);
+        
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
+        
         context.addMessage(null, new FacesMessage("Contact deleted SuccessFully"));
     }
 
