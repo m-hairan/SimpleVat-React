@@ -277,6 +277,12 @@
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-web-api</artifactId>
+			<version>${javaee-web-api-version}</version>
+			<type>jar</type>
+		</dependency>
 	</dependencies>
 
 	<repositories>
