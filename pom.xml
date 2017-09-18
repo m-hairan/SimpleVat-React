@@ -45,6 +45,7 @@
 		<lombok.version>1.14.8</lombok.version>
 		<hibernate.version>5.2.8.Final</hibernate.version>
 		<spring-security-core.version>3.2.5.RELEASE</spring-security-core.version>
+		<javaee-web-api-version>7.0</javaee-web-api-version>
 	</properties>
 
 	<build>
@@ -567,6 +568,12 @@
 				<groupId>org.apache.poi</groupId>
 				<artifactId>poi</artifactId>
 				<version>3.16</version>
+			</dependency>
+			<dependency>
+				<groupId>javax</groupId>
+				<artifactId>javaee-web-api</artifactId>
+				<version>${javaee-web-api-version}</version>
+				<type>jar</type>
 			</dependency>
 			<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
 
