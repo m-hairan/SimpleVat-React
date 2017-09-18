@@ -105,14 +105,13 @@ public class ProjectController {
     
     
     public List<Project> projects(final String searchQuery) throws Exception {
-    /*ProjectCriteria criteria = new ProjectCriteria();
+    ProjectCriteria criteria = new ProjectCriteria();
         criteria.setActive(Boolean.TRUE);
         if (!isNullOrEmpty(searchQuery)) {
             criteria.setProjectName(searchQuery);
         }
         return projectService.getProjectsByCriteria(criteria);
-*/
-              return projectService.getAll();
+//        return projectService.getAll();
 }
     
     
