@@ -20,10 +20,10 @@
                 <p:column headerText="#{messages.transactionCategoryCode}" sortBy="#{transactionCategory.transactionCategoryCode}">
 					<h:outputText value="#{transactionCategory.transactionCategoryCode}" />
 				</p:column>
-                <p:column headerText="#{messages.transactionCategoryName}" sortBy="#{transactionCategory.transactionCategoryName}">
+                         <p:column headerText="#{messages.transactionCategoryName}" sortBy="#{transactionCategory.transactionCategoryName}">
 					<h:outputText value="#{transactionCategory.transactionCategoryName}" />
 				</p:column>
-                <p:column headerText="#{messages.transactionCategoryDescription}" sortBy="#{transactionCategory.transactionCategoryDescription}">
+                         <p:column headerText="#{messages.transactionCategoryDescription}" sortBy="#{transactionCategory.transactionCategoryDescription}">
 					<h:outputText value="#{transactionCategory.transactionCategoryDescription}" />
 				</p:column>
 				<p:column headerText="#{messages.parentTransactionCategoryName}" sortBy="#{transactionCategory.parentTransactionCategory.transactionCategoryName}">
@@ -36,9 +36,9 @@
 				<p:column headerText="Action">
 					 <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" action="#{transactionCategoryView.editAction}">
                              <f:setPropertyActionListener value="#{transactionCategory}" target="#{transactionCategoryView.selectedTransactionCategory}" />
-                     </p:commandButton>
+                         </p:commandButton>
                      
-                     <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{transactionCategoryView.deleteTransactionCategory}" >
+                         <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{transactionCategoryView.deleteTransactionCategory}" >
 						<f:setPropertyActionListener value="#{transactionCategory}" target="#{transactionCategoryView.selectedTransactionCategory}" />
 					</p:commandButton>
                                         

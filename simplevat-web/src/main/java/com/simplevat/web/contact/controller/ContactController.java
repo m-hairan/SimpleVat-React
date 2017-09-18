@@ -77,27 +77,23 @@ public class ContactController extends ContactHelper implements Serializable {
         contactModel = new ContactModel();
         Object objContactId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedContactId");
         System.out.println("selected : :" + objContactId);
+
         if (objContactId != null) {
+
             BeanUtils.copyProperties(contactService.findByPK(Integer.parseInt(objContactId.toString())), contactModel);
-            BeanUtils.copyProperties("selectedContact", selectedContact);
+            titles = titleService.getTitles();
         } else {
             contactModel = new ContactModel();
-            currencies = currencyService.getCurrencies();
-
             setDefaultCurrency();
-
-            countries = countryService.getCountries();
-
             setDefaultCountry();
-
-            languages = languageService.getLanguages();
-
             setDefaultLanguage();
-
             titles = titleService.getTitles();
-
             LOGGER.debug("Loaded Countries :" + countries.size());
         }
+        currencies = currencyService.getCurrencies();
+        countries = countryService.getCountries();
+        languages = languageService.getLanguages();
+
     }
 
     private void setDefaultCurrency() {
@@ -132,13 +128,10 @@ public class ContactController extends ContactHelper implements Serializable {
 
     public String createOrUpdateContact() throws IOException {
         User loggedInUser = FacesUtil.getLoggedInUser();
-
         BeanUtils.copyProperties(contactModel, selectedContact);
-
         System.out.println("Creating contact " + selectedContact.getContactId());
         selectedContact.setOrganization(contactModel.getOrganization());
         selectedContact.setEmail(contactModel.getEmail());
-
         selectedContact.setCreatedBy(loggedInUser.getUserId());
         if (selectedContact.getContactId() != null && selectedContact.getContactId() > 0) {
             this.contactService.update(selectedContact, selectedContact.getContactId());
@@ -147,6 +140,7 @@ public class ContactController extends ContactHelper implements Serializable {
         }
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
+
 //        if(selectedContact.getContactId() != null){
 //            contactService.update(selectedContact);
 //            context.addMessage(null, new FacesMessage("Contact Updated SuccessFully"));
@@ -187,6 +181,7 @@ public class ContactController extends ContactHelper implements Serializable {
 
     public List<Title> completeTitle(String titleStr) {
         List<Title> titleSuggestion = new ArrayList<>();
+
         Iterator<Title> titleIterator = this.titles.iterator();
 
         LOGGER.debug(" Size :" + titles.size());

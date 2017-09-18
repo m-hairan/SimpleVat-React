@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
  
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.fill.JRBaseFiller;
 import net.sf.jasperreports.j2ee.servlets.BaseHttpServlet;
  
  
@@ -24,7 +25,7 @@ public abstract class AbstractReportBean {
         PDF, HTML, EXCEL, RTF
     }
     private ExportOption exportOption;
-    private final String COMPILE_DIR = "/reports";
+    private String compileDir = "/reports";
     //private String compileFileName = "productlist";//name of your compiled report file
     private String message;
  
@@ -43,6 +44,7 @@ public abstract class AbstractReportBean {
         String jasperFilePath = ReportConfigUtil.compileReport(getCompileDir(), getCompileFileName());
  
         File reportFile = new File(jasperFilePath);
+        
  
         ///////////////////
 /*        Connection conn = null;
@@ -81,7 +83,11 @@ public abstract class AbstractReportBean {
     }
  
     protected String getCompileDir() {
-        return COMPILE_DIR;
+        return compileDir;
+    }
+    
+    protected void setCompileDir(String compileDir) {
+        this.compileDir = compileDir;
     }
  
     protected abstract String getCompileFileName();

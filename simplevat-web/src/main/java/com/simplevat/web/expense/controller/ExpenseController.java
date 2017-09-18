@@ -67,7 +67,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
         Object objSelectedExpenseModel = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedExpenseModelId");
         if (objSelectedExpenseModel == null) {
             selectedExpenseModel = new ExpenseModel();
-            Currency defaultCurrency = currencyService.getDefaultCurrency();
+             Currency defaultCurrency = currencyService.getDefaultCurrency();
             if (defaultCurrency != null) {
                 selectedExpenseModel.setCurrency(defaultCurrency);
             }
@@ -108,9 +108,11 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 
     }
 
+    
     public String saveExpense() {
         System.out.println("selected Model : :"+selectedExpenseModel.getExpenseId());
         User loggedInUser = FacesUtil.getLoggedInUser();
+        
         Expense expense = getExpense(selectedExpenseModel);
         expense.setLastUpdateDate(LocalDateTime.now());
         expense.setLastUpdatedBy(loggedInUser.getUserId());
@@ -118,6 +120,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
         expense.setCreatedBy(loggedInUser.getUserId());
         expense.setUser(loggedInUser);
         System.out.println("agdjadgajhdg : :" +expense.getUser().getUserEmail());
+    
         if (selectedExpenseModel.getTransactionType() != null) {
             TransactionType transactionType = transactionTypeService.getTransactionType(selectedExpenseModel.getTransactionType().getTransactionTypeCode());
             expense.setTransactionType(transactionType);

@@ -78,12 +78,19 @@ public class TransactionController extends TransactionControllerHelper implement
     @Setter
     private BankAccountModel selectedBankAccountModel;
 
+    @Getter
+    @Setter
+    List<TransactionType> transactionTypeList;
+
     @PostConstruct
     public void init() {
 
+        this.transactionTypeList = transactionTypeService.findAll();
         Integer bankAccountId = FacesUtil.getSelectedBankAccountId();
-        BankAccount bankAccount = bankAccountService.findByPK(bankAccountId);
-        selectedBankAccountModel = new BankAccountHelper().getBankAccountModel(bankAccount);
+        if (bankAccountId != null) {
+            BankAccount bankAccount = bankAccountService.findByPK(bankAccountId);
+            selectedBankAccountModel = new BankAccountHelper().getBankAccountModel(bankAccount);
+        }
         Object objselectedTransactionModel = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedTransactionId");
 
         if (objselectedTransactionModel != null) {
@@ -238,10 +245,17 @@ public class TransactionController extends TransactionControllerHelper implement
         return "bank-transactions?faces-redirect=true";
     }
 
-    public List<TransactionType> transactionTypes(final String searchQuery) throws Exception {
+/* public List<TransactionType> transactionTypes(final String searchQuery) throws Exception {
+   
         TransactionTypeCriteria transactionTypeCriteria = new TransactionTypeCriteria();
         transactionTypeCriteria.setActive(Boolean.TRUE);
         return transactionTypeService.getTransactionTypesByCriteria(transactionTypeCriteria);
+    
+   
+    }*/
+    public List<TransactionType> transactionTypes() throws Exception {
+        return transactionTypeList;
+
     }
 
     public List<TransactionCategory> transactionCategories(final String searchQuery) throws Exception {

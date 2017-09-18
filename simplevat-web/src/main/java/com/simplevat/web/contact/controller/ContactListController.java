@@ -119,6 +119,7 @@ public class ContactListController extends ContactHelper implements Serializable
         init();
     }
 
+    
     @Nonnull
     public List<ContactModel> getContacts() {
         return filteredContacts;
@@ -144,8 +145,10 @@ public class ContactListController extends ContactHelper implements Serializable
 
         context.addMessage(null, new FacesMessage("Contact deleted SuccessFully"));
     }
+    
 
 //    public void setSelectedContactIds(Long key, Boolean Value){
 //        selectedContactIds.put(key,Value);
 //    }
 }
+

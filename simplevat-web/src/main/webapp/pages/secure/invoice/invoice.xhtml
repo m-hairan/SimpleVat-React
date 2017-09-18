@@ -32,6 +32,7 @@
 
     <ui:define name="title">Invoices</ui:define>
     <ui:define name="content">
+       
         <h:form id="invoice">
             <div class="card card-w-title">
                 <div class="ui-fluid">
@@ -75,9 +76,15 @@
                                                         var="contact"
                                                         itemValue="#{contact.contactId}"
                                                         itemLabel="#{contact.firstName} #{contact.lastName}">
+                                            
+                                            
+                                            
+                                            
                                             <p:ajax event="itemSelect"
                                                     listener="#{invoiceController.updateCurrency}" 
                                                     update="currency invoiceItemTable" />
+                                            
+                                            
                                         </p:autoComplete>
                                         <label>#{messages.contact}</label>
                                         <p:message for="conatcts" />
@@ -341,6 +348,10 @@
                                              update="@form"
                                              validateClient="true"
                                              icon="ui-icon-forward" />
+                            
+                            <p:commandButton action="#{invoiceController.printInvoice()}" rendered="#{invoiceController.renderPrintInvoice}"
+                                             value="#{messages.print_invoice}"
+                                             icon="ui-icon-print" />
                         <span class="ui-separator" style="padding-right: 5px;">
                             <span class="fa fa-ellipsis-v SoftGray" />
                         </span>

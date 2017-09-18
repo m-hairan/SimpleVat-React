@@ -28,6 +28,7 @@ public class ExpenseListController extends ExpenseControllerHelper implements Se
 
     private List<ExpenseModel> expenses;
 
+    
     public List<ExpenseModel> getExpenses() {
 
         List<Expense> expenseList = expenseService.getExpenses();

@@ -1,12 +1,14 @@
 package com.simplevat.web.project.controller;
 
 import com.github.javaplugs.jsf.SpringScopeView;
+import static com.mysql.jdbc.StringUtils.isNullOrEmpty;
 import com.simplevat.criteria.ProjectCriteria;
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.Language;
 import com.simplevat.entity.Project;
 import com.simplevat.entity.User;
+import com.simplevat.entity.bankaccount.TransactionType;
 import com.simplevat.service.ContactService;
 import com.simplevat.service.CurrencyService;
 import com.simplevat.service.LanguageService;
@@ -49,10 +51,7 @@ public class ProjectController {
     @Autowired
     private ContactService contactService;
 
-    @Getter
-    @Setter
-    private List<Project> projects;
-
+    
     @Getter
     @Setter
     private Project selectedProject;
@@ -65,16 +64,10 @@ public class ProjectController {
     @Setter
     private List<Currency> currencies;
 
-    public List<Contact> contacts(final String searchQuery) {
-        return contactService.getContacts(searchQuery);
-    }
-
-    private List<Project> getProjectFromCriteria() throws Exception {
-        ProjectCriteria projectCriteria = new ProjectCriteria();
-        projectCriteria.setActive(Boolean.TRUE);
-        return projectService.getProjectsByCriteria(projectCriteria);
-    }
-
+    
+    
+    
+    
     @PostConstruct
     public void init() {
         selectedProject = new Project();
@@ -88,7 +81,6 @@ public class ProjectController {
             }
         }
         try {
-            this.projects = getProjectFromCriteria();
             this.languages = languageService.getLanguages();
             this.currencies = currencyService.getCurrencies();
         } catch (Exception ex) {
@@ -96,6 +88,37 @@ public class ProjectController {
         }
     }
 
+    
+    
+    public List<Contact> contacts(final String searchQuery) {
+        return contactService.getContacts(searchQuery);
+    }
+
+    
+    private List<Project> getProjectFromCriteria() throws Exception {
+        
+        ProjectCriteria projectCriteria = new ProjectCriteria();
+        projectCriteria.setActive(Boolean.TRUE);
+        return projectService.getProjectsByCriteria(projectCriteria);
+    }
+    
+    
+    
+    public List<Project> projects(final String searchQuery) throws Exception {
+    /*ProjectCriteria criteria = new ProjectCriteria();
+        criteria.setActive(Boolean.TRUE);
+        if (!isNullOrEmpty(searchQuery)) {
+            criteria.setProjectName(searchQuery);
+        }
+        return projectService.getProjectsByCriteria(criteria);
+*/
+              return projectService.getAll();
+}
+    
+    
+
+
+    
     public String saveProject() throws Exception {
         User loggedInUser = FacesUtil.getLoggedInUser();
         selectedProject.setCreatedBy(loggedInUser.getUserId());
@@ -167,5 +190,8 @@ public class ProjectController {
 
         return currencySuggestion;
     }
+    
+    
+  
 
 }

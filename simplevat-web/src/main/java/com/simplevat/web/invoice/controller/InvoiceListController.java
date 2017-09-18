@@ -23,6 +23,8 @@ import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.entity.invoice.InvoiceLineItem;
 import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.web.invoice.model.InvoiceModel;
+import javax.faces.context.Flash;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -57,13 +59,9 @@ public class InvoiceListController implements Serializable {
         invoices = invoiceService.filter(invoiceFilter);
     }
 
-//    @Nonnull
-//    public List<Invoice> getInvoices() {
-//        return invoices;
-//    }
     public String redirectToCreateInvoice() {
         if(selectedInvoice != null){
-            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("invoiceId", selectedInvoice.getInvoiceId());
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("invoiceId", String.valueOf(selectedInvoice.getInvoiceId()));
         }
         return "invoice.xhtml?faces-redirect=true?faces-redirect=true";
     }
@@ -120,7 +118,6 @@ public class InvoiceListController implements Serializable {
         return finalTotal;
     }
     
-
     public String redirectEditInvoice(){
         return "invoice.xhtml?faces-redirect=true&invoiceId"+selectedInvoiceModel.getInvoiceId();
     }

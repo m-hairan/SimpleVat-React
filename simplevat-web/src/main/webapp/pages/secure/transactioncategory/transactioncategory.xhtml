@@ -12,8 +12,9 @@
     <ui:define name="content">
         <si:cdataPanel newAction="#{transactionCategoryView.createNewCategory()}">
             <h:form>
+              
                 <p:dataTable var="transactionCategory" 
-                             value="#{transactionCategoryView.transactionCategories}"
+                             value="#{transactionCategoryView.getAllCategories()}"
                              paginator="true" rows="10"
                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}">
 
@@ -35,12 +36,13 @@
                     <p:column headerText="#{messages.transactionType}" sortBy="#{transactionCategory.transactionType.transactionTypeName}">
                         <h:outputText value="#{transactionCategory.transactionType.transactionTypeName}" />
                     </p:column>
+                    
                     <p:column headerText="Action">
                         <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" action="#{transactionCategoryView.editAction}">
-                            <f:setPropertyActionListener value="#{transactionCategory}" target="#{transactionCategoryView.selectedTransactionCategory}" />
+                            <f:setPropertyActionListener value="#{transactionCategory}" target="#{transactionCategoryView.transactionCategoryModel}" />
                         </p:commandButton>
                         <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{transactionCategoryView.deleteTransactionCategory}" >
-                            <f:setPropertyActionListener value="#{transactionCategory}" target="#{transactionCategoryView.selectedTransactionCategory}" />
+                            <f:setPropertyActionListener value="#{transactionCategory}" target="#{transactionCategoryView.transactionCategoryModel}" />
                         </p:commandButton>
                     </p:column>
                 </p:dataTable>

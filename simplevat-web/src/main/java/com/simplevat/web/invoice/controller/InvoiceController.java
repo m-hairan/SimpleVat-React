@@ -35,6 +35,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import static com.mysql.jdbc.StringUtils.isNullOrEmpty;
+import javax.servlet.http.HttpSession;
 
 /**
  * @author Hiren
@@ -59,6 +60,9 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
     @Setter
     private List<Currency> currencies;
 
+    @Getter
+    private boolean renderPrintInvoice;
+
     @Autowired
     private ContactService contactService;
 
@@ -81,6 +85,7 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
         if (objSelectedInvoice != null) {
             selectedInvoice = invoiceService.findByPK(Integer.parseInt(objSelectedInvoice.toString()));
             selectedInvoiceModel = getInvoiceModel(selectedInvoice);
+            renderPrintInvoice = true;
         } else {
             selectedInvoiceModel = new InvoiceModel();
             contactModel = new ContactModel();
@@ -102,6 +107,7 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
 
     public void addInvoiceItem() {
         boolean validated = validateInvoiceLineItems();
+
         if (validated) {
             updateCurrencyLabel();
             selectedInvoiceModel.addInvoiceItem(new InvoiceItemModel());
@@ -146,9 +152,9 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
     }
 
     public List<Currency> completeCurrency(String currencyStr) {
-    	if(this.currencies == null) {
-    		this.currencies = currencyService.getCurrencies();
-    	}
+        if (this.currencies == null) {
+            this.currencies = currencyService.getCurrencies();
+        }
         List<Currency> currencySuggestion = new ArrayList<>();
         Iterator<Currency> currencyIterator = this.currencies.iterator();
 
@@ -182,11 +188,20 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
         return types;
     }
 
+    public String printInvoice() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
+        session.setAttribute("invoiceId", selectedInvoice.getInvoiceId());
+        return "invoicePDF.xhtml?faces-redirect=true";
+    }
+
     public String saveInvoice() throws IOException {
+
         if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
             return "";
         }
         selectedInvoice = getInvoiceEntity(selectedInvoiceModel);
+
         if (selectedInvoice.getInvoiceId() != null && selectedInvoice.getInvoiceId() > 0) {
             invoiceService.update(selectedInvoice);
         } else {
@@ -194,13 +209,16 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
         }
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-         if (selectedInvoiceModel.getInvoiceId() != null && selectedInvoiceModel.getInvoiceId() > 0) {
-          context.addMessage(null, new FacesMessage("Invoice Updated SuccessFully"));
-		 } else {
+
+        if (selectedInvoiceModel.getInvoiceId() != null && selectedInvoiceModel.getInvoiceId() > 0) {
+            context.addMessage(null, new FacesMessage("Invoice Updated SuccessFully"));
+        } else {
             context.addMessage(null, new FacesMessage("Invoice Added SuccessFully"));
         }
         init();
+
         return "list?faces-redirect=true";
+
     }
 
     public void saveAndAddMoreInvoice() {

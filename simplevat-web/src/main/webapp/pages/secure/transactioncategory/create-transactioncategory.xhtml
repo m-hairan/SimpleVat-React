@@ -12,6 +12,7 @@
         <h:form id="createTransactionCategoryForm"
                 enctype="multipart/form-data">
 
+
             <div class="card card-w-title">
                 <div class="ui-fluid">
                     <div class="ui-g">
@@ -29,7 +30,7 @@
 
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText
-                                                value="#{transactionCategoryView.selectedTransactionCategory.transactionCategoryName}" />
+                                                value="#{transactionCategoryView.transactionCategoryModel.transactionCategoryName}" />
                                             <label>#{messages.transactionCategoryName}</label>
                                         </h:panelGroup>
 
@@ -37,34 +38,39 @@
 
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText
-                                                value="#{transactionCategoryView.selectedTransactionCategory.transactionCategoryDescription}" />
+                                                value="#{transactionCategoryView.transactionCategoryModel.transactionCategoryDescription}" />
                                             <label>#{messages.transactionCategoryDescription}</label>
                                         </h:panelGroup>
 
                                         <h:panelGroup />
 
+
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:outputLabel for="categoryCode"/>
                                             <p:autoComplete id="categoryCode" 
-                                                            value="#{transactionCategoryView.selectedTransactionCategory.transactionType.transactionTypeCode}"
+                                                            value="#{transactionCategoryView.transactionCategoryModel.transactionType}"
                                                             forceSelection="true" 
                                                             dropdown="true"
                                                             completeMethod="#{transactionCategoryView.getAllTransactionType}" 
-                                                            var="transactionType" itemLabel="#{transactionType.transactionTypeName}"  itemValue="#{transactionType.transactionTypeCode}"
+
+                                                            var="transactionType" itemLabel="#{transactionType.transactionTypeName}"  
+                                                            itemValue="#{transactionType}"
                                                             converter="transactionTypeConverter"
                                                             required="false"/>
                                             <label>Transaction Type</label>
                                         </h:panelGroup>
 
+
+                                        
                                         <h:panelGroup />
 
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:outputLabel for="parentCategoryCode"/>
                                             <p:autoComplete id="parentCategoryCode" 
-                                                            value="#{transactionCategoryView.selectedTransactionCategory.parentTransactionCategory}"
+                                                            value="#{transactionCategoryView.transactionCategoryModel.transactionCategoryCode}"
                                                             forceSelection="true" 
                                                             dropdown="true"
-                                                            completeMethod="#{transactionCategoryView.getParentTransactionCategories}" 
+                                                            completeMethod="#{transactionCategoryView.getAllCategories()}" 
                                                             var="transactionCategory" itemLabel="#{transactionCategory.transactionCategoryName}"  itemValue="#{transactionCategory}"
                                                             converter="transactionCategoryConverter"
                                                             required="false"/>
@@ -76,7 +82,7 @@
 
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText
-                                                value="#{transactionCategoryView.selectedTransactionCategory.defaltFlag}" />
+                                                value="#{transactionCategoryView.transactionCategoryModel.defaltFlag}" />
                                             <label>#{messages.defaltFlag}</label>
                                         </h:panelGroup>
 
@@ -91,18 +97,23 @@
                     </div>
                 </div>
 
+
                 <p:toolbar>
                     <f:facet name="left">
-                        <ui:fragment rendered="#{transactionCategoryView.selectedTransactionCategory.transactionCategoryCode == null}">
+                        <ui:fragment rendered="#{transactionCategoryView.transactionCategoryModel.transactionCategoryCode == null}">
+
                             <p:commandButton value="#{messages.save}" icon="ui-icon-save"
                                              action="#{transactionCategoryView.save}" ajax="false" />
+
                             <p:commandButton value="#{messages.save_and_add_more}"
                                              icon="ui-icon-forward"
                                              action="#{transactionCategoryView.saveAndContinue}" ajax="false" />
                         </ui:fragment>
                         <ui:fragment rendered="#{transactionCategoryView.selectedTransactionCategory.transactionCategoryCode > 0}">
+                           
                             <p:commandButton value="#{messages.update}" icon="ui-icon-save"
                                              action="#{transactionCategoryView.update}" ajax="false" />
+                           
                             <p:commandButton value="#{messages.update_and_add_more}"
                                              icon="ui-icon-forward"
                                              action="#{transactionCategoryView.updateAndContinue}" ajax="false" />
