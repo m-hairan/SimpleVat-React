@@ -18,15 +18,13 @@ public class InvoiceDataSourceModel {
     Double unitPrice;
     Double vat;
     Double netSubtotal;
-    Double netTotal;
 
-    public InvoiceDataSourceModel(String quantity, String details, Double unitPrice, Double vat, Double netSubtotal, Double netTotal) {
+    public InvoiceDataSourceModel(String quantity, String details, Double unitPrice, Double vat, Double netSubtotal) {
         this.quantity = quantity;
         this.details = details;
         this.unitPrice = unitPrice;
         this.vat = vat;
         this.netSubtotal = netSubtotal;
-        this.netTotal = netTotal;
     }
 
     public String getQuantity() {
@@ -68,16 +66,4 @@ public class InvoiceDataSourceModel {
     public void setNetSubtotal(Double netSubtotal) {
         this.netSubtotal = netSubtotal;
     }
-
-    public Double getNetTotal() {
-        return netTotal;
-    }
-
-    public void setNetTotal(Double netTotal) {
-        this.netTotal = netTotal;
-    }
-    
-            
-            
-            
 }

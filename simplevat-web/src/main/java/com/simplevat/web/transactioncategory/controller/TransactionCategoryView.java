@@ -29,7 +29,7 @@ import org.springframework.beans.BeanUtils;
 @SpringScopeView
 
 public class TransactionCategoryView extends TranscationCategoryHelper implements Serializable {
-    
+
     @Getter
     public String TRANSACTION_CATEGORY = "/pages/secure/transactioncategory/";
     @Getter
@@ -44,86 +44,63 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
 
     @Autowired
     TransactionTypeService transactionTypeService;
-    
 
-    
     @Autowired
     TransactionTypeService transactionTypeService1;
-    
-    
+
     private List<TransactionCategory> transactionCategories;
 
     @Getter
     @Setter
     private List<TransactionType> transactionTypes;
 
-    
     @Getter
     @Setter
     TransactionCategoryModel transactionCategoryModel;
 
-    
-    
     private List<TransactionCategoryModel> transactionCategoryModels;
 
-    
     @Getter
     public boolean editMode = false;
 
     @Getter
     @Setter
     private TransactionCategory selectedTransactionCategory;
-    
-    
- Object objContactId;
-   int id=0;
- 
+
     @PostConstruct
     public void init() {
         selectedTransactionCategory = new TransactionCategory();
-        transactionCategoryModel=new TransactionCategoryModel();
-      
-        objContactId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedCategoryId");
-        System.out.println("============================================================selected : :" + objContactId);
+        transactionCategoryModel = new TransactionCategoryModel();
+
+        Object objContactId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedCategoryId");
         if (objContactId != null) {
-            
-        transactionTypes = transactionTypeService.findAll();
-        selectedTransactionCategory=transactionCategoryService.findByPK(Integer.parseInt(objContactId.toString()));
-        transactionCategoryModel=getCategory(selectedTransactionCategory);
-        }
-        
-        else
-        {
-        transactionTypes = transactionTypeService.findAll();
-        transactionTypes = transactionTypeService.findAll();
-        
-        }
-        
-        
+            transactionTypes = transactionTypeService.findAll();
+            selectedTransactionCategory = transactionCategoryService.findByPK(Integer.parseInt(objContactId.toString()));
+            transactionCategoryModel = getCategory(selectedTransactionCategory);
+        } else {
+            transactionTypes = transactionTypeService.findAll();
+            transactionTypes = transactionTypeService.findAll();
+
         }
 
-    
-    
-        public List<TransactionCategory> getTransactionCategories() {
+    }
+
+    public List<TransactionCategory> getTransactionCategories() {
         return transactionCategories;
-           }
+    }
 
-    
-    
-    public List<TransactionCategoryModel> getAllCategories()
-    {
+    public List<TransactionCategoryModel> getAllCategories() {
         transactionCategories = transactionCategoryService.findAllTransactionCategory();
-        transactionCategoryModels=new ArrayList<>();
-    
-        for(TransactionCategory category:transactionCategories)
-        {
-        TransactionCategoryModel model= getCategory(category);
-        transactionCategoryModels.add(model);
+        transactionCategoryModels = new ArrayList<>();
+
+        for (TransactionCategory category : transactionCategories) {
+            TransactionCategoryModel model = getCategory(category);
+            transactionCategoryModels.add(model);
         }
-        
+
         return transactionCategoryModels;
     }
-        
+
     /*
     
     public List<TransactionCategory> getParentTransactionCategories(String q) {
@@ -146,13 +123,11 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
         return filterList;
     }
 
-    */
-    
+     */
     public String createNewCategory() {
         return TRANSACTION_CATEGORY + CREATE_PAGE + "?faces-redirect=true";
     }
 
-    
     public String saveAndContinue() throws UnauthorizedException {
         int userId = ContextUtils.getUserContext().getUserId();
         selectedTransactionCategory.setCreatedBy(userId);
@@ -163,69 +138,50 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
         selectedTransactionCategory.setLastUpdateDate(LocalDateTime.now());
         transactionCategoryService.persist(selectedTransactionCategory, selectedTransactionCategory.getTransactionCategoryCode());
         selectedTransactionCategory = new TransactionCategory();
-        
+
         return TRANSACTION_CATEGORY + CREATE_PAGE + "?faces-redirect=true";
     }
 
-    
-    
-    
     public String save() throws UnauthorizedException {
         int userId = ContextUtils.getUserContext().getUserId();
-        selectedTransactionCategory=getTrascationModel(transactionCategoryModel);
+        selectedTransactionCategory = getTrascationModel(transactionCategoryModel);
         selectedTransactionCategory.setCreatedBy(userId);
         selectedTransactionCategory.setDeleteFlag(false);
         selectedTransactionCategory.setLastUpdatedBy(userId);
         selectedTransactionCategory.setOrderSequence(1);
         selectedTransactionCategory.setCreatedDate(LocalDateTime.now());
         selectedTransactionCategory.setLastUpdateDate(LocalDateTime.now());
-        
-        
-        if(transactionCategoryModel.getTransactionType() != null) {
-        TransactionType transactionType = transactionTypeService.getTransactionType(transactionCategoryModel.getTransactionType().getTransactionTypeCode());
-        selectedTransactionCategory.setTransactionType(transactionType);
+        if (transactionCategoryModel.getTransactionType() != null) {
+            TransactionType transactionType = transactionTypeService.getTransactionType(transactionCategoryModel.getTransactionType().getTransactionTypeCode());
+            selectedTransactionCategory.setTransactionType(transactionType);
         }
-    
-        
-        if(transactionCategoryModel.getParentTransactionCategory() != null) {
-         selectedTransactionCategory.setTransactionCategoryName(transactionCategoryModel.getTransactionCategoryName());
+        if (transactionCategoryModel.getParentTransactionCategory() != null) {
+            selectedTransactionCategory.setTransactionCategoryName(transactionCategoryModel.getTransactionCategoryName());
         }
-        
-            System.err.println("persist==========================================="+transactionCategoryModel.getTransactionCategoryCode());
-        
         transactionCategoryService.persist(selectedTransactionCategory);
-            System.err.println("persist===========================================");
-        
-            
-        
-        
-        
         return TRANSACTION_CATEGORY + HOME_PAGE + "?faces-redirect=true";
-  }
+    }
 
-    
     public String update() throws UnauthorizedException {
         int userId = ContextUtils.getUserContext().getUserId();
-        selectedTransactionCategory=getTrascationModel(transactionCategoryModel);
+        selectedTransactionCategory = getTrascationModel(transactionCategoryModel);
         selectedTransactionCategory.setLastUpdatedBy(userId);
         selectedTransactionCategory.setOrderSequence(1);
         selectedTransactionCategory.setLastUpdateDate(LocalDateTime.now());
-        
-         if(transactionCategoryModel.getTransactionType() != null) {
-        TransactionType transactionType = transactionTypeService.getTransactionType(transactionCategoryModel.getTransactionType().getTransactionTypeCode());
-        selectedTransactionCategory.setTransactionType(transactionType);
+
+        if (transactionCategoryModel.getTransactionType() != null) {
+            TransactionType transactionType = transactionTypeService.getTransactionType(transactionCategoryModel.getTransactionType().getTransactionTypeCode());
+            selectedTransactionCategory.setTransactionType(transactionType);
         }
-        if (transactionCategoryModel.getTransactionCategoryCode()!= null && transactionCategoryModel.getTransactionCategoryCode() > 0) {
-            transactionCategoryService.update(selectedTransactionCategory,selectedTransactionCategory.getTransactionCategoryCode());
-          }
+        if (transactionCategoryModel.getTransactionCategoryCode() != null && transactionCategoryModel.getTransactionCategoryCode() > 0) {
+            transactionCategoryService.update(selectedTransactionCategory, selectedTransactionCategory.getTransactionCategoryCode());
+        }
         selectedTransactionCategory = new TransactionCategory();
         init();
-        
-         return TRANSACTION_CATEGORY + HOME_PAGE + "?faces-redirect=true";
-   }
 
-    
-    
+        return TRANSACTION_CATEGORY + HOME_PAGE + "?faces-redirect=true";
+    }
+
     public String updateAndContinue() throws UnauthorizedException {
         int userId = ContextUtils.getUserContext().getUserId();
         selectedTransactionCategory.setLastUpdatedBy(userId);
@@ -238,47 +194,41 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
         return TRANSACTION_CATEGORY + CREATE_PAGE + "?faces-redirect=true";
     }
 
-    
     public String editAction() {
         this.editMode = true;
-    //return "create-transactioncategory?faces-redirect=true&selectedCategoryId="+transactionCategoryModel.getTransactionCategoryCode() ;
-    return "create-transactioncategory?faces-redirect=true&selectedCategoryId="+transactionCategoryModel.getTransactionCategoryCode() ;
- 
+        //return "create-transactioncategory?faces-redirect=true&selectedCategoryId="+transactionCategoryModel.getTransactionCategoryCode() ;
+        return "create-transactioncategory?faces-redirect=true&selectedCategoryId=" + transactionCategoryModel.getTransactionCategoryCode();
+
     }
-    
+
     public List<TransactionType> getAllTransactionType(String str) {
         if (str == null) {
             return this.transactionTypes;
         }
-        
+
         List<TransactionType> filterList = new ArrayList<>();
         transactionTypes = transactionTypeService.findAll();
         for (TransactionType type : transactionTypes) {
-                filterList.add(type);
+            filterList.add(type);
         }
 
         return filterList;
     }
-     
-    
+
     public String deleteTransactionCategory() {
-     /*   
+        /*   
         selectedTransactionCategory.setDeleteFlag(Boolean.TRUE);
     
         transactionCategoryService.update(selectedTransactionCategory);
         this.transactionCategories = transactionCategoryService.executeNamedQuery("findAllTransactionCategory");
         return TRANSACTION_CATEGORY + HOME_PAGE + "?faces-redirect=true";
-    */
+         */
         transactionCategoryModel.setDeleteFlag(Boolean.TRUE);
-        selectedTransactionCategory=getTrascationModel(transactionCategoryModel);
+        selectedTransactionCategory = getTrascationModel(transactionCategoryModel);
         transactionCategoryService.update(selectedTransactionCategory);
         this.transactionCategories = transactionCategoryService.executeNamedQuery("findAllTransactionCategory");
         return TRANSACTION_CATEGORY + HOME_PAGE + "?faces-redirect=true";
-     
-     
+
     }
 
-    
-    
- 
 }

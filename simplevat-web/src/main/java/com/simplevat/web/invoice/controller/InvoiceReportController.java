@@ -65,8 +65,6 @@ public class InvoiceReportController extends AbstractReportBean {
         InvoiceModel invoiceModel = null;
 
         if (invoiceId > 0) {
-
-            System.err.println("helooooooooo " + invoiceId);
             Invoice invoice = invoiceService.findByPK(invoiceId);
             invoiceModel = new InvoiceModelHelper().getInvoiceModel(invoice);
 
@@ -76,7 +74,9 @@ public class InvoiceReportController extends AbstractReportBean {
                 int quantity = 0;
                 List<InvoiceItemModel> invoiceItemModelList = invoiceModel.getInvoiceItems();
                 for (InvoiceItemModel invoiceItem : invoiceItemModelList) {
-                    totalVat = totalVat.add((invoiceItem.getUnitPrice().multiply(new BigDecimal(invoiceItem.getQuatity()))).divide(invoiceItem.getVatId()));
+                    if (invoiceItem.getVatId().compareTo(new BigDecimal(0)) > 0) {
+                        totalVat = totalVat.add((invoiceItem.getUnitPrice().multiply(new BigDecimal(invoiceItem.getQuatity()))).divide(invoiceItem.getVatId()));
+                    }
                     netSubtotal = netSubtotal.add(invoiceItem.getUnitPrice().multiply(new BigDecimal(invoiceItem.getQuatity())));
                     quantity += invoiceItem.getQuatity();
                 }
@@ -109,6 +109,7 @@ public class InvoiceReportController extends AbstractReportBean {
     }
 
     public ArrayList<InvoiceDataSourceModel> getDataBeanList() {
+
         ArrayList<InvoiceDataSourceModel> dataBeanList = new ArrayList<InvoiceDataSourceModel>();
 
         InvoiceModel invoiceModel = null;
@@ -122,17 +123,19 @@ public class InvoiceReportController extends AbstractReportBean {
                 BigDecimal netSubtotal = new BigDecimal(0);
                 int quantity = 0;
                 Double unitprice;
-                Double vat;
+                Double vat = 0.0;
                 Double subTotal;
                 List<InvoiceItemModel> invoiceItemModelList = invoiceModel.getInvoiceItems();
                 for (InvoiceItemModel invoiceItem : invoiceItemModelList) {
                     unitprice = Double.parseDouble((invoiceItem.getUnitPrice().toString()));
-                    totalVat = totalVat.add((invoiceItem.getUnitPrice().multiply(new BigDecimal(invoiceItem.getQuatity()))).divide(invoiceItem.getVatId()));
-                    vat = Double.parseDouble((totalVat.toString()));
-                    netSubtotal = netSubtotal.add(invoiceItem.getUnitPrice().multiply(new BigDecimal(invoiceItem.getQuatity())));
+                    if (invoiceItem.getVatId().compareTo(new BigDecimal(0)) > 0) {
+                        totalVat = (invoiceItem.getUnitPrice().multiply(new BigDecimal(invoiceItem.getQuatity())).divide(invoiceItem.getVatId()));
+                        vat = Double.parseDouble((totalVat.toString()));
+                    }
+                    netSubtotal = invoiceItem.getUnitPrice().multiply(new BigDecimal(invoiceItem.getQuatity()));
                     subTotal = Double.parseDouble((netSubtotal.toString()));
                     quantity = invoiceItem.getQuatity();
-                    dataBeanList.add(new InvoiceDataSourceModel(String.valueOf(quantity), invoiceItem.getDescription(), unitprice, vat, subTotal, subTotal));
+                    dataBeanList.add(new InvoiceDataSourceModel(String.valueOf(quantity), invoiceItem.getDescription(), unitprice, vat, subTotal));
                 }
 
             } catch (Exception ex) {
@@ -147,32 +150,14 @@ public class InvoiceReportController extends AbstractReportBean {
 
         response.reset();
         response.setHeader("Content-Type", "application/pdf");
-//        response.setHeader("Content-Length", String.valueOf(out.toByteArray().length));
         response.setHeader("Content-Disposition", "inline; filename=\"fileName.pdf\"");
         this.invoiceId = invoiceId;
         Collection<InvoiceDataSourceModel> dataList = getDataBeanList();
         JRDataSource beanColDataSource = new JRBeanCollectionDataSource(dataList);
-////////////////////////////////////////////////////////////////////////////////////////////
-//        File file = new File(getCompileDir() + "/" + getCompileFileName() + ".jrxml");
-//        System.out.println("file ================ :" + file.isFile());
-//        InputStream resourceURL = new FileInputStream(file);
-//        System.out.println("Is File Exist " + resourceURL);
-//        JasperDesign jasperDesign = JRXmlLoader.load(resourceURL);
-//        JasperReport jasperReport = (JasperReport) JasperCompileManager.compileReport(jasperDesign);
-//        Map<String, Object> parameters = new HashMap<String, Object>();
-//
-//        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, getReportParameters(), new JRBeanCollectionDataSource(dataList));
-///////////////////////////////////////////////////////////////////////////////////////////////////
         String jasperFilePath = ReportConfigUtil.compileReport(getCompileDir(), getCompileFileName());
         File reportFile = new File(jasperFilePath);
         JasperPrint jasperPrint = JasperFillManager.fillReport(reportFile.getPath(), getReportParameters(), new JRBeanCollectionDataSource(dataList));
         request.getSession().setAttribute(BaseHttpServlet.DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE, jasperPrint);
-        // Create an Exporter
-//        JRPdfExporter exporter = new JRPdfExporter();
-//        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-//        SimpleOutputStreamExporterOutput output = new SimpleOutputStreamExporterOutput(response.getOutputStream());
-//        exporter.setExporterOutput(output);
-//        exporter.exportReport();
         JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
     }
 
