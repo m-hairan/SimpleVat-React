@@ -152,8 +152,9 @@
                         <p:commandButton action="#{projectController.saveProject()}"
                                          value="Save"
                                          icon="ui-icon-save" />
-                        <p:button value="Save &amp; Add More" icon="ui-icon-forward"
-                                  outcome="/pages/secure/project/project"/>
+                        <p:commandButton action="#{projectController.saveProject()}"
+                                         value="Save &amp; Add More"
+                                         icon="ui-icon-forward" />
 
                         <span class="ui-separator" style="padding-right: 5px;">
                             <span class="fa fa-ellipsis-v SoftGray"/>
