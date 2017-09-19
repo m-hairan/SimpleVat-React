@@ -51,7 +51,6 @@ public class ProjectController {
     @Autowired
     private ContactService contactService;
 
-    
     @Getter
     @Setter
     private Project selectedProject;
@@ -64,60 +63,53 @@ public class ProjectController {
     @Setter
     private List<Currency> currencies;
 
-    
-    
-    
-    
     @PostConstruct
     public void init() {
-        selectedProject = new Project();
-        Object objProjectId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedProjectId");
-        if (objProjectId != null) {
-            selectedProject = projectService.findByPK(Integer.parseInt(objProjectId.toString()));
-        } else {
-            Currency defaultCurrency = currencyService.getDefaultCurrency();
-            if (defaultCurrency != null) {
-                this.selectedProject.setCurrency(defaultCurrency);
-            }
-        }
         try {
+            selectedProject = new Project();
+            Object objProjectId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedProjectId");
+            if (objProjectId != null) {
+                selectedProject = projectService.findByPK(Integer.parseInt(objProjectId.toString()));
+            } else {
+                Currency defaultCurrency = currencyService.getDefaultCurrency();
+                if (defaultCurrency != null) {
+                    this.selectedProject.setCurrency(defaultCurrency);
+                }
+            }
             this.languages = languageService.getLanguages();
             this.currencies = currencyService.getCurrencies();
         } catch (Exception ex) {
+            ex.printStackTrace();
             java.util.logging.Logger.getLogger(ProjectController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    
-    
     public List<Contact> contacts(final String searchQuery) {
         return contactService.getContacts(searchQuery);
     }
 
-    
     private List<Project> getProjectFromCriteria() throws Exception {
-        
+
         ProjectCriteria projectCriteria = new ProjectCriteria();
         projectCriteria.setActive(Boolean.TRUE);
         return projectService.getProjectsByCriteria(projectCriteria);
     }
-    
-    
-    
-    public List<Project> projects(final String searchQuery) throws Exception {
-    ProjectCriteria criteria = new ProjectCriteria();
-        criteria.setActive(Boolean.TRUE);
-        if (!isNullOrEmpty(searchQuery)) {
-            criteria.setProjectName(searchQuery);
+
+    public List<Project> projects(final String searchQuery) {
+        try {
+            ProjectCriteria criteria = new ProjectCriteria();
+            criteria.setActive(Boolean.TRUE);
+            if (!isNullOrEmpty(searchQuery)) {
+                criteria.setProjectName(searchQuery);
+            }
+           return projectService.getProjectsByCriteria(criteria);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            java.util.logging.Logger.getLogger(ProjectController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return projectService.getProjectsByCriteria(criteria);
-//        return projectService.getAll();
-}
-    
-    
+        return new ArrayList<>();
+    }
 
-
-    
     public String saveProject() throws Exception {
         User loggedInUser = FacesUtil.getLoggedInUser();
         selectedProject.setCreatedBy(loggedInUser.getUserId());
@@ -189,8 +181,5 @@ public class ProjectController {
 
         return currencySuggestion;
     }
-    
-    
-  
 
 }
