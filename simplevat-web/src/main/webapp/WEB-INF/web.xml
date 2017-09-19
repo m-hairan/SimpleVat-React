@@ -145,7 +145,7 @@
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
         <location>/pages/public/login.xhtml</location>
     </error-page>
-    <error-page>
+    <!--error-page>
         <exception-type>com.simplevat.web.exceptions.WebLayerException</exception-type>
         <location>/pages/public/common/errorNew.xhtml</location>
     </error-page>
@@ -160,7 +160,7 @@
     <error-page>
         <exception-type>java.lang.Throwable</exception-type>
         <location>/pages/public/common/errorNew.xhtml</location>
-    </error-page>
+    </error-page-->
     
     <servlet>
         <servlet-name>PdfServlet</servlet-name>
