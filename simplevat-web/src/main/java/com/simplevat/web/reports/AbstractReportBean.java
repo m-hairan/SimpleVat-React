@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.sql.*;
- 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
@@ -14,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
  
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.fill.JRBaseFiller;
 import net.sf.jasperreports.j2ee.servlets.BaseHttpServlet;
  
  

@@ -96,7 +96,7 @@ public class ReportConfigUtil {
             throws JRException {
         parameters.put("BaseDir", reportFile.getParentFile());
         JRDataSource dataSource = new net.sf.jasperreports.engine.JREmptyDataSource();
-        JasperPrint jasperPrint = JasperFillManager.fillReport(reportFile.getPath(), parameters);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(reportFile.getPath(), parameters,dataSource);
 
         return jasperPrint;
     }
