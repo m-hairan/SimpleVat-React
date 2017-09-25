@@ -18,6 +18,7 @@ import com.simplevat.entity.Event;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.entity.invoice.InvoiceLineItem;
 import com.simplevat.service.invoice.InvoiceService;
+import com.simplevat.service.report.model.BankAccountTransactionReportModel;
 import com.simplevat.util.ChartUtil;
 
 /**
@@ -120,6 +121,26 @@ public class InvoiceServiceImpl extends InvoiceService {
 		activity.setField3(field3);
 		activity.setLastUpdateDate(LocalDateTime.now());
 		return activity;
+	}
+
+	@Override
+	public Map<Object, Number> getInvoicePerMonth(Date startDate, Date endDate) {
+		if(startDate == null || endDate == null) {
+			startDate = util.getStartDate(Calendar.YEAR,-1).getTime();
+			endDate = util.getEndDate().getTime();
+		}
+		List<Object[]> rows = getDao().getInvocePerMonth(startDate,endDate);
+		return util.getCashMap(rows);
+	}
+
+	@Override
+	public List<BankAccountTransactionReportModel> getInvoicesForRepots(Date startDate, Date endDate) {
+		List<Object[]> rows = getDao().getInvoices(startDate, endDate);
+		List<BankAccountTransactionReportModel> list = util.convertToTransactionReportModel(rows);
+		for(BankAccountTransactionReportModel model : list) {
+			model.setCredit(true);
+		}
+		return list;
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.simplevat.service.invoice;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import com.simplevat.dao.invoice.InvoiceDao;
 import com.simplevat.entity.Event;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.service.SimpleVatService;
+import com.simplevat.service.report.model.BankAccountTransactionReportModel;
 
 /**
  *
@@ -20,6 +22,10 @@ public abstract class InvoiceService extends SimpleVatService<Integer, Invoice> 
 	private InvoiceDao invoiceDao;
 	
 	public abstract  Map<Object, Number> getInvoicePerMonth();
+	
+	public abstract  Map<Object, Number> getInvoicePerMonth(Date startDate, Date endDate);
+	
+	public abstract List<BankAccountTransactionReportModel> getInvoicesForRepots(Date startDate, Date endDate);
 	
 	public abstract  int getMaxValue(Map<Object, Number> data);
 	

@@ -1,4 +1,4 @@
-package com.simplevat.web.reports.model;
+package com.simplevat.service.report.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -12,6 +12,6 @@ public class BankAccountTransactionReportModel {
 	private String transaction;
 	private String type;
 	private String reference;
-	private BigDecimal debit;
-	private BigDecimal credit;
+	private BigDecimal amount;
+	private boolean credit;
 }

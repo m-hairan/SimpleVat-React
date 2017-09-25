@@ -1,6 +1,7 @@
 package com.simplevat.service.impl;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import com.simplevat.dao.Dao;
 import com.simplevat.dao.ExpenseDao;
 import com.simplevat.entity.Expense;
 import com.simplevat.service.ExpenseService;
+import com.simplevat.service.report.model.BankAccountTransactionReportModel;
 import com.simplevat.util.ChartUtil;
 
 @Service("expenseService")
@@ -42,8 +44,7 @@ public class ExpenseServiceImpl extends ExpenseService  {
 
 	@Override
 	public Map<Object, Number> getExpensePerMonth() {
-		List<Object[]> rows = expenseDao.getExpensePerMonth(util.getStartDate(Calendar.YEAR,-1).getTime(),util.getEndDate().getTime());
-		return util.getCashMap(rows);
+		return getExpensePerMonth(null, null);
 	}
 
 	@Override
@@ -60,6 +61,28 @@ public class ExpenseServiceImpl extends ExpenseService  {
 	public int getVatOutQuartly() {
 		List<Object[]> rows = expenseDao.getVatOutPerMonthWise(util.getStartDate(Calendar.MONTH,-4).getTime(),util.getEndDate().getTime());
 		return util.addAmount(rows); 
+	}
+
+	@Override
+	public Map<Object, Number> getExpensePerMonth(Date startDate, Date endDate) {
+		if(startDate == null || endDate == null) {
+			startDate = util.getStartDate(Calendar.YEAR,-1).getTime();
+			endDate = util.getEndDate().getTime();
+		} 
+		List<Object[]> rows = expenseDao.getExpensePerMonth(startDate,endDate);
+		return util.getCashMap(rows);
+	}
+
+	@Override
+	public List<BankAccountTransactionReportModel> getExpensesForReport(Date startDate, Date endDate) {
+		
+		List<Object[]> rows = expenseDao.getExpenses(startDate, endDate);
+		List<BankAccountTransactionReportModel> list = util.convertToTransactionReportModel(rows);
+		for(BankAccountTransactionReportModel model : list) {
+			model.setCredit(false);
+		}
+		return util.convertToTransactionReportModel(rows);
+		
 	}
 	
 

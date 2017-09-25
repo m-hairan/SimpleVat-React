@@ -1,5 +1,6 @@
 package com.simplevat.util;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -14,6 +15,7 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 import com.simplevat.service.impl.bankaccount.ChartData;
+import com.simplevat.service.report.model.BankAccountTransactionReportModel;
 
 @Component
 public class ChartUtil {
@@ -44,6 +46,23 @@ public class ChartUtil {
 		}
 
 		return chartDatas;
+	}
+	
+	public List<BankAccountTransactionReportModel> convertToTransactionReportModel(List<Object[]> rows) {
+		List<BankAccountTransactionReportModel> list = new ArrayList<>();
+		for (Object[] row : rows) {
+			BankAccountTransactionReportModel model = new BankAccountTransactionReportModel();
+			model.setAmount((BigDecimal) row[0]);
+			model.setDate(localeDateTimeToDate((LocalDateTime)row[1]));
+			model.setReference((String)row[2]);
+			model.setType("TYPE-TBD");
+			model.setTransaction("TRANSACTION-TBD");
+			
+			list.add(model);
+		}
+		
+		return list;
+		
 	}
 
 	public int addAmount(List<Object[]> rows) {

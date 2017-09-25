@@ -1,22 +1,41 @@
 package com.simplevat.test.service.invoice;
 
-import com.simplevat.entity.invoice.DiscountType;
-import com.simplevat.entity.invoice.Invoice;
-import com.simplevat.entity.invoice.InvoiceLineItem;
-import com.simplevat.test.common.BaseManagerTest;
-import org.junit.Ignore;
-import org.junit.Test;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+
+import org.junit.Ignore;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.simplevat.entity.invoice.Invoice;
+import com.simplevat.entity.invoice.InvoiceLineItem;
+import com.simplevat.service.ExpenseService;
+import com.simplevat.service.invoice.InvoiceService;
+import com.simplevat.service.report.model.BankAccountTransactionReportModel;
+import com.simplevat.test.common.BaseManagerTest;
+import com.simplevat.util.ChartUtil;
 
 /**
  *
  * @author hiren
  */
 public class TestInvoiceService extends BaseManagerTest {
+	
+	@Autowired
+	InvoiceService invoiceService;
+	
+	@Autowired
+	ExpenseService expenseService;
+    
+    @Autowired
+    ChartUtil util;
+    
     
     @Test
     @Ignore
@@ -46,6 +65,22 @@ public class TestInvoiceService extends BaseManagerTest {
             items.add(item);
         }
         return items;
+    }
+    @Ignore
+    @Test
+    public void testGetInvoicesForReport() {
+    	List<BankAccountTransactionReportModel> list = 
+    			invoiceService.getInvoicesForRepots(util.getStartDate(Calendar.YEAR,-1).getTime(),util.getEndDate().getTime());
+    	assertNotNull(list);
+    	assertTrue("Size should be greater than zero ", list.size() > 0);
+    }
+    @Ignore
+    @Test
+    public void testGetExpenseForReport() {
+    	List<BankAccountTransactionReportModel> list = 
+    			expenseService.getExpensesForReport(util.getStartDate(Calendar.YEAR,-1).getTime(),util.getEndDate().getTime());
+    	assertNotNull(list);
+    	assertTrue("Size should be greater than zero ", list.size() > 0);
     }
     
 }

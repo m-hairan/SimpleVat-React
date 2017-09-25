@@ -22,6 +22,14 @@ public interface InvoiceDao extends Dao<Integer, Invoice> {
 	public List<Object[]> getInvocePerMonth(Date startDate, Date endDate);
 	
 	/**
+	 * This methods will return all the invoices within that perticular range of date supplied 
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
+	public List<Object[]> getInvoices(Date startDate, Date endDate);
+	
+	/**
 	 * This methods take date duration and calculate VatIn per month wise
 	 * @param startDate
 	 * @param endDate

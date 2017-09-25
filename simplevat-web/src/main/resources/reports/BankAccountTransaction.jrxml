@@ -32,8 +32,8 @@
 		<field name="type" class="java.lang.String"/>
 		<field name="transaction" class="java.lang.String"/>
 		<field name="reference" class="java.lang.String"/>
-		<field name="debit" class="java.math.BigDecimal"/>
-		<field name="credit" class="java.math.BigDecimal"/>
+		<field name="amount" class="java.math.BigDecimal"/>
+		<field name="credit" class="java.lang.Boolean"/>
 	</subDataset>
 	<parameter name="REPORT_NAME" class="java.lang.String"/>
 	<parameter name="FROM_DATE" class="java.util.Date"/>
@@ -259,9 +259,11 @@
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
-								<reportElement x="0" y="0" width="100" height="30" uuid="5fb0237f-17f4-497e-81fb-b7d97a510e3c"/>
+								<reportElement x="0" y="0" width="100" height="30" uuid="5fb0237f-17f4-497e-81fb-b7d97a510e3c">
+									<printWhenExpression><![CDATA[$F{credit}==false]]></printWhenExpression>
+								</reportElement>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$P{currency}+$F{debit}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$P{currency}+$F{amount}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -278,9 +280,11 @@
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField>
-								<reportElement x="0" y="0" width="100" height="30" uuid="31fd694d-9280-404f-b01e-d78648848b3c"/>
+								<reportElement x="0" y="0" width="100" height="30" uuid="31fd694d-9280-404f-b01e-d78648848b3c">
+									<printWhenExpression><![CDATA[$F{credit}==true]]></printWhenExpression>
+								</reportElement>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$P{currency}+$F{credit}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$P{currency}+$F{amount}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

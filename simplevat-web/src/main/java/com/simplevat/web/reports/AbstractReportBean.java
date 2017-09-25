@@ -2,14 +2,16 @@ package com.simplevat.web.reports;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
- 
+
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.j2ee.servlets.BaseHttpServlet;
@@ -25,6 +27,11 @@ public abstract class AbstractReportBean {
     private String compileDir = "/reports";
     //private String compileFileName = "productlist";//name of your compiled report file
     private String message;
+    
+
+	private Date startDate;
+    
+    private Date endDate;
  
     public AbstractReportBean() {
         super();
@@ -96,4 +103,19 @@ public abstract class AbstractReportBean {
     public void setMessage(String message) {
         this.message = message;
     }
+    public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}    
 }

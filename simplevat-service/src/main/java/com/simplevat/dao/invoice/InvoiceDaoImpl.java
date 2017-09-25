@@ -41,6 +41,29 @@ public class InvoiceDaoImpl extends AbstractDao<Integer, Invoice> implements Inv
 		}
 		return invoices;
 	}
+	@Override
+	public List<Object[]> getInvoices(Date startDate, Date endDate) {
+		List<Object[]> invoices = new ArrayList<>(0);
+		try {
+			String queryString = "select "
+					+ "sum(li.invoiceLineItemUnitPrice*li.invoiceLineItemQuantity) as invoiceTotal, "
+					+ "i.invoiceDate as date, i.invoiceReferenceNumber as refNum,  "
+					+ "i.invoiceId as invoiceId "
+					+ "from Invoice i JOIN i.invoiceLineItems li "
+					+ "where i.deleteFlag = 'false' and li.deleteFlag= 'false' "
+					+ "and i.invoiceDate BETWEEN :startDate AND :endDate "
+					+ "group by i.invoiceId";
+					//+ "order by i.invoiceDate asc";
+
+			Query query = getEntityManager().createQuery(queryString)
+					.setParameter("startDate", startDate, TemporalType.DATE)
+					.setParameter("endDate", endDate, TemporalType.DATE);
+			invoices = query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return invoices;
+	}	
 
 	@Override
 	public List<Object[]> getVatInPerMonth(Date startDate, Date endDate) {
@@ -82,6 +105,8 @@ public class InvoiceDaoImpl extends AbstractDao<Integer, Invoice> implements Inv
 		}
 		return invoices;
 	}
+
+
 
     
 }
