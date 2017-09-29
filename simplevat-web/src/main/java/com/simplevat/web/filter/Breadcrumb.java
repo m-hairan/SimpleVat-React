@@ -1,16 +1,19 @@
 package com.simplevat.web.filter;
 
 import java.util.LinkedList;
+import javax.faces.application.ResourceHandler;
 
 public class Breadcrumb {
 	
 	private LinkedList<String> urlList = new LinkedList<String>();
 	
 	public void addUri(String uri){
+            if(!uri.contains(ResourceHandler.RESOURCE_IDENTIFIER)){
 		if(urlList.contains(uri)){
 			urlList.remove(uri);
 		}
 		urlList.add(uri);
+            }
 	}
 	
 	public String getCurrentUri(){
