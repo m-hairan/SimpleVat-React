@@ -9,7 +9,7 @@ import lombok.Data;
 @NamedQueries({
     @NamedQuery(name = "allTitles",
             query = "SELECT t "
-            + "FROM Title t ")
+            + "FROM Title t ORDER BY t.defaultFlag DESC, t.orderSequence ASC ")
 })
 
 @Entity
@@ -27,4 +27,10 @@ public class Title {
     @Column(name = "TITLE_DESCRIPTION")
     private String titleDescription;
 
+    @Column(name = "DEFAULT_FLAG")
+    private Character defaultFlag;
+
+    @Column(name = "ORDER_SEQUENCE")
+    private Integer orderSequence;
+    
 }

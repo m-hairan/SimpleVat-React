@@ -8,8 +8,7 @@ import lombok.Data;
  */
 @NamedQueries({
     @NamedQuery(name = "allLanguages",
-            query = "SELECT l "
-            + "FROM Language l  ")
+            query = "SELECT l FROM Language l ORDER BY l.defaultFlag DESC, l.orderSequence ASC ")
 })
 
 @Entity
@@ -27,4 +26,10 @@ public class Language {
     @Column(name = "LANGUAGE_DESCRIPTION")
     private String languageDescription;
 
+    @Column(name = "DEFAULT_FLAG")
+    private Character defaultFlag;
+
+    @Column(name = "ORDER_SEQUENCE")
+    private Integer orderSequence;
+    
 }

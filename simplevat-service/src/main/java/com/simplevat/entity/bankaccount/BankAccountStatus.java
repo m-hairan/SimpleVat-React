@@ -24,7 +24,7 @@ import com.simplevat.entity.converter.DateConverter;
 @NamedQueries({
     @NamedQuery(name = "allBankAccountStatuses",
             query = "SELECT status "
-            + "FROM BankAccountStatus status where status.deleteFlag = FALSE order by status.orderSequence ASC"),
+            + "FROM BankAccountStatus status where status.deleteFlag = FALSE order by status.defaultFlag DESC, status.orderSequence ASC"),
     @NamedQuery(name = "findBankAccountStatusByName",
             query = "SELECT status "
             + "FROM BankAccountStatus status where status.bankAccountStatusName = :status")

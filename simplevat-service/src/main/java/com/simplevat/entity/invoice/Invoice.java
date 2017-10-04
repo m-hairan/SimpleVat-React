@@ -2,6 +2,7 @@ package com.simplevat.entity.invoice;
 
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Currency;
+import com.simplevat.entity.DocumentTemplate;
 import com.simplevat.entity.Project;
 import com.simplevat.entity.converter.DateConverter;
 import java.io.Serializable;
@@ -92,6 +93,11 @@ public class Invoice implements Serializable {
     @JoinColumn(name = "PROJECT_ID")
     private Project invoiceProject;
 
+     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "DOCUMENT_TEMPLATE_ID")
+    private DocumentTemplate documentTemplate;
+
+    
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "invoice", orphanRemoval = true)
     private Collection<InvoiceLineItem> invoiceLineItems;
 

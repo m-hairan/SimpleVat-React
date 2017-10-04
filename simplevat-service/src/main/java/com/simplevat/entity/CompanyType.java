@@ -11,9 +11,10 @@ import javax.persistence.*;
 @Table(name = "COMPANY_TYPE")
 @Data
 public class CompanyType {
+
     @Id
     @Column(name = "COMPANY_TYPE_CODE")
-    private int companyTypeCode;
+    private Integer id;
     @Basic
     @Column(name = "COMPANY_TYPE_NAME")
     private String companyTypeName;

@@ -15,23 +15,25 @@ import java.time.LocalDateTime;
 public class Company {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "COMPANY_ID")
-    private int companyId;
+    private Integer companyId;
     @Basic
     @Column(name = "COMPNAY_NAME")
-    private String compnayName;
+    private String companyName;
     @Basic
     @Column(name = "COMPANY_REGISTRATION_NUMBER")
     private String companyRegistrationNumber;
-    @Basic
-    @Column(name = "COMPANY_TYPE_CODE")
-    private Integer companyTypeCode;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COMPANY_TYPE_CODE")
+    private CompanyType companyTypeCode;
     @Basic
     @Column(name = "VAT_REGISTRATION_NUMBER")
     private String vatRegistrationNumber;
     @Basic
-    @Column(name = "COMPANY_LOGO_URL")
-    private String companyLogoUrl;
+    @Lob
+    @Column(name = "COMPANY_LOGO")
+    private byte[] companyLogo;
     @Basic
     @Column(name = "EMAIL_ADDRESS")
     private String emailAddress;
@@ -51,20 +53,44 @@ public class Company {
     @Column(name = "INVOICING_ADDRESS_LINE3")
     private String invoicingAddressLine3;
     @Basic
-    @Column(name = "CITY")
-    private String city;
+    @Column(name = "INVOICING_CITY")
+    private String invoicingCity;
     @Basic
-    @Column(name = "STATE_REGION")
-    private String stateRegion;
+    @Column(name = "INVOICING_STATE_REGION")
+    private String invoicingStateRegion;
     @Basic
-    @Column(name = "POST_ZIP_CODE")
-    private String postZipCode;
+    @Column(name = "INVOICING_POST_ZIP_CODE")
+    private String invoicingPostZipCode;
     @Basic
-    @Column(name = "PO_BOX_NUMBER")
-    private String poBoxNumber;
+    @Column(name = "INVOICING_PO_BOX_NUMBER")
+    private String invoicingPoBoxNumber;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "INVOICING_COUNTRY_CODE")
+    private Country invoicingCountryCode;
     @Basic
-    @Column(name = "COUNTRY_CODE")
-    private Integer countryCode;
+    @Column(name = "COMPANY_ADDRESS_LINE1")
+    private String companyAddressLine1;
+    @Basic
+    @Column(name = "COMPANY_ADDRESS_LINE2")
+    private String companyAddressLine2;
+    @Basic
+    @Column(name = "COMPANY_ADDRESS_LINE3")
+    private String companyAddressLine3;
+    @Basic
+    @Column(name = "COMPANY_CITY")
+    private String companyCity;
+    @Basic
+    @Column(name = "COMPANY_STATE_REGION")
+    private String companyStateRegion;
+    @Basic
+    @Column(name = "COMPANY_POST_ZIP_CODE")
+    private String companyPostZipCode;
+    @Basic
+    @Column(name = "COMPANY_PO_BOX_NUMBER")
+    private String companyPoBoxNumber;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COMPANY_COUNTRY_CODE")
+    private Country companyCountryCode;
     @Basic
     @Column(name = "CREATED_BY")
     private Integer createdBy;

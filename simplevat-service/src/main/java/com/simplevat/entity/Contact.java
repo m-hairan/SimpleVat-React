@@ -14,7 +14,7 @@ import lombok.Data;
             query = "SELECT c "
             + "FROM Contact c where c.deleteFlag = FALSE order by c.firstName, c.lastName"),
     @NamedQuery(name = "Contact.contactsByName",
-            query = "SELECT c FROM Contact c WHERE (c.firstName LIKE :name or c.lastName LIKE :name) order by c.firstName, c.lastName")
+            query = "SELECT c FROM Contact c WHERE  ((c.firstName LIKE :name or c.lastName LIKE :name) and c.deleteFlag = FALSE) order by c.firstName, c.lastName")
 })
 
 @Entity

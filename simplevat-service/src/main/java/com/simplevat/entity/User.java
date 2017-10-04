@@ -21,7 +21,7 @@ public class User {
 
     @Id
     @Column(name = "USER_ID")
-    private int userId;
+    private Integer userId;
 
     @Basic
     @Column(name = "FIRST_NAME")
@@ -89,6 +89,10 @@ public class User {
     @Basic
     @Column(name = "PROFILE_IMAGE_URL")
     private String profileImagePath;
+
+    @Basic
+    @Column(name = "PROFILE_IMAGE")
+    private byte[] profileImageBinary;
 
     @PrePersist
     public void updateDates() {

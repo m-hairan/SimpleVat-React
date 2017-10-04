@@ -24,7 +24,7 @@ import lombok.Data;
 @Table(name = "DISCOUNT_TYPE")
 @NamedQueries({
     @NamedQuery(name = "DiscountType.discountTypes",
-            query = "from DiscountType dt where dt.deleteFlag = 'N' order by dt.orderSequence")
+            query = "from DiscountType dt where dt.deleteFlag = 'N' order by dt.defaultFlag DESC, dt.orderSequence ASC")
 })
 public class DiscountType implements Serializable {
 

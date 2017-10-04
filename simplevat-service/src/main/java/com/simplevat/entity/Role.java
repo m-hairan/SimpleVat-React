@@ -10,7 +10,7 @@ import javax.persistence.*;
 
 @NamedQueries({
     @NamedQuery(name = "Role.FindAllRole",
-            query = "SELECT r FROM Role r")
+            query = "SELECT r FROM Role r ORDER BY r.defaultFlag DESC, r.orderSequence ASC ")
 })
 @Entity
 @Table(name = "ROLE")
@@ -29,7 +29,11 @@ public class Role {
     @Column(name = "ROLE_DESCRIPTION")
     private String roleDescription;
 
-//    @Basic
-//    private Collection<User> usersByRoleCode;
+    @Column(name = "DEFAULT_FLAG")
+    private Character defaultFlag;
+
+    @Column(name = "ORDER_SEQUENCE")
+    private Integer orderSequence;
+    
 
 }

@@ -21,7 +21,7 @@ import com.simplevat.entity.converter.DateConverter;
 @NamedQueries({
     @NamedQuery(name = "findAllTransactionStatues",
             query = "SELECT t "
-            + "FROM TransactionStatus t where t.deleteFlag = FALSE order by t.orderSequence ASC")
+            + "FROM TransactionStatus t where t.deleteFlag = FALSE order by t.defaltFlag DESC, t.orderSequence ASC")
 })
 @Entity
 @Table(name = "EXPLANATION_STATUS")

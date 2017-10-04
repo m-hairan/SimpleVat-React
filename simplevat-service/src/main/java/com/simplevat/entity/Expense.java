@@ -7,9 +7,11 @@ import com.simplevat.entity.converter.DateConverter;
 import lombok.Data;
 
 import javax.persistence.*;
-
+import javax.annotation.Nonnull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by mohsinh on 2/26/2017.
@@ -93,7 +95,28 @@ public class Expense{
     @Version
     @Column(name = "VERSION_NUMBER")
     private Integer versionNumber;
+    
+    @Basic
+    @Lob
+    @Column(name = "RECEIPT_ATTACHMENT")
+    private byte[] receiptAttachmentBinary;
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "expense", orphanRemoval = true)
+    private Collection<ExpenseLineItem> expenseLineItems;
+    
+  
+    @Nonnull
+    public Collection<ExpenseLineItem> getExpenseLineItems() {
+        return (expenseLineItems == null) ? (expenseLineItems = new ArrayList<>()) : expenseLineItems;
+    }
+    
+     public void setExpenseLineItems(@Nonnull final Collection<ExpenseLineItem> expenseLineItems) {
+
+        final Collection<ExpenseLineItem> thisExpenseLineItems = getExpenseLineItems();
+        thisExpenseLineItems.clear();
+        thisExpenseLineItems.addAll(expenseLineItems);
+    }
+    
     @PrePersist
     public void updateDates() {
         createdDate = LocalDateTime.now();
