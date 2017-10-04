@@ -58,9 +58,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         }
 
         if (isUser) {
-            return "/pages/secure/home.xhtml";
+            return "/pages/secure/home.xhtml?faces-redirect=true";
         } else if (isAdmin) {
-            return "/pages/secure/home.xhtml";
+            return "/pages/secure/home.xhtml?faces-redirect=true";
         } else {
             throw new IllegalStateException();
         }

@@ -52,16 +52,16 @@ public class ContactController extends ContactHelper implements Serializable {
     private TitleService titleService;
 
     @Getter
-    private List<Country> countries;
+    private List<Country> countries = new ArrayList<>();
 
     @Getter
-    private List<Language> languages;
+    private List<Language> languages = new ArrayList<>();
 
     @Getter
-    private List<Currency> currencies;
+    private List<Currency> currencies = new ArrayList<>();
 
     @Getter
-    private List<Title> titles;
+    private List<Title> titles = new ArrayList<>();
 
     @Getter
     @Setter
@@ -77,9 +77,7 @@ public class ContactController extends ContactHelper implements Serializable {
         contactModel = new ContactModel();
         Object objContactId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedContactId");
         System.out.println("selected : :" + objContactId);
-
         if (objContactId != null) {
-
             BeanUtils.copyProperties(contactService.findByPK(Integer.parseInt(objContactId.toString())), contactModel);
             titles = titleService.getTitles();
         } else {
@@ -140,7 +138,6 @@ public class ContactController extends ContactHelper implements Serializable {
         }
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-
 //        if(selectedContact.getContactId() != null){
 //            contactService.update(selectedContact);
 //            context.addMessage(null, new FacesMessage("Contact Updated SuccessFully"));
@@ -181,7 +178,7 @@ public class ContactController extends ContactHelper implements Serializable {
 
     public List<Title> completeTitle(String titleStr) {
         List<Title> titleSuggestion = new ArrayList<>();
-
+        
         Iterator<Title> titleIterator = this.titles.iterator();
 
         LOGGER.debug(" Size :" + titles.size());
@@ -202,6 +199,7 @@ public class ContactController extends ContactHelper implements Serializable {
 
     public List<Country> completeCountry(String countryStr) {
         List<Country> countrySuggestion = new ArrayList<>();
+        
         Iterator<Country> countryIterator = this.countries.iterator();
 
         LOGGER.debug(" Size :" + countries.size());

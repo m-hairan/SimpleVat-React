@@ -19,21 +19,17 @@
 
     <cc:implementation>
         <si:cpanel>
-            <h:form>
-                <si:ctoolbar deleteAction="#{cc.attrs.deleteAction}" 
-                             exportAction="#{cc.attrs.exportAction}"
-                             importAction="#{cc.attrs.importAction}"
-                             newAction="#{cc.attrs.newAction}"/>              
-            </h:form>
+            <si:ctoolbar deleteAction="#{cc.attrs.deleteAction}" 
+                         exportAction="#{cc.attrs.exportAction}"
+                         importAction="#{cc.attrs.importAction}"
+                         newAction="#{cc.attrs.newAction}"/>        
             <p:spacer height="5"/>
             <cc:insertChildren />
             <p:spacer height="5"/>
-            <h:form>
-                <si:ctoolbar deleteAction="#{cc.attrs.deleteAction}" 
-                             exportAction="#{cc.attrs.exportAction}"
-                             importAction="#{cc.attrs.importAction}"
-                             newAction="#{cc.attrs.newAction}"/>                
-            </h:form>
+            <si:ctoolbar deleteAction="#{cc.attrs.deleteAction}" 
+                         exportAction="#{cc.attrs.exportAction}"
+                         importAction="#{cc.attrs.importAction}"
+                         newAction="#{cc.attrs.newAction}"/>      
         </si:cpanel>
     </cc:implementation>
 </html>

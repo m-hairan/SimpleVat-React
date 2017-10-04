@@ -11,10 +11,15 @@ import com.simplevat.entity.Project;
 import com.simplevat.entity.User;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionType;
+import java.io.IOException;
+import java.io.InputStream;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import javax.annotation.Nonnull;
 
 @Getter
 @Setter
@@ -36,9 +41,18 @@ public class ExpenseModel {
     private LocalDateTime createdDate;
     private Integer lastUpdatedBy;
     private LocalDateTime lastUpdateDate;
-    private boolean deleteFlag =  false;
+    private boolean deleteFlag = false;
     private UploadedFile attachmentFile;
     private StreamedContent attachmentFileContent;
     private Integer versionNumber;
-    
+    byte[] receiptAttachmentBinary;
+    private List<ExpenseItemModel> expenseItem;
+
+    public void addExpenseItem(@Nonnull final ExpenseItemModel expenseItemModel) {
+        if (null == this.expenseItem) {
+            expenseItem = new ArrayList<>();
+        }
+        expenseItem.add(expenseItemModel);
+    }
+
 }

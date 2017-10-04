@@ -84,13 +84,6 @@ public class ProjectListController {
     }
 
     public String redirectToEditProject() throws Exception {
-//        ProjectCriteria projectCriteria = new ProjectCriteria();
-//        projectCriteria.setProjectId(project.getProjectId());
-//        List<Project> projects = projectService.getProjectsByCriteria(projectCriteria);
-//        if (CollectionUtils.isEmpty(projects)) {
-//            throw new Exception("Invalid Project Id");
-//        }
-//        this.selectedProject = projects.get(0);
         System.out.println("selectedProjectId" + selectedProject.getProjectId());
         return "project.xhtml?faces-redirect=true&selectedProjectId=" + selectedProject.getProjectId();
     }

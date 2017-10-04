@@ -1,6 +1,8 @@
 package com.simplevat.user.model;
 
 import com.simplevat.entity.Company;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +15,7 @@ import org.primefaces.model.UploadedFile;
  */
 @Getter
 @Setter
-public class UserModel {
+public class UserModel implements Serializable{
 
     private Integer userId;
 
@@ -34,5 +36,19 @@ public class UserModel {
     private StreamedContent profileImageContent;
     
     private StreamedContent currentProfileImageContent;
+   
+    private Integer createdBy;
+    private LocalDateTime createdDate;
+    private Boolean isActive;
+    private String password;
+    private String profileImagePath;
+    private Integer versionNumber;
+    private Boolean deleteFlag ;
+    private Integer roleCode;
+    private byte[] profileImageBinary;
+
+
+
+
 
 }

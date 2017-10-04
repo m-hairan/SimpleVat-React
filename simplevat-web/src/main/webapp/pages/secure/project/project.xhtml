@@ -39,7 +39,7 @@
                                     <p:outputLabel for="conatcts"/>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="conatcts"
-                                                        converter="contactConverter"
+                                                        converter="#{contactConverter}"
                                                         required="true"
                                                         requiredMessage="Please select contact"
                                                         dropdown="true"
@@ -48,13 +48,21 @@
                                                         completeMethod="#{projectController.contacts}"
                                                         value="#{projectController.selectedProject.contact}"
                                                         var="contact"
-                                                        itemValue="#{contact.contactId}"
+                                                        itemValue="#{contact}"
                                                         itemLabel="#{contact.firstName} #{contact.lastName}">
                                         </p:autoComplete>
                                         <label>Contact</label>
 
                                     </h:panelGroup>
 
+                                    
+                                     <p:outputLabel value="OR  ">
+                                        <p:commandLink onsuccess="PF('add_contact_popup').show();" 
+                                                       actionListener="#{projectController.initCreateContact()}"
+                                                       style="color: #009688" 
+                                                       value="Add New Contact" />
+                                    </p:outputLabel>
+                                    
                                 </p:panelGrid>
                             </p:fieldset>
 
@@ -112,7 +120,9 @@
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="language" dropdown="true" forceSelection="true"
                                                         effect="fold" converter="#{languageConverter}"
-                                                        dropdownMode=""
+                                                        dropdownMode="" 
+                                                        required="true"
+                                                        requiredMessage="Please select language"
                                                         completeMethod="#{projectController.completeLanguage}"
                                                         value="#{projectController.selectedProject.invoiceLanguageCode}"
                                                         var="language" itemValue="#{language.languageCode}"
@@ -153,5 +163,6 @@
             </div>
 
         </h:form>
+          <ui:include src="add-contact-popup.xhtml" />
     </ui:define>
 </ui:composition>

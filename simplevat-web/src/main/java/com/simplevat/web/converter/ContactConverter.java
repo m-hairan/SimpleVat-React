@@ -8,11 +8,12 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author hiren
  */
-@FacesConverter("contactConverter")
+@Service
 public class ContactConverter implements Converter {
 
     @Autowired

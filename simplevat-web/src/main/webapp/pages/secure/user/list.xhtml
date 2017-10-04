@@ -9,8 +9,9 @@
     <ui:define name="title">#{messages.bank_accounts}</ui:define>
 
     <ui:define name="content">
-        <si:cdataPanel newAction="#{expenseController.createExpense()}">
-            <h:form id="form">
+
+        <h:form id="form">
+            <si:cdataPanel newAction="#{manageUserController.openUserPage()}">
                 <p:dataTable var="user" 
                              value="#{manageUserController.userDTOList}"
                              paginator="true" rows="10"
@@ -53,7 +54,8 @@
                         </p:commandButton>
                     </p:column>
                 </p:dataTable>
-            </h:form>
-        </si:cdataPanel>
+            </si:cdataPanel>
+        </h:form>
+
     </ui:define>
 </ui:composition>

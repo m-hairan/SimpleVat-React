@@ -10,25 +10,26 @@
 
     <ui:define name="content">
 
-        <si:cdataPanel newAction= "#{transactionController.createTransaction()}" >
-            <h:form>
+
+        <h:form>
+            <si:cdataPanel newAction= "#{transactionController.createTransaction()}" importAction="#{transactionController.importTransaction()}">
                 <p:dataTable var="transaction"
                              id="transactionsTable"
                              value="#{transactionListController.transactions}"
                              paginator="true" rows="10"
-                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}">
-                    
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}">
+
                     <f:facet name="{TableHeader}">
                         <p:outputLabel styleClass="tableCustomHeader" value="#{transactionListController.selectedBankAccountModel.bankAccountName}" />
                     </f:facet>
 
-                    <p:column>
+                    <p:column width="20" style="text-align: center">
 
                         <h:panelGroup rendered="#{transaction.transactionStatus.explainationStatusName eq 'EXPLAINED'}">
                             <i class="fa fa-check" style="color: green;"></i>
                         </h:panelGroup>
                         <h:panelGroup rendered="#{transaction.transactionStatus.explainationStatusName eq 'UNEXPLAINED'}">
-                            <i class="fa fa-close" style="color: red;"></i>
+                            <i class="fa fa-question" style="color: red;"></i>
                         </h:panelGroup>
 
                     </p:column>
@@ -69,9 +70,10 @@
                     </p:column>
 
                 </p:dataTable>
-            </h:form>
+            </si:cdataPanel>
+        </h:form>
+        <ui:include src="import-transaction-popup.xhtml"/>
 
-        </si:cdataPanel>
 
     </ui:define>
 

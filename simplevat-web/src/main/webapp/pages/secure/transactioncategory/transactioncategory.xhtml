@@ -10,9 +10,9 @@
     <ui:define name="title">#{messages.manageTransaction}</ui:define>
 
     <ui:define name="content">
-        <si:cdataPanel newAction="#{transactionCategoryView.createNewCategory()}">
-            <h:form>
-              
+
+        <h:form>
+            <si:cdataPanel newAction="#{transactionCategoryView.createNewCategory()}">
                 <p:dataTable var="transactionCategory" 
                              value="#{transactionCategoryView.getAllCategories()}"
                              paginator="true" rows="10"
@@ -36,7 +36,7 @@
                     <p:column headerText="#{messages.transactionType}" sortBy="#{transactionCategory.transactionType.transactionTypeName}">
                         <h:outputText value="#{transactionCategory.transactionType.transactionTypeName}" />
                     </p:column>
-                    
+
                     <p:column headerText="Action">
                         <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" action="#{transactionCategoryView.editAction}">
                             <f:setPropertyActionListener value="#{transactionCategory}" target="#{transactionCategoryView.transactionCategoryModel}" />
@@ -46,9 +46,9 @@
                         </p:commandButton>
                     </p:column>
                 </p:dataTable>
-<!--                 <tp:error/>-->
-            </h:form>
-        </si:cdataPanel>
+            </si:cdataPanel>
+        </h:form>
+
     </ui:define>
 
 

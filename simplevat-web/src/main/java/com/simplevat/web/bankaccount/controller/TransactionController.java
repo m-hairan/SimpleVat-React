@@ -40,6 +40,7 @@ import java.io.Serializable;
 import java.time.ZoneId;
 import java.util.Date;
 import javax.annotation.PostConstruct;
+import org.primefaces.context.RequestContext;
 
 @Controller
 @SpringScopeView
@@ -111,6 +112,10 @@ public class TransactionController extends TransactionControllerHelper implement
 
     public String createTransaction() {
         return "/pages/secure/bankaccount/edit-bank-transaction.xhtml?faces-redirect=true";
+    }
+    
+    public void importTransaction() {
+        RequestContext.getCurrentInstance().execute("PF('importTransactionWidget').show()");
     }
 
     public String editTransection() {

@@ -9,14 +9,15 @@
     <ui:define name="title">#{messages.bank_accounts}</ui:define>
 
     <ui:define name="content">
-        <si:cdataPanel newAction="#{bankAccountController.createBankAccount()}">
-            <h:form>
+
+        <h:form>
+            <si:cdataPanel newAction="#{bankAccountController.createBankAccount()}">
                 <p:dataTable var="bankAccount"
                              id="bankAccountsTable"
                              value="#{bankAccountListController.bankAccounts}"
                              paginator="true" rows="10"
                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}"
-                            >
+                             >
                     <f:facet name="{TableHeader}">
                         <p:outputLabel styleClass="tableCustomHeader" value="#{messages.bank_accounts}" />
                     </f:facet>
@@ -55,9 +56,9 @@
                     </p:column>
 
                 </p:dataTable>
+            </si:cdataPanel>
+        </h:form>
 
-            </h:form>
-        </si:cdataPanel>
     </ui:define>
 
 </ui:composition>

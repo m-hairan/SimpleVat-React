@@ -4,7 +4,6 @@ import com.github.javaplugs.jsf.SpringScopeView;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +17,7 @@ import java.io.Serializable;
 
 @Controller
 @SpringScopeView
-public class ExpenseListController extends ExpenseControllerHelper implements Serializable{
+public class ExpenseListController extends ExpenseControllerHelper implements Serializable {
 
     @Autowired
     private ExpenseService expenseService;
@@ -28,7 +27,6 @@ public class ExpenseListController extends ExpenseControllerHelper implements Se
 
     private List<ExpenseModel> expenses;
 
-    
     public List<ExpenseModel> getExpenses() {
 
         List<Expense> expenseList = expenseService.getExpenses();
@@ -47,22 +45,8 @@ public class ExpenseListController extends ExpenseControllerHelper implements Se
         this.expenses = expenses;
     }
 
-//    /**
-//     * @return the selectedExpenseModel
-//     */
-//    public ExpenseModel getSelectedExpenseModel() {
-//        return selectedExpenseModel;
-//    }
-//
-//    /**
-//     * @param selectedExpenseModel the selectedExpenseModel to set
-//     */
-//    public void setSelectedExpenseModel(ExpenseModel selectedExpenseModel) {
-//        this.selectedExpenseModel = selectedExpenseModel;
-//    }
-    
-    public String redirectToEdit(){
-        return "create-expense?faces-redirect=true&selectedExpenseModelId="+selectedExpenseModel.getExpenseId();
+    public String redirectToEdit() {
+        return "create-expense?faces-redirect=true&selectedExpenseModelId=" + selectedExpenseModel.getExpenseId();
     }
 
 }

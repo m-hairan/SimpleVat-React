@@ -8,8 +8,9 @@
 
     <ui:define name="title">#{messages.expenses}</ui:define>
     <ui:define name="content">
-        <si:cdataPanel newAction="#{expenseController.createExpense()}">
-            <h:form id="form">
+
+        <h:form id="form">
+            <si:cdataPanel newAction="#{expenseController.createExpense()}">
                 <p:dataTable var="expense" 
                              value="#{expenseListController.expenses}"
                              id="expensesTable"
@@ -52,8 +53,9 @@
                     </p:column>
 
                 </p:dataTable>
-            </h:form>
-        </si:cdataPanel>
+            </si:cdataPanel>
+        </h:form>
+
     </ui:define>
 
 </ui:composition>

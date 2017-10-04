@@ -1,85 +1,89 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:pu="http://primefaces.org/ultima">
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pu="http://primefaces.org/ultima">
 
-	<h:form id="menuform">
-		<div class="layout-menu #{guestPreferences.menuClass}">
-			<div class="nano">
-				<div class="nano-content menu-scroll-content">
-					<ui:fragment
-						rendered="#{guestPreferences.profileMode == 'inline' and guestPreferences.menuLayout != 'menu-layout-static menu-layout-horizontal'}">
-						<div class="profile">
-							<div class="profile-image">
-								<ui:fragment rendered="#{not empty userProfileController.profilePic}">
-									<p:graphicImage height="60px" width="60px"
-										value="#{userProfileController.profilePic}" />
-								</ui:fragment>
+    <h:form id="menuform">
+        <div class="layout-menu #{guestPreferences.menuClass}">
+            <div class="nano">
+                <div class="nano-content menu-scroll-content">
+                    <ui:fragment
+                        rendered="#{guestPreferences.profileMode == 'inline' and guestPreferences.menuLayout != 'menu-layout-static menu-layout-horizontal'}">
+                        <div class="profile">
+                            <div class="profile-image">
+                                <ui:fragment rendered="#{not empty userProfileController.profilePic}">
+                                    <p:graphicImage height="60px" width="60px"
+                                                    value="#{userProfileController.profilePic}" />
+                                </ui:fragment>
 
-								<ui:fragment rendered="#{empty userProfileController.profilePic}">
-									<p:graphicImage name="images/user-avtar-icon1.png" library="ultima-layout"
-										height="60px" width="60px" />
-								</ui:fragment>
-							</div>
-							<a id="profile-options" href="#"> <span class="profile-name">#{userProfileController.currentUser.firstName}
-									#{userProfileController.currentUser.lastName}</span> <i
-								class="material-icons">&#xE313;</i>
-							</a>
-						</div>
+                                <ui:fragment rendered="#{empty userProfileController.profilePic}">
+                                    <p:graphicImage name="images/user-avtar-icon1.png" library="ultima-layout"
+                                                    height="60px" width="60px" />
+                                </ui:fragment>
+                            </div>
+                            <a id="profile-options" href="#"> <span class="profile-name">#{userProfileController.currentUser.firstName}
+                                    #{userProfileController.currentUser.lastName}</span> <i
+                                    class="material-icons">&#xE313;</i>
+                            </a>
+                        </div>
 
-						<ul id="profile-menu" class="ultima-menu">
-							<li role="menuitem"><p:link
-									onclick="#{userProfileController.prefillData()}"
-									outcome="/pages/secure/user/profile" styleClass="ripplelink">
-									<i class="material-icons">&#xE7FD;</i>
-									<span>Profile</span>
-								</p:link></li>
-							<li role="menuitem"><a href="#" class="ripplelink"> <i
-									class="material-icons">&#xE32A;</i> <span>Privacy</span>
-							</a></li>
-							<li role="menuitem"><a href="#" class="ripplelink"> <i
-									class="material-icons">&#xE8B9;</i> <span>Settings</span>
-							</a></li>
-							<li role="menuitem"><a
-								href="#{request.contextPath}/j_spring_security_logout"
-								class="ripplelink"> <i class="material-icons">&#xE8AC;</i> <span>Logout</span>
-							</a></li>
-						</ul>
-					</ui:fragment>
+                        <ul id="profile-menu" class="ultima-menu">
+                            <li role="menuitem"><p:link
+                                    onclick="#{userProfileController.prefillData()}"
+                                    outcome="/pages/secure/user/profile" styleClass="ripplelink">
+                                    <i class="material-icons">&#xE7FD;</i>
+                                    <span>Profile</span>
+                                </p:link></li>
+                            <li role="menuitem">
+                                <p:link outcome="/pages/secure/companyProfile/profile" styleClass="ripplelink">
+                                <i class="ui-icon ui-icon-business"></i>
+                                <span>Company Profile</span>
+                                </p:link>
+                            </li>     
+                            <li role="menuitem"><a href="#" class="ripplelink"> <i
+                                        class="material-icons">&#xE32A;</i> <span>Privacy</span>
+                                </a></li>
+                            <li role="menuitem"><a href="#" class="ripplelink"> <i
+                                        class="material-icons">&#xE8B9;</i> <span>Settings</span>
+                                </a></li>
+                            <li role="menuitem"><a
+                                    href="#{request.contextPath}/j_spring_security_logout"
+                                    class="ripplelink"> <i class="material-icons">&#xE8AC;</i> <span>Logout</span>
+                                </a></li>
+                        </ul>
+                    </ui:fragment>
 
-					<pu:menu widgetVar="me">
-						<p:menuitem id="st_dashboard" value="Home" icon="&#xE871;"
-							outcome="/pages/secure/home" />
+                    <pu:menu widgetVar="me">
+                        <p:menuitem id="st_dashboard" value="Home" icon="&#xE871;"
+                                    outcome="/pages/secure/home" />
 
-						<p:menuitem id="st_contact" update="@form contactForm"
-							value="Contacts" icon="contacts"
-							outcome="/pages/secure/contact/list" />
+                        <p:menuitem id="st_contact" update="@form contactForm"
+                                    value="Contacts" icon="contacts"
+                                    outcome="/pages/secure/contact/list" />
 
-						<p:menuitem id="st_project" value="Projects" icon="book"
-							outcome="/pages/secure/project/projects" />
+                        <p:menuitem id="st_project" value="Projects" icon="book"
+                                    outcome="/pages/secure/project/projects" />
 
-						<p:menuitem id="st_invoice" update="@form invoice"
-							value="Invoices" icon="receipt" 
-							outcome="/pages/secure/invoice/list" />
+                        <p:menuitem id="st_invoice" update="@form invoice"
+                                    value="Invoices" icon="receipt" 
+                                    outcome="/pages/secure/invoice/list" />
 
-						<p:menuitem id="st_expense" value="#{messages.expenses}"
-							icon="exposure" outcome="#{expenseMenuLink}" />
+                        <p:menuitem id="st_expense" value="#{messages.expenses}"
+                                    icon="exposure" outcome="#{expenseMenuLink}" />
 
-						<p:menuitem id="st_bankaccount" value="#{messages.bank_accounts}"
-							icon="" outcome="#{bankAccountMenuLink}" />
+                        <p:menuitem id="st_bankaccount" value="#{messages.bank_accounts}"
+                                    icon="store" outcome="#{bankAccountMenuLink}" />
 
-						<p:menuitem id="st_transactioncategory"
-							value="#{messages.transactioncategory}" icon=""
-							outcome="/pages/secure/transactioncategory/transactioncategory" />
-                                                <p:menuitem value="Users" icon=""
-							outcome="/pages/secure/user/list" />                                        
-                                                <p:menuitem value="#{messages.importfile}" icon=""
-							outcome="/pages/secure/import/index" />
-					</pu:menu>
-				</div>
-			</div>
-		</div>
-	</h:form>
+                        <p:menuitem id="st_transactioncategory"
+                                    value="#{messages.transactioncategory}" icon="undo"
+                                    outcome="/pages/secure/transactioncategory/transactioncategory" />
+                        <p:menuitem value="Users" icon="people"
+                                    outcome="/pages/secure/user/list" />   
+                    </pu:menu>
+                </div>
+            </div>
+        </div>
+    </h:form>
 </ui:composition>

@@ -13,7 +13,9 @@ import com.simplevat.service.ContactService;
 import com.simplevat.service.CurrencyService;
 import com.simplevat.service.LanguageService;
 import com.simplevat.service.ProjectService;
+import com.simplevat.web.contact.model.ContactModel;
 import com.simplevat.web.utils.FacesUtil;
+import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -35,7 +37,7 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 @SpringScopeView
-public class ProjectController {
+public class ProjectController implements Serializable {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ProjectController.class);
 
@@ -63,6 +65,11 @@ public class ProjectController {
     @Setter
     private List<Currency> currencies;
 
+    @Getter
+    @Setter
+    private ContactModel contactModel;
+
+    
     @PostConstruct
     public void init() {
         try {
@@ -75,6 +82,7 @@ public class ProjectController {
                 if (defaultCurrency != null) {
                     this.selectedProject.setCurrency(defaultCurrency);
                 }
+                contactModel = new ContactModel();
             }
             this.languages = languageService.getLanguages();
             this.currencies = currencyService.getCurrencies();
@@ -180,6 +188,39 @@ public class ProjectController {
         LOGGER.debug(" Size :" + currencySuggestion.size());
 
         return currencySuggestion;
+    }
+    
+    public void initCreateContact() {
+        contactModel = new ContactModel();
+    }
+
+    public void createContact() {
+        Currency defaultCurrency = currencyService.getDefaultCurrency();
+
+        final Contact contact = new Contact();
+
+        contact.setBillingEmail(contactModel.getEmail());
+        contact.setDeleteFlag(Boolean.FALSE);
+        contact.setEmail(contactModel.getEmail());
+        contact.setFirstName(contactModel.getFirstName());
+        contact.setLastName(contactModel.getLastName());
+        contact.setOrganization(contactModel.getOrganization());
+        contact.setCreatedBy(1);
+        contact.setCurrency(defaultCurrency);
+
+        contactModel = new ContactModel();
+
+        if (defaultCurrency != null) {
+            contactModel.setCurrency(defaultCurrency);
+        }
+        if (contact.getContactId()!=null) {
+            contactService.update(contact);
+        } else {
+            contactService.persist(contact);
+        }
+
+        selectedProject.setContact(contact);
+
     }
 
 }

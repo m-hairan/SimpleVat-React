@@ -85,7 +85,7 @@ public class UserController {
         editMode = false;
         selectedUser = new UserDTO();
         selectedUser.setRole(new Role());
-        String userId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("user");
+        String userId = (String)FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("user");
         if (userId != null) {
             User user = userService.findByPK(Integer.parseInt(userId));
             BeanUtils.copyProperties(user, selectedUser);

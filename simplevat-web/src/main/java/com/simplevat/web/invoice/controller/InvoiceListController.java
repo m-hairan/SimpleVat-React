@@ -23,8 +23,6 @@ import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.entity.invoice.InvoiceLineItem;
 import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.web.invoice.model.InvoiceModel;
-import javax.faces.context.Flash;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -43,7 +41,7 @@ public class InvoiceListController implements Serializable {
     @Getter
     @Setter
     private InvoiceModel selectedInvoiceModel;
-    
+
     @Getter
     @Setter
     private Invoice selectedInvoice;
@@ -53,37 +51,27 @@ public class InvoiceListController implements Serializable {
 
     @PostConstruct
     public void initInvoices() {
-    	System.out.println("inside Post constructor");
+        System.out.println("inside Post constructor");
         invoices = new ArrayList<>();
         final InvoiceFilter invoiceFilter = new InvoiceFilter();
         invoices = invoiceService.filter(invoiceFilter);
     }
 
     public String redirectToCreateInvoice() {
-        if(selectedInvoice != null){
-            FacesContext.getCurrentInstance().getExternalContext().getFlash().put("invoiceId", String.valueOf(selectedInvoice.getInvoiceId()));
+        String selectedInvoiceId = "";
+        if (selectedInvoice != null) {
+           selectedInvoiceId =  "&selectedInvoiceModelId=" + selectedInvoice.getInvoiceId();
         }
-        return "invoice.xhtml?faces-redirect=true?faces-redirect=true";
+        return "invoice.xhtml?faces-redirect=true"+selectedInvoiceId;
     }
-
-//    public String redirectToEditInvoice(Invoice invoice) throws Exception {
-////  
-//        InvoiceCriteria invoiceCriteria = new InvoiceCriteria();
-//        invoiceCriteria.setInvoiceId(invoice.getInvoiceId());
-//        List<Invoice> invoices = invoiceService.getInvoiceByCriteria(invoiceCriteria);
-//        if(CollectionUtils.isEmpty(invoices)){
-//            throw new Exception("Invalid Invoice Id");
-//        }
-//        this.selectedInvoice = invoices.get(0);
-//        return "/pages/secure/invoice/invoice.xhtml?faces-redirect=true";
-////        return "invoice.xhtml?faces-redirect=true&invoiceId=" + invoiceId;
-//    }
 
     public void deleteInvoice(final Invoice invoice) {
         invoice.setDeleteFlag(Boolean.TRUE);
         invoiceService.update(invoice, invoice.getInvoiceId());
+        initInvoices();
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage("Invoice Deleted SuccessFully"));
+
     }
 
     @Nonnull
@@ -117,8 +105,8 @@ public class InvoiceListController implements Serializable {
         }
         return finalTotal;
     }
-    
-    public String redirectEditInvoice(){
-        return "invoice.xhtml?faces-redirect=true&invoiceId"+selectedInvoiceModel.getInvoiceId();
+
+    public String redirectEditInvoice() {
+        return "invoice.xhtml?faces-redirect=true&invoiceId" + selectedInvoiceModel.getInvoiceId();
     }
 }

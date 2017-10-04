@@ -1,0 +1,329 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
+                template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="head">
+        <style>
+            .ui-fluid .ui-calendar input {
+                width: 90%;
+            }
+
+        </style>
+        <h:outputScript name="js/ripple.js" library="ultima-layout" />
+        <h:outputScript name="js/layout.js" library="ultima-layout" />
+    </ui:define>
+
+    <ui:define name="title">#{messages.CompanyProfile}</ui:define>
+    <ui:define name="content">
+        <h:form id="profile" enctype="multipart/form-data">
+            <div class="card card-w-title">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <h1>#{messages.CompanyProfile}</h1>
+                            <p:fieldset legend="#{messages.CompanyDetail}" toggleable="false">
+                                <p:panelGrid columns="4" 
+                                             columnClasses="ui-grid-col-0,ui-grid-col-6,ui-grid-col-0,ui-grid-col-6" 
+                                             layout="grid" 
+                                             styleClass="ui-panelgrid-blank form-group"
+                                             style="border:0px none; background-color:transparent;">
+
+                                    <p:outputLabel for="CompanyName" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="CompanyName" value="#{companyProfileController.companyModel.companyName}" />
+                                        <label>#{messages.CompanyName}</label>
+                                        <p:message for="CompanyName" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel  />
+                                    <h:panelGroup styleClass="md-inputfield"  >
+                                        <div style="margin-left: 44%; margin-bottom: 15px;">
+                                            <ui:fragment rendered="#{not empty companyProfileController.profilePic}">
+                                                <p:graphicImage height="140px" width="140px"
+                                                                value="#{companyProfileController.profilePic}" />
+                                            </ui:fragment>
+                                            <ui:fragment rendered="#{empty companyProfileController.profilePic}">
+                                                <p:graphicImage name="images/user-avtar-icon1.png" library="ultima-layout" height="140px" width="140px"/>
+
+                                            </ui:fragment>
+
+                                            <div style="width:140px">
+                                                <p:fileUpload id="CompanyLogo" 
+                                                              value="#{companyProfileController.companyModel.profileImage}"
+                                                              mode="simple" skinSimple="true" />
+                                            </div>
+                                        </div>
+                                    </h:panelGroup>
+
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="6" 
+                                             columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                                             layout="grid" 
+                                             styleClass="ui-panelgrid-blank form-group"
+                                             style="border:0px none; background-color:transparent;">
+
+                                    <p:outputLabel for="CompanyRegistrationNumber" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="CompanyRegistrationNumber" value="#{companyProfileController.companyModel.companyRegistrationNumber}"/>
+                                        <label>#{messages.CompanyRegistrationNumber}</label>
+                                        <p:message for="CompanyRegistrationNumber" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="VatRegistrationNumber" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="VatRegistrationNumber" value="#{companyProfileController.companyModel.vatRegistrationNumber}"/>
+                                        <label>#{messages.VatRegistrationNumber}</label>
+                                        <p:message for="VatRegistrationNumber" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="EmailAddress" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="EmailAddress" value="#{companyProfileController.companyModel.emailAddress}"
+                                                     validatorMessage="Invalid email format">
+                                            <f:validateRegex
+                                                pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                        </p:inputText>
+                                        <label>#{messages.EmailAddress}</label>
+                                        <p:message for="EmailAddress" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="dob" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputMask id="dob" mask="999999999" value="#{companyProfileController.companyModel.phoneNumber}"/>
+                                        <label>#{messages.PhoneNumber}</label>
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="CompanyTypeCode" />
+                                    <h:panelGroup styleClass="md-inputwrapper-focus">
+                                        <p:selectOneMenu id="CompanyTypeCode" value="#{companyProfileController.companyModel.companyTypeCode.id}">
+                                            <f:selectItems value="#{companyProfileController.companyTypes}"/>
+                                        </p:selectOneMenu> 
+                                        <label>#{messages.CompanyTypeCode}</label>
+                                        <p:message for="CompanyTypeCode" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="Website" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="Website" value="#{companyProfileController.companyModel.website}"/>
+                                        <label>#{messages.Website}</label>
+                                        <p:message for="Website" />
+                                    </h:panelGroup>
+                                </p:panelGrid>
+                            </p:fieldset>
+                            <p:fieldset legend="#{messages.InvoicingAddress}" toggleable="false">
+                                <p:panelGrid columns="6" id="invoicingAdd"
+                                             columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                                             layout="grid" 
+                                             styleClass="ui-panelgrid-blank form-group"
+                                             style="border:0px none; background-color:transparent;">
+                                    <p:outputLabel for="InvoicingAddressLine1" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputTextarea id="InvoicingAddressLine1" value="#{companyProfileController.companyModel.invoicingAddressLine1}" 
+                                                         counter="counterValue"
+                                                         maxlength="255"
+                                                         counterTemplate="{0} characters remaining."
+                                                         />
+                                        <h:outputText id="counterValue" />
+                                        <label>#{messages.InvoicingAddressLine1}</label>
+                                        <p:message for="InvoicingAddressLine1" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="InvoicingAddressLine2" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputTextarea id="InvoicingAddressLine2" value="#{companyProfileController.companyModel.invoicingAddressLine2}"
+                                                          counter="counterValue1"
+                                                         maxlength="255"
+                                                         counterTemplate="{0} characters remaining."
+                                                         />
+                                        <h:outputText id="counterValue1" />
+                                        <label>#{messages.InvoicingAddressLine2}</label>
+                                        <p:message for="InvoicingAddressLine2" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="InvoicingAddressLine3" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputTextarea id="InvoicingAddressLine3" value="#{companyProfileController.companyModel.invoicingAddressLine3}"
+                                                          counter="counterValue2"
+                                                          maxlength="255"
+                                                         counterTemplate="{0} characters remaining."
+                                                         />
+                                        <label>#{messages.InvoicingAddressLine3}</label>
+                                        <h:outputText id="counterValue2" />
+                                       <p:message for="InvoicingAddressLine3" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="InvoicingCity" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="InvoicingCity" value="#{companyProfileController.companyModel.invoicingCity}"/>
+                                        <label>#{messages.InvoicingCity}</label>
+                                        <p:message for="InvoicingCity" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="InvoicingStateRegion" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="InvoicingStateRegion" value="#{companyProfileController.companyModel.invoicingStateRegion}"/>
+                                        <label>#{messages.InvoicingStateRegion}</label>
+                                        <p:message for="InvoicingStateRegion" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="InvoicingCountryCode" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="InvoicingCountryCode"
+                                                        converter="#{countryConverter}" 
+                                                        dropdown="true" 
+                                                        forceSelection="true" 
+                                                        effect="fold"
+                                                        completeMethod="#{companyProfileController.completeCountry}"
+                                                        value="#{companyProfileController.companyModel.invoicingCountryCode}"
+                                                        var="country"
+                                                        itemValue="#{country.countryCode}"
+                                                        itemLabel="#{country.countryFullName}" 
+                                                        required="true"
+                                                        requiredMessage="Please select Country"/>
+                                        <label>#{messages.InvoicingCountryCode}</label>
+                                        <p:message for="InvoicingCountryCode" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="InvoicingPOBoxNumber" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="InvoicingPOBoxNumber" value="#{companyProfileController.companyModel.invoicingPoBoxNumber}"/>
+                                        <label>#{messages.InvoicingPOBoxNumber}</label>
+                                        <p:message for="InvoicingPOBoxNumber" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="InvoicingPostZipCode" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="InvoicingPostZipCode" value="#{companyProfileController.companyModel.invoicingPostZipCode}"/>
+                                        <label>#{messages.InvoicingPostZipCode}</label>
+                                        <p:message for="InvoicingPostZipCode" />
+                                    </h:panelGroup>
+                                </p:panelGrid>
+                            </p:fieldset>
+                            <p:fieldset legend="#{messages.CompanyAddress}" toggleable="false">
+                                <h:panelGroup styleClass="md-inputwrapper-focus" >
+                                    <p:selectBooleanCheckbox id="isSame" value="#{companyProfileController.same}" >
+                                        <p:ajax update="companyAdd" process="profile" event="change" listener="#{companyProfileController.sameAsInvoicingAddress()}"/>
+                                    </p:selectBooleanCheckbox>
+                                    <p:outputLabel for="isSame" value="Company Address is same as Invoicing Address" />
+                                    <p:message for="isSame" />
+                                </h:panelGroup>
+                                <p:panelGrid columns="6" id="companyAdd"
+                                             columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                                             layout="grid" 
+                                             styleClass="ui-panelgrid-blank form-group"
+                                             style="border:0px none; background-color:transparent;">
+                                    <p:outputLabel for="CompanyAddressLine1" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputTextarea id="CompanyAddressLine1" value="#{companyProfileController.companyModel.companyAddressLine1}"
+                                                         counter="counterValue3"
+                                                          maxlength="255"
+                                                         counterTemplate="{0} characters remaining."
+                                                         />
+                                         <h:outputText id="counterValue3" />
+                                        <label>#{messages.CompanyAddressLine1}</label>
+                                        <p:message for="CompanyAddressLine1" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="CompanyAddressLine2" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputTextarea id="CompanyAddressLine2" value="#{companyProfileController.companyModel.companyAddressLine2}"
+                                                            counter="counterValue4"
+                                                          maxlength="255"
+                                                         counterTemplate="{0} characters remaining."
+                                                         />
+                                           <h:outputText id="counterValue4" />
+                                        <label>#{messages.CompanyAddressLine2}</label>
+                                        <p:message for="CompanyAddressLine2" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="CompanyAddressLine3" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputTextarea id="CompanyAddressLine3" value="#{companyProfileController.companyModel.companyAddressLine3}"
+                                                            counter="counterValue5"
+                                                          maxlength="255"
+                                                         counterTemplate="{0} characters remaining."
+                                                         />
+                                           <h:outputText id="counterValue5" />
+                                        <label>#{messages.CompanyAddressLine3}</label>
+                                        <p:message for="CompanyAddressLine3" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="CompanyCity" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="CompanyCity" value="#{companyProfileController.companyModel.companyCity}"/>
+                                        <label>#{messages.CompanyCity}</label>
+                                        <p:message for="CompanyCity" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="CompanyStateRegion" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="CompanyStateRegion" value="#{companyProfileController.companyModel.companyStateRegion}"/>
+                                        <label>#{messages.CompanyStateRegion}</label>
+                                        <p:message for="CompanyStateRegion" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="CompanyCountryCode" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="CompanyCountryCode"
+                                                        converter="#{countryConverter}" 
+                                                        dropdown="true" 
+                                                        forceSelection="true" 
+                                                        effect="fold"
+                                                        completeMethod="#{companyProfileController.completeCountry}"
+                                                        value="#{companyProfileController.companyModel.companyCountryCode}"
+                                                        var="country" 
+                                                        itemValue="#{country.countryCode}"
+                                                        itemLabel="#{country.countryFullName}" 
+                                                        required="true"
+                                                        requiredMessage="Please select Country"/>
+                                        <label>#{messages.CompanyCountryCode}</label>
+                                        <p:message for="CompanyCountryCode" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="CompanyPOBoxNumber" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="CompanyPOBoxNumber" value="#{companyProfileController.companyModel.companyPoBoxNumber}"/>
+                                        <label>#{messages.CompanyPOBoxNumber}</label>
+                                        <p:message for="CompanyPOBoxNumber" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="CompanyPostZipCode" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="CompanyPostZipCode" value="#{companyProfileController.companyModel.companyPostZipCode}"/>
+                                        <label>#{messages.CompanyPostZipCode}</label>
+                                        <p:message for="CompanyPostZipCode" />
+                                    </h:panelGroup>
+                                </p:panelGrid>
+                            </p:fieldset>
+                        </div>
+                    </div>
+                </div>
+                <p:toolbar>
+                    <f:facet name="left">
+
+                        <p:commandButton actionListener="#{companyProfileController.saveUpdate()}"
+                                         value="Save"
+                                         ajax="false"
+                                         update="@form"
+                                         icon="ui-icon-save" />
+
+                        <span class="ui-separator" style="padding-right: 5px;">
+                            <span class="fa fa-ellipsis-v SoftGray" />
+                        </span>
+                        <si:cbutton type="cancel" outcome="/pages/secure/home"/>
+                    </f:facet>
+
+                    <f:facet name="right">
+                        <si:cbutton type="home"/>
+                    </f:facet>
+                </p:toolbar>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

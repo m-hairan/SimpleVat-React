@@ -94,7 +94,7 @@ public class SecurityBean implements PhaseListener, Serializable {
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, password);
             Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authenticate);
-            return "/pages/secure/home.xhtml";
+            return "/pages/secure/home.xhtml?faces-redirect=true";
         } catch (final Exception e) {
             LOGGER.error("Error log in " + e);
             FacesContext.getCurrentInstance().addMessage(null,
@@ -113,7 +113,7 @@ public class SecurityBean implements PhaseListener, Serializable {
             String firstName = userObj.getFirstName();
             String randomPassword = updatedUserPassword(userObj);
             sendPasswordNotificationMail(mailEnum, summary, randomPassword, firstName, username);
-            return "/pages/public/login.xhtml";
+            return "/pages/public/login.xhtml?faces-redirect=true";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Email address provided."));
         }

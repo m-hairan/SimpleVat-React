@@ -35,6 +35,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import static com.mysql.jdbc.StringUtils.isNullOrEmpty;
+import com.simplevat.entity.VatCategory;
+import com.simplevat.entity.VatCategory;
+import com.simplevat.service.VatCategoryService;
+import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -59,6 +63,13 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
     @Getter
     @Setter
     private List<Currency> currencies;
+    
+    @Getter
+    private BigDecimal total;
+
+    @Getter
+    @Setter
+    private List<VatCategory> vatCategoryList = new ArrayList<>();
 
     @Getter
     private boolean renderPrintInvoice;
@@ -78,11 +89,15 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
     @Autowired
     private ProjectService projectService;
 
+    @Autowired
+    private VatCategoryService vatCategoryService;
+
     @PostConstruct
     public void init() {
-        Object objSelectedInvoice = FacesContext.getCurrentInstance().getExternalContext().getFlash().get("invoiceId");
-        System.out.println("objSelectedInvoice :" + objSelectedInvoice);
+       Object objSelectedInvoice = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedInvoiceModelId");
+         System.out.println("objSelectedInvoice :" + objSelectedInvoice);
         if (objSelectedInvoice != null) {
+
             selectedInvoice = invoiceService.findByPK(Integer.parseInt(objSelectedInvoice.toString()));
             selectedInvoiceModel = getInvoiceModel(selectedInvoice);
             renderPrintInvoice = true;
@@ -96,6 +111,10 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
             updateCurrencyLabel();
             selectedInvoiceModel.addInvoiceItem(new InvoiceItemModel());
         }
+        if (vatCategoryService.getVatCategoryList() != null) {
+            vatCategoryList = vatCategoryService.getVatCategoryList();
+        }
+        calculateTotal();
     }
 
     private void setDefaultCurrency() {
@@ -105,7 +124,7 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
         }
     }
 
-    public void addInvoiceItem() {
+    public void addInvoiceItem() {     //---------------
         boolean validated = validateInvoiceLineItems();
 
         if (validated) {
@@ -115,7 +134,7 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
 
     }
 
-    private boolean validateInvoiceLineItems() {
+    private boolean validateInvoiceLineItems() { //---------------
         boolean validated = true;
         for (InvoiceItemModel lastItem : selectedInvoiceModel.getInvoiceItems()) {
             if (lastItem.getQuatity() < 1 || lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0) {
@@ -139,7 +158,7 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
     }
 
     public List<Contact> contacts(final String searchQuery) {
-        return contactService.getContacts(searchQuery.trim());
+        return contactService.getContacts(searchQuery);
     }
 
     public List<Project> projects(final String searchQuery) throws Exception {
@@ -247,7 +266,7 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
         }
     }
 
-    public void updateCurrencyLabel() {
+    public void updateCurrencyLabel() {  //--------------
         if (null != selectedInvoiceModel.getCurrencyCode()) {
             selectedInvoiceModel.setCurrencyCode(currencyService.getCurrency(selectedInvoiceModel.getCurrencyCode().getCurrencyCode()));
         }
@@ -267,7 +286,19 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
                 invoiceItemModel.setSubTotal(amountWithTax);
             }
         }
-
+        calculateTotal();
+    }
+    
+    private void calculateTotal(){
+         total = new BigDecimal(0);
+        List<InvoiceItemModel> invoiceItem = selectedInvoiceModel.getInvoiceItems();
+        if(invoiceItem != null){
+            for (InvoiceItemModel invoice : invoiceItem) {
+                if (invoice.getSubTotal() != null) {
+                    total = total.add(invoice.getSubTotal());
+                }
+            }
+        }
     }
 
     public void initCreateContact() {
@@ -276,7 +307,6 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
 
     public void createContact() {
         Currency defaultCurrency = currencyService.getDefaultCurrency();
-
         final Contact contact = new Contact();
 
         contact.setBillingEmail(contactModel.getEmail());
@@ -287,20 +317,26 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
         contact.setOrganization(contactModel.getOrganization());
         contact.setCreatedBy(1);
         contact.setCurrency(defaultCurrency);
-
-        contactModel = new ContactModel();
-
         if (defaultCurrency != null) {
             contactModel.setCurrency(defaultCurrency);
         }
-        if (contact.getContactId() > 0) {
+        
+        System.out.println("hellllllllllllllllllooooooooooooooooooooooooooooooooooooooooo"+contact.getContactId() );
+        if (contact.getContactId()!=null) {
             contactService.update(contact);
         } else {
             contactService.persist(contact);
         }
-
         selectedInvoiceModel.setContact(contact);
 
     }
 
+    public List<SelectItem> getVatPercentageList() {
+        List<SelectItem> vatList = new ArrayList<>();
+        for (VatCategory vatCategory : vatCategoryList) {
+            SelectItem item = new SelectItem(vatCategory.getVat(), vatCategory.getName());
+            vatList.add(item);
+        }
+        return vatList;
+    }
 }

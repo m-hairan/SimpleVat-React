@@ -39,12 +39,12 @@ public class CButtonComponent extends UIInput implements NamingContainer {
 		} else if (type.equalsIgnoreCase("cancel")) {
 			setTitle("Cancel");
 			if(outcome == null){
-				Breadcrumb breadcrumb = (Breadcrumb) context.getExternalContext().getSessionMap().get("breadcrumb");
-				if(breadcrumb != null){
-					setOutcome(breadcrumb.getPreviousUri());
-				}
+                            Breadcrumb breadcrumb = (Breadcrumb) context.getExternalContext().getSessionMap().get("breadcrumb");
+                            if(breadcrumb != null){
+                                setOutcome(breadcrumb.getPreviousUri());
+                            }
 			}else{
-				setOutcome(outcome);
+                            setOutcome(outcome);
 			}
 			setIcon("ui-icon-cancel");
 		}

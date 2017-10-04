@@ -13,16 +13,20 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-
 import javax.activation.MimetypesFileTypeMap;
-
 import org.apache.commons.io.FilenameUtils;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.UploadedFile;
-
 import com.simplevat.entity.Expense;
+import com.simplevat.entity.ExpenseLineItem;
 import com.simplevat.web.constant.ExpenseConstants;
+import com.simplevat.web.expense.model.ExpenseItemModel;
 import com.simplevat.web.expense.model.ExpenseModel;
+import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
 
 public class ExpenseControllerHelper {
 
@@ -50,7 +54,31 @@ public class ExpenseControllerHelper {
         expense.setTransactionCategory(model.getTransactionCategory());
         expense.setTransactionType(model.getTransactionType());
         expense.setVersionNumber(model.getVersionNumber());
+        final Collection<ExpenseLineItem> items = model
+                .getExpenseItem()
+                .stream()
+                .map((item) -> convertToLineItem(item, expense))
+                .collect(Collectors.toList());
+
+        expense.setExpenseLineItems(items);
+
         return expense;
+    }
+
+    @Nonnull
+    private ExpenseLineItem convertToLineItem(@Nonnull final ExpenseItemModel model,
+            @Nonnull final Expense expense) {
+
+        final ExpenseLineItem item = new ExpenseLineItem();
+        if (model.getId() > 0) {
+            item.setExpenseLineItemId(model.getId());
+        }
+        item.setExpenseLineItemDescription(model.getDescription());
+        item.setExpenseLineItemQuantity(model.getQuatity());
+        item.setExpenseLineItemUnitPrice(model.getUnitPrice());
+        item.setExpenseLineItemVat(model.getVatId());
+        item.setExpense(expense);
+        return item;
     }
 
     public ExpenseModel getExpenseModel(Expense entity) {
@@ -78,6 +106,7 @@ public class ExpenseControllerHelper {
         expenseModel.setTransactionCategory(entity.getTransactionCategory());
         expenseModel.setTransactionType(entity.getTransactionType());
         expenseModel.setVersionNumber(entity.getVersionNumber());
+        expenseModel.setReceiptAttachmentBinary(entity.getReceiptAttachmentBinary());
 
         String attachmentPath = entity.getReceiptAttachmentPath();
         if (attachmentPath != null && !attachmentPath.isEmpty()) {
@@ -90,8 +119,45 @@ public class ExpenseControllerHelper {
                 e.printStackTrace();
             }
         }
-
+        final List<ExpenseItemModel> items = entity
+                .getExpenseLineItems()
+                .stream()
+                .map((lineItem) -> convertToItemModel(lineItem))
+                .collect(Collectors.toList());
+        expenseModel.setExpenseItem(items);
         return expenseModel;
+    }
+
+    @Nonnull
+    public ExpenseItemModel convertToItemModel(@Nonnull final ExpenseLineItem expenseLineItem) {
+
+        final ExpenseItemModel model = new ExpenseItemModel();
+
+        model.setId(expenseLineItem.getExpenseLineItemId());
+        model.setDescription(expenseLineItem.getExpenseLineItemDescription());
+        model.setQuatity(expenseLineItem.getExpenseLineItemQuantity());
+        model.setUnitPrice(expenseLineItem.getExpenseLineItemUnitPrice());
+        model.setVatId(expenseLineItem.getExpenseLineItemVat());
+        this.updateSubTotal(model);
+        return model;
+
+    }
+
+    private void updateSubTotal(@Nonnull final ExpenseItemModel expenseItemModel) {
+        final int quantity = expenseItemModel.getQuatity();
+        final BigDecimal unitPrice = expenseItemModel.getUnitPrice();
+        final BigDecimal vatPer = expenseItemModel.getVatId();
+        if (null != unitPrice) {
+            final BigDecimal amountWithoutTax = unitPrice.multiply(new BigDecimal(quantity));
+            expenseItemModel.setSubTotal(amountWithoutTax);
+
+            if (vatPer != null && vatPer.compareTo(BigDecimal.ZERO) >= 1) {
+                final BigDecimal amountWithTax = amountWithoutTax
+                        .add(amountWithoutTax.multiply(vatPer).multiply(new BigDecimal(0.01)));
+                expenseItemModel.setSubTotal(amountWithTax);
+            }
+        }
+
     }
 
     public void storeUploadedFile(ExpenseModel model, Expense expense, String fileLocation) {
@@ -122,5 +188,4 @@ public class ExpenseControllerHelper {
             e.printStackTrace();
         }
     }
-
 }

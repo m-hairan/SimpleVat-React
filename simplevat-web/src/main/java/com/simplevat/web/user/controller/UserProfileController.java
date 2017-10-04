@@ -29,17 +29,27 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.event.PhaseId;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.context.annotation.SessionScope;
 
 /**
  *
  * @author Uday
  */
 @Controller
-@SpringScopeView
-public class UserProfileController {
+//@SpringScopeView
+@SessionScope
+public class UserProfileController implements Serializable{
 
+    @Getter
+    @Setter
     private UserModel currentUser;
+    @Getter
+    @Setter
     private User currentUserEntity;
 
     @Autowired
@@ -68,73 +78,56 @@ public class UserProfileController {
 
     public void update() throws UnauthorizedException {
         try {
-            currentUserEntity = convertToEntity(currentUser);
-            if (null != currentUser.getProfileImage()
-                    && currentUser.getProfileImage().getSize() > 0) {
-                storeUploadedFile(fileLocation);
-            }
-            //TODO Dear Hiren you cannot simple update the password like this in database
-            // you have to encode with BCrypEncoder and then you have to save it.
-            // BTW it is not necessary that every time password is updated
-        //    userService.update(currentUserEntity);
-            userService.persist(currentUserEntity);
+            try {
 
+                byte[] bytes = IOUtils.toByteArray(currentUser.getProfileImage().getInputstream());
+                currentUser.setProfileImageBinary(bytes);
+
+            } catch (IOException ex) {
+                Logger.getLogger(UserProfileController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            currentUserEntity = convertToEntity(currentUser);
+
+            if (currentUser.getUserId() > 0) {
+                userService.update(currentUserEntity, currentUser.getUserId());
+            }
             init();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User Profile updated successfully"));
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(UserProfileController.class.getName()).log(Level.SEVERE, null, ex);
-        } //catch (TransactionRequiredException ex) {
-            //Logger.getLogger(UserProfileController.class.getName()).log(Level.SEVERE, null, ex);
-     //   }
-    }
-
-    private void storeUploadedFile(String fileLocation) throws UnauthorizedException {
-        String tomcatHome = System.getProperty("catalina.base");
-        String fileUploadAbsolutePath = tomcatHome.concat(fileLocation);
-        File filePath = new File(fileUploadAbsolutePath);
-        if (!filePath.exists()) {
-            filePath.mkdir();
-        }
-        Path dataFolder = Paths.get(fileUploadAbsolutePath);
-
-        UploadedFile uploadedFile = currentUser.getProfileImage();
-
-        String filename = FilenameUtils.getBaseName(uploadedFile.getFileName());
-        String extension = FilenameUtils.getExtension(uploadedFile.getFileName());
-
-        try {
-
-            Path file = Files.createTempFile(dataFolder, "Profile_" + currentUser.getUserId() + filename, "_" + System.currentTimeMillis() + "." + extension);
-            InputStream in = uploadedFile.getInputstream();
-            Files.copy(in, file, StandardCopyOption.REPLACE_EXISTING);
-
-            currentUserEntity.setProfileImagePath(fileLocation + "/" + file.getFileName());
-
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
     }
 
+    
     @Nonnull
     private User convertToEntity(@Nonnull final UserModel userModel) {
         final LocalDateTime dob = LocalDateTime
-                .ofInstant(userModel.getDateOfBirth().toInstant(),
-                        ZoneId.systemDefault());
-        User user = userService.getUserByEmail(userModel.getUserEmailId()).get();
+                .ofInstant(userModel.getDateOfBirth().toInstant(), ZoneId.systemDefault());
+        //  User user = userService.getUserByEmail(userModel.getUserEmailId()).get();
 
-        // todo: change when company module is done.
+        User user = new User();
+        user.setUserId(userModel.getUserId());
         user.setCompanyId(userModel.getCompanyId());
         user.setDateOfBirth(dob);
-        user.setDeleteFlag(Boolean.FALSE);
+        user.setDeleteFlag(userModel.getDeleteFlag());
         user.setUserEmail(userModel.getUserEmailId());
         user.setFirstName(userModel.getFirstName());
         user.setLastName(userModel.getLastName());
+        user.setCreatedBy(userModel.getCreatedBy());
+        user.setIsActive(Boolean.TRUE);
+        user.setPassword(userModel.getPassword());
+        user.setProfileImagePath(userModel.getProfileImagePath());
+        user.setVersionNumber(userModel.getVersionNumber());
+        user.setCreatedDate(userModel.getCreatedDate());
+        user.setRoleCode(userModel.getRoleCode());
+        user.setProfileImageBinary(userModel.getProfileImageBinary());
         return user;
     }
 
     @Nonnull
     private UserModel convertToModel(@Nonnull final User user) {
+
         final UserModel userModel = new UserModel();
 
         userModel.setUserId(user.getUserId());
@@ -144,27 +137,22 @@ public class UserProfileController {
         userModel.setUserEmailId(user.getUserEmail());
         userModel.setFirstName(user.getFirstName());
         userModel.setLastName(user.getLastName());
+        userModel.setDeleteFlag(user.getDeleteFlag());
+        userModel.setPassword(user.getPassword());
+        userModel.setVersionNumber(user.getVersionNumber());
+        userModel.setCreatedBy(user.getCreatedBy());
+        userModel.setProfileImagePath(user.getProfileImagePath());
+        userModel.setCreatedDate(user.getCreatedDate());
+        userModel.setRoleCode(user.getRoleCode());
+        userModel.setProfileImageBinary(user.getProfileImageBinary());
 
         return userModel;
     }
 
-    public StreamedContent getProfilePic() throws UnauthorizedException {
-        if (currentUserEntity == null) {
-            final UserContext context = ContextUtils.getUserContext();
-            currentUserEntity = userService.findByPK(context.getUserId());
-        }
-        final String attachmentPath = currentUserEntity.getProfileImagePath();
-        if (attachmentPath != null && !attachmentPath.isEmpty()) {
-            String tomcatHome = System.getProperty("catalina.base");
-            File profilePic = new File(tomcatHome.concat(attachmentPath));
-            try {
-                final InputStream inputStream = new FileInputStream(profilePic);
-                return new DefaultStreamedContent(inputStream,
-                        new MimetypesFileTypeMap().getContentType(profilePic),
-                        profilePic.getName());
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+    public StreamedContent getProfilePic(){
+        if (currentUser.getProfileImageBinary() != null) {
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(currentUser.getProfileImageBinary());
+            return new DefaultStreamedContent(inputStream);
         }
         return null;
     }
@@ -177,8 +165,8 @@ public class UserProfileController {
         }
         return currentUser;
     }
-    
-    public String prefillData(){
+
+    public String prefillData() {
         return "";
     }
 }

@@ -16,6 +16,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,24 +111,23 @@ public class ContactListController extends ContactHelper implements Serializable
     }
 
     public void delete() {
-        for (ContactModel contactModel : getContacts()) {
+        for (ContactModel contactModel : filteredContacts) {
             if (contactModel.getSelected()) {
-                Contact contact = getContact(contactModel);
-                contactService.update(contact);
+                Contact contact1 = getContact(contactModel);
+                contact1.setDeleteFlag(Boolean.TRUE);
+                contactService.update(contact1);
             }
         }
         init();
+        RequestContext.getCurrentInstance().update("contactListForm");
     }
 
-    
     @Nonnull
     public List<ContactModel> getContacts() {
         return filteredContacts;
     }
 
     public String redirectToEditContact() {
-
-        //  return "contact?faces-redirect=true&selectedContactId=" + selectedContact.getContactId();
         return "contact?faces-redirect=true&selectedContactId=" + contact.getContactId();
 
     }
@@ -135,20 +135,17 @@ public class ContactListController extends ContactHelper implements Serializable
     public void deleteContact() {
 
         contact.setDeleteFlag(Boolean.TRUE);
-
         selectedContact = getContact(contact);
 
         contactService.update(selectedContact);
-
+        populateContactList();
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
 
         context.addMessage(null, new FacesMessage("Contact deleted SuccessFully"));
     }
-    
 
 //    public void setSelectedContactIds(Long key, Boolean Value){
 //        selectedContactIds.put(key,Value);
 //    }
 }
-
