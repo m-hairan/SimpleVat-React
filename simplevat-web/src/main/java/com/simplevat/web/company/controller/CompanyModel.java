@@ -29,6 +29,7 @@ public class CompanyModel {
     private String emailAddress;
     private String phoneNumber;
     private String website;
+    private String invoicingReferencePattern;
     private String invoicingAddressLine1;
     private String invoicingAddressLine2;
     private String invoicingAddressLine3;

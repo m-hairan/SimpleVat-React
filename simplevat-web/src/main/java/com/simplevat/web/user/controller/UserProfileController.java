@@ -1,35 +1,24 @@
 package com.simplevat.web.user.controller;
 
-import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.User;
 import com.simplevat.web.exception.UnauthorizedException;
 import com.simplevat.security.ContextUtils;
 import com.simplevat.security.UserContext;
 import com.simplevat.service.UserServiceNew;
 import com.simplevat.user.model.UserModel;
-import org.apache.commons.io.FilenameUtils;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-
-import javax.activation.MimetypesFileTypeMap;
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.faces.event.PhaseId;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.io.IOUtils;
@@ -41,11 +30,9 @@ import org.springframework.web.context.annotation.SessionScope;
  * @author Uday
  */
 @Controller
-//@SpringScopeView
 @SessionScope
 public class UserProfileController implements Serializable{
 
-    @Getter
     @Setter
     private UserModel currentUser;
     @Getter
@@ -55,19 +42,13 @@ public class UserProfileController implements Serializable{
     @Autowired
     private UserServiceNew userService;
 
-    @Autowired
-    private UserServiceNew userServiceNew;
-
-    @Value("${file.upload.location}")
-    private String fileLocation;
-
     @PostConstruct
     public void init() {
         try {
             final UserContext context = ContextUtils.getUserContext();
             currentUserEntity = userService.findByPK(context.getUserId());
         } catch (UnauthorizedException ex) {
-//            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
         if (currentUserEntity != null) {
             currentUser = convertToModel(currentUserEntity);
@@ -98,7 +79,6 @@ public class UserProfileController implements Serializable{
             Logger.getLogger(UserProfileController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
     
     @Nonnull
     private User convertToEntity(@Nonnull final UserModel userModel) {

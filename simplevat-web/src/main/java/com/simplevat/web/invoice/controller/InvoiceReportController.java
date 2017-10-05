@@ -5,12 +5,17 @@
  */
 package com.simplevat.web.invoice.controller;
 
+import com.simplevat.entity.Company;
+import com.simplevat.entity.Contact;
 import com.simplevat.entity.invoice.Invoice;
+import com.simplevat.service.CompanyService;
+import com.simplevat.service.UserServiceNew;
 import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.web.invoice.model.InvoiceItemModel;
 import com.simplevat.web.invoice.model.InvoiceModel;
 import com.simplevat.web.reports.AbstractReportBean;
 import com.simplevat.web.reports.ReportConfigUtil;
+import com.simplevat.web.utils.FacesUtil;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -42,11 +47,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Named
 public class InvoiceReportController extends AbstractReportBean {
 
-    private final String COMPILE_FILE_NAME = "Invoice";
+    private final String COMPILE_FILE_NAME = "InvoiceJasper";
     private int invoiceId;
 
     @Autowired
     private InvoiceService invoiceService;
+
+    @Autowired
+    private CompanyService companyService;
+
+    @Autowired
+    private UserServiceNew userServiceNew;
 
     @Override
     protected String getCompileFileName() {
@@ -67,7 +78,7 @@ public class InvoiceReportController extends AbstractReportBean {
         if (invoiceId > 0) {
             Invoice invoice = invoiceService.findByPK(invoiceId);
             invoiceModel = new InvoiceModelHelper().getInvoiceModel(invoice);
-
+            Company company = companyService.findByPK(userServiceNew.findByPK(invoice.getCreatedBy()).getCompanyId());
             try {
                 BigDecimal totalVat = new BigDecimal(0);
                 BigDecimal netSubtotal = new BigDecimal(0);
@@ -80,32 +91,93 @@ public class InvoiceReportController extends AbstractReportBean {
                     netSubtotal = netSubtotal.add(invoiceItem.getUnitPrice().multiply(new BigDecimal(invoiceItem.getQuatity())));
                     quantity += invoiceItem.getQuatity();
                 }
-                SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-                parameters.put("companyName", "Company Name");
-                parameters.put("companyAddress", "Company Address");
-                String country = "";
-                if (invoiceModel.getContact().getCountry() != null) {
-                    country = invoiceModel.getContact().getCountry().getCountryName();
-                }
-                parameters.put("invoiceHolderAddress", country);
-                parameters.put("invoiceNumber", String.valueOf(invoiceModel.getInvoiceId()));
-                parameters.put("invoiceDueDate", String.valueOf(dateFormat.format(invoiceModel.getInvoiceDate())));
-                parameters.put("paymentDueDate", String.valueOf(dateFormat.format(invoiceModel.getInvoiceDate())));
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+                parameters.put("companyName", company.getCompanyName());
+                parameters.put("companyAddress", getComapnyAddress(company));
+                parameters.put("invoiceHolderAddress", getInvoiceHolderAddress(invoiceModel.getContact()));
+                parameters.put("invoiceNumber", "INVOICE " + invoiceModel.getInvoiceRefNo());
+                System.out.println("invoiceModel.getInvoiceDate()=================" + invoiceModel.getInvoiceDate());
+                parameters.put("invoiceDate", String.valueOf(dateFormat.format(invoiceModel.getInvoiceDate())));
+                parameters.put("paymentDueDate", String.valueOf(dateFormat.format(invoiceModel.getInvoiceDueDate())));
                 parameters.put("quantity", String.valueOf(quantity));
                 parameters.put("details", "");
-                parameters.put("paymentReference", String.valueOf(0));
+                parameters.put("paymentReference", invoiceModel.getInvoiceRefNo());
                 parameters.put("vat", String.valueOf(totalVat));
                 parameters.put("netSubtotal", String.valueOf(netSubtotal));
                 parameters.put("netTotal", String.valueOf(netSubtotal.add(totalVat)));
                 parameters.put("paymentDetails", String.valueOf(invoiceModel.getInvoiceText()));
                 parameters.put("accountNumber", String.valueOf(invoiceModel.getContractPoNumber()));
-                parameters.put("otherInformation", String.valueOf(0));
+                parameters.put("otherInformation", company.getCompanyRegistrationNumber());
 
             } catch (Exception ex) {
                 Logger.getLogger(InvoiceReportController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return parameters;
+    }
+
+    private String getComapnyAddress(Company company) {
+        StringBuilder companyAddress = new StringBuilder();
+        if (company.getCompanyAddressLine1() != null) {
+            companyAddress.append(company.getCompanyAddressLine1());
+        }
+        if (company.getCompanyAddressLine2() != null) {
+            companyAddress.append("\n").append(company.getCompanyAddressLine2());
+        }
+        if (company.getCompanyAddressLine3() != null) {
+            companyAddress.append("\n").append(company.getCompanyAddressLine3());
+        }
+        if (company.getCompanyCity() != null) {
+            companyAddress.append(", ").append(company.getCompanyCity());
+        }
+        if (company.getCompanyStateRegion() != null) {
+            companyAddress.append("\n").append(company.getCompanyStateRegion());
+        }
+        if (company.getCompanyCountryCode() != null) {
+            companyAddress.append(", ").append(company.getCompanyCountryCode().getCountryName());
+        }
+        if (company.getCompanyPostZipCode() != null) {
+            companyAddress.append(", ").append(company.getCompanyPostZipCode());
+        }
+        if (company.getVatRegistrationNumber() != null) {
+            companyAddress.append("\nVAT: ").append(company.getVatRegistrationNumber());
+        }
+        return companyAddress.toString();
+    }
+
+    private String getInvoiceHolderAddress(Contact contact) {
+        StringBuilder invoiceHolderAddress = new StringBuilder();
+        if (contact.getFirstName() != null) {
+            invoiceHolderAddress.append(contact.getFirstName());
+        }
+        if (contact.getMiddleName() != null) {
+            invoiceHolderAddress.append(" ").append(contact.getMiddleName());
+        }
+        if (contact.getLastName() != null) {
+            invoiceHolderAddress.append(" ").append(contact.getLastName());
+        }
+        if (contact.getInvoicingAddressLine1() != null) {
+            invoiceHolderAddress.append("\n").append(contact.getInvoicingAddressLine1());
+        }
+        if (contact.getInvoicingAddressLine2() != null) {
+            invoiceHolderAddress.append(", ").append(contact.getInvoicingAddressLine2());
+        }
+        if (contact.getInvoicingAddressLine3() != null) {
+            invoiceHolderAddress.append(", ").append(contact.getInvoicingAddressLine3());
+        }
+        if (contact.getCity() != null) {
+            invoiceHolderAddress.append("\n").append(contact.getCity());
+        }
+        if (contact.getStateRegion() != null) {
+            invoiceHolderAddress.append(", ").append(contact.getStateRegion());
+        }
+        if (contact.getCountry() != null) {
+            invoiceHolderAddress.append("\n").append(contact.getCountry().getCountryName());
+        }
+        if (contact.getPostZipCode() != null) {
+            invoiceHolderAddress.append(", ").append(contact.getPostZipCode());
+        }
+        return invoiceHolderAddress.toString();
     }
 
     public ArrayList<InvoiceDataSourceModel> getDataBeanList() {

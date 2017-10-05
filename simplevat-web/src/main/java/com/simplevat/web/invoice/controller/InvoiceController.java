@@ -35,9 +35,13 @@ import java.util.Iterator;
 import java.util.List;
 
 import static com.mysql.jdbc.StringUtils.isNullOrEmpty;
+import com.simplevat.entity.Company;
 import com.simplevat.entity.VatCategory;
 import com.simplevat.entity.VatCategory;
+import com.simplevat.service.CompanyService;
 import com.simplevat.service.VatCategoryService;
+import com.simplevat.web.utils.FacesUtil;
+import java.util.Calendar;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 
@@ -57,13 +61,16 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
     private Invoice selectedInvoice;
 
     @Getter
+    private Company company;
+
+    @Getter
     @Setter
     private ContactModel contactModel;
 
     @Getter
     @Setter
     private List<Currency> currencies;
-    
+
     @Getter
     private BigDecimal total;
 
@@ -76,6 +83,9 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
 
     @Autowired
     private ContactService contactService;
+
+    @Autowired
+    private CompanyService companyService;
 
     @Autowired
     private CurrencyService currencyService;
@@ -92,10 +102,14 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
     @Autowired
     private VatCategoryService vatCategoryService;
 
+    @Getter
+    @Setter
+    List<SelectItem> vatCategorySelectItemList = new ArrayList<>();
+
     @PostConstruct
     public void init() {
-       Object objSelectedInvoice = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedInvoiceModelId");
-         System.out.println("objSelectedInvoice :" + objSelectedInvoice);
+        Object objSelectedInvoice = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedInvoiceModelId");
+        System.out.println("objSelectedInvoice :" + objSelectedInvoice);
         if (objSelectedInvoice != null) {
 
             selectedInvoice = invoiceService.findByPK(Integer.parseInt(objSelectedInvoice.toString()));
@@ -107,13 +121,15 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
             currencies = currencyService.getCurrencies();
             setDefaultCurrency();
             selectedInvoiceModel.setInvoiceDate(new Date());
+            selectedInvoiceModel.setInvoiceDueDate(new Date());
             selectedInvoiceModel.setInvoiceDueOn(30);
             updateCurrencyLabel();
-            selectedInvoiceModel.addInvoiceItem(new InvoiceItemModel());
+            selectedInvoiceModel.setInvoiceItems(new ArrayList());
+            company = companyService.findByPK(FacesUtil.getLoggedInUser().getCompanyId());
+            selectedInvoiceModel.setInvoiceRefNo(getNextInvoiceRefNumber(company.getInvoicingReferencePattern()));
         }
-        if (vatCategoryService.getVatCategoryList() != null) {
-            vatCategoryList = vatCategoryService.getVatCategoryList();
-        }
+        populateVatCategory();
+
         calculateTotal();
     }
 
@@ -219,11 +235,13 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
         if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
             return "";
         }
+        selectedInvoiceModel.setInvoiceDueDate(getDueDate(selectedInvoiceModel));
         selectedInvoice = getInvoiceEntity(selectedInvoiceModel);
-
         if (selectedInvoice.getInvoiceId() != null && selectedInvoice.getInvoiceId() > 0) {
             invoiceService.update(selectedInvoice);
         } else {
+            company.setInvoicingReferencePattern(selectedInvoice.getInvoiceReferenceNumber());
+            companyService.update(company);
             invoiceService.persist(selectedInvoice);
         }
         FacesContext context = FacesContext.getCurrentInstance();
@@ -288,11 +306,11 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
         }
         calculateTotal();
     }
-    
-    private void calculateTotal(){
-         total = new BigDecimal(0);
+
+    private void calculateTotal() {
+        total = new BigDecimal(0);
         List<InvoiceItemModel> invoiceItem = selectedInvoiceModel.getInvoiceItems();
-        if(invoiceItem != null){
+        if (invoiceItem != null) {
             for (InvoiceItemModel invoice : invoiceItem) {
                 if (invoice.getSubTotal() != null) {
                     total = total.add(invoice.getSubTotal());
@@ -320,9 +338,8 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
         if (defaultCurrency != null) {
             contactModel.setCurrency(defaultCurrency);
         }
-        
-        System.out.println("hellllllllllllllllllooooooooooooooooooooooooooooooooooooooooo"+contact.getContactId() );
-        if (contact.getContactId()!=null) {
+
+        if (contact.getContactId() != null) {
             contactService.update(contact);
         } else {
             contactService.persist(contact);
@@ -331,12 +348,21 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
 
     }
 
-    public List<SelectItem> getVatPercentageList() {
-        List<SelectItem> vatList = new ArrayList<>();
-        for (VatCategory vatCategory : vatCategoryList) {
-            SelectItem item = new SelectItem(vatCategory.getVat(), vatCategory.getName());
-            vatList.add(item);
+    private void populateVatCategory() {
+        vatCategoryList = vatCategoryService.getVatCategoryList();
+        if (vatCategoryList != null) {
+            for (VatCategory vatCategory : vatCategoryList) {
+                SelectItem item = new SelectItem(vatCategory.getVat(), vatCategory.getName());
+                vatCategorySelectItemList.add(item);
+            }
         }
-        return vatList;
     }
+
+    private Date getDueDate(InvoiceModel invoiceModel) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(invoiceModel.getInvoiceDate());
+        calendar.add(Calendar.DAY_OF_YEAR, invoiceModel.getInvoiceDueOn());
+        return calendar.getTime();
+    }
+
 }

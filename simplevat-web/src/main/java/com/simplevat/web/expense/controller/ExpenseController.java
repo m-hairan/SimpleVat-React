@@ -74,7 +74,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
     @Getter
     @Setter
     private List<TransactionType> transactionTypes;
-    
+
     @Getter
     @Setter
     private List<VatCategory> vatCategoryList = new ArrayList<>();
@@ -82,9 +82,16 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
     @Getter
     private BigDecimal total;
 
-    
-      @Autowired
-     private VatCategoryService vatCategoryService;
+    @Autowired
+    private VatCategoryService vatCategoryService;
+
+    @Getter
+    @Setter
+    List<SelectItem> vatCategorySelectItemList = new ArrayList<>();
+
+    @Getter
+    @Setter
+    String fileName;
 
     @PostConstruct
     public void init() {
@@ -92,7 +99,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
         if (objSelectedExpenseModel == null) {
             selectedExpenseModel = new ExpenseModel();
 //            selectedExpenseModel.setAttachmentFile(new DefaultUploadedFile());
-            selectedExpenseModel.addExpenseItem(new ExpenseItemModel());
+            selectedExpenseModel.setExpenseItem(new ArrayList<>());
             Currency defaultCurrency = currencyService.getDefaultCurrency();
             if (defaultCurrency != null) {
                 selectedExpenseModel.setCurrency(defaultCurrency);
@@ -112,12 +119,9 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
             Expense expense = expenseService.findByPK(Integer.parseInt(objSelectedExpenseModel.toString()));
             selectedExpenseModel = getExpenseModel(expense);
         }
-        
-        if(vatCategoryService.getVatCategoryList()!=null)
-      {
-        vatCategoryList=vatCategoryService.getVatCategoryList();
-      } 
-      
+
+        populateVatCategory();
+
         calculateTotal();
     }
 
@@ -143,7 +147,6 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
     }
 
     public String saveExpense() {
-        System.out.println("helllllllllllllllllooooooooooooooooooooooooo: :" + selectedExpenseModel.getExpenseId());
         User loggedInUser = FacesUtil.getLoggedInUser();
         Expense expense = getExpense(selectedExpenseModel);
         expense.setLastUpdateDate(LocalDateTime.now());
@@ -234,7 +237,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
     }
 
     public void fileUploadListener(FileUploadEvent e) {
-
+        fileName = e.getFile().getFileName();
         selectedExpenseModel.setReceiptAttachmentBinary(e.getFile().getContents());
     }
 
@@ -293,7 +296,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
                 expenseItemModel.setSubTotal(amountWithTax);
             }
         }
-       calculateTotal();
+        calculateTotal();
     }
 
     public List<TransactionType> getAllTransactionType(String str) {
@@ -308,25 +311,27 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
         }
         return filterList;
     }
-    
-    public List<SelectItem> getVatPercentageList(){
-       List<SelectItem> vatCategorySelectItemList = new ArrayList<>();
-        for (VatCategory vatCategory : vatCategoryList) {
-            SelectItem item=new SelectItem(vatCategory.getVat(), vatCategory.getName());
-            vatCategorySelectItemList.add(item);
-            }
-      return vatCategorySelectItemList;
-    }
-    
-     private void calculateTotal(){
-         total = new BigDecimal(0);
+
+    private void calculateTotal() {
+        total = new BigDecimal(0);
         List<ExpenseItemModel> expenseItem = selectedExpenseModel.getExpenseItem();
-        if(expenseItem != null){
+        if (expenseItem != null) {
             for (ExpenseItemModel expense : expenseItem) {
                 if (expense.getSubTotal() != null) {
                     total = total.add(expense.getSubTotal());
                 }
             }
         }
-    }    
+    }
+
+    private void populateVatCategory() {
+        vatCategoryList = vatCategoryService.getVatCategoryList();
+        if(vatCategoryList!=null)
+        {
+        for (VatCategory vatCategory : vatCategoryList) {
+            SelectItem item = new SelectItem(vatCategory.getVat(), vatCategory.getName());
+            vatCategorySelectItemList.add(item);
+        }
+        }
+    }
 }

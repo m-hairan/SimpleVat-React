@@ -10,12 +10,12 @@ import com.simplevat.security.UserContext;
 import com.simplevat.service.RoleService;
 import com.simplevat.service.UserServiceNew;
 import com.simplevat.web.user.model.UserDTO;
-//import com.sun.xml.internal.ws.api.model.wsdl.WSDLBoundOperation;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.activation.MimetypesFileTypeMap;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import lombok.Getter;
@@ -47,7 +48,7 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 @SpringScopeView
-public class UserController {
+public class UserController implements Serializable {
 
     @Autowired
     private UserServiceNew userService;
@@ -77,15 +78,21 @@ public class UserController {
     private String password;
 
     @Getter
+    @Setter
+    private String fileName;
+
+    @Getter
     private List<Role> roleList;
 
+    @PostConstruct
     public void init() {
         newProfilePic = null;
         password = null;
         editMode = false;
         selectedUser = new UserDTO();
         selectedUser.setRole(new Role());
-        String userId = (String)FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("user");
+        String userId = (String) FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("user");
+
         if (userId != null) {
             User user = userService.findByPK(Integer.parseInt(userId));
             BeanUtils.copyProperties(user, selectedUser);
@@ -117,26 +124,13 @@ public class UserController {
                 e.printStackTrace();
             }
         }
-        if (selectedUser != null) {
-            final String attachmentPath = selectedUser.getProfileImagePath();
-            if (attachmentPath != null && !attachmentPath.isEmpty()) {
-                String tomcatHome = System.getProperty("catalina.base");
-                File profilePic = new File(tomcatHome.concat(attachmentPath));
-                try {
-                    final InputStream inputStream = new FileInputStream(profilePic);
-                    return new DefaultStreamedContent(inputStream,
-                            new MimetypesFileTypeMap().getContentType(profilePic),
-                            profilePic.getName());
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
         return null;
     }
 
     public void handleFileUpload(FileUploadEvent event) {
         newProfilePic = event.getFile();
+        selectedUser.setProfileImageBinary(event.getFile().getContents());
+        fileName = event.getFile().getFileName();
         FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -156,6 +150,11 @@ public class UserController {
             UserContext userContext = ContextUtils.getUserContext();
             user.setCreatedBy(userContext.getUserId());
             user.setLastUpdatedBy(userContext.getUserId());
+            if (selectedUser.getRoleCode() != null) {
+                Role role = roleService.findByPK(selectedUser.getRoleCode());
+                user.setRole(role);
+            }
+
             if (!editMode) {
                 userService.persist(user);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User Profile added successfully"));

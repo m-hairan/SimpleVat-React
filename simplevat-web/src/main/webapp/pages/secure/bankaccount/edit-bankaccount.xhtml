@@ -98,6 +98,18 @@
                                             </p:selectOneRadio>
                                         </h:panelGroup>
 
+                                        <p:outputLabel for="bank_account_type"/>
+                                        <h:panelGroup styleClass="md-inputwrapper-focus">
+                                            
+                                            <p:selectOneMenu id="bank_account_type"  value="#{bankAccountController.selectedBankAccount.bankAccountType.id}"  style="width:100%"
+                                                            required="true"
+                                                            requiredMessage="Please select account type"
+                                                             >
+                                                <f:selectItems value="#{bankAccountController.bankAccountTypes}" />
+                                            </p:selectOneMenu>
+                                            <label>#{messages.account_type}</label>
+                                        </h:panelGroup>
+
                                     </p:panelGrid>
                                 </p:fieldset>
                                 <br />
@@ -137,6 +149,8 @@
                                             <label>#{messages.iban_number}</label>
                                         </h:panelGroup>
 
+                                        
+                                        
                                         <p:outputLabel for="bankCountry"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:outputLabel for="bankCountry"/>
@@ -152,6 +166,9 @@
                                                             required="false"/>
                                             <label>#{messages.country}</label>
                                         </h:panelGroup>
+                                        
+                                        <p:outputLabel />
+                                        <p:outputLabel />
                                     </p:panelGrid>
                                 </p:fieldset>
 

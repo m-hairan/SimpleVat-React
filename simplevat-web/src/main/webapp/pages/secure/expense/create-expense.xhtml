@@ -109,7 +109,7 @@
                                                             value="#{expenseController.selectedExpenseModel.currency}"
                                                             var="currency" 
                                                             itemValue="#{currency}"
-                                                            itemLabel="#{currency.currencyDescription}" 
+                                                            itemLabel="#{currency.currencyIsoCode}  #{currency.currencySymbol} " 
                                                             required="true"
                                                             requiredMessage="Please select currency"/>
                                             <label>#{messages.currency}</label>
@@ -168,8 +168,14 @@
                                         <h:panelGroup />
 
                                         <h:panelGroup styleClass="md-inputfield">
+                                        <div style="width:140px">
                                             <p:fileUpload auto="true"
-                                                mode="advanced" skinSimple="true"  fileUploadListener="#{expenseController.fileUploadListener}" />
+                                                          mode="advanced" update="fileName"  fileUploadListener="#{expenseController.fileUploadListener}"  />
+                                               
+                                            <h:outputText value="#{expenseController.fileName}"  id="fileName"/>
+                                        
+                                            
+                                        </div>
                                             <h:panelGroup rendered="#{expenseController.selectedExpenseModel.attachmentFileContent != null}">
                                                
                                                 <p:commandButton value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
@@ -256,7 +262,7 @@
                                                  <p:selectOneMenu id="vatId"   value="#{expenseItem.vatId}"   style="width:100%">
                                                 
                                                     <f:selectItem itemLabel="Select One" itemValue="" />
-                                                    <f:selectItems value="#{expenseController.vatPercentageList}" />
+                                                    <f:selectItems value="#{expenseController.vatCategorySelectItemList}" />
                                                 <p:ajax event="change" 
                                                             listener="#{expenseController.updateSubTotal(expenseItem)}" 
                                                             update="subTotal" />

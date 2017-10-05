@@ -38,10 +38,10 @@
                     </p:column>
 
                     <p:column headerText="Action">
-                        <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" action="#{transactionCategoryView.editAction}">
+                        <p:commandButton icon="ui-icon-edit" title="Edit Transcation" styleClass="AquaButton" action="#{transactionCategoryView.editAction}">
                             <f:setPropertyActionListener value="#{transactionCategory}" target="#{transactionCategoryView.transactionCategoryModel}" />
                         </p:commandButton>
-                        <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{transactionCategoryView.deleteTransactionCategory}" >
+                        <p:commandButton icon="ui-icon-delete" title="Delete Transcation" styleClass="AquaButton" action="#{transactionCategoryView.deleteTransactionCategory}" >
                             <f:setPropertyActionListener value="#{transactionCategory}" target="#{transactionCategoryView.transactionCategoryModel}" />
                         </p:commandButton>
                     </p:column>

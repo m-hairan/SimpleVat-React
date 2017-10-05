@@ -10,6 +10,9 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import lombok.Getter;
+import lombok.Setter;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
@@ -17,6 +20,9 @@ import java.util.Date;
  */
 public class UserDTO extends User {
 
+    @Getter
+    @Setter
+    private UploadedFile profileImage;
     private String name;
     private Date displayDOB;
 

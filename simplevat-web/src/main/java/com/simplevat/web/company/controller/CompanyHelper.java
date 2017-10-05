@@ -32,6 +32,7 @@ class CompanyHelper {
         companyModel.setCreatedDate(company.getCreatedDate());
         companyModel.setDeleteFlag(company.getDeleteFlag());
         companyModel.setEmailAddress(company.getEmailAddress());
+        companyModel.setInvoicingReferencePattern(company.getInvoicingReferencePattern());
         companyModel.setInvoicingAddressLine1(company.getInvoicingAddressLine1());
         companyModel.setInvoicingAddressLine2(company.getInvoicingAddressLine2());
         companyModel.setInvoicingAddressLine3(company.getInvoicingAddressLine3());
@@ -68,6 +69,7 @@ class CompanyHelper {
         company.setCreatedDate(companyModel.getCreatedDate());
         company.setDeleteFlag(companyModel.getDeleteFlag());
         company.setEmailAddress(companyModel.getEmailAddress());
+        company.setInvoicingReferencePattern(companyModel.getInvoicingReferencePattern());
         company.setInvoicingAddressLine1(companyModel.getInvoicingAddressLine1());
         company.setInvoicingAddressLine2(companyModel.getInvoicingAddressLine2());
         company.setInvoicingAddressLine3(companyModel.getInvoicingAddressLine3());

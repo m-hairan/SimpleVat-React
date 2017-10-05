@@ -22,9 +22,6 @@
 
     <ui:define name="title">#{messages.profile}</ui:define>
     <ui:define name="content">
-        <f:metadata>
-            <f:viewAction action="#{userController.init}" immediate="true"/>
-        </f:metadata>
         <h:form id="profile" enctype="multipart/form-data">
             <div class="card card-w-title">
                 <div class="ui-fluid">
@@ -47,9 +44,11 @@
                                         <div style="width:140px">
                                             <p:fileUpload fileUploadListener="#{userController.handleFileUpload}" mode="advanced"
                                                           label="Upload Profile" update="profilepic" auto="true" sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+                                            <h:outputText value="#{userController.fileName}" />
+                                        
+              
                                         </div>
-
-                                    </div>
+                                    </div>             
 
                                 </h:panelGroup>
                                 <p:panelGrid columns="6" 
@@ -57,8 +56,7 @@
                                              layout="grid" 
                                              styleClass="ui-panelgrid-blank form-group"
                                              style="border:0px none; background-color:transparent;">
-
-                                    <p:outputLabel for="firstName" />
+                                <p:outputLabel for="firstName" />
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="firstName"
                                                      maxlength="25"
@@ -79,8 +77,7 @@
                                         <label>#{messages.lastName}</label>
                                         <p:message for="lastName" />
                                     </h:panelGroup>
-
-                                    <p:outputLabel for="emailId" />
+                           <p:outputLabel for="emailId" />
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="emailId"
                                                      required="true"

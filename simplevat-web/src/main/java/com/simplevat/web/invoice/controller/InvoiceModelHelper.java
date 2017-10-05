@@ -14,20 +14,21 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
+import org.apache.commons.lang3.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 /**
  *
- * @author Hiren
+ * @author Uday
  *
  */
-@Controller
-@SpringScopeView
 public class InvoiceModelHelper {
 
     @Autowired
@@ -35,7 +36,7 @@ public class InvoiceModelHelper {
 
     public Invoice getInvoiceEntity(InvoiceModel invoiceModel) {
         final LocalDateTime invoiceDate = LocalDateTime.ofInstant(invoiceModel.getInvoiceDate().toInstant(), ZoneId.systemDefault());
-
+        final LocalDateTime invoiceDueDate = LocalDateTime.ofInstant(invoiceModel.getInvoiceDueDate().toInstant(), ZoneId.systemDefault());
         Invoice invoice;
 
         if (invoiceModel.getInvoiceId() != null && invoiceModel.getInvoiceId() > 0) {
@@ -52,6 +53,7 @@ public class InvoiceModelHelper {
         invoice.setInvoiceDiscount(invoiceModel.getDiscount());
         invoice.setDiscountType(invoiceModel.getDiscountType());
         invoice.setInvoiceDueOn(invoiceModel.getInvoiceDueOn());
+        invoice.setInvoiceDueDate(invoiceDueDate);
         invoice.setInvoiceReferenceNumber(invoiceModel.getInvoiceRefNo());
         invoice.setInvoiceText(invoiceModel.getInvoiceText());
 
@@ -87,7 +89,6 @@ public class InvoiceModelHelper {
         return item;
     }
 
-    
     public InvoiceModel getInvoiceModel(Invoice invoice) {
 
         InvoiceModel invoiceModel = new InvoiceModel();
@@ -97,7 +98,7 @@ public class InvoiceModelHelper {
         invoiceModel.setInvoiceId(invoice.getInvoiceId());
         invoiceModel.setContact(invoice.getInvoiceContact());
         invoiceModel.setProject(invoice.getInvoiceProject());
-
+        invoiceModel.setInvoiceDueDate(null != invoice.getInvoiceDueDate() ? Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant()) : null);
         invoiceModel.setInvoiceDate(null != invoice.getInvoiceDate() ? Date.from(invoice.getInvoiceDate().atZone(ZoneId.systemDefault()).toInstant()) : null);
         invoiceModel.setDiscount(invoice.getInvoiceDiscount());
         invoiceModel.setDiscountType(invoice.getDiscountType());
@@ -148,5 +149,29 @@ public class InvoiceModelHelper {
             }
         }
 
+    }
+
+    public String getNextInvoiceRefNumber(String invoicingReferencePattern) {
+        Pattern p = Pattern.compile("[a-z]+|\\d+");
+        Matcher m = p.matcher(invoicingReferencePattern);
+        int invoceNumber = 0;
+        String invoiceReplacementString = "";
+        String invoiceRefNumber = "";
+        while (m.find()) {
+            if (StringUtils.isNumeric(m.group())) {
+                invoiceReplacementString = m.group();
+                invoceNumber = Integer.parseInt(m.group());
+                invoiceRefNumber = ++invoceNumber + "";
+                while (invoiceRefNumber.length() < invoiceReplacementString.length()) {
+                    invoiceRefNumber = "0" + invoiceRefNumber;
+                }
+            }
+        }
+        String nextInvoiceNumber = replaceLast(invoicingReferencePattern, invoiceReplacementString, invoiceRefNumber);
+        return nextInvoiceNumber;
+    }
+
+    public static String replaceLast(String text, String regex, String replacement) {
+        return text.replaceFirst("(?s)(.*)" + regex, "$1" + replacement);
     }
 }

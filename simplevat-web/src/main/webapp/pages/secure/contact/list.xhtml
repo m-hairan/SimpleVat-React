@@ -84,13 +84,15 @@
                                 </h:panelGroup>
                                 <h:panelGrid columns="1" style="margin: 0 auto">
                                     <p:commandButton icon="ui-icon-edit" 
+                                                     title="Edit Contact"
                                                      styleClass="AquaButton" 
                                                      update="@form:selectedContactDetail" 
                                                      action="#{contactListController.redirectToEditContact}" >
                                         <f:setPropertyActionListener value="#{contact}" target="#{contactListController.contact}" />
                                     </p:commandButton>
 
-                                    <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" 
+                                    <p:commandButton icon="ui-icon-delete" styleClass="AquaButton"
+                                                     title="Delete Contact"
                                                      update="#{p:component('contactListForm')}" 
                                                      action="#{contactListController.deleteContact()}">
                                         <f:setPropertyActionListener value="#{contact}" target="#{contactListController.contact}" />

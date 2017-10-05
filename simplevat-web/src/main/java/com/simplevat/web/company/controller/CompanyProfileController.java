@@ -55,7 +55,7 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
     public CompanyModel companyModel;
     @Getter
     @Setter
-    public boolean same;
+    public boolean copyInvoiceAddress;
     public StreamedContent profilePic;
     @Getter
     private List<Country> countries = new ArrayList<>();
@@ -137,7 +137,7 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
     }
 
     public void sameAsInvoicingAddress() {
-        if (same) {
+        if (copyInvoiceAddress) {
             companyModel.setCompanyAddressLine1(companyModel.getInvoicingAddressLine1());
             companyModel.setCompanyAddressLine2(companyModel.getInvoicingAddressLine2());
             companyModel.setCompanyAddressLine3(companyModel.getInvoicingAddressLine3());

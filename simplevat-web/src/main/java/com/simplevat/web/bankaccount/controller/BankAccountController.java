@@ -1,6 +1,7 @@
 package com.simplevat.web.bankaccount.controller;
 
 import com.github.javaplugs.jsf.SpringScopeView;
+import com.simplevat.entity.bankaccount.BankAccountType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import com.simplevat.entity.Currency;
 import com.simplevat.entity.User;
 import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.entity.bankaccount.BankAccountStatus;
+import com.simplevat.service.BankAccountTypeService;
 import com.simplevat.service.CountryService;
 import com.simplevat.service.CurrencyService;
 import com.simplevat.service.bankaccount.BankAccountService;
@@ -22,6 +24,7 @@ import com.simplevat.service.bankaccount.BankAccountStatusService;
 import com.simplevat.web.utils.FacesUtil;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
+import javax.faces.model.SelectItem;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -42,6 +45,13 @@ public class BankAccountController extends BankAccountHelper implements Serializ
     @Autowired
     private CountryService countryService;
 
+    @Autowired
+    private BankAccountTypeService bankAccountTypeService;
+
+    @Getter
+    @Setter
+    List<SelectItem> bankAccountTypes = new ArrayList<>();
+
     @Getter
     @Setter
     private BankAccount selectedBankAccount;
@@ -55,9 +65,17 @@ public class BankAccountController extends BankAccountHelper implements Serializ
     public void init() {
         Object objSelectedBankAccountId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(FacesUtil.REQUEST_KEY_BANK_ACCOUNT);;
         System.out.println("selected :" + objSelectedBankAccountId);
+     
         if (objSelectedBankAccountId != null) {
 
+            
             selectedBankAccount = bankAccountService.findByPK(Integer.parseInt(objSelectedBankAccountId.toString()));
+
+           if (selectedBankAccount.getBankAccountType() == null) {
+                selectedBankAccount.setBankAccountType(new BankAccountType());
+            }
+            selectedBankAccount.setBankAccountType(new BankAccountType());
+
         } else {
             this.selectedBankAccount = new BankAccount();
             Currency defaultCurrency = currencyService.getDefaultCurrency();
@@ -68,6 +86,22 @@ public class BankAccountController extends BankAccountHelper implements Serializ
             Country defaultCountry = countryService.getDefaultCountry();
             if (defaultCountry != null) {
                 this.selectedBankAccount.setBankCountry(defaultCountry);
+            }
+            
+                     selectedBankAccount.setBankAccountType(new BankAccountType());
+
+             }
+        
+        populateAllBankAccontType();
+
+    }
+
+    private void populateAllBankAccontType() {
+        bankAccountTypes.clear();
+        List<BankAccountType> bankAccountTypeList = bankAccountTypeService.getBankAccountTypeList();
+        if (bankAccountTypeService.getBankAccountTypeList() != null) {
+            for (BankAccountType bankAccountType : bankAccountTypeList) {
+                bankAccountTypes.add(new SelectItem(bankAccountType.getId(), bankAccountType.getName()));
             }
         }
     }
@@ -118,7 +152,13 @@ public class BankAccountController extends BankAccountHelper implements Serializ
                         .getCurrency(selectedBankAccount.getBankAccountCurrency().getCurrencyCode());
                 selectedBankAccount.setBankAccountCurrency(currency);
             }
+            
+            if (selectedBankAccount.getBankAccountType()!= null) {
+                BankAccountType bankAccountType = bankAccountTypeService.getBankAccountType(selectedBankAccount.getBankAccountType().getId());
+                selectedBankAccount.setBankAccountType(bankAccountType);
+            }
 
+            
             if (selectedBankAccount.getBankAccountId() == null || selectedBankAccount.getBankAccountId() == 0) {
                 selectedBankAccount.setCurrentBalance(selectedBankAccount.getOpeningBalance());
                 BankAccountStatus bankAccountStatus = bankAccountStatusService.getBankAccountStatusByName("ACTIVE");
@@ -127,7 +167,7 @@ public class BankAccountController extends BankAccountHelper implements Serializ
             if (selectedBankAccount.getBankAccountId() == null) {
                 bankAccountService.persist(selectedBankAccount);
             } else {
-            bankAccountService.update(selectedBankAccount);
+                bankAccountService.update(selectedBankAccount);
             }
         } catch (Exception e) {
             e.printStackTrace();
