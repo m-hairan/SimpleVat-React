@@ -121,7 +121,6 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
             currencies = currencyService.getCurrencies();
             setDefaultCurrency();
             selectedInvoiceModel.setInvoiceDate(new Date());
-            selectedInvoiceModel.setInvoiceDueDate(new Date());
             selectedInvoiceModel.setInvoiceDueOn(30);
             updateCurrencyLabel();
             selectedInvoiceModel.setInvoiceItems(new ArrayList());
