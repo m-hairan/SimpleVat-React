@@ -100,7 +100,11 @@ public class BankAccount {
     @Version
     @Column(name = "VERSION_NUMBER")
     private Integer versionNumber;
-
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "BANK_ACCOUNT_TYPE_CODE")
+    private BankAccountType bankAccountType;
+    
     @PrePersist
     public void updateDates() {
         createdDate = LocalDateTime.now();

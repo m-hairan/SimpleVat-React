@@ -44,6 +44,9 @@ public class Company {
     @Column(name = "WEBSITE")
     private String website;
     @Basic
+    @Column(name = "INVOICING_REFERENCE_PATTERN")
+    private String invoicingReferencePattern;
+    @Basic
     @Column(name = "INVOICING_ADDRESS_LINE1")
     private String invoicingAddressLine1;
     @Basic

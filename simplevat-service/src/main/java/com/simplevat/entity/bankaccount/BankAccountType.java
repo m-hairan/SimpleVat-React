@@ -1,7 +1,5 @@
-package com.simplevat.entity;
-
+package com.simplevat.entity.bankaccount;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import javax.persistence.*;
 import lombok.Data;
 
@@ -9,35 +7,31 @@ import lombok.Data;
  * Created by Uday on 9/28/2017.
  */
 @NamedQueries({
-    @NamedQuery(name = "allVatCategory",
-            query = "SELECT v FROM VatCategory v  where v.deleteFlag = FALSE order by v.defaultFlag DESC, v.orderSequence ASC ")
+    @NamedQuery(name = "allBankAccountType",
+            query = "SELECT v FROM BankAccountType v order by v.defaultFlag DESC, v.orderSequence ASC ")
 })
 @Entity
-@Table(name = "VAT_CATEGORY")
+@Table(name = "BANK_ACCOUNT_TYPE")
 @Data
-public class VatCategory implements Serializable{
+public class BankAccountType implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     @Basic
     @Column(name = "name")
     private String name;
-    @Basic
-    @Column(name = "vat")
-    private BigDecimal vat;
- 
     @Column(name = "DEFAULT_FLAG")
     private Character defaultFlag;
-
     @Column(name = "ORDER_SEQUENCE")
     private Integer orderSequence;
-   
+    @Version
+    @Column(name = "version_number")
+    private Integer versionNumber;
     @Basic
-    @Column(name = "DELETE_FLAG", columnDefinition = "TINYINT")
+    @Column(name = "delete_flag", columnDefinition = "TINYINT")
     private Boolean deleteFlag = Boolean.FALSE;
 
 }

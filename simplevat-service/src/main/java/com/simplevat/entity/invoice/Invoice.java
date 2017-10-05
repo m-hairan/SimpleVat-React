@@ -5,6 +5,8 @@ import com.simplevat.entity.Currency;
 import com.simplevat.entity.DocumentTemplate;
 import com.simplevat.entity.Project;
 import com.simplevat.entity.converter.DateConverter;
+import com.simplevat.service.CompanyService;
+import com.simplevat.service.impl.CompanyServiceImpl;
 import java.io.Serializable;
 import lombok.Data;
 
@@ -46,6 +48,9 @@ public class Invoice implements Serializable {
 
     @Column(name = "INVOICE_DUE_ON")
     private Integer invoiceDueOn;
+    
+    @Column(name = "INVOICE_DUE_DATE")
+    private LocalDateTime invoiceDueDate;
 
     @Column(name = "INVOICE_TEXT")
     private String invoiceText;
