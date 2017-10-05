@@ -235,7 +235,6 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
         if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
             return "";
         }
-        selectedInvoiceModel.setInvoiceDueDate(getDueDate(selectedInvoiceModel));
         selectedInvoice = getInvoiceEntity(selectedInvoiceModel);
         if (selectedInvoice.getInvoiceId() != null && selectedInvoice.getInvoiceId() > 0) {
             invoiceService.update(selectedInvoice);
