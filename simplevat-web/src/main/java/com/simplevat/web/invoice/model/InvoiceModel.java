@@ -29,6 +29,8 @@ public class InvoiceModel {
     private String invoiceRefNo;
 
     private Date invoiceDate;
+    
+    private Date invoiceDueDate;
 
     private int invoiceDueOn;
 
