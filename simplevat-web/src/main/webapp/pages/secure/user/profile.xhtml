@@ -3,6 +3,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:o="http://omnifaces.org/ui"
                 xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
                 template="/WEB-INF/templates/template.xhtml">
 
@@ -41,7 +42,7 @@
                                         </ui:fragment>
                                         <div style="width:140px">
                                             <p:fileUpload fileUploadListener="#{userProfileController.handleFileUpload}" mode="advanced" update="profilepic"
-                                                          label="Upload Profile"  auto="true" sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
+                                                          label="Upload Profile"  auto="true" sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
                                             <h:outputText value="#{userProfileController.fileName}" />
 
                                         </div>
@@ -100,7 +101,10 @@
                                         <label>#{messages.dateOfBirth}</label>
                                     </h:panelGroup>
                                 </p:panelGrid>
-                            </p:fieldset>
+                                   </p:fieldset>
+                            
+                            
+                             
                         </div>
                     </div>
                 </div>

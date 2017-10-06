@@ -68,7 +68,7 @@
 
                                         <div style="margin-left: 44%; margin-bottom: 15px;">
                                             <ui:fragment rendered="#{companyProfileController.renderProfilePic}">
-                                                <p:graphicImage height="140px" width="140px"
+                                                <p:graphicImage height="140px" width="140px" cache="false"
                                                                 value="#{streamedContentSessionController.streamedComapanyLogo}" />
                                             </ui:fragment>
                                             <ui:fragment rendered="#{!companyProfileController.renderProfilePic}">

@@ -7,7 +7,6 @@ import com.simplevat.security.ContextUtils;
 import com.simplevat.security.UserContext;
 import com.simplevat.service.UserServiceNew;
 import com.simplevat.user.model.UserModel;
-import com.simplevat.web.common.controller.StreamedContentSessionController;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,7 +137,7 @@ public class UserProfileController implements Serializable{
    public void handleFileUpload(FileUploadEvent event) {
         currentUser.setProfileImageBinary(event.getFile().getContents());
         fileName = event.getFile().getFileName();
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(StreamedContentSessionController.STREAMED_CONTENT_PROFILE_PIC, event.getFile().getContents());
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_PROFILE_PIC", event.getFile().getContents());
         renderProfilePic = true;
         FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
         FacesContext.getCurrentInstance().addMessage(null, message);
