@@ -49,18 +49,21 @@
     <ui:define name="content">
         <h:form>
         <h:panelGroup layout="block" styleClass="ui-g dashboard" id="dashboardPanel">
-            <div class="ui-g-12 ui-md-8">
+            <h:panelGroup layout="block" styleClass="ui-g-12 ui-md-8">
                 <div class="card overview">
-                    <p:panel header="Cash Flow" style="height:400px; width: auto">
+                    <p:panel header="Cash Flow" style="height:400px; width: auto" id="cashFlowChartPanel">
                         <p:chart type="line" model="#{homeController.cashFlowLineChartModel}" rendered="#{not empty homeController.cashFlowLineChartModel.series}"
                                  style="height:350px; width: auto" responsive="true" />
                     </p:panel>
                 </div>
-            </div>
+            </h:panelGroup>
+            <p:blockUI block="cashFlowChartPanel" trigger="remoteCommandToLoadContent">
+                Chart is Loading....
+            </p:blockUI>
 
-            <div class="ui-g-12 ui-md-4">
+            <h:panelGroup layout="block" styleClass="ui-g-12 ui-md-4" >
                 <p:scrollPanel header="Bank Accounts" mode="native"
-                               style="height:400px">
+                               style="height:400px" id="bankAccountPanel">
                     <ul class="activity-list">
                         <ui:repeat
                             value="#{homeController.bankAccountList}"
@@ -92,7 +95,10 @@
                         </ui:repeat>
                     </ul>
                 </p:scrollPanel>
-            </div>
+            </h:panelGroup>
+            <p:blockUI block="bankAccountPanel" trigger="remoteCommandToLoadContent">
+                Bank Account Loading....
+            </p:blockUI>
             <si:cbox name="Vat In" icon="&#xE86C;"
                      amount="#{homeController.vatIn}" currency="$" />
             <si:cbox name="Vat Out" icon="&#xE8C9;"
@@ -114,12 +120,15 @@
                 </p:panel>
             </div>
             <div class="ui-g-12 ui-md-8">
-                <p:panel header="Calendar" style="height:100%">
+                <p:panel header="Calendar" style="height:100%" id="calendarPanel">
                     <p:schedule value="#{homeController.eventModel}" rendered="#{not empty homeController.eventModel}"/>
                 </p:panel>
             </div>
+            <p:blockUI block="calendarPanel" trigger="remoteCommandToLoadContent">
+                Calendar Loading....
+            </p:blockUI>
             <div class="ui-g-12 ui-md-4">
-                <p:panel header="Activity" style="height:100%">
+                <p:panel header="Activity" style="height:100%" id="activityPanel">
                     <div class="activity-header">
                         <div class="ui-g">
                             <div class="ui-g-6">
@@ -152,8 +161,11 @@
                     </ul>
                 </p:panel>
             </div>
+             <p:blockUI block="activityPanel" trigger="remoteCommandToLoadContent">
+                Activity Loading....
+            </p:blockUI>
         </h:panelGroup>
-        <p:remoteCommand autoRun="true" actionListener="#{homeController.lazyInitialization}" update="dashboardPanel"/>
+            <p:remoteCommand id="remoteCommandToLoadContent" autoRun="true" actionListener="#{homeController.lazyInitialization}" update="dashboardPanel"/>
         </h:form>
     </ui:define>
 </ui:composition>
