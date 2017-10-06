@@ -21,6 +21,7 @@ public class User {
 
     @Id
     @Column(name = "USER_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
 
     @Basic
@@ -40,9 +41,9 @@ public class User {
     @Convert(converter = DateConverter.class)
     private LocalDateTime dateOfBirth;
 
-    @Basic
-    @Column(name = "COMPANY_ID")
-    private Integer companyId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "COMPANY_ID")
+    private Company company;
 
     @Basic
     @Column(name = "ROLE_CODE")
