@@ -78,7 +78,7 @@ public class InvoiceReportController extends AbstractReportBean {
         if (invoiceId > 0) {
             Invoice invoice = invoiceService.findByPK(invoiceId);
             invoiceModel = new InvoiceModelHelper().getInvoiceModel(invoice);
-            Company company = companyService.findByPK(userServiceNew.findByPK(invoice.getCreatedBy()).getCompanyId());
+            Company company = companyService.findByPK(userServiceNew.findByPK(invoice.getCreatedBy()).getCompany().getCompanyId());
             try {
                 BigDecimal totalVat = new BigDecimal(0);
                 BigDecimal netSubtotal = new BigDecimal(0);

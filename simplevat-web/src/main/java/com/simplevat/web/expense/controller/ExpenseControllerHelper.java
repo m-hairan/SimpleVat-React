@@ -33,7 +33,6 @@ public class ExpenseControllerHelper {
     public Expense getExpense(ExpenseModel model) {
         Expense expense = new Expense();
         expense.setExpenseId(model.getExpenseId());
-        System.out.println("accwedwqrfewewq : " + model.getExpenseId());
         expense.setUser(model.getUser());
         expense.setCreatedBy(model.getCreatedBy());
         expense.setCreatedDate(model.getCreatedDate());
@@ -107,18 +106,6 @@ public class ExpenseControllerHelper {
         expenseModel.setTransactionType(entity.getTransactionType());
         expenseModel.setVersionNumber(entity.getVersionNumber());
         expenseModel.setReceiptAttachmentBinary(entity.getReceiptAttachmentBinary());
-
-        String attachmentPath = entity.getReceiptAttachmentPath();
-        if (attachmentPath != null && !attachmentPath.isEmpty()) {
-            String tomcatHome = System.getProperty("catalina.base");
-            File expenseFile = new File(tomcatHome.concat(attachmentPath));
-            try {
-                InputStream inputStream = new FileInputStream(expenseFile);
-                expenseModel.setAttachmentFileContent(new DefaultStreamedContent(inputStream, new MimetypesFileTypeMap().getContentType(expenseFile), expenseFile.getName()));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
         final List<ExpenseItemModel> items = entity
                 .getExpenseLineItems()
                 .stream()
@@ -160,32 +147,4 @@ public class ExpenseControllerHelper {
 
     }
 
-    public void storeUploadedFile(ExpenseModel model, Expense expense, String fileLocation) {
-        String tomcatHome = System.getProperty("catalina.base");
-
-        String fileUploadAbsolutePath = tomcatHome.concat(fileLocation);
-        File filePath = new File(fileUploadAbsolutePath);
-        if (!filePath.exists()) {
-            filePath.mkdir();
-        }
-        Path dataFolder = Paths.get(fileUploadAbsolutePath);
-
-        UploadedFile uploadedFile = model.getAttachmentFile();
-
-        String filename = FilenameUtils.getBaseName(uploadedFile.getFileName());
-        String extension = FilenameUtils.getExtension(uploadedFile.getFileName());
-
-        try {
-
-            Path file = Files.createTempFile(dataFolder, ExpenseConstants.EXPENSE + "_" + filename, "_" + System.currentTimeMillis() + "." + extension);
-            InputStream in = uploadedFile.getInputstream();
-            Files.copy(in, file, StandardCopyOption.REPLACE_EXISTING);
-
-            expense.setReceiptAttachmentPath(fileLocation + "/" + file.getFileName());
-
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
 }

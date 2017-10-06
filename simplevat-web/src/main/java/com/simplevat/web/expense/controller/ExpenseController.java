@@ -220,9 +220,6 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
             expense.setUser(user);
         }
 
-        if (this.getSelectedExpenseModel().getAttachmentFile().getSize() > 0) {
-            storeUploadedFile(this.getSelectedExpenseModel(), expense, fileLocation);
-        }
 
         if (expense.getExpenseId() == null || expense.getExpenseId() == 0) {
             expenseService.persist(expense);

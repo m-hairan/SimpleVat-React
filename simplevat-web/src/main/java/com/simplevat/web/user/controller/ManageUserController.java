@@ -8,8 +8,10 @@ package com.simplevat.web.user.controller;
 
 
 import com.github.javaplugs.jsf.SpringScopeView;
+import com.simplevat.entity.Company;
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.User;
+import com.simplevat.service.CompanyService;
 import com.simplevat.service.UserServiceNew;
 import com.simplevat.web.user.model.UserDTO;
 import java.util.ArrayList;
@@ -33,7 +35,8 @@ public class ManageUserController {
 
     @Autowired
     private UserServiceNew userService;
-    
+    @Autowired
+    private CompanyService companyService;
     @Setter
     @Getter
     private UserDTO selectedUser;
@@ -42,6 +45,9 @@ public class ManageUserController {
     @Setter
     private User user;
 
+    @Getter
+    @Setter
+    private Company company;
     
     @Getter
     private List<UserDTO> userDTOList;
@@ -78,7 +84,7 @@ public class ManageUserController {
 
     private User getUserFromUserDTO(UserDTO selectedUser) {
     User user = new User();
-    user.setCompanyId(selectedUser.getCompanyId());
+    user.setCompany(selectedUser.getCompany());
     user.setCreatedBy(selectedUser.getCreatedBy());
     user.setCreatedDate(selectedUser.getCreatedDate());
     user.setDateOfBirth(selectedUser.getDateOfBirth());

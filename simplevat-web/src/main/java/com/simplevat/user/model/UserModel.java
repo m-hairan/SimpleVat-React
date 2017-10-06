@@ -29,7 +29,7 @@ public class UserModel implements Serializable{
     
     private Date today = new Date();
 
-    private Integer companyId;
+    private Company company;
 
     private UploadedFile profileImage;
 

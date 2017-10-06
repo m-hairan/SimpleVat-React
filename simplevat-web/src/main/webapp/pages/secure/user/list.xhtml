@@ -39,8 +39,8 @@
                         <h:outputText value="#{user.isActive == true ? 'Yes':'No'}" />
                     </p:column>
 
-                    <p:column headerText="Company" sortBy="#{user.companyId}">
-                        <h:outputText value="#{user.companyId}" />
+                    <p:column headerText="Company" sortBy="#{user.company.companyName}">
+                        <h:outputText value="#{user.company.companyName}" />
                     </p:column>
 
                     <p:column headerText="Action">

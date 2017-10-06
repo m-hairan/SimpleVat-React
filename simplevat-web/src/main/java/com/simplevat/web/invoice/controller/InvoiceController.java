@@ -124,8 +124,10 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
             selectedInvoiceModel.setInvoiceDueOn(30);
             updateCurrencyLabel();
             selectedInvoiceModel.setInvoiceItems(new ArrayList());
-            company = companyService.findByPK(FacesUtil.getLoggedInUser().getCompanyId());
-            selectedInvoiceModel.setInvoiceRefNo(getNextInvoiceRefNumber(company.getInvoicingReferencePattern()));
+            company = companyService.findByPK(FacesUtil.getLoggedInUser().getCompany().getCompanyId());
+            if (company.getInvoicingReferencePattern() != null) {
+                selectedInvoiceModel.setInvoiceRefNo(getNextInvoiceRefNumber(company.getInvoicingReferencePattern()));
+            }
         }
         populateVatCategory();
 
@@ -234,6 +236,7 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
         if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
             return "";
         }
+        selectedInvoiceModel.setInvoiceDueDate(getDueDate(selectedInvoiceModel));
         selectedInvoice = getInvoiceEntity(selectedInvoiceModel);
         if (selectedInvoice.getInvoiceId() != null && selectedInvoice.getInvoiceId() > 0) {
             invoiceService.update(selectedInvoice);

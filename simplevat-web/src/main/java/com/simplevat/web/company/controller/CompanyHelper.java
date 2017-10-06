@@ -21,7 +21,7 @@ class CompanyHelper {
         companyModel.setCompanyCity(company.getCompanyCity());
         companyModel.setCompanyCountryCode(company.getCompanyCountryCode());
         companyModel.setCompanyId(company.getCompanyId());
-        companyModel.setCompanyLogo(companyModel.getCompanyLogo());
+        companyModel.setCompanyLogo(company.getCompanyLogo());
         companyModel.setCompanyPoBoxNumber(company.getCompanyPoBoxNumber());
         companyModel.setCompanyPostZipCode(company.getCompanyPostZipCode());
         companyModel.setCompanyRegistrationNumber(company.getCompanyRegistrationNumber());

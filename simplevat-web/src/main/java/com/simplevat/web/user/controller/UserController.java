@@ -9,7 +9,10 @@ import com.simplevat.security.ContextUtils;
 import com.simplevat.security.UserContext;
 import com.simplevat.service.RoleService;
 import com.simplevat.service.UserServiceNew;
+import com.simplevat.web.common.controller.StreamedContentSessionController;
 import com.simplevat.web.user.model.UserDTO;
+import com.simplevat.web.utils.FacesUtil;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -63,9 +66,6 @@ public class UserController implements Serializable {
     @Getter
     private List<Title> titles;
 
-    @Value("${file.upload.location}")
-    private String fileLocation;
-
     @Getter
     @Setter
     private UploadedFile newProfilePic;
@@ -84,6 +84,13 @@ public class UserController implements Serializable {
     @Getter
     private List<Role> roleList;
 
+    @Getter
+    @Setter
+    StreamedContentSessionController streamContent;
+
+    @Getter
+    private boolean renderProfilePic;
+
     @PostConstruct
     public void init() {
         newProfilePic = null;
@@ -91,14 +98,20 @@ public class UserController implements Serializable {
         editMode = false;
         selectedUser = new UserDTO();
         selectedUser.setRole(new Role());
+        streamContent = new StreamedContentSessionController();
         String userId = (String) FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("user");
 
         if (userId != null) {
             User user = userService.findByPK(Integer.parseInt(userId));
             BeanUtils.copyProperties(user, selectedUser);
+            if (selectedUser.getProfileImageBinary() != null) {
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_USER_PIC", selectedUser.getProfileImageBinary());
+                renderProfilePic = true;
+            }
             editMode = true;
         }
         roleList = roleService.getRoles();
+
     }
 
     public List<Title> filterTitle(String titleStr) {
@@ -124,6 +137,12 @@ public class UserController implements Serializable {
                 e.printStackTrace();
             }
         }
+
+        if (selectedUser.getProfileImageBinary() != null) {
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(selectedUser.getProfileImageBinary());
+            return new DefaultStreamedContent(inputStream);
+        }
+
         return null;
     }
 
@@ -131,15 +150,15 @@ public class UserController implements Serializable {
         newProfilePic = event.getFile();
         selectedUser.setProfileImageBinary(event.getFile().getContents());
         fileName = event.getFile().getFileName();
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_USER_PIC", event.getFile().getContents());
+        renderProfilePic = true;
         FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     public String save() {
         try {
-            if (null != newProfilePic) {
-                storeUploadedFile(fileLocation, newProfilePic, selectedUser);
-            }
+
             if (password != null) {
                 BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
                 String encodedPassword = passwordEncoder.encode(password);
@@ -148,6 +167,7 @@ public class UserController implements Serializable {
             User user = new User();
             BeanUtils.copyProperties(selectedUser, user);
             UserContext userContext = ContextUtils.getUserContext();
+            user.setCompany(FacesUtil.getLoggedInUser().getCompany());
             user.setCreatedBy(userContext.getUserId());
             user.setLastUpdatedBy(userContext.getUserId());
             if (selectedUser.getRoleCode() != null) {
@@ -167,31 +187,6 @@ public class UserController implements Serializable {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";
-    }
-
-    private void storeUploadedFile(String fileLocation, UploadedFile uploadedFile, User user) throws UnauthorizedException {
-        String tomcatHome = System.getProperty("catalina.base");
-        String fileUploadAbsolutePath = tomcatHome.concat(fileLocation);
-        File filePath = new File(fileUploadAbsolutePath);
-        if (!filePath.exists()) {
-            filePath.mkdir();
-        }
-        Path dataFolder = Paths.get(fileUploadAbsolutePath);
-
-        String filename = FilenameUtils.getBaseName(uploadedFile.getFileName());
-        String extension = FilenameUtils.getExtension(uploadedFile.getFileName());
-
-        try {
-
-            Path file = Files.createTempFile(dataFolder, "Profile_" + selectedUser.getUserId() + filename, "_" + System.currentTimeMillis() + "." + extension);
-            InputStream in = uploadedFile.getInputstream();
-            Files.copy(in, file, StandardCopyOption.REPLACE_EXISTING);
-
-            user.setProfileImagePath(fileLocation + "/" + file.getFileName());
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
 }

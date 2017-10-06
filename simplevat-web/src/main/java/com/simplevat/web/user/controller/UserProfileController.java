@@ -1,11 +1,13 @@
 package com.simplevat.web.user.controller;
 
+import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.User;
 import com.simplevat.web.exception.UnauthorizedException;
 import com.simplevat.security.ContextUtils;
 import com.simplevat.security.UserContext;
 import com.simplevat.service.UserServiceNew;
 import com.simplevat.user.model.UserModel;
+import com.simplevat.web.common.controller.StreamedContentSessionController;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import java.util.logging.Logger;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.io.IOUtils;
+import org.primefaces.event.FileUploadEvent;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -30,7 +33,7 @@ import org.springframework.web.context.annotation.SessionScope;
  * @author Uday
  */
 @Controller
-@SessionScope
+@SpringScopeView
 public class UserProfileController implements Serializable{
 
     @Setter
@@ -41,17 +44,27 @@ public class UserProfileController implements Serializable{
 
     @Autowired
     private UserServiceNew userService;
+    
+    @Getter
+    @Setter        
+    String fileName;
+    
+    @Getter 
+    private boolean renderProfilePic;
 
     @PostConstruct
     public void init() {
         try {
             final UserContext context = ContextUtils.getUserContext();
             currentUserEntity = userService.findByPK(context.getUserId());
-        } catch (UnauthorizedException ex) {
+        } 
+        catch (UnauthorizedException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
         if (currentUserEntity != null) {
             currentUser = convertToModel(currentUserEntity);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_PROFILE_PIC", currentUser.getProfileImageBinary());
+            renderProfilePic = true;
         } else {
             currentUser = null;
         }
@@ -59,14 +72,7 @@ public class UserProfileController implements Serializable{
 
     public void update() throws UnauthorizedException {
         try {
-            try {
-
-                byte[] bytes = IOUtils.toByteArray(currentUser.getProfileImage().getInputstream());
-                currentUser.setProfileImageBinary(bytes);
-
-            } catch (IOException ex) {
-                Logger.getLogger(UserProfileController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            
 
             currentUserEntity = convertToEntity(currentUser);
 
@@ -88,7 +94,7 @@ public class UserProfileController implements Serializable{
 
         User user = new User();
         user.setUserId(userModel.getUserId());
-        user.setCompanyId(userModel.getCompanyId());
+        user.setCompany(userModel.getCompany());
         user.setDateOfBirth(dob);
         user.setDeleteFlag(userModel.getDeleteFlag());
         user.setUserEmail(userModel.getUserEmailId());
@@ -111,7 +117,7 @@ public class UserProfileController implements Serializable{
         final UserModel userModel = new UserModel();
 
         userModel.setUserId(user.getUserId());
-        userModel.setCompanyId(user.getCompanyId());
+        userModel.setCompany(user.getCompany());
         // todo: chnage when company module is done.
         userModel.setDateOfBirth(null != user.getDateOfBirth() ? Date.from(user.getDateOfBirth().atZone(ZoneId.systemDefault()).toInstant()) : null);
         userModel.setUserEmailId(user.getUserEmail());
@@ -129,13 +135,15 @@ public class UserProfileController implements Serializable{
         return userModel;
     }
 
-    public StreamedContent getProfilePic(){
-        if (currentUser.getProfileImageBinary() != null) {
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(currentUser.getProfileImageBinary());
-            return new DefaultStreamedContent(inputStream);
-        }
-        return null;
+   public void handleFileUpload(FileUploadEvent event) {
+        currentUser.setProfileImageBinary(event.getFile().getContents());
+        fileName = event.getFile().getFileName();
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(StreamedContentSessionController.STREAMED_CONTENT_PROFILE_PIC, event.getFile().getContents());
+        renderProfilePic = true;
+        FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
+   
 
     public UserModel getCurrentUser() throws UnauthorizedException {
         if (currentUser == null) {

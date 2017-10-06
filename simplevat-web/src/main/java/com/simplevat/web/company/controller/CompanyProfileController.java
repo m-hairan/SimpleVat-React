@@ -28,6 +28,7 @@ import javax.faces.model.SelectItem;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.io.IOUtils;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.slf4j.Logger;
@@ -64,12 +65,20 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
     @Getter
     @Setter
     public Company company;
+    @Getter
+    @Setter        
+    String fileName;
+    @Getter 
+    private boolean renderProfilePic;
 
     @PostConstruct
     public void init() {
-        companyModel = getCompanyModelFromCompany(companyService.findByPK(FacesUtil.getLoggedInUser().getCompanyId()));
+        companyModel = getCompanyModelFromCompany(companyService.findByPK(FacesUtil.getLoggedInUser().getCompany().getCompanyId()));
         countries = countryService.getCountries();
         companyTypes = getCompanyTypeSelectItem();
+        System.out.println("com.simplevat.web.company.controller.CompanyProfileController.init()=============================================="+companyModel.getCompanyLogo());
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_COMPANY_LOGO", companyModel.getCompanyLogo());
+        renderProfilePic = true;
     }
 
     private List<SelectItem> getCompanyTypeSelectItem() {
@@ -109,12 +118,7 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
     public void saveUpdate() {
         try {
 
-            try {
-                byte[] bytes = IOUtils.toByteArray(companyModel.getProfileImage().getInputstream());
-                companyModel.setCompanyLogo(bytes);
-            } catch (IOException ex) {
-                java.util.logging.Logger.getLogger(UserProfileController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+           
             Company c = getCompanyFromCompanyModel(companyModel);
             c.setCompanyTypeCode(companyTypeService.findByPK(c.getCompanyTypeCode().getId()));
             if (c.getCompanyId() != null && c.getCompanyId() > 0) {
@@ -126,14 +130,6 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
             java.util.logging.Logger.getLogger(UserProfileController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }
-
-    public StreamedContent getProfilePic() {
-        if (companyModel.getCompanyLogo() != null) {
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(companyModel.getCompanyLogo());
-            return new DefaultStreamedContent(inputStream);
-        }
-        return null;
     }
 
     public void sameAsInvoicingAddress() {
@@ -156,5 +152,14 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
             companyModel.setCompanyPostZipCode("");
             companyModel.setCompanyStateRegion("");
         }
+    }
+    
+    public void handleFileUpload(FileUploadEvent event) {
+       companyModel.setCompanyLogo(event.getFile().getContents());
+       fileName = event.getFile().getFileName();
+       FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_COMPANY_LOGO", event.getFile().getContents());
+       renderProfilePic = true;
+       FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
+       FacesContext.getCurrentInstance().addMessage(null, message);
     }
 }

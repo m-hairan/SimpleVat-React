@@ -13,15 +13,17 @@
                         rendered="#{guestPreferences.profileMode == 'inline' and guestPreferences.menuLayout != 'menu-layout-static menu-layout-horizontal'}">
                         <div class="profile">
                             <div class="profile-image">
-                                <ui:fragment rendered="#{not empty userProfileController.profilePic}">
-                                    <p:graphicImage height="60px" width="60px"
-                                                    value="#{userProfileController.profilePic}" />
-                                </ui:fragment>
+                                <ui:fragment rendered="#{userProfileController.renderProfilePic}">
 
-                                <ui:fragment rendered="#{empty userProfileController.profilePic}">
-                                    <p:graphicImage name="images/user-avtar-icon1.png" library="ultima-layout"
-                                                    height="60px" width="60px" />
+                                    <p:graphicImage height="60px" width="60px"
+                                                    value="#{streamedContentSessionController.streamedProfilePic}" />
                                 </ui:fragment>
+                                <ui:fragment rendered="#{!userProfileController.renderProfilePic}">
+
+                                    <p:graphicImage name="images/user-avtar-icon1.png" library="ultima-layout" height="60px" width="60px"/>
+
+                                </ui:fragment>
+                                
                             </div>
                             <a id="profile-options" href="#"> <span class="profile-name">#{userProfileController.currentUser.firstName}
                                     #{userProfileController.currentUser.lastName}</span> <i
@@ -37,9 +39,9 @@
                                     <span>Profile</span>
                                 </p:link></li>
                             <li role="menuitem">
-                                <p:link outcome="/pages/secure/companyProfile/profile" styleClass="ripplelink">
-                                <i class="ui-icon ui-icon-business"></i>
-                                <span>Company Profile</span>
+                                <p:link outcome="/pages/secure/company/companyProfile" styleClass="ripplelink">
+                                    <i class="ui-icon ui-icon-business"></i>
+                                    <span>Company Profile</span>
                                 </p:link>
                             </li>     
                             <li role="menuitem"><a href="#" class="ripplelink"> <i
@@ -83,7 +85,7 @@
                                     outcome="/pages/secure/user/list" />   
                         <p:menuitem value="Vat Category" icon="people"
                                     outcome="/pages/secure/vat/list" />   
-                   
+
                     </pu:menu>
                 </div>
             </div>
