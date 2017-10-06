@@ -173,13 +173,13 @@
                 Activity Loading....
             </p:blockUI>
         </h:panelGroup>
-            <p:remoteCommand id="remoteCommandToLoadCashFlowChartPanel" autoRun="true" actionListener="#{homeController.lazyInitializationFlowChart}" update="cashFlowChartPanel"/>
-            <p:remoteCommand id="remoteCommandToLoadBankAccountPanel" autoRun="true" actionListener="#{homeController.lazyInitializationBankAccount}" update="bankAccountPanel"/>
-            <p:remoteCommand id="remoteCommandToLoadVatInOutPanel" autoRun="true" actionListener="#{homeController.lazyInitializationVatInOutCalculation}" update="vatInOutPanel"/>
-            <p:remoteCommand id="remoteCommandToLoadInvoiceAndExpansePanel" autoRun="true" actionListener="#{homeController.lazyInitializationInvoiceAndExpanse}" update="invoiceAndExpansePanel"/>
-            <p:remoteCommand id="remoteCommandToLoadVatActivityPanel" autoRun="true" actionListener="#{homeController.lazyInitializationVatActivity}" update="vatActivityPanel"/>
-            <p:remoteCommand id="remoteCommandToLoadEventPanel" autoRun="true" actionListener="#{homeController.lazyInitializationEvent}" update="eventPanel"/>
-            <p:remoteCommand id="remoteCommandToLoadContentActivityPanel" autoRun="true" actionListener="#{homeController.lazyInitializationActivity}" update="activityPanel"/>
+            <p:remoteCommand id="remoteCommandToLoadCashFlowChartPanel" autoRun="true" async="true" actionListener="#{homeController.lazyInitializationFlowChart}" update="cashFlowChartPanel"/>
+            <p:remoteCommand id="remoteCommandToLoadBankAccountPanel" autoRun="true" async="true" actionListener="#{homeController.lazyInitializationBankAccount}" update="bankAccountPanel"/>
+            <p:remoteCommand id="remoteCommandToLoadVatInOutPanel" autoRun="true" async="true" actionListener="#{homeController.lazyInitializationVatInOutCalculation}" update="vatInOutPanel"/>
+            <p:remoteCommand id="remoteCommandToLoadInvoiceAndExpansePanel" autoRun="true" async="true" actionListener="#{homeController.lazyInitializationInvoiceAndExpanse}" update="invoiceAndExpansePanel"/>
+            <p:remoteCommand id="remoteCommandToLoadVatActivityPanel" autoRun="true" async="true" actionListener="#{homeController.lazyInitializationVatActivity}" update="vatActivityPanel"/>
+            <p:remoteCommand id="remoteCommandToLoadEventPanel" autoRun="true" async="true" actionListener="#{homeController.lazyInitializationEvent}" update="eventPanel"/>
+            <p:remoteCommand id="remoteCommandToLoadContentActivityPanel" autoRun="true" async="true" actionListener="#{homeController.lazyInitializationActivity}" update="activityPanel"/>
         </h:form>
     </ui:define>
 </ui:composition>
