@@ -66,6 +66,8 @@ public class HomeController implements Serializable {
     @Setter
     private LineChartModel cashFlowLineChartModel;
     @Getter
+    private boolean renderCashFlowLineChartModel;
+    @Getter
     @Setter
     private List<BankAccount> bankAccountList;
     @Getter
@@ -90,24 +92,44 @@ public class HomeController implements Serializable {
 
     @PostConstruct
     public void init() {
-        cashFlowLineChartModel  = new LineChartModel();
+        cashFlowLineChartModel = new LineChartModel();
         bankAccountList = new ArrayList<>();
-        animatedModel1  = new LineChartModel();
-        animatedModel2  = new BarChartModel();
+        animatedModel1 = new LineChartModel();
+        animatedModel2 = new BarChartModel();
         eventModel = new DefaultScheduleModel();
         activities = new ArrayList<>();
     }
 
-    public void lazyInitialization() {
+    public void lazyInitializationFlowChart() {
         populateCashFlowChart();
+    }
+
+    public void lazyInitializationBankAccount() {
         populateAccountDetails();
+    }
+
+    public void lazyInitializationVatInOutCalculation() {
         populateVatDetails();
+    }
+
+    public void lazyInitializationInvoiceAndExpanse() {
+        populateInvoiceAndExpanseChart();
+    }
+
+    public void lazyInitializationVatActivity() {
+        populateVatInOutChart();
+    }
+
+    public void lazyInitializationEvent() {
         populateEventModel();
+        
+    }
+    public void lazyInitializationActivity(){
         populateLatestActivity();
-        createAnimatedModels();
     }
 
     private void populateCashFlowChart() {
+        renderCashFlowLineChartModel = false;
         cashFlowLineChartModel = new LineChartModel();
         LineChartSeries cashIn = new LineChartSeries();
         cashIn.setFill(true);
@@ -138,6 +160,9 @@ public class HomeController implements Serializable {
         yAxis.setMin(0);
         int maxValue = transactionService.getMaxTransactionValue(cashInDataMap, cashOutDataMap);
         yAxis.setMax(maxValue);
+        if(cashInDataMap!= null && !cashInDataMap.isEmpty() && cashOutDataMap!= null && !cashOutDataMap.isEmpty()){
+            renderCashFlowLineChartModel = true;
+        }
     }
 
     private void populateAccountDetails() {
@@ -167,7 +192,7 @@ public class HomeController implements Serializable {
         activities = activityService.getLatestActivites(6);
     }
 
-    private void createAnimatedModels() {
+    private void populateInvoiceAndExpanseChart() {
         Map<Object, Number> invoiseData = invoiceService.getInvoicePerMonth();
         Map<Object, Number> expesneData = expenseService.getExpensePerMonth();
         animatedModel1 = initLinearModel(invoiseData, expesneData);
@@ -184,7 +209,9 @@ public class HomeController implements Serializable {
         } else {
             yAxis.setMax(invoiceService.getMaxValue(expesneData));
         }
+    }
 
+    private void populateVatInOutChart() {
         Map<Object, Number> vatInData = invoiceService.getVatInPerMonth();
         Map<Object, Number> vatOutData = expenseService.getVatOutPerMonth();
         animatedModel2 = initBarModel(vatInData, vatOutData);
@@ -192,8 +219,10 @@ public class HomeController implements Serializable {
         animatedModel2.setAnimate(true);
         animatedModel2.setLegendPosition("ne");
         animatedModel2.setStacked(true);
+        Axis xAxis = new CategoryAxis("Months");
+        xAxis.setTickAngle(45);
 
-        yAxis = animatedModel2.getAxis(AxisType.Y);
+        Axis yAxis = animatedModel2.getAxis(AxisType.Y);
         yAxis.setMin(0);
         animatedModel2.getAxes().put(AxisType.X, xAxis);
         int maxValue = getMaxForVat(vatInData, vatOutData);

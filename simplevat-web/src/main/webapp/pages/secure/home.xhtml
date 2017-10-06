@@ -52,12 +52,12 @@
             <h:panelGroup layout="block" styleClass="ui-g-12 ui-md-8">
                 <div class="card overview">
                     <p:panel header="Cash Flow" style="height:400px; width: auto" id="cashFlowChartPanel">
-                        <p:chart type="line" model="#{homeController.cashFlowLineChartModel}" rendered="#{not empty homeController.cashFlowLineChartModel.series}"
+                        <p:chart type="line" model="#{homeController.cashFlowLineChartModel}" rendered="#{homeController.renderCashFlowLineChartModel}"
                                  style="height:350px; width: auto" responsive="true" />
                     </p:panel>
                 </div>
             </h:panelGroup>
-            <p:blockUI block="cashFlowChartPanel" trigger="remoteCommandToLoadContent">
+            <p:blockUI block="cashFlowChartPanel" trigger="remoteCommandToLoadCashFlowChartPanel">
                 Chart is Loading....
             </p:blockUI>
 
@@ -89,42 +89,50 @@
                                     </div>
                                 </div>
                             </li>
-
-
-
                         </ui:repeat>
                     </ul>
                 </p:scrollPanel>
             </h:panelGroup>
-            <p:blockUI block="bankAccountPanel" trigger="remoteCommandToLoadContent">
+            <p:blockUI block="bankAccountPanel" trigger="remoteCommandToLoadBankAccountPanel">
                 Bank Account Loading....
             </p:blockUI>
-            <si:cbox name="Vat In" icon="&#xE86C;"
-                     amount="#{homeController.vatIn}" currency="$" />
-            <si:cbox name="Vat Out" icon="&#xE8C9;"
-                     amount="#{homeController.vatOut}" currency="$" />
-            <si:cbox name="Vat Balance" icon="&#xE160;"
-                     amount="#{homeController.vatBalance}" currency="$" />
-            <si:cbox name="Transactions" icon="&#xE0BE;"
-                     amount="#{homeController.numberOfTransaction}" currency="" />
+            <h:panelGroup layout="block" id="vatInOutPanel" styleClass="ui-g-12 ui-md-12">
+                <si:cbox name="Vat In" icon="&#xE86C;"
+                         amount="#{homeController.vatIn}" currency="$" />
+                <si:cbox name="Vat Out" icon="&#xE8C9;"
+                         amount="#{homeController.vatOut}" currency="$" />
+                <si:cbox name="Vat Balance" icon="&#xE160;"
+                         amount="#{homeController.vatBalance}" currency="$" />
+                <si:cbox name="Transactions" icon="&#xE0BE;"
+                         amount="#{homeController.numberOfTransaction}" currency="" />
+            </h:panelGroup>
+            <p:blockUI block="vatInOutPanel" trigger="remoteCommandToLoadVatInOutPanel">
+                Loading....
+            </p:blockUI>
             <div class="ui-g-12 ui-md-6">
-                <p:panel header="Invoices and Expense">
+                <p:panel header="Invoices and Expense" id="invoiceAndExpansePanel">
                     <p:chart type="line" model="#{homeController.animatedModel1}" rendered="#{not empty homeController.animatedModel1.series}"
                              style="width:100%;" responsive="true" />
                 </p:panel>
             </div>
+            <p:blockUI block="invoiceAndExpansePanel" trigger="remoteCommandToLoadInvoiceAndExpansePanel">
+                Loading....
+            </p:blockUI>
             <div class="ui-g-12 ui-md-6">
-                <p:panel header="VAT Acivity">
+                <p:panel header="VAT Acivity" id="vatActivityPanel">
                     <p:chart type="bar" model="#{homeController.animatedModel2}" rendered="#{not empty homeController.animatedModel2.series}"
                              style="width:100%;" responsive="true" />
                 </p:panel>
             </div>
+            <p:blockUI block="vatActivityPanel" trigger="remoteCommandToLoadVatActivityPanel">
+                Loading....
+            </p:blockUI>
             <div class="ui-g-12 ui-md-8">
-                <p:panel header="Calendar" style="height:100%" id="calendarPanel">
+                <p:panel header="Calendar" style="height:100%" id="eventPanel">
                     <p:schedule value="#{homeController.eventModel}" rendered="#{not empty homeController.eventModel}"/>
                 </p:panel>
             </div>
-            <p:blockUI block="calendarPanel" trigger="remoteCommandToLoadContent">
+            <p:blockUI block="eventPanel" trigger="remoteCommandToLoadEventPanel">
                 Calendar Loading....
             </p:blockUI>
             <div class="ui-g-12 ui-md-4">
@@ -161,11 +169,17 @@
                     </ul>
                 </p:panel>
             </div>
-             <p:blockUI block="activityPanel" trigger="remoteCommandToLoadContent">
+             <p:blockUI block="activityPanel" trigger="remoteCommandToLoadContentActivityPanel">
                 Activity Loading....
             </p:blockUI>
         </h:panelGroup>
-            <p:remoteCommand id="remoteCommandToLoadContent" autoRun="true" actionListener="#{homeController.lazyInitialization}" update="dashboardPanel"/>
+            <p:remoteCommand id="remoteCommandToLoadCashFlowChartPanel" autoRun="true" actionListener="#{homeController.lazyInitializationFlowChart}" update="cashFlowChartPanel"/>
+            <p:remoteCommand id="remoteCommandToLoadBankAccountPanel" autoRun="true" actionListener="#{homeController.lazyInitializationBankAccount}" update="bankAccountPanel"/>
+            <p:remoteCommand id="remoteCommandToLoadVatInOutPanel" autoRun="true" actionListener="#{homeController.lazyInitializationVatInOutCalculation}" update="vatInOutPanel"/>
+            <p:remoteCommand id="remoteCommandToLoadInvoiceAndExpansePanel" autoRun="true" actionListener="#{homeController.lazyInitializationInvoiceAndExpanse}" update="invoiceAndExpansePanel"/>
+            <p:remoteCommand id="remoteCommandToLoadVatActivityPanel" autoRun="true" actionListener="#{homeController.lazyInitializationVatActivity}" update="vatActivityPanel"/>
+            <p:remoteCommand id="remoteCommandToLoadEventPanel" autoRun="true" actionListener="#{homeController.lazyInitializationEvent}" update="eventPanel"/>
+            <p:remoteCommand id="remoteCommandToLoadContentActivityPanel" autoRun="true" actionListener="#{homeController.lazyInitializationActivity}" update="activityPanel"/>
         </h:form>
     </ui:define>
 </ui:composition>
