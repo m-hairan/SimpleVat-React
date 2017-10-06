@@ -47,11 +47,12 @@
     </ui:define>
 
     <ui:define name="content">
-        <div class="ui-g dashboard">
+        <h:form>
+        <h:panelGroup layout="block" styleClass="ui-g dashboard" id="dashboardPanel">
             <div class="ui-g-12 ui-md-8">
                 <div class="card overview">
-                    <p:panel header="Cash Flow">
-                        <p:chart type="line" model="#{homeController.cashFlowLineChartModel}"
+                    <p:panel header="Cash Flow" style="height:400px; width: auto">
+                        <p:chart type="line" model="#{homeController.cashFlowLineChartModel}" rendered="#{not empty homeController.cashFlowLineChartModel.series}"
                                  style="height:350px; width: auto" responsive="true" />
                     </p:panel>
                 </div>
@@ -102,19 +103,19 @@
                      amount="#{homeController.numberOfTransaction}" currency="" />
             <div class="ui-g-12 ui-md-6">
                 <p:panel header="Invoices and Expense">
-                    <p:chart type="line" model="#{homeController.animatedModel1}"
+                    <p:chart type="line" model="#{homeController.animatedModel1}" rendered="#{not empty homeController.animatedModel1.series}"
                              style="width:100%;" responsive="true" />
                 </p:panel>
             </div>
             <div class="ui-g-12 ui-md-6">
                 <p:panel header="VAT Acivity">
-                    <p:chart type="bar" model="#{homeController.animatedModel2}"
+                    <p:chart type="bar" model="#{homeController.animatedModel2}" rendered="#{not empty homeController.animatedModel2.series}"
                              style="width:100%;" responsive="true" />
                 </p:panel>
             </div>
             <div class="ui-g-12 ui-md-8">
                 <p:panel header="Calendar" style="height:100%">
-                    <p:schedule value="#{homeController.eventModel}" />
+                    <p:schedule value="#{homeController.eventModel}" rendered="#{not empty homeController.eventModel}"/>
                 </p:panel>
             </div>
             <div class="ui-g-12 ui-md-4">
@@ -151,6 +152,8 @@
                     </ul>
                 </p:panel>
             </div>
-        </div>
+        </h:panelGroup>
+        <p:remoteCommand autoRun="true" actionListener="#{homeController.lazyInitialization}" update="dashboardPanel"/>
+        </h:form>
     </ui:define>
 </ui:composition>

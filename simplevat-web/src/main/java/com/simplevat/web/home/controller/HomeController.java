@@ -90,6 +90,15 @@ public class HomeController implements Serializable {
 
     @PostConstruct
     public void init() {
+        cashFlowLineChartModel  = new LineChartModel();
+        bankAccountList = new ArrayList<>();
+        animatedModel1  = new LineChartModel();
+        animatedModel2  = new BarChartModel();
+        eventModel = new DefaultScheduleModel();
+        activities = new ArrayList<>();
+    }
+
+    public void lazyInitialization() {
         populateCashFlowChart();
         populateAccountDetails();
         populateVatDetails();
