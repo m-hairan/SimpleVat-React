@@ -3,6 +3,7 @@ package com.simplevat.dao;
 import com.simplevat.entity.Contact;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by mohsin on 3/3/2017.
@@ -20,4 +21,6 @@ public interface ContactDao extends Dao<Integer, Contact>{
     Contact getContact(int id);
 
     Contact updateContact(Contact contact);*/
+
+    Optional<Contact> getContactByEmail(String Email);
 }

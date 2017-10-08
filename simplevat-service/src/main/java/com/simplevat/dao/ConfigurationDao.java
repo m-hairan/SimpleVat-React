@@ -6,6 +6,7 @@
 package com.simplevat.dao;
 
 import com.simplevat.entity.Configuration;
+import java.util.List;
 
 /**
  *
@@ -14,5 +15,6 @@ import com.simplevat.entity.Configuration;
 public interface ConfigurationDao extends Dao<Integer, Configuration> {
 
     public Configuration getConfigurationByName(String cofigurationName);
+    public List<Configuration> getConfigurationList();
 
 }

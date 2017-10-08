@@ -13,6 +13,10 @@ import lombok.Data;
     @NamedQuery(name = "allContacts",
             query = "SELECT c "
             + "FROM Contact c where c.deleteFlag = FALSE order by c.firstName, c.lastName"),
+    
+    @NamedQuery(name = "Contact.contactByEmail",
+            query = "SELECT c "
+            + "FROM Contact c where c.email =:email"),
     @NamedQuery(name = "Contact.contactsByName",
             query = "SELECT c FROM Contact c WHERE  ((c.firstName LIKE :name or c.lastName LIKE :name) and c.deleteFlag = FALSE) order by c.firstName, c.lastName")
 })

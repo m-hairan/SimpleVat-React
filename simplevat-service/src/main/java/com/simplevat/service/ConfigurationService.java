@@ -6,13 +6,18 @@
 package com.simplevat.service;
 
 import com.simplevat.entity.Configuration;
+import java.util.List;
 
 /**
  *
  * @author daynil
  */
-public abstract class ConfigurationService extends SimpleVatService<Integer, Configuration>{
+public abstract class ConfigurationService extends SimpleVatService<Integer, Configuration> {
 
-   public abstract Configuration getConfigurationByName(String cofigurationName);
+    public abstract Configuration getConfigurationByName(String cofigurationName);
+
+    public abstract List<Configuration> getConfigurationList();
+
+    public abstract void updateConfigurationList(List<Configuration> configurationList);
 
 }

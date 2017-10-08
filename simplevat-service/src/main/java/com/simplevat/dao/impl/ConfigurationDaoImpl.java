@@ -8,6 +8,7 @@ package com.simplevat.dao.impl;
 import com.simplevat.dao.AbstractDao;
 import com.simplevat.dao.ConfigurationDao;
 import com.simplevat.entity.Configuration;
+import java.util.List;
 import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 
@@ -25,6 +26,15 @@ public class ConfigurationDaoImpl extends AbstractDao<Integer, Configuration> im
         query.setParameter("name", cofigurationName);
         if(query.getResultList() != null && !query.getResultList().isEmpty()){
             return query.getResultList().get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public List<Configuration> getConfigurationList() {
+        TypedQuery<Configuration> query = getEntityManager().createQuery("SELECT c FROM Configuration c", Configuration.class);
+        if(query.getResultList() != null && !query.getResultList().isEmpty()){
+            return query.getResultList();
         }
         return null;
     }

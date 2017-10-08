@@ -12,6 +12,7 @@ import com.simplevat.entity.Configuration;
 import com.simplevat.entity.DocumentTemplate;
 import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.DocumentTemplateService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +37,22 @@ public class ConfigurationServiceImpl extends ConfigurationService {
     protected Dao<Integer, Configuration> getDao() {
 
         return dao;
+    }
+
+    @Override
+    public List<Configuration> getConfigurationList() {
+        return dao.getConfigurationList();
+    }
+
+    @Override
+    public void updateConfigurationList(List<Configuration> configurationList) {
+        for (Configuration configuration : configurationList) {
+            if (configuration.getId() != null) {
+                dao.update(configuration);
+            } else {
+                dao.persist(configuration);
+            }
+        }
     }
 
 }
