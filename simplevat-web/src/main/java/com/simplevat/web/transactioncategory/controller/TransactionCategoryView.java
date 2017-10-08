@@ -170,7 +170,7 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
             selectedTransactionCategory.setTransactionType(transactionType);
         }
         if (transactionCategoryModel.getTransactionCategoryCode() != null && transactionCategoryModel.getTransactionCategoryCode() > 0) {
-            transactionCategoryService.update(selectedTransactionCategory, selectedTransactionCategory.getTransactionCategoryCode());
+            transactionCategoryService.update(selectedTransactionCategory);
         }
         selectedTransactionCategory = new TransactionCategory();
         init();

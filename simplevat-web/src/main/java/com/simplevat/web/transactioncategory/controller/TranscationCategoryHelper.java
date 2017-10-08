@@ -19,7 +19,7 @@ public class TranscationCategoryHelper {
    {
    TransactionCategoryModel model=new TransactionCategoryModel();
    model.setCreatedBy(category.getCreatedBy());
-   model.setCreatedDate(category.getLastUpdateDate());
+   model.setCreatedDate(category.getCreatedDate());
    model.setDefaltFlag(category.getDefaltFlag());
    model.setDeleteFlag(category.getDeleteFlag());
    model.setLastUpdateDate(category.getLastUpdateDate());
@@ -38,7 +38,7 @@ public class TranscationCategoryHelper {
  {
    TransactionCategory model=new TransactionCategory();
    model.setCreatedBy(category.getCreatedBy());
-   model.setCreatedDate(category.getLastUpdateDate());
+   model.setCreatedDate(category.getCreatedDate());
    model.setDefaltFlag(category.getDefaltFlag());
    model.setDeleteFlag(category.getDeleteFlag());
    model.setLastUpdateDate(category.getLastUpdateDate());

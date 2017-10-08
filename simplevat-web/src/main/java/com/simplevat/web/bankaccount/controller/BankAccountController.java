@@ -63,15 +63,12 @@ public class BankAccountController extends BankAccountHelper implements Serializ
      */
     @PostConstruct
     public void init() {
-        Object objSelectedBankAccountId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(FacesUtil.REQUEST_KEY_BANK_ACCOUNT);;
+        Object objSelectedBankAccountId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("bankAccountId");
         System.out.println("selected :" + objSelectedBankAccountId);
-     
+
         if (objSelectedBankAccountId != null) {
-
-            
             selectedBankAccount = bankAccountService.findByPK(Integer.parseInt(objSelectedBankAccountId.toString()));
-
-           if (selectedBankAccount.getBankAccountType() == null) {
+            if (selectedBankAccount.getBankAccountType() == null) {
                 selectedBankAccount.setBankAccountType(new BankAccountType());
             }
             selectedBankAccount.setBankAccountType(new BankAccountType());
@@ -87,13 +84,9 @@ public class BankAccountController extends BankAccountHelper implements Serializ
             if (defaultCountry != null) {
                 this.selectedBankAccount.setBankCountry(defaultCountry);
             }
-            
-                     selectedBankAccount.setBankAccountType(new BankAccountType());
-
-             }
-        
+            selectedBankAccount.setBankAccountType(new BankAccountType());
+        }
         populateAllBankAccontType();
-
     }
 
     private void populateAllBankAccontType() {
@@ -134,7 +127,7 @@ public class BankAccountController extends BankAccountHelper implements Serializ
     public String editBankAccount() {
         System.out.println("selectedBankAccount.getBankAccountId() :" + selectedBankAccount.getBankAccountId());
         // FacesUtil.setSelectedBankAccountIntoFlash(FacesContext.getCurrentInstance(), String.valueOf(selectedBankAccount.getBankAccountId()));
-        return "edit-bankaccount?faces-redirect=true&REQUEST_SELECTED_BANK_ACCOUNT=" + selectedBankAccount.getBankAccountId();
+        return "edit-bankaccount?faces-redirect=true&bankAccountId=" + selectedBankAccount.getBankAccountId();
     }
 
     public String saveBankAccount() {
@@ -152,13 +145,12 @@ public class BankAccountController extends BankAccountHelper implements Serializ
                         .getCurrency(selectedBankAccount.getBankAccountCurrency().getCurrencyCode());
                 selectedBankAccount.setBankAccountCurrency(currency);
             }
-            
-            if (selectedBankAccount.getBankAccountType()!= null) {
+
+            if (selectedBankAccount.getBankAccountType() != null) {
                 BankAccountType bankAccountType = bankAccountTypeService.getBankAccountType(selectedBankAccount.getBankAccountType().getId());
                 selectedBankAccount.setBankAccountType(bankAccountType);
             }
 
-            
             if (selectedBankAccount.getBankAccountId() == null || selectedBankAccount.getBankAccountId() == 0) {
                 selectedBankAccount.setCurrentBalance(selectedBankAccount.getOpeningBalance());
                 BankAccountStatus bankAccountStatus = bankAccountStatusService.getBankAccountStatusByName("ACTIVE");
