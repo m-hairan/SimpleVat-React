@@ -24,6 +24,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.io.IOUtils;
 import org.primefaces.event.FileUploadEvent;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -33,7 +34,7 @@ import org.springframework.web.context.annotation.SessionScope;
  */
 @Controller
 @SpringScopeView
-public class UserProfileController implements Serializable{
+public class UserProfileController implements Serializable {
 
     @Setter
     private UserModel currentUser;
@@ -43,27 +44,36 @@ public class UserProfileController implements Serializable{
 
     @Autowired
     private UserServiceNew userService;
-    
+
     @Getter
-    @Setter        
+    @Setter
     String fileName;
-    
-    @Getter 
+
+    @Getter
     private boolean renderProfilePic;
+
+    @Getter
+    private boolean editMode;
+
+    @Getter
+    @Setter
+    private String password;
 
     @PostConstruct
     public void init() {
+        editMode = false;
         try {
             final UserContext context = ContextUtils.getUserContext();
             currentUserEntity = userService.findByPK(context.getUserId());
-        } 
-        catch (UnauthorizedException ex) {
+        } catch (UnauthorizedException ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         if (currentUserEntity != null) {
             currentUser = convertToModel(currentUserEntity);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_PROFILE_PIC", currentUser.getProfileImageBinary());
             renderProfilePic = true;
+            editMode = true;
         } else {
             currentUser = null;
         }
@@ -71,8 +81,11 @@ public class UserProfileController implements Serializable{
 
     public void update() throws UnauthorizedException {
         try {
-            
-
+            if (password != null && !password.trim().isEmpty()) {
+                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                String encodedPassword = passwordEncoder.encode(password);
+                currentUser.setPassword(encodedPassword);
+            }
             currentUserEntity = convertToEntity(currentUser);
 
             if (currentUser.getUserId() > 0) {
@@ -84,7 +97,7 @@ public class UserProfileController implements Serializable{
             Logger.getLogger(UserProfileController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Nonnull
     private User convertToEntity(@Nonnull final UserModel userModel) {
         final LocalDateTime dob = LocalDateTime
@@ -134,7 +147,7 @@ public class UserProfileController implements Serializable{
         return userModel;
     }
 
-   public void handleFileUpload(FileUploadEvent event) {
+    public void handleFileUpload(FileUploadEvent event) {
         currentUser.setProfileImageBinary(event.getFile().getContents());
         fileName = event.getFile().getFileName();
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_PROFILE_PIC", event.getFile().getContents());
@@ -142,7 +155,6 @@ public class UserProfileController implements Serializable{
         FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-   
 
     public UserModel getCurrentUser() throws UnauthorizedException {
         if (currentUser == null) {

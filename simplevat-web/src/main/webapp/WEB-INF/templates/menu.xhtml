@@ -33,23 +33,19 @@
 
                         <ul id="profile-menu" class="ultima-menu">
                             <li role="menuitem"><p:link
-                                    onclick="#{userProfileController.prefillData()}"
-                                    outcome="/pages/secure/user/profile" styleClass="ripplelink">
+                                    outcome="/pages/secure/account/index" styleClass="ripplelink">
                                     <i class="material-icons">&#xE7FD;</i>
-                                    <span>Profile</span>
-                                </p:link></li>
-                            <li role="menuitem">
-                                <p:link outcome="/pages/secure/company/companyProfile" styleClass="ripplelink">
-                                    <i class="ui-icon ui-icon-business"></i>
-                                    <span>Company Profile</span>
+                                    <span>Account</span>
                                 </p:link>
-                            </li>     
-                            <li role="menuitem"><a href="#" class="ripplelink"> <i
+                            </li>
+                           <li role="menuitem"><a href="#" class="ripplelink"> <i
                                         class="material-icons">&#xE32A;</i> <span>Privacy</span>
                                 </a></li>
-                            <li role="menuitem"><a href="#" class="ripplelink"> <i
-                                        class="material-icons">&#xE8B9;</i> <span>Settings</span>
-                                </a></li>
+                            <li role="menuitem"><p:link outcome="/pages/secure/setting/index" styleClass="ripplelink">
+                                    <i class="material-icons">&#xE8B9;</i> 
+                                    <span>Settings</span>
+                                </p:link>
+                            </li>
                             <li role="menuitem"><a
                                     href="#{request.contextPath}/j_spring_security_logout"
                                     class="ripplelink"> <i class="material-icons">&#xE8AC;</i> <span>Logout</span>
@@ -78,13 +74,8 @@
                         <p:menuitem id="st_bankaccount" value="#{messages.bank_accounts}"
                                     icon="store" outcome="#{bankAccountMenuLink}" />
 
-                        <p:menuitem id="st_transactioncategory"
-                                    value="#{messages.transactioncategory}" icon="undo"
-                                    outcome="/pages/secure/transactioncategory/transactioncategory" />
                         <p:menuitem value="Users" icon="people"
                                     outcome="/pages/secure/user/list" />   
-                        <p:menuitem value="Vat Category" icon="people"
-                                    outcome="/pages/secure/vat/list" />   
 
                     </pu:menu>
                 </div>

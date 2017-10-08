@@ -1,0 +1,43 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
+                template="/WEB-INF/templates/template.xhtml">
+    <ui:define name="head">
+        <style type="text/css">
+            .ui-fileupload-content{
+                display:none !important;  
+            }
+            .ui-fluid .ui-button {
+                width: auto !important;
+            }
+        </style>
+    </ui:define>
+    <ui:define name="title">#{messages.Settings}</ui:define>
+    <ui:define name="content">
+        <div class="card card-w-title">
+            <div class="ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                         <h1>#{messages.Settings}</h1>
+                        <p:tabView>
+                            <p:tab title="General">
+                                <ui:include src="general.xhtml"/>
+                            </p:tab>
+                            <p:tab title="Vat Category">
+                                <ui:include src="vat-list.xhtml"/>
+                            </p:tab>
+                            <p:tab title="Transaction Category">
+                                <ui:include src="transactioncategory-list.xhtml"/>
+                            </p:tab>
+                        </p:tabView>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

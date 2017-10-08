@@ -38,7 +38,7 @@
                 <div class="ui-fluid">
                     <div class="ui-g">
                         <div class="ui-g-12">
-                            <ui:fragment rendered="#{invoiceController.selectedInvoiceModel.invoiceId > 0}">
+                            <ui:fragment rendered="#{invoiceController.selectedInvoiceModel.invoiceId != null}">
                                 <h1>#{messages.edit_invoice}</h1>
                             </ui:fragment>
                             <ui:fragment rendered="#{invoiceController.selectedInvoiceModel.invoiceId == null}">
@@ -247,8 +247,8 @@
                                             <f:facet name="input">
 
                                                 <p:selectOneMenu id="vatId" value="#{invoiceItem.vatId}"  style="width:100%"
-                                                          
-                                                           
+
+
                                                                  >
 
                                                     <f:selectItem itemLabel="Select One" itemValue="" />
@@ -288,8 +288,8 @@
                                                 <f:facet name="footer">
                                                     <p:outputPanel autoUpdate="true">
                                                         <h:outputText id="total" value="#{invoiceController.total}" >
-                                                           <f:convertNumber maxFractionDigits="2" pattern="#,##0.00" />
-                                                       </h:outputText>
+                                                            <f:convertNumber maxFractionDigits="2" pattern="#,##0.00" />
+                                                        </h:outputText>
                                                     </p:outputPanel>
                                                 </f:facet>
                                             </p:column>  
@@ -368,6 +368,9 @@
                         <p:commandButton action="#{invoiceController.printInvoice()}" rendered="#{invoiceController.renderPrintInvoice}"
                                          value="#{messages.print_invoice}"
                                          icon="ui-icon-print" />
+                        <p:commandButton action="#{invoiceMailController.sendInvoiceMail()}" rendered="#{invoiceController.renderPrintInvoice}"
+                                         value="#{messages.Send_By_Mail}"
+                                         icon="ui-icon-mail" />
                         <span class="ui-separator" style="padding-right: 5px;">
                             <span class="fa fa-ellipsis-v SoftGray" />
                         </span>

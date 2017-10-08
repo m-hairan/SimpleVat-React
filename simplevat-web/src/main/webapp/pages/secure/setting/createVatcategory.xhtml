@@ -1,0 +1,80 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/template.xhtml">
+
+
+    <ui:define name="content">
+
+        <h:form id="createVatCategoryForm"
+                enctype="multipart/form-data">
+
+            <div class="card card-w-title">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+
+                        <div class="ui-g-12">
+                            <div class="card card-w-title">
+                                <p:fieldset legend="Vat Category Details"
+                                            toggleable="false" toggleSpeed="500">
+                                    <p:panelGrid columns="4"
+                                                 columnClasses="ui-grid-col-0,ui-grid-col-5,ui-grid-col-0,ui-grid-col-5"
+                                                 layout="grid" styleClass="ui-panelgrid-blank form-group"
+                                                 style="border:0px none; background-color:transparent;">
+
+                                        <h:panelGroup />
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText
+                                                value="#{vatController.category.name}" />
+                                            <label>#{messages.vatCategoryName}</label>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup />
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText
+                                                value="#{vatController.category.vat}" >
+
+                                            </p:inputText>
+                                            <label>#{messages.vatCategoryPercentage}</label>
+                                        </h:panelGroup>
+                                        <h:panelGroup />
+                                    </p:panelGrid>
+                                </p:fieldset>
+                                <br />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p:toolbar>
+                    <f:facet name="left">
+                        <ui:fragment rendered="#{vatController.category.id == null}">
+
+                            <p:commandButton value="#{messages.save}" icon="ui-icon-save"
+                                             action="#{vatController.save}" ajax="false" />
+                        </ui:fragment>
+                        <ui:fragment rendered="#{vatController.category.id > 0}">
+
+                            <p:commandButton value="#{messages.update}" icon="ui-icon-save"
+                                             action="#{vatController.save}" ajax="false" />
+                        </ui:fragment>
+                        <p:commandButton title="#{messages.cancel}" icon="ui-icon-cancel"
+                                         action="/pages/secure/vat/list.xhtml" />
+                    </f:facet>
+                    <f:facet name="right">
+
+                        <p:button value="Home" icon="ui-icon-home"
+                                  outcome="#{homePageLink}" />
+
+                    </f:facet>
+
+                </p:toolbar>
+
+            </div>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

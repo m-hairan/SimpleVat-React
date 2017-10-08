@@ -17,6 +17,12 @@
 
                         <div class="ui-g-12">
                             <div class="card card-w-title">
+                                <ui:fragment rendered="#{transactionController.selectedTransactionModel.transactionId == null}">
+                                    <h1>New Bank Transaction</h1>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{transactionController.selectedTransactionModel.transactionId != null}">
+                                    <h1>Edit Bank Transaction</h1>
+                                </ui:fragment>
                                 <p:fieldset legend="#{messages.select_type}" toggleable="false"
                                             toggleSpeed="500">
                                     <p:panelGrid columns="6"
@@ -212,13 +218,12 @@
 
                         <p:commandButton title="#{messages.cancel}" icon="ui-icon-cancel"
                                          action="/pages/secure/bankaccount/bank-transactions.xhtml"
-                                         immmedidate="true"
-                                         />
+                                         immediate="true" />
                     </f:facet>
 
                     <f:facet name="right">
 
-                        <p:button type="button" value="Home" icon="ui-icon-home"
+                        <p:button value="Home" icon="ui-icon-home"
                                   outcome="#{homePageLink}" />
 
                     </f:facet>

@@ -64,9 +64,6 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
     @Autowired
     private UserServiceNew userServiceNew;
 
-    @Value("${file.upload.location}")
-    private String fileLocation;
-
     @Getter
     @Setter
     private ExpenseModel selectedExpenseModel;
@@ -126,22 +123,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
     }
 
     public String createExpense() {
-//        ExpenseModel expenseModel = new ExpenseModel();
-//        expenseModel.setExpenseId(0);
-//
-//        Currency defaultCurrency = currencyService.getDefaultCurrency();
-//        if (defaultCurrency != null) {
-//            expenseModel.setCurrency(defaultCurrency);
-//        }
-//        TransactionType transactionType = transactionTypeService.getDefaultTransactionType();
-//        if (transactionType != null) {
-//            expenseModel.setTransactionType(transactionType);
-//        }
-//        TransactionCategory transactionCategory = (TransactionCategory) transactionCategoryService.getDefaultTransactionCategory();
-//        if (transactionCategory != null) {
-//            expenseModel.setTransactionCategory(transactionCategory);
-//        }
-//        this.setSelectedExpenseModel(expenseModel);
+
         return "/pages/secure/expense/create-expense.xhtml?faces-redirect=true";
 
     }
@@ -219,8 +201,6 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
             User user = userServiceNew.findByPK(selectedExpenseModel.getUser().getUserId());
             expense.setUser(user);
         }
-
-
         if (expense.getExpenseId() == null || expense.getExpenseId() == 0) {
             expenseService.persist(expense);
         } else {
@@ -274,7 +254,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
         return validated;
     }
 
-    public void updateCurrencyLabel() {  //--------------
+    public void updateCurrencyLabel() {  
         if (null != selectedExpenseModel.getCurrency()) {
             selectedExpenseModel.setCurrency(currencyService.getCurrency(selectedExpenseModel.getCurrency().getCurrencyCode()));
         }
@@ -302,7 +282,6 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
         }
         List<TransactionType> filterList = new ArrayList<>();
         transactionTypes = transactionTypeService.findAll();
-
         for (TransactionType type : transactionTypes) {
             filterList.add(type);
         }
@@ -320,15 +299,13 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
             }
         }
     }
-
     private void populateVatCategory() {
         vatCategoryList = vatCategoryService.getVatCategoryList();
-        if(vatCategoryList!=null)
-        {
-        for (VatCategory vatCategory : vatCategoryList) {
-            SelectItem item = new SelectItem(vatCategory.getVat(), vatCategory.getName());
-            vatCategorySelectItemList.add(item);
-        }
+        if (vatCategoryList != null) {
+            for (VatCategory vatCategory : vatCategoryList) {
+                SelectItem item = new SelectItem(vatCategory.getVat(), vatCategory.getName());
+                vatCategorySelectItemList.add(item);
+            }
         }
     }
 }

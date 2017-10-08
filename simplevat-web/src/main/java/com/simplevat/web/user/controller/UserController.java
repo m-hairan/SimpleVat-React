@@ -159,7 +159,7 @@ public class UserController implements Serializable {
     public String save() {
         try {
 
-            if (password != null) {
+            if (password != null && !password.trim().isEmpty()) {
                 BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
                 String encodedPassword = passwordEncoder.encode(password);
                 selectedUser.setPassword(encodedPassword);

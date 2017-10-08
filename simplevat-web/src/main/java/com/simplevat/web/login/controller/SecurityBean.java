@@ -147,7 +147,7 @@ public class SecurityBean implements PhaseListener, Serializable {
         try {
             userObj.setPassword(passwordEncoder.encode(randomPassword));
             userObj.setIsActive(true);
-            userService.persist(userObj, 0);
+            userService.update(userObj);
         } catch (IllegalArgumentException ex) {
             java.util.logging.Logger.getLogger(SecurityBean.class.getName()).log(Level.SEVERE, null, ex);
         }

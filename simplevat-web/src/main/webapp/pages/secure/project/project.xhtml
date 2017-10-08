@@ -5,7 +5,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
                 template="/WEB-INF/templates/template.xhtml">
-   
+
 
     <ui:define name="title">Project</ui:define>
     <ui:define name="content">
@@ -14,8 +14,12 @@
                 <div class="ui-fluid">
                     <div class="ui-g">
                         <div class="ui-g-12">
-                            <h1>New Project</h1>
-
+                            <ui:fragment rendered="#{projectController.selectedProject.projectId == null}">
+                                <h1>New Project</h1>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{projectController.selectedProject.projectId != null}">
+                                <h1>Edit Project</h1>
+                            </ui:fragment>
                             <p:fieldset legend="Project Details" toggleable="false">
                                 <p:panelGrid columns="6"
                                              columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
@@ -24,14 +28,14 @@
                                              style="border:0px none; background-color:transparent;">
 
                                     <p:outputLabel for="projectName"/>
-                                   
+
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="projectName"
                                                      maxlength="12"
                                                      value="#{projectController.selectedProject.projectName}"
                                                      required="true"
                                                      requiredMessage="Please enter Project Name"
-                                        />
+                                                     />
                                         <p:message for="projectName"/>
                                         <label>Project Name</label>
                                     </h:panelGroup>
@@ -55,14 +59,14 @@
 
                                     </h:panelGroup>
 
-                                    
-                                     <p:outputLabel value="OR  ">
+
+                                    <p:outputLabel value="OR  ">
                                         <p:commandLink onsuccess="PF('add_contact_popup').show();" 
                                                        actionListener="#{projectController.initCreateContact()}"
                                                        style="color: #009688" 
                                                        value="Add New Contact" />
                                     </p:outputLabel>
-                                    
+
                                 </p:panelGrid>
                             </p:fieldset>
 
@@ -103,7 +107,7 @@
                                                         itemLabel="#{currency.currencyDescription}"
                                                         required="true"
                                                         requiredMessage="Please select currency"
-                                        />
+                                                        />
 
                                         <label>Currency</label>
                                     </h:panelGroup>
@@ -127,7 +131,7 @@
                                                         value="#{projectController.selectedProject.invoiceLanguageCode}"
                                                         var="language" itemValue="#{language.languageCode}"
                                                         itemLabel="#{language.languageDescription}"
-                                        />
+                                                        />
 
                                         <label>Invoice Language</label>
                                     </h:panelGroup>
@@ -163,6 +167,6 @@
             </div>
 
         </h:form>
-          <ui:include src="add-contact-popup.xhtml" />
+        <ui:include src="add-contact-popup.xhtml" />
     </ui:define>
 </ui:composition>

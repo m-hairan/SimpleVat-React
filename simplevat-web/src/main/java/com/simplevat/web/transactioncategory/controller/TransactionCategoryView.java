@@ -31,13 +31,9 @@ import org.springframework.beans.BeanUtils;
 public class TransactionCategoryView extends TranscationCategoryHelper implements Serializable {
 
     @Getter
-    public String TRANSACTION_CATEGORY = "/pages/secure/transactioncategory/";
+    public String CREATE_PAGE = "create-transactioncategory";
     @Getter
-    public String CREATE_PAGE = "create-transactioncategory.xhtml";
-    @Getter
-    public final String LIST_PAGE = "all-transactioncategory.xhtml";
-    @Getter
-    public String HOME_PAGE = "transactioncategory.xhtml";
+    public String HOME_PAGE = "setting?faces-redirect=true&tabIndex=2";
 
     @Autowired
     private TransactionCategoryServiceNew transactionCategoryService;
@@ -125,7 +121,7 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
 
      */
     public String createNewCategory() {
-        return TRANSACTION_CATEGORY + CREATE_PAGE + "?faces-redirect=true";
+        return CREATE_PAGE + "?faces-redirect=true";
     }
 
     public String saveAndContinue() throws UnauthorizedException {
@@ -139,7 +135,7 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
         transactionCategoryService.persist(selectedTransactionCategory, selectedTransactionCategory.getTransactionCategoryCode());
         selectedTransactionCategory = new TransactionCategory();
 
-        return TRANSACTION_CATEGORY + CREATE_PAGE + "?faces-redirect=true";
+        return CREATE_PAGE + "?faces-redirect=true";
     }
 
     public String save() throws UnauthorizedException {
@@ -159,7 +155,7 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
             selectedTransactionCategory.setTransactionCategoryName(transactionCategoryModel.getTransactionCategoryName());
         }
         transactionCategoryService.persist(selectedTransactionCategory);
-        return TRANSACTION_CATEGORY + HOME_PAGE + "?faces-redirect=true";
+        return HOME_PAGE;
     }
 
     public String update() throws UnauthorizedException {
@@ -179,7 +175,7 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
         selectedTransactionCategory = new TransactionCategory();
         init();
 
-        return TRANSACTION_CATEGORY + HOME_PAGE + "?faces-redirect=true";
+        return HOME_PAGE;
     }
 
     public String updateAndContinue() throws UnauthorizedException {
@@ -191,13 +187,13 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
                 selectedTransactionCategory.getTransactionCategoryCode());
         selectedTransactionCategory = new TransactionCategory();
         init();
-        return TRANSACTION_CATEGORY + CREATE_PAGE + "?faces-redirect=true";
+        return CREATE_PAGE + "?faces-redirect=true";
     }
 
     public String editAction() {
         this.editMode = true;
         //return "create-transactioncategory?faces-redirect=true&selectedCategoryId="+transactionCategoryModel.getTransactionCategoryCode() ;
-        return "create-transactioncategory?faces-redirect=true&selectedCategoryId=" + transactionCategoryModel.getTransactionCategoryCode();
+        return CREATE_PAGE + "?faces-redirect=true&selectedCategoryId=" + transactionCategoryModel.getTransactionCategoryCode();
 
     }
 
@@ -227,7 +223,7 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
         selectedTransactionCategory = getTrascationModel(transactionCategoryModel);
         transactionCategoryService.update(selectedTransactionCategory);
         this.transactionCategories = transactionCategoryService.executeNamedQuery("findAllTransactionCategory");
-        return TRANSACTION_CATEGORY + HOME_PAGE + "?faces-redirect=true";
+        return HOME_PAGE;
 
     }
 

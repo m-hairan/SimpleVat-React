@@ -27,7 +27,7 @@ public class InvoiceJasperServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     @Autowired
-    private InvoiceReportController invoiceReportController;
+    private InvoiceUtil invoiceUtil;
     
     @Override
      public void init(ServletConfig config) throws ServletException {
@@ -41,7 +41,7 @@ public class InvoiceJasperServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            invoiceReportController.prepareReport(request, response,Integer.parseInt(request.getSession().getAttribute("invoiceId").toString()));
+            invoiceUtil.prepareReport(request, response,Integer.parseInt(request.getSession().getAttribute("invoiceId").toString()));
         } catch (JRException ex) {
             Logger.getLogger(InvoiceJasperServlet.class.getName()).log(Level.SEVERE, null, ex);
         }

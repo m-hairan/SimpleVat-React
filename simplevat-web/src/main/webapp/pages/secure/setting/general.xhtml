@@ -1,0 +1,51 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:h="http://java.sun.com/jsf/html"
+     xmlns:f="http://java.sun.com/jsf/core"
+     xmlns:ui="http://java.sun.com/jsf/facelets"
+     xmlns:p="http://primefaces.org/ui"
+     xmlns:o="http://omnifaces.org/ui"
+     xmlns:si="http://java.sun.com/jsf/composite/ccomponent">
+
+    <h:form>
+        <p:fieldset legend="#{messages.GeneralDetail}" toggleable="false">
+            <p:panelGrid columns="6" 
+                         columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                         layout="grid" 
+                         styleClass="ui-panelgrid-blank form-group"
+                         style="border:0px none; background-color:transparent;">
+                <p:outputLabel for="invoicingReferencePattern" />
+                <h:panelGroup styleClass="md-inputfield">
+                    <p:inputText id="invoicingReferencePattern" value="#{generalController.configurationInvoiceRefPtrn.value}"/>
+                    <label>#{messages.InvoicingReferencePattern}</label>
+                    <p:message for="invoicingReferencePattern" />
+                </h:panelGroup>
+
+                <p:outputLabel />
+                <h:panelGroup />
+
+                <p:outputLabel />
+                <h:panelGroup />
+
+            </p:panelGrid>
+        </p:fieldset>
+        <br/>
+        <p:toolbar>
+            <f:facet name="left">
+                <p:commandButton actionListener="#{generalController.saveUpdate()}"
+                                 value="Save"
+                                 ajax="false"
+                                 update="@form"
+                                 icon="ui-icon-save" />
+
+                <span class="ui-separator" style="padding-right: 5px;">
+                    <span class="fa fa-ellipsis-v SoftGray" />
+                </span>
+                <si:cbutton type="cancel" outcome="/pages/secure/home"/>
+            </f:facet>
+
+            <f:facet name="right">
+                <si:cbutton type="home"/>
+            </f:facet>
+        </p:toolbar>
+    </h:form>
+</div>

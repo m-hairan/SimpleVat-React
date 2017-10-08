@@ -17,6 +17,12 @@
 
                         <div class="ui-g-12">
                             <div class="card card-w-title">
+                                <ui:fragment rendered="#{bankAccountController.selectedBankAccount.bankAccountId == null}">
+                                    <h1>New Bank Account</h1>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{bankAccountController.selectedBankAccount.bankAccountId != null}">
+                                    <h1>Edit Bank Account</h1>
+                                </ui:fragment>
                                 <p:fieldset legend="#{messages.bank_account}" toggleable="false"
                                             toggleSpeed="500">
                                     <p:panelGrid columns="6"
@@ -200,7 +206,7 @@
 
                     <f:facet name="right">
 
-                        <p:button type="button" value="Home" icon="ui-icon-home"
+                        <p:button value="Home" icon="ui-icon-home"
                                   outcome="#{homePageLink}" />
 
                     </f:facet>

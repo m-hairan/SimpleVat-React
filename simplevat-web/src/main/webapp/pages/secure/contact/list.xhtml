@@ -48,7 +48,7 @@
     <ui:define name="content">
 
         <h:form id="contactListForm">
-            <si:cdataPanel newAction= "#{contactController.redirectToCreateContact()}" deleteAction="#{contactListController.delete()}" process="contactList">
+            <si:cdataPanel newAction= "#{contactController.redirectToCreateContact()}" deleteAction="#{contactListController.delete()}">
                 <p:dataGrid var="contact" 
                             value="#{contactListController.contacts}" 
                             columns="6" layout="grid"

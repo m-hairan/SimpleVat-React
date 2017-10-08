@@ -36,10 +36,13 @@ import java.util.List;
 
 import static com.mysql.jdbc.StringUtils.isNullOrEmpty;
 import com.simplevat.entity.Company;
+import com.simplevat.entity.Configuration;
 import com.simplevat.entity.VatCategory;
 import com.simplevat.entity.VatCategory;
 import com.simplevat.service.CompanyService;
+import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.VatCategoryService;
+import com.simplevat.web.constant.ConfigurationConstants;
 import com.simplevat.web.utils.FacesUtil;
 import java.util.Calendar;
 import javax.faces.model.SelectItem;
@@ -61,7 +64,7 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
     private Invoice selectedInvoice;
 
     @Getter
-    private Company company;
+    private Configuration configuration;
 
     @Getter
     @Setter
@@ -70,6 +73,10 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
     @Getter
     @Setter
     private List<Currency> currencies;
+
+    @Getter
+    @Setter
+    private List<Configuration> configurationList;
 
     @Getter
     private BigDecimal total;
@@ -85,7 +92,7 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
     private ContactService contactService;
 
     @Autowired
-    private CompanyService companyService;
+    private ConfigurationService configurationService;
 
     @Autowired
     private CurrencyService currencyService;
@@ -115,6 +122,7 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
             selectedInvoice = invoiceService.findByPK(Integer.parseInt(objSelectedInvoice.toString()));
             selectedInvoiceModel = getInvoiceModel(selectedInvoice);
             renderPrintInvoice = true;
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("invoiceId", selectedInvoice.getInvoiceId());
         } else {
             selectedInvoiceModel = new InvoiceModel();
             contactModel = new ContactModel();
@@ -124,9 +132,10 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
             selectedInvoiceModel.setInvoiceDueOn(30);
             updateCurrencyLabel();
             selectedInvoiceModel.setInvoiceItems(new ArrayList());
-            company = companyService.findByPK(FacesUtil.getLoggedInUser().getCompany().getCompanyId());
-            if (company.getInvoicingReferencePattern() != null) {
-                selectedInvoiceModel.setInvoiceRefNo(getNextInvoiceRefNumber(company.getInvoicingReferencePattern()));
+            configurationList = configurationService.getConfigurationList();
+            configuration = configurationList.stream().filter(conf -> conf.getName().equals(ConfigurationConstants.INVOICING_REFERENCE_PATTERN)).findFirst().get();
+            if (configuration.getValue() != null) {
+                selectedInvoiceModel.setInvoiceRefNo(getNextInvoiceRefNumber(configuration.getValue()));
             }
         }
         populateVatCategory();
@@ -241,8 +250,8 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
         if (selectedInvoice.getInvoiceId() != null && selectedInvoice.getInvoiceId() > 0) {
             invoiceService.update(selectedInvoice);
         } else {
-            company.setInvoicingReferencePattern(selectedInvoice.getInvoiceReferenceNumber());
-            companyService.update(company);
+            configuration.setValue(selectedInvoice.getInvoiceReferenceNumber());
+            configurationService.update(configuration);
             invoiceService.persist(selectedInvoice);
         }
         FacesContext context = FacesContext.getCurrentInstance();
