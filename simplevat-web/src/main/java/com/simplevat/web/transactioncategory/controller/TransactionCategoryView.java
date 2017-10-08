@@ -33,7 +33,7 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
     @Getter
     public String CREATE_PAGE = "create-transactioncategory";
     @Getter
-    public String HOME_PAGE = "setting?faces-redirect=true&tabIndex=2";
+    public String HOME_PAGE = "index?faces-redirect=true&tabIndex=2";
 
     @Autowired
     private TransactionCategoryServiceNew transactionCategoryService;

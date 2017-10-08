@@ -14,8 +14,6 @@ import com.simplevat.service.CompanyTypeService;
 import com.simplevat.service.CountryService;
 import com.simplevat.web.user.controller.UserProfileController;
 import com.simplevat.web.utils.FacesUtil;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,9 +25,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.io.IOUtils;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,7 +72,6 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
         companyModel = getCompanyModelFromCompany(companyService.findByPK(FacesUtil.getLoggedInUser().getCompany().getCompanyId()));
         countries = countryService.getCountries();
         companyTypes = getCompanyTypeSelectItem();
-        System.out.println("com.simplevat.web.company.controller.CompanyProfileController.init()=============================================="+companyModel.getCompanyLogo());
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_COMPANY_LOGO", companyModel.getCompanyLogo());
         renderProfilePic = true;
     }

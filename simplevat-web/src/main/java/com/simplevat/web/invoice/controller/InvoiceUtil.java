@@ -95,9 +95,12 @@ public class InvoiceUtil extends AbstractReportBean{
                 parameters.put("companyAddress", getComapnyAddress(company));
                 parameters.put("invoiceHolderAddress", getInvoiceHolderAddress(invoiceModel.getContact()));
                 parameters.put("invoiceNumber", "INVOICE " + invoiceModel.getInvoiceRefNo());
-                System.out.println("invoiceModel.getInvoiceDate()=================" + invoiceModel.getInvoiceDate());
                 parameters.put("invoiceDate", String.valueOf(dateFormat.format(invoiceModel.getInvoiceDate())));
-                parameters.put("paymentDueDate", String.valueOf(dateFormat.format(invoiceModel.getInvoiceDueDate())));
+                if(invoiceModel.getInvoiceDueDate() != null){
+                    parameters.put("paymentDueDate", String.valueOf(dateFormat.format(invoiceModel.getInvoiceDueDate())));
+                }else{
+                    parameters.put("paymentDueDate", "");
+                }
                 parameters.put("quantity", String.valueOf(quantity));
                 parameters.put("details", "");
                 parameters.put("paymentReference", invoiceModel.getInvoiceRefNo());

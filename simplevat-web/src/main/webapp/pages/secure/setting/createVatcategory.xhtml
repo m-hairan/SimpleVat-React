@@ -3,6 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
                 template="/WEB-INF/templates/template.xhtml">
 
 
@@ -62,12 +63,11 @@
                         </ui:fragment>
                         <p:commandButton title="#{messages.cancel}" icon="ui-icon-cancel"
                                          action="/pages/secure/vat/list.xhtml" />
+                        
+                        <si:cbutton type="cancel"/>
                     </f:facet>
                     <f:facet name="right">
-
-                        <p:button value="Home" icon="ui-icon-home"
-                                  outcome="#{homePageLink}" />
-
+                        <si:cbutton type="home"/>
                     </f:facet>
 
                 </p:toolbar>

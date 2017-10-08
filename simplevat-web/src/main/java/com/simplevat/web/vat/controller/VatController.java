@@ -35,7 +35,6 @@ public class VatController {
     public void init() {
 
         Object objSelectedVat = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("vatCategoryId");
-        System.out.println("objSelectedInvoice :" + objSelectedVat);
         if (objSelectedVat != null) {
             category = vatCategoryService.findByPK(Integer.parseInt(objSelectedVat.toString()));
         } else {
@@ -51,7 +50,7 @@ public class VatController {
             category.setId(category.getId());
             vatCategoryService.update(category);
         }
-        return "list?faces-redirect=true";
+        return "index?faces-redirect=true";
     }
 
 }

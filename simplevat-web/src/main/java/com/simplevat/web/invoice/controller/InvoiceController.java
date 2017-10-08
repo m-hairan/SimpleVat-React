@@ -133,9 +133,11 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
             updateCurrencyLabel();
             selectedInvoiceModel.setInvoiceItems(new ArrayList());
             configurationList = configurationService.getConfigurationList();
-            configuration = configurationList.stream().filter(conf -> conf.getName().equals(ConfigurationConstants.INVOICING_REFERENCE_PATTERN)).findFirst().get();
-            if (configuration.getValue() != null) {
-                selectedInvoiceModel.setInvoiceRefNo(getNextInvoiceRefNumber(configuration.getValue()));
+            if(configurationList != null){
+                configuration = configurationList.stream().filter(conf -> conf.getName().equals(ConfigurationConstants.INVOICING_REFERENCE_PATTERN)).findFirst().get();
+                if (configuration.getValue() != null) {
+                    selectedInvoiceModel.setInvoiceRefNo(getNextInvoiceRefNumber(configuration.getValue()));
+                }
             }
         }
         populateVatCategory();
