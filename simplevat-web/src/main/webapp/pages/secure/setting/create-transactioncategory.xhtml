@@ -3,6 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
                 template="/WEB-INF/templates/template.xhtml">
 
     <ui:define name="title">New #{message.transactioncategory}</ui:define>
@@ -18,6 +19,12 @@
                     <div class="ui-g">
 
                         <div class="ui-g-12">
+                            <ui:fragment rendered="#{transactionCategoryView.transactionCategoryModel.transactionCategoryCode != null}">
+                                <h1>#{messages.EditTransactionCategory}</h1>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{transactionCategoryView.transactionCategoryModel.transactionCategoryCode == null}">
+                                <h1>#{messages.NewTransactionCategory}</h1>
+                            </ui:fragment>
                             <div class="card card-w-title">
                                 <p:fieldset legend="Transaction Category Details"
                                             toggleable="false" toggleSpeed="500">
@@ -61,7 +68,7 @@
                                         </h:panelGroup>
 
 
-                                        
+
                                         <h:panelGroup />
 
                                         <h:panelGroup styleClass="md-inputfield">
@@ -110,10 +117,10 @@
                                              action="#{transactionCategoryView.saveAndContinue}" ajax="false" />
                         </ui:fragment>
                         <ui:fragment rendered="#{transactionCategoryView.selectedTransactionCategory.transactionCategoryCode > 0}">
-                           
+
                             <p:commandButton value="#{messages.update}" icon="ui-icon-save"
                                              action="#{transactionCategoryView.update}" ajax="false" />
-                           
+
                             <p:commandButton value="#{messages.update_and_add_more}"
                                              icon="ui-icon-forward"
                                              action="#{transactionCategoryView.updateAndContinue}" ajax="false" />
@@ -123,14 +130,12 @@
                         </span>
 
 
-                        <p:commandButton title="#{messages.cancel}" icon="ui-icon-cancel"
-                                         action="/pages/secure/transactioncategory/transactioncategory.xhtml" />
+                        <si:cbutton type="cancel"/>
                     </f:facet>
 
                     <f:facet name="right">
 
-                        <p:button value="Home" icon="ui-icon-home"
-                                  outcome="#{homePageLink}" />
+                        <si:cbutton type="home"/>
 
                     </f:facet>
 

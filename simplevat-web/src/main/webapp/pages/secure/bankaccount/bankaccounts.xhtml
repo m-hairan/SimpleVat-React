@@ -26,7 +26,7 @@
                         <h:outputText value="#{bankAccount.bankAccountName}" />
                     </p:column>
 
-                    <p:column headerText="#{messages.account_number}" sortBy="#{bankAccount.accountNumber}">
+                    <p:column headerText="#{messages.account_number}" sortBy="#{bankAccount.accountNumber}" styleClass="amount">
                         <h:outputText value="#{bankAccount.accountNumber}" />
                     </p:column>
 
@@ -34,7 +34,7 @@
                         <h:outputText value="#{bankAccount.swiftCode}" />
                     </p:column>
 
-                    <p:column headerText="#{messages.current_balance}" sortBy="#{bankAccount.currentBalance}">
+                    <p:column headerText="#{messages.current_balance}" sortBy="#{bankAccount.currentBalance}" styleClass="amount">
                           <h:outputText value="#{bankAccount.bankAccountCurrency.currencySymbol}" />
                         <h:outputText value="#{bankAccount.currentBalance}" />
                     </p:column>

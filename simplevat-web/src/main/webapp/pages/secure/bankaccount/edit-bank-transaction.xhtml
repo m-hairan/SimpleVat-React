@@ -3,6 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
                 template="/WEB-INF/templates/template.xhtml">
 
     <ui:define name="title">#{messages.new_bank_account}</ui:define>
@@ -203,28 +204,36 @@
 
                 <p:toolbar>
                     <f:facet name="left">
-                        <p:commandButton value="#{messages.save}" icon="ui-icon-save"
-                                         action="#{transactionController.saveTransaction}"/>
-                        <p:commandButton value="#{messages.save_and_add_more}"
-                                         icon="ui-icon-forward"
-                                         action="#{transactionController.saveAndContinueTransaction}"
-                                         ajax="false"
-                                         update="createTransactionForm"/>
+                        <ui:fragment rendered="#{transactionController.selectedTransactionModel.transactionId == null}">
+                            <p:commandButton value="#{messages.save}" icon="ui-icon-save"
+                                             action="#{transactionController.saveTransaction}"/>
+                            <p:commandButton value="#{messages.save_and_add_more}"
+                                             icon="ui-icon-forward"
+                                             action="#{transactionController.saveAndContinueTransaction}"
+                                             ajax="false"
+                                             update="createTransactionForm"/>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{transactionController.selectedTransactionModel.transactionId != null}">
+                            <p:commandButton value="#{messages.update}" icon="ui-icon-save"
+                                             action="#{transactionController.saveTransaction}"/>
+                            <p:commandButton value="#{messages.update_and_add_more}"
+                                             icon="ui-icon-forward"
+                                             action="#{transactionController.saveAndContinueTransaction}"
+                                             ajax="false"
+                                             update="createTransactionForm"/>
+                        </ui:fragment>
 
                         <span class="ui-separator" style="padding-right: 5px;"> <span
                                 class="fa fa-ellipsis-v SoftGray" />
                         </span>
 
 
-                        <p:commandButton title="#{messages.cancel}" icon="ui-icon-cancel"
-                                         action="/pages/secure/bankaccount/bank-transactions.xhtml"
-                                         immediate="true" />
+                        <si:cbutton type="cancel"/>
                     </f:facet>
 
                     <f:facet name="right">
 
-                        <p:button value="Home" icon="ui-icon-home"
-                                  outcome="#{homePageLink}" />
+                        <si:cbutton type="home"/>
 
                     </f:facet>
 

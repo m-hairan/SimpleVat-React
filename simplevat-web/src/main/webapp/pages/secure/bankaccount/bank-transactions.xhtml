@@ -44,15 +44,15 @@
                         <h:outputText value="#{transaction.transactionDescription}" />
                     </p:column>
 
-                    <p:column headerText="#{messages.credit}" sortBy="#{transaction.transactionAmount}">
+                    <p:column headerText="#{messages.credit}" sortBy="#{transaction.transactionAmount}" styleClass="amount">
                         <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString() eq 'C'}" />
                     </p:column>
 
-                    <p:column headerText="#{messages.debit}" sortBy="#{transaction.transactionAmount}">
+                    <p:column headerText="#{messages.debit}" sortBy="#{transaction.transactionAmount}" styleClass="amount">
                         <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString() eq 'D'}" />
                     </p:column>
 
-                    <p:column headerText="#{messages.current_balance}">
+                    <p:column headerText="#{messages.current_balance}" styleClass="amount">
                         <h:outputText value="#{transaction.currentBalance}" />
                     </p:column>
 

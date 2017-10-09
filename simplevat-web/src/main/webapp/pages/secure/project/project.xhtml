@@ -147,12 +147,22 @@
 
                 <p:toolbar>
                     <f:facet name="left">
-                        <p:commandButton action="#{projectController.saveProject()}"
-                                         value="Save"
-                                         icon="ui-icon-save" />
-                        <p:commandButton action="#{projectController.saveProject()}"
-                                         value="Save &amp; Add More"
-                                         icon="ui-icon-forward" />
+                        <ui:fragment rendered="#{projectController.selectedProject.projectId == null}">
+                            <p:commandButton action="#{projectController.saveProject()}"
+                                             value="#{messages.save}"
+                                             icon="ui-icon-save" />
+                            <p:commandButton action="#{projectController.saveProject()}"
+                                             value="#{messages.save_and_add_more}"
+                                             icon="ui-icon-forward" />
+                        </ui:fragment>
+                        <ui:fragment rendered="#{projectController.selectedProject.projectId != null}">
+                            <p:commandButton action="#{projectController.saveProject()}"
+                                             value="#{messages.update}"
+                                             icon="ui-icon-save" />
+                            <p:commandButton action="#{projectController.saveProject()}"
+                                             value="#{messages.update_and_add_more}"
+                                             icon="ui-icon-forward" />
+                        </ui:fragment>
 
                         <span class="ui-separator" style="padding-right: 5px;">
                             <span class="fa fa-ellipsis-v SoftGray"/>

@@ -354,16 +354,30 @@
                 </div>
                 <p:toolbar>
                     <f:facet name="left">
-                        <p:commandButton action="#{invoiceController.saveInvoice()}"
-                                         value="#{messages.save}"
-                                         validateClient="true"
-                                         update="@form"
-                                         icon="ui-icon-save" />
-                        <p:commandButton action="#{invoiceController.saveAndAddMoreInvoice()}"
-                                         value="#{messages.save_and_add_more}"
-                                         update="@form"
-                                         validateClient="true"
-                                         icon="ui-icon-forward" />
+                        <ui:fragment rendered="#{invoiceController.selectedInvoiceModel.invoiceId != null}">
+                            <p:commandButton action="#{invoiceController.saveInvoice()}"
+                                             value="#{messages.save}"
+                                             validateClient="true"
+                                             update="@form"
+                                             icon="ui-icon-save" />
+                            <p:commandButton action="#{invoiceController.saveAndAddMoreInvoice()}"
+                                             value="#{messages.save_and_add_more}"
+                                             update="@form"
+                                             validateClient="true"
+                                             icon="ui-icon-forward" />
+                        </ui:fragment>
+                        <ui:fragment rendered="#{invoiceController.selectedInvoiceModel.invoiceId == null}">
+                            <p:commandButton action="#{invoiceController.saveInvoice()}"
+                                             value="#{messages.update}"
+                                             validateClient="true"
+                                             update="@form"
+                                             icon="ui-icon-save" />
+                            <p:commandButton action="#{invoiceController.saveAndAddMoreInvoice()}"
+                                             value="#{messages.update_and_add_more}"
+                                             update="@form"
+                                             validateClient="true"
+                                             icon="ui-icon-forward" />
+                        </ui:fragment>
 
                         <p:commandButton action="#{invoiceController.printInvoice()}" rendered="#{invoiceController.renderPrintInvoice}"
                                          value="#{messages.print_invoice}"

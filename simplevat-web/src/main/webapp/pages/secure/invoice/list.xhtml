@@ -27,7 +27,7 @@
                         <p:outputLabel styleClass="tableCustomHeader" value="#{messages.invoices}" />
 
                     </f:facet>
-                    <p:column headerText="#{messages.number}" sortBy="#{invoice.invoiceReferenceNumber}">
+                    <p:column headerText="#{messages.refnumber}" sortBy="#{invoice.invoiceReferenceNumber}">
                         <h:outputText value="#{invoice.invoiceReferenceNumber}" />
                     </p:column>
 
@@ -38,7 +38,7 @@
                         </h:outputText>
                     </p:column>
 
-                    <p:column headerText="#{messages.invoice_due_on}" sortBy="#{invoice.invoiceDueOn}">
+                    <p:column headerText="#{messages.invoice_due_on}" sortBy="#{invoice.invoiceDueOn}" styleClass="amount">
                         <h:outputText value="#{invoice.invoiceDueOn}" />
                     </p:column>
 
@@ -47,13 +47,13 @@
                         <h:outputText value="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}" />
                     </p:column>
                     <p:column headerText="#{messages.no_of_items}"
-                              sortBy="#{invoice.invoiceLineItems.size()}">
+                              sortBy="#{invoice.invoiceLineItems.size()}" styleClass="amount">
                         <h:outputText value="#{invoice.invoiceLineItems.size()}" />
                     </p:column>
                     <c:set value="#{invoiceListController.totalAmount(invoice)}"
                            var="total" />
                     <p:column headerText="#{messages.total_cost}"
-                              sortBy="#{total}">
+                              sortBy="#{total}" styleClass="amount">
                         <h:outputText value="#{invoice.currency.currencySymbol} " />
                         <h:outputText value="#{total}" >
                             <f:convertNumber maxFractionDigits="2" pattern="#,##0.00" />

@@ -16,9 +16,13 @@ import com.simplevat.service.ContactService;
 import com.simplevat.service.invoice.InvoiceService;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +35,7 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 @SpringScopeView
-public class InvoiceMailController implements Serializable {
+public class InvoiceReminderController implements Serializable {
 
 //    private final static Logger LOGGER = (Logger) LoggerFactory.getLogger(InvoiceMailController.class);
     private static final long serialVersionUID = -7388960716549948523L;
@@ -50,24 +54,36 @@ public class InvoiceMailController implements Serializable {
     @Autowired
     private ContactService contactService;
 
-    public void sendInvoiceMail() throws Exception {
+    @PostConstruct
+    public void init() {
+        List<Invoice> invoices = invoiceService.getInvoiceList();
+        if (invoices != null && !invoices.isEmpty()) {
+            for (Invoice invoice : invoices) {
+                sendInvoiceMail(invoice);
+            }
+        }
+    }
+
+    private void sendInvoiceMail(Invoice invoice) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        Integer invoiceId = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("invoiceId").toString());
         MailEnum mailEnum = MailEnum.INVOICE_PDF;
-        String summary = "Your Invoice Generated successfully. Please check your mail for further details";
-        Invoice invoice = invoiceService.findByPK(invoiceId);
+        String summary = "Please pay your bill your last date is " + invoice.getInvoiceDueDate().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")) + " . Please check the mail attachment for further detail";
         Optional<Contact> contact = contactService.getContactByEmail(invoice.getInvoiceContact().getEmail());
         if (contact.isPresent()) {
-            Contact contactObj = contact.get();
-            String firstName = contactObj.getFirstName();
-            byte[] byteArray = invoiceUtil.prepareMailReport(outputStream, invoiceId).toByteArray();
-            sendInvoiceMail(mailEnum, summary, firstName, invoice.getInvoiceContact().getEmail(), byteArray);
+            try {
+                Contact contactObj = contact.get();
+                String firstName = contactObj.getFirstName();
+                byte[] byteArray = invoiceUtil.prepareMailReport(outputStream, invoice.getInvoiceId()).toByteArray();
+                sendInvoiceMail(mailEnum, summary, firstName, invoice.getInvoiceContact().getEmail(), byteArray);
+            } catch (Exception ex) {
+                Logger.getLogger(InvoiceReminderController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Email address provided."));
         }
     }
 
-    private void sendInvoiceMail(MailEnum mailEnum, String summary, String firstName, String senderMailAddress, byte[] byteArray) throws Exception {
+    private void sendInvoiceMail(MailEnum mailEnum, String summary, String firstName, String senderMailAddress, byte[] byteArray) {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -82,13 +98,14 @@ public class InvoiceMailController implements Serializable {
                     attachment.setAttachmentName("Invoice");
                     attachment.setAttachmentObject(new ByteArrayResource(byteArray));
                     mailIntegration.sendHtmlMail(mail, attachment);
+
                 } catch (Exception ex) {
-                    Logger.getLogger(InvoiceMailController.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(InvoiceMailController.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
         t.start();
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(summary));
     }
 
 }

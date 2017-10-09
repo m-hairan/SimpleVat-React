@@ -2,7 +2,9 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui" template="/WEB-INF/templates/template.xhtml">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
+                template="/WEB-INF/templates/template.xhtml">
 
     <ui:define name="head">
         <style>
@@ -338,29 +340,37 @@
 
                 <p:toolbar>
                     <f:facet name="left">
-                        <p:commandButton value="#{messages.save}" icon="ui-icon-save"
-                                         action="#{expenseController.saveExpense}" />
-                        <p:commandButton value="#{messages.save_and_add_more}"
-                                         icon="ui-icon-forward" 
-                                         action="#{expenseController.saveAndContinueExpense}"
-                                         ajax="false"
-                                         update="createExpenseForm"/>
+                        <ui:fragment rendered="#{expenseController.selectedExpenseModel.expenseId == null}">
+                            <p:commandButton value="#{messages.save}" icon="ui-icon-save"
+                                             action="#{expenseController.saveExpense}" />
+                            <p:commandButton value="#{messages.save_and_add_more}"
+                                             icon="ui-icon-forward" 
+                                             action="#{expenseController.saveAndContinueExpense}"
+                                             ajax="false"
+                                             update="createExpenseForm"/>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{expenseController.selectedExpenseModel.expenseId != null}">
+                            <p:commandButton value="#{messages.update}" icon="ui-icon-save"
+                                             action="#{expenseController.saveExpense}" />
+                            <p:commandButton value="#{messages.update_and_add_more}"
+                                             icon="ui-icon-forward" 
+                                             action="#{expenseController.saveAndContinueExpense}"
+                                             ajax="false"
+                                             update="createExpenseForm"/>
+                        </ui:fragment>
+
 
                         <span class="ui-separator" style="padding-right: 5px;"> <span
                                 class="fa fa-ellipsis-v SoftGray" />
                         </span>
 
 
-                        <p:commandButton title="#{messages.cancel}" icon="ui-icon-cancel"
-                                         action="/pages/secure/expense/expenses.xhtml"
-                                         immediate="true"
-                                         />
+                        <si:cbutton type="cancel"/>
                     </f:facet>
 
                     <f:facet name="right">
 
-                        <p:button value="Home" icon="ui-icon-home"
-                                  outcome="#{homePageLink}" />
+                        <si:cbutton type="home"/>
 
                     </f:facet>
 

@@ -17,6 +17,12 @@
                     <div class="ui-g">
 
                         <div class="ui-g-12">
+                            <ui:fragment rendered="#{vatController.category.id != null}">
+                                <h1>#{messages.EditVatCategory}</h1>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{vatController.category.id == null}">
+                                <h1>#{messages.NewVatCategory}</h1>
+                            </ui:fragment>
                             <div class="card card-w-title">
                                 <p:fieldset legend="Vat Category Details"
                                             toggleable="false" toggleSpeed="500">
@@ -61,6 +67,9 @@
                             <p:commandButton value="#{messages.update}" icon="ui-icon-save"
                                              action="#{vatController.save}" ajax="false" />
                         </ui:fragment>
+                        <span class="ui-separator" style="padding-right: 5px;"> <span
+                                class="fa fa-ellipsis-v SoftGray" />
+                        </span>
                         <si:cbutton type="cancel"/>
                     </f:facet>
                     <f:facet name="right">

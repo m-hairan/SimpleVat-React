@@ -208,6 +208,7 @@
                     <p:outputLabel for="copyInvoiceAddress" value="Company Address is same as Invoicing Address" />
                 </h:panelGroup>
             </p:panelGrid>
+            <p:spacer height="5" />
             <p:panelGrid columns="6" id="companyAdd"
                          columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
                          layout="grid" 
@@ -314,7 +315,6 @@
 
                 <p:commandButton actionListener="#{companyProfileController.saveUpdate()}"
                                  value="Save"
-                                 ajax="false"
                                  update="@form"
                                  icon="ui-icon-save" />
 

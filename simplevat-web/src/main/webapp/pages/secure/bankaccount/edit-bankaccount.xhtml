@@ -3,6 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
                 template="/WEB-INF/templates/template.xhtml">
 
     <ui:define name="title">#{messages.new_bank_account}</ui:define>
@@ -106,10 +107,10 @@
 
                                         <p:outputLabel for="bank_account_type"/>
                                         <h:panelGroup styleClass="md-inputwrapper-focus">
-                                            
+
                                             <p:selectOneMenu id="bank_account_type"  value="#{bankAccountController.selectedBankAccount.bankAccountType.id}"  style="width:100%"
-                                                            required="true"
-                                                            requiredMessage="Please select account type"
+                                                             required="true"
+                                                             requiredMessage="Please select account type"
                                                              >
                                                 <f:selectItems value="#{bankAccountController.bankAccountTypes}" />
                                             </p:selectOneMenu>
@@ -155,8 +156,8 @@
                                             <label>#{messages.iban_number}</label>
                                         </h:panelGroup>
 
-                                        
-                                        
+
+
                                         <p:outputLabel for="bankCountry"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:outputLabel for="bankCountry"/>
@@ -172,7 +173,7 @@
                                                             required="false"/>
                                             <label>#{messages.country}</label>
                                         </h:panelGroup>
-                                        
+
                                         <p:outputLabel />
                                         <p:outputLabel />
                                     </p:panelGrid>
@@ -185,29 +186,37 @@
 
                 <p:toolbar>
                     <f:facet name="left">
-                        <p:commandButton value="#{messages.save}" icon="ui-icon-save"
-                                         action="#{bankAccountController.saveBankAccount}" />
-                        <p:commandButton value="#{messages.save_and_add_more}"
-                                         icon="ui-icon-forward"
-                                         action="#{bankAccountController.saveAndContinueBankAccount}"
-                                         ajax="false"
-                                         update="createBankAccountForm"/>
+                        <ui:fragment rendered="#{bankAccountController.selectedBankAccount.bankAccountId == null}">
+                            <p:commandButton value="#{messages.save}" icon="ui-icon-save"
+                                             action="#{bankAccountController.saveBankAccount}" />
+                            <p:commandButton value="#{messages.save_and_add_more}"
+                                             icon="ui-icon-forward"
+                                             action="#{bankAccountController.saveAndContinueBankAccount}"
+                                             ajax="false"
+                                             update="createBankAccountForm"/>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{bankAccountController.selectedBankAccount.bankAccountId != null}">
+                            <p:commandButton value="#{messages.update}" icon="ui-icon-save"
+                                             action="#{bankAccountController.saveBankAccount}" />
+                            <p:commandButton value="#{messages.update_and_add_more}"
+                                             icon="ui-icon-forward"
+                                             action="#{bankAccountController.saveAndContinueBankAccount}"
+                                             ajax="false"
+                                             update="createBankAccountForm"/>
+                        </ui:fragment>
+
 
                         <span class="ui-separator" style="padding-right: 5px;"> <span
                                 class="fa fa-ellipsis-v SoftGray" />
                         </span>
 
 
-                        <p:commandButton title="#{messages.cancel}" icon="ui-icon-cancel"
-                                         action="/pages/secure/bankaccount/bankaccounts.xhtml"
-                                         immediate="true"
-                                         />
+                        <si:cbutton type="cancel"/>
                     </f:facet>
 
                     <f:facet name="right">
 
-                        <p:button value="Home" icon="ui-icon-home"
-                                  outcome="#{homePageLink}" />
+                        <si:cbutton type="home"/>
 
                     </f:facet>
 

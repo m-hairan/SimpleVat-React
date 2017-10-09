@@ -9,7 +9,7 @@ import com.simplevat.entity.Company;
 
 /**
  *
- * @author admin
+ * @author uday
  */
 class CompanyHelper {
 

@@ -212,13 +212,6 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
     }
 
     public String deleteTransactionCategory() {
-        /*   
-        selectedTransactionCategory.setDeleteFlag(Boolean.TRUE);
-    
-        transactionCategoryService.update(selectedTransactionCategory);
-        this.transactionCategories = transactionCategoryService.executeNamedQuery("findAllTransactionCategory");
-        return TRANSACTION_CATEGORY + HOME_PAGE + "?faces-redirect=true";
-         */
         transactionCategoryModel.setDeleteFlag(Boolean.TRUE);
         selectedTransactionCategory = getTrascationModel(transactionCategoryModel);
         transactionCategoryService.update(selectedTransactionCategory);

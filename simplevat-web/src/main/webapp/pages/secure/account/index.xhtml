@@ -14,6 +14,12 @@
             .ui-fluid .ui-button {
                 width: auto !important;
             }
+            .ui-fluid .ui-button-icon-only {
+                width: 32px !important;
+            }
+            .ui-fluid .ui-autocomplete-dropdown {
+                width: 20px !important;
+            }
         </style>
     </ui:define>
     <ui:define name="title">#{messages.profile}</ui:define>
@@ -24,7 +30,7 @@
                 <div class="ui-g">
                     <div class="ui-g-12">
                         <h1>#{messages.Account}</h1>
-                        <p:tabView>
+                        <p:tabView id="tabview">
                             <p:tab title="Account">
                                 <ui:include src="profile.xhtml"/>
                             </p:tab>

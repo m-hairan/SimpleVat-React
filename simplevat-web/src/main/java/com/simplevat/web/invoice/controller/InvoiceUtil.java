@@ -42,7 +42,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
- * @author admin
+ * @author uday
  */
 @Named
 public class InvoiceUtil extends AbstractReportBean{
@@ -112,7 +112,7 @@ public class InvoiceUtil extends AbstractReportBean{
                 parameters.put("otherInformation", company.getCompanyRegistrationNumber());
 
             } catch (Exception ex) {
-                Logger.getLogger(InvoiceReportController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(InvoiceUtil.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return parameters;
@@ -213,7 +213,7 @@ public class InvoiceUtil extends AbstractReportBean{
                 }
 
             } catch (Exception ex) {
-                Logger.getLogger(InvoiceReportController.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(InvoiceUtil.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 

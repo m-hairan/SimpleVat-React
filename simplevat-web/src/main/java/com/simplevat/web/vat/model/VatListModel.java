@@ -11,7 +11,7 @@ import java.util.Date;
 
 /**
  *
- * @author daynil
+ * @author uday
  */
 public class VatListModel {
     
