@@ -160,7 +160,7 @@
                                                         converter="#{currencyConverter}"
                                                         completeMethod="#{invoiceController.completeCurrency}" 
                                                         value="#{invoiceController.selectedInvoiceModel.currencyCode}"
-                                                        var="currency" itemValue="#{currency.currencyCode} "
+                                                        var="currency" itemValue="#{currency.currencyCode}"
                                                         itemLabel="#{currency.currencyIsoCode}  #{currency.currencySymbol} " >
                                             <p:ajax event="itemSelect" 
                                                     listener="#{invoiceController.updateCurrencyLabel()}" 
