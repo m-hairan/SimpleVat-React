@@ -115,21 +115,24 @@
                                     </h:panelGroup>
 
                                     <p:outputLabel for="role" />
-                                    <h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputwrapper-filled">
                                         <p:selectOneMenu value="#{userController.selectedUser.roleCode}" id="role"
                                                          required="true"
                                                          requiredMessage="Please select Role">
                                             <f:selectItems value="#{userController.roleList}" var="role" itemLabel="#{role.roleName}" itemValue="#{role.roleCode}"/>
                                         </p:selectOneMenu>
+                                        <label>Role</label>
                                         <p:message for="role" />
                                     </h:panelGroup>
 
                                     <p:outputLabel for="active" />
-                                    <h:panelGroup>
-                                        <p:selectOneMenu value="#{userController.selectedUser.isActive}" id="active">
+                                    <h:panelGroup styleClass="md-inputwrapper-filled">
+                                        <p:selectOneMenu value="#{userController.selectedUser.isActive}" id="active" required="true"
+                                                         requiredMessage="Please select Status">
                                             <f:selectItem itemLabel="Active" itemValue="true"/>
                                             <f:selectItem itemLabel="InActive" itemValue="false"/>
                                         </p:selectOneMenu>
+                                        <label>Status</label>
                                         <p:message for="active" />
                                     </h:panelGroup>
                                 </p:panelGrid>
