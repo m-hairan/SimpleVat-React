@@ -14,22 +14,26 @@
             <meta name="theme-color" content="#{guestPreferences.themeColors[guestPreferences.theme]}" />
         </f:facet>
         <title><ui:define name="pageTitle">Simple VAT</ui:define></title>
-        <h:outputScript name="js/nanoscroller.js" library="ultima-layout" />
-        <h:outputScript name="js/layout.js" library="ultima-layout" />
-        <h:outputScript name="js/ripple.js" library="ultima-layout" />
-        <h:outputScript name="js/swipe.js" library="ultima-layout" />
-        <h:outputStylesheet library="css" name="default.css" />
+
+        <p:cache region="templatejs" key="templatejs">
+            <h:outputScript name="js/nanoscroller.js" library="ultima-layout" />
+            <h:outputScript name="js/layout.js" library="ultima-layout" />
+            <h:outputScript name="js/ripple.js" library="ultima-layout" />
+            <h:outputScript name="js/swipe.js" library="ultima-layout" />
+            <h:outputStylesheet library="css" name="default.css" />
+        </p:cache>
         <ui:insert name="head"/>
     </h:head>
-   
+
     <h:body styleClass="main-body #{guestPreferences.compact ? 'layout-compact' : null}">
         <ui:param name="expenseMenuLink" value="/pages/secure/expense/expenses" />
         <ui:param name="bankAccountMenuLink" value="/pages/secure/bankaccount/bankaccounts" />
         <ui:param name="homePageLink" value="/pages/secure/home" />
         <div class="layout-wrapper #{guestPreferences.menuLayout}">
-            <ui:include src="topbar.xhtml" />
-            <ui:include src="menu.xhtml" />
-            
+            <p:cache region="topbar-left-menu" key="topbar-left-menu">
+                <ui:include src="topbar.xhtml" />
+                <ui:include src="menu.xhtml" />
+            </p:cache>
             <div class="layout-main">
                 <p:growl id="globalGrowl" 
                          autoUpdate="true"
@@ -37,31 +41,31 @@
                          globalOnly="true"
                          showDetail="true" /> 
                 <ui:insert name="content"/>
-                
                 <ui:include src="footer.xhtml" />
             </div>
         </div>
-        
+
         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-			<p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-			<p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-		</p:confirmDialog>
-        
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+        </p:confirmDialog>
+
         <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
-           <f:facet name="start">
-               <i class="fa fa-circle-o-notch fa-spin ajax-loader" aria-hidden="true"></i>
-           </f:facet>
+            <f:facet name="start">
+                <i class="fa fa-circle-o-notch fa-spin ajax-loader" aria-hidden="true"></i>
+            </f:facet>
 
-           <f:facet name="complete">
-               <h:outputText value="" />
-           </f:facet>
-       </p:ajaxStatus>
-        
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+        </p:ajaxStatus>
 
-        <h:outputStylesheet name="css/nanoscroller.css" library="ultima-layout" />
-        <h:outputStylesheet name="css/animate.css" library="ultima-layout" />
-        <h:outputStylesheet name="css/ripple.css" library="ultima-layout" />
-        <h:outputStylesheet name="css/layout-simplevat.css" library="ultima-layout" />
+        <p:cache region="templatecss" key="templatecss">
+            <h:outputStylesheet name="css/nanoscroller.css" library="ultima-layout" />
+            <h:outputStylesheet name="css/animate.css" library="ultima-layout" />
+            <h:outputStylesheet name="css/ripple.css" library="ultima-layout" />
+            <h:outputStylesheet name="css/layout-simplevat.css" library="ultima-layout" />
+        </p:cache>
     </h:body>
 
 </html>
