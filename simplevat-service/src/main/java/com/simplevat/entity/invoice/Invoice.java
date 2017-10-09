@@ -48,6 +48,7 @@ public class Invoice implements Serializable {
     private Integer invoiceDueOn;
     
     @Column(name = "INVOICE_DUE_DATE")
+    @Convert(converter = DateConverter.class)
     private LocalDateTime invoiceDueDate;
 
     @Column(name = "INVOICE_TEXT")

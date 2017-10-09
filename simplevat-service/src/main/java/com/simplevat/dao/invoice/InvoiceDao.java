@@ -44,6 +44,6 @@ public interface InvoiceDao extends Dao<Integer, Invoice> {
 	 * @return
 	 */
 	public List<Object[]> getInvoiceDue(Date startDate, Date endDate);
-	
 
+    public List<Invoice> getInvoiceList();
 }

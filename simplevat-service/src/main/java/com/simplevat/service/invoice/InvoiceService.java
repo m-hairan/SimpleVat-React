@@ -35,6 +35,8 @@ public abstract class InvoiceService extends SimpleVatService<Integer, Invoice> 
 	
 	public abstract  List<Event> getInvoiceAsEvent();
 	
+        public abstract  List<Invoice> getInvoiceList();
+        
 	@Override
 	protected InvoiceDao getDao() {
 		return invoiceDao;
