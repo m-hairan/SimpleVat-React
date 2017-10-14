@@ -1,6 +1,7 @@
 package com.simplevat.user.model;
 
 import com.simplevat.entity.Company;
+import com.simplevat.entity.Role;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -44,7 +45,7 @@ public class UserModel implements Serializable{
     private String profileImagePath;
     private Integer versionNumber;
     private Boolean deleteFlag ;
-    private Integer roleCode;
+    private Role role;
     private byte[] profileImageBinary;
 
 

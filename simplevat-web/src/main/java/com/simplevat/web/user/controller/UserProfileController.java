@@ -113,12 +113,11 @@ public class UserProfileController implements Serializable {
         user.setFirstName(userModel.getFirstName());
         user.setLastName(userModel.getLastName());
         user.setCreatedBy(userModel.getCreatedBy());
+        user.setRole(userModel.getRole());
         user.setIsActive(Boolean.TRUE);
         user.setPassword(userModel.getPassword());
-        user.setProfileImagePath(userModel.getProfileImagePath());
         user.setVersionNumber(userModel.getVersionNumber());
         user.setCreatedDate(userModel.getCreatedDate());
-        user.setRoleCode(userModel.getRoleCode());
         user.setProfileImageBinary(userModel.getProfileImageBinary());
         return user;
     }
@@ -137,11 +136,10 @@ public class UserProfileController implements Serializable {
         userModel.setLastName(user.getLastName());
         userModel.setDeleteFlag(user.getDeleteFlag());
         userModel.setPassword(user.getPassword());
+        userModel.setRole(user.getRole());
         userModel.setVersionNumber(user.getVersionNumber());
         userModel.setCreatedBy(user.getCreatedBy());
-        userModel.setProfileImagePath(user.getProfileImagePath());
         userModel.setCreatedDate(user.getCreatedDate());
-        userModel.setRoleCode(user.getRoleCode());
         userModel.setProfileImageBinary(user.getProfileImageBinary());
 
         return userModel;
