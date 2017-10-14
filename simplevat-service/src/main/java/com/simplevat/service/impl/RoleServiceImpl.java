@@ -34,4 +34,9 @@ public class RoleServiceImpl extends RoleService {
 	public Dao<Integer, Role> getDao() {
 		return roleDao;
 	}
+
+    @Override
+    public Role getDefaultRole() {
+        return roleDao.getDefaultRole();
+    }
 }

@@ -110,7 +110,7 @@ public class InvoiceDaoImpl extends AbstractDao<Integer, Invoice> implements Inv
     }
 
     @Override
-    public List<Invoice> getInvoiceList() {
+    public List<Invoice> getInvoiceListByDueDate() {
         TypedQuery<Invoice> query = getEntityManager().createQuery("Select i from Invoice i where i.deleteFlag = false and i.invoiceDueDate =:invoiceDueDate", Invoice.class);
         query.setParameter("invoiceDueDate", LocalDateTime.now());
         if (query.getResultList() != null && !query.getResultList().isEmpty()) {

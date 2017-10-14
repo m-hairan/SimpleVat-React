@@ -19,7 +19,7 @@ public class Role {
 
     @Id
     @Column(name = "ROLE_CODE")
-    private int roleCode;
+    private Integer roleCode;
 
     @Basic
     @Column(name = "ROLE_NAME")

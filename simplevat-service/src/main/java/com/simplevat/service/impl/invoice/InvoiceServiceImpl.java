@@ -144,7 +144,7 @@ public class InvoiceServiceImpl extends InvoiceService {
     }
 
     @Override
-    public List<Invoice> getInvoiceList() {
-        return getDao().getInvoiceList();
+    public List<Invoice> getInvoiceListByDueDate() {
+        return getDao().getInvoiceListByDueDate();
     }
 }

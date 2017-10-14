@@ -12,38 +12,43 @@ import com.simplevat.entity.invoice.Invoice;
  * @since 20 May, 2017 7:34:45 PM
  */
 public interface InvoiceDao extends Dao<Integer, Invoice> {
-	
-	/**
-	 * This methods take date duration and calculate Invoices per month wise
-	 * @param startDate
-	 * @param endDate
-	 * @return List Of Invoice, month wise
-	 */
-	public List<Object[]> getInvocePerMonth(Date startDate, Date endDate);
-	
-	/**
-	 * This methods will return all the invoices within that perticular range of date supplied 
-	 * @param startDate
-	 * @param endDate
-	 * @return
-	 */
-	public List<Object[]> getInvoices(Date startDate, Date endDate);
-	
-	/**
-	 * This methods take date duration and calculate VatIn per month wise
-	 * @param startDate
-	 * @param endDate
-	 * @return List Of Invoice, month wise
-	 */
-	public List<Object[]> getVatInPerMonth(Date startDate, Date endDate);
-	
-	/**
-	 * This methods return list of event due for given date range
-	 * @param startDate
-	 * @param endDate
-	 * @return
-	 */
-	public List<Object[]> getInvoiceDue(Date startDate, Date endDate);
 
-    public List<Invoice> getInvoiceList();
+    /**
+     * This methods take date duration and calculate Invoices per month wise
+     *
+     * @param startDate
+     * @param endDate
+     * @return List Of Invoice, month wise
+     */
+    public List<Object[]> getInvocePerMonth(Date startDate, Date endDate);
+
+    /**
+     * This methods will return all the invoices within that perticular range of
+     * date supplied
+     *
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    public List<Object[]> getInvoices(Date startDate, Date endDate);
+
+    /**
+     * This methods take date duration and calculate VatIn per month wise
+     *
+     * @param startDate
+     * @param endDate
+     * @return List Of Invoice, month wise
+     */
+    public List<Object[]> getVatInPerMonth(Date startDate, Date endDate);
+
+    /**
+     * This methods return list of event due for given date range
+     *
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    public List<Object[]> getInvoiceDue(Date startDate, Date endDate);
+
+    public List<Invoice> getInvoiceListByDueDate();
 }

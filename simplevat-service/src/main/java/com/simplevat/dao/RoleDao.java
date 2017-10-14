@@ -12,4 +12,6 @@ public interface RoleDao extends Dao<Integer, Role> {
     List<Role> getRoles();
 
     Role getRoleById(Integer roleCode);
+
+    public Role getDefaultRole();
 }

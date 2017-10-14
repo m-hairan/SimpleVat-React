@@ -46,10 +46,6 @@ public class User {
     private Company company;
 
     @Basic
-    @Column(name = "ROLE_CODE")
-    private Integer roleCode;
-
-    @Basic
     @Column(name = "CREATED_BY")
     private Integer createdBy;
 
@@ -88,10 +84,7 @@ public class User {
     private String password;
 
     @Basic
-    @Column(name = "PROFILE_IMAGE_URL")
-    private String profileImagePath;
-
-    @Basic
+    @Lob
     @Column(name = "PROFILE_IMAGE")
     private byte[] profileImageBinary;
 

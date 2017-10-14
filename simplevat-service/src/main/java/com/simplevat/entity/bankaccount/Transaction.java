@@ -58,8 +58,9 @@ public class Transaction {
     @Column(name = "EXPLAINED_TRANSACTION_ATTACHEMENT_DESCRIPTION")
     private String explainedTransactionAttachementDescription;
     @Basic
-    @Column(name = "EXPLAINED_TRANSACTION_ATTACHEMENT_PATH")
-    private String explainedTransactionAttachementPath;
+    @Lob
+    @Column(name = "EXPLAINED_TRANSACTION_ATTACHEMENT")
+    private byte[] explainedTransactionAttachement;
     @Basic
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BANK_ACCOUNT_ID")
@@ -93,6 +94,9 @@ public class Transaction {
     @Version
     @Column(name = "VERSION_NUMBER")
     private Integer versionNumber;
+    
+    
+    
     
     @PrePersist
     public void updateDates() {

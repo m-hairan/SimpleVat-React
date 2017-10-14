@@ -27,8 +27,13 @@ public class BankAccountTypeServiceImpl extends BankAccountTypeService {
 
     @Override
     public BankAccountType getBankAccountType(int id) {
-        
-    return bankAccountTypeDao.getBankAccountType(id);
+
+        return bankAccountTypeDao.getBankAccountType(id);
+    }
+
+    @Override
+    public BankAccountType getDefaultBankAccountType() {
+        return bankAccountTypeDao.getDefaultBankAccountType();
     }
 
 }

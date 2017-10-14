@@ -8,7 +8,9 @@ public enum MailEnum {
     SIGN_UP_VERIFICATION("Welcome to SimpleVat",
             "<p>Dear ${user},</p><br/><p>Thank you for joining us at Simplevat. </p> <br/> Thank you."),
     INVOICE_PDF("Welcome to SimpleVat",
-            "<p>Dear ${user},</p><br/><p>Please pay your bill. </p> <br/> Thank you.");
+            "<p>Dear ${user},</p><br/><p>Please pay your bill. </p> <br/> Thank you."),
+    NEW_USER_CREATED("Welcome to SimpleVat",
+            "<p>Dear ${user},</p><br/><p>Your user account created successfully </p> <br/> Thank you.");
 
     private String subject;
     private String body;

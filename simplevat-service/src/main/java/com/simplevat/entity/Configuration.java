@@ -40,7 +40,7 @@ public class Configuration implements Serializable {
     @Basic(optional = false)
     @Column(name = "name")
     private String name;
-    @Basic(optional = false)
+    @Basic(optional = true)
     @Column(name = "value")
     private String value;
 

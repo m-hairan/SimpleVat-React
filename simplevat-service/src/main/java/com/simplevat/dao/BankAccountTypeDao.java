@@ -16,4 +16,6 @@ public interface BankAccountTypeDao extends Dao<Integer, BankAccountType> {
      public List<BankAccountType> getBankAccountTypeList();
      public BankAccountType getBankAccountType(int id);
 
+    public BankAccountType getDefaultBankAccountType();
+
 }

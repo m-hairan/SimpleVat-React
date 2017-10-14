@@ -32,7 +32,19 @@ public class MailIntegration {
         this.mailSender = mailSender;
     }
 
-    private void sendEmail(final Mail mail, MailAttachment mailAttachment, boolean html) throws Exception {
+//    private void sendEmail(final Mail mail, boolean html) throws Exception {
+//
+//        MimeMessagePreparator preparator = mimeMessage -> {
+//            MimeMessageHelper mimeMessagePreparator = new MimeMessageHelper(mimeMessage, true, UTF_8);
+//            mimeMessagePreparator.setTo(mail.getTo());
+//            mimeMessagePreparator.setFrom(new InternetAddress(mail.getFrom(), mail.getFromName()));
+//            mimeMessagePreparator.setText(mail.getBody(), html);
+//            mimeMessagePreparator.setSubject(mail.getSubject());
+//        };
+//        mailSender.send(preparator);
+//    }
+    
+    private void sendEmail(final Mail mail, MailAttachment mailAttachment, JavaMailSender javaMailSender, boolean html) throws Exception {
 
         MimeMessagePreparator preparator = mimeMessage -> {
             MimeMessageHelper mimeMessagePreparator = new MimeMessageHelper(mimeMessage, true, UTF_8);
@@ -41,19 +53,35 @@ public class MailIntegration {
             mimeMessagePreparator.setText(mail.getBody(), html);
             mimeMessagePreparator.setSubject(mail.getSubject());
             if (mailAttachment != null) {
-                if(mailAttachment.getAttachmentObject() instanceof InputStreamSource){
-                    mimeMessagePreparator.addAttachment(mailAttachment.getAttachmentName()+".pdf", (InputStreamSource)mailAttachment.getAttachmentObject());
+                if (mailAttachment.getAttachmentObject() instanceof InputStreamSource) {
+                    mimeMessagePreparator.addAttachment(mailAttachment.getAttachmentName() + ".pdf", (InputStreamSource) mailAttachment.getAttachmentObject());
                 }
             }
         };
-        mailSender.send(preparator);
+        javaMailSender.send(preparator);
     }
 
-    public void sendHtmlMail(final Mail mail) throws Exception {
-        sendEmail(mail, null, true);
+    private void sendEmail(final Mail mail, JavaMailSender javaMailSender, boolean html) throws Exception {
+
+        MimeMessagePreparator preparator = mimeMessage -> {
+            MimeMessageHelper mimeMessagePreparator = new MimeMessageHelper(mimeMessage, true, UTF_8);
+            mimeMessagePreparator.setTo(mail.getTo());
+            mimeMessagePreparator.setFrom(new InternetAddress(mail.getFrom(), mail.getFromName()));
+            mimeMessagePreparator.setText(mail.getBody(), html);
+            mimeMessagePreparator.setSubject(mail.getSubject());
+        };
+        javaMailSender.send(preparator);
     }
     
-    public void sendHtmlMail(final Mail mail, MailAttachment mailAttachment) throws Exception {
-        sendEmail(mail, mailAttachment, true);
+//    public void sendHtmlMail(final Mail mail) throws Exception {
+//        sendEmail(mail, true);
+//    }
+    
+    public void sendHtmlMail(final Mail mail, MailAttachment mailAttachment, JavaMailSender javaMailSender) throws Exception {
+        sendEmail(mail, mailAttachment, javaMailSender, true);
+    }
+    
+    public void sendHtmlMail(final Mail mail, JavaMailSender javaMailSender) throws Exception {
+        sendEmail(mail, javaMailSender, true);
     }
 }
