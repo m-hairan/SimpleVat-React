@@ -1,12 +1,15 @@
 package com.simplevat.web.login.controller;
 
 import com.github.javaplugs.jsf.SpringScopeView;
+import com.simplevat.entity.Configuration;
 import com.simplevat.entity.Mail;
 import com.simplevat.entity.MailEnum;
 import com.simplevat.entity.User;
 import com.simplevat.integration.MailIntegration;
 import com.simplevat.integration.MailPreparer;
+import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.UserServiceNew;
+import com.simplevat.web.constant.ConfigurationConstants;
 import com.simplevat.web.utils.SessionIdentifierGenerator;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,8 +32,12 @@ import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.logging.Level;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 @Controller
 //@ManagedBean(name = "securityBean")
@@ -54,6 +61,9 @@ public class SecurityBean implements PhaseListener, Serializable {
     @Autowired
     @Qualifier("authenticationManager")
     private AuthenticationManager authenticationManager;
+    
+    @Autowired
+    private ConfigurationService configurationService;
 
     @Autowired
     private MailIntegration mailIntegration;
@@ -138,7 +148,7 @@ public class SecurityBean implements PhaseListener, Serializable {
                 randomPassword,
                 mailEnum
         );
-        mailIntegration.sendHtmlMail(mail);
+        mailIntegration.sendHtmlMail(mail, getJavaMailSender(configurationService.getConfigurationList()));
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(summary));
     }
 
@@ -152,6 +162,24 @@ public class SecurityBean implements PhaseListener, Serializable {
             java.util.logging.Logger.getLogger(SecurityBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         return randomPassword;
+    }
+    
+    private JavaMailSender getJavaMailSender(List<Configuration> configurationList) {
+        JavaMailSenderImpl sender = new JavaMailSenderImpl();
+        sender.setProtocol("smtp");
+        sender.setHost(configurationList.stream().filter(host -> host.getName().equals(ConfigurationConstants.MAIL_HOST)).findAny().get().getValue());
+        sender.setPort(Integer.parseInt(configurationList.stream().filter(host -> host.getName().equals(ConfigurationConstants.MAIL_PORT)).findAny().get().getValue()));
+        sender.setUsername(configurationList.stream().filter(host -> host.getName().equals(ConfigurationConstants.MAIL_USERNAME)).findAny().get().getValue());
+        sender.setPassword(configurationList.stream().filter(host -> host.getName().equals(ConfigurationConstants.MAIL_PASSWORD)).findAny().get().getValue());
+
+        Properties mailProps = new Properties();
+        mailProps.put("mail.smtps.auth", configurationList.stream().filter(host -> host.getName().equals(ConfigurationConstants.MAIL_SMTP_AUTH)).findAny().get().getValue());
+        mailProps.put("mail.smtp.starttls.enable", configurationList.stream().filter(host -> host.getName().equals(ConfigurationConstants.MAIL_SMTP_STARTTLS_ENABLE)).findAny().get().getValue());
+        mailProps.put("mail.smtp.debug", "true");
+
+        sender.setJavaMailProperties(mailProps);
+
+        return sender;
     }
 
 }

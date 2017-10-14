@@ -134,15 +134,11 @@ public class TransactionImportController implements Serializable {
             transaction1.setTransactionDate(LocalDateTime.of(date, time));
             if (transaction.getDrAmount() !=  null && !transaction.getDrAmount().trim().isEmpty()) {
                 transaction1.setTransactionAmount(BigDecimal.valueOf(Double.parseDouble(transaction.getDrAmount().replaceAll(",", ""))));
-                TransactionType transactionType = transactionTypeService.getTransactionType(TransactionTypeConstant.BANKTRANSACTIONDEBIT);
-                transaction1.setTransactionType(transactionType);
-                transaction1.setDebitCreditFlag(transactionType.getDebitCreditFlag());
+                transaction1.setDebitCreditFlag('D');
             }
             if (transaction.getCrAmount() !=  null && !transaction.getCrAmount().trim().isEmpty()) {
                 transaction1.setTransactionAmount(BigDecimal.valueOf(Double.parseDouble(transaction.getCrAmount().replaceAll(",", ""))));
-                TransactionType transactionType = transactionTypeService.getTransactionType(TransactionTypeConstant.BANKTRANSACTIONCREDIT);
-                transaction1.setTransactionType(transactionType);
-                transaction1.setDebitCreditFlag(transactionType.getDebitCreditFlag());
+                transaction1.setDebitCreditFlag('C');
             }
             transaction1.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.UNEXPLIANED));
             transactionService.persist(transaction1);

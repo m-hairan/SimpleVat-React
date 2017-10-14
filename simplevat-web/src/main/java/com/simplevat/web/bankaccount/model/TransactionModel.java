@@ -31,7 +31,7 @@ public class TransactionModel implements Comparable<TransactionModel> {
     private TransactionCategory explainedTransactionCategory;
     private String explainedTransactionDescription;
     private String explainedTransactionAttachementDescription;
-    private String explainedTransactionAttachementPath;
+    private byte[] explainedTransactionAttachement;
     private BankAccount bankAccount;
     private TransactionStatus transactionStatus;
     private BigDecimal currentBalance = new BigDecimal(123);

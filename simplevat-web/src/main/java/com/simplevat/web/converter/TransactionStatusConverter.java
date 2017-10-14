@@ -6,15 +6,20 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 import com.simplevat.entity.bankaccount.TransactionStatus;
+import com.simplevat.service.bankaccount.TransactionStatusService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-@FacesConverter("transactionStatusConverter")
+@Service
 public class TransactionStatusConverter implements Converter {
 
+    @Autowired
+    private TransactionStatusService transactionStatusService;
+    
 	@Override
 	public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
 		if (string != null && !string.isEmpty()) {
-			TransactionStatus transactionStatus = new TransactionStatus();
-			transactionStatus.setExplainationStatusCode(Integer.parseInt(string));
+			TransactionStatus transactionStatus = transactionStatusService.findByPK(Integer.parseInt(string));
 			return transactionStatus;
 		}
 		return null;

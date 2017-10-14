@@ -71,18 +71,12 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
     public void init() {
         companyModel = getCompanyModelFromCompany(companyService.findByPK(FacesUtil.getLoggedInUser().getCompany().getCompanyId()));
         countries = countryService.getCountries();
-        companyTypes = getCompanyTypeSelectItem();
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_COMPANY_LOGO", companyModel.getCompanyLogo());
         renderProfilePic = true;
     }
 
-    private List<SelectItem> getCompanyTypeSelectItem() {
-        List<CompanyType> companyTypeList = companyTypeService.getCompanyTypes();
-        List<SelectItem> tmpList = new ArrayList<>();
-        companyTypeList.forEach((companyType) -> {
-            tmpList.add(new SelectItem(companyType.getId(), companyType.getCompanyTypeName()));
-        });
-        return tmpList;
+    public List<CompanyType> completeCompanyType() {
+        return companyTypeService.getCompanyTypes();
     }
 
     public List<Country> completeCountry(String countryStr) {

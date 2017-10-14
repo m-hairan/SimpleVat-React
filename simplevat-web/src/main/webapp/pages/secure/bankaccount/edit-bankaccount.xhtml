@@ -37,8 +37,9 @@
                                             <p:inputText
                                                 id="bankAccountName"
                                                 value="#{bankAccountController.selectedBankAccount.bankAccountName}"
-                                                required="true" />
+                                                required="true" requiredMessage="Please enter bank account name"/>
                                             <label>#{messages.account_name}</label>
+                                            <p:message for="bankAccountName" />
                                         </h:panelGroup>
 
 
@@ -53,17 +54,18 @@
                                                             value="#{bankAccountController.selectedBankAccount.bankAccountCurrency}"
                                                             var="currency" 
                                                             itemValue="#{currency}"
-                                                            itemLabel="#{currency.currencyDescription}" 
-                                                            required="true"/>
+                                                            itemLabel="#{currency.currencyDescription} #{currency.currencySymbol}" 
+                                                            required="true" requiredMessage="Please select bank account currency"/>
 
                                             <label>#{messages.currency}</label>
+                                            <p:message for="bankAccountcurrency" />
                                         </h:panelGroup>
 
                                         <p:outputLabel for="bankAccountStatus" rendered="#{bankAccountController.selectedBankAccount.bankAccountId > 0}"/>
                                         <h:panelGroup styleClass="md-inputfield" rendered="#{bankAccountController.selectedBankAccount.bankAccountId > 0}">
                                             <p:autoComplete
                                                 id="bankAccountStatus"
-                                                converter="bankAccountStatusConverter"
+                                                converter="#{bankAccountStatusConverter}"
                                                 dropdown="true"
                                                 forceSelection="true"
                                                 effect="fold"
@@ -72,22 +74,25 @@
                                                 var="bankAccountStatus"
                                                 itemValue="#{bankAccountStatus}"
                                                 itemLabel="#{bankAccountStatus.bankAccountStatusName}"
-                                                required="true">
+                                                required="true" requiredMessage="Please select bank account status">
                                             </p:autoComplete>
                                             <label>#{messages.status}</label>
+                                            <p:message for="bankAccountStatus" />
                                         </h:panelGroup>
 
                                         <p:outputLabel for="bankOpeningBalance"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText
+                                            <p:inputNumber
                                                 id="bankOpeningBalance"
+                                                symbol="#{bankAccountController.selectedBankAccount.bankAccountCurrency.currencySymbol} " symbolPosition="p"
                                                 value="#{bankAccountController.selectedBankAccount.openingBalance}"
                                                 disabled="#{bankAccountController.selectedBankAccount.bankAccountId > 0}"
-                                                required="true" />
+                                                required="true" requiredMessage="Please enter account opening balance"/>
                                             <label>#{messages.opening_balance}</label>
+                                            <p:message for="bankOpeningBalance" />
                                         </h:panelGroup>
 
-                                        <p:outputLabel for="isPrimaryAccount"/>
+                                        <p:outputLabel for="isPrimaryAccount" />
                                         <h:panelGroup>
                                             <label>#{messages.is_this_your_primary_account}</label>
                                             <p:selectOneRadio value="#{bankAccountController.selectedBankAccount.isprimaryAccountFlag}" id="isPrimaryAccount">
@@ -96,7 +101,7 @@
                                             </p:selectOneRadio>
                                         </h:panelGroup>
 
-                                        <p:outputLabel for="isPersonalAccount"/>
+                                        <p:outputLabel for="isPersonalAccount" />
                                         <h:panelGroup>
                                             <label>#{messages.is_this_your_personal_account}</label>
                                             <p:selectOneRadio value="#{bankAccountController.selectedBankAccount.personalCorporateAccountInd}" id="isPersonalAccount">
@@ -106,15 +111,21 @@
                                         </h:panelGroup>
 
                                         <p:outputLabel for="bank_account_type"/>
-                                        <h:panelGroup styleClass="md-inputwrapper-focus">
-
-                                            <p:selectOneMenu id="bank_account_type"  value="#{bankAccountController.selectedBankAccount.bankAccountType.id}"  style="width:100%"
-                                                             required="true"
-                                                             requiredMessage="Please select account type"
-                                                             >
-                                                <f:selectItems value="#{bankAccountController.bankAccountTypes}" />
-                                            </p:selectOneMenu>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:autoComplete
+                                                id="bank_account_type"
+                                                converter="#{bankAccountTypeConverter}"
+                                                dropdown="true"
+                                                forceSelection="true"
+                                                effect="fold"
+                                                completeMethod="#{bankAccountController.completeBankAccontType()}"
+                                                value="#{bankAccountController.selectedBankAccount.bankAccountType}"
+                                                var="bankAccountType"
+                                                itemValue="#{bankAccountType}"
+                                                itemLabel="#{bankAccountType.name}"
+                                                required="true" requiredMessage="Please select account type"/>
                                             <label>#{messages.account_type}</label>
+                                            <p:message for="bank_account_type" />
                                         </h:panelGroup>
 
                                     </p:panelGrid>
@@ -169,8 +180,7 @@
                                                             completeMethod="#{countryController.completeCountry}" 
                                                             value="#{bankAccountController.selectedBankAccount.bankCountry}"
                                                             var="country" itemValue="#{country.countryCode}" 
-                                                            itemLabel="#{country.countryFullName}" 
-                                                            required="false"/>
+                                                            itemLabel="#{country.countryFullName}" />
                                             <label>#{messages.country}</label>
                                         </h:panelGroup>
 
@@ -187,22 +197,18 @@
                 <p:toolbar>
                     <f:facet name="left">
                         <ui:fragment rendered="#{bankAccountController.selectedBankAccount.bankAccountId == null}">
-                            <p:commandButton value="#{messages.save}" icon="ui-icon-save"
+                            <p:commandButton value="#{messages.save}" icon="ui-icon-save" update="createBankAccountForm"
                                              action="#{bankAccountController.saveBankAccount}" />
                             <p:commandButton value="#{messages.save_and_add_more}"
-                                             icon="ui-icon-forward"
-                                             action="#{bankAccountController.saveAndContinueBankAccount}"
-                                             ajax="false"
-                                             update="createBankAccountForm"/>
+                                             icon="ui-icon-forward" update="createBankAccountForm"
+                                             action="#{bankAccountController.saveAndContinueBankAccount}"/>
                         </ui:fragment>
                         <ui:fragment rendered="#{bankAccountController.selectedBankAccount.bankAccountId != null}">
-                            <p:commandButton value="#{messages.update}" icon="ui-icon-save"
+                            <p:commandButton value="#{messages.update}" icon="ui-icon-save" update="createBankAccountForm"
                                              action="#{bankAccountController.saveBankAccount}" />
                             <p:commandButton value="#{messages.update_and_add_more}"
-                                             icon="ui-icon-forward"
-                                             action="#{bankAccountController.saveAndContinueBankAccount}"
-                                             ajax="false"
-                                             update="createBankAccountForm"/>
+                                             icon="ui-icon-forward" update="createBankAccountForm"
+                                             action="#{bankAccountController.saveAndContinueBankAccount}"/>
                         </ui:fragment>
 
 

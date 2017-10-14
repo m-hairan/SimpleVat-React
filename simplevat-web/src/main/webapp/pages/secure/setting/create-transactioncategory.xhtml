@@ -33,64 +33,66 @@
                                                  layout="grid" styleClass="ui-panelgrid-blank form-group"
                                                  style="border:0px none; background-color:transparent;">
 
-                                        <h:panelGroup />
-
+                                        <p:outputLabel for="categoryName"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText
-                                                value="#{transactionCategoryView.transactionCategoryModel.transactionCategoryName}" />
+                                            <p:inputText id="categoryName"
+                                                value="#{transactionCategoryView.transactionCategoryModel.transactionCategoryName}" 
+                                                required="true" requiredMessage="Please enter Category Name."/>
                                             <label>#{messages.transactionCategoryName}</label>
+                                            <p:message for="categoryName"/>
                                         </h:panelGroup>
 
-                                        <h:panelGroup />
-
+                                        <p:outputLabel for="CategoryDescription"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText
+                                            <p:inputText id="CategoryDescription"
                                                 value="#{transactionCategoryView.transactionCategoryModel.transactionCategoryDescription}" />
                                             <label>#{messages.transactionCategoryDescription}</label>
                                         </h:panelGroup>
 
-                                        <h:panelGroup />
-
-
+                                        <p:outputLabel for="TypeCode"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:outputLabel for="categoryCode"/>
-                                            <p:autoComplete id="categoryCode" 
+                                            <p:autoComplete id="TypeCode" 
                                                             value="#{transactionCategoryView.transactionCategoryModel.transactionType}"
                                                             forceSelection="true" 
                                                             dropdown="true"
+                                                            effect="fold"
                                                             completeMethod="#{transactionCategoryView.getAllTransactionType}" 
-
+                                                            required="true" requiredMessage="Please enter Type name."
                                                             var="transactionType" itemLabel="#{transactionType.transactionTypeName}"  
                                                             itemValue="#{transactionType}"
-                                                            converter="transactionTypeConverter"
-                                                            required="false"/>
+                                                            converter="#{transactionTypeConverter}"/>
                                             <label>Transaction Type</label>
+                                            <p:message for="TypeCode"/>
                                         </h:panelGroup>
 
 
 
-                                        <h:panelGroup />
-
+                                        <p:outputLabel for="parentCategoryCode"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:outputLabel for="parentCategoryCode"/>
                                             <p:autoComplete id="parentCategoryCode" 
                                                             value="#{transactionCategoryView.transactionCategoryModel.parentTransactionCategory}"
                                                             forceSelection="true" 
                                                             dropdown="true"
+                                                            effect="fold"
                                                             completeMethod="#{transactionCategoryView.getAllCategories()}" 
-                                                            var="transactionCategory" itemLabel="#{transactionCategory.transactionCategoryName}"  itemValue="#{transactionCategory}"
-                                                            converter="transactionCategoryConverter"
-                                                            required="false"/>
+                                                            var="transactionCategory" 
+                                                            itemLabel="#{transactionCategory.transactionCategoryName}"  
+                                                            itemValue="#{transactionCategory}"
+                                                            converter="#{transactionCategoryConverter}" />
                                             <label>Parent Category Code</label>
                                         </h:panelGroup>
 
-                                        <h:panelGroup />
-
-
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText
-                                                value="#{transactionCategoryView.transactionCategoryModel.defaltFlag}" />
+                                        <p:outputLabel for="defaultFlag"/>
+                                        <h:panelGroup>
                                             <label>#{messages.defaltFlag}</label>
+                                            <p:selectOneRadio id="defaultFlag"
+                                                              value="#{transactionCategoryView.transactionCategoryModel.defaltFlag}" 
+                                                              required="true" requiredMessage="Please enter Default flag." >
+                                                <f:selectItem itemLabel="Yes" itemValue="Y" />
+                                                <f:selectItem itemLabel="No" itemValue="N" />
+                                            </p:selectOneRadio>
+                                            <p:message for="defaultFlag" />
                                         </h:panelGroup>
 
                                         <h:panelGroup />
@@ -109,21 +111,21 @@
                     <f:facet name="left">
                         <ui:fragment rendered="#{transactionCategoryView.transactionCategoryModel.transactionCategoryCode == null}">
 
-                            <p:commandButton value="#{messages.save}" icon="ui-icon-save"
-                                             action="#{transactionCategoryView.save}" ajax="false" />
+                            <p:commandButton value="#{messages.save}" icon="ui-icon-save" update="createTransactionCategoryForm"
+                                             action="#{transactionCategoryView.save}" />
 
-                            <p:commandButton value="#{messages.save_and_add_more}"
+                            <p:commandButton value="#{messages.save_and_add_more}" update="createTransactionCategoryForm"
                                              icon="ui-icon-forward"
-                                             action="#{transactionCategoryView.saveAndContinue}" ajax="false" />
+                                             action="#{transactionCategoryView.saveAndContinue}" />
                         </ui:fragment>
                         <ui:fragment rendered="#{transactionCategoryView.selectedTransactionCategory.transactionCategoryCode > 0}">
 
-                            <p:commandButton value="#{messages.update}" icon="ui-icon-save"
-                                             action="#{transactionCategoryView.update}" ajax="false" />
+                            <p:commandButton value="#{messages.update}" icon="ui-icon-save" update="createTransactionCategoryForm"
+                                             action="#{transactionCategoryView.update}" />
 
                             <p:commandButton value="#{messages.update_and_add_more}"
-                                             icon="ui-icon-forward"
-                                             action="#{transactionCategoryView.updateAndContinue}" ajax="false" />
+                                             icon="ui-icon-forward" update="createTransactionCategoryForm"
+                                             action="#{transactionCategoryView.updateAndContinue}" />
                         </ui:fragment>
                         <span class="ui-separator" style="padding-right: 5px;"> <span
                                 class="fa fa-ellipsis-v SoftGray" />

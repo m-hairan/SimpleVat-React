@@ -15,7 +15,7 @@ public class InvoiceItemModel {
     private int id;
 
     private int quatity;
-    private BigDecimal unitPrice = BigDecimal.ZERO;
+    private BigDecimal unitPrice;
     private BigDecimal vatId = BigDecimal.ZERO;
     private String description;
     private BigDecimal subTotal;

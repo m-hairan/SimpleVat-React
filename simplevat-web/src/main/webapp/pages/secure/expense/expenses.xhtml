@@ -14,6 +14,10 @@
                 <p:dataTable var="expense" 
                              value="#{expenseListController.expenses}"
                              id="expensesTable"
+                             selectionMode="single"
+                             rowIndexVar="index" 
+                             selection="#{expenseListController.selectedExpenseModel}"
+                             rowKey="#{expense.expenseId}" 
                              paginator="true" rows="10"
                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}">
 
@@ -21,21 +25,23 @@
                         <p:outputLabel styleClass="tableCustomHeader" value="#{messages.expenses}" />
                     </f:facet>
 
-                    <p:column headerText="#{messages.receiptnumber}" sortBy="#{expense.receiptNumber}">
+                    <p:column headerText="#{messages.receiptnumber}" sortBy="#{expense.receiptNumber}" filterMatchMode="contains" filterBy="#{expense.receiptNumber}">
                         <h:outputText value="#{expense.receiptNumber}" />
                     </p:column>
 
-                    <p:column headerText="#{messages.amount}" sortBy="#{expense.expenseAmount}" styleClass="amount">
-                         <h:outputText value="#{expense.currency.currencySymbol} " />
-                        <h:outputText value="#{expense.expenseAmount}" />
+                    <p:column headerText="#{messages.amount}" sortBy="#{expense.expenseAmount}" styleClass="amount" filterMatchMode="contains" filterBy="#{expense.expenseAmount}">
+                        <h:outputText value="#{expense.currency.currencySymbol} " />
+                        <h:outputText value="#{expense.expenseAmount}" >
+                            <f:convertNumber type="currency" currencySymbol=""/>
+                        </h:outputText>
                     </p:column>
 
-                    <p:column headerText="#{messages.description}" sortBy="#{expense.expenseDescription}">
+                    <p:column headerText="#{messages.description}" sortBy="#{expense.expenseDescription}" filterMatchMode="contains" filterBy="#{expense.expenseDescription}">
                         <h:outputText value="#{expense.expenseDescription}" />
                     </p:column>
 
-                    <p:column headerText="#{messages.expense_date}" sortBy="#{expense.expenseDate.time}">
-                        <h:outputText value="#{expense.expenseDate.time}" >
+                    <p:column headerText="#{messages.expense_date}" sortBy="#{expense.expenseDate}" filterMatchMode="contains" filterBy="#{expense.expenseDate}">
+                        <h:outputText value="#{expense.expenseDate}" >
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>

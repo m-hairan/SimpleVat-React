@@ -52,7 +52,7 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
 
     @Getter
     @Setter
-    TransactionCategoryModel transactionCategoryModel;
+    public TransactionCategoryModel transactionCategoryModel;
 
     private List<TransactionCategoryModel> transactionCategoryModels;
 
@@ -66,7 +66,6 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
     @PostConstruct
     public void init() {
         selectedTransactionCategory = new TransactionCategory();
-        transactionCategoryModel = new TransactionCategoryModel();
 
         Object objContactId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedCategoryId");
         if (objContactId != null) {
@@ -75,8 +74,11 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
             transactionCategoryModel = getCategory(selectedTransactionCategory);
         } else {
             transactionTypes = transactionTypeService.findAll();
-            transactionTypes = transactionTypeService.findAll();
-
+            transactionCategoryModel = new TransactionCategoryModel();
+            TransactionCategory transactionCategory = transactionCategoryService.getDefaultTransactionCategory();
+            if (transactionCategory != null) {
+                transactionCategoryModel.setParentTransactionCategory(transactionCategory);
+            }
         }
 
     }

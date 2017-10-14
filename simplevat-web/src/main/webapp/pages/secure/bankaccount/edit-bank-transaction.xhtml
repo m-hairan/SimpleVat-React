@@ -6,6 +6,15 @@
                 xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
                 template="/WEB-INF/templates/template.xhtml">
 
+    <ui:define name="head">
+        <style>
+            .ui-fileupload-content{
+                display:none !important;  
+            }
+        </style>
+
+    </ui:define>
+    
     <ui:define name="title">#{messages.new_bank_account}</ui:define>
 
     <ui:define name="content">
@@ -35,7 +44,7 @@
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete
                                                 id="transactionType"
-                                                converter="transactionTypeConverter"
+                                                converter="#{transactionTypeConverter}"
                                                 dropdown="true"
                                                 forceSelection="true"
                                                 effect="fold"
@@ -44,9 +53,10 @@
                                                 var="transactionType"
                                                 itemValue="#{transactionType}"
                                                 itemLabel="#{transactionType.transactionTypeName}"
-                                                required="true">
+                                                required="true" requiredMessage="Please select transaction type.">
                                             </p:autoComplete>
                                             <label>#{messages.type}</label>
+                                            <p:message for="transactionType"/>
                                         </h:panelGroup>
 
                                         <p:outputLabel for="transactionDate"/>
@@ -54,17 +64,20 @@
                                             <p:calendar
                                                 id="transactionDate"
                                                 value="#{transactionController.selectedTransactionModel.transactionDate}"
-                                                required="true" />
+                                                required="true" requiredMessage="Please select transaction date."/>
                                             <label>#{messages.date}</label>
+                                            <p:message for="transactionDate"/>
                                         </h:panelGroup>
 
                                         <p:outputLabel for="transactionAmount"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText
-                                                id="transactionAmount"
-                                                value="#{transactionController.selectedTransactionModel.transactionAmount}"
-                                                required="true" />
+                                            <p:inputNumber symbol="#{transactionController.selectedTransactionModel.bankAccount.bankAccountCurrency.currencySymbol} "
+                                                           symbolPosition="p"
+                                                           id="transactionAmount"
+                                                           value="#{transactionController.selectedTransactionModel.transactionAmount}"
+                                                           required="true" requiredMessage="Please select transaction amount."/>
                                             <label>#{messages.total_amount}</label>
+                                            <p:message for="transactionAmount"/>
                                         </h:panelGroup>
 
                                     </p:panelGrid>
@@ -80,11 +93,11 @@
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete
                                                 id="transactionCategory"
-                                                converter="transactionCategoryConverter"
+                                                converter="#{transactionCategoryConverter}"
                                                 dropdown="true"
                                                 forceSelection="true"
                                                 effect="fold"
-                                                completeMethod="#{transactionController.transactionCategories}"
+                                                completeMethod="#{transactionController.transactionCategories()}"
                                                 value="#{transactionController.selectedTransactionModel.explainedTransactionCategory}"
                                                 var="transactionCategory"
                                                 itemValue="#{transactionCategory}"
@@ -104,9 +117,9 @@
 
                                         <p:outputLabel for="transactionStatus" rendered="#{transactionController.selectedTransactionModel.transactionId > 0}"/>
                                         <h:panelGroup styleClass="md-inputfield" rendered="#{transactionController.selectedTransactionModel.transactionId > 0}">
-                                            <p:autoComplete
+                                            <p:autoComplete 
                                                 id="transactionStatus"
-                                                converter="transactionStatusConverter"
+                                                converter="#{transactionStatusConverter}"
                                                 dropdown="true"
                                                 forceSelection="true"
                                                 effect="fold"
@@ -115,9 +128,10 @@
                                                 var="transactionStatus"
                                                 itemValue="#{transactionStatus}"
                                                 itemLabel="#{transactionStatus.explainationStatusName}"
-                                                required="true">
+                                                required="true" requiredMessage="Please select transaction status.">
                                             </p:autoComplete>
                                             <label>#{messages.status}</label>
+                                            <p:message for="transactionStatus"/>
                                         </h:panelGroup>
 
                                     </p:panelGrid>
@@ -175,11 +189,11 @@
                                         <h:panelGroup />
 
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:fileUpload
-                                                value="#{transactionController.selectedTransactionModel.attachmentFile}"
-                                                mode="simple" skinSimple="true" />
+                                            <p:fileUpload fileUploadListener="#{transactionController.fileUploadListener}" style="text-align: center"
+                                                          mode="advanced" update="fileName" auto="true"/>
+                                            <h:outputText value="#{transactionController.fileName}"  id="fileName"/>
                                             <h:panelGroup rendered="#{transactionController.selectedTransactionModel.attachmentFileContent != null}">
-                                                <p:commandButton value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
+                                                <p:commandButton value="Download" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
                                                     <p:fileDownload value="#{transactionController.selectedTransactionModel.attachmentFileContent}" />
                                                 </p:commandButton>
                                             </h:panelGroup>
@@ -205,21 +219,19 @@
                 <p:toolbar>
                     <f:facet name="left">
                         <ui:fragment rendered="#{transactionController.selectedTransactionModel.transactionId == null}">
-                            <p:commandButton value="#{messages.save}" icon="ui-icon-save"
+                            <p:commandButton value="#{messages.save}" icon="ui-icon-save"  update="createTransactionForm"
                                              action="#{transactionController.saveTransaction}"/>
                             <p:commandButton value="#{messages.save_and_add_more}"
                                              icon="ui-icon-forward"
                                              action="#{transactionController.saveAndContinueTransaction}"
-                                             ajax="false"
                                              update="createTransactionForm"/>
                         </ui:fragment>
                         <ui:fragment rendered="#{transactionController.selectedTransactionModel.transactionId != null}">
-                            <p:commandButton value="#{messages.update}" icon="ui-icon-save"
+                            <p:commandButton value="#{messages.update}" icon="ui-icon-save"  update="createTransactionForm"
                                              action="#{transactionController.saveTransaction}"/>
                             <p:commandButton value="#{messages.update_and_add_more}"
                                              icon="ui-icon-forward"
                                              action="#{transactionController.saveAndContinueTransaction}"
-                                             ajax="false"
                                              update="createTransactionForm"/>
                         </ui:fragment>
 

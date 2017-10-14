@@ -6,20 +6,24 @@
 package com.simplevat.web.invoice.controller;
 
 import com.github.javaplugs.jsf.SpringScopeView;
+import com.simplevat.entity.Configuration;
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Mail;
 import com.simplevat.entity.MailAttachment;
 import com.simplevat.entity.MailEnum;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.integration.MailIntegration;
+import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.ContactService;
 import com.simplevat.service.invoice.InvoiceService;
+import com.simplevat.web.constant.ConfigurationConstants;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -27,6 +31,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -52,11 +58,14 @@ public class InvoiceReminderController implements Serializable {
     private InvoiceService invoiceService;
 
     @Autowired
+    private ConfigurationService configurationService;
+
+    @Autowired
     private ContactService contactService;
 
     @PostConstruct
     public void init() {
-        List<Invoice> invoices = invoiceService.getInvoiceList();
+        List<Invoice> invoices = invoiceService.getInvoiceListByDueDate();
         if (invoices != null && !invoices.isEmpty()) {
             for (Invoice invoice : invoices) {
                 sendInvoiceMail(invoice);
@@ -97,7 +106,7 @@ public class InvoiceReminderController implements Serializable {
                     MailAttachment attachment = new MailAttachment();
                     attachment.setAttachmentName("Invoice");
                     attachment.setAttachmentObject(new ByteArrayResource(byteArray));
-                    mailIntegration.sendHtmlMail(mail, attachment);
+                    mailIntegration.sendHtmlMail(mail, attachment, getJavaMailSender(configurationService.getConfigurationList()));
 
                 } catch (Exception ex) {
                     Logger.getLogger(InvoiceMailController.class
@@ -108,4 +117,21 @@ public class InvoiceReminderController implements Serializable {
         t.start();
     }
 
+    public JavaMailSender getJavaMailSender(List<Configuration> configurationList) {
+        JavaMailSenderImpl sender = new JavaMailSenderImpl();
+        sender.setProtocol("smtp");
+        sender.setHost(configurationList.stream().filter(host -> host.getName().equals(ConfigurationConstants.MAIL_HOST)).findAny().get().getValue());
+        sender.setPort(Integer.parseInt(configurationList.stream().filter(host -> host.getName().equals(ConfigurationConstants.MAIL_PORT)).findAny().get().getValue()));
+        sender.setUsername(configurationList.stream().filter(host -> host.getName().equals(ConfigurationConstants.MAIL_USERNAME)).findAny().get().getValue());
+        sender.setPassword(configurationList.stream().filter(host -> host.getName().equals(ConfigurationConstants.MAIL_PASSWORD)).findAny().get().getValue());
+
+        Properties mailProps = new Properties();
+        mailProps.put("mail.smtps.auth", configurationList.stream().filter(host -> host.getName().equals(ConfigurationConstants.MAIL_SMTP_AUTH)).findAny().get().getValue());
+        mailProps.put("mail.smtp.starttls.enable", configurationList.stream().filter(host -> host.getName().equals(ConfigurationConstants.MAIL_SMTP_STARTTLS_ENABLE)).findAny().get().getValue());
+        mailProps.put("mail.smtp.debug", "true");
+
+        sender.setJavaMailProperties(mailProps);
+
+        return sender;
+    }
 }

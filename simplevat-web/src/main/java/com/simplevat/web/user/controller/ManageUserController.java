@@ -48,7 +48,7 @@ public class ManageUserController {
     @Getter
     @Setter
     private Company company;
-    
+    @Setter
     @Getter
     private List<UserDTO> userDTOList;
 
@@ -70,7 +70,7 @@ public class ManageUserController {
     }
     
     
-    public void deleteUser(){        
+    public String deleteUser(){        
           
         user=getUserFromUserDTO(selectedUser);
         user.setDeleteFlag(true);
@@ -79,7 +79,7 @@ public class ManageUserController {
         context.getExternalContext().getFlash().setKeepMessages(true);
         context.addMessage(null, new FacesMessage("Contact deleted SuccessFully"));
   
-        
+        return "list?faces-redirect=true"; 
     }
 
     private User getUserFromUserDTO(UserDTO selectedUser) {
@@ -95,9 +95,7 @@ public class ManageUserController {
     user.setLastUpdateDate(selectedUser.getLastUpdateDate());
     user.setLastUpdatedBy(selectedUser.getLastUpdatedBy());
     user.setPassword(selectedUser.getPassword());
-    user.setProfileImagePath(selectedUser.getProfileImagePath());
     user.setRole(selectedUser.getRole());
-    user.setRoleCode(selectedUser.getRoleCode());
     user.setUserEmail(selectedUser.getUserEmail());
     user.setUserId(selectedUser.getUserId());
     user.setVersionNumber(selectedUser.getVersionNumber());

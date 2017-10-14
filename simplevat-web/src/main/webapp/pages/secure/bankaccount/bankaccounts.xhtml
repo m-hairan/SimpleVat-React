@@ -16,27 +16,28 @@
                              id="bankAccountsTable"
                              value="#{bankAccountListController.bankAccounts}"
                              paginator="true" rows="10"
-                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}"
-                             >
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}">
                     <f:facet name="{TableHeader}">
                         <p:outputLabel styleClass="tableCustomHeader" value="#{messages.bank_accounts}" />
                     </f:facet>
 
-                    <p:column headerText="#{messages.account_name}" sortBy="#{bankAccount.bankAccountName}">
+                    <p:column headerText="#{messages.account_name}" sortBy="#{bankAccount.bankAccountName}" filterMatchMode="contains" filterBy="#{bankAccount.bankAccountName}">
                         <h:outputText value="#{bankAccount.bankAccountName}" />
                     </p:column>
 
-                    <p:column headerText="#{messages.account_number}" sortBy="#{bankAccount.accountNumber}" styleClass="amount">
+                    <p:column headerText="#{messages.account_number}" sortBy="#{bankAccount.accountNumber}" filterMatchMode="contains" filterBy="#{bankAccount.accountNumber}" styleClass="amount">
                         <h:outputText value="#{bankAccount.accountNumber}" />
                     </p:column>
 
-                    <p:column headerText="#{messages.swift_code}" sortBy="#{bankAccount.swiftCode}">
+                    <p:column headerText="#{messages.swift_code}" sortBy="#{bankAccount.swiftCode}" filterMatchMode="contains" filterBy="#{bankAccount.swiftCode}">
                         <h:outputText value="#{bankAccount.swiftCode}" />
                     </p:column>
 
-                    <p:column headerText="#{messages.current_balance}" sortBy="#{bankAccount.currentBalance}" styleClass="amount">
-                          <h:outputText value="#{bankAccount.bankAccountCurrency.currencySymbol}" />
-                        <h:outputText value="#{bankAccount.currentBalance}" />
+                    <p:column headerText="#{messages.current_balance}" sortBy="#{bankAccount.currentBalance}" styleClass="amount" filterMatchMode="contains" filterBy="#{bankAccount.currentBalance}">
+                        <h:outputText value="#{bankAccount.bankAccountCurrency.currencySymbol} " />
+                        <h:outputText value="#{bankAccount.currentBalance}" >
+                            <f:convertNumber type="currency" currencySymbol=""/>
+                        </h:outputText>
                     </p:column>
 
                     <p:column headerText="Action">

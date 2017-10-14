@@ -12,34 +12,39 @@
 
         <h:form id="form">
             <si:cdataPanel newAction="#{manageUserController.openUserPage()}">
-                <p:dataTable var="user" 
+                <p:dataTable var="user" id="userTable" 
                              value="#{manageUserController.userDTOList}"
-                             paginator="true" rows="10"
+                             paginator="true" rows="10" reflow="true"
                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}">
 
                     <f:facet name="{TableHeader}">
                         <p:outputLabel styleClass="tableCustomHeader" value="#{messages.users}" />
                     </f:facet>
 
-                    <p:column headerText="Name" sortBy="#{user.name}">
+                    <p:column headerText="Name" sortBy="#{user.name}"  filterMatchMode="contains" filterBy="#{user.name}">
                         <h:outputText value="#{user.name}" />
                     </p:column>
 
-                    <p:column headerText="DOB" sortBy="#{user.displayDOB}">
+                    <p:column headerText="DOB" sortBy="#{user.displayDOB}" filterMatchMode="contains" filterBy="#{user.displayDOB}" >
+                        <f:facet name="filter">
+                            <p:calendar  pattern="dd/MM/yyyy" locale="de" navigator="true">
+                                <p:ajax event="dateSelect"  oncomplete="PF('userTable').filter()"/>
+                            </p:calendar>
+                        </f:facet>
                         <h:outputText value="#{user.displayDOB}">
                             <f:convertDateTime pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>
 
-                    <p:column headerText="Role Name" sortBy="#{user.role.roleName}">
+                    <p:column headerText="Role Name" sortBy="#{user.role.roleName}" filterMatchMode="contains" filterBy="#{user.role.roleName}">
                         <h:outputText value="#{user.role.roleName}" />
                     </p:column>
 
-                    <p:column headerText="Active" sortBy="#{user.isActive}">
+                    <p:column headerText="Active" sortBy="#{user.isActive}" filterMatchMode="contains" filterBy="#{user.isActive}">
                         <h:outputText value="#{user.isActive == true ? 'Yes':'No'}" />
                     </p:column>
 
-                    <p:column headerText="Company" sortBy="#{user.company.companyName}">
+                    <p:column headerText="Company" sortBy="#{user.company.companyName}" filterMatchMode="contains" filterBy="#{user.company.companyName}">
                         <h:outputText value="#{user.company.companyName}" />
                     </p:column>
 
@@ -48,7 +53,7 @@
                             <f:setPropertyActionListener value="#{user}" target="#{manageUserController.selectedUser}" />
                         </p:commandButton>
 
-                        <p:commandButton icon="ui-icon-delete" title="Delete User" styleClass="AquaButton" action="#{manageUserController.deleteUser}">
+                        <p:commandButton icon="ui-icon-delete" title="Delete User" update="userTable" styleClass="AquaButton" action="#{manageUserController.deleteUser}">
                             <f:setPropertyActionListener value="#{user}" target="#{manageUserController.selectedUser}" />
                             <p:confirm header="#{messages.delete}" message="#{messages.are_you_sure_want_to_delete}" icon="ui-icon-alert" />
                         </p:commandButton>

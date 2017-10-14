@@ -7,14 +7,17 @@ package com.simplevat.web.invoice.controller;
 
 import com.simplevat.entity.Company;
 import com.simplevat.entity.Contact;
+import com.simplevat.entity.Currency;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.service.CompanyService;
+import com.simplevat.service.CurrencyService;
 import com.simplevat.service.UserServiceNew;
 import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.web.invoice.model.InvoiceItemModel;
 import com.simplevat.web.invoice.model.InvoiceModel;
 import com.simplevat.web.reports.AbstractReportBean;
 import com.simplevat.web.reports.ReportConfigUtil;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -45,8 +48,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author uday
  */
 @Named
-public class InvoiceUtil extends AbstractReportBean{
-    private final String COMPILE_FILE_NAME = "InvoiceJasper";
+public class InvoiceUtil extends AbstractReportBean {
+
+    private final String COMPILE_FILE_NAME = "Invoice_36";
     private int invoiceId;
 
     @Autowired
@@ -54,6 +58,9 @@ public class InvoiceUtil extends AbstractReportBean{
 
     @Autowired
     private CompanyService companyService;
+
+    @Autowired
+    private CurrencyService currencyService;
 
     @Autowired
     private UserServiceNew userServiceNew;
@@ -76,6 +83,7 @@ public class InvoiceUtil extends AbstractReportBean{
 
         if (invoiceId > 0) {
             Invoice invoice = invoiceService.findByPK(invoiceId);
+            Currency currency = currencyService.findByPK(invoice.getCurrency().getCurrencyCode());
             invoiceModel = new InvoiceModelHelper().getInvoiceModel(invoice);
             Company company = companyService.findByPK(userServiceNew.findByPK(invoice.getCreatedBy()).getCompany().getCompanyId());
             try {
@@ -85,22 +93,25 @@ public class InvoiceUtil extends AbstractReportBean{
                 List<InvoiceItemModel> invoiceItemModelList = invoiceModel.getInvoiceItems();
                 for (InvoiceItemModel invoiceItem : invoiceItemModelList) {
                     if (invoiceItem.getVatId().compareTo(new BigDecimal(0)) > 0) {
-                        totalVat = totalVat.add((invoiceItem.getUnitPrice().multiply(new BigDecimal(invoiceItem.getQuatity()))).divide(invoiceItem.getVatId()));
+                        totalVat = totalVat.add((invoiceItem.getUnitPrice().multiply(new BigDecimal(invoiceItem.getQuatity()))).divide(new BigDecimal(invoiceItem.getVatId().doubleValue())));
                     }
                     netSubtotal = netSubtotal.add(invoiceItem.getUnitPrice().multiply(new BigDecimal(invoiceItem.getQuatity())));
                     quantity += invoiceItem.getQuatity();
                 }
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
                 parameters.put("companyName", company.getCompanyName());
+                parameters.put("CompanyImage", new ByteArrayInputStream(company.getCompanyLogo()));
                 parameters.put("companyAddress", getComapnyAddress(company));
                 parameters.put("invoiceHolderAddress", getInvoiceHolderAddress(invoiceModel.getContact()));
                 parameters.put("invoiceNumber", "INVOICE " + invoiceModel.getInvoiceRefNo());
                 parameters.put("invoiceDate", String.valueOf(dateFormat.format(invoiceModel.getInvoiceDate())));
-                if(invoiceModel.getInvoiceDueDate() != null){
+                if (invoiceModel.getInvoiceDueDate() != null) {
                     parameters.put("paymentDueDate", String.valueOf(dateFormat.format(invoiceModel.getInvoiceDueDate())));
-                }else{
+                } else {
                     parameters.put("paymentDueDate", "");
                 }
+                parameters.put("CurrencySymbol", currency.getCurrencySymbol());
+                parameters.put("CurrencyISOCode", currency.getCurrencyIsoCode());
                 parameters.put("quantity", String.valueOf(quantity));
                 parameters.put("details", "");
                 parameters.put("paymentReference", invoiceModel.getInvoiceRefNo());
@@ -193,21 +204,17 @@ public class InvoiceUtil extends AbstractReportBean{
             Invoice invoice = invoiceService.findByPK(invoiceId);
             invoiceModel = new InvoiceModelHelper().getInvoiceModel(invoice);
             try {
-                BigDecimal totalVat = new BigDecimal(0);
-                BigDecimal netSubtotal = new BigDecimal(0);
                 int quantity = 0;
-                Double unitprice;
-                Double vat = 0.0;
-                Double subTotal;
+                BigDecimal unitprice = new BigDecimal(0);
+                BigDecimal vat = new BigDecimal(0);
+                BigDecimal subTotal = new BigDecimal(0);
                 List<InvoiceItemModel> invoiceItemModelList = invoiceModel.getInvoiceItems();
                 for (InvoiceItemModel invoiceItem : invoiceItemModelList) {
-                    unitprice = Double.parseDouble((invoiceItem.getUnitPrice().toString()));
+                    unitprice = invoiceItem.getUnitPrice();
                     if (invoiceItem.getVatId().compareTo(new BigDecimal(0)) > 0) {
-                        totalVat = (invoiceItem.getUnitPrice().multiply(new BigDecimal(invoiceItem.getQuatity())).divide(invoiceItem.getVatId()));
-                        vat = Double.parseDouble((totalVat.toString()));
+                        vat = (invoiceItem.getUnitPrice().multiply(new BigDecimal(invoiceItem.getQuatity()))).divide(new BigDecimal(invoiceItem.getVatId().doubleValue()));
                     }
-                    netSubtotal = invoiceItem.getUnitPrice().multiply(new BigDecimal(invoiceItem.getQuatity()));
-                    subTotal = Double.parseDouble((netSubtotal.toString()));
+                    subTotal = invoiceItem.getUnitPrice().multiply(new BigDecimal(invoiceItem.getQuatity()));
                     quantity = invoiceItem.getQuatity();
                     dataBeanList.add(new InvoiceDataSourceModel(String.valueOf(quantity), invoiceItem.getDescription(), unitprice, vat, subTotal));
                 }
@@ -234,7 +241,7 @@ public class InvoiceUtil extends AbstractReportBean{
         request.getSession().setAttribute(BaseHttpServlet.DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE, jasperPrint);
         JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
     }
-    
+
     public ByteArrayOutputStream prepareMailReport(ByteArrayOutputStream outputStream, int invoiceId) throws JRException, IOException {
         this.invoiceId = invoiceId;
         Collection<InvoiceDataSourceModel> dataList = getDataBeanList();

@@ -27,36 +27,36 @@
                         <p:outputLabel styleClass="tableCustomHeader" value="#{messages.invoices}" />
 
                     </f:facet>
-                    <p:column headerText="#{messages.refnumber}" sortBy="#{invoice.invoiceReferenceNumber}">
+                    <p:column headerText="#{messages.refnumber}" sortBy="#{invoice.invoiceReferenceNumber}" filterMatchMode="contains" filterBy="#{invoice.invoiceReferenceNumber}">
                         <h:outputText value="#{invoice.invoiceReferenceNumber}" />
                     </p:column>
 
-                    <p:column headerText="#{messages.date}" sortBy="#{invoice.invoiceDate}">
+                    <p:column headerText="#{messages.date}" sortBy="#{invoice.invoiceDate}" filterMatchMode="contains" filterBy="#{invoice.invoiceDate}">
                         <h:outputText value="#{invoice.invoiceDate}" >
                             <f:converter converterId="localDateTimeConverter" />
-                            <f:attribute name="pattern" value="dd/MM/yyyy" />
+                            <f:attribute name="pattern" value="dd/MM/yyyy"/>
                         </h:outputText>
                     </p:column>
 
-                    <p:column headerText="#{messages.invoice_due_on}" sortBy="#{invoice.invoiceDueOn}" styleClass="amount">
+                    <p:column headerText="#{messages.invoice_due_on}" sortBy="#{invoice.invoiceDueOn}" styleClass="amount" filterMatchMode="contains" filterBy="#{invoice.invoiceDueOn}">
                         <h:outputText value="#{invoice.invoiceDueOn}" />
                     </p:column>
 
-                    <p:column headerText="#{messages.contact_name}"
+                    <p:column headerText="#{messages.contact_name}" filterMatchMode="contains" filterBy="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}"
                               sortBy="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}">
                         <h:outputText value="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}" />
                     </p:column>
-                    <p:column headerText="#{messages.no_of_items}"
+                    <p:column headerText="#{messages.no_of_items}" filterMatchMode="contains" filterBy="#{invoice.invoiceLineItems.size()}"
                               sortBy="#{invoice.invoiceLineItems.size()}" styleClass="amount">
                         <h:outputText value="#{invoice.invoiceLineItems.size()}" />
                     </p:column>
                     <c:set value="#{invoiceListController.totalAmount(invoice)}"
                            var="total" />
-                    <p:column headerText="#{messages.total_cost}"
+                    <p:column headerText="#{messages.total_cost}" filterMatchMode="contains" filterBy="#{total}"
                               sortBy="#{total}" styleClass="amount">
                         <h:outputText value="#{invoice.currency.currencySymbol} " />
                         <h:outputText value="#{total}" >
-                            <f:convertNumber maxFractionDigits="2" pattern="#,##0.00" />
+                            <f:convertNumber type="currency" currencySymbol=""/>
                         </h:outputText>
                     </p:column>
 

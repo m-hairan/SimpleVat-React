@@ -47,6 +47,7 @@ import com.simplevat.web.utils.FacesUtil;
 import java.util.Calendar;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
+import org.primefaces.context.RequestContext;
 
 /**
  * @author Hiren
@@ -235,11 +236,11 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
         return types;
     }
 
-    public String printInvoice() {
+    public void printInvoice() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
         session.setAttribute("invoiceId", selectedInvoice.getInvoiceId());
-        return "invoicePDF.xhtml?faces-redirect=true";
+        RequestContext.getCurrentInstance().execute("PF('invoicePDFWidget').show(); PF('invoicePDFWidget').content.scrollTop('0')");
     }
 
     public String saveInvoice() throws IOException {

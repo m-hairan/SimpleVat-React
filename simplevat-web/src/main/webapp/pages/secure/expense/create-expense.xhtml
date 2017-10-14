@@ -44,7 +44,7 @@
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete
                                                 id="expenseClaimantId"
-                                                converter="userConverter"
+                                                converter="#{userConverter}"
                                                 dropdown="true"
                                                 forceSelection="true"
                                                 effect="fold"
@@ -57,14 +57,15 @@
                                                 requiredMessage="Please select Claimant">
                                             </p:autoComplete>
                                             <label>#{messages.claimant}</label>
+                                            <p:message for="expenseClaimantId" />
                                         </h:panelGroup>
                                         <p:outputLabel for="expenseTransactionType"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete
                                                 id="expenseTransactionType"
-                                                converter="transactionTypeConverter"
+                                                converter="#{transactionTypeConverter}"
                                                 dropdown="true"
-                                                forceSelection="true"
+                                                forceSelection="true" 
                                                 effect="fold"
                                                 completeMethod="#{expenseController.getAllTransactionType}"
                                                 value="#{expenseController.selectedExpenseModel.transactionType}"
@@ -75,13 +76,14 @@
                                                 requiredMessage="Please select expense Type">
                                             </p:autoComplete>
                                             <label>#{messages.type}</label>
+                                            <p:message for="expenseTransactionType" />
                                         </h:panelGroup>
 
                                         <p:outputLabel for="expenseTransactionCategory"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete
                                                 id="expenseTransactionCategory"
-                                                converter="transactionCategoryConverter"
+                                                converter="#{transactionCategoryConverter}"
                                                 dropdown="true"
                                                 forceSelection="true"
                                                 effect="fold"
@@ -102,17 +104,21 @@
                                                 required="true"
                                                 requiredMessage="Please select expense date"/>
                                             <label>#{messages.expense_date}</label>
+                                            <p:message for="expenseDate" />
                                         </h:panelGroup>
 
 
                                         <p:outputLabel for="expenseAmount"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText
+                                            <p:inputNumber
                                                 id="expenseAmount"
                                                 value="#{expenseController.selectedExpenseModel.expenseAmount}"
+                                                symbol="#{expenseController.selectedExpenseModel.currency.currencySymbol} " symbolPosition="p"
                                                 required="true" 
-                                                requiredMessage="Please enter expense amount"/>
+                                                requiredMessage="Please enter expense amount">
+                                            </p:inputNumber>
                                             <label>#{messages.amount}</label>
+                                            <p:message for="expenseAmount" />
                                         </h:panelGroup>
 
                                         <p:outputLabel for="expenseCurrency" />
@@ -130,6 +136,7 @@
                                                             required="true"
                                                             requiredMessage="Please select currency"/>
                                             <label>#{messages.currency}</label>
+                                            <p:message for="expenseCurrency" />
                                         </h:panelGroup>
 
                                         <p:outputLabel for="expenseDescription" />
@@ -185,8 +192,8 @@
                                         <h:panelGroup />
 
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <div style="width:140px">
-                                                <p:fileUpload auto="true"
+                                            <div style="text-align: center">
+                                                <p:fileUpload auto="true" 
                                                               mode="advanced" update="fileName"  fileUploadListener="#{expenseController.fileUploadListener}"  />
 
                                                 <h:outputText value="#{expenseController.fileName}"  id="fileName"/>
@@ -255,10 +262,13 @@
                                         <p:column headerText="Unit Price (#{expenseController.selectedExpenseModel.currency.currencyIsoCode})" styleClass="amount">
                                             <p:cellEditor>
                                                 <f:facet name="output">
-                                                    <h:outputText value="#{expenseItem.unitPrice}" />
+                                                    <h:outputText value="#{expenseItem.unitPrice}" >
+                                                        <f:convertNumber type="currency" currencySymbol="#{expenseController.selectedExpenseModel.currency.currencySymbol} " />
+                                                    </h:outputText>
                                                 </f:facet>
                                                 <f:facet name="input">
-                                                    <p:inputText id="unitPrice" 
+                                                    <p:inputNumber id="unitPrice" 
+                                                                 symbol="#{expenseController.selectedExpenseModel.currency.currencySymbol} " symbolPosition="p"
                                                                  validator="positiveNumberValidator"
                                                                  validatorMessage="Please enter Price more then 0"
                                                                  value="#{expenseItem.unitPrice}" 
@@ -266,7 +276,7 @@
                                                         <p:ajax event="change" 
                                                                 listener="#{expenseController.updateSubTotal(expenseItem)}" 
                                                                 update="subTotal" />
-                                                    </p:inputText>
+                                                    </p:inputNumber>
                                                 </f:facet>
                                             </p:cellEditor>
                                         </p:column>
@@ -307,18 +317,18 @@
 
                                         <p:column headerText="Subtotal (#{expenseController.selectedExpenseModel.currency.currencyIsoCode})" styleClass="amount">
                                             <h:outputText id="subTotal" value="#{expenseItem.subTotal}" >
-                                                <f:convertNumber maxFractionDigits="2" pattern="#,##0.00" />
+                                                <f:convertNumber type="currency" currencySymbol="#{expenseController.selectedExpenseModel.currency.currencySymbol} " />
                                             </h:outputText>
                                         </p:column>
-                                        <p:columnGroup type="footer"  >  
+                                        <p:columnGroup type="footer"  rendered="#{expenseController.selectedExpenseModel.expenseItem.size() > 0}">  
                                             <p:row >                                        
-                                                <p:column  colspan="5" footerText="Total" />  
+                                                <p:column  colspan="5" footerText="Total" styleClass="amount"/>  
 
-                                                <p:column >
+                                                <p:column styleClass="amount">
                                                     <f:facet name="footer">
                                                         <p:outputPanel autoUpdate="true">
                                                             <h:outputText id="total" value="#{expenseController.total}" >
-                                                                <f:convertNumber maxFractionDigits="2" pattern="#,##0.00" />
+                                                                <f:convertNumber type="currency" currencySymbol="#{expenseController.selectedExpenseModel.currency.currencySymbol} " />
                                                             </h:outputText>
                                                         </p:outputPanel>
                                                     </f:facet>
@@ -341,22 +351,18 @@
                 <p:toolbar>
                     <f:facet name="left">
                         <ui:fragment rendered="#{expenseController.selectedExpenseModel.expenseId == null}">
-                            <p:commandButton value="#{messages.save}" icon="ui-icon-save"
+                            <p:commandButton value="#{messages.save}" icon="ui-icon-save" update="createExpenseForm"
                                              action="#{expenseController.saveExpense}" />
                             <p:commandButton value="#{messages.save_and_add_more}"
-                                             icon="ui-icon-forward" 
-                                             action="#{expenseController.saveAndContinueExpense}"
-                                             ajax="false"
-                                             update="createExpenseForm"/>
+                                             icon="ui-icon-forward"  update="createExpenseForm"
+                                             action="#{expenseController.saveAndContinueExpense}" />
                         </ui:fragment>
                         <ui:fragment rendered="#{expenseController.selectedExpenseModel.expenseId != null}">
-                            <p:commandButton value="#{messages.update}" icon="ui-icon-save"
+                            <p:commandButton value="#{messages.update}" icon="ui-icon-save" update="createExpenseForm"
                                              action="#{expenseController.saveExpense}" />
                             <p:commandButton value="#{messages.update_and_add_more}"
-                                             icon="ui-icon-forward" 
-                                             action="#{expenseController.saveAndContinueExpense}"
-                                             ajax="false"
-                                             update="createExpenseForm"/>
+                                             icon="ui-icon-forward" update="createExpenseForm"
+                                             action="#{expenseController.saveAndContinueExpense}" />
                         </ui:fragment>
 
 

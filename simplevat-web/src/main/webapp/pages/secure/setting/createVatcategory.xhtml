@@ -31,20 +31,20 @@
                                                  layout="grid" styleClass="ui-panelgrid-blank form-group"
                                                  style="border:0px none; background-color:transparent;">
 
-                                        <h:panelGroup />
+                                        <p:outputLabel for="vatName"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText
-                                                value="#{vatController.category.name}" />
+                                            <p:inputText id="vatName" required="true" requiredMessage="please enter Vat Name."
+                                                         value="#{vatController.category.name}" />
                                             <label>#{messages.vatCategoryName}</label>
+                                            <p:message for="vatName" />
                                         </h:panelGroup>
 
-                                        <h:panelGroup />
+                                        <p:outputLabel for="vatPer"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText
-                                                value="#{vatController.category.vat}" >
-
-                                            </p:inputText>
+                                            <p:inputMask id="vatPer" mask="99" required="true" requiredMessage="please enter Vat Percentage."
+                                                value="#{vatController.category.vat}" />
                                             <label>#{messages.vatCategoryPercentage}</label>
+                                            <p:message for="vatPer" />
                                         </h:panelGroup>
                                         <h:panelGroup />
                                     </p:panelGrid>
@@ -59,13 +59,13 @@
                     <f:facet name="left">
                         <ui:fragment rendered="#{vatController.category.id == null}">
 
-                            <p:commandButton value="#{messages.save}" icon="ui-icon-save"
-                                             action="#{vatController.save}" ajax="false" />
+                            <p:commandButton value="#{messages.save}" icon="ui-icon-save" update="createVatCategoryForm"
+                                             action="#{vatController.save}" />
                         </ui:fragment>
                         <ui:fragment rendered="#{vatController.category.id > 0}">
 
-                            <p:commandButton value="#{messages.update}" icon="ui-icon-save"
-                                             action="#{vatController.save}" ajax="false" />
+                            <p:commandButton value="#{messages.update}" icon="ui-icon-save" update="createVatCategoryForm"
+                                             action="#{vatController.save}" />
                         </ui:fragment>
                         <span class="ui-separator" style="padding-right: 5px;"> <span
                                 class="fa fa-ellipsis-v SoftGray" />

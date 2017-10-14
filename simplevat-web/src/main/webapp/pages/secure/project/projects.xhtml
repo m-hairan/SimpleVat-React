@@ -23,41 +23,41 @@
                     <f:facet name="{TableHeader}">
                         <p:outputLabel styleClass="tableCustomHeader" value="#{messages.projects}" />
                     </f:facet>
-                    <p:column headerText="Project Id" sortBy="#{project.projectId}">
+<!--                    <p:column headerText="Project Id" sortBy="#{project.projectId}" filterMatchMode="contains" filterBy="#{project.projectId}">
                         <h:outputText value="#{project.projectId}"/>
-                    </p:column>
+                    </p:column>-->
 
-                    <p:column headerText="Project Name" sortBy="#{project.projectName}">
+                    <p:column headerText="Project Name" sortBy="#{project.projectName}" filterMatchMode="contains" filterBy="#{project.projectName}">
                         <h:outputText value="#{project.projectName}"/>
                     </p:column>
 
-                    <p:column headerText="Project Budget" sortBy="#{project.projectBudget}" styleClass="amount">
+                    <p:column headerText="Project Budget" sortBy="#{project.projectBudget}" styleClass="amount" filterMatchMode="contains" filterBy="#{project.projectBudget}">
                         <h:outputText value="#{project.projectBudget}"/>
                     </p:column>
-                    <p:column headerText="VAT Registration Number" sortBy="#{project.vatRegistrationNumber}">
+                    <p:column headerText="VAT Number" sortBy="#{project.vatRegistrationNumber}" filterMatchMode="contains" filterBy="#{project.vatRegistrationNumber}">
                         <h:outputText value="#{project.vatRegistrationNumber}"/>
                     </p:column>
-                    <p:column headerText="Invoice Language Code" sortBy="#{project.invoiceLanguageCode.languageDescription}">
+                    <p:column headerText="Invoice Language" sortBy="#{project.invoiceLanguageCode.languageDescription}" filterMatchMode="contains" filterBy="#{project.invoiceLanguageCode.languageDescription}">
                         <h:outputText value="#{project.invoiceLanguageCode.languageDescription}"/>
                     </p:column>
-                    <p:column headerText="Currency Code" sortBy="#{project.currency.currencyCode}">
-                        <h:outputText value="#{project.currency.currencyCode}"/>
+                    <p:column headerText="Currency Code" sortBy="#{project.currency.currencyCode}" filterMatchMode="contains" filterBy="#{project.currency.currencyIsoCode}">
+                        <h:outputText value="#{project.currency.currencyIsoCode}"/>
                     </p:column>
-                    <p:column headerText="Created By" sortBy="#{project.createdBy}">
+<!--                    <p:column headerText="Created By" sortBy="#{project.createdBy}" filterMatchMode="contains" filterBy="#{project.createdBy}">
                         <h:outputText value="#{project.createdBy}"/>
-                    </p:column>
-                    <p:column headerText="Contact Name"
+                    </p:column>-->
+                    <p:column headerText="Contact Name" filterMatchMode="contains" filterBy="#{project.contact.firstName} #{project.contact.lastName}"
                               sortBy="#{project.contact.firstName} #{project.contact.lastName}">
                         <h:outputText
                             value="#{project.contact.firstName} #{project.contact.lastName}"/>
                     </p:column>
 
-                    <p:column headerText="Created Date" sortBy="#{project.createdDate}">
+<!--                    <p:column headerText="Created Date" sortBy="#{project.createdDate}" filterMatchMode="contains" filterBy="#{project.createdDate}">
                         <h:outputText value="#{project.createdDate}">
                             <f:converter converterId="localDateTimeConverter" />
                             <f:attribute name="pattern" value="dd/MM/yyyy"/>
                         </h:outputText>
-                    </p:column>
+                    </p:column>-->
                     <p:column headerText="Action">
                         <p:commandButton title="View project"
                                          icon="ui-icon-edit"

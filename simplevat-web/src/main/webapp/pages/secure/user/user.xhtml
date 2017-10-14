@@ -115,24 +115,29 @@
                                     </h:panelGroup>
 
                                     <p:outputLabel for="role" />
-                                    <h:panelGroup styleClass="md-inputwrapper-filled">
-                                        <p:selectOneMenu value="#{userController.selectedUser.roleCode}" id="role"
-                                                         required="true"
-                                                         requiredMessage="Please select Role">
-                                            <f:selectItems value="#{userController.roleList}" var="role" itemLabel="#{role.roleName}" itemValue="#{role.roleCode}"/>
-                                        </p:selectOneMenu>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete
+                                            id="role"
+                                            converter="#{userRoleConverter}"
+                                            dropdown="true"
+                                            forceSelection="true"
+                                            effect="fold"
+                                            completeMethod="#{userController.comoleteRole()}"
+                                            value="#{userController.selectedUser.role}"
+                                            var="role" itemLabel="#{role.roleName}" itemValue="#{role}"
+                                            required="true" requiredMessage="Please select Role."/>
                                         <label>Role</label>
                                         <p:message for="role" />
                                     </h:panelGroup>
 
                                     <p:outputLabel for="active" />
-                                    <h:panelGroup styleClass="md-inputwrapper-filled">
-                                        <p:selectOneMenu value="#{userController.selectedUser.isActive}" id="active" required="true"
-                                                         requiredMessage="Please select Status">
+                                    <h:panelGroup>
+                                        <label>Status</label>
+                                        <p:selectOneRadio value="#{userController.selectedUser.isActive}" id="active" required="true"
+                                                          requiredMessage="Please select Status">
                                             <f:selectItem itemLabel="Active" itemValue="true"/>
                                             <f:selectItem itemLabel="InActive" itemValue="false"/>
-                                        </p:selectOneMenu>
-                                        <label>Status</label>
+                                        </p:selectOneRadio>
                                         <p:message for="active" />
                                     </h:panelGroup>
                                 </p:panelGrid>
@@ -147,7 +152,7 @@
 
                                     <p:outputLabel for="password"/>
                                     <h:panelGroup styleClass="md-inputfield">
-                                        <p:password id="password"
+                                        <p:password id="password" autocomplete="false"
                                                     value="#{userController.password}"
                                                     required="true" 
                                                     requiredMessage="Please enter Password"/>
@@ -156,7 +161,7 @@
                                     </h:panelGroup>
                                     <p:outputLabel for="cpassword"/>
                                     <h:panelGroup styleClass="md-inputfield">
-                                        <p:password id="cpassword"
+                                        <p:password id="cpassword" autocomplete="false"
                                                     required="true"
                                                     requiredMessage="Please enter Confirm Password"/>
                                         <label>Confirm Password</label>

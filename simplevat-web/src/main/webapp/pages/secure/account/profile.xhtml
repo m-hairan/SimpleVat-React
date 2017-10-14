@@ -67,17 +67,23 @@
                     </p:inputText>
                     <label>#{messages.emailId}</label>
                     <p:message for="emailId" />
-
                 </h:panelGroup>
+                
                 <p:outputLabel for="dob" />
                 <h:panelGroup styleClass="md-inputfield">
                     <p:calendar id="dob"
                                 pattern="MM/dd/yyyy"
                                 maxdate="#{userProfileController.currentUser.today}"
                                 value="#{userProfileController.currentUser.dateOfBirth}"
-                                readonlyInput="true" />
+                                readonlyInput="#{userProfileController.currentUser.dateOfBirth != null}" />
                     <label>#{messages.dateOfBirth}</label>
                 </h:panelGroup>
+
+                <p:outputLabel />
+                <h:panelGroup />
+
+                <p:outputLabel />
+                <h:panelGroup />
             </p:panelGrid>
         </p:fieldset>
 
@@ -90,7 +96,7 @@
                          style="border:0px none; background-color:transparent;">
                 <p:outputLabel for="epassword"/>
                 <h:panelGroup styleClass="md-inputfield">
-                    <p:password id="epassword" value="#{userProfileController.password}"/>
+                    <p:password id="epassword" value="#{userProfileController.password}" autocomplete="false"/>
                     <label>Password</label>
                     <p:message for="epassword" />
                 </h:panelGroup>

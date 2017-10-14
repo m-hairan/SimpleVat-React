@@ -36,11 +36,15 @@ import com.simplevat.web.bankaccount.model.BankAccountModel;
 import com.simplevat.web.constant.BankAccountConstant;
 import com.simplevat.web.constant.TransactionStatusConstant;
 import com.simplevat.web.utils.FacesUtil;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.time.ZoneId;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
 
 @Controller
 @SpringScopeView
@@ -81,6 +85,10 @@ public class TransactionController extends TransactionControllerHelper implement
 
     @Getter
     @Setter
+    String fileName;
+
+    @Getter
+    @Setter
     List<TransactionType> transactionTypeList;
 
     @PostConstruct
@@ -96,7 +104,11 @@ public class TransactionController extends TransactionControllerHelper implement
 
         if (objselectedTransactionModel != null) {
             selectedTransactionModel = getTransactionModel(transactionService.findByPK(Integer.parseInt(objselectedTransactionModel.toString())));
-        } else {
+            if (selectedTransactionModel.getExplainedTransactionAttachement() != null) {
+                InputStream stream = new ByteArrayInputStream(selectedTransactionModel.getExplainedTransactionAttachement());
+                selectedTransactionModel.setAttachmentFileContent(new DefaultStreamedContent(stream));
+            }
+        } else if (selectedTransactionModel == null) {
             selectedTransactionModel = new TransactionModel();
             TransactionType transactionType = transactionTypeService.getDefaultTransactionType();
             if (transactionType != null) {
@@ -113,9 +125,9 @@ public class TransactionController extends TransactionControllerHelper implement
     public String createTransaction() {
         return "/pages/secure/bankaccount/edit-bank-transaction.xhtml?faces-redirect=true";
     }
-    
+
     public void importTransaction() {
-        RequestContext.getCurrentInstance().execute("PF('importTransactionWidget').show()");
+        RequestContext.getCurrentInstance().execute("PF('importTransactionWidget').show(); PF('importTransactionWidget').content.scrollTop('0')");
     }
 
     public String editTransection() {
@@ -152,10 +164,6 @@ public class TransactionController extends TransactionControllerHelper implement
         if (selectedTransactionModel.getTransactionStatus() != null) {
             TransactionStatus transactionStatus = transactionStatusService.findByPK(selectedTransactionModel.getTransactionStatus().getExplainationStatusCode());
             transaction.setTransactionStatus(transactionStatus);
-        }
-
-        if (selectedTransactionModel.getAttachmentFile() != null && selectedTransactionModel.getAttachmentFile().getSize() > 0) {
-            storeUploadedFile(selectedTransactionModel, transaction, fileLocation);
         }
         System.out.println("before inside if :" + transaction.getTransactionStatus());
 
@@ -218,10 +226,6 @@ public class TransactionController extends TransactionControllerHelper implement
             TransactionStatus transactionStatus = transactionStatusService.findByAttributes(map).get(0);
             transaction.setTransactionStatus(transactionStatus);
         }
-
-        if (selectedTransactionModel.getAttachmentFile().getSize() > 0) {
-            storeUploadedFile(selectedTransactionModel, transaction, fileLocation);
-        }
         if (transaction.getTransactionId() == null) {
             transactionService.persist(transaction);
         } else {
@@ -232,6 +236,15 @@ public class TransactionController extends TransactionControllerHelper implement
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transaction saved successfully"));
         return "/pages/secure/bankaccount/edit-bank-transaction.xhtml?faces-redirect=true";
 
+    }
+
+    public void fileUploadListener(FileUploadEvent e) {
+        fileName = e.getFile().getFileName();
+        selectedTransactionModel.setExplainedTransactionAttachement(e.getFile().getContents());
+        if (selectedTransactionModel.getExplainedTransactionAttachement() != null) {
+            InputStream stream = new ByteArrayInputStream(selectedTransactionModel.getExplainedTransactionAttachement());
+            selectedTransactionModel.setAttachmentFileContent(new DefaultStreamedContent(stream));
+        }
     }
 
     public List<Project> completeProjects() throws Exception {
@@ -250,7 +263,7 @@ public class TransactionController extends TransactionControllerHelper implement
         return "bank-transactions?faces-redirect=true";
     }
 
-/* public List<TransactionType> transactionTypes(final String searchQuery) throws Exception {
+    /* public List<TransactionType> transactionTypes(final String searchQuery) throws Exception {
    
         TransactionTypeCriteria transactionTypeCriteria = new TransactionTypeCriteria();
         transactionTypeCriteria.setActive(Boolean.TRUE);
@@ -263,7 +276,7 @@ public class TransactionController extends TransactionControllerHelper implement
 
     }
 
-    public List<TransactionCategory> transactionCategories(final String searchQuery) throws Exception {
+    public List<TransactionCategory> transactionCategories() throws Exception {
         TransactionCategoryCriteria transactionCategoryCriteria = new TransactionCategoryCriteria();
         transactionCategoryCriteria.setActive(Boolean.TRUE);
         return transactionCategoryService.getCategoriesByComplexCriteria(transactionCategoryCriteria);

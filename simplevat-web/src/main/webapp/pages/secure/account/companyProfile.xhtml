@@ -33,10 +33,19 @@
                         <p:message for="VatRegistrationNumber" />
                     </h:panelGroup>
                     <p:spacer height="10"/>
-                    <h:panelGroup styleClass="md-inputwrapper-focus">
-                        <p:selectOneMenu id="CompanyTypeCode" value="#{companyProfileController.companyModel.companyTypeCode.id}">
-                            <f:selectItems value="#{companyProfileController.companyTypes}"/>
-                        </p:selectOneMenu> 
+                    <h:panelGroup styleClass="md-inputfield">
+                        <p:autoComplete id="CompanyTypeCode"
+                                        converter="#{companyTypeConverter}" 
+                                        dropdown="true" 
+                                        forceSelection="true" 
+                                        effect="fold"
+                                        completeMethod="#{companyProfileController.completeCompanyType()}"
+                                        value="#{companyProfileController.companyModel.companyTypeCode}"
+                                        var="companyType"
+                                        itemValue="#{companyType}"
+                                        itemLabel="#{companyType.companyTypeName}" 
+                                        required="true"
+                                        requiredMessage="Please select Country"/>
                         <label>#{messages.CompanyTypeCode}</label>
                         <p:message for="CompanyTypeCode" />
                     </h:panelGroup>

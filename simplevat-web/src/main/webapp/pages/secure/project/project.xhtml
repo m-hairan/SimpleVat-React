@@ -28,16 +28,14 @@
                                              style="border:0px none; background-color:transparent;">
 
                                     <p:outputLabel for="projectName"/>
-
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="projectName"
                                                      maxlength="12"
                                                      value="#{projectController.selectedProject.projectName}"
                                                      required="true"
-                                                     requiredMessage="Please enter Project Name"
-                                                     />
-                                        <p:message for="projectName"/>
+                                                     requiredMessage="Please enter Project Name"/>
                                         <label>Project Name</label>
+                                        <p:message for="projectName"/>
                                     </h:panelGroup>
 
                                     <p:outputLabel for="conatcts"/>
@@ -56,7 +54,7 @@
                                                         itemLabel="#{contact.firstName} #{contact.lastName}">
                                         </p:autoComplete>
                                         <label>Contact</label>
-
+                                        <p:message for="conatcts"/>
                                     </h:panelGroup>
 
 
@@ -104,19 +102,17 @@
                                                         completeMethod="#{projectController.completeCurrency}"
                                                         value="#{projectController.selectedProject.currency}"
                                                         var="currency" itemValue="#{currency}"
-                                                        itemLabel="#{currency.currencyDescription}"
+                                                        itemLabel="#{currency.currencyDescription} #{currency.currencySymbol}"
                                                         required="true"
-                                                        requiredMessage="Please select currency"
-                                                        />
-
+                                                        requiredMessage="Please select currency"/>
                                         <label>Currency</label>
+                                        <p:message for="currency"/>
                                     </h:panelGroup>
 
                                     <p:outputLabel for="projectBudget"/>
                                     <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText id="projectBudget"
-                                                     value="#{projectController.selectedProject.projectBudget}">
-                                        </p:inputText>
+                                        <p:inputNumber id="projectBudget" symbol="#{projectController.selectedProject.currency.currencySymbol} " symbolPosition="p"
+                                                     value="#{projectController.selectedProject.projectBudget}"/>
                                         <label>Project Budget </label>
                                     </h:panelGroup>
 
@@ -130,10 +126,9 @@
                                                         completeMethod="#{projectController.completeLanguage}"
                                                         value="#{projectController.selectedProject.invoiceLanguageCode}"
                                                         var="language" itemValue="#{language.languageCode}"
-                                                        itemLabel="#{language.languageDescription}"
-                                                        />
-
+                                                        itemLabel="#{language.languageDescription}"/>
                                         <label>Invoice Language</label>
+                                        <p:message for="language"/>
                                     </h:panelGroup>
                                     <p:outputLabel/>
                                     <p:outputLabel/>
@@ -149,18 +144,18 @@
                     <f:facet name="left">
                         <ui:fragment rendered="#{projectController.selectedProject.projectId == null}">
                             <p:commandButton action="#{projectController.saveProject()}"
-                                             value="#{messages.save}"
+                                             value="#{messages.save}" update="project"
                                              icon="ui-icon-save" />
                             <p:commandButton action="#{projectController.saveProject()}"
-                                             value="#{messages.save_and_add_more}"
+                                             value="#{messages.save_and_add_more}" update="project"
                                              icon="ui-icon-forward" />
                         </ui:fragment>
                         <ui:fragment rendered="#{projectController.selectedProject.projectId != null}">
-                            <p:commandButton action="#{projectController.saveProject()}"
+                            <p:commandButton action="#{projectController.saveProject()}" update="project"
                                              value="#{messages.update}"
                                              icon="ui-icon-save" />
                             <p:commandButton action="#{projectController.saveProject()}"
-                                             value="#{messages.update_and_add_more}"
+                                             value="#{messages.update_and_add_more}" update="project"
                                              icon="ui-icon-forward" />
                         </ui:fragment>
 

@@ -46,6 +46,11 @@
                                     <span>Settings</span>
                                 </p:link>
                             </li>
+                            <li role="menuitem"><p:link outcome="/pages/secure/user/list" styleClass="ripplelink">
+                                    <i class="material-icons">&#xE7FB;</i>
+                                    <span>Users</span>
+                                </p:link>
+                            </li>
                             <li role="menuitem"><a
                                     href="#{request.contextPath}/j_spring_security_logout"
                                     class="ripplelink"> <i class="material-icons">&#xE8AC;</i> <span>Logout</span>
@@ -73,9 +78,6 @@
 
                         <p:menuitem id="st_bankaccount" value="#{messages.bank_accounts}"
                                     icon="store" outcome="#{bankAccountMenuLink}" />
-
-                        <p:menuitem value="Users" icon="people"
-                                    outcome="/pages/secure/user/list" />   
 
                     </pu:menu>
                 </div>

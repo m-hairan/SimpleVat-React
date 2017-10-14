@@ -50,10 +50,6 @@ public class BankAccountController extends BankAccountHelper implements Serializ
 
     @Getter
     @Setter
-    List<SelectItem> bankAccountTypes = new ArrayList<>();
-
-    @Getter
-    @Setter
     private BankAccount selectedBankAccount;
 
     /**
@@ -68,10 +64,12 @@ public class BankAccountController extends BankAccountHelper implements Serializ
 
         if (objSelectedBankAccountId != null) {
             selectedBankAccount = bankAccountService.findByPK(Integer.parseInt(objSelectedBankAccountId.toString()));
+            BankAccountType defaultBankAccountType = bankAccountTypeService.getDefaultBankAccountType();
             if (selectedBankAccount.getBankAccountType() == null) {
-                selectedBankAccount.setBankAccountType(new BankAccountType());
+                if (defaultBankAccountType != null) {
+                    selectedBankAccount.setBankAccountType(defaultBankAccountType);
+                }
             }
-            selectedBankAccount.setBankAccountType(new BankAccountType());
 
         } else {
             this.selectedBankAccount = new BankAccount();
@@ -84,19 +82,15 @@ public class BankAccountController extends BankAccountHelper implements Serializ
             if (defaultCountry != null) {
                 this.selectedBankAccount.setBankCountry(defaultCountry);
             }
-            selectedBankAccount.setBankAccountType(new BankAccountType());
-        }
-        populateAllBankAccontType();
-    }
-
-    private void populateAllBankAccontType() {
-        bankAccountTypes.clear();
-        List<BankAccountType> bankAccountTypeList = bankAccountTypeService.getBankAccountTypeList();
-        if (bankAccountTypeService.getBankAccountTypeList() != null) {
-            for (BankAccountType bankAccountType : bankAccountTypeList) {
-                bankAccountTypes.add(new SelectItem(bankAccountType.getId(), bankAccountType.getName()));
+            BankAccountType defaultBankAccountType = bankAccountTypeService.getDefaultBankAccountType();
+            if (defaultBankAccountType != null) {
+                selectedBankAccount.setBankAccountType(defaultBankAccountType);
             }
         }
+    }
+
+    public List<BankAccountType> completeBankAccontType() {
+        return bankAccountTypeService.getBankAccountTypeList();
     }
 
     public List<BankAccount> populateAccountDetails() {
@@ -197,7 +191,7 @@ public class BankAccountController extends BankAccountHelper implements Serializ
 
     public String deleteBankAccount() {
         selectedBankAccount.setDeleteFlag(true);
-        bankAccountService.delete(selectedBankAccount, selectedBankAccount.getBankAccountId());
+        bankAccountService.update(selectedBankAccount);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("BankAccount deleted successfully"));
         return "/pages/secure/bankaccount/bankaccounts.xhtml?faces-redirect=true";
     }

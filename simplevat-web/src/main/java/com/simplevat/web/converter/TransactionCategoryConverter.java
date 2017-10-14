@@ -6,32 +6,38 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 import com.simplevat.entity.bankaccount.TransactionCategory;
+import com.simplevat.service.TransactionCategoryServiceNew;
+import com.simplevat.service.bankaccount.TransactionTypeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author bhavin.panchani
  *
  */
-@FacesConverter("transactionCategoryConverter")
+@Service
 public class TransactionCategoryConverter implements Converter {
 
-	@Override
-	public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
-		if (string != null && !string.isEmpty()) {
-			TransactionCategory transactionCategory = new TransactionCategory();
-			transactionCategory.setTransactionCategoryCode(Integer.parseInt(string));
-			return transactionCategory;
-		}
-		return null;
-	}
+    @Autowired
+    private TransactionCategoryServiceNew transactionCategoryService;
 
-	@Override
-	public String getAsString(FacesContext fc, UIComponent uic, Object o) {
-		
-		if (o instanceof TransactionCategory) {
-			TransactionCategory transactionCategory = (TransactionCategory) o;
-			return Integer.toString(transactionCategory.getTransactionCategoryCode());
-		}
-		return null;
-	}
+    @Override
+    public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
+        if (string != null && !string.isEmpty()) {
+            TransactionCategory transactionCategory = transactionCategoryService.findByPK(Integer.parseInt(string));
+            return transactionCategory;
+        }
+        return null;
+    }
+
+    @Override
+    public String getAsString(FacesContext fc, UIComponent uic, Object o) {
+
+        if (o instanceof TransactionCategory) {
+            TransactionCategory transactionCategory = (TransactionCategory) o;
+            return Integer.toString(transactionCategory.getTransactionCategoryCode());
+        }
+        return null;
+    }
 
 }

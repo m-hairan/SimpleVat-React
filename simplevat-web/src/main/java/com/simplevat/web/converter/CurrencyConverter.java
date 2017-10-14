@@ -23,7 +23,6 @@ public class CurrencyConverter implements Converter {
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         if (value != null && !value.isEmpty()) {
             Currency currency = currencyService.getCurrency(Integer.parseInt(value));
-//            currency.setCurrencyCode(Integer.parseInt(value));
             return currency;
         }
 

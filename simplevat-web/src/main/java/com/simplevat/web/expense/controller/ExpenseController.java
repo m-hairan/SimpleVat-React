@@ -31,13 +31,17 @@ import com.simplevat.service.UserServiceNew;
 import com.simplevat.service.VatCategoryService;
 import com.simplevat.service.bankaccount.TransactionTypeService;
 import com.simplevat.web.expense.model.ExpenseItemModel;
+import com.simplevat.web.invoice.model.InvoiceItemModel;
 import com.simplevat.web.utils.FacesUtil;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.model.SelectItem;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DefaultUploadedFile;
 
 @Controller
@@ -115,6 +119,10 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 
             Expense expense = expenseService.findByPK(Integer.parseInt(objSelectedExpenseModel.toString()));
             selectedExpenseModel = getExpenseModel(expense);
+            if (selectedExpenseModel.getReceiptAttachmentBinary() != null) {
+                InputStream stream = new ByteArrayInputStream(selectedExpenseModel.getReceiptAttachmentBinary());
+                selectedExpenseModel.setAttachmentFileContent(new DefaultStreamedContent(stream));
+            }
         }
 
         populateVatCategory();
@@ -128,7 +136,33 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 
     }
 
+    private boolean validateInvoiceLineItems() { //---------------
+        boolean validated = true;
+        for (ExpenseItemModel lastItem : selectedExpenseModel.getExpenseItem()) {
+            if (lastItem.getQuatity() < 1 || lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0) {
+                FacesMessage message = new FacesMessage("Please enter proper detail for all expense items.");
+                message.setSeverity(FacesMessage.SEVERITY_ERROR);
+                FacesContext.getCurrentInstance().addMessage("validationId", message);
+                validated = false;
+            }
+        }
+        return validated;
+    }
+
+    private boolean validateAtLeastOneItem() {
+        if (selectedExpenseModel.getExpenseItem().size() < 1) {
+            FacesMessage message = new FacesMessage("Please add atleast one item to create Expense.");
+            message.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage("validationId", message);
+            return false;
+        }
+        return true;
+    }
+
     public String saveExpense() {
+        if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
+            return "";
+        }
         User loggedInUser = FacesUtil.getLoggedInUser();
         Expense expense = getExpense(selectedExpenseModel);
         expense.setLastUpdateDate(LocalDateTime.now());
@@ -171,8 +205,10 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
         return "/pages/secure/expense/expenses.xhtml?faces-redirect=true";
     }
 
-    public void saveAndContinueExpense() {
-        System.out.println("selected Model : :" + selectedExpenseModel.getExpenseId());
+    public String saveAndContinueExpense() {
+        if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
+            return "";
+        }
         User loggedInUser = FacesUtil.getLoggedInUser();
         Expense expense = getExpense(selectedExpenseModel);
 
@@ -211,19 +247,25 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
         }
         this.setSelectedExpenseModel(new ExpenseModel());
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense saved successfully"));
+        return "/pages/secure/expense/create-expense.xhtml?faces-redirect=true";
     }
 
     public void fileUploadListener(FileUploadEvent e) {
         fileName = e.getFile().getFileName();
         selectedExpenseModel.setReceiptAttachmentBinary(e.getFile().getContents());
+        if (selectedExpenseModel.getReceiptAttachmentBinary() != null) {
+            InputStream stream = new ByteArrayInputStream(selectedExpenseModel.getReceiptAttachmentBinary());
+            selectedExpenseModel.setAttachmentFileContent(new DefaultStreamedContent(stream));
+        }
     }
 
-    public void deleteExpense() {
+    public String deleteExpense() {
         System.out.println("selected Model : :" + selectedExpenseModel.getExpenseId());
         Expense expense = getExpense(selectedExpenseModel);
         expense.setDeleteFlag(true);
         expenseService.update(expense);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense deleted successfully"));
+        return "expenses.xhtml?faces-redirect=true";
     }
 
     public List<User> users(final String searchQuery) throws Exception {
@@ -254,7 +296,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
         return validated;
     }
 
-    public void updateCurrencyLabel() {  
+    public void updateCurrencyLabel() {
         if (null != selectedExpenseModel.getCurrency()) {
             selectedExpenseModel.setCurrency(currencyService.getCurrency(selectedExpenseModel.getCurrency().getCurrencyCode()));
         }
@@ -299,6 +341,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
             }
         }
     }
+
     private void populateVatCategory() {
         vatCategoryList = vatCategoryService.getVatCategoryList();
         if (vatCategoryList != null) {

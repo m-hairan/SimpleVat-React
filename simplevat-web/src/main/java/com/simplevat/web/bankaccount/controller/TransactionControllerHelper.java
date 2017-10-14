@@ -24,6 +24,7 @@ import com.simplevat.web.constant.BankAccountConstant;
 import com.simplevat.web.bankaccount.model.TransactionModel;
 import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.web.bankaccount.model.BankAccountModel;
+import java.io.ByteArrayInputStream;
 import java.time.LocalDateTime;
 
 public class TransactionControllerHelper {
@@ -45,7 +46,7 @@ public class TransactionControllerHelper {
         transaction.setExplainedTransactionCategory(model.getExplainedTransactionCategory());
         transaction.setExplainedTransactionDescription(model.getExplainedTransactionDescription());
         transaction.setExplainedTransactionAttachementDescription(model.getExplainedTransactionAttachementDescription());
-        transaction.setExplainedTransactionAttachementPath(model.getExplainedTransactionAttachementPath());
+        transaction.setExplainedTransactionAttachement(model.getExplainedTransactionAttachement());
         transaction.setBankAccount(model.getBankAccount());
         transaction.setTransactionStatus(model.getTransactionStatus());
         transaction.setCurrentBalance(model.getCurrentBalance());
@@ -76,7 +77,7 @@ public class TransactionControllerHelper {
         transactionModel.setExplainedTransactionCategory(entity.getExplainedTransactionCategory());
         transactionModel.setExplainedTransactionDescription(entity.getExplainedTransactionDescription());
         transactionModel.setExplainedTransactionAttachementDescription(entity.getExplainedTransactionAttachementDescription());
-        transactionModel.setExplainedTransactionAttachementPath(entity.getExplainedTransactionAttachementPath());
+        transactionModel.setExplainedTransactionAttachement(entity.getExplainedTransactionAttachement());
         transactionModel.setTransactionStatus(entity.getTransactionStatus());
         transactionModel.setBankAccount(entity.getBankAccount());
         transactionModel.setCurrentBalance(entity.getCurrentBalance());
@@ -87,16 +88,10 @@ public class TransactionControllerHelper {
         transactionModel.setDeleteFlag(entity.getDeleteFlag());
         transactionModel.setVersionNumber(entity.getVersionNumber());
 
-        String attachmentPath = entity.getExplainedTransactionAttachementPath();
-        if (attachmentPath != null && !attachmentPath.isEmpty()) {
-            String tomcatHome = System.getProperty("catalina.base");
-            File transactionReceiptFile = new File(tomcatHome.concat(attachmentPath));
-            try {
-                InputStream inputStream = new FileInputStream(transactionReceiptFile);
-                transactionModel.setAttachmentFileContent(new DefaultStreamedContent(inputStream, new MimetypesFileTypeMap().getContentType(transactionReceiptFile), transactionReceiptFile.getName()));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+        byte[] attachmentPath = entity.getExplainedTransactionAttachement();
+        if (attachmentPath != null) {
+            InputStream inputStream = new ByteArrayInputStream(attachmentPath);
+                transactionModel.setAttachmentFileContent(new DefaultStreamedContent(inputStream));
         }
 
         return transactionModel;
@@ -125,35 +120,6 @@ public class TransactionControllerHelper {
         bankAccount.setSwiftCode(model.getSwiftCode());
         bankAccount.setVersionNumber(model.getVersionNumber());
         return bankAccount;
-    }
-
-    public void storeUploadedFile(TransactionModel model, Transaction transaction, String fileLocation) {
-        String tomcatHome = System.getProperty("catalina.base");
-
-        String fileUploadAbsolutePath = tomcatHome.concat(fileLocation);
-        File filePath = new File(fileUploadAbsolutePath);
-        if (!filePath.exists()) {
-            filePath.mkdir();
-        }
-        Path dataFolder = Paths.get(fileUploadAbsolutePath);
-
-        UploadedFile uploadedFile = model.getAttachmentFile();
-
-        String filename = FilenameUtils.getBaseName(uploadedFile.getFileName());
-        String extension = FilenameUtils.getExtension(uploadedFile.getFileName());
-
-        try {
-
-            Path file = Files.createTempFile(dataFolder, BankAccountConstant.TRANSACTION + "_" + filename, "_" + System.currentTimeMillis() + "." + extension);
-            InputStream in = uploadedFile.getInputstream();
-            Files.copy(in, file, StandardCopyOption.REPLACE_EXISTING);
-
-            transaction.setExplainedTransactionAttachementPath(fileLocation + "/" + file.getFileName());
-
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
 }

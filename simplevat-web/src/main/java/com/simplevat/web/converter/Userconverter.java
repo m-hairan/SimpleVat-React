@@ -6,19 +6,24 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 import com.simplevat.entity.User;
+import com.simplevat.service.UserServiceNew;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author bhavin.panchani
  *
  */
-@FacesConverter("userConverter")
-public class Userconverter implements Converter {
+@Service
+public class UserConverter implements Converter {
 
+    @Autowired
+    private UserServiceNew userServiceNew;
+    
 	@Override
 	public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
 		if (string != null && !string.isEmpty()) {
-			User user = new User();
-			user.setUserId(Integer.parseInt(string));
+			User user = userServiceNew.findByPK(Integer.parseInt(string));
 			return user;
 		}
 		return null;
@@ -29,7 +34,7 @@ public class Userconverter implements Converter {
 		
 		if (o instanceof User) {
 			User user = (User) o;
-			return Integer.toString(user.getUserId());
+			return user.getUserId().toString();
 		}
 		return null;
 	}

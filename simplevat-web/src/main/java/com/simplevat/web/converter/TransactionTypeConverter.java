@@ -1,37 +1,44 @@
 package com.simplevat.web.converter;
 
+import com.simplevat.criteria.bankaccount.TransactionTypeCriteria;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.FacesConverter;
 
 import com.simplevat.entity.bankaccount.TransactionType;
+import com.simplevat.service.bankaccount.TransactionTypeService;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author bhavin.panchani
  *
  */
-@FacesConverter("transactionTypeConverter")
+@Service
 public class TransactionTypeConverter implements Converter {
 
-	@Override
-	public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
-		if (string != null && !string.isEmpty()) {
-			TransactionType transactionType = new TransactionType();
-			transactionType.setTransactionTypeCode(Integer.parseInt(string));
-			return transactionType;
-		}
-		return null;
-	}
+    @Autowired
+    private TransactionTypeService transactionTypeService;
 
-	@Override
-	public String getAsString(FacesContext fc, UIComponent uic, Object o) {
-		
-		if (o instanceof TransactionType) {
-			TransactionType transactionType = (TransactionType) o;
-			return Integer.toString(transactionType.getTransactionTypeCode());
-		}
-		return null;
-	}
+    @Override
+    public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
+        if (string != null && !string.isEmpty()) {
+            TransactionType transactionType = transactionTypeService.findByPK(Integer.parseInt(string));
+            return transactionType;
+        }
+        return null;
+    }
+
+    @Override
+    public String getAsString(FacesContext fc, UIComponent uic, Object o) {
+
+        if (o instanceof TransactionType) {
+            TransactionType transactionType = (TransactionType) o;
+            return transactionType.getTransactionTypeCode().toString();
+        }
+        return null;
+    }
 
 }

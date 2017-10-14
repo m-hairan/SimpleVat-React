@@ -6,32 +6,37 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
 import com.simplevat.entity.bankaccount.BankAccountStatus;
+import com.simplevat.service.bankaccount.BankAccountStatusService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author bhavin.panchani
  *
  */
-@FacesConverter("bankAccountStatusConverter")
+@Service
 public class BankAccountStatusConverter implements Converter {
 
-	@Override
-	public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
-		if (string != null && !string.isEmpty()) {
-			BankAccountStatus bankAccountStatus = new BankAccountStatus();
-			bankAccountStatus.setBankAccountStatusCode(Integer.parseInt(string));
-			return bankAccountStatus;
-		}
-		return null;
-	}
+    @Autowired
+    private BankAccountStatusService bankAccountStatusService;
 
-	@Override
-	public String getAsString(FacesContext fc, UIComponent uic, Object o) {
-		
-		if (o instanceof BankAccountStatus) {
-			BankAccountStatus bankAccountStatus = (BankAccountStatus) o;
-			return Integer.toString(bankAccountStatus.getBankAccountStatusCode());
-		}
-		return null;
-	}
+    @Override
+    public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
+        if (string != null && !string.isEmpty()) {
+            BankAccountStatus bankAccountStatus = bankAccountStatusService.getBankAccountStatus(Integer.parseInt(string));
+            return bankAccountStatus;
+        }
+        return null;
+    }
+
+    @Override
+    public String getAsString(FacesContext fc, UIComponent uic, Object o) {
+
+        if (o instanceof BankAccountStatus) {
+            BankAccountStatus bankAccountStatus = (BankAccountStatus) o;
+            return Integer.toString(bankAccountStatus.getBankAccountStatusCode());
+        }
+        return null;
+    }
 
 }
