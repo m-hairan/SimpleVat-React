@@ -45,6 +45,7 @@
 		<lombok.version>1.14.8</lombok.version>
 		<hibernate.version>5.2.8.Final</hibernate.version>
 		<spring-security-core.version>3.2.5.RELEASE</spring-security-core.version>
+		<jasperreports-fonts.version>6.0.0</jasperreports-fonts.version>
 		<javaee-web-api-version>7.0</javaee-web-api-version>
 	</properties>
 
@@ -576,6 +577,12 @@
 				<type>jar</type>
 			</dependency>
 			<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+
+			<dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports-fonts</artifactId>
+			<version>${jasperreports-fonts.version}</version>
+        </dependency>
 
 		</dependencies>
 	</dependencyManagement>
