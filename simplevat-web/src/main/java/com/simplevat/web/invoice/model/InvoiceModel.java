@@ -3,6 +3,7 @@ package com.simplevat.web.invoice.model;
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.Project;
+import com.simplevat.entity.User;
 import com.simplevat.entity.invoice.DiscountType;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -43,6 +44,10 @@ public class InvoiceModel {
     private DiscountType discountType;
 
     private BigDecimal discount;
+    
+    private Integer createdBy;
+    
+    private Integer lastUpdatedBy;
 
     private String contractPoNumber;
 

@@ -33,7 +33,7 @@ public class CurrencyConverter implements Converter {
     public String getAsString(FacesContext context, UIComponent component, Object value) {
         if (value instanceof Currency) {
             Currency currency = (Currency) value;
-            return Integer.toString(currency.getCurrencyCode());
+            return currency.getCurrencyCode().toString();
         }
         return value.toString();
     }

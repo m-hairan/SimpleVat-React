@@ -134,7 +134,7 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
             updateCurrencyLabel();
             selectedInvoiceModel.setInvoiceItems(new ArrayList());
             configurationList = configurationService.getConfigurationList();
-            if(configurationList != null){
+            if (configurationList != null) {
                 configuration = configurationList.stream().filter(conf -> conf.getName().equals(ConfigurationConstants.INVOICING_REFERENCE_PATTERN)).findFirst().get();
                 if (configuration.getValue() != null) {
                     selectedInvoiceModel.setInvoiceRefNo(getNextInvoiceRefNumber(configuration.getValue()));
@@ -250,11 +250,14 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
         }
         selectedInvoiceModel.setInvoiceDueDate(getDueDate(selectedInvoiceModel));
         selectedInvoice = getInvoiceEntity(selectedInvoiceModel);
+        
         if (selectedInvoice.getInvoiceId() != null && selectedInvoice.getInvoiceId() > 0) {
+            selectedInvoice.setLastUpdatedBy(FacesUtil.getLoggedInUser().getUserId());
             invoiceService.update(selectedInvoice);
         } else {
             configuration.setValue(selectedInvoice.getInvoiceReferenceNumber());
             configurationService.update(configuration);
+            selectedInvoice.setCreatedBy(FacesUtil.getLoggedInUser().getUserId());
             invoiceService.persist(selectedInvoice);
         }
         FacesContext context = FacesContext.getCurrentInstance();
@@ -346,7 +349,7 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
         contact.setFirstName(contactModel.getFirstName());
         contact.setLastName(contactModel.getLastName());
         contact.setOrganization(contactModel.getOrganization());
-        contact.setCreatedBy(1);
+        contact.setCreatedBy(FacesUtil.getLoggedInUser().getUserId());
         contact.setCurrency(defaultCurrency);
         if (defaultCurrency != null) {
             contactModel.setCurrency(defaultCurrency);

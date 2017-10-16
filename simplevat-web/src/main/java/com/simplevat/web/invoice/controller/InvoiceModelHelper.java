@@ -62,7 +62,8 @@ public class InvoiceModelHelper {
                 .collect(Collectors.toList());
 
         invoice.setInvoiceLineItems(items);
-        invoice.setCreatedBy(1);
+        invoice.setCreatedBy(invoiceModel.getCreatedBy());
+        invoice.setLastUpdatedBy(invoiceModel.getLastUpdatedBy());
 
         return invoice;
     }
@@ -111,6 +112,8 @@ public class InvoiceModelHelper {
                 .collect(Collectors.toList());
 
         invoiceModel.setInvoiceItems(items);
+        invoiceModel.setCreatedBy(invoice.getCreatedBy());
+        invoiceModel.setLastUpdatedBy(invoice.getLastUpdatedBy());
 
         return invoiceModel;
     }
