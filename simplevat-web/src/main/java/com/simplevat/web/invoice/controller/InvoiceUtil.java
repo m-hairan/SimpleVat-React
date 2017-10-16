@@ -50,7 +50,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Named
 public class InvoiceUtil extends AbstractReportBean {
 
-    private final String COMPILE_FILE_NAME = "Invoice_36";
+    private final String COMPILE_FILE_NAME = "Invoice_37";
     private int invoiceId;
 
     @Autowired
@@ -132,28 +132,28 @@ public class InvoiceUtil extends AbstractReportBean {
     private String getComapnyAddress(Company company) {
         StringBuilder companyAddress = new StringBuilder();
         if (company.getCompanyAddressLine1() != null) {
-            companyAddress.append(company.getCompanyAddressLine1());
+            companyAddress.append(company.getCompanyAddressLine1()).append("\n");
         }
         if (company.getCompanyAddressLine2() != null) {
-            companyAddress.append("\n").append(company.getCompanyAddressLine2());
+            companyAddress.append(company.getCompanyAddressLine2()).append("\n");
         }
         if (company.getCompanyAddressLine3() != null) {
-            companyAddress.append("\n").append(company.getCompanyAddressLine3());
+            companyAddress.append(company.getCompanyAddressLine3()).append(", ");
         }
         if (company.getCompanyCity() != null) {
-            companyAddress.append(", ").append(company.getCompanyCity());
+            companyAddress.append(company.getCompanyCity()).append("\n");
         }
         if (company.getCompanyStateRegion() != null) {
-            companyAddress.append("\n").append(company.getCompanyStateRegion());
+            companyAddress.append(company.getCompanyStateRegion()).append(", ");
         }
         if (company.getCompanyCountryCode() != null) {
-            companyAddress.append(", ").append(company.getCompanyCountryCode().getCountryName());
+            companyAddress.append(company.getCompanyCountryCode().getCountryName()).append(", ");
         }
         if (company.getCompanyPostZipCode() != null) {
-            companyAddress.append(", ").append(company.getCompanyPostZipCode());
+            companyAddress.append(company.getCompanyPostZipCode()).append("\nVAT: ");
         }
         if (company.getVatRegistrationNumber() != null) {
-            companyAddress.append("\nVAT: ").append(company.getVatRegistrationNumber());
+            companyAddress.append(company.getVatRegistrationNumber());
         }
         return companyAddress.toString();
     }
@@ -161,34 +161,40 @@ public class InvoiceUtil extends AbstractReportBean {
     private String getInvoiceHolderAddress(Contact contact) {
         StringBuilder invoiceHolderAddress = new StringBuilder();
         if (contact.getFirstName() != null) {
-            invoiceHolderAddress.append(contact.getFirstName());
+            invoiceHolderAddress.append(contact.getFirstName()).append(" ");
         }
         if (contact.getMiddleName() != null) {
-            invoiceHolderAddress.append(" ").append(contact.getMiddleName());
+            invoiceHolderAddress.append(contact.getMiddleName()).append(" ");
         }
         if (contact.getLastName() != null) {
-            invoiceHolderAddress.append(" ").append(contact.getLastName());
+            invoiceHolderAddress.append(contact.getLastName()).append("\n");
+        } else {
+            invoiceHolderAddress.append("\n");
         }
         if (contact.getInvoicingAddressLine1() != null) {
-            invoiceHolderAddress.append("\n").append(contact.getInvoicingAddressLine1());
+            invoiceHolderAddress.append(contact.getInvoicingAddressLine1()).append(", ");
         }
         if (contact.getInvoicingAddressLine2() != null) {
-            invoiceHolderAddress.append(", ").append(contact.getInvoicingAddressLine2());
+            invoiceHolderAddress.append(contact.getInvoicingAddressLine2()).append(", ");
         }
         if (contact.getInvoicingAddressLine3() != null) {
-            invoiceHolderAddress.append(", ").append(contact.getInvoicingAddressLine3());
+            invoiceHolderAddress.append(contact.getInvoicingAddressLine3()).append("\n");
+        } else {
+            invoiceHolderAddress.append("\n");
         }
         if (contact.getCity() != null) {
-            invoiceHolderAddress.append("\n").append(contact.getCity());
+            invoiceHolderAddress.append(contact.getCity()).append(", ");
         }
         if (contact.getStateRegion() != null) {
-            invoiceHolderAddress.append(", ").append(contact.getStateRegion());
+            invoiceHolderAddress.append(contact.getStateRegion()).append("\n");
+        } else {
+            invoiceHolderAddress.append("\n");
         }
         if (contact.getCountry() != null) {
-            invoiceHolderAddress.append("\n").append(contact.getCountry().getCountryName());
+            invoiceHolderAddress.append(contact.getCountry().getCountryName()).append(", ");
         }
         if (contact.getPostZipCode() != null) {
-            invoiceHolderAddress.append(", ").append(contact.getPostZipCode());
+            invoiceHolderAddress.append(contact.getPostZipCode());
         }
         return invoiceHolderAddress.toString();
     }
