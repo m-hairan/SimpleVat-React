@@ -94,7 +94,7 @@ public class TestTransactionService extends BaseManagerTest {
 		transaction.setDebitCreditFlag(getRandomCreditOrDebit());
 		transaction.setDeleteFlag(false);
 		transaction.setExplainedTransactionAttachementDescription("");
-		transaction.setExplainedTransactionAttachementPath("");
+//		transaction.setExplainedTransactionAttachementPath("");
 		TransactionCategory category = transactionCategoryDao.findByPK(1);
 		//category.setTransactionCategoryCode(1);
 		transaction.setExplainedTransactionCategory(category);
