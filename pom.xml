@@ -13,6 +13,7 @@
 	</modules>
 
 	<properties>
+	    <maven.test.skip>true</maven.test.skip>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jsf.version>2.2.14</jsf.version>
