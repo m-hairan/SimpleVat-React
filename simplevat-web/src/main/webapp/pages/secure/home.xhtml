@@ -12,7 +12,7 @@
     <ui:define name="head">
         <script type="text/javascript">
             //<![CDATA[
-            function skinChart() {
+            function lineChart() {
                 this.cfg.shadow = false;
                 this.cfg.title = '';
                 this.cfg.seriesColors = ['#FFC107', '#03A9F4'];
@@ -23,8 +23,12 @@
                     shadow: false
                 };
                 this.cfg.axesDefaults = {
+                    tickRenderer: $.jqplot.CanvasAxisTickRenderer,
                     rendererOptions: {
                         textColor: '#212121'
+                    },
+                    tickOptions: {
+                        angle: 45
                     }
                 };
                 this.cfg.seriesDefaults = {
@@ -35,7 +39,19 @@
                         size: 7,
                         style: 'circle'
                     }
-                }
+                };
+
+            }
+            function barChart() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#FFC107', '#03A9F4'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#EEEEEE',
+                    shadow: false
+                };
             }
             //]]>
         </script>
@@ -43,143 +59,150 @@
             .main-content {
                 padding: 0;
             }
+            .simplevat-dashboardpanel{
+                height:350px;
+                margin-bottom: 15px;
+            }
+            .ui-state-hover{
+                background-color: #757575;
+                margin-bottom: 15px;
+            }
+            .fc-center h2{
+                font-size: 1.2em;
+            }
         </style>
     </ui:define>
 
     <ui:define name="content">
         <h:form>
-        <h:panelGroup layout="block" styleClass="ui-g dashboard" id="dashboardPanel">
-            <h:panelGroup layout="block" styleClass="ui-g-12 ui-md-8">
-                <div class="card overview">
-                    <p:panel header="Cash Flow" style="height:400px; width: auto" id="cashFlowChartPanel">
-                        <p:chart type="line" model="#{homeController.cashFlowLineChartModel}" rendered="#{homeController.renderCashFlowLineChartModel}"
-                                 style="height:350px; width: auto" responsive="true" />
+
+            <h:panelGroup layout="block" styleClass="ui-g dashboard" id="dashboardPanel">
+                <p:dashboard id="board" model="#{homeController.model}" styleClass="ui-g-12 ui-md-12">
+                    <p:ajax event="reorder" />
+
+                    <p:panel id="cashflow" header="Cash Flow" styleClass="simplevat-dashboardpanel">
+                        <h:panelGroup layout="block" style="width: auto;position:relative;">
+                            <h:panelGroup styleClass="cashFlowChartPanelPlaceHolder" style="position:absolute;width:90%">
+                                <ui:include src="../content-loading-placeholder.xhtml"/>
+                            </h:panelGroup>
+                            <h:panelGroup styleClass="cashFlowChartPanel" id="cashFlowChartPanel">
+                                <p:chart type="line" model="#{homeController.cashFlowLineChartModel}" rendered="#{homeController.renderCashFlowLineChartModel}"
+                                         style="height:300px; width: auto" responsive="true" />
+                            </h:panelGroup>
+                        </h:panelGroup>
                     </p:panel>
-                </div>
-            </h:panelGroup>
-            <p:blockUI block="cashFlowChartPanel" trigger="remoteCommandToLoadCashFlowChartPanel">
-                Chart is Loading....
-            </p:blockUI>
+                    <p:panel id="invoiceExpanse" header="Invoices and Expense"  styleClass="simplevat-dashboardpanel">
+                        <h:panelGroup layout="block" style="width: 100%;position:relative;">
+                            <h:panelGroup styleClass="invoiceAndExpansePanelPlaceHolder" style="position:absolute;width:90%">
+                                <ui:include src="../content-loading-placeholder.xhtml"/>
+                            </h:panelGroup>
+                            <h:panelGroup styleClass="invoiceAndExpansePanel" id="invoiceAndExpansePanel">
+                                <p:chart type="line" model="#{homeController.animatedModel1}" rendered="#{not empty homeController.animatedModel1.series}"
+                                         style="height:280px;margin-top: 20px;" responsive="true"/>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </p:panel>
+                    <p:panel id="vatActivity" header="VAT Acivity"  styleClass="simplevat-dashboardpanel">
+                        <h:panelGroup layout="block" style="position:relative">
+                            <h:panelGroup styleClass="vatActivityPanelPlaceHolder" style="position:absolute;width:90%">
+                                <ui:include src="../content-loading-placeholder.xhtml"/>
+                            </h:panelGroup>
+                            <h:panelGroup id="vatActivityPanel" styleClass="vatActivityPanel">
+                                <p:chart type="bar" model="#{homeController.animatedModel2}" rendered="#{not empty homeController.animatedModel2.series}"
+                                         style="height:280px;margin-top: 20px;" responsive="true" />
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </p:panel>
+                    <p:panel id="bankAccount"  header="Bank Account" styleClass="simplevat-dashboardpanel">
+                        <p:scrollPanel mode="native" style="border: none">
+                            <h:panelGroup layout="block"  style="border:none">
+                                <h:panelGroup styleClass="bankAccountPanelPlaceHolder">
+                                    <ui:include src="../content-loading-placeholder.xhtml"/>
+                                </h:panelGroup>
+                                <h:panelGroup layout="block" styleClass="bankAccountPanel" id="bankAccountPanel" style="display:none;">
+                                    <ul class="account-list">
+                                        <ui:repeat
+                                            value="#{homeController.bankAccountList}"
+                                            var="value">
+                                            <li>
+                                                <div class="ui-g">
+                                                    <div class="ui-g-6">
+                                                        <div style="color: #757575; font-size: 17px;">
+                                                            <p:commandLink value="#{value.bankName}" style="color: #009688;"/>
+                                                        </div>
 
-            <h:panelGroup layout="block" styleClass="ui-g-12 ui-md-4" >
-                <p:scrollPanel mode="native"
-                               style="height:400px" id="bankAccountPanel">
-                    <ul class="activity-list">
-                        <ui:repeat
-                            value="#{homeController.bankAccountList}"
-                            var="value">
-                            <!--#{value.bankAccountId} -->
+                                                        <div style="color: #757575; font-size: 14px;">#{value.bankAccountType.name} Saving Account</div>
+                                                    </div>
+                                                    <div class="ui-g-6">
+                                                        #{value.bankAccountCurrency.currencySymbol}#{value.currentBalance}
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ui:repeat>
+                                    </ul>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </p:scrollPanel>
+                    </p:panel>
+                    <p:panel id="scheduler" header="Calendar" styleClass="simplevat-dashboardpanel">
+                        <h:panelGroup layout="block" style="position:relative">
+                            <h:panelGroup styleClass="eventPanelPlaceHolder" style="position:absolute;width:90%">
+                                <ui:include src="../content-loading-placeholder.xhtml"/>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" id="eventPanel" styleClass="eventPanel" style="visibility: hidden">
+                                <p:schedule value="#{homeController.eventModel}" rendered="#{not empty homeController.eventModel}" style="height:280px;" />
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </p:panel>
+                    <p:panel id="activity" header="Activity" styleClass="simplevat-dashboardpanel">
+                        <h:panelGroup layout="block" id="activityPanel">
+                            <ul class="activity-list">
+                                <ui:repeat var="activity" value="#{homeController.activities}">
+                                    <li>
+                                        <div class="ui-g">
+                                            <div class="ui-g-6">#{activity.field3}</div>
+                                            <div class="ui-g-6">
+                                                <h:outputText value="#{activity.strLastUpdateDate}">
 
-                            <li>
-                                <div class="count" style="background-color: #00bcd4">
-                                    #{value.bankAccountCurrency.currencySymbol}#{value.currentBalance}</div>
-                                <div class="ui-g">
-                                    <div class="ui-g-6">
-                                        #{value.bankName}
-                                        <div style="color: #757575; font-size: 14px;">Saving
-                                            Account</div>
-                                    </div>
-                                    <div class="ui-g-6">
-                                        Last Updated 15 May 2017
-                                        <div>
-                                            <p:graphicImage name="images/green-check.png"
-                                                            library="ultima-layout" style="width: 10%" />
-                                            Transactions Uptodate
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ui:repeat>
-                    </ul>
-                </p:scrollPanel>
+                                                </h:outputText>
+                                            </div>
+                                        </div>								
+                                        <div class="ui-g">
+                                            <div class="ui-g-6">#{activity.field1}</div>
+                                            <div class="ui-g-6">#{activity.field2}</div>
+                                        </div>								
+                                    </li>
+                                </ui:repeat>
+                            </ul>
+                        </h:panelGroup>
+                    </p:panel>
+
+                </p:dashboard>
+                <div style="clear:both" />
             </h:panelGroup>
-            <p:blockUI block="bankAccountPanel" trigger="remoteCommandToLoadBankAccountPanel">
-                Bank Account Loading....
-            </p:blockUI>
-            <h:panelGroup layout="block" id="vatInOutPanel" styleClass="ui-g-12 ui-md-12">
-                <si:cbox name="Vat In" icon="&#xE86C;"
-                         amount="#{homeController.vatIn}" currency="$" />
-                <si:cbox name="Vat Out" icon="&#xE8C9;"
-                         amount="#{homeController.vatOut}" currency="$" />
-                <si:cbox name="Vat Balance" icon="&#xE160;"
-                         amount="#{homeController.vatBalance}" currency="$" />
-                <si:cbox name="Transactions" icon="&#xE0BE;"
-                         amount="#{homeController.numberOfTransaction}" currency="" />
-            </h:panelGroup>
-            <p:blockUI block="vatInOutPanel" trigger="remoteCommandToLoadVatInOutPanel">
-                Loading....
-            </p:blockUI>
-            <div class="ui-g-12 ui-md-6">
-                <p:panel header="Invoices and Expense" id="invoiceAndExpansePanel">
-                    <p:chart type="line" model="#{homeController.animatedModel1}" rendered="#{not empty homeController.animatedModel1.series}"
-                             style="width:100%;" responsive="true" />
-                </p:panel>
-            </div>
-            <p:blockUI block="invoiceAndExpansePanel" trigger="remoteCommandToLoadInvoiceAndExpansePanel">
-                Loading....
-            </p:blockUI>
-            <div class="ui-g-12 ui-md-6">
-                <p:panel header="VAT Acivity" id="vatActivityPanel">
-                    <p:chart type="bar" model="#{homeController.animatedModel2}" rendered="#{not empty homeController.animatedModel2.series}"
-                             style="width:100%;" responsive="true" />
-                </p:panel>
-            </div>
-            <p:blockUI block="vatActivityPanel" trigger="remoteCommandToLoadVatActivityPanel">
-                Loading....
-            </p:blockUI>
-            <div class="ui-g-12 ui-md-8">
-                <p:panel header="Calendar" style="height:100%" id="eventPanel">
-                    <p:schedule value="#{homeController.eventModel}" rendered="#{not empty homeController.eventModel}"/>
-                </p:panel>
-            </div>
-            <p:blockUI block="eventPanel" trigger="remoteCommandToLoadEventPanel">
-                Calendar Loading....
-            </p:blockUI>
-            <div class="ui-g-12 ui-md-4">
-                <p:panel header="Activity" style="height:100%" id="activityPanel">
-                    <div class="activity-header">
-                        <div class="ui-g">
-                            <div class="ui-g-6">
-                                <span style="font-weight: bold">Last Activity</span>
-                                <!-- <p>Updated 1 minute ago</p> -->
-                            </div>
-                            <div class="ui-g-6" style="text-align: right">
-                                <p:commandButton type="button" icon="ui-icon-update" />
-                            </div>
-                        </div>
-                    </div>
-                    <ul class="activity-list">
-                        <ui:repeat var="activity" value="#{homeController.activities}">
-                            <li>
-                                    <!-- <div class="count">#{activity.field1}</div> -->
-                                <div class="ui-g">
-                                    <div class="ui-g-6">#{activity.field3}</div>
-                                    <div class="ui-g-6">
-                                        <h:outputText value="#{activity.strLastUpdateDate}">
-                                            
-                                        </h:outputText>
-                                    </div>
-                                </div>								
-                                <div class="ui-g">
-                                    <div class="ui-g-6">#{activity.field1}</div>
-                                    <div class="ui-g-6">#{activity.field2}</div>
-                                </div>								
-                            </li>
-                        </ui:repeat>
-                    </ul>
-                </p:panel>
-            </div>
-             <p:blockUI block="activityPanel" trigger="remoteCommandToLoadContentActivityPanel">
-                Activity Loading....
-            </p:blockUI>
-        </h:panelGroup>
-            <p:remoteCommand id="remoteCommandToLoadCashFlowChartPanel" autoRun="true" async="true" actionListener="#{homeController.lazyInitializationFlowChart}" update="cashFlowChartPanel"/>
-            <p:remoteCommand id="remoteCommandToLoadBankAccountPanel" autoRun="true" async="true" actionListener="#{homeController.lazyInitializationBankAccount}" update="bankAccountPanel"/>
-            <p:remoteCommand id="remoteCommandToLoadVatInOutPanel" autoRun="true" async="true" actionListener="#{homeController.lazyInitializationVatInOutCalculation}" update="vatInOutPanel"/>
-            <p:remoteCommand id="remoteCommandToLoadInvoiceAndExpansePanel" autoRun="true" async="true" actionListener="#{homeController.lazyInitializationInvoiceAndExpanse}" update="invoiceAndExpansePanel"/>
-            <p:remoteCommand id="remoteCommandToLoadVatActivityPanel" autoRun="true" async="true" actionListener="#{homeController.lazyInitializationVatActivity}" update="vatActivityPanel"/>
-            <p:remoteCommand id="remoteCommandToLoadEventPanel" autoRun="true" async="true" actionListener="#{homeController.lazyInitializationEvent}" update="eventPanel"/>
+            <p:remoteCommand id="remoteCommandToLoadCashFlowChartPanel" autoRun="true" async="true" actionListener="#{homeController.lazyInitializationFlowChart}" update="cashFlowChartPanel" oncomplete="fadeOutPlaceHolder('cashFlowChartPanel');"/>
+            <p:remoteCommand id="remoteCommandToLoadBankAccountPanel" autoRun="true" async="true" actionListener="#{homeController.lazyInitializationBankAccount}" update="bankAccountPanel" oncomplete="fadeOutPlaceHolder('bankAccountPanel')"/>
+            <p:remoteCommand id="remoteCommandToLoadInvoiceAndExpansePanel" autoRun="true" async="true" actionListener="#{homeController.lazyInitializationInvoiceAndExpanse}" update="invoiceAndExpansePanel" oncomplete="fadeOutPlaceHolder('invoiceAndExpansePanel');"/>
+            <p:remoteCommand id="remoteCommandToLoadVatActivityPanel" autoRun="true" async="true" actionListener="#{homeController.lazyInitializationVatActivity}" update="vatActivityPanel" oncomplete="fadeOutPlaceHolder('vatActivityPanel');"/>
+            <p:remoteCommand id="remoteCommandToLoadEventPanel" autoRun="true" async="true" actionListener="#{homeController.lazyInitializationEvent}" update="eventPanel" oncomplete="updateSchedulLabel();"/>
             <p:remoteCommand id="remoteCommandToLoadContentActivityPanel" autoRun="true" async="true" actionListener="#{homeController.lazyInitializationActivity}" update="activityPanel"/>
         </h:form>
+
+        <script type="text/javascript">
+            function fadeOutPlaceHolder(styleClass) {
+                $("." + styleClass + "PlaceHolder").fadeOut("slow", function () {
+                    $("." + styleClass).fadeIn("slow");
+                });
+            }
+            function updateSchedulLabel() {
+                $('.fc-today-button').text('Today');
+                $('.fc-month-button').text('M');
+                $('.fc-agendaWeek-button').text('W');
+                $('.fc-agendaDay-button').text('D');
+                $('.eventPanel').css('visibility', 'visible');
+                fadeOutPlaceHolder('eventPanel');
+            }
+
+        </script>
     </ui:define>
 </ui:composition>

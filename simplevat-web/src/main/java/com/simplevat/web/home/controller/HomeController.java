@@ -16,18 +16,18 @@ import com.simplevat.service.bankaccount.BankAccountService;
 import com.simplevat.service.bankaccount.TransactionService;
 import com.simplevat.service.invoice.InvoiceService;
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.annotation.PostConstruct;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.model.DashboardColumn;
+import org.primefaces.model.DashboardModel;
+import org.primefaces.model.DefaultDashboardColumn;
+import org.primefaces.model.DefaultDashboardModel;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleModel;
@@ -36,6 +36,7 @@ import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.CategoryAxis;
 import org.primefaces.model.chart.ChartSeries;
+import org.primefaces.model.chart.LegendPlacement;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +90,7 @@ public class HomeController implements Serializable {
     private ScheduleModel eventModel;
     @Getter
     private List<Activity> activities;
+    private DashboardModel model;
 
     @PostConstruct
     public void init() {
@@ -98,6 +100,26 @@ public class HomeController implements Serializable {
         animatedModel2 = new BarChartModel();
         eventModel = new DefaultScheduleModel();
         activities = new ArrayList<>();
+
+        model = new DefaultDashboardModel();
+        DefaultDashboardColumn column1 = new DefaultDashboardColumn();
+        DefaultDashboardColumn column2 = new DefaultDashboardColumn();
+        DefaultDashboardColumn column3 = new DefaultDashboardColumn();
+        column1.setStyleClass("ui-g-12 ui-md-4");
+        column2.setStyleClass("ui-g-12 ui-md-4");
+        column3.setStyleClass("ui-g-12 ui-md-4");
+
+        column1.addWidget("cashflow");
+        column2.addWidget("invoiceExpanse");
+        column3.addWidget("vatActivity");
+
+        column1.addWidget("bankAccount");
+        column2.addWidget("scheduler");
+        column3.addWidget("activity");
+
+        model.addColumn(column1);
+        model.addColumn(column2);
+        model.addColumn(column3);
     }
 
     public void lazyInitializationFlowChart() {
@@ -122,9 +144,10 @@ public class HomeController implements Serializable {
 
     public void lazyInitializationEvent() {
         populateEventModel();
-        
+
     }
-    public void lazyInitializationActivity(){
+
+    public void lazyInitializationActivity() {
         populateLatestActivity();
     }
 
@@ -160,7 +183,7 @@ public class HomeController implements Serializable {
         yAxis.setMin(0);
         int maxValue = transactionService.getMaxTransactionValue(cashInDataMap, cashOutDataMap);
         yAxis.setMax(maxValue);
-        if(cashInDataMap!= null && !cashInDataMap.isEmpty() && cashOutDataMap!= null && !cashOutDataMap.isEmpty()){
+        if (cashInDataMap != null && !cashInDataMap.isEmpty() && cashOutDataMap != null && !cashOutDataMap.isEmpty()) {
             renderCashFlowLineChartModel = true;
         }
     }
@@ -198,7 +221,11 @@ public class HomeController implements Serializable {
         animatedModel1 = initLinearModel(invoiseData, expesneData);
         animatedModel1.setTitle("Invoices and Expenses");
         animatedModel1.setAnimate(true);
-        animatedModel1.setLegendPosition("se");
+        animatedModel1.setLegendPosition("n");
+        animatedModel1.setLegendPlacement(LegendPlacement.OUTSIDE);
+        animatedModel1.setLegendCols(2);
+        animatedModel1.setLegendRows(1);
+        animatedModel1.setExtender("lineChart");
         Axis xAxis = new CategoryAxis("Months");
         xAxis.setTickAngle(45);
         animatedModel1.getAxes().put(AxisType.X, xAxis);
@@ -217,8 +244,12 @@ public class HomeController implements Serializable {
         animatedModel2 = initBarModel(vatInData, vatOutData);
         animatedModel2.setTitle("VAT");
         animatedModel2.setAnimate(true);
-        animatedModel2.setLegendPosition("ne");
+        animatedModel2.setLegendPosition("n");
+        animatedModel2.setLegendPlacement(LegendPlacement.OUTSIDE);
+        animatedModel2.setLegendCols(2);
+        animatedModel2.setLegendRows(1);
         animatedModel2.setStacked(true);
+        animatedModel2.setExtender("barChart");
         Axis xAxis = new CategoryAxis("Months");
         xAxis.setTickAngle(45);
 
@@ -274,5 +305,19 @@ public class HomeController implements Serializable {
         model.addSeries(expenses);
 
         return model;
+    }
+
+    /**
+     * @return the model
+     */
+    public DashboardModel getModel() {
+        return model;
+    }
+
+    /**
+     * @param model the model to set
+     */
+    public void setModel(DashboardModel model) {
+        this.model = model;
     }
 }
