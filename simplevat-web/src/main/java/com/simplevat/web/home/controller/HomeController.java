@@ -154,12 +154,12 @@ public class HomeController implements Serializable {
     private void populateCashFlowChart() {
         renderCashFlowLineChartModel = false;
         cashFlowLineChartModel = new LineChartModel();
-         animatedModel1.setLegendPosition("n");
-        animatedModel1.setLegendPlacement(LegendPlacement.OUTSIDE);
-        animatedModel1.setLegendCols(2);
-        animatedModel1.setLegendRows(1);
-        animatedModel1.setExtender("areaChart");
-        
+        cashFlowLineChartModel.setLegendPosition("n");
+        cashFlowLineChartModel.setLegendPlacement(LegendPlacement.OUTSIDE);
+        cashFlowLineChartModel.setLegendCols(2);
+        cashFlowLineChartModel.setLegendRows(1);
+        cashFlowLineChartModel.setExtender("areaChart");
+
         LineChartSeries cashIn = new LineChartSeries();
         cashIn.setFill(true);
 
