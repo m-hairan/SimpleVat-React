@@ -139,7 +139,9 @@
                                                 <div class="ui-g">
                                                     <div class="ui-g-6">
                                                         <div style="color: #757575; font-size: 17px;">
-                                                            <p:commandLink value="#{value.bankName}" style="color: #009688;"/>
+                                                            <p:commandLink value="#{value.bankName}" action="#{homeController.loadBankAccountTransaction}" style="color: #009688;">
+                                                                <f:setPropertyActionListener value="#{value.bankAccountId}" target="#{homeController.selectedBankAccountId}"/>
+                                                            </p:commandLink>
                                                         </div>
 
                                                         <div style="color: #757575; font-size: 14px;">#{value.bankAccountType.name} Saving Account</div>

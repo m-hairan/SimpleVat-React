@@ -15,6 +15,7 @@ import com.simplevat.service.ExpenseService;
 import com.simplevat.service.bankaccount.BankAccountService;
 import com.simplevat.service.bankaccount.TransactionService;
 import com.simplevat.service.invoice.InvoiceService;
+import com.simplevat.web.utils.FacesUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -91,6 +92,9 @@ public class HomeController implements Serializable {
     @Getter
     private List<Activity> activities;
     private DashboardModel model;
+    @Getter
+    @Setter
+    private int selectedBankAccountId;
 
     @PostConstruct
     public void init() {
@@ -150,6 +154,11 @@ public class HomeController implements Serializable {
     public void lazyInitializationActivity() {
         populateLatestActivity();
     }
+    
+    public String loadBankAccountTransaction(){
+        FacesUtil.setSelectedBankAccountId(selectedBankAccountId);
+        return "/pages/secure/bankaccount/bank-transactions?faces-redirect=true";
+    }
 
     private void populateCashFlowChart() {
         renderCashFlowLineChartModel = false;
@@ -182,7 +191,8 @@ public class HomeController implements Serializable {
         cashFlowLineChartModel.setShowPointLabels(true);
         cashFlowLineChartModel.setAnimate(true);
 
-        Axis xAxis = new CategoryAxis("Months");
+        Axis xAxis = new CategoryAxis("Months");        
+        xAxis.setTickAngle(45);
         cashFlowLineChartModel.getAxes().put(AxisType.X, xAxis);
         Axis yAxis = cashFlowLineChartModel.getAxis(AxisType.Y);
         yAxis.setLabel("Cash Amount");
