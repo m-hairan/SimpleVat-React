@@ -186,7 +186,6 @@ public class HomeController implements Serializable {
         cashFlowLineChartModel.addSeries(cashOut);
 
         cashFlowLineChartModel.setTitle("Cash Flow");
-        cashFlowLineChartModel.setLegendPosition("ne");
         cashFlowLineChartModel.setStacked(true);
         cashFlowLineChartModel.setShowPointLabels(true);
         cashFlowLineChartModel.setAnimate(true);
