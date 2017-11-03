@@ -252,7 +252,7 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
         selectedInvoice = getInvoiceEntity(selectedInvoiceModel);
         
         if (selectedInvoice.getInvoiceId() != null && selectedInvoice.getInvoiceId() > 0) {
-            selectedInvoice.setLastUpdatedBy(FacesUtil.getLoggedInUser().getUserId());
+            selectedInvoice.setLastUpdateBy(FacesUtil.getLoggedInUser().getUserId());
             invoiceService.update(selectedInvoice);
         } else {
             configuration.setValue(selectedInvoice.getInvoiceReferenceNumber());

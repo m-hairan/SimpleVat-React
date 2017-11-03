@@ -9,8 +9,10 @@ import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.Configuration;
 import com.simplevat.service.ConfigurationService;
 import com.simplevat.web.constant.ConfigurationConstants;
+import com.simplevat.web.utils.FacesUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -143,24 +145,38 @@ public class GeneralController implements Serializable {
         try {
             configurationList.clear();
             if (configurationInvoiceRefPtrn != null) {
+                configurationInvoiceRefPtrn.setLastUpdateBy(FacesUtil.getLoggedInUser().getUserId());
+                configurationInvoiceRefPtrn.setLastUpdateDate(Calendar.getInstance().getTime());
                 configurationList.add(configurationInvoiceRefPtrn);
             }
             if (configurationMailHost != null) {
+                configurationMailHost.setLastUpdateBy(FacesUtil.getLoggedInUser().getUserId());
+                configurationMailHost.setLastUpdateDate(Calendar.getInstance().getTime());
                 configurationList.add(configurationMailHost);
             }
             if (configurationMailPassword != null) {
+                configurationMailPassword.setLastUpdateBy(FacesUtil.getLoggedInUser().getUserId());
+                configurationMailPassword.setLastUpdateDate(Calendar.getInstance().getTime());
                 configurationList.add(configurationMailPassword);
             }
             if (configurationMailPort != null) {
+                configurationMailPort.setLastUpdateBy(FacesUtil.getLoggedInUser().getUserId());
+                configurationMailPort.setLastUpdateDate(Calendar.getInstance().getTime());
                 configurationList.add(configurationMailPort);
             }
             if (configurationMailSmtpAuth != null) {
+                configurationMailSmtpAuth.setLastUpdateBy(FacesUtil.getLoggedInUser().getUserId());
+                configurationMailSmtpAuth.setLastUpdateDate(Calendar.getInstance().getTime());
                 configurationList.add(configurationMailSmtpAuth);
             }
             if (configurationMailSmtpStartTlsEnable != null) {
+                configurationMailSmtpStartTlsEnable.setLastUpdateBy(FacesUtil.getLoggedInUser().getUserId());
+                configurationMailSmtpStartTlsEnable.setLastUpdateDate(Calendar.getInstance().getTime());
                 configurationList.add(configurationMailSmtpStartTlsEnable);
             }
             if (configurationMailUserName != null) {
+                configurationMailUserName.setLastUpdateBy(FacesUtil.getLoggedInUser().getUserId());
+                configurationMailUserName.setLastUpdateDate(Calendar.getInstance().getTime());
                 configurationList.add(configurationMailUserName);
             }
             configurationService.updateConfigurationList(configurationList);

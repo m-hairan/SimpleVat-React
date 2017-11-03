@@ -130,7 +130,7 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
         int userId = ContextUtils.getUserContext().getUserId();
         selectedTransactionCategory.setCreatedBy(userId);
         selectedTransactionCategory.setDeleteFlag(false);
-        selectedTransactionCategory.setLastUpdatedBy(userId);
+        selectedTransactionCategory.setLastUpdateBy(userId);
         selectedTransactionCategory.setOrderSequence(1);
         selectedTransactionCategory.setCreatedDate(LocalDateTime.now());
         selectedTransactionCategory.setLastUpdateDate(LocalDateTime.now());
@@ -145,7 +145,7 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
         selectedTransactionCategory = getTrascationModel(transactionCategoryModel);
         selectedTransactionCategory.setCreatedBy(userId);
         selectedTransactionCategory.setDeleteFlag(false);
-        selectedTransactionCategory.setLastUpdatedBy(userId);
+        selectedTransactionCategory.setLastUpdateBy(userId);
         selectedTransactionCategory.setOrderSequence(1);
         selectedTransactionCategory.setCreatedDate(LocalDateTime.now());
         selectedTransactionCategory.setLastUpdateDate(LocalDateTime.now());
@@ -163,7 +163,7 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
     public String update() throws UnauthorizedException {
         int userId = ContextUtils.getUserContext().getUserId();
         selectedTransactionCategory = getTrascationModel(transactionCategoryModel);
-        selectedTransactionCategory.setLastUpdatedBy(userId);
+        selectedTransactionCategory.setLastUpdateBy(userId);
         selectedTransactionCategory.setOrderSequence(1);
         selectedTransactionCategory.setLastUpdateDate(LocalDateTime.now());
 
@@ -182,7 +182,7 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
 
     public String updateAndContinue() throws UnauthorizedException {
         int userId = ContextUtils.getUserContext().getUserId();
-        selectedTransactionCategory.setLastUpdatedBy(userId);
+        selectedTransactionCategory.setLastUpdateBy(userId);
         selectedTransactionCategory.setOrderSequence(1);
         selectedTransactionCategory.setLastUpdateDate(LocalDateTime.now());
         transactionCategoryService.update(selectedTransactionCategory,

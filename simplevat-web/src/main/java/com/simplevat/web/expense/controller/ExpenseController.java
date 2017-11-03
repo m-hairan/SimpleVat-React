@@ -166,7 +166,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
         User loggedInUser = FacesUtil.getLoggedInUser();
         Expense expense = getExpense(selectedExpenseModel);
         expense.setLastUpdateDate(LocalDateTime.now());
-        expense.setLastUpdatedBy(loggedInUser.getUserId());
+        expense.setLastUpdateBy(loggedInUser.getUserId());
         expense.setDeleteFlag(false);
         expense.setCreatedBy(loggedInUser.getUserId());
 
@@ -194,6 +194,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
             User user = userServiceNew.findByPK(selectedExpenseModel.getUser().getUserId());
             expense.setUser(user);
         }
+        expense.setExpenseAmount(total);
 
         if (expense.getExpenseId() == null || expense.getExpenseId() == 0) {
             expenseService.persist(expense);
@@ -213,7 +214,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
         Expense expense = getExpense(selectedExpenseModel);
 
         expense.setLastUpdateDate(LocalDateTime.now());
-        expense.setLastUpdatedBy(loggedInUser.getUserId());
+        expense.setLastUpdateBy(loggedInUser.getUserId());
         expense.setDeleteFlag(false);
         expense.setCreatedBy(loggedInUser.getUserId());
 

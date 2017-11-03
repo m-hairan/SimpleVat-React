@@ -23,5 +23,5 @@ public class ExpenseItemModel {
     private BigDecimal vatId = BigDecimal.ZERO;
     private String description;
     private BigDecimal subTotal;
-
+    private Integer versionNumber;
 }

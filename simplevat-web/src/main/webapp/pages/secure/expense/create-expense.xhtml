@@ -87,7 +87,7 @@
                                                 dropdown="true"
                                                 forceSelection="true"
                                                 effect="fold"
-                                                completeMethod="#{transactionController.transactionCategories}"
+                                                completeMethod="#{transactionController.transactionCategories()}"
                                                 value="#{expenseController.selectedExpenseModel.transactionCategory}"
                                                 var="transactionCategory"
                                                 itemValue="#{transactionCategory}"
@@ -108,18 +108,7 @@
                                         </h:panelGroup>
 
 
-                                        <p:outputLabel for="expenseAmount"/>
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputNumber
-                                                id="expenseAmount"
-                                                value="#{expenseController.selectedExpenseModel.expenseAmount}"
-                                                symbol="#{expenseController.selectedExpenseModel.currency.currencySymbol} " symbolPosition="p"
-                                                required="true" 
-                                                requiredMessage="Please enter expense amount">
-                                            </p:inputNumber>
-                                            <label>#{messages.amount}</label>
-                                            <p:message for="expenseAmount" />
-                                        </h:panelGroup>
+                                        
 
                                         <p:outputLabel for="expenseCurrency" />
                                         <h:panelGroup styleClass="md-inputfield">

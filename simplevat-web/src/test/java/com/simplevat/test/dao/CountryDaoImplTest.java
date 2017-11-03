@@ -60,7 +60,7 @@ public class CountryDaoImplTest extends BaseManagerTest {
 			country.setCountryFullName(PREFIX + "_FULL_NAME_" + i);
 			country.setCountryName(PREFIX+ "_NAME_"+i);
 			country.setCreatedBy(3);
-			country.setDefaltFlag('C');
+//			country.setDefaltFlag('C');
 			country.setIsoAlpha3Code("A");
 			country.setOrderSequence(i);
 			countries.add(country);

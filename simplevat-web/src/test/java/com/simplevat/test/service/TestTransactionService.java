@@ -99,7 +99,7 @@ public class TestTransactionService extends BaseManagerTest {
 		//category.setTransactionCategoryCode(1);
 		transaction.setExplainedTransactionCategory(category);
 		transaction.setExplainedTransactionDescription("");
-		transaction.setLastUpdatedBy(1);
+		transaction.setLastUpdateBy(1);
 		Project project =projectDao.findByPK(1);
 		//project.setProjectId(1);
 		

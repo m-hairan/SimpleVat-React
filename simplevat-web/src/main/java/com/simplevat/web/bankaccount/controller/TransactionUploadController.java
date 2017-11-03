@@ -183,7 +183,7 @@ public class TransactionUploadController {
 			transaction.setTransactionDescription(importedDraftTransaction.getImportedTransactionDescription());
 			transaction.setDebitCreditFlag(importedDraftTransaction.getImportedDebitCreditFlag());
 			transaction.setTransactionAmount(importedDraftTransaction.getImportedTransactionAmount());
-			transaction.setLastUpdatedBy(12345);
+			transaction.setLastUpdateBy(12345);
 			transaction.setCreatedBy(12345);
 			
 			BankAccount bankAccount = bankAccountService.findByPK(importedDraftTransaction.getBankAccount().getBankAccountId());

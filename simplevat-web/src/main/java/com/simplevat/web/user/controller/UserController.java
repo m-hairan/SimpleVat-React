@@ -2,16 +2,12 @@ package com.simplevat.web.user.controller;
 
 import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.Configuration;
-import com.simplevat.entity.Contact;
 import com.simplevat.entity.Mail;
-import com.simplevat.entity.MailAttachment;
 import com.simplevat.entity.MailEnum;
 import com.simplevat.entity.Role;
 import com.simplevat.entity.Title;
 import com.simplevat.entity.User;
-import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.integration.MailIntegration;
-import com.simplevat.web.exception.UnauthorizedException;
 import com.simplevat.security.ContextUtils;
 import com.simplevat.security.UserContext;
 import com.simplevat.service.ConfigurationService;
@@ -24,41 +20,24 @@ import com.simplevat.web.invoice.controller.InvoiceReminderController;
 import com.simplevat.web.user.model.UserDTO;
 import com.simplevat.web.utils.FacesUtil;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.activation.MimetypesFileTypeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.poi.poifs.crypt.binaryrc4.BinaryRC4Decryptor;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -98,9 +77,6 @@ public class UserController implements Serializable {
     private UploadedFile newProfilePic;
 
     @Getter
-    private boolean editMode;
-
-    @Getter
     @Setter
     private String password;
 
@@ -122,7 +98,6 @@ public class UserController implements Serializable {
     public void init() {
         newProfilePic = null;
         password = null;
-        editMode = false;
         streamContent = new StreamedContentSessionController();
         String userId = (String) FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("user");
 
@@ -134,7 +109,6 @@ public class UserController implements Serializable {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_USER_PIC", selectedUser.getProfileImageBinary());
                 renderProfilePic = true;
             }
-            editMode = true;
         } else {
             selectedUser = new UserDTO();
             Role role = roleService.getDefaultRole();
@@ -205,15 +179,19 @@ public class UserController implements Serializable {
             user.setCompany(FacesUtil.getLoggedInUser().getCompany());
             user.setCreatedBy(userContext.getUserId());
             user.setLastUpdatedBy(userContext.getUserId());
-
-
-            if (!editMode) {
+//            if (selectedUser.getRoleCode() != null) {
+//                Role role = roleService.findByPK(selectedUser.getRoleCode());
+//                user.setRole(role);
+//            }
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.getExternalContext().getFlash().setKeepMessages(true);
+            if (user.getUserId() == null) {
                 userService.persist(user);
                 sendNewUserMail(user, password);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User Profile added successfully"));
+                context.addMessage(null, new FacesMessage("User Profile added successfully"));
             } else {
                 userService.update(user, user.getUserId());
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User Profile updated successfully"));
+                context.addMessage(null, new FacesMessage("User Profile updated successfully"));
             }
             return "list?faces-redirect=true";
         } catch (Exception ex) {

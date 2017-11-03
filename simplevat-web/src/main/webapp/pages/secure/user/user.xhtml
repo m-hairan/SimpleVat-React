@@ -143,7 +143,7 @@
                                 </p:panelGrid>
                             </p:fieldset>
 
-                            <p:fieldset legend="Password" toggleable="false" rendered="#{!userController.editMode}">
+                            <p:fieldset legend="Password" toggleable="false" rendered="#{userController.selectedUser.userId == null}">
                                 <p:panelGrid columns="6" 
                                              columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
                                              layout="grid" 
@@ -174,7 +174,7 @@
                                 </p:panelGrid>
                             </p:fieldset>
 
-                            <p:fieldset legend="Password" toggleable="false" rendered="#{userController.editMode}">
+                            <p:fieldset legend="Password" toggleable="false" rendered="#{userController.selectedUser.userId == null}">
                                 <p:panelGrid columns="6" 
                                              columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
                                              layout="grid" 

@@ -125,7 +125,7 @@ public class TransactionImportController implements Serializable {
         try {
             User loggedInUser = FacesUtil.getLoggedInUser();
             com.simplevat.entity.bankaccount.Transaction transaction1 = new com.simplevat.entity.bankaccount.Transaction();
-            transaction1.setLastUpdatedBy(loggedInUser.getUserId());
+            transaction1.setLastUpdateBy(loggedInUser.getUserId());
             transaction1.setCreatedBy(loggedInUser.getUserId());
             transaction1.setBankAccount(bankAccount);
             transaction1.setTransactionDescription(transaction.getDescription());

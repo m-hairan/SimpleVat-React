@@ -32,7 +32,7 @@ public class BankAccountModel {
 
     private BankAccountStatus bankAccountStatus;
 
-    private String personalCorporateAccountInd = "C";
+    private Character personalCorporateAccountInd = 'C';
 
     private Boolean isprimaryAccountFlag = true;
 

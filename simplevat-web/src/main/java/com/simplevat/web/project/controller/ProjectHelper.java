@@ -19,7 +19,7 @@ public class ProjectHelper {
         projectModel.setDeleteFlag(project.getDeleteFlag());
         projectModel.setInvoiceLanguageCode(project.getInvoiceLanguageCode());
         projectModel.setLastUpdateDate(project.getLastUpdateDate());
-        projectModel.setLastUpdatedBy(project.getLastUpdatedBy());
+        projectModel.setLastUpdatedBy(project.getLastUpdateBy());
         projectModel.setProjectBudget(project.getProjectBudget());
         projectModel.setProjectId(project.getProjectId());
         projectModel.setProjectName(project.getProjectName());

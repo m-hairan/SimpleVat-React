@@ -63,7 +63,7 @@ public class InvoiceModelHelper {
 
         invoice.setInvoiceLineItems(items);
         invoice.setCreatedBy(invoiceModel.getCreatedBy());
-        invoice.setLastUpdatedBy(invoiceModel.getLastUpdatedBy());
+        invoice.setLastUpdateBy(invoiceModel.getLastUpdatedBy());
 
         return invoice;
     }
@@ -75,14 +75,15 @@ public class InvoiceModelHelper {
         if (model.getId() > 0) {
             item.setInvoiceLineItemId(model.getId());
         }
-        item.setCreatedDate(Calendar.getInstance());
+        item.setCreatedDate(Calendar.getInstance().getTime());
 
         item.setInvoiceLineItemDescription(model.getDescription());
         item.setInvoiceLineItemQuantity(model.getQuatity());
         item.setInvoiceLineItemUnitPrice(model.getUnitPrice());
         item.setInvoiceLineItemVat(model.getVatId());
         item.setCreatedBy(1);
-        item.setLastUpdateDate(Calendar.getInstance());
+        item.setLastUpdateDate(Calendar.getInstance().getTime());
+        item.setVersionNumber(model.getVersionNumber());
         item.setInvoice(invoice);
 
         return item;
@@ -113,7 +114,7 @@ public class InvoiceModelHelper {
 
         invoiceModel.setInvoiceItems(items);
         invoiceModel.setCreatedBy(invoice.getCreatedBy());
-        invoiceModel.setLastUpdatedBy(invoice.getLastUpdatedBy());
+        invoiceModel.setLastUpdatedBy(invoice.getLastUpdateBy());
 
         return invoiceModel;
     }
@@ -128,7 +129,7 @@ public class InvoiceModelHelper {
         model.setQuatity(invoiceLineItem.getInvoiceLineItemQuantity());
         model.setUnitPrice(invoiceLineItem.getInvoiceLineItemUnitPrice());
         model.setVatId(invoiceLineItem.getInvoiceLineItemVat());
-
+        model.setVersionNumber(invoiceLineItem.getVersionNumber());
         this.updateSubTotal(model);
 
         return model;

@@ -1,0 +1,148 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
+                template="/WEB-INF/templates/template.xhtml">
+
+
+    <ui:define name="content">
+
+        <h:form id="TransactionReport"
+                enctype="multipart/form-data">
+
+            <div class="card card-w-title">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+
+                        <div class="ui-g-12">
+                            <ui:fragment>
+                                <h1>#{messages.TransactionReport}</h1>
+                            </ui:fragment>
+                            <div class="card card-w-title">
+                                <p:fieldset legend="View Report"
+                                            toggleable="false" toggleSpeed="500">
+                                    <p:panelGrid columns="5"
+                                                 columnClasses="ui-grid-col-0,ui-grid-col-3,ui-grid-col-0,ui-grid-col-3,ui-grid-col-1"
+                                                 layout="grid" styleClass="ui-panelgrid-blank form-group"
+                                                 style="border:0px none; background-color:transparent;">
+
+                                        <p:outputLabel for="year"/>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:autoComplete
+                                                id="year"
+                                                converter="#{financialPeriodConverter}"
+                                                dropdown="true"
+                                                forceSelection="true"
+                                                effect="fold"
+                                                completeMethod="#{transactionReport.completeFinancialPeriods()}"
+                                                value="#{transactionReport.financialPeriod}"
+                                                var="financialPeriod"
+                                                itemValue="#{financialPeriod}"
+                                                itemLabel="#{financialPeriod.name}"
+                                                required="true"
+                                                requiredMessage="Please select Claimant">
+                                            </p:autoComplete>
+                                            <label>#{messages.FinancialPeriod}</label>
+                                            <p:message for="year" />
+                                        </h:panelGroup>
+
+                                        <p:outputLabel for="account"/>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:autoComplete
+                                                id="account"
+                                                converter="#{bankAccountConverter}"
+                                                dropdown="true"
+                                                forceSelection="true"
+                                                effect="fold"
+                                                completeMethod="#{transactionReport.completeBankAccounts()}"
+                                                value="#{transactionReport.bankAccount}"
+                                                var="bankAccount"
+                                                itemValue="#{bankAccount}"
+                                                itemLabel="#{bankAccount.bankAccountName}"
+                                                required="true"
+                                                requiredMessage="Please select Claimant">
+                                            </p:autoComplete>
+                                            <label>#{messages.BankAccountName}</label>
+                                            <p:message for="account" />
+                                        </h:panelGroup>
+                                        <p:commandButton value="#{messages.View}" process="TransactionReport" update="@form"
+                                                         action="#{transactionReport.view()}" />
+                                    </p:panelGrid>
+                                </p:fieldset>
+                                <h:panelGroup id="transaction" rendered="#{transactionReport.transactionList.size() > 0}" >
+                                    <p:fieldset legend="Vat Category Details" 
+                                                toggleable="false" toggleSpeed="500">
+                                        <p:dataTable id="transactionTable" var="transaction" value="#{transactionReport.transactionList}" 
+                                                     paginator="true" rows="10" emptyMessage="Transaction record not found."
+                                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}">
+                                            <f:facet name="{TableHeader}"  >
+                                                <p:outputPanel style="float: left">
+                                                    <h:commandButton value="Export" styleClass="ui-button">
+                                                        <p:dataExporter target="transactionTable" type="pdf" fileName="TransactionReportFrom#{transactionReport.financialPeriod.name}" 
+                                                                        preProcessor="#{transactionReport.preProcessPDF}"/>
+                                                    </h:commandButton>
+                                                </p:outputPanel>
+                                                <p:outputPanel style="clear: both"/>
+                                            </f:facet>
+                                            <p:column headerText="Transaction Date">
+                                                <h:outputText value="#{transaction.transactionDate.time}" >
+                                                    <f:convertDateTime pattern="MM/ddyyyy hh:mm"/>
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="Transaction Description">
+                                                <p:outputLabel value="#{transaction.transactionDescription}"/>
+                                            </p:column>
+                                            <p:column headerText="Transaction Type">
+                                                <p:outputLabel value="#{transaction.transactionType.transactionTypeName}"/>
+                                            </p:column>
+                                            <p:column headerText="Debit/Credit">
+                                                <p:outputLabel value="#{transaction.debitCreditFlag}"/>
+                                            </p:column>
+                                            <p:column headerText="Transaction Amount" styleClass="amount">
+                                                <p:outputLabel value="#{transactionReport.bankAccount.bankAccountCurrency.currencySymbol}" />
+                                                <p:outputLabel value="#{transaction.transactionAmount}" >
+                                                    <f:convertNumber type="currency" currencySymbol=" " />
+                                                </p:outputLabel> 
+                                            </p:column>
+                                            <p:columnGroup type="footer" rendered="#{transactionReport.transactionList.size() > 0}">  
+                                                <p:row >                                        
+                                                    <p:column colspan="4" footerText="Balance" styleClass="amount"/>  
+                                                    <p:column styleClass="amount">
+                                                        <f:facet name="footer">
+                                                            <p:outputPanel autoUpdate="true">
+                                                                <p:outputLabel value="#{transactionReport.bankAccount.bankAccountCurrency.currencySymbol}" />
+                                                                <h:outputText id="total" value="#{transactionReport.bankAccount.currentBalance}" >
+                                                                    <f:convertNumber type="currency" currencySymbol=" " />
+                                                                </h:outputText>
+                                                            </p:outputPanel>
+                                                        </f:facet>
+                                                    </p:column>  
+                                                </p:row>  
+                                            </p:columnGroup>
+                                        </p:dataTable>
+                                    </p:fieldset>
+                                </h:panelGroup>
+                                <br />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p:toolbar>
+                    <f:facet name="left">
+                        <si:cbutton type="cancel"/>
+                    </f:facet>
+                    <f:facet name="right">
+                        <si:cbutton type="home"/>
+                    </f:facet>
+
+                </p:toolbar>
+
+            </div>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

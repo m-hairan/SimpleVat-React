@@ -1,9 +1,10 @@
 package com.simplevat.web.filter;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import javax.faces.application.ResourceHandler;
 
-public class Breadcrumb {
+public class Breadcrumb implements Serializable{
 	
 	private LinkedList<String> urlList = new LinkedList<String>();
 	

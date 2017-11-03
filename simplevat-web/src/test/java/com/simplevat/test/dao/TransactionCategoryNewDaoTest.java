@@ -101,7 +101,7 @@ public class TransactionCategoryNewDaoTest extends AbstractJUnit4SpringContextTe
 		transactionCategory.setDefaltFlag('N');
 		transactionCategory.setDeleteFlag(false);
 		transactionCategory.setLastUpdateDate(null);
-		transactionCategory.setLastUpdatedBy(3);
+		transactionCategory.setLastUpdateBy(3);
 		transactionCategory.setOrderSequence(1);
 		//transactionCategory.setParentTransactionCategoryCode(null);
 		transactionCategory.setParentTransactionCategory(null);

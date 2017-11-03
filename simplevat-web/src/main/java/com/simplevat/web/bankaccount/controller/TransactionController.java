@@ -142,7 +142,7 @@ public class TransactionController extends TransactionControllerHelper implement
         Transaction transaction = getTransaction(selectedTransactionModel);
         selectedBankAccount = getBankAccount(selectedBankAccountModel);
         System.out.println("selectedBankAccount :" + selectedBankAccount);
-        transaction.setLastUpdatedBy(loggedInUser.getUserId());
+        transaction.setLastUpdateBy(loggedInUser.getUserId());
         transaction.setCreatedBy(loggedInUser.getUserId());
         transaction.setBankAccount(selectedBankAccount);
         if (selectedTransactionModel.getTransactionType() != null) {
@@ -200,7 +200,7 @@ public class TransactionController extends TransactionControllerHelper implement
         User loggedInUser = FacesUtil.getLoggedInUser();
         Transaction transaction = getTransaction(selectedTransactionModel);
 
-        transaction.setLastUpdatedBy(loggedInUser.getUserId());
+        transaction.setLastUpdateBy(loggedInUser.getUserId());
         transaction.setCreatedBy(loggedInUser.getUserId());
         transaction.setBankAccount(selectedBankAccount);
 

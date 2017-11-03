@@ -45,7 +45,7 @@ public class ExpenseControllerHelper {
         }
         expense.setExpenseDescription(model.getExpenseDescription());
         expense.setLastUpdateDate(model.getLastUpdateDate());
-        expense.setLastUpdatedBy(model.getLastUpdatedBy());
+        expense.setLastUpdateBy(model.getLastUpdatedBy());
         expense.setProject(model.getProject());
         expense.setReceiptAttachmentDescription(model.getReceiptAttachmentDescription());
         expense.setReceiptAttachmentPath(model.getReceiptAttachmentPath());
@@ -76,6 +76,7 @@ public class ExpenseControllerHelper {
         item.setExpenseLineItemQuantity(model.getQuatity());
         item.setExpenseLineItemUnitPrice(model.getUnitPrice());
         item.setExpenseLineItemVat(model.getVatId());
+        item.setVersionNumber(model.getVersionNumber());
         item.setExpense(expense);
         return item;
     }
@@ -97,7 +98,7 @@ public class ExpenseControllerHelper {
 
         expenseModel.setExpenseDescription(entity.getExpenseDescription());
         expenseModel.setLastUpdateDate(entity.getLastUpdateDate());
-        expenseModel.setLastUpdatedBy(entity.getLastUpdatedBy());
+        expenseModel.setLastUpdatedBy(entity.getLastUpdateBy());
         expenseModel.setProject(entity.getProject());
         expenseModel.setReceiptAttachmentDescription(entity.getReceiptAttachmentDescription());
         expenseModel.setReceiptAttachmentPath(entity.getReceiptAttachmentPath());
@@ -125,6 +126,7 @@ public class ExpenseControllerHelper {
         model.setQuatity(expenseLineItem.getExpenseLineItemQuantity());
         model.setUnitPrice(expenseLineItem.getExpenseLineItemUnitPrice());
         model.setVatId(expenseLineItem.getExpenseLineItemVat());
+        model.setVersionNumber(expenseLineItem.getVersionNumber());
         this.updateSubTotal(model);
         return model;
 

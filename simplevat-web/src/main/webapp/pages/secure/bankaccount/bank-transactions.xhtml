@@ -10,40 +10,32 @@
 
     <ui:define name="content">
         <style>
-
-            .status-label{
+            .ui-widget-content .ui-inputfield {
+                padding-right: 24em;
+            }
+            .label{
                 font-size: 75%;
-                line-height: 20px;
-                float: left;
-                padding-left: 2px;
             }
-            .explained {
-                color: #037b03;
-                display: inherit;
+            .eligibility-EXPLAINED {
+                width: 60px;
+                color: #5cb85c;
             }
-            .explained:after {
+            .eligibility-EXPLAINED:after {
                 content: 'Explained';
                 vertical-align: middle;
                 display: inline;
             }
-            .unexplained {
-                color: #ff0000;
-                display: inherit;
+            .eligibility-UNEXPLAINED {
+                color: #d9534f;
+                width: 50px;
             }
-            .unexplained:after {
+            .eligibility-UNEXPLAINED:after {
                 content: 'Unexplained';
                 vertical-align: middle;
                 display: inline;
             }
             .ui-row-toggler{
                 display: inline !important;
-                float: left;
-            }
-            .explained-block .ui-row-toggler{
-                color: #037b03 !important;
-            }
-            .unexplained-block .ui-row-toggler{
-                color: #ff0000 !important;
             }
         </style>
 
@@ -58,7 +50,7 @@
                         <p:outputLabel styleClass="tableCustomHeader" value="#{transactionListController.selectedBankAccountModel.bankAccountName}" />
                     </f:facet>
 
-                    <p:column width="80" style="text-align: center">
+                    <p:column width="70" style="text-align: center">
 
                         <h:panelGroup rendered="#{transaction.transactionStatus.explainationStatusName eq 'EXPLAINED'}">
                             <i class="fa fa-check" style="color: green;"></i>
@@ -67,14 +59,14 @@
                             <i class="fa fa-question" style="color: red;"></i>
                         </h:panelGroup>
                         <br/>
-                        <p:rowToggler />
-                        <h:panelGroup styleClass="explained-block" rendered="#{transaction.transactionStatus.explainationStatusName eq 'EXPLAINED'}" >
-                            <h:panelGroup layout="block" styleClass="status-label explained">
+                        <h:panelGroup layout="block">
+                            <p:rowToggler />
+                            <h:panelGroup layout="block" style="display:block" styleClass="label eligibility-#{transaction.transactionStatus.explainationStatusName}" 
+                                          rendered="#{transaction.transactionStatus.explainationStatusName eq 'EXPLAINED'}">
                                 <h:outputText value=" "/>
                             </h:panelGroup>
-                        </h:panelGroup>
-                        <h:panelGroup styleClass="unexplained-block" rendered="#{transaction.transactionStatus.explainationStatusName eq 'UNEXPLAINED'}">
-                            <h:panelGroup layout="block" styleClass="status-label unexplained">
+                            <h:panelGroup layout="block" style="display:block" styleClass="label eligibility-#{transaction.transactionStatus.explainationStatusName}" 
+                                          rendered="#{transaction.transactionStatus.explainationStatusName eq 'UNEXPLAINED'}">
                                 <h:outputText value=" "/>
                             </h:panelGroup>
                         </h:panelGroup>
@@ -124,72 +116,57 @@
 
                     </p:column>
 
-                    <p:rowExpansion >
-                        <p:panelGrid  columns="2"
-                                      columnClasses="ui-grid-col-6,ui-grid-col-6"
-                                      layout="grid" styleClass="ui-panelgrid-blank form-group ui-fluid"
-                                      style="border:0px none; background-color:transparent; padding-top: 10px">
+                    <p:rowExpansion  >
+                        <p:panelGrid  columns="1"
+                                      layout="grid" styleClass="ui-panelgrid-blank form-group">
+                            <p:panelGrid  columns="2"
+                                          columnClasses="ui-grid-col-6,ui-grid-col-6"
+                                          layout="grid" styleClass="ui-panelgrid-blank form-group"
+                                          style="border:0px none; background-color:transparent; padding-top: 10px">
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:autoComplete
+                                        id="transactionType"
+                                        converter="#{transactionTypeConverter}"
+                                        dropdown="true"
+                                        forceSelection="true"
+                                        effect="fold"
+                                        groupBy="#{transactionType.parentTransactionType.transactionTypeName}"
+                                        completeMethod="#{transactionListController.transactionTypes()}"
+                                        value="#{transaction.transactionType}"
+                                        var="transactionType"
+                                        itemValue="#{transactionType}"
+                                        itemLabel="#{transactionType.transactionTypeName}">
+                                    </p:autoComplete>
+                                    <label>#{messages.type}</label>
+                                </h:panelGroup>
 
-                            <h:panelGroup styleClass="md-inputfield">
-                                <p:autoComplete
-                                    id="transactionType"
-                                    converter="#{transactionTypeConverter}"
-                                    dropdown="true"
-                                    forceSelection="true"
-                                    effect="fold"
-                                    completeMethod="#{transactionListController.transactionTypes()}"
-                                    value="#{transaction.transactionType}"
-                                    var="transactionType"
-                                    itemValue="#{transactionType}"
-                                    itemLabel="#{transactionType.transactionTypeName}">
-                                </p:autoComplete>
-                                <label>#{messages.type}</label>
-                            </h:panelGroup>
-
-                            <h:panelGroup styleClass="md-inputfield">
-                                <p:autoComplete
-                                    id="transactionCategory"
-                                    converter="#{transactionCategoryConverter}"
-                                    dropdown="true"
-                                    forceSelection="true"
-                                    effect="fold"
-                                    completeMethod="#{transactionListController.transactionCategories}"
-                                    value="#{transaction.explainedTransactionCategory}"
-                                    var="transactionCategory"
-                                    itemValue="#{transactionCategory}"
-                                    itemLabel="#{transactionCategory.transactionCategoryName}">
-                                </p:autoComplete>
-                                <label>#{messages.category}</label>
-                            </h:panelGroup>
-
-
-                            <h:panelGroup styleClass="md-inputfield">
-                                <p:inputText id="transactionDescription"
-                                             value="#{transaction.transactionDescription}" />
-                                <label>#{messages.description}</label>
-                            </h:panelGroup>
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:autoComplete
+                                        id="transactionCategory"
+                                        converter="#{transactionCategoryConverter}"
+                                        dropdown="true"
+                                        forceSelection="true"
+                                        effect="fold"
+                                        completeMethod="#{transactionListController.transactionCategories}"
+                                        value="#{transaction.explainedTransactionCategory}"
+                                        var="transactionCategory"
+                                        itemValue="#{transactionCategory}"
+                                        itemLabel="#{transactionCategory.transactionCategoryName}">
+                                    </p:autoComplete>
+                                    <label>#{messages.category}</label>
+                                </h:panelGroup>
 
 
-                            <h:panelGroup styleClass="md-inputfield" >
-                                <p:autoComplete
-                                    id="transactionStatus"
-                                    converter="#{transactionStatusConverter}"
-                                    dropdown="true"
-                                    forceSelection="true"
-                                    effect="fold"
-                                    completeMethod="#{transactionListController.transactionStatuses}"
-                                    value="#{transaction.transactionStatus}"
-                                    var="transactionStatus"
-                                    itemValue="#{transactionStatus}"
-                                    itemLabel="#{transactionStatus.explainationStatusName}">
-                                </p:autoComplete>
-                                <label>#{messages.status}</label>
-                            </h:panelGroup>
-                        </p:panelGrid>
-                        <p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group"
-                                     columnClasses="ui-grid-col-6,ui-grid-col-6">
-                                     <p:commandButton value="#{messages.save}" icon="ui-icon-save" update="transactionsTable"
-                                         action="#{transactionListController.updateTransactionDropDown()}">
+                                <h:panelGroup styleClass="md-inputfield">
+                                    <p:inputText id="transactionDescription"
+                                                 value="#{transaction.transactionDescription}" />
+                                    <label>#{messages.description}</label>
+                                </h:panelGroup>
+                            </p:panelGrid>
+
+
+                            <p:commandButton value="#{messages.save}" icon="ui-icon-save" update="transactionsTable"
+                                             action="#{transactionListController.updateTransactionDropDown()}">
                                 <f:setPropertyActionListener target="#{transactionListController.transactionModel}" value="#{transaction}" />
                             </p:commandButton>
                         </p:panelGrid>

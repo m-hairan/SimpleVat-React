@@ -52,7 +52,7 @@ public class TransactionControllerHelper {
         transaction.setCurrentBalance(model.getCurrentBalance());
         transaction.setCreatedBy(model.getCreatedBy());
         transaction.setCreatedDate(model.getCreatedDate());
-        transaction.setLastUpdatedBy(model.getLastUpdatedBy());
+        transaction.setLastUpdateBy(model.getLastUpdatedBy());
         transaction.setLastUpdateDate(model.getLastUpdateDate());
         transaction.setDeleteFlag(model.getDeleteFlag());
         transaction.setVersionNumber(model.getVersionNumber());
@@ -83,7 +83,7 @@ public class TransactionControllerHelper {
         transactionModel.setCurrentBalance(entity.getCurrentBalance());
         transactionModel.setCreatedBy(entity.getCreatedBy());
         transactionModel.setCreatedDate(entity.getCreatedDate());
-        transactionModel.setLastUpdatedBy(entity.getLastUpdatedBy());
+        transactionModel.setLastUpdatedBy(entity.getLastUpdateBy());
         transactionModel.setLastUpdateDate(entity.getLastUpdateDate());
         transactionModel.setDeleteFlag(entity.getDeleteFlag());
         transactionModel.setVersionNumber(entity.getVersionNumber());

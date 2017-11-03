@@ -89,9 +89,21 @@ public class TransactionListController extends TransactionControllerHelper imple
             TransactionCategory transactionCategory = transactionCategoryService.findByPK(transactionModel.getExplainedTransactionCategory().getTransactionCategoryCode());
             transaction.setExplainedTransactionCategory(transactionCategory);
         }
-        if (transactionModel.getTransactionStatus() != null) {
-            TransactionStatus transactionStatus = transactionStatusService.findByPK(transactionModel.getTransactionStatus().getExplainationStatusCode());
-            transaction.setTransactionStatus(transactionStatus);
+        if (transactionModel.getTransactionType() != null && transactionModel.getExplainedTransactionCategory() != null) {
+            if (transactionModel.getTransactionStatus() == null
+                    || transactionModel.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.UNEXPLIANED) {
+                System.out.println("inside if :" + transaction.getTransactionStatus());
+                TransactionStatus transactionStatus = transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED);
+                transaction.setTransactionStatus(transactionStatus);
+            }
+        } else {
+
+            System.out.println("inside inside if :" + transaction.getTransactionStatus());
+            if (transactionModel.getTransactionStatus() == null
+                    || transactionModel.getTransactionStatus().getExplainationStatusCode() == 0) {
+                TransactionStatus transactionStatus = transactionStatusService.findByPK(TransactionStatusConstant.UNEXPLIANED);
+                transaction.setTransactionStatus(transactionStatus);
+            }
         }
         transactionService.update(transaction);
         init();
