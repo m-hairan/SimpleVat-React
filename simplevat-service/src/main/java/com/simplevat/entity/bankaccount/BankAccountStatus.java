@@ -1,22 +1,22 @@
 package com.simplevat.entity.bankaccount;
 
-import java.time.LocalDateTime;
 
+import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
 import lombok.Data;
 
-import com.simplevat.entity.converter.DateConverter;
+import org.hibernate.annotations.ColumnDefault;
 
 /**
  * Created by mohsinh on 2/26/2017.
@@ -32,49 +32,55 @@ import com.simplevat.entity.converter.DateConverter;
 @Entity
 @Table(name = "BANK_ACCOUNT_STATUS")
 @Data
-public class BankAccountStatus {
+public class BankAccountStatus implements Serializable{
 	
     @Id
     @Column(name = "BANK_ACCOUNT_STATUS_CODE")
     private Integer bankAccountStatusCode;
     
-    @Basic
+    @Basic(optional = false)
     @Column(name = "BANK_ACCOUNT_STATUS_NAME")
     private String bankAccountStatusName;
+    
     @Basic
     @Column(name = "BANK_ACCOUNT_STATUS_DESCRIPTION")
     private String bankAccountStatusDescription;
     
-    @Basic
-    @Column(name = "DEFAULT_FLAG", length = 1, columnDefinition = "CHAR")
-    private String defaultFlag = "N";
-    
-    @Basic
+    @Column(name = "DEFAULT_FLAG")
+    @ColumnDefault(value = "'N'")
+    @Basic(optional = false)
+    private Character defaultFlag;
+
     @Column(name = "ORDER_SEQUENCE")
-    private int orderSequence = 1;
+    @ColumnDefault(value = "1")
+    @Basic(optional = false)
+    private Integer orderSequence;
     
-    @Basic
     @Column(name = "CREATED_BY")
+    @Basic(optional = false)
     private Integer createdBy;
 
-    @Basic
     @Column(name = "CREATED_DATE")
-    @Convert(converter = DateConverter.class)
-    private LocalDateTime createdDate;
+    @ColumnDefault(value = "CURRENT_TIMESTAMP")
+    @Basic(optional = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdDate;
 
-    @Basic
     @Column(name = "LAST_UPDATED_BY")
-    private Integer lastUpdatedBy;
-    @Basic
+    private Integer lastUpdateBy;
+
     @Column(name = "LAST_UPDATE_DATE")
-    @Convert(converter = DateConverter.class)
-    private LocalDateTime lastUpdateDate;
-    
-    @Basic
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastUpdateDate;
+
     @Column(name = "DELETE_FLAG")
-    private Boolean deleteFlag = false;
-    @Basic
-    @Version
+    @ColumnDefault(value = "0")
+    @Basic(optional = false)
+    private boolean deleteFlag;
+
     @Column(name = "VERSION_NUMBER")
+    @ColumnDefault(value = "1")
+    @Basic(optional = false)
+    @Version
     private Integer versionNumber;
 }

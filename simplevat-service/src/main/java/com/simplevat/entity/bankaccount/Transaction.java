@@ -2,6 +2,7 @@ package com.simplevat.entity.bankaccount;
 
 import com.simplevat.entity.Project;
 import com.simplevat.entity.converter.DateConverter;
+import java.io.Serializable;
 
 import lombok.Data;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import org.hibernate.annotations.ColumnDefault;
 
 /**
  * Created by mohsinh on 2/26/2017.
@@ -16,22 +18,29 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "TRANSACTON")
 @Data
-public class Transaction {
+public class Transaction implements Serializable {
+
+    private static final long serialVersionUID = 848122185643690684L; 
+    
     @Id
     @Column(name = "TRANSACTION_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer transactionId;
+    
     @Basic
     @Column(name = "TRANSACTION_DATE")
     private LocalDateTime transactionDate;
+    
     @Basic
     @Column(name = "TRANSACTION_DESCRIPTION")
     private String transactionDescription;
+    
     @Basic
     @Column(name = "TRANSACTION_AMOUNT")
+    @ColumnDefault(value = "0.00")
     private BigDecimal transactionAmount;
-    @Basic
     
+    @Basic
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TRANSACTION_TYPE_CODE")
     private TransactionType transactionType;
@@ -39,7 +48,8 @@ public class Transaction {
     @Basic
     @Column(name = "RECEIPT_NUMBER")
     private String receiptNumber;
-    @Basic
+    
+    @Basic(optional = false)
     @Column(name = "DEBIT_CREDIT_FLAG")
     private Character debitCreditFlag;
     
@@ -54,45 +64,57 @@ public class Transaction {
     @Basic
     @Column(name = "EXPLAINED_TRANSACTION_DESCRIPTION")
     private String explainedTransactionDescription;
+    
     @Basic
     @Column(name = "EXPLAINED_TRANSACTION_ATTACHEMENT_DESCRIPTION")
     private String explainedTransactionAttachementDescription;
+    
     @Basic
     @Lob
     @Column(name = "EXPLAINED_TRANSACTION_ATTACHEMENT")
     private byte[] explainedTransactionAttachement;
+    
     @Basic
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BANK_ACCOUNT_ID")
     private BankAccount bankAccount;
     
+    @Basic(optional = false)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EXPLANATION_STATUS_CODE")
     private TransactionStatus transactionStatus;
     
+    @Basic(optional = false)
     @Column(name="CURRENT_BALANCE")
+    @ColumnDefault(value = "0.00")
     private BigDecimal currentBalance;
     
-    @Basic
     @Column(name = "CREATED_BY")
+    @Basic(optional = false)
     private Integer createdBy;
-    @Basic
+
     @Column(name = "CREATED_DATE")
+    @ColumnDefault(value = "CURRENT_TIMESTAMP")
+    @Basic(optional = false)
     @Convert(converter = DateConverter.class)
     private LocalDateTime createdDate;
-    @Basic
+
     @Column(name = "LAST_UPDATED_BY")
-    private Integer lastUpdatedBy;
-    @Basic
+    private Integer lastUpdateBy;
+
     @Column(name = "LAST_UPDATE_DATE")
     @Convert(converter = DateConverter.class)
     private LocalDateTime lastUpdateDate;
-    @Basic
+
     @Column(name = "DELETE_FLAG")
+    @ColumnDefault(value = "0")
+    @Basic(optional = false)
     private Boolean deleteFlag = Boolean.FALSE;
-    @Basic
-    @Version
+
     @Column(name = "VERSION_NUMBER")
+    @ColumnDefault(value = "1")
+    @Basic(optional = false)
+    @Version
     private Integer versionNumber;
     
     

@@ -1,48 +1,64 @@
 package com.simplevat.entity.bankaccount;
 
 import com.simplevat.entity.converter.DateConverter;
+import java.io.Serializable;
 
 import lombok.Data;
 
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
+import org.hibernate.annotations.ColumnDefault;
 
 /**
  * Created by mohsinh on 2/26/2017.
  */
 @NamedQueries({
     @NamedQuery(name = "findAllTransactionType",
-            query = "SELECT t "
-            + "FROM TransactionType t where t.deleteFlag='false' ORDER BY t.defaltFlag DESC , t.orderSequence ASC")
+            query = "SELECT t FROM TransactionType t where t.deleteFlag=false AND t.parentTransactionType != null ORDER BY t.defaltFlag DESC , t.orderSequence ASC")
 })
 @Entity
 @Table(name = "TRANSACTION_TYPE")
 @Data
-public class TransactionType {
+public class TransactionType implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "TRANSACTION_TYPE_CODE")
     private Integer transactionTypeCode;
 
     @Column(name = "TRANSACTION_TYPE_NAME")
+    @Basic(optional = false)
     private String transactionTypeName;
 
     @Column(name = "TRANSACTION_TYPE_DESCRIPTION")
     private String transactionTypeDescription;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PARENT_TRANSACTION_TYPE_CODE")
+    private TransactionType parentTransactionType;
+
     @Column(name = "DEBIT_CREDIT_FLAG")
+    @Basic(optional = false)
     private Character debitCreditFlag;
 
     @Column(name = "DEFAULT_FLAG")
+    @ColumnDefault(value = "'N'")
+    @Basic(optional = false)
     private Character defaltFlag;
 
     @Column(name = "ORDER_SEQUENCE")
+    @ColumnDefault(value = "1")
+    @Basic(optional = false)
     private Integer orderSequence;
 
     @Column(name = "CREATED_BY")
+    @Basic(optional = false)
     private Integer createdBy;
 
     @Column(name = "CREATED_DATE")
+    @ColumnDefault(value = "CURRENT_TIMESTAMP")
+    @Basic(optional = false)
     @Convert(converter = DateConverter.class)
     private LocalDateTime createdDate;
 
@@ -51,13 +67,16 @@ public class TransactionType {
 
     @Column(name = "LAST_UPDATE_DATE")
     @Convert(converter = DateConverter.class)
-    private LocalDateTime LastUpatedDate;
-    
+    private LocalDateTime LastUpdatedDate;
+
     @Column(name = "DELETE_FLAG")
-    private Boolean deleteFlag = Boolean.FALSE;
+    @ColumnDefault(value = "0")
+    @Basic(optional = false)
+    private boolean deleteFlag;
 
-    @Version
     @Column(name = "VERSION_NUMBER")
+    @ColumnDefault(value = "1")
+    @Basic(optional = false)
+    @Version
     private Integer versionNumber;
-
 }

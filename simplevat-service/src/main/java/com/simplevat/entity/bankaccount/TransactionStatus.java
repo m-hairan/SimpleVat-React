@@ -17,6 +17,8 @@ import javax.persistence.Version;
 import lombok.Data;
 
 import com.simplevat.entity.converter.DateConverter;
+import java.io.Serializable;
+import org.hibernate.annotations.ColumnDefault;
 
 @NamedQueries({
     @NamedQuery(name = "findAllTransactionStatues",
@@ -26,48 +28,58 @@ import com.simplevat.entity.converter.DateConverter;
 @Entity
 @Table(name = "EXPLANATION_STATUS")
 @Data
-public class TransactionStatus {
+public class TransactionStatus implements Serializable {
 
-	@Id
-	@Column(name = "EXPLANATION_STATUS_CODE")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int explainationStatusCode;
-	
-	@Basic
-	@Column(name = "EXPLANATION_STATUS_NAME")
-	private String explainationStatusName;
-	
-	@Basic
-	@Column(name = "EXPLANATION_STATUS_DESCRIPTION")
-	private String explainationStatusDescriptions;
+    private static final long serialVersionUID = 848122185643690684L;
+    @Id
+    @Column(name = "EXPLANATION_STATUS_CODE")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int explainationStatusCode;
 
-	@Column(name = "DEFAULT_FLAG")
-	private Character defaltFlag;
+    @Basic(optional = false)
+    @Column(name = "EXPLANATION_STATUS_NAME")
+    private String explainationStatusName;
 
-	@Column(name = "ORDER_SEQUENCE")
-	private Integer orderSequence;
+    @Basic
+    @Column(name = "EXPLANATION_STATUS_DESCRIPTION")
+    private String explainationStatusDescriptions;
 
-	@Basic
-	@Column(name = "CREATED_BY")
-	private Integer createdBy;
-	@Basic
-	@Column(name = "CREATED_DATE")
-	@Convert(converter = DateConverter.class)
-	private LocalDateTime createdDate;
-	@Basic
-	@Column(name = "LAST_UPDATED_BY")
-	private Integer lastUpdatedBy;
-	@Basic
-	@Column(name = "LAST_UPDATE_DATE")
-	@Convert(converter = DateConverter.class)
-	private LocalDateTime lastUpdateDate;
-	@Basic
-	@Column(name = "DELETE_FLAG")
-	private Boolean deleteFlag = Boolean.FALSE;
+    @Column(name = "DEFAULT_FLAG")
+    @ColumnDefault(value = "'N'")
+    @Basic(optional = false)
+    private Character defaltFlag;
 
-	@Basic
-	@Version
-	@Column(name = "VERSION_NUMBER")
-	private Integer versionNumber;
+    @Column(name = "ORDER_SEQUENCE")
+    @ColumnDefault(value = "1")
+    @Basic(optional = false)
+    private Integer orderSequence;
+
+    @Column(name = "CREATED_BY")
+    @Basic(optional = false)
+    private Integer createdBy;
+
+    @Column(name = "CREATED_DATE")
+    @ColumnDefault(value = "CURRENT_TIMESTAMP")
+    @Basic(optional = false)
+    @Convert(converter = DateConverter.class)
+    private LocalDateTime createdDate;
+
+    @Column(name = "LAST_UPDATED_BY")
+    private Integer lastUpdateBy;
+
+    @Column(name = "LAST_UPDATE_DATE")
+    @Convert(converter = DateConverter.class)
+    private LocalDateTime lastUpdateDate;
+
+    @Column(name = "DELETE_FLAG")
+    @ColumnDefault(value = "0")
+    @Basic(optional = false)
+    private Boolean deleteFlag = Boolean.FALSE;
+
+    @Column(name = "VERSION_NUMBER")
+    @ColumnDefault(value = "1")
+    @Basic(optional = false)
+    @Version
+    private Integer versionNumber;
 
 }

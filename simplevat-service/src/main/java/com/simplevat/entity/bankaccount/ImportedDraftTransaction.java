@@ -1,6 +1,7 @@
 package com.simplevat.entity.bankaccount;
 
 import com.simplevat.entity.converter.DateConverter;
+import java.io.Serializable;
 
 import lombok.Data;
 
@@ -8,6 +9,7 @@ import javax.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import org.hibernate.annotations.ColumnDefault;
 
 /**
  * Created by mohsinh on 2/26/2017.
@@ -15,7 +17,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "IMPORTED_DRAFT_TRANSACTON")
 @Data
-public class ImportedDraftTransaction {
+public class ImportedDraftTransaction implements Serializable {
+
+    private static final long serialVersionUID = 848122185643690684L;
     @Id
     @Column(name = "IMPORTED_TRANSACTION_ID")
     private int importedTransactionId;
@@ -26,37 +30,48 @@ public class ImportedDraftTransaction {
     @Basic
     @Column(name = "IMPORTED_TRANSACTION_DESCRIPTION")
     private String importedTransactionDescription;
+    
     @Basic
+    @ColumnDefault(value = "0.00")
     @Column(name = "IMPORTED_TRANSACTION_AMOUNT")
     private BigDecimal importedTransactionAmount;
-    @Basic
+    
+    @Basic(optional = false)
     @Column(name = "IMPORTED_DEBIT_CREDIT_FLAG")
     private Character importedDebitCreditFlag;
+    
     @Basic
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BANK_ACCOUNT_ID")
     private BankAccount bankAccount;
-    @Basic
+    
     @Column(name = "CREATED_BY")
+    @Basic(optional = false)
     private Integer createdBy;
-    @Basic
+
     @Column(name = "CREATED_DATE")
+    @ColumnDefault(value = "CURRENT_TIMESTAMP")
+    @Basic(optional = false)
     @Convert(converter = DateConverter.class)
     private LocalDateTime createdDate;
-    @Basic
+
     @Column(name = "LAST_UPDATED_BY")
-    private Integer lastUpdatedBy;
-    @Basic
+    private Integer lastUpdateBy;
+
     @Column(name = "LAST_UPDATE_DATE")
     @Convert(converter = DateConverter.class)
     private LocalDateTime lastUpdateDate;
-    @Basic
+
     @Column(name = "DELETE_FLAG")
-    private Boolean deleteFlag = false;
-    @Basic
-    @Version
+    @ColumnDefault(value = "0")
+    @Basic(optional = false)
+    private Boolean deleteFlag = Boolean.FALSE;
+
     @Column(name = "VERSION_NUMBER")
-    private int versionNumber;
+    @ColumnDefault(value = "1")
+    @Basic(optional = false)
+    @Version
+    private Integer versionNumber;
 
     @PrePersist
     public void updateDates() {

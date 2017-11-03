@@ -56,4 +56,9 @@ public class BankAccountServiceImpl extends BankAccountService{
 		activity.setLoggingRequired(true);
 		return activity;
 	}
+
+    @Override
+    public BankAccount getBankAccountById(int id) {
+        return bankAccountDao.getBankAccountById(id);
+    }
 }

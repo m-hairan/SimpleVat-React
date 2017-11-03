@@ -1,12 +1,14 @@
 package com.simplevat.entity.bankaccount;
 
 import com.simplevat.entity.converter.DateConverter;
+import java.io.Serializable;
 
 import lombok.Data;
 
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
+import org.hibernate.annotations.ColumnDefault;
 
 /**
  * Created by mohsinh on 2/26/2017.
@@ -19,15 +21,19 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "TRANSACTION_CATEGORY")
 @Data
-public class TransactionCategory {
+public class TransactionCategory implements Serializable {
+
+    private static final long serialVersionUID = 848122185643690684L;
 	
     @Id
     @Column(name = "TRANSACTION_CATEGORY_CODE")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer transactionCategoryCode;
-    @Basic
+    
+    @Basic(optional = false)
     @Column(name = "TRANSACTION_CATEGORY_NAME")
     private String transactionCategoryName;
+    
     @Basic
     @Column(name = "TRANSACTION_CATEGORY_DESCRIPTION")
     private String transactionCategoryDescription;
@@ -41,32 +47,41 @@ public class TransactionCategory {
     private TransactionCategory parentTransactionCategory;
     
     @Column(name = "DEFAULT_FLAG")
+    @ColumnDefault(value = "'N'")
+    @Basic(optional = false)
     private Character defaltFlag;
 
     @Column(name = "ORDER_SEQUENCE")
+    @ColumnDefault(value = "1")
+    @Basic(optional = false)
     private Integer orderSequence;
     
-    @Basic
     @Column(name = "CREATED_BY")
+    @Basic(optional = false)
     private Integer createdBy;
-    @Basic
+
     @Column(name = "CREATED_DATE")
+    @ColumnDefault(value = "CURRENT_TIMESTAMP")
+    @Basic(optional = false)
     @Convert(converter = DateConverter.class)
     private LocalDateTime createdDate;
-    @Basic
+
     @Column(name = "LAST_UPDATED_BY")
-    private Integer lastUpdatedBy;
-    @Basic
+    private Integer lastUpdateBy;
+
     @Column(name = "LAST_UPDATE_DATE")
     @Convert(converter = DateConverter.class)
     private LocalDateTime lastUpdateDate;
-    @Basic
+
     @Column(name = "DELETE_FLAG")
+    @ColumnDefault(value = "0")
+    @Basic(optional = false)
     private Boolean deleteFlag = Boolean.FALSE;
-    
-    @Basic
-    @Version
+
     @Column(name = "VERSION_NUMBER")
+    @ColumnDefault(value = "1")
+    @Basic(optional = false)
+    @Version
     private Integer versionNumber;
 
 

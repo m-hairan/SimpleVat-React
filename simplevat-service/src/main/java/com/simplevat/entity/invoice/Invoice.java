@@ -16,6 +16,7 @@ import java.util.Collection;
 import javax.annotation.Nonnull;
 import lombok.AccessLevel;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 /**
  * Created by mohsinh on 2/26/2017.
@@ -25,7 +26,7 @@ import lombok.Setter;
 @Table(name = "INVOICE")
 @NamedQueries({
     @NamedQuery(name = "Invoice.searchInvoices",
-            query = "from Invoice i where i.deleteFlag = 'N' order by i.lastUpdateDate desc")
+            query = "from Invoice i where i.deleteFlag = false order by i.lastUpdateDate desc")
 })
 public class Invoice implements Serializable {
 
@@ -44,7 +45,9 @@ public class Invoice implements Serializable {
     @Convert(converter = DateConverter.class)
     private LocalDateTime invoiceDate;
 
+    @Basic(optional = false)
     @Column(name = "INVOICE_DUE_ON")
+    @ColumnDefault(value = "0")
     private Integer invoiceDueOn;
     
     @Column(name = "INVOICE_DUE_DATE")
@@ -59,6 +62,7 @@ public class Invoice implements Serializable {
     private DiscountType discountType;
 
     @Column(name = "INVOICE_DISCOUNT")
+    @ColumnDefault(value = "0.00")
     private BigDecimal invoiceDiscount;
 
     @Column(name = "CONTRACT_PO_NUMBER")
@@ -69,24 +73,31 @@ public class Invoice implements Serializable {
     private Currency currency;
 
     @Column(name = "CREATED_BY")
+    @Basic(optional = false)
     private Integer createdBy;
 
     @Column(name = "CREATED_DATE")
+    @ColumnDefault(value = "CURRENT_TIMESTAMP")
+    @Basic(optional = false)
     @Convert(converter = DateConverter.class)
     private LocalDateTime createdDate;
 
     @Column(name = "LAST_UPDATED_BY")
-    private Integer lastUpdatedBy;
+    private Integer lastUpdateBy;
 
     @Column(name = "LAST_UPDATE_DATE")
     @Convert(converter = DateConverter.class)
     private LocalDateTime lastUpdateDate;
 
     @Column(name = "DELETE_FLAG")
+    @ColumnDefault(value = "0")
+    @Basic(optional = false)
     private Boolean deleteFlag = Boolean.FALSE;
 
-    @Version
     @Column(name = "VERSION_NUMBER")
+    @ColumnDefault(value = "1")
+    @Basic(optional = false)
+    @Version
     private Integer versionNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)

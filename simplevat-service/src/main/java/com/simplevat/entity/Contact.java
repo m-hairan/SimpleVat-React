@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.ColumnDefault;
 
 /**
  * Created by mohsinh on 2/26/2017.
@@ -12,11 +13,13 @@ import lombok.Data;
 @NamedQueries({
     @NamedQuery(name = "allContacts",
             query = "SELECT c "
-            + "FROM Contact c where c.deleteFlag = FALSE order by c.firstName, c.lastName"),
+            + "FROM Contact c where c.deleteFlag = FALSE order by c.firstName, c.lastName")
+    ,
     
     @NamedQuery(name = "Contact.contactByEmail",
             query = "SELECT c "
-            + "FROM Contact c where c.email =:email"),
+            + "FROM Contact c where c.email =:email")
+    ,
     @NamedQuery(name = "Contact.contactsByName",
             query = "SELECT c FROM Contact c WHERE  ((c.firstName LIKE :name or c.lastName LIKE :name) and c.deleteFlag = FALSE) order by c.firstName, c.lastName")
 })
@@ -25,7 +28,6 @@ import lombok.Data;
 @Table(name = "CONTACT")
 @Data
 public class Contact implements Serializable {
-	
 
     private static final long serialVersionUID = 6914121175305098995L;
 
@@ -86,11 +88,13 @@ public class Contact implements Serializable {
     @Column(name = "VAT_REGISTRATION_NUMBER")
     private String vatRegistrationNumber;
 
-    @Basic
+    @Basic(optional = false)
     @Column(name = "CREATED_BY")
     private Integer createdBy;
-    @Basic
+
+    @Basic(optional = false)
     @Column(name = "CREATED_DATE")
+    @ColumnDefault(value = "CURRENT_TIMESTAMP")
     @Convert(converter = DateConverter.class)
     private LocalDateTime createdDate;
 
@@ -102,13 +106,16 @@ public class Contact implements Serializable {
     @Column(name = "LAST_UPDATE_DATE")
     @Convert(converter = DateConverter.class)
     private LocalDateTime lastUpdateDate;
-    @Basic
+
     @Column(name = "DELETE_FLAG")
+    @ColumnDefault(value = "0")
+    @Basic(optional = false)
     private Boolean deleteFlag = Boolean.FALSE;
 
-    @Basic
-    @Version
     @Column(name = "VERSION_NUMBER")
+    @ColumnDefault(value = "1")
+    @Basic(optional = false)
+    @Version
     private Integer versionNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)

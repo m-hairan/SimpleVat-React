@@ -38,17 +38,20 @@ public class DocumentTemplate implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "ID")
     private Integer id;
+    
     @Basic(optional = false)
-    @Column(name = "name")
+    @Column(name = "NAME")
     private String name;
+    
     @Basic(optional = false)
-    @Column(name = "type")
+    @Column(name = "TYPE")
     private int type;
+    
     @Basic(optional = false)
     @Lob
-    @Column(name = "template")
+    @Column(name = "TEMPLATE")
     private byte[] template;
 
     public DocumentTemplate() {

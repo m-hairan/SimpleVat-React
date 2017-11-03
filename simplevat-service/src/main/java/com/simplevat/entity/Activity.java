@@ -72,7 +72,7 @@ public class Activity {
     @PostLoad
     public void updateLastUploadDateTime() {
         if (lastUpdateDate != null) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy hh:mm a");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd hh:mm a");
             strLastUpdateDate = lastUpdateDate.format(formatter);
         }
     }

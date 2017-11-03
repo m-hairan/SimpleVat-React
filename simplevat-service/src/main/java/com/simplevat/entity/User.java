@@ -1,10 +1,12 @@
 package com.simplevat.entity;
 
 import com.simplevat.entity.converter.DateConverter;
+import java.io.Serializable;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import org.hibernate.annotations.ColumnDefault;
 
 /**
  * Created by mohsinh on 2/26/2017.
@@ -17,8 +19,10 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "USER", schema = "simplevat", catalog = "")
 @Data
-public class User {
+public class User implements Serializable{
 
+    private static final long serialVersionUID = 1L;
+    
     @Id
     @Column(name = "USER_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +32,7 @@ public class User {
     @Column(name = "FIRST_NAME")
     private String firstName;
 
-    @Basic
+    @Basic(optional = false)
     @Column(name = "USER_EMAIL")
     private String userEmail;
 
@@ -45,12 +49,13 @@ public class User {
     @JoinColumn(name = "COMPANY_ID")
     private Company company;
 
-    @Basic
     @Column(name = "CREATED_BY")
+    @Basic(optional = false)
     private Integer createdBy;
 
-    @Basic
     @Column(name = "CREATED_DATE")
+    @ColumnDefault(value = "CURRENT_TIMESTAMP")
+    @Basic(optional = false)
     @Convert(converter = DateConverter.class)
     private LocalDateTime createdDate;
 
@@ -63,23 +68,27 @@ public class User {
     @Column(name = "LAST_UPDATE_DATE")
     private LocalDateTime lastUpdateDate;
 
-    @Basic
-    @Column(name = "DELETE_FLAG")
-    private Boolean deleteFlag = Boolean.FALSE;
-
-    @Basic
+    @Basic(optional = false)
+    @ColumnDefault(value = "0")
     @Column(name = "IS_ACTIVE")
     private Boolean isActive;
+    
+    @Column(name = "DELETE_FLAG")
+    @ColumnDefault(value = "0")
+    @Basic(optional = false)
+    private Boolean deleteFlag = Boolean.FALSE;
 
-    @Version
     @Column(name = "VERSION_NUMBER")
+    @ColumnDefault(value = "1")
+    @Basic(optional = false)
+    @Version
     private Integer versionNumber;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ROLE_CODE")
     private Role role;
 
-    @Basic
+    @Basic(optional = false)
     @Column(name = "USER_PASSWORD")
     private String password;
 

@@ -11,7 +11,10 @@ import org.springframework.stereotype.Repository;
 
 import com.simplevat.dao.AbstractDao;
 import com.simplevat.dao.bankaccount.TransactionDao;
+import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.entity.bankaccount.Transaction;
+import java.time.Instant;
+import java.time.ZoneId;
 import javax.persistence.TypedQuery;
 
 @Repository
@@ -83,4 +86,17 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
         }
         return null;
     }
+
+    @Override
+    public List<Transaction> getTransactionsByDateRangeAndBankAccountId(BankAccount bankAccount, Date startDate, Date lastDate) {
+        TypedQuery<Transaction> query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.deleteFlag = false and t.bankAccount.bankAccountId = :bankAccountId and t.transactionDate BETWEEN :startDate AND :lastDate ORDER BY t.transactionDate ASC", Transaction.class);
+        query.setParameter("bankAccountId", bankAccount.getBankAccountId());
+        query.setParameter("startDate", Instant.ofEpochMilli(startDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
+        query.setParameter("lastDate", Instant.ofEpochMilli(lastDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
+        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
+            return query.getResultList();
+        }
+        return null;
+    }
+
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Calendar;
+import org.hibernate.annotations.ColumnDefault;
 
 /**
  * Created by mohsinh on 2/26/2017.
@@ -38,13 +39,16 @@ public class ExpenseLineItem implements Serializable {
     @Column(name = "EXPENSE_LINE_ITEM_VAT")
     private BigDecimal expenseLineItemVat;
 
-    @Basic
     @Column(name = "DELETE_FLAG")
+    @ColumnDefault(value = "0")
+    @Basic(optional = false)
     private Boolean deleteFlag = Boolean.FALSE;
 
-    @Basic
     @Column(name = "VERSION_NUMBER")
-    private Integer versionNumber = 0;
+    @ColumnDefault(value = "1")
+    @Basic(optional = false)
+    @Version
+    private Integer versionNumber;
 
     @ManyToOne
     @JoinColumn(name = "EXPENSE_ID")

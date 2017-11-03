@@ -3,6 +3,7 @@ package com.simplevat.entity.bankaccount;
 import com.simplevat.entity.Country;
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.converter.DateConverter;
+import java.io.Serializable;
 
 import lombok.Data;
 
@@ -12,6 +13,9 @@ import javax.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
+import org.hibernate.annotations.ColumnDefault;
+import static org.hibernate.type.TypeFactory.serializable;
 
 /**
  * Created by mohsinh on 2/26/2017.
@@ -26,7 +30,7 @@ import java.time.LocalDateTime;
 @Table(name = "BANK_ACCOUNT")
 @Data
 @Transactional
-public class BankAccount {
+public class BankAccount implements Serializable{
 
     @Id
     @Column(name = "BANK_ACCOUNT_ID")
@@ -45,60 +49,78 @@ public class BankAccount {
     @JoinColumn(name = "BANK_ACCOUNT_STATUS_CODE")
     private BankAccountStatus bankAccountStatus;
     
-    @Basic
-    @Column(name = "PERSONAL_CORPORATE_ACCOUNT_IND", length = 1, columnDefinition = "CHAR")
-    private String personalCorporateAccountInd = "C";
-    @Basic
+    @Basic(optional = false)
+    @ColumnDefault(value = "'C'")
+    @Column(name = "PERSONAL_CORPORATE_ACCOUNT_IND", length = 1)
+    private Character personalCorporateAccountInd;
+    
+    @Basic(optional = false)
+    @ColumnDefault(value = "1")
     @Column(name = "ISPRIMARY_ACCOUNT_FLAG")
-    private Boolean isprimaryAccountFlag = true;
+    private Boolean isprimaryAccountFlag = Boolean.TRUE;
+    
     @Basic
     @Column(name = "BANK_NAME")
     private String bankName;
+    
     @Basic
     @Column(name = "ACCOUNT_NUMBER")
     private String accountNumber;
+    
     @Basic
     @Column(name = "IBAN_NUMBER")
     private String ibanNumber;
     @Basic
     @Column(name = "SWIFT_CODE")
     private String swiftCode;
+    
     @Basic
+    @ColumnDefault(value = "0.00")
     @Column(name = "OPENING_BALANCE")
     private BigDecimal openingBalance;
+    
     @Basic
+    @ColumnDefault(value = "0.00")
     @Column(name = "CURRENT_BALANCE")
     private BigDecimal currentBalance;
+    
     @Basic
     @Column(name = "BANK_FEED_STATUS_CODE")
     private Integer bankFeedStatusCode;
+    
    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BANK_COUNTRY_CODE")
     private Country bankCountry;
     
-    @Basic
     @Column(name = "CREATED_BY")
+    @Basic(optional = false)
     private Integer createdBy;
 
-    @Basic
     @Column(name = "CREATED_DATE")
+    @ColumnDefault(value = "CURRENT_TIMESTAMP")
+    @Basic(optional = false)
     @Convert(converter = DateConverter.class)
     private LocalDateTime createdDate;
-
+    
     @Basic
     @Column(name = "LAST_UPDATED_BY")
     private Integer lastUpdatedBy;
+    
     @Basic
     @Column(name = "LAST_UPDATE_DATE")
     @Convert(converter = DateConverter.class)
     private LocalDateTime lastUpdateDate;
-    @Basic
+
     @Column(name = "DELETE_FLAG")
+    @ColumnDefault(value = "0")
+    @Basic(optional = false)
     private Boolean deleteFlag = Boolean.FALSE;
-    @Basic
-    @Version
+
     @Column(name = "VERSION_NUMBER")
+    @ColumnDefault(value = "1")
+    @Basic(optional = false)
+    @Version
     private Integer versionNumber;
     
     @ManyToOne(fetch = FetchType.LAZY)

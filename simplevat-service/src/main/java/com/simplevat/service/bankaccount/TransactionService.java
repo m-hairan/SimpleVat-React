@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.simplevat.criteria.bankaccount.TransactionCriteria;
+import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.service.SimpleVatService;
+import java.util.Date;
 
 public abstract class TransactionService extends SimpleVatService<Integer, Transaction> {
 
@@ -23,6 +25,8 @@ public abstract class TransactionService extends SimpleVatService<Integer, Trans
     public abstract void persist(Transaction transaction);
 
     public abstract Transaction update(Transaction transaction);
-    
+
     public abstract Transaction deleteTransaction(Transaction transaction);
+
+    public abstract List<Transaction> getTransactionsByDateRangeAndBankAccountId(BankAccount bankAccount, Date startDate, Date lastDate);
 }

@@ -8,6 +8,9 @@ import lombok.Setter;
 import javax.persistence.*;
 
 import com.simplevat.entity.converter.DateConverter;
+import java.io.Serializable;
+import java.util.Date;
+import org.hibernate.annotations.ColumnDefault;
 
 /**
  * Created by mohsinh on 2/26/2017.
@@ -15,55 +18,65 @@ import com.simplevat.entity.converter.DateConverter;
 
 @NamedQueries({
         @NamedQuery(name = "allCountries",
-                query = "SELECT c " +
-                        "FROM Country c where c.deleteFlag='false' ORDER BY c.defaltFlag DESC , c.orderSequence ASC")
+                query = "SELECT c FROM Country c where c.deleteFlag=false ORDER BY c.defaltFlag DESC , c.orderSequence ASC")
 })
 
 @Entity
 @Table(name = "COUNTRY")
 @Data
-public class Country {
+public class Country implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "COUNTRY_CODE")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int countryCode;
-    @Basic
+    @Basic(optional = false)
     @Column(name = "COUNTRY_NAME")
     private String countryName;
     @Basic
     @Column(name = "COUNTRY_DESCRIPTION")
     private String countryDescription;
     @Basic
-    @Column(name = "ISO_ALPHA3_CODE", length = 3, columnDefinition = "CHAR")
+    @Column(name = "ISO_ALPHA3_CODE", length = 3)
     private String isoAlpha3Code;
     
     @Column(name = "DEFAULT_FLAG")
+    @ColumnDefault(value = "'N'")
+    @Basic(optional = false)
     private Character defaltFlag;
 
     @Column(name = "ORDER_SEQUENCE")
+    @ColumnDefault(value = "1")
+    @Basic(optional = false)
     private Integer orderSequence;
-    
-    @Basic
+
     @Column(name = "CREATED_BY")
+    @Basic(optional = false)
     private Integer createdBy;
-    @Basic
+
     @Column(name = "CREATED_DATE")
-    @Convert(converter = DateConverter.class)
-    private LocalDateTime createdDate;
-    @Basic
+    @ColumnDefault(value = "CURRENT_TIMESTAMP")
+    @Basic(optional = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdDate;
+
     @Column(name = "LAST_UPDATED_BY")
-    private Integer lastUpdatedBy;
-    @Basic
+    private Integer lastUpdateBy;
+
     @Column(name = "LAST_UPDATE_DATE")
-    @Convert(converter = DateConverter.class)
-    private LocalDateTime lastUpdateDate;
-    @Basic
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastUpdateDate;
+
     @Column(name = "DELETE_FLAG")
-    private Boolean deleteFlag = Boolean.FALSE;
-    
-    @Basic
-    @Version
+    @ColumnDefault(value = "0")
+    @Basic(optional = false)
+    private boolean deleteFlag;
+
     @Column(name = "VERSION_NUMBER")
+    @ColumnDefault(value = "1")
+    @Basic(optional = false)
+    @Version
     private Integer versionNumber;
 
     @Transient

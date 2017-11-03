@@ -19,6 +19,7 @@ import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.service.bankaccount.TransactionService;
 import com.simplevat.util.ChartUtil;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Objects;
 
 @Service("transactionService")
@@ -179,6 +180,11 @@ public class TransactionServiceImpl extends TransactionService {
         updateLatestTransaction(diffAmount, transaction);
         updateAccountBalance(balanceAmount, transaction);
         return transaction;
+    }
+
+    @Override
+    public List<Transaction> getTransactionsByDateRangeAndBankAccountId(BankAccount bankAccount, Date startDate, Date lastDate) {
+        return transactionDao.getTransactionsByDateRangeAndBankAccountId(bankAccount,startDate,lastDate);
     }
 
 }

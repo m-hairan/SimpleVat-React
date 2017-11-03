@@ -1,11 +1,14 @@
 package com.simplevat.entity.invoice;
 
+import com.simplevat.entity.converter.DateConverter;
 import java.io.Serializable;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Calendar;
+import java.time.LocalDateTime;
+import java.util.Date;
+import org.hibernate.annotations.ColumnDefault;
 
 /**
  * Created by mohsinh on 2/26/2017.
@@ -22,7 +25,7 @@ public class InvoiceLineItem implements Serializable {
     @Column(name = "INVOICE_LINE_ITEM_ID")
     private int invoiceLineItemId;
 
-    @Basic
+    @Basic(optional = false)
     @Column(name = "INVOICE_LINE_ITEM_QUANTITY")
     private Integer invoiceLineItemQuantity;
 
@@ -32,37 +35,41 @@ public class InvoiceLineItem implements Serializable {
 
     @Basic
     @Column(name = "INVOICE_LINE_ITEM_UNIT_PRICE")
+    @ColumnDefault(value = "0.00")
     private BigDecimal invoiceLineItemUnitPrice;
 
     @Basic
     @Column(name = "INVOICE_LINE_ITEM_VAT")
+    @ColumnDefault(value = "0.00")
     private BigDecimal invoiceLineItemVat;
 
-    @Basic
     @Column(name = "CREATED_BY")
+    @Basic(optional = false)
     private Integer createdBy;
 
-    @Basic
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "CREATED_DATE")
-    private Calendar createdDate;
-
-    @Basic
-    @Column(name = "LAST_UPDATED_BY")
-    private Integer lastUpdatedBy;
-
-    @Basic
+    @ColumnDefault(value = "CURRENT_TIMESTAMP")
+    @Basic(optional = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "LAST_UPDATE_DATE")
-    private Calendar lastUpdateDate;
+    private Date createdDate;
 
-    @Basic
+    @Column(name = "LAST_UPDATED_BY")
+    private Integer lastUpdateBy;
+
+    @Column(name = "LAST_UPDATE_DATE")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastUpdateDate;
+
     @Column(name = "DELETE_FLAG")
+    @ColumnDefault(value = "0")
+    @Basic(optional = false)
     private Boolean deleteFlag = Boolean.FALSE;
 
-    @Basic
     @Column(name = "VERSION_NUMBER")
-    private Integer versionNumber = 0;
+    @ColumnDefault(value = "1")
+    @Basic(optional = false)
+    @Version
+    private Integer versionNumber;
 
     @ManyToOne
     @JoinColumn(name = "INVOICE_ID")
