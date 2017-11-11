@@ -11,14 +11,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.Expense;
 import com.simplevat.entity.Project;
 import com.simplevat.entity.User;
-import com.simplevat.entity.VatCategory;
 import com.simplevat.entity.VatCategory;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionType;
@@ -30,8 +28,9 @@ import com.simplevat.service.TransactionCategoryServiceNew;
 import com.simplevat.service.UserServiceNew;
 import com.simplevat.service.VatCategoryService;
 import com.simplevat.service.bankaccount.TransactionTypeService;
+import com.simplevat.web.common.controller.BaseController;
+import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.expense.model.ExpenseItemModel;
-import com.simplevat.web.invoice.model.InvoiceItemModel;
 import com.simplevat.web.utils.FacesUtil;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -42,11 +41,10 @@ import javax.annotation.PostConstruct;
 import javax.faces.model.SelectItem;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.DefaultUploadedFile;
 
 @Controller
 @SpringScopeView
-public class ExpenseController extends ExpenseControllerHelper implements Serializable {
+public class ExpenseController extends BaseController implements Serializable {
 
     private static final long serialVersionUID = 5366159429842989755L;
 
@@ -78,6 +76,10 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 
     @Getter
     @Setter
+    private List<TransactionCategory> transactionCategorys = new ArrayList<>();
+
+    @Getter
+    @Setter
     private List<VatCategory> vatCategoryList = new ArrayList<>();
 
     @Getter
@@ -94,8 +96,18 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
     @Setter
     String fileName;
 
+    @Getter
+    @Setter
+    ExpenseControllerHelper controllerHelper;
+
+    
+    public ExpenseController() {
+        super(ModuleName.EXPENSE_MODULE);
+    }
+
     @PostConstruct
     public void init() {
+        controllerHelper = new ExpenseControllerHelper();
         Object objSelectedExpenseModel = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedExpenseModelId");
         if (objSelectedExpenseModel == null) {
             selectedExpenseModel = new ExpenseModel();
@@ -105,20 +117,12 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
             if (defaultCurrency != null) {
                 selectedExpenseModel.setCurrency(defaultCurrency);
             }
-            TransactionType transactionType = transactionTypeService.getDefaultTransactionType();
-            if (transactionType != null) {
-                selectedExpenseModel.setTransactionType(transactionType);
-            }
-            TransactionCategory transactionCategory = (TransactionCategory) transactionCategoryService.getDefaultTransactionCategory();
-            if (transactionCategory != null) {
-                selectedExpenseModel.setTransactionCategory(transactionCategory);
-            }
+
             updateCurrencyLabel();
             transactionTypes = transactionTypeService.findAll();
         } else {
-
             Expense expense = expenseService.findByPK(Integer.parseInt(objSelectedExpenseModel.toString()));
-            selectedExpenseModel = getExpenseModel(expense);
+            selectedExpenseModel = controllerHelper.getExpenseModel(expense);
             if (selectedExpenseModel.getReceiptAttachmentBinary() != null) {
                 InputStream stream = new ByteArrayInputStream(selectedExpenseModel.getReceiptAttachmentBinary());
                 selectedExpenseModel.setAttachmentFileContent(new DefaultStreamedContent(stream));
@@ -134,6 +138,33 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 
         return "/pages/secure/expense/create-expense.xhtml?faces-redirect=true";
 
+    }
+
+    public List<TransactionCategory> completeCategory() {
+        List<TransactionCategory> transactionCategoryParentList = new ArrayList<>();
+        List<TransactionCategory> transactionCategoryList = new ArrayList<>();
+        if (selectedExpenseModel.getTransactionType() != null) {
+            transactionCategoryList = transactionCategoryService.findAllTransactionCategoryByTransactionType(selectedExpenseModel.getTransactionType().getTransactionTypeCode());
+        }
+        for (TransactionCategory transactionCategory : transactionCategoryList) {
+            if (transactionCategory.getParentTransactionCategory() != null) {
+                transactionCategoryParentList.add(transactionCategory.getParentTransactionCategory());
+            }
+        }
+        transactionCategoryList.removeAll(transactionCategoryParentList);
+        return transactionCategoryList;
+
+    }
+
+    public List<TransactionCategory> getAllTranscationCategories(String categories) {
+        return transactionCategorys;
+    }
+
+    public void deleteLineItem(ExpenseItemModel expenseItemModel) {
+        selectedExpenseModel.getExpenseItem().remove(expenseItemModel);
+        if (expenseItemModel.getSubTotal() != null) {
+            total = total.subtract(expenseItemModel.getSubTotal());
+        }
     }
 
     private boolean validateInvoiceLineItems() { //---------------
@@ -164,7 +195,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
             return "";
         }
         User loggedInUser = FacesUtil.getLoggedInUser();
-        Expense expense = getExpense(selectedExpenseModel);
+        Expense expense = controllerHelper.getExpense(selectedExpenseModel);
         expense.setLastUpdateDate(LocalDateTime.now());
         expense.setLastUpdateBy(loggedInUser.getUserId());
         expense.setDeleteFlag(false);
@@ -211,7 +242,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
             return "";
         }
         User loggedInUser = FacesUtil.getLoggedInUser();
-        Expense expense = getExpense(selectedExpenseModel);
+        Expense expense = controllerHelper.getExpense(selectedExpenseModel);
 
         expense.setLastUpdateDate(LocalDateTime.now());
         expense.setLastUpdateBy(loggedInUser.getUserId());
@@ -262,7 +293,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
 
     public String deleteExpense() {
         System.out.println("selected Model : :" + selectedExpenseModel.getExpenseId());
-        Expense expense = getExpense(selectedExpenseModel);
+        Expense expense = controllerHelper.getExpense(selectedExpenseModel);
         expense.setDeleteFlag(true);
         expenseService.update(expense);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense deleted successfully"));
@@ -287,7 +318,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
     private boolean validateExpenceLineItems() { //---------------
         boolean validated = true;
         for (ExpenseItemModel lastItem : selectedExpenseModel.getExpenseItem()) {
-            if (lastItem.getQuatity() < 1 || lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0) {
+            if (lastItem.getUnitPrice()==null||lastItem.getQuatity() < 1 || lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0) {
                 FacesMessage message = new FacesMessage("Please enter proper detail for all expence items.");
                 message.setSeverity(FacesMessage.SEVERITY_ERROR);
                 FacesContext.getCurrentInstance().addMessage("validationId", message);
@@ -302,7 +333,6 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
             selectedExpenseModel.setCurrency(currencyService.getCurrency(selectedExpenseModel.getCurrency().getCurrencyCode()));
         }
     }
-
     public void updateSubTotal(final ExpenseItemModel expenseItemModel) {
         final int quantity = expenseItemModel.getQuatity();
         final BigDecimal unitPrice = expenseItemModel.getUnitPrice();
@@ -324,7 +354,7 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
             return this.transactionTypes;
         }
         List<TransactionType> filterList = new ArrayList<>();
-        transactionTypes = transactionTypeService.findAll();
+        transactionTypes = transactionTypeService.executeNamedQuery("findMoneyOutTransactionType");
         for (TransactionType type : transactionTypes) {
             filterList.add(type);
         }
@@ -352,4 +382,5 @@ public class ExpenseController extends ExpenseControllerHelper implements Serial
             }
         }
     }
+
 }

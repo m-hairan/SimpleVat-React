@@ -3,7 +3,11 @@ package com.simplevat.web.contact.controller;
 import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.*;
 import com.simplevat.service.*;
+import com.simplevat.web.constant.ContactTypeConstant;
+import com.simplevat.web.common.controller.BaseController;
+import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.contact.model.ContactModel;
+import com.simplevat.web.contact.model.ContactType;
 import com.simplevat.web.utils.FacesUtil;
 
 import java.io.IOException;
@@ -30,7 +34,7 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 @SpringScopeView
-public class ContactController extends ContactHelper implements Serializable {
+public class ContactController extends BaseController implements Serializable {
 
     private static final long serialVersionUID = -6783876735681802047L;
 
@@ -71,14 +75,31 @@ public class ContactController extends ContactHelper implements Serializable {
     @Setter
     private Contact selectedContact;
 
+    @Getter
+    @Setter
+    private ContactHelper contactHelper;
+
+    public ContactController() {
+        super(ModuleName.CONTACT_MODULE);
+    }
+
     @PostConstruct
     public void init() {
         selectedContact = new Contact();
         contactModel = new ContactModel();
+        contactHelper=new ContactHelper();
+        
         Object objContactId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedContactId");
         System.out.println("selected : :" + objContactId);
         if (objContactId != null) {
-            BeanUtils.copyProperties(contactService.findByPK(Integer.parseInt(objContactId.toString())), contactModel);
+            Contact contact = contactService.findByPK(Integer.parseInt(objContactId.toString()));
+            BeanUtils.copyProperties(contact, contactModel);
+            for (ContactType contactType : completeContactType()) {
+                if (contactType.getId() == contact.getContactType()) {
+                    contactModel.setContactType(contactType);
+                }
+            }
+            
             titles = titleService.getTitles();
         } else {
             contactModel = new ContactModel();
@@ -92,6 +113,14 @@ public class ContactController extends ContactHelper implements Serializable {
         countries = countryService.getCountries();
         languages = languageService.getLanguages();
 
+    }
+
+    public List<ContactType> completeContactType() {
+        List<ContactType> contactTypeList = new ArrayList<>();
+        contactTypeList.add(new ContactType(ContactTypeConstant.VENDOR, "Vendor"));
+        contactTypeList.add(new ContactType(ContactTypeConstant.CUSTOMER, "Customer"));
+        contactTypeList.add(new ContactType(ContactTypeConstant.EMPLOYEE, "Employee"));
+        return contactTypeList;
     }
 
     private void setDefaultCurrency() {
@@ -131,6 +160,7 @@ public class ContactController extends ContactHelper implements Serializable {
         selectedContact.setOrganization(contactModel.getOrganization());
         selectedContact.setEmail(contactModel.getEmail());
         selectedContact.setCreatedBy(loggedInUser.getUserId());
+        selectedContact.setContactType(contactModel.getContactType().getId());
         if (selectedContact.getContactId() != null && selectedContact.getContactId() > 0) {
             this.contactService.update(selectedContact, selectedContact.getContactId());
         } else {
@@ -161,6 +191,7 @@ public class ContactController extends ContactHelper implements Serializable {
         contact.setOrganization(contactModel.getOrganization());
         contact.setEmail(contactModel.getEmail());
         contact.setCreatedBy(loggedInUser.getUserId());
+        contact.setContactType(contactModel.getContactType().getId());
         if (selectedContact.getContactId() > 0) {
             this.contactService.update(contact);
         } else {
@@ -178,7 +209,7 @@ public class ContactController extends ContactHelper implements Serializable {
 
     public List<Title> completeTitle(String titleStr) {
         List<Title> titleSuggestion = new ArrayList<>();
-        
+
         Iterator<Title> titleIterator = this.titles.iterator();
 
         LOGGER.debug(" Size :" + titles.size());
@@ -199,7 +230,7 @@ public class ContactController extends ContactHelper implements Serializable {
 
     public List<Country> completeCountry(String countryStr) {
         List<Country> countrySuggestion = new ArrayList<>();
-        
+
         Iterator<Country> countryIterator = this.countries.iterator();
 
         LOGGER.debug(" Size :" + countries.size());

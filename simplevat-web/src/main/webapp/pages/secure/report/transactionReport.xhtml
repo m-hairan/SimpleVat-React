@@ -23,8 +23,8 @@
                             <div class="card card-w-title">
                                 <p:fieldset legend="View Report"
                                             toggleable="false" toggleSpeed="500">
-                                    <p:panelGrid columns="5"
-                                                 columnClasses="ui-grid-col-0,ui-grid-col-3,ui-grid-col-0,ui-grid-col-3,ui-grid-col-1"
+                                    <p:panelGrid columns="6"
+                                                 columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
                                                  layout="grid" styleClass="ui-panelgrid-blank form-group"
                                                  style="border:0px none; background-color:transparent;">
 
@@ -48,25 +48,61 @@
                                             <p:message for="year" />
                                         </h:panelGroup>
 
-                                        <p:outputLabel for="account"/>
+
+
+
+
+
+                                        <p:outputLabel for="purchaseTransactionType"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete
-                                                id="account"
-                                                converter="#{bankAccountConverter}"
+                                                id="purchaseTransactionType"
+                                                converter="#{transactionTypeConverter}"
+                                                dropdown="true"
+                                                forceSelection="true" 
+                                                groupBy="#{transactionType.parentTransactionType.transactionTypeName}"
+                                                value="#{transactionReport.transactionType}"
+                                                completeMethod="#{transactionReport.transactionTypes}"
+                                                var="transactionType"
+                                                itemValue="#{transactionType}" 
+                                                itemLabel="#{transactionType.transactionTypeName}" 
+                                                effect="fold"
+                                                required="true"
+                                                requiredMessage="Please select purchase Type">
+
+                                                <p:ajax update="transactionCategory" event="itemSelect" />
+
+                                            </p:autoComplete>
+                                            <label>#{messages.type}</label>
+                                            <p:message for="purchaseTransactionType" />
+                                        </h:panelGroup>
+
+
+                                        <p:outputLabel for="transactionCategory"/>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:autoComplete
+                                                id="transactionCategory"
+                                                converter="#{transactionCategoryConverter}"
                                                 dropdown="true"
                                                 forceSelection="true"
                                                 effect="fold"
-                                                completeMethod="#{transactionReport.completeBankAccounts()}"
-                                                value="#{transactionReport.bankAccount}"
-                                                var="bankAccount"
-                                                itemValue="#{bankAccount}"
-                                                itemLabel="#{bankAccount.bankAccountName}"
+                                                groupBy="#{transactionCategory.parentTransactionCategory.transactionCategoryName}"
+                                                completeMethod="#{transactionReport.transactionCategories(transactionReport.transactionType)}"
+                                                value="#{transactionReport.transactionCategory}"
+                                                var="transactionCategory"
+                                                itemValue="#{transactionCategory}"
+                                                itemLabel="#{transactionCategory.transactionCategoryName}"
                                                 required="true"
-                                                requiredMessage="Please select Claimant">
+                                                requiredMessage="Please select purchase Category"
+                                                >
                                             </p:autoComplete>
-                                            <label>#{messages.BankAccountName}</label>
-                                            <p:message for="account" />
+                                            <label>#{messages.category}</label>
                                         </h:panelGroup>
+
+
+
+
+
                                         <p:commandButton value="#{messages.View}" process="TransactionReport" update="@form"
                                                          action="#{transactionReport.view()}" />
                                     </p:panelGrid>
@@ -86,21 +122,22 @@
                                                 </p:outputPanel>
                                                 <p:outputPanel style="clear: both"/>
                                             </f:facet>
-                                            <p:column headerText="Transaction Date">
+                                            <p:column headerText="Transaction Date" width="130" >
                                                 <h:outputText value="#{transaction.transactionDate.time}" >
-                                                    <f:convertDateTime pattern="MM/ddyyyy hh:mm"/>
+                                                    <f:convertDateTime pattern="MM/dd/yyyy hh:mm"/>
                                                 </h:outputText>
                                             </p:column>
                                             <p:column headerText="Transaction Description">
                                                 <p:outputLabel value="#{transaction.transactionDescription}"/>
                                             </p:column>
-                                            <p:column headerText="Transaction Type">
+                                            <p:column headerText="Transaction Type" width="130">
                                                 <p:outputLabel value="#{transaction.transactionType.transactionTypeName}"/>
                                             </p:column>
-                                            <p:column headerText="Debit/Credit">
-                                                <p:outputLabel value="#{transaction.debitCreditFlag}"/>
+                                            <p:column headerText="Transaction Category" width="130">
+                                                <p:outputLabel value="#{transaction.explainedTransactionCategory.transactionCategoryName}"/>
                                             </p:column>
-                                            <p:column headerText="Transaction Amount" styleClass="amount">
+
+                                            <p:column headerText="Transaction Amount" styleClass="amount" width="180">
                                                 <p:outputLabel value="#{transactionReport.bankAccount.bankAccountCurrency.currencySymbol}" />
                                                 <p:outputLabel value="#{transaction.transactionAmount}" >
                                                     <f:convertNumber type="currency" currencySymbol=" " />
@@ -112,8 +149,7 @@
                                                     <p:column styleClass="amount">
                                                         <f:facet name="footer">
                                                             <p:outputPanel autoUpdate="true">
-                                                                <p:outputLabel value="#{transactionReport.bankAccount.bankAccountCurrency.currencySymbol}" />
-                                                                <h:outputText id="total" value="#{transactionReport.bankAccount.currentBalance}" >
+                                                                <h:outputText id="total" value="#{transactionReport.totalTransactionAmount}" >
                                                                     <f:convertNumber type="currency" currencySymbol=" " />
                                                                 </h:outputText>
                                                             </p:outputPanel>

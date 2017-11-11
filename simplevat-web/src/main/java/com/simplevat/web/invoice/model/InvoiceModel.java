@@ -30,7 +30,7 @@ public class InvoiceModel {
     private String invoiceRefNo;
 
     private Date invoiceDate;
-    
+
     private Date invoiceDueDate;
 
     private int invoiceDueOn;
@@ -44,12 +44,20 @@ public class InvoiceModel {
     private DiscountType discountType;
 
     private BigDecimal discount;
-    
+
     private Integer createdBy;
-    
+
     private Integer lastUpdatedBy;
 
     private String contractPoNumber;
+
+    private BigDecimal invoiceAmount;
+    
+    private BigDecimal dueAmount;
+
+    private Integer status;
+    
+    private Integer paymentMode;
 
     public void addInvoiceItem(@Nonnull final InvoiceItemModel invoiceItemModel) {
         if (null == this.invoiceItems) {

@@ -21,11 +21,13 @@ public class PositiveNumberValidator implements Validator {
             Object value) throws ValidatorException {
 
         try {
-            if (new BigDecimal(value.toString()).signum() == -1) {
-                FacesMessage msg = new FacesMessage("Validation failed.",
-                        "Number must be strictly positive");
-                msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-                throw new ValidatorException(msg);
+            if (value != null) {
+                if (new BigDecimal(value.toString()).signum() == -1) {
+                    FacesMessage msg = new FacesMessage("Validation failed.",
+                            "Number must be strictly positive");
+                    msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+                    throw new ValidatorException(msg);
+                }
             }
         } catch (NumberFormatException ex) {
             FacesMessage msg = new FacesMessage("Validation failed.", "Not a number");

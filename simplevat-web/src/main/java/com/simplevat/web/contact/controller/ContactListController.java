@@ -4,6 +4,8 @@ import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.Contact;
 
 import com.simplevat.service.ContactService;
+import com.simplevat.web.common.controller.BaseController;
+import com.simplevat.web.constant.ModuleName;
 
 import com.simplevat.web.contact.model.ContactModel;
 
@@ -24,7 +26,7 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 @SpringScopeView
-public class ContactListController extends ContactHelper implements Serializable {
+public class ContactListController extends BaseController implements Serializable {
 
     private static final long serialVersionUID = 2549403337578048506L;
     private final static Logger LOGGER = LoggerFactory.getLogger(ContactListController.class);
@@ -59,9 +61,18 @@ public class ContactListController extends ContactHelper implements Serializable
     @Autowired
     private ContactService contactService;
 
+    @Getter
+    @Setter
+    private ContactHelper contactHelper;
+
+    public ContactListController() {
+        super(ModuleName.CONTACT_MODULE);
+    }
+
     @PostConstruct
     public void init() {
         selectedFilter = null;
+        contactHelper=new ContactHelper();
         contactList = new ArrayList<>();
         this.filteredContacts = new ArrayList<>();
         populateContactList();
@@ -74,7 +85,7 @@ public class ContactListController extends ContactHelper implements Serializable
         } else {
             contactList.clear();
             for (Contact contact : contactService.getContacts()) {
-                ContactModel contactModel = getContactModel(contact);
+                ContactModel contactModel = contactHelper.getContactModel(contact);
                 contactList.add(contactModel);
             }
             filteredContacts.clear();
@@ -113,7 +124,7 @@ public class ContactListController extends ContactHelper implements Serializable
     public void delete() {
         for (ContactModel contactModel : filteredContacts) {
             if (contactModel.getSelected()) {
-                Contact contact1 = getContact(contactModel);
+                Contact contact1 =contactHelper.getContact(contactModel);
                 contact1.setDeleteFlag(Boolean.TRUE);
                 contactService.update(contact1);
             }
@@ -135,7 +146,7 @@ public class ContactListController extends ContactHelper implements Serializable
     public void deleteContact() {
 
         contact.setDeleteFlag(Boolean.TRUE);
-        selectedContact = getContact(contact);
+        selectedContact = contactHelper.getContact(contact);
 
         contactService.update(selectedContact);
         populateContactList();

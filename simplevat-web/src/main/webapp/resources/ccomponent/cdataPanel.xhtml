@@ -14,6 +14,7 @@
             <cc:attribute name="importAction" method-signature="void import(java.lang.String)" />
             <cc:attribute name="exportAction" method-signature="void import(java.lang.String)" />
             <cc:attribute name="deleteAction" method-signature="void import(java.lang.String)" />
+            <cc:facet name="left"/>
         </cc:interface>
     </cc:interface>
 
@@ -22,7 +23,9 @@
             <si:ctoolbar deleteAction="#{cc.attrs.deleteAction}" 
                          exportAction="#{cc.attrs.exportAction}"
                          importAction="#{cc.attrs.importAction}"
-                         newAction="#{cc.attrs.newAction}"/>        
+                         newAction="#{cc.attrs.newAction}">
+                <cc:insertFacet name="left"/>
+            </si:ctoolbar>
             <p:spacer height="5"/>
             <cc:insertChildren />
             <p:spacer height="5"/>

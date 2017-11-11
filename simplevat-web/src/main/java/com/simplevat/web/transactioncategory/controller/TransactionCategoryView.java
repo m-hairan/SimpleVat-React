@@ -12,10 +12,12 @@ import org.springframework.stereotype.Controller;
 
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionType;
-import com.simplevat.web.exception.UnauthorizedException;
+import com.simplevat.web.exceptions.UnauthorizedException;
 import com.simplevat.security.ContextUtils;
 import com.simplevat.service.TransactionCategoryServiceNew;
 import com.simplevat.service.bankaccount.TransactionTypeService;
+import com.simplevat.web.common.controller.BaseController;
+import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.transactioncategory.model.TransactionCategoryModel;
 import java.io.Serializable;
 import javax.faces.context.FacesContext;
@@ -28,7 +30,7 @@ import org.springframework.beans.BeanUtils;
 //@ManagedBean(name = "transactionCategoryView")
 @SpringScopeView
 
-public class TransactionCategoryView extends TranscationCategoryHelper implements Serializable {
+public class TransactionCategoryView extends BaseController implements Serializable {
 
     @Getter
     public String CREATE_PAGE = "create-transactioncategory";
@@ -63,15 +65,23 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
     @Setter
     private TransactionCategory selectedTransactionCategory;
 
+    @Getter
+    @Setter
+    private TranscationCategoryHelper transcationCategoryHelper;
+
+    public TransactionCategoryView() {
+        super(ModuleName.SETTING_MODULE);
+    }
+
     @PostConstruct
     public void init() {
         selectedTransactionCategory = new TransactionCategory();
-
+        transcationCategoryHelper = new TranscationCategoryHelper();
         Object objContactId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedCategoryId");
         if (objContactId != null) {
             transactionTypes = transactionTypeService.findAll();
             selectedTransactionCategory = transactionCategoryService.findByPK(Integer.parseInt(objContactId.toString()));
-            transactionCategoryModel = getCategory(selectedTransactionCategory);
+            transactionCategoryModel = transcationCategoryHelper.getCategory(selectedTransactionCategory);
         } else {
             transactionTypes = transactionTypeService.findAll();
             transactionCategoryModel = new TransactionCategoryModel();
@@ -92,7 +102,7 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
         transactionCategoryModels = new ArrayList<>();
 
         for (TransactionCategory category : transactionCategories) {
-            TransactionCategoryModel model = getCategory(category);
+            TransactionCategoryModel model = transcationCategoryHelper.getCategory(category);
             transactionCategoryModels.add(model);
         }
 
@@ -142,7 +152,7 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
 
     public String save() throws UnauthorizedException {
         int userId = ContextUtils.getUserContext().getUserId();
-        selectedTransactionCategory = getTrascationModel(transactionCategoryModel);
+        selectedTransactionCategory = transcationCategoryHelper.getTrascationModel(transactionCategoryModel);
         selectedTransactionCategory.setCreatedBy(userId);
         selectedTransactionCategory.setDeleteFlag(false);
         selectedTransactionCategory.setLastUpdateBy(userId);
@@ -162,7 +172,7 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
 
     public String update() throws UnauthorizedException {
         int userId = ContextUtils.getUserContext().getUserId();
-        selectedTransactionCategory = getTrascationModel(transactionCategoryModel);
+        selectedTransactionCategory = transcationCategoryHelper.getTrascationModel(transactionCategoryModel);
         selectedTransactionCategory.setLastUpdateBy(userId);
         selectedTransactionCategory.setOrderSequence(1);
         selectedTransactionCategory.setLastUpdateDate(LocalDateTime.now());
@@ -215,7 +225,7 @@ public class TransactionCategoryView extends TranscationCategoryHelper implement
 
     public String deleteTransactionCategory() {
         transactionCategoryModel.setDeleteFlag(Boolean.TRUE);
-        selectedTransactionCategory = getTrascationModel(transactionCategoryModel);
+        selectedTransactionCategory = transcationCategoryHelper.getTrascationModel(transactionCategoryModel);
         transactionCategoryService.update(selectedTransactionCategory);
         this.transactionCategories = transactionCategoryService.executeNamedQuery("findAllTransactionCategory");
         return HOME_PAGE;

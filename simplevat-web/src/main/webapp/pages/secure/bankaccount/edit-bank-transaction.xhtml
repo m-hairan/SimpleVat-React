@@ -14,7 +14,7 @@
         </style>
 
     </ui:define>
-    
+
     <ui:define name="title">#{messages.new_bank_account}</ui:define>
 
     <ui:define name="content">
@@ -40,20 +40,44 @@
                                                  layout="grid" styleClass="ui-panelgrid-blank form-group"
                                                  style="border:0px none; background-color:transparent;">
 
-                                        <p:outputLabel for="transactionType"/>
-                                        <h:panelGroup styleClass="md-inputfield">
+                                        <p:outputLabel for="transactionType" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() == 0}"/>
+                                        <h:panelGroup styleClass="md-inputfield" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() == 0}">
                                             <p:autoComplete
                                                 id="transactionType"
                                                 converter="#{transactionTypeConverter}"
                                                 dropdown="true"
                                                 forceSelection="true"
                                                 effect="fold"
+                                                groupBy="#{transactionType.parentTransactionType.transactionTypeName}"
                                                 completeMethod="#{transactionController.transactionTypes()}"
                                                 value="#{transactionController.selectedTransactionModel.transactionType}"
                                                 var="transactionType"
-                                                itemValue="#{transactionType}"
-                                                itemLabel="#{transactionType.transactionTypeName}"
+                                                itemValue="#{transactionType}" 
+                                                itemLabel="#{transactionType.transactionTypeName}" 
                                                 required="true" requiredMessage="Please select transaction type.">
+                                                <p:ajax update="transactionCategory" event="itemSelect" />
+                                            </p:autoComplete>
+                                            <label>#{messages.type}</label>
+                                            <p:message for="transactionType"/>
+                                        </h:panelGroup>
+
+                                        <p:outputLabel for="transactionType1" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() > 0}"/>
+                                        <h:panelGroup styleClass="md-inputfield" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() > 0}">
+                                            <p:autoComplete
+                                                id="transactionType1"
+                                                converter="#{transactionTypeConverter}"
+                                                dropdown="true"
+                                                forceSelection="true"
+                                                disabled="true"
+                                                effect="fold"
+                                                groupBy="#{transactionType.parentTransactionType.transactionTypeName}"
+                                                completeMethod="#{transactionController.transactionTypes()}"
+                                                value="#{transactionController.selectedTransactionModel.transactionType}"
+                                                var="transactionType"
+                                                itemValue="#{transactionType}" 
+                                                itemLabel="#{transactionType.transactionTypeName}" 
+                                                required="true" requiredMessage="Please select transaction type.">
+                                                <p:ajax update="transactionCategory1" event="itemSelect" />
                                             </p:autoComplete>
                                             <label>#{messages.type}</label>
                                             <p:message for="transactionType"/>
@@ -69,15 +93,28 @@
                                             <p:message for="transactionDate"/>
                                         </h:panelGroup>
 
-                                        <p:outputLabel for="transactionAmount"/>
-                                        <h:panelGroup styleClass="md-inputfield">
+                                        <p:outputLabel for="transactionAmount" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() == 0}"/>
+                                        <h:panelGroup styleClass="md-inputfield" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() == 0}">
                                             <p:inputNumber symbol="#{transactionController.selectedTransactionModel.bankAccount.bankAccountCurrency.currencySymbol }"
                                                            symbolPosition="p"
                                                            id="transactionAmount"
                                                            value="#{transactionController.selectedTransactionModel.transactionAmount}"
-                                                           required="true" requiredMessage="Please select transaction amount."/>
+                                                           required="true" requiredMessage="Please select transaction amount.">
+                                                <p:ajax update="InvoiceList"  />
+                                            </p:inputNumber>
                                             <label>#{messages.total_amount}</label>
                                             <p:message for="transactionAmount"/>
+                                        </h:panelGroup>
+
+                                        <p:outputLabel for="transactionAmount1" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() > 0}"/>
+                                        <h:panelGroup styleClass="md-inputfield" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() > 0}">
+                                            <p:inputNumber symbol="#{transactionController.selectedTransactionModel.bankAccount.bankAccountCurrency.currencySymbol }"
+                                                           symbolPosition="p"
+                                                           id="transactionAmount1"
+                                                           value="#{transactionController.selectedTransactionModel.transactionAmount}"
+                                                           required="true" requiredMessage="Please select transaction amount."/>
+                                            <label>#{messages.total_amount}</label>
+                                            <p:message for="transactionAmount1"/>
                                         </h:panelGroup>
 
                                     </p:panelGrid>
@@ -89,15 +126,44 @@
                                                  layout="grid" styleClass="ui-panelgrid-blank form-group"
                                                  style="border:0px none; background-color:transparent;">
 
-                                        <p:outputLabel for="transactionCategory"/>
+                                        <h:panelGroup />
                                         <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText
+                                                value="#{transactionController.selectedTransactionModel.transactionDescription}" />
+                                            <label>#{messages.description}</label>
+                                        </h:panelGroup>
+
+                                        <p:outputLabel for="transactionCategory" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() == 0}"/>
+                                        <h:panelGroup styleClass="md-inputfield" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() == 0}">
                                             <p:autoComplete
                                                 id="transactionCategory"
                                                 converter="#{transactionCategoryConverter}"
                                                 dropdown="true"
                                                 forceSelection="true"
                                                 effect="fold"
-                                                completeMethod="#{transactionController.transactionCategories()}"
+                                                groupBy="#{(transactionCategory.parentTransactionCategory.transactionCategoryName != null)?transactionCategory.parentTransactionCategory.transactionCategoryName:'Others'}"
+                                                completeMethod="#{transactionController.transactionCategories(transactionController.selectedTransactionModel.transactionType)}"
+                                                value="#{transactionController.selectedTransactionModel.explainedTransactionCategory}"
+                                                var="transactionCategory"
+                                                itemValue="#{transactionCategory}"
+                                                itemLabel="#{transactionCategory.transactionCategoryName}"
+                                                >
+                                                <p:ajax update="InvoiceLabel InvoiceList" event="itemSelect" />
+                                            </p:autoComplete>
+                                            <label>#{messages.category}</label>
+                                        </h:panelGroup>
+
+                                        <p:outputLabel for="transactionCategory1" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() > 0}"/>
+                                        <h:panelGroup styleClass="md-inputfield" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() > 0}">
+                                            <p:autoComplete
+                                                id="transactionCategory1"
+                                                converter="#{transactionCategoryConverter}"
+                                                dropdown="true"
+                                                forceSelection="true"
+                                                disabled="true"
+                                                effect="fold"
+                                                groupBy="#{(transactionCategory.parentTransactionCategory.transactionCategoryName != null)?transactionCategory.parentTransactionCategory.transactionCategoryName:'Others'}"
+                                                completeMethod="#{transactionController.transactionCategories(transactionController.selectedTransactionModel.transactionType)}"
                                                 value="#{transactionController.selectedTransactionModel.explainedTransactionCategory}"
                                                 var="transactionCategory"
                                                 itemValue="#{transactionCategory}"
@@ -107,33 +173,27 @@
                                             <label>#{messages.category}</label>
                                         </h:panelGroup>
 
-                                        <h:panelGroup />
-
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText
-                                                value="#{transactionController.selectedTransactionModel.transactionDescription}" />
-                                            <label>#{messages.description}</label>
+                                        <h:panelGroup id="InvoiceLabel" >
+                                            <p:outputLabel for="invoice1" rendered="#{transactionController.selectedTransactionModel.explainedTransactionCategory.transactionCategoryCode == 1 and transactionController.selectedTransactionModel.childTransactionList.size() == 0}" />
                                         </h:panelGroup>
-
-                                        <p:outputLabel for="transactionStatus" rendered="#{transactionController.selectedTransactionModel.transactionId > 0}"/>
-                                        <h:panelGroup styleClass="md-inputfield" rendered="#{transactionController.selectedTransactionModel.transactionId > 0}">
-                                            <p:autoComplete 
-                                                id="transactionStatus"
-                                                converter="#{transactionStatusConverter}"
-                                                dropdown="true"
-                                                forceSelection="true"
-                                                effect="fold"
-                                                completeMethod="#{transactionController.transactionStatuses}"
-                                                value="#{transactionController.selectedTransactionModel.transactionStatus}"
-                                                var="transactionStatus"
-                                                itemValue="#{transactionStatus}"
-                                                itemLabel="#{transactionStatus.explainationStatusName}"
-                                                required="true" requiredMessage="Please select transaction status.">
-                                            </p:autoComplete>
-                                            <label>#{messages.status}</label>
-                                            <p:message for="transactionStatus"/>
+                                        <h:panelGroup id="InvoiceList" >
+                                            <h:panelGroup styleClass="md-inputfield" rendered="#{transactionController.selectedTransactionModel.explainedTransactionCategory.transactionCategoryCode == 1 and transactionController.selectedTransactionModel.childTransactionList.size() == 0}">
+                                                <p:autoComplete id="invoice1" converter="#{invoiceConverter}"
+                                                                dropdown="true"
+                                                                forceSelection="true"
+                                                                effect="fold" 
+                                                                groupBy="#{(transactionController.selectedTransactionModel.transactionAmount.doubleValue() == invoice.dueAmount.doubleValue())?'Suggested':'Others'}"
+                                                                completeMethod="#{transactionController.completeInvoice()}"
+                                                                value="#{transactionController.selectedTransactionModel.refObject}"
+                                                                var="invoice"
+                                                                itemValue="#{invoice}"
+                                                                itemLabel="#{transactionController.autocompleteInvoiceLebal(invoice)}"
+                                                                required="true" requiredMessage="Please select invoice reference.">
+                                                    <p:ajax event="itemSelect" listener="#{transactionListController.referenceListner(transaction.refObject)}"/>
+                                                </p:autoComplete>
+                                                <label>Invoice Reference</label>
+                                            </h:panelGroup>
                                         </h:panelGroup>
-
                                     </p:panelGrid>
                                 </p:fieldset>
                                 <br />

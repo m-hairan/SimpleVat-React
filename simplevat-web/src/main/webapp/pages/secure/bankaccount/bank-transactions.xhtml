@@ -16,164 +16,116 @@
             .label{
                 font-size: 75%;
             }
-            .eligibility-EXPLAINED {
-                width: 60px;
-                color: #5cb85c;
-            }
-            .eligibility-EXPLAINED:after {
-                content: 'Explained';
-                vertical-align: middle;
-                display: inline;
-            }
-            .eligibility-UNEXPLAINED {
-                color: #d9534f;
-                width: 50px;
-            }
-            .eligibility-UNEXPLAINED:after {
-                content: 'Unexplained';
-                vertical-align: middle;
-                display: inline;
-            }
+            /*            .eligibility-EXPLAINED {
+                            width: 60px;
+                            color: #5cb85c;
+                        }
+                        .eligibility-UNEXPLAINED {
+                            color: #d9534f;
+                            width: 50px;
+                        }
+                        .eligibility-PARTIALLY-EXPLAINED {
+                            width: 60px;
+                            color: #f98e03;
+                        }*/
+
+
             .ui-row-toggler{
-                display: inline !important;
+                display: none !important;
             }
         </style>
 
         <h:form>
-            <si:cdataPanel newAction= "#{transactionController.createTransaction()}" importAction="#{transactionController.importTransaction()}">
-                <p:dataTable var="transaction"
-                             id="transactionsTable"
-                             value="#{transactionListController.transactions}"
-                             paginator="true" rows="10" rowExpandMode="single" 
-                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}">
-                    <f:facet name="{TableHeader}">
-                        <p:outputLabel styleClass="tableCustomHeader" value="#{transactionListController.selectedBankAccountModel.bankAccountName}" />
+            <div class="ui-fluid tree">
+                <si:cdataPanel newAction= "#{transactionController.createTransaction()}" importAction="#{transactionController.importTransaction()}">
+                    <f:facet name="left">
+                        <p:commandButton value="All (#{transactionListController.totalTransactions})" styleClass="AquaButton" action="#{transactionListController.allTransactions()}" update="#{p:component('transactionsTable')}"/>
+                        <p:commandButton icon="transtype-EXPLAINED" value="Explained (#{transactionListController.totalExplained})" styleClass="AquaButton" action="#{transactionListController.allExplainedTransactions()}" update="#{p:component('transactionsTable')}"/>
+                        <p:commandButton icon="transtype-UNEXPLAINED" value="Unexplained (#{transactionListController.totalUnExplained})" styleClass="AquaButton" action="#{transactionListController.allUnExplainedTransactions()}" update="#{p:component('transactionsTable')}"/>
+                        <p:commandButton icon="transtype-PARTIALLY-EXPLAINED" value="Partially Explained (#{transactionListController.totalPartiallyExplained})" styleClass="AquaButton" action="#{transactionListController.allPartiallyExplainedTransactions()}" update="#{p:component('transactionsTable')}"/>
                     </f:facet>
+                    <p:dataTable var="transaction"
+                                 value="#{transactionListController.transactions}"
+                                 selectionMode="single"
+                                 rowIndexVar="index"
+                                 widgetVar="transactiondt"
+                                 rowExpandMode="single" 
+                                 selection="#{transactionListController.selectedTransactionModel}"
+                                 rowKey="#{transaction.transactionId}" 
+                                 paginator="true" rows="#{transactionListController.datatableRowCount}"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}"
+                                 id="transactionsTable">
+                        <p:ajax event="page"  listener="#{transactionListController.refreshTableDataonPageChange()}"/>
+                        <p:ajax event="rowSelect" process="transactionsTable" listener="#{transactionListController.expandCollapseOnRowSelect(btnBinding.clientId)}" update="transactionsTable"/> 
 
-                    <p:column width="70" style="text-align: center">
+                        <f:facet name="{TableHeader}">
+                            <p:outputLabel styleClass="tableCustomHeader" value="#{transactionListController.selectedBankAccountModel.bankAccountName}" />
+                        </f:facet>
 
-                        <h:panelGroup rendered="#{transaction.transactionStatus.explainationStatusName eq 'EXPLAINED'}">
-                            <i class="fa fa-check" style="color: green;"></i>
-                        </h:panelGroup>
-                        <h:panelGroup rendered="#{transaction.transactionStatus.explainationStatusName eq 'UNEXPLAINED'}">
-                            <i class="fa fa-question" style="color: red;"></i>
-                        </h:panelGroup>
-                        <br/>
-                        <h:panelGroup layout="block">
+                        <p:column width="30" style="text-align: center">
+                            <h:panelGroup layout="block">
+                                <h:panelGroup layout="block" style="display:block" styleClass="label transtype-#{transaction.transactionStatus.explainationStatusName}#{transaction.parent ? '': '-child'}" 
+                                              >
+                                    <h:outputText value=" "/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </p:column>
+
+                        <p:column headerText="#{messages.date}" width="80" sortBy="#{transaction.transactionDate.time}" filterMatchMode="contains" filterBy="#{transaction.transactionDate.time}">
+                            <h:outputText value="#{transaction.transactionDate.time}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="#{messages.description}" filterMatchMode="contains" filterBy="#{transaction.transactionDescription}">
+                            <p:outputLabel value="#{transaction.transactionDescription}"/>
+                        </p:column>
+
+                        <p:column headerText="#{messages.credit}" sortBy="#{transaction.transactionAmount}" width="150" styleClass="amount" filterMatchMode="contains" filterBy="#{transaction.transactionAmount}">
+                            <h:outputText value="#{transaction.bankAccount.bankAccountCurrency.currencySymbol} " rendered="#{transaction.debitCreditFlag.toString() eq 'C'}" />
+                            <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString() eq 'C'}" >
+                                <f:convertNumber type="currency" currencySymbol=""/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="#{messages.debit}" sortBy="#{transaction.transactionAmount}" width="150" styleClass="amount" filterMatchMode="contains" filterBy="#{transaction.transactionAmount}">
+                            <h:outputText value="#{transaction.bankAccount.bankAccountCurrency.currencySymbol} " rendered="#{transaction.debitCreditFlag.toString() eq 'D'}" />
+                            <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString() eq 'D'}" >
+                                <f:convertNumber type="currency" currencySymbol=""/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="#{messages.current_balance}" styleClass="amount" width="150" filterMatchMode="contains" filterBy="#{transaction.currentBalance}">
+                            <h:outputText value="#{transaction.bankAccount.bankAccountCurrency.currencySymbol} " />
+                            <h:outputText value="#{transaction.currentBalance}" >
+                                <f:convertNumber type="currency" currencySymbol=""/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Action" width="130">
                             <p:rowToggler />
-                            <h:panelGroup layout="block" style="display:block" styleClass="label eligibility-#{transaction.transactionStatus.explainationStatusName}" 
-                                          rendered="#{transaction.transactionStatus.explainationStatusName eq 'EXPLAINED'}">
-                                <h:outputText value=" "/>
-                            </h:panelGroup>
-                            <h:panelGroup layout="block" style="display:block" styleClass="label eligibility-#{transaction.transactionStatus.explainationStatusName}" 
-                                          rendered="#{transaction.transactionStatus.explainationStatusName eq 'UNEXPLAINED'}">
-                                <h:outputText value=" "/>
-                            </h:panelGroup>
-                        </h:panelGroup>
-                    </p:column>
-
-                    <p:column headerText="#{messages.date}" sortBy="#{transaction.transactionDate.time}" filterMatchMode="contains" filterBy="#{transaction.transactionDate.time}">
-                        <h:outputText value="#{transaction.transactionDate.time}" >
-                            <f:convertDateTime pattern="dd/MM/yyyy" />
-                        </h:outputText>
-                    </p:column>
-
-                    <p:column headerText="#{messages.description}" filterMatchMode="contains" filterBy="#{transaction.transactionDescription}">
-                        <p:outputLabel value="#{transaction.transactionDescription}"/>
-                    </p:column>
-
-                    <p:column headerText="#{messages.credit}" sortBy="#{transaction.transactionAmount}" styleClass="amount" filterMatchMode="contains" filterBy="#{transaction.transactionAmount}">
-                        <h:outputText value="#{transaction.bankAccount.bankAccountCurrency.currencySymbol} " rendered="#{transaction.debitCreditFlag.toString() eq 'C'}" />
-                        <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString() eq 'C'}" >
-                            <f:convertNumber type="currency" currencySymbol=""/>
-                        </h:outputText>
-                    </p:column>
-
-                    <p:column headerText="#{messages.debit}" sortBy="#{transaction.transactionAmount}" styleClass="amount" filterMatchMode="contains" filterBy="#{transaction.transactionAmount}">
-                        <h:outputText value="#{transaction.bankAccount.bankAccountCurrency.currencySymbol} " rendered="#{transaction.debitCreditFlag.toString() eq 'D'}" />
-                        <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString() eq 'D'}" >
-                            <f:convertNumber type="currency" currencySymbol=""/>
-                        </h:outputText>
-                    </p:column>
-
-                    <p:column headerText="#{messages.current_balance}" styleClass="amount" filterMatchMode="contains" filterBy="#{transaction.currentBalance}">
-                        <h:outputText value="#{transaction.bankAccount.bankAccountCurrency.currencySymbol} " />
-                        <h:outputText value="#{transaction.currentBalance}" >
-                            <f:convertNumber type="currency" currencySymbol=""/>
-                        </h:outputText>
-                    </p:column>
-
-                    <p:column headerText="Action">
-
-                        <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" action="#{transactionController.editTransection}">
-                            <f:setPropertyActionListener value="#{transaction}" target="#{transactionController.selectedTransactionModel}" />
-                        </p:commandButton>
-
-                        <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{transactionController.deleteTransaction}" update="transactionsTable">
-                            <f:setPropertyActionListener value="#{transaction}" target="#{transactionController.selectedTransactionModel}" />
-                            <p:confirm header="#{messages.delete}" message="#{messages.are_you_sure_want_to_delete}" icon="ui-icon-alert" />
-                        </p:commandButton>
-
-                    </p:column>
-
-                    <p:rowExpansion  >
-                        <p:panelGrid  columns="1"
-                                      layout="grid" styleClass="ui-panelgrid-blank form-group">
-                            <p:panelGrid  columns="2"
-                                          columnClasses="ui-grid-col-6,ui-grid-col-6"
-                                          layout="grid" styleClass="ui-panelgrid-blank form-group"
-                                          style="border:0px none; background-color:transparent; padding-top: 10px">
-                                <h:panelGroup styleClass="md-inputfield">
-                                    <p:autoComplete
-                                        id="transactionType"
-                                        converter="#{transactionTypeConverter}"
-                                        dropdown="true"
-                                        forceSelection="true"
-                                        effect="fold"
-                                        groupBy="#{transactionType.parentTransactionType.transactionTypeName}"
-                                        completeMethod="#{transactionListController.transactionTypes()}"
-                                        value="#{transaction.transactionType}"
-                                        var="transactionType"
-                                        itemValue="#{transactionType}"
-                                        itemLabel="#{transactionType.transactionTypeName}">
-                                    </p:autoComplete>
-                                    <label>#{messages.type}</label>
-                                </h:panelGroup>
-
-                                <h:panelGroup styleClass="md-inputfield">
-                                    <p:autoComplete
-                                        id="transactionCategory"
-                                        converter="#{transactionCategoryConverter}"
-                                        dropdown="true"
-                                        forceSelection="true"
-                                        effect="fold"
-                                        completeMethod="#{transactionListController.transactionCategories}"
-                                        value="#{transaction.explainedTransactionCategory}"
-                                        var="transactionCategory"
-                                        itemValue="#{transactionCategory}"
-                                        itemLabel="#{transactionCategory.transactionCategoryName}">
-                                    </p:autoComplete>
-                                    <label>#{messages.category}</label>
-                                </h:panelGroup>
-
-
-                                <h:panelGroup styleClass="md-inputfield">
-                                    <p:inputText id="transactionDescription"
-                                                 value="#{transaction.transactionDescription}" />
-                                    <label>#{messages.description}</label>
-                                </h:panelGroup>
-                            </p:panelGrid>
-
-
-                            <p:commandButton value="#{messages.save}" icon="ui-icon-save" update="transactionsTable"
-                                             action="#{transactionListController.updateTransactionDropDown()}">
-                                <f:setPropertyActionListener target="#{transactionListController.transactionModel}" value="#{transaction}" />
+                            <p:commandButton icon="#{transaction.expandIcon ? 'ui-icon-expand-less' : 'ui-icon-expand-more'}" styleClass="AquaButton" action="#{transactionListController.expandCollapse(transaction, btnBinding.clientId)}" binding="#{btnBinding}" update="transactionsTable" id="collapseExpandBtn">
                             </p:commandButton>
-                        </p:panelGrid>
+                            <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" action="#{transactionController.editTransection}"  rendered="#{transaction.parentTransaction == null}">
+                                <f:setPropertyActionListener value="#{transaction}" target="#{transactionController.selectedTransactionModel}" />
+                            </p:commandButton>
 
-                    </p:rowExpansion>
-                </p:dataTable>
-            </si:cdataPanel>
+                            <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{transactionController.deleteTransaction}" update="transactionsTable">
+                                <f:setPropertyActionListener value="#{transaction}" target="#{transactionController.selectedTransactionModel}" />
+                                <p:confirm header="#{messages.delete}" message="#{messages.are_you_sure_want_to_delete}" icon="ui-icon-alert" />
+                            </p:commandButton>
+
+                        </p:column>
+
+                        <p:rowExpansion>
+                            <ui:include src="child-transaction.xhtml">
+                                <ui:param name="transaction" value="#{transaction}"/>
+                                <ui:param name="rowIdx" value="#{rowIdx}"/>
+                            </ui:include>
+                        </p:rowExpansion>
+                    </p:dataTable>
+                </si:cdataPanel>
+            </div>
         </h:form>
         <ui:include src="import-transaction-popup.xhtml"/>
 

@@ -74,6 +74,8 @@ public class ContactModel implements Serializable {
     private Currency currency;
 
     private Title title;
+    
+    private ContactType contactType;
 
     private Boolean selected = Boolean.FALSE;
 

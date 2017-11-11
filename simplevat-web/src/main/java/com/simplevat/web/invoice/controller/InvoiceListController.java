@@ -22,6 +22,8 @@ import com.simplevat.entity.invoice.DiscountType;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.entity.invoice.InvoiceLineItem;
 import com.simplevat.service.invoice.InvoiceService;
+import com.simplevat.web.common.controller.BaseController;
+import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.invoice.model.InvoiceModel;
 
 /**
@@ -30,7 +32,7 @@ import com.simplevat.web.invoice.model.InvoiceModel;
  */
 @Controller
 @SpringScopeView
-public class InvoiceListController implements Serializable {
+public class InvoiceListController extends BaseController implements Serializable {
 
     private static final long serialVersionUID = 9066359395680732884L;
 
@@ -49,6 +51,10 @@ public class InvoiceListController implements Serializable {
     @Autowired
     private InvoiceService invoiceService;
 
+    public InvoiceListController() {
+        super(ModuleName.INVOICE_MODULE);
+    }
+
     @PostConstruct
     public void initInvoices() {
         System.out.println("inside Post constructor");
@@ -60,9 +66,9 @@ public class InvoiceListController implements Serializable {
     public String redirectToCreateInvoice() {
         String selectedInvoiceId = "";
         if (selectedInvoice != null) {
-           selectedInvoiceId =  "&selectedInvoiceModelId=" + selectedInvoice.getInvoiceId();
+            selectedInvoiceId = "&selectedInvoiceModelId=" + selectedInvoice.getInvoiceId();
         }
-        return "invoice.xhtml?faces-redirect=true"+selectedInvoiceId;
+        return "invoice.xhtml?faces-redirect=true" + selectedInvoiceId;
     }
 
     public void deleteInvoice(final Invoice invoice) {
@@ -71,7 +77,6 @@ public class InvoiceListController implements Serializable {
         initInvoices();
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage("Invoice Deleted SuccessFully"));
-
     }
 
     @Nonnull

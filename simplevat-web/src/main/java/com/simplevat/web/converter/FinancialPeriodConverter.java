@@ -1,7 +1,7 @@
 package com.simplevat.web.converter;
 
-import com.simplevat.web.report.FinancialPeriod;
-import com.simplevat.web.report.FinancialPeriodHolder;
+import com.simplevat.web.financialreport.FinancialPeriod;
+import com.simplevat.web.financialreport.FinancialPeriodHolder;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;

@@ -13,6 +13,8 @@ import com.simplevat.service.ContactService;
 import com.simplevat.service.CurrencyService;
 import com.simplevat.service.LanguageService;
 import com.simplevat.service.ProjectService;
+import com.simplevat.web.common.controller.BaseController;
+import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.contact.model.ContactModel;
 import com.simplevat.web.utils.FacesUtil;
 import java.io.Serializable;
@@ -37,7 +39,7 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 @SpringScopeView
-public class ProjectController implements Serializable {
+public class ProjectController extends BaseController implements Serializable {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ProjectController.class);
 
@@ -69,7 +71,10 @@ public class ProjectController implements Serializable {
     @Setter
     private ContactModel contactModel;
 
-    
+    public ProjectController() {
+        super(ModuleName.PROJECT_MODULE);
+    }
+
     @PostConstruct
     public void init() {
         try {
@@ -110,7 +115,7 @@ public class ProjectController implements Serializable {
             if (!isNullOrEmpty(searchQuery)) {
                 criteria.setProjectName(searchQuery);
             }
-           return projectService.getProjectsByCriteria(criteria);
+            return projectService.getProjectsByCriteria(criteria);
         } catch (Exception ex) {
             ex.printStackTrace();
             java.util.logging.Logger.getLogger(ProjectController.class.getName()).log(Level.SEVERE, null, ex);
@@ -189,7 +194,7 @@ public class ProjectController implements Serializable {
 
         return currencySuggestion;
     }
-    
+
     public void initCreateContact() {
         contactModel = new ContactModel();
     }
@@ -213,7 +218,7 @@ public class ProjectController implements Serializable {
         if (defaultCurrency != null) {
             contactModel.setCurrency(defaultCurrency);
         }
-        if (contact.getContactId()!=null) {
+        if (contact.getContactId() != null) {
             contactService.update(contact);
         } else {
             contactService.persist(contact);

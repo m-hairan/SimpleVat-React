@@ -59,6 +59,7 @@
                                             <label>#{messages.claimant}</label>
                                             <p:message for="expenseClaimantId" />
                                         </h:panelGroup>
+
                                         <p:outputLabel for="expenseTransactionType"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete
@@ -74,6 +75,9 @@
                                                 itemLabel="#{transactionType.transactionTypeName}"
                                                 required="true"
                                                 requiredMessage="Please select expense Type">
+                                                <p:ajax event="itemSelect"
+                                                        update="expenseTransactionCategory"  />
+
                                             </p:autoComplete>
                                             <label>#{messages.type}</label>
                                             <p:message for="expenseTransactionType" />
@@ -87,7 +91,8 @@
                                                 dropdown="true"
                                                 forceSelection="true"
                                                 effect="fold"
-                                                completeMethod="#{transactionController.transactionCategories()}"
+                                                groupBy="#{(transactionCategory.parentTransactionCategory.transactionCategoryName != null)?transactionCategory.parentTransactionCategory.transactionCategoryName:'Others'}"
+                                                completeMethod="#{expenseController.completeCategory()}"
                                                 value="#{expenseController.selectedExpenseModel.transactionCategory}"
                                                 var="transactionCategory"
                                                 itemValue="#{transactionCategory}"
@@ -96,6 +101,7 @@
                                             </p:autoComplete>
                                             <label>#{messages.category}</label>
                                         </h:panelGroup>
+
                                         <p:outputLabel for="expenseDate"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:calendar
@@ -108,7 +114,7 @@
                                         </h:panelGroup>
 
 
-                                        
+
 
                                         <p:outputLabel for="expenseCurrency" />
                                         <h:panelGroup styleClass="md-inputfield">
@@ -127,6 +133,7 @@
                                             <label>#{messages.currency}</label>
                                             <p:message for="expenseCurrency" />
                                         </h:panelGroup>
+
 
                                         <p:outputLabel for="expenseDescription" />
                                         <h:panelGroup styleClass="md-inputfield">
@@ -163,6 +170,7 @@
 
                                     </p:panelGrid>
                                 </p:fieldset>
+
                                 <br />
                                 <p:fieldset legend="Receipt" toggleable="true" toggleSpeed="500">
                                     <p:panelGrid columns="6"
@@ -208,6 +216,7 @@
                                     </p:panelGrid>
                                 </p:fieldset>
 
+
                                 <p:fieldset legend="Expense Item Details" toggleable="true" 
                                             toggleSpeed="300">
                                     <p:messages autoUpdate="true" id="validationId" closable="true" for="validationId" />
@@ -222,12 +231,27 @@
                                             <p:commandButton title="Delete Expense Item" 
                                                              update="expenseItemTable"
                                                              process="@this"
-                                                             actionListener="#{expenseController.selectedExpenseModel.expenseItem.remove(expenseItem)}"
+                                                             actionListener="#{expenseController.deleteLineItem(expenseItem)}"
                                                              icon="ui-icon-delete">
                                             </p:commandButton>
                                         </p:column>
 
-                                        <p:column headerText="Quantity" styleClass="amount">
+                                        <p:column headerText="Description" styleClass="amount" style="width: 320px">
+                                            <p:cellEditor>
+                                                <f:facet name="output">
+                                                    <h:outputText value="#{expenseItem.description}" />
+                                                </f:facet>
+                                                <f:facet name="input">
+                                                    <p:inputText id="description" 
+                                                                 value="#{expenseItem.description}" 
+                                                                 style="width:100%">
+                                                        <p:ajax event="change" />
+                                                    </p:inputText>
+                                                </f:facet>
+                                            </p:cellEditor>
+                                        </p:column>
+
+                                        <p:column headerText="Quantity" styleClass="amount" >
                                             <p:cellEditor>
                                                 <f:facet name="output">
                                                     <h:outputText value="#{expenseItem.quatity}" />
@@ -257,11 +281,11 @@
                                                 </f:facet>
                                                 <f:facet name="input">
                                                     <p:inputNumber id="unitPrice" 
-                                                                 symbol="#{expenseController.selectedExpenseModel.currency.currencySymbol} " symbolPosition="p"
-                                                                 validator="positiveNumberValidator"
-                                                                 validatorMessage="Please enter Price more then 0"
-                                                                 value="#{expenseItem.unitPrice}" 
-                                                                 style="width:100%">
+                                                                   symbol="#{expenseController.selectedExpenseModel.currency.currencySymbol} " symbolPosition="p"
+                                                                   validator="positiveNumberValidator"
+                                                                   validatorMessage="Please enter Price more then 0"
+                                                                   value="#{expenseItem.unitPrice}" 
+                                                                   style="width:100%">
                                                         <p:ajax event="change" 
                                                                 listener="#{expenseController.updateSubTotal(expenseItem)}" 
                                                                 update="subTotal" />
@@ -289,20 +313,6 @@
                                             </p:cellEditor>
                                         </p:column>
 
-                                        <p:column headerText="Description" styleClass="amount">
-                                            <p:cellEditor>
-                                                <f:facet name="output">
-                                                    <h:outputText value="#{expenseItem.description}" />
-                                                </f:facet>
-                                                <f:facet name="input">
-                                                    <p:inputText id="description" 
-                                                                 value="#{expenseItem.description}" 
-                                                                 style="width:100%">
-                                                        <p:ajax event="change" />
-                                                    </p:inputText>
-                                                </f:facet>
-                                            </p:cellEditor>
-                                        </p:column>
 
                                         <p:column headerText="Subtotal (#{expenseController.selectedExpenseModel.currency.currencyIsoCode})" styleClass="amount">
                                             <h:outputText id="subTotal" value="#{expenseItem.subTotal}" >

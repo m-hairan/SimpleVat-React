@@ -17,8 +17,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
 import com.simplevat.web.bankaccount.model.TransactionModel;
-import com.simplevat.criteria.bankaccount.TransactionCategoryCriteria;
-import com.simplevat.criteria.bankaccount.TransactionTypeCriteria;
 import com.simplevat.entity.Project;
 import com.simplevat.entity.User;
 import com.simplevat.entity.bankaccount.BankAccount;
@@ -26,21 +24,27 @@ import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionStatus;
 import com.simplevat.entity.bankaccount.TransactionType;
+import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.service.ProjectService;
 import com.simplevat.service.bankaccount.BankAccountService;
 import com.simplevat.service.TransactionCategoryServiceNew;
 import com.simplevat.service.bankaccount.TransactionService;
 import com.simplevat.service.bankaccount.TransactionStatusService;
 import com.simplevat.service.bankaccount.TransactionTypeService;
+import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.web.bankaccount.model.BankAccountModel;
-import com.simplevat.web.constant.BankAccountConstant;
+import com.simplevat.web.constant.InvoiceStatusConstant;
+import com.simplevat.web.constant.TransactionCreditDebitConstant;
+import com.simplevat.web.constant.TransactionEntryTypeConstant;
+import com.simplevat.web.constant.TransactionRefrenceTypeConstant;
 import com.simplevat.web.constant.TransactionStatusConstant;
 import com.simplevat.web.utils.FacesUtil;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.time.ZoneId;
-import java.util.Date;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import javax.annotation.PostConstruct;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
@@ -52,6 +56,9 @@ public class TransactionController extends TransactionControllerHelper implement
 
     @Autowired
     private TransactionService transactionService;
+
+    @Autowired
+    private InvoiceService invoiceService;
 
     @Autowired
     private TransactionTypeService transactionTypeService;
@@ -94,7 +101,6 @@ public class TransactionController extends TransactionControllerHelper implement
     @PostConstruct
     public void init() {
 
-        this.transactionTypeList = transactionTypeService.findAll();
         Integer bankAccountId = FacesUtil.getSelectedBankAccountId();
         if (bankAccountId != null) {
             BankAccount bankAccount = bankAccountService.findByPK(bankAccountId);
@@ -110,14 +116,6 @@ public class TransactionController extends TransactionControllerHelper implement
             }
         } else if (selectedTransactionModel == null) {
             selectedTransactionModel = new TransactionModel();
-            TransactionType transactionType = transactionTypeService.getDefaultTransactionType();
-            if (transactionType != null) {
-                selectedTransactionModel.setTransactionType(transactionType);
-            }
-            TransactionCategory transactionCategory = transactionCategoryService.getDefaultTransactionCategory();
-            if (transactionCategory != null) {
-                selectedTransactionModel.setExplainedTransactionCategory(transactionCategory);
-            }
         }
 
     }
@@ -136,61 +134,138 @@ public class TransactionController extends TransactionControllerHelper implement
         return "edit-bank-transaction?faces-redirect=true&selectedTransactionId=" + selectedTransactionModel.getTransactionId();
     }
 
+    private Transaction createNewChildTransaction(Transaction transaction, char transactionCreditDebitConstant, BigDecimal transactionAmount) {
+        Transaction childTransaction = new Transaction();
+        childTransaction.setDebitCreditFlag(transactionCreditDebitConstant);
+        childTransaction.setCreatedBy(FacesUtil.getLoggedInUser().getUserId());
+        childTransaction.setTransactionDate(LocalDateTime.now());
+        childTransaction.setCurrentBalance(new BigDecimal(0.00));
+        childTransaction.setCreatedDate(LocalDateTime.now());
+        childTransaction.setParentTransaction(transaction);
+        childTransaction.setBankAccount(transaction.getBankAccount());
+        childTransaction.setEntryType(TransactionEntryTypeConstant.SYSTEM);
+        childTransaction.setTransactionType(transaction.getTransactionType());
+        childTransaction.setExplainedTransactionCategory(transaction.getExplainedTransactionCategory());
+        childTransaction.setTransactionDescription(transaction.getTransactionDescription());
+        childTransaction.setTransactionAmount(transactionAmount);
+        return childTransaction;
+    }
+
+    private Object getRefObject() {
+        Object refObject = null;
+        if (selectedTransactionModel.getExplainedTransactionCategory() != null
+                && selectedTransactionModel.getExplainedTransactionCategory().getTransactionCategoryCode() == TransactionRefrenceTypeConstant.INVOICE) {
+            refObject = selectedTransactionModel.getRefObject();
+        }
+        return refObject;
+    }
+
+    private void updatePrevReference(Transaction transaction) {
+        Integer prevReferanceId = transaction.getReferenceId();
+        if (prevReferanceId != null) {
+            if (transaction.getReferenceType() == TransactionRefrenceTypeConstant.INVOICE) {
+                Invoice invoice = invoiceService.findByPK(transaction.getReferenceId());
+                invoice.setDueAmount(invoice.getDueAmount().add(transaction.getTransactionAmount()));
+                invoiceService.update(invoice);
+            }
+            transaction.setReferenceId(null);
+            transaction.setReferenceType(null);
+        }
+    }
+
+    private void updateRefObjectAmount(Transaction transaction, Object object) {
+        updatePrevReference(transaction);
+        if (object instanceof Invoice) {
+            Invoice invoice = (Invoice) object;
+            BigDecimal invoiceDueAmount = invoice.getDueAmount();
+            if (transaction.getTransactionAmount().doubleValue() <= invoiceDueAmount.doubleValue()) {
+                invoice.setDueAmount(invoiceDueAmount.subtract(transaction.getTransactionAmount()));
+                invoice.setStatus(InvoiceStatusConstant.PAID);
+                if (invoiceDueAmount.doubleValue() > transaction.getTransactionAmount().doubleValue()) {
+                    invoice.setStatus(InvoiceStatusConstant.PARTIALPAID);
+                }
+                transaction.setReferenceId(invoice.getInvoiceId());
+                transaction.setReferenceType(TransactionRefrenceTypeConstant.INVOICE);
+                transaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED));
+            } else {
+                transaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.PARTIALLYEXPLIANED));
+                Transaction newChildTransaction = createNewChildTransaction(transaction, TransactionCreditDebitConstant.CREDIT, invoice.getDueAmount());
+                newChildTransaction.setReferenceId(invoice.getInvoiceId());
+                newChildTransaction.setReferenceType(TransactionRefrenceTypeConstant.INVOICE);
+                newChildTransaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED));
+                transaction.getChildTransactionList().add(newChildTransaction);
+                invoice.setDueAmount(new BigDecimal(0));
+                invoice.setStatus(InvoiceStatusConstant.PAID);
+            }
+        }
+    }
+
+    private boolean validTransactionAmount(Transaction transaction) {
+        BigDecimal validTransactionAmount = new BigDecimal(0);
+        if (transaction.getChildTransactionList() != null && !transaction.getChildTransactionList().isEmpty()) {
+            for (Transaction childTransaction : transaction.getChildTransactionList()) {
+                validTransactionAmount = validTransactionAmount.add(childTransaction.getTransactionAmount());
+            }
+        }
+        if (validTransactionAmount.doubleValue() > transaction.getTransactionAmount().doubleValue()) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transaction amount can't be less than " + validTransactionAmount.doubleValue()));
+            return false;
+        }
+        return true;
+    }
+
     public String saveTransaction() {
         User loggedInUser = FacesUtil.getLoggedInUser();
-        System.out.println("selectedTransactionModel :" + selectedTransactionModel);
-        Transaction transaction = getTransaction(selectedTransactionModel);
+        Transaction transaction = getTransactionEntity(selectedTransactionModel);
+        if (transaction.getTransactionId() != null) {
+            if (!validTransactionAmount(transaction)) {
+                return "";
+            }
+        }
         selectedBankAccount = getBankAccount(selectedBankAccountModel);
-        System.out.println("selectedBankAccount :" + selectedBankAccount);
         transaction.setLastUpdateBy(loggedInUser.getUserId());
-        transaction.setCreatedBy(loggedInUser.getUserId());
+        if (transaction.getTransactionId() == null) {
+            transaction.setCreatedBy(loggedInUser.getUserId());
+        }
         transaction.setBankAccount(selectedBankAccount);
+        transaction.setEntryType(TransactionEntryTypeConstant.MANUALLY);
+        transaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED));
         if (selectedTransactionModel.getTransactionType() != null) {
-            TransactionType transactionType = transactionTypeService.getTransactionType(selectedTransactionModel.getTransactionType().getTransactionTypeCode());
-            transaction.setTransactionType(transactionType);
-            transaction.setDebitCreditFlag(transactionType.getDebitCreditFlag());
+            transaction.setDebitCreditFlag(selectedTransactionModel.getTransactionType().getDebitCreditFlag());
         }
-
-        if (selectedTransactionModel.getExplainedTransactionCategory() != null) {
-            TransactionCategory transactionCategory = transactionCategoryService.findByPK(selectedTransactionModel.getExplainedTransactionCategory().getTransactionCategoryCode());
-            transaction.setExplainedTransactionCategory(transactionCategory);
-        }
-
         if (selectedTransactionModel.getProject() != null) {
             Project project = projectService.findByPK(selectedTransactionModel.getProject().getProjectId());
             transaction.setProject(project);
         }
-
-        if (selectedTransactionModel.getTransactionStatus() != null) {
-            TransactionStatus transactionStatus = transactionStatusService.findByPK(selectedTransactionModel.getTransactionStatus().getExplainationStatusCode());
-            transaction.setTransactionStatus(transactionStatus);
-        }
-        System.out.println("before inside if :" + transaction.getTransactionStatus());
-
-        if (selectedTransactionModel.getTransactionType() != null && selectedTransactionModel.getExplainedTransactionCategory() != null) {
-            if (selectedTransactionModel.getTransactionStatus() == null
-                    || selectedTransactionModel.getTransactionStatus().getExplainationStatusCode() == 0) {
-                System.out.println("inside if :" + transaction.getTransactionStatus());
-                TransactionStatus transactionStatus = transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED);
-                transaction.setTransactionStatus(transactionStatus);
+        if (transaction.getChildTransactionList() != null && !transaction.getChildTransactionList().isEmpty()) {
+            BigDecimal totalAmount = new BigDecimal(0);
+            for (Transaction tempTransaction : transaction.getChildTransactionList()) {
+                System.out.println("tempTransaction createdBy :"+tempTransaction.getCreatedBy());
+                totalAmount = totalAmount.add(tempTransaction.getTransactionAmount());
             }
-        } else {
-
-            System.out.println("inside inside if :" + transaction.getTransactionStatus());
-            if (selectedTransactionModel.getTransactionStatus() == null
-                    || selectedTransactionModel.getTransactionStatus().getExplainationStatusCode() == 0) {
-                TransactionStatus transactionStatus = transactionStatusService.findByPK(TransactionStatusConstant.UNEXPLIANED);
-                transaction.setTransactionStatus(transactionStatus);
+            if (selectedTransactionModel.getTransactionAmount().doubleValue() > totalAmount.doubleValue()) {
+                transaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.PARTIALLYEXPLIANED));
             }
         }
-        System.out.println("after inside if :" + transaction.getTransactionStatus());
 
+        if (getRefObject() != null) {
+            updateRefObjectAmount(transaction, getRefObject());
+            if (transaction.getChildTransactionList() != null && !transaction.getChildTransactionList().isEmpty()) {
+                transaction.setExplainedTransactionCategory(null);
+                transaction.setTransactionType(null);
+            }
+        }
+        System.out.println("transaction createdBy :"+transaction.getCreatedBy());
         if (transaction.getTransactionId() == null) {
             transactionService.persist(transaction);
         } else {
             transactionService.update(transaction);
         }
-
+        if (getRefObject() != null) {
+            if (getRefObject() instanceof Invoice) {
+                invoiceService.update((Invoice) getRefObject());
+            }
+        }
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transaction saved successfully"));
         return "bank-transactions?faces-redirect=true";
 
@@ -198,7 +273,7 @@ public class TransactionController extends TransactionControllerHelper implement
 
     public String saveAndContinueTransaction() {
         User loggedInUser = FacesUtil.getLoggedInUser();
-        Transaction transaction = getTransaction(selectedTransactionModel);
+        Transaction transaction = getTransactionEntity(selectedTransactionModel);
 
         transaction.setLastUpdateBy(loggedInUser.getUserId());
         transaction.setCreatedBy(loggedInUser.getUserId());
@@ -255,31 +330,48 @@ public class TransactionController extends TransactionControllerHelper implement
 
     public String deleteTransaction() {
 
-        Transaction transaction = getTransaction(selectedTransactionModel);
+        Transaction transaction = getTransactionEntity(selectedTransactionModel);
         transaction.setDeleteFlag(true);
-        transactionService.deleteTransaction(transaction);
+        if (transaction.getParentTransaction() != null) {
+            transactionService.deleteChildTransaction(transaction);
+        } else {
+            transactionService.deleteTransaction(transaction);
+        }
 
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transaction deleted successfully"));
         return "bank-transactions?faces-redirect=true";
     }
 
-    /* public List<TransactionType> transactionTypes(final String searchQuery) throws Exception {
-   
-        TransactionTypeCriteria transactionTypeCriteria = new TransactionTypeCriteria();
-        transactionTypeCriteria.setActive(Boolean.TRUE);
-        return transactionTypeService.getTransactionTypesByCriteria(transactionTypeCriteria);
-    
-   
-    }*/
     public List<TransactionType> transactionTypes() throws Exception {
-        return transactionTypeList;
+        return transactionTypeService.findAll();
 
     }
 
-    public List<TransactionCategory> transactionCategories() throws Exception {
-        TransactionCategoryCriteria transactionCategoryCriteria = new TransactionCategoryCriteria();
-        transactionCategoryCriteria.setActive(Boolean.TRUE);
-        return transactionCategoryService.getCategoriesByComplexCriteria(transactionCategoryCriteria);
+    public List<Invoice> completeInvoice() {
+        List<Invoice> invoiceList = new ArrayList<>();
+        for (Invoice invoice : invoiceService.getInvoiceListByDueAmount()) {
+            invoiceList.add(invoice);
+        }
+        return invoiceList;
+    }
+
+    public String autocompleteInvoiceLebal(Invoice invoice) {
+        return invoice != null ? invoice.getInvoiceReferenceNumber() + ':' + invoice.getDueAmount() + '(' + invoice.getInvoiceContact().getFirstName() + ')' : "";
+    }
+
+    public List<TransactionCategory> transactionCategories(TransactionType transactionType) throws Exception {
+        List<TransactionCategory> transactionCategoryParentList = new ArrayList<>();
+        List<TransactionCategory> transactionCategoryList = new ArrayList<>();
+        if (transactionType != null) {
+            transactionCategoryList = transactionCategoryService.findAllTransactionCategoryByTransactionType(transactionType.getTransactionTypeCode());
+        }
+        for (TransactionCategory transactionCategory : transactionCategoryList) {
+            if (transactionCategory.getParentTransactionCategory() != null) {
+                transactionCategoryParentList.add(transactionCategory.getParentTransactionCategory());
+            }
+        }
+        transactionCategoryList.removeAll(transactionCategoryParentList);
+        return transactionCategoryList;
     }
 
     public List<TransactionStatus> transactionStatuses(final String searchQuery) throws Exception {

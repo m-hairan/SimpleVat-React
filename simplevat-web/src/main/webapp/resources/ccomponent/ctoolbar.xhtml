@@ -8,32 +8,37 @@
 
     <cc:interface>
         <cc:attribute name="newAction" method-signature="void new(java.lang.String)"/>
-	<cc:attribute name="importAction" method-signature="void import(java.lang.String)" />
-	<cc:attribute name="exportAction" method-signature="void import(java.lang.String)" />
-	<cc:attribute name="deleteAction" method-signature="void import(java.lang.String)" />
+        <cc:attribute name="importAction" method-signature="void import(java.lang.String)" />
+        <cc:attribute name="exportAction" method-signature="void import(java.lang.String)" />
+        <cc:attribute name="deleteAction" method-signature="void import(java.lang.String)" />
+        <cc:facet name="left"/>
     </cc:interface>
 
     <cc:implementation>
-          <p:toolbar>
-                    <f:facet name="left">
-                        <p:commandButton value="#{messages.button_new}" action="#{cc.attrs.newAction}" icon="ui-icon-plus" />
-                        <span class="ui-separator" style="padding-right: 5px;">
-                            <span class="fa fa-ellipsis-v SoftGray" />
-                        </span>
-                            <p:commandButton action="#{cc.attrs.importAction}" title="#{messages.button_import}" icon="ui-icon-file-download" />
-                            <p:commandButton action="#{cc.attrs.exportAction}" title="#{messages.button_export}" icon="ui-icon-file-upload" />
-                            <p:commandButton action="#{cc.attrs.deleteAction}" title="#{messages.delete}" icon="ui-icon-delete" />
-                    </f:facet>
+        <p:toolbar>
+            <f:facet name="left">
+                <p:commandButton value="#{messages.button_new}" action="#{cc.attrs.newAction}" icon="ui-icon-plus" />
+                <span class="ui-separator" style="padding-right: 5px;">
+                    <span class="fa fa-ellipsis-v SoftGray" />
+                </span>
+                <p:commandButton action="#{cc.attrs.importAction}" title="#{messages.button_import}" icon="ui-icon-file-download" />
+                <p:commandButton action="#{cc.attrs.exportAction}" title="#{messages.button_export}" icon="ui-icon-file-upload" />
+                <p:commandButton action="#{cc.attrs.deleteAction}" title="#{messages.delete}" icon="ui-icon-delete" />
+                <span class="ui-separator" style="padding-right: 5px;">
+                    <span class="fa fa-ellipsis-v SoftGray" />
+                </span>
+                <cc:renderFacet name="left"/>
+            </f:facet>
 
-                    <f:facet name="right">
-                        <p:menuButton value="Options">
-                            <p:menuitem value="#{messages.button_import}" action="#{cc.attrs.importAction}" icon="ui-icon-file-download" />
-                            <p:menuitem value="#{messages.button_export}" action="#{cc.attrs.exportAction}" icon="ui-icon-file-upload" />
-                            <p:menuitem value="#{messages.delete}" action="#{cc.attrs.deleteAction}" icon="ui-icon-delete" />
-                            <p:separator />
-                            <p:menuitem value="#{messages.home_page}" outcome="/pages/secure/home" icon="ui-icon-home"/>
-                        </p:menuButton>
-                    </f:facet>
-                </p:toolbar>
+            <f:facet name="right">
+                <p:menuButton value="Options">
+                    <p:menuitem value="#{messages.button_import}" action="#{cc.attrs.importAction}" icon="ui-icon-file-download" />
+                    <p:menuitem value="#{messages.button_export}" action="#{cc.attrs.exportAction}" icon="ui-icon-file-upload" />
+                    <p:menuitem value="#{messages.delete}" action="#{cc.attrs.deleteAction}" icon="ui-icon-delete" />
+                    <p:separator />
+                    <p:menuitem value="#{messages.home_page}" outcome="/pages/secure/home" icon="ui-icon-home"/>
+                </p:menuButton>
+            </f:facet>
+        </p:toolbar>
     </cc:implementation>
 </html>

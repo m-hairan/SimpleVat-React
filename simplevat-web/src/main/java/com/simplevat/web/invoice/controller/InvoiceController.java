@@ -35,14 +35,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import static com.mysql.jdbc.StringUtils.isNullOrEmpty;
-import com.simplevat.entity.Company;
 import com.simplevat.entity.Configuration;
 import com.simplevat.entity.VatCategory;
-import com.simplevat.entity.VatCategory;
-import com.simplevat.service.CompanyService;
 import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.VatCategoryService;
+import com.simplevat.web.common.controller.BaseController;
 import com.simplevat.web.constant.ConfigurationConstants;
+import com.simplevat.web.constant.InvoiceStatusConstant;
+import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.utils.FacesUtil;
 import java.util.Calendar;
 import javax.faces.model.SelectItem;
@@ -54,7 +54,7 @@ import org.primefaces.context.RequestContext;
  */
 @Controller
 @SpringScopeView
-public class InvoiceController extends InvoiceModelHelper implements Serializable {
+public class InvoiceController extends BaseController implements Serializable {
 
     private static final long serialVersionUID = 6299117288316809011L;
 
@@ -114,14 +114,28 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
     @Setter
     List<SelectItem> vatCategorySelectItemList = new ArrayList<>();
 
+    @Getter
+    BigDecimal discountAmount = new BigDecimal(0);
+
+    @Getter
+    BigDecimal totalInvoiceCalculation = new BigDecimal(0);
+
+    @Autowired
+    InvoiceModelHelper invoiceModelHelper;
+
+    public InvoiceController() {
+        super(ModuleName.INVOICE_MODULE);
+    }
+
     @PostConstruct
     public void init() {
+
         Object objSelectedInvoice = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedInvoiceModelId");
         System.out.println("objSelectedInvoice :" + objSelectedInvoice);
         if (objSelectedInvoice != null) {
 
             selectedInvoice = invoiceService.findByPK(Integer.parseInt(objSelectedInvoice.toString()));
-            selectedInvoiceModel = getInvoiceModel(selectedInvoice);
+            selectedInvoiceModel = invoiceModelHelper.getInvoiceModel(selectedInvoice);
             renderPrintInvoice = true;
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("invoiceId", selectedInvoice.getInvoiceId());
         } else {
@@ -129,6 +143,7 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
             contactModel = new ContactModel();
             currencies = currencyService.getCurrencies();
             setDefaultCurrency();
+            selectedInvoiceModel.setDiscount(new BigDecimal(0));
             selectedInvoiceModel.setInvoiceDate(new Date());
             selectedInvoiceModel.setInvoiceDueOn(30);
             updateCurrencyLabel();
@@ -137,7 +152,7 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
             if (configurationList != null) {
                 configuration = configurationList.stream().filter(conf -> conf.getName().equals(ConfigurationConstants.INVOICING_REFERENCE_PATTERN)).findFirst().get();
                 if (configuration.getValue() != null) {
-                    selectedInvoiceModel.setInvoiceRefNo(getNextInvoiceRefNumber(configuration.getValue()));
+                    selectedInvoiceModel.setInvoiceRefNo(invoiceModelHelper.getNextInvoiceRefNumber(configuration.getValue()));
                 }
             }
         }
@@ -159,21 +174,56 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
         if (validated) {
             updateCurrencyLabel();
             selectedInvoiceModel.addInvoiceItem(new InvoiceItemModel());
+
         }
 
+    }
+
+    public void deleteLineItem(InvoiceItemModel itemModel) {
+        selectedInvoiceModel.getInvoiceItems().remove(itemModel);
+        if (itemModel.getSubTotal() != null && discountAmount != null) {
+            total = total.subtract(itemModel.getSubTotal()).add(discountAmount);
+            updateSubTotalOnDiscountAdded();
+        }
     }
 
     private boolean validateInvoiceLineItems() { //---------------
         boolean validated = true;
         for (InvoiceItemModel lastItem : selectedInvoiceModel.getInvoiceItems()) {
-            if (lastItem.getQuatity() < 1 || lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0) {
+
+            if ( lastItem.getUnitPrice() == null || lastItem.getQuatity() < 1 || lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0) {
                 FacesMessage message = new FacesMessage("Please enter proper detail for all invoice items.");
                 message.setSeverity(FacesMessage.SEVERITY_ERROR);
                 FacesContext.getCurrentInstance().addMessage("validationId", message);
                 validated = false;
             }
+
         }
         return validated;
+    }
+
+    public void updateSubTotalOnDiscountAdded() {
+        if (selectedInvoiceModel.getDiscount() == null) {
+            calculateTotal();
+        }
+        calculateDiscount();
+    }
+
+    public void calculateDiscount() {
+        if (selectedInvoiceModel.getDiscount() != null && total != null) {
+            totalInvoiceCalculation = new BigDecimal(0);
+            List<InvoiceItemModel> invoiceItem = selectedInvoiceModel.getInvoiceItems();
+            if (invoiceItem != null) {
+                for (InvoiceItemModel invoice : invoiceItem) {
+                    if (invoice.getSubTotal() != null) {
+                        totalInvoiceCalculation = totalInvoiceCalculation.add(invoice.getSubTotal());
+                    }
+                }
+            }
+            discountAmount = (totalInvoiceCalculation.multiply(selectedInvoiceModel.getDiscount())).divide(new BigDecimal(100));
+            total = totalInvoiceCalculation.subtract(discountAmount);
+        }
+
     }
 
     private boolean validateAtLeastOneItem() {
@@ -249,8 +299,21 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
             return "";
         }
         selectedInvoiceModel.setInvoiceDueDate(getDueDate(selectedInvoiceModel));
-        selectedInvoice = getInvoiceEntity(selectedInvoiceModel);
-        
+        System.out.println("total===============" + total);
+        selectedInvoiceModel.setInvoiceAmount(total);
+
+        selectedInvoiceModel.setDueAmount(total);
+        if (selectedInvoiceModel.getDueAmount().doubleValue() == selectedInvoiceModel.getInvoiceAmount().doubleValue()) {
+            selectedInvoiceModel.setStatus(InvoiceStatusConstant.UNPAID);
+        } else if (selectedInvoiceModel.getDueAmount().doubleValue() < selectedInvoiceModel.getInvoiceAmount().doubleValue()) {
+            if (selectedInvoiceModel.getDueAmount().doubleValue() == 0) {
+                selectedInvoiceModel.setStatus(InvoiceStatusConstant.PAID);
+            } else {
+                selectedInvoiceModel.setStatus(InvoiceStatusConstant.PARTIALPAID);
+            }
+        }
+        selectedInvoice = invoiceModelHelper.getInvoiceEntity(selectedInvoiceModel);
+
         if (selectedInvoice.getInvoiceId() != null && selectedInvoice.getInvoiceId() > 0) {
             selectedInvoice.setLastUpdateBy(FacesUtil.getLoggedInUser().getUserId());
             invoiceService.update(selectedInvoice);
@@ -278,7 +341,7 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
         if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
             return;
         }
-        Invoice invoice = getInvoiceEntity(selectedInvoiceModel);
+        Invoice invoice = invoiceModelHelper.getInvoiceEntity(selectedInvoiceModel);
         invoiceService.update(invoice, invoice.getInvoiceId());
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
@@ -313,7 +376,6 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
         if (null != unitPrice) {
             final BigDecimal amountWithoutTax = unitPrice.multiply(new BigDecimal(quantity));
             invoiceItemModel.setSubTotal(amountWithoutTax);
-
             if (vatPer != null && vatPer.compareTo(BigDecimal.ZERO) >= 1) {
                 final BigDecimal amountWithTax = amountWithoutTax
                         .add(amountWithoutTax.multiply(vatPer).multiply(new BigDecimal(0.01)));
@@ -332,6 +394,10 @@ public class InvoiceController extends InvoiceModelHelper implements Serializabl
                     total = total.add(invoice.getSubTotal());
                 }
             }
+        }
+        if (selectedInvoiceModel.getDiscount() != null) {
+            updateSubTotalOnDiscountAdded();
+
         }
     }
 

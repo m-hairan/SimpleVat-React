@@ -2,6 +2,7 @@ package com.simplevat.security;
 
 import com.simplevat.entity.User;
 import com.simplevat.service.UserServiceNew;
+import java.io.Serializable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,7 +14,7 @@ import java.util.Optional;
 import javax.faces.context.FacesContext;
 
 @Service("customUserDetailsService")
-public class CustomUserDetailsService implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService, Serializable {
 
     @Autowired
     private UserServiceNew userService;

@@ -20,4 +20,6 @@ public class InvoiceItemModel {
     private String description;
     private BigDecimal subTotal;
     private Integer versionNumber;
+    private String productService;
+    
 }

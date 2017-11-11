@@ -9,6 +9,8 @@ import com.simplevat.service.ContactService;
 import com.simplevat.service.CurrencyService;
 import com.simplevat.service.LanguageService;
 import com.simplevat.service.ProjectService;
+import com.simplevat.web.common.controller.BaseController;
+import com.simplevat.web.constant.ModuleName;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -27,7 +29,7 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 @SpringScopeView
-public class ProjectListController {
+public class ProjectListController extends BaseController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ProjectListController.class);
 
@@ -65,20 +67,24 @@ public class ProjectListController {
         return projectService.getProjectsByCriteria(projectCriteria);
     }
 
+    public ProjectListController() {
+        super(ModuleName.PROJECT_MODULE);
+    }
+
     @PostConstruct
     public void init() {
         selectedProject = new Project();
-            Currency defaultCurrency = currencyService.getDefaultCurrency();
-            if (defaultCurrency != null) {
-                this.selectedProject.setCurrency(defaultCurrency);
-            }
-            try {
-                this.projects = getProjectFromCriteria();
-            } catch (Exception ex) {
-                java.util.logging.Logger.getLogger(ProjectListController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        Currency defaultCurrency = currencyService.getDefaultCurrency();
+        if (defaultCurrency != null) {
+            this.selectedProject.setCurrency(defaultCurrency);
         }
-    
+        try {
+            this.projects = getProjectFromCriteria();
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(ProjectListController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public String redirectToCreateProject() {
         return "/pages/secure/project/project.xhtml?faces-redirect=true";
     }
@@ -92,12 +98,12 @@ public class ProjectListController {
         project.setDeleteFlag(Boolean.TRUE);
         projectService.update(project);
         try {
-                this.projects = getProjectFromCriteria();
-            } catch (Exception ex) {
-                java.util.logging.Logger.getLogger(ProjectListController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            this.projects = getProjectFromCriteria();
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(ProjectListController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Project deleted successfully"));
-     }
+    }
 
     public List<Project> projects(final String searchQuery) throws Exception {
         ProjectCriteria projectCriteria = new ProjectCriteria();

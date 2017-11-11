@@ -8,6 +8,8 @@ package com.simplevat.web.vat.controller;
 import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.VatCategory;
 import com.simplevat.service.VatCategoryService;
+import com.simplevat.web.common.controller.BaseController;
+import com.simplevat.web.constant.ModuleName;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import lombok.Getter;
@@ -22,7 +24,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 @SpringScopeView
 
-public class VatController {
+public class VatController extends BaseController {
 
     @Autowired
     private VatCategoryService vatCategoryService;
@@ -30,6 +32,10 @@ public class VatController {
     @Getter
     @Setter
     VatCategory category;
+
+    public VatController() {
+        super(ModuleName.SETTING_MODULE);
+    }
 
     @PostConstruct
     public void init() {

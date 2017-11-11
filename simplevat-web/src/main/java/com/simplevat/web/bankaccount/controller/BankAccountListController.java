@@ -8,13 +8,14 @@ import org.springframework.stereotype.Controller;
 
 import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.service.bankaccount.BankAccountService;
+import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;
 
 @Controller
 @SpringScopeView
-public class BankAccountListController {
+public class BankAccountListController implements Serializable {
 
     @Autowired
     private BankAccountService bankAccountService;

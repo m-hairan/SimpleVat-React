@@ -2,7 +2,7 @@ package com.simplevat.web.user.controller;
 
 import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.User;
-import com.simplevat.web.exception.UnauthorizedException;
+import com.simplevat.web.exceptions.UnauthorizedException;
 import com.simplevat.security.ContextUtils;
 import com.simplevat.security.UserContext;
 import com.simplevat.service.UserServiceNew;

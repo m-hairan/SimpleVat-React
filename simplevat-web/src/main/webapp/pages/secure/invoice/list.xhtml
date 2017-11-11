@@ -42,6 +42,13 @@
                         <h:outputText value="#{invoice.invoiceDueOn}" />
                     </p:column>
 
+                    <p:column headerText="#{messages.due_date}" sortBy="#{invoice.invoiceDueDate}" filterMatchMode="contains" filterBy="#{invoice.invoiceDueDate}">
+                        <h:outputText value="#{invoice.invoiceDueDate}" >
+                            <f:converter converterId="localDateTimeConverter" />
+                            <f:attribute name="pattern" value="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    
                     <p:column headerText="#{messages.contact_name}" filterMatchMode="contains" filterBy="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}"
                               sortBy="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}">
                         <h:outputText value="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}" />
@@ -53,9 +60,9 @@
                     <c:set value="#{invoiceListController.totalAmount(invoice)}"
                            var="total" />
                     <p:column headerText="#{messages.total_cost}" filterMatchMode="contains" filterBy="#{total}"
-                              sortBy="#{total}" styleClass="amount">
+                              sortBy="#{invoice.invoiceAmount}" styleClass="amount">
                         <h:outputText value="#{invoice.currency.currencySymbol} " />
-                        <h:outputText value="#{total}" >
+                        <h:outputText value="#{invoice.invoiceAmount}" >
                             <f:convertNumber type="currency" currencySymbol=""/>
                         </h:outputText>
                     </p:column>

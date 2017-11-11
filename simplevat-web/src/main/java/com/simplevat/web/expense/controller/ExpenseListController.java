@@ -13,15 +13,17 @@ import org.springframework.stereotype.Controller;
 import com.simplevat.entity.Expense;
 import com.simplevat.web.expense.model.ExpenseModel;
 import com.simplevat.service.ExpenseService;
+import com.simplevat.web.common.controller.BaseController;
+import com.simplevat.web.constant.ModuleName;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 
 @Controller
 @SpringScopeView
-public class ExpenseListController extends ExpenseControllerHelper implements Serializable {
+public class ExpenseListController extends BaseController implements Serializable {
 
     private static final long serialVersionUID = 9066359395680732884L;
-    
+
     @Autowired
     private ExpenseService expenseService;
     @Getter
@@ -31,17 +33,24 @@ public class ExpenseListController extends ExpenseControllerHelper implements Se
     @Setter
     private List<ExpenseModel> expenses;
 
-    @PostConstruct
-    public void init(){
-       List<Expense> expenseList = expenseService.getExpenses();
+    @Getter
+    @Setter
+    ExpenseControllerHelper controllerHelper;
 
+    public ExpenseListController() {
+        super(ModuleName.EXPENSE_MODULE);
+    }
+
+    @PostConstruct
+    public void init() {
+        controllerHelper = new ExpenseControllerHelper();
+        List<Expense> expenseList = expenseService.getExpenses();
         expenses = new ArrayList<>();
-        
+
         for (Expense expense : expenseList) {
-            ExpenseModel model = this.getExpenseModel(expense);
+            ExpenseModel model = controllerHelper.getExpenseModel(expense);
             expenses.add(model);
         }
-        
     }
 
     public String redirectToEdit() {

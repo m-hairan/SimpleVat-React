@@ -21,12 +21,14 @@ import javax.annotation.Nonnull;
 import org.apache.commons.lang3.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Uday
  *
  */
+@Component
 public class InvoiceModelHelper {
 
     @Autowired
@@ -64,6 +66,10 @@ public class InvoiceModelHelper {
         invoice.setInvoiceLineItems(items);
         invoice.setCreatedBy(invoiceModel.getCreatedBy());
         invoice.setLastUpdateBy(invoiceModel.getLastUpdatedBy());
+        invoice.setInvoiceAmount(invoiceModel.getInvoiceAmount());
+        invoice.setDueAmount(invoiceModel.getDueAmount());
+        invoice.setStatus(invoiceModel.getStatus());
+        invoice.setPaymentMode(invoiceModel.getPaymentMode());
 
         return invoice;
     }
@@ -84,6 +90,9 @@ public class InvoiceModelHelper {
         item.setCreatedBy(1);
         item.setLastUpdateDate(Calendar.getInstance().getTime());
         item.setVersionNumber(model.getVersionNumber());
+        if(model.getProductService()!=null){
+            item.setInvoiceLineItemProductService(model.getProductService());
+        }
         item.setInvoice(invoice);
 
         return item;
@@ -115,6 +124,10 @@ public class InvoiceModelHelper {
         invoiceModel.setInvoiceItems(items);
         invoiceModel.setCreatedBy(invoice.getCreatedBy());
         invoiceModel.setLastUpdatedBy(invoice.getLastUpdateBy());
+        invoiceModel.setInvoiceAmount(invoice.getInvoiceAmount());
+        invoiceModel.setDueAmount(invoice.getDueAmount());
+        invoiceModel.setStatus(invoice.getStatus());
+        invoiceModel.setPaymentMode(invoice.getPaymentMode());
 
         return invoiceModel;
     }
@@ -130,6 +143,9 @@ public class InvoiceModelHelper {
         model.setUnitPrice(invoiceLineItem.getInvoiceLineItemUnitPrice());
         model.setVatId(invoiceLineItem.getInvoiceLineItemVat());
         model.setVersionNumber(invoiceLineItem.getVersionNumber());
+        if(invoiceLineItem.getInvoiceLineItemProductService()!=null){
+            model.setProductService(invoiceLineItem.getInvoiceLineItemProductService());
+        }
         this.updateSubTotal(model);
 
         return model;

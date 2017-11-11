@@ -8,7 +8,9 @@ package com.simplevat.web.setting.controller;
 import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.Configuration;
 import com.simplevat.service.ConfigurationService;
+import com.simplevat.web.common.controller.BaseController;
 import com.simplevat.web.constant.ConfigurationConstants;
+import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.utils.FacesUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 @SpringScopeView
-public class GeneralController implements Serializable {
+public class GeneralController extends BaseController implements Serializable {
 
     @Autowired
     private ConfigurationService configurationService;
@@ -62,6 +64,10 @@ public class GeneralController implements Serializable {
     @Getter
     @Setter
     private Configuration configurationMailSmtpStartTlsEnable;
+
+    public GeneralController() {
+        super(ModuleName.SETTING_MODULE);
+    }
 
     @PostConstruct
     public void init() {

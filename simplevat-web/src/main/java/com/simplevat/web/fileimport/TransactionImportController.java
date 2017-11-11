@@ -15,7 +15,8 @@ import com.simplevat.service.bankaccount.TransactionStatusService;
 import com.simplevat.service.bankaccount.TransactionTypeService;
 import com.simplevat.web.bean.Transaction;
 import com.simplevat.web.constant.TransactionStatusConstant;
-import com.simplevat.web.constant.TransactionTypeConstant;
+import com.simplevat.web.constant.TransactionCreditDebitConstant;
+import com.simplevat.web.constant.TransactionEntryTypeConstant;
 import com.simplevat.web.utils.FacesUtil;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -128,17 +129,18 @@ public class TransactionImportController implements Serializable {
             transaction1.setLastUpdateBy(loggedInUser.getUserId());
             transaction1.setCreatedBy(loggedInUser.getUserId());
             transaction1.setBankAccount(bankAccount);
+            transaction1.setEntryType(TransactionEntryTypeConstant.IMPORT);
             transaction1.setTransactionDescription(transaction.getDescription());
             LocalDate date = LocalDate.parse(transaction.getTransactionDate(), DateTimeFormatter.ofPattern("M/d/yyyy"));
             LocalTime time = LocalTime.now();
             transaction1.setTransactionDate(LocalDateTime.of(date, time));
-            if (transaction.getDrAmount() !=  null && !transaction.getDrAmount().trim().isEmpty()) {
+            if (transaction.getDrAmount() != null && !transaction.getDrAmount().trim().isEmpty()) {
                 transaction1.setTransactionAmount(BigDecimal.valueOf(Double.parseDouble(transaction.getDrAmount().replaceAll(",", ""))));
-                transaction1.setDebitCreditFlag('D');
+                transaction1.setDebitCreditFlag(TransactionCreditDebitConstant.DEBIT);
             }
-            if (transaction.getCrAmount() !=  null && !transaction.getCrAmount().trim().isEmpty()) {
+            if (transaction.getCrAmount() != null && !transaction.getCrAmount().trim().isEmpty()) {
                 transaction1.setTransactionAmount(BigDecimal.valueOf(Double.parseDouble(transaction.getCrAmount().replaceAll(",", ""))));
-                transaction1.setDebitCreditFlag('C');
+                transaction1.setDebitCreditFlag(TransactionCreditDebitConstant.CREDIT);
             }
             transaction1.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.UNEXPLIANED));
             transactionService.persist(transaction1);

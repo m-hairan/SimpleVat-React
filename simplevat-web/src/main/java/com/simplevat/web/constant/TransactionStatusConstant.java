@@ -13,6 +13,6 @@ public final class TransactionStatusConstant {
 
     public static final int UNEXPLIANED = 1;
     public static final int EXPLIANED = 2;
-    public static final int SUGGESTED = 3;
+    public static final int PARTIALLYEXPLIANED = 3;
     
 }

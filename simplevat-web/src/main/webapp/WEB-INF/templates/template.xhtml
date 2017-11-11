@@ -23,6 +23,20 @@
             <h:outputStylesheet library="css" name="default.css" />
         </p:cache>
         <ui:insert name="head"/>
+        <style type="text/css">
+            .ui-fileupload-content{
+                display:none !important;  
+            }
+            .ui-fluid .ui-button {
+                width: auto !important;
+            }
+            .ui-fluid .ui-button-icon-only {
+                width: 32px !important;
+            }
+            .ui-fluid .ui-autocomplete-dropdown {
+                width: 20px !important;
+            }
+        </style>
     </h:head>
 
     <h:body styleClass="main-body #{guestPreferences.compact ? 'layout-compact' : null}">

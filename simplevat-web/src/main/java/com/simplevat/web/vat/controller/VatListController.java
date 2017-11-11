@@ -4,9 +4,12 @@
  * and open the template in the editor.
  */
 package com.simplevat.web.vat.controller;
+
 import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.VatCategory;
 import com.simplevat.service.VatCategoryService;
+import com.simplevat.web.common.controller.BaseController;
+import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.vat.model.VatListModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +28,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 @SpringScopeView
 
-public class VatListController {
+public class VatListController extends BaseController {
 
     @Getter
     @Setter
@@ -38,7 +41,10 @@ public class VatListController {
     @Autowired
     private VatCategoryService vatCategoryService;
 
-    @PostConstruct
+    public VatListController() {
+        super(ModuleName.SETTING_MODULE);
+    }
+   @PostConstruct
     public void init() {
 
         if (vatCategoryService.getVatCategoryList() != null) {
