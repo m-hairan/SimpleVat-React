@@ -16,7 +16,9 @@ import org.hibernate.annotations.ColumnDefault;
 @NamedQueries({
     @NamedQuery(name = "findAllTransactionCategory",
             query = "SELECT t "
-            + "FROM TransactionCategory t where t.deleteFlag='false' ORDER BY t.defaltFlag DESC , t.orderSequence ASC")
+            + "FROM TransactionCategory t where t.deleteFlag=false ORDER BY t.defaltFlag DESC , t.orderSequence ASC"),
+    @NamedQuery(name = "findAllTransactionCategoryByTransactionType",
+            query = "SELECT t FROM TransactionCategory t where t.deleteFlag=FALSE AND t.transactionType.transactionTypeCode =:transactionTypeCode ORDER BY t.defaltFlag DESC , t.orderSequence ASC, t.transactionCategoryName ASC")
 })
 @Entity
 @Table(name = "TRANSACTION_CATEGORY")

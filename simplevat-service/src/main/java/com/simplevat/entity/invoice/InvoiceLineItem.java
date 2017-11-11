@@ -34,6 +34,11 @@ public class InvoiceLineItem implements Serializable {
     private String invoiceLineItemDescription;
 
     @Basic
+    @Column(name = "INVOICE_LINE_ITEM_PRODUCT_SERVICE")
+    private String invoiceLineItemProductService;
+
+    
+    @Basic
     @Column(name = "INVOICE_LINE_ITEM_UNIT_PRICE")
     @ColumnDefault(value = "0.00")
     private BigDecimal invoiceLineItemUnitPrice;

@@ -37,6 +37,8 @@ public abstract class InvoiceService extends SimpleVatService<Integer, Invoice> 
 	
         public abstract  List<Invoice> getInvoiceListByDueDate();
         
+        public abstract  List<Invoice> getInvoiceListByDueAmount();
+        
 	@Override
 	protected InvoiceDao getDao() {
 		return invoiceDao;

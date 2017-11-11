@@ -133,6 +133,10 @@ public class Contact implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TITLE_CODE")
     private Title title;
+    
+    @Basic
+    @Column(name = "CONTACT_TYPE")
+    private Integer contactType;
 
     @PrePersist
     public void updateDates() {

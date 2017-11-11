@@ -49,7 +49,7 @@ public class Invoice implements Serializable {
     @Column(name = "INVOICE_DUE_ON")
     @ColumnDefault(value = "0")
     private Integer invoiceDueOn;
-    
+
     @Column(name = "INVOICE_DUE_DATE")
     @Convert(converter = DateConverter.class)
     private LocalDateTime invoiceDueDate;
@@ -108,13 +108,26 @@ public class Invoice implements Serializable {
     @JoinColumn(name = "PROJECT_ID")
     private Project invoiceProject;
 
-     @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DOCUMENT_TEMPLATE_ID")
     private DocumentTemplate documentTemplate;
 
-    
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "invoice", orphanRemoval = true)
     private Collection<InvoiceLineItem> invoiceLineItems;
+
+    @Column(name = "INVOICE_AMOUNT")
+    @ColumnDefault(value = "0.00")
+    private BigDecimal invoiceAmount;
+
+    @Column(name = "DUE_AMOUNT")
+    @ColumnDefault(value = "0.00")
+    private BigDecimal dueAmount;
+
+    @Column(name = "STATUS")
+    private Integer status;
+
+    @Column(name = "PAYMENTMODE")
+    private Integer paymentMode;
 
     @Nonnull
     public Collection<InvoiceLineItem> getInvoiceLineItems() {

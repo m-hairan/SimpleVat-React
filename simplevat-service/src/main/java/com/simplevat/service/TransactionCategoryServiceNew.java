@@ -8,6 +8,8 @@ import com.simplevat.entity.bankaccount.TransactionCategory;
 public abstract class TransactionCategoryServiceNew extends SimpleVatService<Integer, TransactionCategory> {
 	
 	public abstract  List<TransactionCategory> findAllTransactionCategory();
+        
+        public abstract  List<TransactionCategory> findAllTransactionCategoryByTransactionType(Integer transactionTypeCode);
 	
 	public abstract  List<TransactionCategory> getCategoriesByComplexCriteria(TransactionCategoryCriteria criteria);
 	

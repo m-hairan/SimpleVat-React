@@ -1,9 +1,12 @@
 package com.simplevat.service.impl.bankaccount;
 
+import com.simplevat.constants.InvoiceStatusConstant;
+import com.simplevat.constants.TransactionCreditDebitConstant;
+import com.simplevat.constants.TransactionRefrenceTypeConstant;
+import com.simplevat.constants.TransactionStatusConstant;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,11 +17,18 @@ import com.simplevat.criteria.bankaccount.TransactionCriteria;
 import com.simplevat.criteria.bankaccount.TransactionFilter;
 import com.simplevat.dao.bankaccount.BankAccountDao;
 import com.simplevat.dao.bankaccount.TransactionDao;
+import com.simplevat.dao.bankaccount.TransactionStatusDao;
+import com.simplevat.dao.invoice.InvoiceDao;
 import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.entity.bankaccount.Transaction;
+import com.simplevat.entity.bankaccount.TransactionCategory;
+import com.simplevat.entity.bankaccount.TransactionStatus;
+import com.simplevat.entity.bankaccount.TransactionType;
+import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.service.bankaccount.TransactionService;
 import com.simplevat.util.ChartUtil;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -31,6 +41,12 @@ public class TransactionServiceImpl extends TransactionService {
 
     @Autowired
     private TransactionDao transactionDao;
+
+    @Autowired
+    private InvoiceDao invoiceDao;
+
+    @Autowired
+    private TransactionStatusDao transactionStatusDao;
 
     @Autowired
     private BankAccountDao bankAccountDao;
@@ -181,10 +197,36 @@ public class TransactionServiceImpl extends TransactionService {
         updateAccountBalance(balanceAmount, transaction);
         return transaction;
     }
+    
+    @Override
+    public Transaction deleteChildTransaction(Transaction transaction) {
+        transaction.setDeleteFlag(true);
+        transactionDao.update(transaction);
+        return transaction;
+    }
 
     @Override
-    public List<Transaction> getTransactionsByDateRangeAndBankAccountId(BankAccount bankAccount, Date startDate, Date lastDate) {
-        return transactionDao.getTransactionsByDateRangeAndBankAccountId(bankAccount,startDate,lastDate);
+    public List<Transaction> getTransactionsByDateRangeAndTranscationTypeAndTranscationCategory(TransactionType transactionType, TransactionCategory category, Date startDate, Date lastDate) {
+        return transactionDao.getTransactionsByDateRangeAndTranscationTypeAndTranscationCategory(transactionType, category, startDate, lastDate);
+    }
+
+    @Override
+    public List<Transaction> getChildTransactionListByParentId(int parentId) {
+        return transactionDao.getChildTransactionListByParentId(parentId);
+    }
+
+    @Override
+    public void persistChildTransaction(Transaction transaction) {
+        if (transaction.getTransactionId() == null) {
+            transactionDao.persist(transaction);
+        } else {
+            transactionDao.update(transaction);
+        }
+    }
+
+    @Override
+    public List<Transaction> getAllParentTransactions(BankAccount bankAccount) {
+        return transactionDao.getAllParentTransactions(bankAccount);
     }
 
 }

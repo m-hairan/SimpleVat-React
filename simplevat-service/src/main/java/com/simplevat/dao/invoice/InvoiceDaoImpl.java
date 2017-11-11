@@ -1,8 +1,8 @@
 package com.simplevat.dao.invoice;
 
 import com.simplevat.dao.AbstractDao;
-import com.simplevat.entity.Event;
 import com.simplevat.entity.invoice.Invoice;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import java.util.ArrayList;
@@ -113,6 +113,16 @@ public class InvoiceDaoImpl extends AbstractDao<Integer, Invoice> implements Inv
     public List<Invoice> getInvoiceListByDueDate() {
         TypedQuery<Invoice> query = getEntityManager().createQuery("Select i from Invoice i where i.deleteFlag = false and i.invoiceDueDate =:invoiceDueDate", Invoice.class);
         query.setParameter("invoiceDueDate", LocalDateTime.now());
+        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
+            return query.getResultList();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Invoice> getInvoiceListByDueAmount() {
+        TypedQuery<Invoice> query = getEntityManager().createQuery("Select i from Invoice i where i.deleteFlag = false and i.dueAmount !=:dueAmount", Invoice.class);
+        query.setParameter("dueAmount", new BigDecimal(0.00));
         if (query.getResultList() != null && !query.getResultList().isEmpty()) {
             return query.getResultList();
         }

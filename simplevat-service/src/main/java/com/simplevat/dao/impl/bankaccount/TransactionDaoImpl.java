@@ -13,6 +13,8 @@ import com.simplevat.dao.AbstractDao;
 import com.simplevat.dao.bankaccount.TransactionDao;
 import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.entity.bankaccount.Transaction;
+import com.simplevat.entity.bankaccount.TransactionCategory;
+import com.simplevat.entity.bankaccount.TransactionType;
 import java.time.Instant;
 import java.time.ZoneId;
 import javax.persistence.TypedQuery;
@@ -88,11 +90,45 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
     }
 
     @Override
+    public List<Transaction> getTransactionsByDateRangeAndTranscationTypeAndTranscationCategory(TransactionType transactionType, TransactionCategory category, Date startDate, Date lastDate) {
+        TypedQuery<Transaction> query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.deleteFlag = false and t.transactionType.transactionTypeCode =:transactionTypeCode and t.explainedTransactionCategory.transactionCategoryCode =:transactionCategoryCode and t.transactionDate BETWEEN :startDate AND :lastDate ORDER BY t.transactionDate ASC", Transaction.class);
+        query.setParameter("transactionTypeCode", transactionType.getTransactionTypeCode());
+        query.setParameter("transactionCategoryCode", category.getTransactionCategoryCode());
+        query.setParameter("startDate", Instant.ofEpochMilli(startDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
+        query.setParameter("lastDate", Instant.ofEpochMilli(lastDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
+        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
+            return query.getResultList();
+        }
+        return null;
+    }
+
+    @Override
     public List<Transaction> getTransactionsByDateRangeAndBankAccountId(BankAccount bankAccount, Date startDate, Date lastDate) {
         TypedQuery<Transaction> query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.deleteFlag = false and t.bankAccount.bankAccountId = :bankAccountId and t.transactionDate BETWEEN :startDate AND :lastDate ORDER BY t.transactionDate ASC", Transaction.class);
         query.setParameter("bankAccountId", bankAccount.getBankAccountId());
         query.setParameter("startDate", Instant.ofEpochMilli(startDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
         query.setParameter("lastDate", Instant.ofEpochMilli(lastDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
+        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
+            return query.getResultList();
+        }
+        return null;
+    }
+    
+    
+    @Override
+    public List<Transaction> getChildTransactionListByParentId(int parentId) {
+        TypedQuery<Transaction> query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.deleteFlag = false and t.parentTransaction.transactionId =:parentId ORDER BY t.transactionDate ASC", Transaction.class);
+        query.setParameter("parentId", parentId);
+        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
+            return query.getResultList();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Transaction> getAllParentTransactions(BankAccount bankAccount) {
+        TypedQuery<Transaction> query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.deleteFlag = false and t.parentTransaction = null and t.bankAccount.bankAccountId = :bankAccountId ORDER BY t.transactionDate DESC", Transaction.class);
+        query.setParameter("bankAccountId", bankAccount.getBankAccountId());
         if (query.getResultList() != null && !query.getResultList().isEmpty()) {
             return query.getResultList();
         }

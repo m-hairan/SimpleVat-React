@@ -15,7 +15,13 @@ import org.hibernate.annotations.ColumnDefault;
  */
 @NamedQueries({
     @NamedQuery(name = "findAllTransactionType",
-            query = "SELECT t FROM TransactionType t where t.deleteFlag=false AND t.parentTransactionType != null ORDER BY t.defaltFlag DESC , t.orderSequence ASC")
+            query = "SELECT t FROM TransactionType t where t.deleteFlag=false and t.parentTransactionType != null ORDER BY t.defaltFlag DESC , t.orderSequence ASC")
+    ,
+    @NamedQuery(name = "findMoneyInTransactionType",
+            query = "SELECT t FROM TransactionType t where t.deleteFlag=false AND t.parentTransactionType.transactionTypeCode = 1 ORDER BY t.defaltFlag DESC , t.orderSequence ASC")
+    ,
+    @NamedQuery(name = "findMoneyOutTransactionType",
+            query = "SELECT t FROM TransactionType t where t.deleteFlag=false AND t.parentTransactionType.transactionTypeCode = 7 ORDER BY t.defaltFlag DESC , t.orderSequence ASC")
 })
 @Entity
 @Table(name = "TRANSACTION_TYPE")

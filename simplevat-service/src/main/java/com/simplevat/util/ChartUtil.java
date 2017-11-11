@@ -131,8 +131,10 @@ public class ChartUtil {
         Number max = 0;
         for (int i = 0; i < list.size(); i++) {
             Number number = list.get(i);
-            if (number.doubleValue() > max.doubleValue()) {
-                max = number;
+            if (number != null) {
+                if (number.doubleValue() > max.doubleValue()) {
+                    max = number;
+                }
             }
         }
         int maxValue = 0;

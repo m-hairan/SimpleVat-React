@@ -18,7 +18,6 @@ import com.simplevat.service.TransactionCategoryServiceNew;
 @Transactional
 public class TransactionCategoryServiceNewImpl extends TransactionCategoryServiceNew {
 
-
     @Autowired
     @Qualifier(value = "transactionCategoryDao")
     private TransactionCategoryDaoNew dao;
@@ -28,28 +27,31 @@ public class TransactionCategoryServiceNewImpl extends TransactionCategoryServic
         return dao;
     }
 
-	@Override
-	public List<TransactionCategory> findAllTransactionCategory() {
-		return getDao().executeNamedQuery("findAllTransactionCategory");
-	}
+    @Override
+    public List<TransactionCategory> findAllTransactionCategory() {
+        return getDao().executeNamedQuery("findAllTransactionCategory");
+    }
 
+    @Override
+    public TransactionCategory getDefaultTransactionCategory() {
+        List<TransactionCategory> transactionCategories = findAllTransactionCategory();
 
-
-	@Override
-	public TransactionCategory getDefaultTransactionCategory() {
-		List<TransactionCategory> transactionCategories = findAllTransactionCategory();
-		
-		if (CollectionUtils.isNotEmpty(transactionCategories)) {
+        if (CollectionUtils.isNotEmpty(transactionCategories)) {
             return transactionCategories.get(0);
         }
-		return null;
-	}
+        return null;
+    }
 
-	@Override
-	public List<TransactionCategory> getCategoriesByComplexCriteria(TransactionCategoryCriteria criteria) {
-		TransactionCategoryFilterNew filter = new TransactionCategoryFilterNew(criteria);
-		return this.filter(filter);
-		
-	}
+    @Override
+    public List<TransactionCategory> getCategoriesByComplexCriteria(TransactionCategoryCriteria criteria) {
+        TransactionCategoryFilterNew filter = new TransactionCategoryFilterNew(criteria);
+        return this.filter(filter);
+
+    }
+
+    @Override
+    public List<TransactionCategory> findAllTransactionCategoryByTransactionType(Integer transactionTypeCode) {
+        return dao.findAllTransactionCategoryByTransactionType(transactionTypeCode);
+    }
 
 }

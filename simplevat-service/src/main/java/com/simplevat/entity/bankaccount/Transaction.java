@@ -10,6 +10,7 @@ import javax.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import org.hibernate.annotations.ColumnDefault;
 
 /**
@@ -17,78 +18,79 @@ import org.hibernate.annotations.ColumnDefault;
  */
 @Entity
 @Table(name = "TRANSACTON")
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @Data
 public class Transaction implements Serializable {
 
-    private static final long serialVersionUID = 848122185643690684L; 
-    
+    private static final long serialVersionUID = 848122185643690684L;
+
     @Id
     @Column(name = "TRANSACTION_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer transactionId;
-    
+
     @Basic
     @Column(name = "TRANSACTION_DATE")
     private LocalDateTime transactionDate;
-    
+
     @Basic
     @Column(name = "TRANSACTION_DESCRIPTION")
     private String transactionDescription;
-    
+
     @Basic
     @Column(name = "TRANSACTION_AMOUNT")
     @ColumnDefault(value = "0.00")
     private BigDecimal transactionAmount;
-    
+
     @Basic
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TRANSACTION_TYPE_CODE")
     private TransactionType transactionType;
-    
+
     @Basic
     @Column(name = "RECEIPT_NUMBER")
     private String receiptNumber;
-    
+
     @Basic(optional = false)
     @Column(name = "DEBIT_CREDIT_FLAG")
     private Character debitCreditFlag;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EXPLAINED_PROJECT_ID")
     private Project project;
-   
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EXPLAINED_TRANSACTION_CATEGORY_CODE")
     private TransactionCategory explainedTransactionCategory;
-    
+
     @Basic
     @Column(name = "EXPLAINED_TRANSACTION_DESCRIPTION")
     private String explainedTransactionDescription;
-    
+
     @Basic
     @Column(name = "EXPLAINED_TRANSACTION_ATTACHEMENT_DESCRIPTION")
     private String explainedTransactionAttachementDescription;
-    
+
     @Basic
     @Lob
     @Column(name = "EXPLAINED_TRANSACTION_ATTACHEMENT")
     private byte[] explainedTransactionAttachement;
-    
+
     @Basic
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BANK_ACCOUNT_ID")
     private BankAccount bankAccount;
-    
+
     @Basic(optional = false)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EXPLANATION_STATUS_CODE")
     private TransactionStatus transactionStatus;
-    
+
     @Basic(optional = false)
-    @Column(name="CURRENT_BALANCE")
+    @Column(name = "CURRENT_BALANCE")
     @ColumnDefault(value = "0.00")
     private BigDecimal currentBalance;
-    
+
     @Column(name = "CREATED_BY")
     @Basic(optional = false)
     private Integer createdBy;
@@ -117,9 +119,22 @@ public class Transaction implements Serializable {
     @Version
     private Integer versionNumber;
     
-    
-    
-    
+    @Column(name = "ENTRY_TYPE")
+    private Integer entryType;
+
+    @Column(name = "REFERENCE_ID")
+    private Integer referenceId;
+
+    @Column(name = "REFERENCE_TYPE")
+    private Integer referenceType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PARENT_TRANSACTION")
+    private Transaction parentTransaction;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "parentTransaction")
+    private Collection<Transaction> childTransactionList;
+
     @PrePersist
     public void updateDates() {
         createdDate = LocalDateTime.now();
@@ -131,6 +146,4 @@ public class Transaction implements Serializable {
         lastUpdateDate = LocalDateTime.now();
     }
 
-	
-    
 }
