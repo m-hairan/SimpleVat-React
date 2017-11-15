@@ -7,14 +7,15 @@ import org.springframework.stereotype.Repository;
 
 import com.simplevat.dao.CurrencyDao;
 import com.simplevat.entity.Currency;
-import com.simplevat.dao.AbstractDao; 
+import com.simplevat.dao.AbstractDao;
+import com.simplevat.entity.CurrencyConversion;
+import javax.persistence.TypedQuery;
 
 /**
  * Created by mohsin on 3/11/2017.
  */
 @Repository
 public class CurrencyDaoImpl extends AbstractDao<Integer, Currency> implements CurrencyDao {
-
 
     @Override
     public List<Currency> getCurrencies() {
@@ -34,5 +35,16 @@ public class CurrencyDaoImpl extends AbstractDao<Integer, Currency> implements C
 
     public Currency getCurrency(final int currencyCode) {
         return this.findByPK(currencyCode);
+    }
+
+    @Override
+    public CurrencyConversion getCurrencyRateFromCurrencyConversion(int currencyCode) {
+        TypedQuery<CurrencyConversion> query = getEntityManager().createQuery("select c from CurrencyConversion c where c.currencyCode =:currencyCode", CurrencyConversion.class);
+        query.setParameter("currencyCode", currencyCode);
+        List<CurrencyConversion> currencyConversionList = query.getResultList();
+        if (currencyConversionList != null && !currencyConversionList.isEmpty()) {
+            return currencyConversionList.get(0);
+        }
+        return null;
     }
 }

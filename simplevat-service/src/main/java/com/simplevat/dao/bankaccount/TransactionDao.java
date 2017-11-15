@@ -30,4 +30,6 @@ public interface TransactionDao extends Dao<Integer, Transaction> {
 
     public List<Transaction> getTransactionsByDateRangeAndBankAccountId(BankAccount bankAccount, Date startDate, Date lastDate);
 
+    public List<Transaction> getAllTransactions();
+
 }

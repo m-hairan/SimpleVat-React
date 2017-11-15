@@ -30,8 +30,8 @@ public class ContactServiceImpl extends ContactService {
     }
 
     @Override
-    public List<Contact> getContacts(final String searchQuery) {
-        return contactDao.getContacts(searchQuery);
+    public List<Contact> getContacts(final String searchQuery,int contactType) {
+        return contactDao.getContacts(searchQuery,contactType);
     }
 
     @Override

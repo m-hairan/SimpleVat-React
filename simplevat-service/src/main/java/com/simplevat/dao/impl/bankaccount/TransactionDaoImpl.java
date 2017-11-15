@@ -113,8 +113,7 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
         }
         return null;
     }
-    
-    
+
     @Override
     public List<Transaction> getChildTransactionListByParentId(int parentId) {
         TypedQuery<Transaction> query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.deleteFlag = false and t.parentTransaction.transactionId =:parentId ORDER BY t.transactionDate ASC", Transaction.class);
@@ -131,6 +130,16 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
         query.setParameter("bankAccountId", bankAccount.getBankAccountId());
         if (query.getResultList() != null && !query.getResultList().isEmpty()) {
             return query.getResultList();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Transaction> getAllTransactions() {
+        TypedQuery<Transaction> query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.deleteFlag = false ORDER BY t.transactionDate ASC", Transaction.class);
+        List<Transaction> transactionList = query.getResultList();
+        if (transactionList != null && !transactionList.isEmpty()) {
+            return transactionList;
         }
         return null;
     }

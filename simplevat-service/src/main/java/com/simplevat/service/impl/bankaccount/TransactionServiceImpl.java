@@ -229,4 +229,9 @@ public class TransactionServiceImpl extends TransactionService {
         return transactionDao.getAllParentTransactions(bankAccount);
     }
 
+    @Override
+    public List<Transaction> getAllTransactions() {
+         return transactionDao.getAllTransactions();
+    }
+
 }

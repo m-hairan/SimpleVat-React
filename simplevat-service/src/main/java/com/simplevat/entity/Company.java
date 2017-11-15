@@ -35,6 +35,10 @@ public class Company implements Serializable{
     @JoinColumn(name = "COMPANY_TYPE_CODE")
     private CompanyType companyTypeCode;
     
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "INDUSTRY_TYPE_CODE")
+    private IndustryType industryTypeCode;
+    
     @Basic
     @Column(name = "VAT_REGISTRATION_NUMBER")
     private String vatRegistrationNumber;

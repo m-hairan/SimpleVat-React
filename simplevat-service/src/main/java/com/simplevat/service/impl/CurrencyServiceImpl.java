@@ -2,6 +2,7 @@ package com.simplevat.service.impl;
 
 import com.simplevat.dao.CurrencyDao;
 import com.simplevat.entity.Currency;
+import com.simplevat.entity.CurrencyConversion;
 import com.simplevat.service.CurrencyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,4 +37,9 @@ public class CurrencyServiceImpl extends CurrencyService {
 	public CurrencyDao getDao() {
 		return currencyDao;
 	}
+
+    @Override
+    public CurrencyConversion getCurrencyRateFromCurrencyConversion(int currencyCode) {
+        return currencyDao.getCurrencyRateFromCurrencyConversion(currencyCode);
+    }
 }

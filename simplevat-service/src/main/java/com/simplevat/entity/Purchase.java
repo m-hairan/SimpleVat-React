@@ -76,6 +76,10 @@ public class Purchase implements Serializable {
     @JoinColumn(name = "PROJECT_ID")
     private Project project;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CONTACT_ID")
+    private Contact purchaseContact;
+
     @Basic
     @Column(name = "RECEIPT_ATTACHMENT_PATH")
     private String receiptAttachmentPath;

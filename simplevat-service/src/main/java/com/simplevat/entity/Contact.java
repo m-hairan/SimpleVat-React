@@ -21,7 +21,7 @@ import org.hibernate.annotations.ColumnDefault;
             + "FROM Contact c where c.email =:email")
     ,
     @NamedQuery(name = "Contact.contactsByName",
-            query = "SELECT c FROM Contact c WHERE  ((c.firstName LIKE :name or c.lastName LIKE :name) and c.deleteFlag = FALSE) order by c.firstName, c.lastName")
+            query = "SELECT c FROM Contact c WHERE  ((c.firstName LIKE :name or c.lastName LIKE :name) and c.deleteFlag = FALSE and c.contactType=:contactType) order by c.firstName, c.lastName")
 })
 
 @Entity

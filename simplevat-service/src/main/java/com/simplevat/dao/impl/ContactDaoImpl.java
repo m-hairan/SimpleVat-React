@@ -34,10 +34,11 @@ public class ContactDaoImpl extends AbstractDao<Integer, Contact> implements Con
     }
 
     @Override
-    public List<Contact> getContacts(final String searchQuery) {
+    public List<Contact> getContacts(final String searchQuery,int contactType) {
         List<Contact> contacts = getEntityManager()
                 .createNamedQuery("Contact.contactsByName", Contact.class)
                 .setParameter("name", "%" + searchQuery + "%")
+                .setParameter("contactType", contactType)
                 .getResultList();
         return contacts;
     }

@@ -1,6 +1,7 @@
 package com.simplevat.dao;
 
 import com.simplevat.entity.Currency;
+import com.simplevat.entity.CurrencyConversion;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ public interface CurrencyDao extends Dao<Integer, Currency> {
     Currency getCurrency(final int currencyCode);
 
     Currency getDefaultCurrency();
+
+    public CurrencyConversion getCurrencyRateFromCurrencyConversion(int currencyCode);
 }

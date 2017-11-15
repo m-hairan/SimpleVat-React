@@ -1,6 +1,7 @@
 package com.simplevat.service;
 
 import com.simplevat.entity.Currency;
+import com.simplevat.entity.CurrencyConversion;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ public abstract class CurrencyService extends SimpleVatService<Integer, Currency
 	public abstract Currency getCurrency(final int currencyCode);
 
 	public abstract Currency getDefaultCurrency();
+        
+        public abstract CurrencyConversion getCurrencyRateFromCurrencyConversion(final int currencyCode);
 }

@@ -13,7 +13,7 @@ public abstract class ContactService extends SimpleVatService <Integer, Contact>
 
     public abstract List<Contact> getContacts();
 
-    public abstract List<Contact> getContacts(final String searchQuery);
+    public abstract List<Contact> getContacts(final String searchQuery ,int ContactType);
 
     public abstract Contact getContact(int id);
     

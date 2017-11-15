@@ -1,50 +1,38 @@
 package com.simplevat.entity;
 
-import java.time.LocalDateTime;
-
-import lombok.Data;
-import lombok.Setter;
-
-import javax.persistence.*;
-
-import com.simplevat.entity.converter.DateConverter;
 import java.io.Serializable;
 import java.util.Date;
+import lombok.Data;
+
+import javax.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 
 /**
  * Created by mohsinh on 2/26/2017.
  */
-
-@NamedQueries({
-        @NamedQuery(name = "allCountries",
-                query = "SELECT c FROM Country c where c.deleteFlag=false ORDER BY c.defaltFlag DESC , c.orderSequence ASC")
-})
-
 @Entity
-@Table(name = "COUNTRY")
+@Table(name = "INDUSTRY_TYPE")
 @Data
-public class Country implements Serializable {
+public class IndustryType implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Id
-    @Column(name = "COUNTRY_CODE")
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private int countryCode;
+    @Column(name = "INDUSTRY_TYPE_CODE", nullable = false)
+    private Integer id;
+
     @Basic(optional = false)
-    @Column(name = "COUNTRY_NAME")
-    private String countryName;
+    @Column(name = "INDUSTRY_TYPE_NAME", nullable = false)
+    private String industryTypeName;
+
     @Basic
-    @Column(name = "COUNTRY_DESCRIPTION")
-    private String countryDescription;
-    @Basic
-    @Column(name = "ISO_ALPHA3_CODE", length = 3)
-    private String isoAlpha3Code;
-    
+    @Column(name = "INDUSTRY_TYPE_DESCRIPTION")
+    private String industryTypeDescription;
+
     @Column(name = "DEFAULT_FLAG")
     @ColumnDefault(value = "'N'")
     @Basic(optional = false)
-    private Character defaltFlag;
+    private Character defaultFlag;
 
     @Column(name = "ORDER_SEQUENCE")
     @ColumnDefault(value = "1")
@@ -78,18 +66,4 @@ public class Country implements Serializable {
     @Basic(optional = false)
     @Version
     private Integer versionNumber;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CURRENCY_CODE")
-    private Currency currencyCode;
-
-    @Transient
-    @Setter
-    private String countryFullName;
-
-    public String getCountryFullName() {
-        countryFullName = countryName + " - (" + isoAlpha3Code + ")";
-        return countryFullName;
-    }
-
 }

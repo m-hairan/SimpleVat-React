@@ -71,7 +71,7 @@ public class Transaction implements Serializable {
     @Column(name = "EXPLAINED_TRANSACTION_ATTACHEMENT_DESCRIPTION")
     private String explainedTransactionAttachementDescription;
 
-    @Basic
+    @Basic(optional = true)
     @Lob
     @Column(name = "EXPLAINED_TRANSACTION_ATTACHEMENT")
     private byte[] explainedTransactionAttachement;
