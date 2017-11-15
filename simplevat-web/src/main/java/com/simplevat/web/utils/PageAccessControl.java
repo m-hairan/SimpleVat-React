@@ -38,6 +38,7 @@ public class PageAccessControl {
         adminRoleAccessList.add(ModuleName.PROJECT_MODULE.getName());
         adminRoleAccessList.add(ModuleName.SETTING_MODULE.getName());
         adminRoleAccessList.add(ModuleName.CONTACT_MODULE.getName());
+        adminRoleAccessList.add(ModuleName.TAX_MODULE.getName());
         accessMap.put(RoleCode.ADMIN.getCode(), adminRoleAccessList);
 
         List<String> shareHolderRoleAccessList = new ArrayList<>();

@@ -1,6 +1,8 @@
 package com.simplevat.web.expense.controller;
 
 import com.github.javaplugs.jsf.SpringScopeView;
+import com.simplevat.entity.Company;
+import com.simplevat.entity.Contact;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -14,12 +16,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.simplevat.entity.Currency;
+import com.simplevat.entity.CurrencyConversion;
 import com.simplevat.entity.Expense;
 import com.simplevat.entity.Project;
 import com.simplevat.entity.User;
 import com.simplevat.entity.VatCategory;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionType;
+import com.simplevat.service.CompanyService;
+import com.simplevat.service.ContactService;
 import com.simplevat.web.expense.model.ExpenseModel;
 import com.simplevat.service.CurrencyService;
 import com.simplevat.service.ExpenseService;
@@ -29,12 +34,16 @@ import com.simplevat.service.UserServiceNew;
 import com.simplevat.service.VatCategoryService;
 import com.simplevat.service.bankaccount.TransactionTypeService;
 import com.simplevat.web.common.controller.BaseController;
+import com.simplevat.web.constant.ContactTypeConstant;
 import com.simplevat.web.constant.ModuleName;
+import com.simplevat.web.contact.model.ContactModel;
 import com.simplevat.web.expense.model.ExpenseItemModel;
 import com.simplevat.web.utils.FacesUtil;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -62,6 +71,9 @@ public class ExpenseController extends BaseController implements Serializable {
 
     @Autowired
     private ProjectService projectService;
+    
+    @Autowired
+    private CompanyService companyService;
 
     @Autowired
     private UserServiceNew userServiceNew;
@@ -92,32 +104,44 @@ public class ExpenseController extends BaseController implements Serializable {
     @Setter
     List<SelectItem> vatCategorySelectItemList = new ArrayList<>();
 
+    @Autowired
+    private ContactService contactService;
+
     @Getter
     @Setter
     String fileName;
+    
+    @Getter
+    @Setter
+    private ContactModel contactModel;
+    
+    @Getter
+    private Company company;
+    
+    private CurrencyConversion currencyConversion;
 
     @Getter
     @Setter
     ExpenseControllerHelper controllerHelper;
 
-    
     public ExpenseController() {
         super(ModuleName.EXPENSE_MODULE);
     }
 
     @PostConstruct
     public void init() {
+        company = companyService.findByPK(userServiceNew.findByPK(FacesUtil.getLoggedInUser().getUserId()).getCompany().getCompanyId());
+        contactModel = new ContactModel();
         controllerHelper = new ExpenseControllerHelper();
         Object objSelectedExpenseModel = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedExpenseModelId");
         if (objSelectedExpenseModel == null) {
             selectedExpenseModel = new ExpenseModel();
 //            selectedExpenseModel.setAttachmentFile(new DefaultUploadedFile());
             selectedExpenseModel.setExpenseItem(new ArrayList<>());
-            Currency defaultCurrency = currencyService.getDefaultCurrency();
+            Currency defaultCurrency = company.getCompanyCountryCode().getCurrencyCode();
             if (defaultCurrency != null) {
                 selectedExpenseModel.setCurrency(defaultCurrency);
             }
-
             updateCurrencyLabel();
             transactionTypes = transactionTypeService.findAll();
         } else {
@@ -138,6 +162,38 @@ public class ExpenseController extends BaseController implements Serializable {
 
         return "/pages/secure/expense/create-expense.xhtml?faces-redirect=true";
 
+    }
+
+    public void updateCurrency() {
+        setDefaultCurrency();
+        if (selectedExpenseModel.getExpenseContact() != null) {
+            final Contact contact = contactService
+                    .getContact(selectedExpenseModel.getExpenseContact().getContactId());
+            selectedExpenseModel.setCurrency(contact.getCurrency());
+        }
+    }
+
+    private void setDefaultCurrency() {
+        Currency defaultCurrency = company.getCompanyCountryCode().getCurrencyCode();
+        if (defaultCurrency != null) {
+            selectedExpenseModel.setCurrency(defaultCurrency);
+        }
+    }
+    
+    public String exchangeRate(Currency currency) {
+        String exchangeRateString = "";
+        currencyConversion = currencyService.getCurrencyRateFromCurrencyConversion(currency.getCurrencyCode());
+        if (currencyConversion != null) {
+            exchangeRateString = "1 " + currency.getCurrencyIsoCode() + " = " + new BigDecimal(BigInteger.ONE).divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP) + " " + company.getCompanyCountryCode().getCurrencyCode().getCurrencyIsoCode();
+        }
+        return exchangeRateString;
+    }
+
+    public BigDecimal totalAmountInHomeCurrency(Currency currency) {
+        if (total != null) {
+            return total.divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP);
+        }
+        return new BigDecimal(0);
     }
 
     public List<TransactionCategory> completeCategory() {
@@ -167,6 +223,10 @@ public class ExpenseController extends BaseController implements Serializable {
         }
     }
 
+    public List<Contact> contacts(final String searchQuery) {
+        return contactService.getContacts(searchQuery,ContactTypeConstant.EMPLOYEE);
+    }
+
     private boolean validateInvoiceLineItems() { //---------------
         boolean validated = true;
         for (ExpenseItemModel lastItem : selectedExpenseModel.getExpenseItem()) {
@@ -189,6 +249,38 @@ public class ExpenseController extends BaseController implements Serializable {
         }
         return true;
     }
+    
+    
+    public void initCreateContact() {
+        contactModel = new ContactModel();
+    }
+    
+    public void createContact() {
+        Currency defaultCurrency = currencyService.getDefaultCurrency();
+        final Contact contact = new Contact();
+        contact.setBillingEmail(contactModel.getEmail());
+        contact.setDeleteFlag(Boolean.FALSE);
+        contact.setEmail(contactModel.getEmail());
+        contact.setFirstName(contactModel.getFirstName());
+        contact.setLastName(contactModel.getLastName());
+        contact.setOrganization(contactModel.getOrganization());
+        contact.setCreatedBy(FacesUtil.getLoggedInUser().getUserId());
+        contact.setCurrency(defaultCurrency);
+        contact.setContactType(ContactTypeConstant.EMPLOYEE);
+        if (defaultCurrency != null) {
+            contactModel.setCurrency(defaultCurrency);
+        }
+        
+        if (contact.getContactId() != null) {
+            contactService.update(contact);
+        } else {
+            contactService.persist(contact);
+        }
+    selectedExpenseModel.setExpenseContact(contact);
+            
+    }
+    
+    
 
     public String saveExpense() {
         if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
@@ -225,6 +317,12 @@ public class ExpenseController extends BaseController implements Serializable {
             User user = userServiceNew.findByPK(selectedExpenseModel.getUser().getUserId());
             expense.setUser(user);
         }
+
+        if (selectedExpenseModel.getExpenseContact() != null) {
+            Contact contact = contactService.findByPK(selectedExpenseModel.getExpenseContact().getContactId());
+            expense.setExpenseContact(contact);
+        }
+
         expense.setExpenseAmount(total);
 
         if (expense.getExpenseId() == null || expense.getExpenseId() == 0) {
@@ -269,6 +367,11 @@ public class ExpenseController extends BaseController implements Serializable {
             User user = userServiceNew.findByPK(selectedExpenseModel.getUser().getUserId());
             expense.setUser(user);
         }
+         if (selectedExpenseModel.getExpenseContact() != null) {
+            Contact contact = contactService.findByPK(selectedExpenseModel.getExpenseContact().getContactId());
+            expense.setExpenseContact(contact);
+        }
+
         if (expense.getExpenseId() == null || expense.getExpenseId() == 0) {
             expenseService.persist(expense);
         } else {
@@ -318,7 +421,7 @@ public class ExpenseController extends BaseController implements Serializable {
     private boolean validateExpenceLineItems() { //---------------
         boolean validated = true;
         for (ExpenseItemModel lastItem : selectedExpenseModel.getExpenseItem()) {
-            if (lastItem.getUnitPrice()==null||lastItem.getQuatity() < 1 || lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0) {
+            if (lastItem.getUnitPrice() == null || lastItem.getQuatity() < 1 || lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0) {
                 FacesMessage message = new FacesMessage("Please enter proper detail for all expence items.");
                 message.setSeverity(FacesMessage.SEVERITY_ERROR);
                 FacesContext.getCurrentInstance().addMessage("validationId", message);
@@ -333,6 +436,7 @@ public class ExpenseController extends BaseController implements Serializable {
             selectedExpenseModel.setCurrency(currencyService.getCurrency(selectedExpenseModel.getCurrency().getCurrencyCode()));
         }
     }
+
     public void updateSubTotal(final ExpenseItemModel expenseItemModel) {
         final int quantity = expenseItemModel.getQuatity();
         final BigDecimal unitPrice = expenseItemModel.getUnitPrice();

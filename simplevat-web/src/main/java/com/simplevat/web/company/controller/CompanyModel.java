@@ -7,6 +7,7 @@ package com.simplevat.web.company.controller;
 
 import com.simplevat.entity.CompanyType;
 import com.simplevat.entity.Country;
+import com.simplevat.entity.IndustryType;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,7 @@ public class CompanyModel {
     private String companyName;
     private String companyRegistrationNumber;
     private CompanyType companyTypeCode;
+    private IndustryType industryTypeCode;
     private String vatRegistrationNumber;
     private byte[] companyLogo;
     private String emailAddress;

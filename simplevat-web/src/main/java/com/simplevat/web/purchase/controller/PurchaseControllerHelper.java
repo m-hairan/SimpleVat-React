@@ -39,6 +39,7 @@ public class PurchaseControllerHelper {
         purchase.setTransactionCategory(model.getTransactionCategory());
         purchase.setTransactionType(model.getTransactionType());
         purchase.setVersionNumber(model.getVersionNumber());
+        purchase.setPurchaseContact(model.getPurchaseContact());
         
         final Collection<PurchaseLineItem> items = model
                 .getPurchaseItems()
@@ -79,7 +80,7 @@ public class PurchaseControllerHelper {
         purchaseModel.setCurrency(entity.getCurrency());
         purchaseModel.setDeleteFlag(entity.getDeleteFlag());
         purchaseModel.setPurchaseAmount(entity.getPurchaseAmount());
-        
+        purchaseModel.setPurchaseContact(entity.getPurchaseContact());
         if (entity.getPurchaseDate() != null) {
             Date PurchaseDate = Date.from(entity.getPurchaseDate().atZone(ZoneId.systemDefault()).toInstant());
             purchaseModel.setPurchaseDate(PurchaseDate);

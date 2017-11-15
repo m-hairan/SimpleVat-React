@@ -14,6 +14,7 @@ import com.simplevat.service.CurrencyService;
 import com.simplevat.service.LanguageService;
 import com.simplevat.service.ProjectService;
 import com.simplevat.web.common.controller.BaseController;
+import com.simplevat.web.constant.ContactTypeConstant;
 import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.contact.model.ContactModel;
 import com.simplevat.web.utils.FacesUtil;
@@ -98,7 +99,7 @@ public class ProjectController extends BaseController implements Serializable {
     }
 
     public List<Contact> contacts(final String searchQuery) {
-        return contactService.getContacts(searchQuery);
+        return contactService.getContacts(searchQuery,ContactTypeConstant.CUSTOMER);
     }
 
     private List<Project> getProjectFromCriteria() throws Exception {
@@ -212,6 +213,7 @@ public class ProjectController extends BaseController implements Serializable {
         contact.setOrganization(contactModel.getOrganization());
         contact.setCreatedBy(1);
         contact.setCurrency(defaultCurrency);
+        contact.setContactType(ContactTypeConstant.CUSTOMER);
 
         contactModel = new ContactModel();
 

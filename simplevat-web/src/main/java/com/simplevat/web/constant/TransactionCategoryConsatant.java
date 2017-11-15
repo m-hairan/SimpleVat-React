@@ -12,4 +12,5 @@ package com.simplevat.web.constant;
 public class TransactionCategoryConsatant {
 
     public static final String INVOICEPAYMENT = "Invoice Payment";
+    public static final int INVOICEPAYMENT_PK = 1;
 }

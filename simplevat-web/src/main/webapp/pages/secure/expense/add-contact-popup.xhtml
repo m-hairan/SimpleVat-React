@@ -1,0 +1,60 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <h:form id="add_contact">
+        <p:dialog header="New Contact" widgetVar="add_contact_popup" 
+                  resizable="false" 
+                  draggable="false" 
+                  modal="true"
+                  responsive="true" 
+                  hideEffect="scale">
+            <div class="ui-g form-group" style="margin-bottom: 16px;">
+                <div class="ui-g-12">
+                    <p:panelGrid columns="4" 
+                                 columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                                 layout="grid" 
+                                 styleClass="ui-panelgrid-blank form-group"
+                                 style="border:0px none; background-color:transparent;">
+                        
+                        <p:outputLabel />
+                        <h:panelGroup styleClass="md-inputfield">
+                            <p:inputText value="#{expenseController.contactModel.firstName}"/>
+                            <label>First Name</label>
+                        </h:panelGroup>
+                        
+                        <p:outputLabel />
+                        <h:panelGroup styleClass="md-inputfield">
+                            <p:inputText value="#{expenseController.contactModel.lastName}"/>
+                            <label>Last Name</label>
+                        </h:panelGroup>
+                        
+                        <p:outputLabel />
+                        <h:panelGroup styleClass="md-inputfield">
+                            <p:inputText value="#{expenseController.contactModel.organization}"/>
+                            <label>Organization Name</label>
+                        </h:panelGroup>
+                        
+                        <p:outputLabel />
+                        <h:panelGroup styleClass="md-inputfield">
+                            <p:inputText value="#{expenseController.contactModel.email}"/>
+                            <label>Email</label>
+                        </h:panelGroup>
+                        
+                    </p:panelGrid>
+                </div>
+
+            </div>
+
+            <f:facet name="footer">
+                <p:commandButton 
+                    actionListener="#{expenseController.createContact()}"
+                    value="Save"
+                    update="createExpenseForm:conatcts @form"
+                    onsuccess="PF('add_contact_popup').hide()" style="width:auto" 
+                    icon="ui-icon-save"/>
+            </f:facet>  
+        </p:dialog>
+    </h:form>
+</ui:composition>

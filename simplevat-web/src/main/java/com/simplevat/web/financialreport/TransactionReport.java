@@ -147,7 +147,6 @@ public class TransactionReport extends BaseController {
 
     public void view() {
         transactionList.clear();
-        System.out.println("Inserted View======" + transactionType.getTransactionTypeCode() + "  " + transactionCategory.getTransactionCategoryCode());
         List<Transaction> transactions = new ArrayList<Transaction>();
         transactions = transactionService.getTransactionsByDateRangeAndTranscationTypeAndTranscationCategory(transactionType, transactionCategory, financialPeriod.getStartDate(), financialPeriod.getLastDate());
         //   System.out.println("dataa========="+transactionService.getTransactionsByDateRangeAndTranscationTypeAndTranscationCategory(transactionType, transactionCategory, financialPeriod.getStartDate(), financialPeriod.getLastDate()));
@@ -156,7 +155,6 @@ public class TransactionReport extends BaseController {
                 totalTransactionAmount=totalTransactionAmount+transaction.getTransactionAmount().doubleValue();
                 transactionList.add(transactionControllerHelper.getTransactionModel(transaction));
             }
-            System.out.println("total amount===="+totalTransactionAmount);
         }
     }
 

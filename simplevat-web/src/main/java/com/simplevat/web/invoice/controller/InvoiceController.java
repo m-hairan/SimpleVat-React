@@ -35,15 +35,22 @@ import java.util.Iterator;
 import java.util.List;
 
 import static com.mysql.jdbc.StringUtils.isNullOrEmpty;
+import com.simplevat.entity.Company;
 import com.simplevat.entity.Configuration;
+import com.simplevat.entity.CurrencyConversion;
 import com.simplevat.entity.VatCategory;
+import com.simplevat.service.CompanyService;
 import com.simplevat.service.ConfigurationService;
+import com.simplevat.service.UserServiceNew;
 import com.simplevat.service.VatCategoryService;
 import com.simplevat.web.common.controller.BaseController;
 import com.simplevat.web.constant.ConfigurationConstants;
+import com.simplevat.web.constant.ContactTypeConstant;
 import com.simplevat.web.constant.InvoiceStatusConstant;
 import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.utils.FacesUtil;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.Calendar;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
@@ -58,8 +65,41 @@ public class InvoiceController extends BaseController implements Serializable {
 
     private static final long serialVersionUID = 6299117288316809011L;
 
+    @Autowired
+    private ContactService contactService;
+
+    @Autowired
+    private ConfigurationService configurationService;
+
+    @Autowired
+    private UserServiceNew userServiceNew;
+
+    @Autowired
+    private InvoiceModelHelper invoiceModelHelper;
+
+    @Autowired
+    private CurrencyService currencyService;
+
+    @Autowired
+    private CompanyService companyService;
+
+    @Autowired
+    private InvoiceService invoiceService;
+
+    @Autowired
+    private DiscountTypeService discountTypeService;
+
+    @Autowired
+    private ProjectService projectService;
+
+    @Autowired
+    private VatCategoryService vatCategoryService;
+
     @Getter
     private InvoiceModel selectedInvoiceModel;
+
+    @Getter
+    private Company company;
 
     @Getter
     private Invoice selectedInvoice;
@@ -82,33 +122,14 @@ public class InvoiceController extends BaseController implements Serializable {
     @Getter
     private BigDecimal total;
 
+    private CurrencyConversion currencyConversion;
+
     @Getter
     @Setter
     private List<VatCategory> vatCategoryList = new ArrayList<>();
 
     @Getter
     private boolean renderPrintInvoice;
-
-    @Autowired
-    private ContactService contactService;
-
-    @Autowired
-    private ConfigurationService configurationService;
-
-    @Autowired
-    private CurrencyService currencyService;
-
-    @Autowired
-    private InvoiceService invoiceService;
-
-    @Autowired
-    private DiscountTypeService discountTypeService;
-
-    @Autowired
-    private ProjectService projectService;
-
-    @Autowired
-    private VatCategoryService vatCategoryService;
 
     @Getter
     @Setter
@@ -120,16 +141,13 @@ public class InvoiceController extends BaseController implements Serializable {
     @Getter
     BigDecimal totalInvoiceCalculation = new BigDecimal(0);
 
-    @Autowired
-    InvoiceModelHelper invoiceModelHelper;
-
     public InvoiceController() {
         super(ModuleName.INVOICE_MODULE);
     }
 
     @PostConstruct
     public void init() {
-
+        company = companyService.findByPK(userServiceNew.findByPK(FacesUtil.getLoggedInUser().getUserId()).getCompany().getCompanyId());
         Object objSelectedInvoice = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedInvoiceModelId");
         System.out.println("objSelectedInvoice :" + objSelectedInvoice);
         if (objSelectedInvoice != null) {
@@ -146,7 +164,6 @@ public class InvoiceController extends BaseController implements Serializable {
             selectedInvoiceModel.setDiscount(new BigDecimal(0));
             selectedInvoiceModel.setInvoiceDate(new Date());
             selectedInvoiceModel.setInvoiceDueOn(30);
-            updateCurrencyLabel();
             selectedInvoiceModel.setInvoiceItems(new ArrayList());
             configurationList = configurationService.getConfigurationList();
             if (configurationList != null) {
@@ -162,7 +179,7 @@ public class InvoiceController extends BaseController implements Serializable {
     }
 
     private void setDefaultCurrency() {
-        Currency defaultCurrency = currencyService.getDefaultCurrency();
+        Currency defaultCurrency = company.getCompanyCountryCode().getCurrencyCode();
         if (defaultCurrency != null) {
             selectedInvoiceModel.setCurrencyCode(defaultCurrency);
         }
@@ -172,7 +189,6 @@ public class InvoiceController extends BaseController implements Serializable {
         boolean validated = validateInvoiceLineItems();
 
         if (validated) {
-            updateCurrencyLabel();
             selectedInvoiceModel.addInvoiceItem(new InvoiceItemModel());
 
         }
@@ -191,7 +207,7 @@ public class InvoiceController extends BaseController implements Serializable {
         boolean validated = true;
         for (InvoiceItemModel lastItem : selectedInvoiceModel.getInvoiceItems()) {
 
-            if ( lastItem.getUnitPrice() == null || lastItem.getQuatity() < 1 || lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0) {
+            if (lastItem.getUnitPrice() == null || lastItem.getQuatity() < 1 || lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0) {
                 FacesMessage message = new FacesMessage("Please enter proper detail for all invoice items.");
                 message.setSeverity(FacesMessage.SEVERITY_ERROR);
                 FacesContext.getCurrentInstance().addMessage("validationId", message);
@@ -200,6 +216,22 @@ public class InvoiceController extends BaseController implements Serializable {
 
         }
         return validated;
+    }
+
+    public String exchangeRate(Currency currency) {
+        String exchangeRateString = "";
+        currencyConversion = currencyService.getCurrencyRateFromCurrencyConversion(currency.getCurrencyCode());
+        if (currencyConversion != null) {
+            exchangeRateString = "1 " + currency.getCurrencyIsoCode() + " = " + new BigDecimal(BigInteger.ONE).divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP) + " " + company.getCompanyCountryCode().getCurrencyCode().getCurrencyIsoCode();
+        }
+        return exchangeRateString;
+    }
+
+    public BigDecimal totalAmountInHomeCurrency(Currency currency) {
+        if (total != null && currencyConversion != null) {
+            return total.divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP);
+        }
+        return new BigDecimal(0);
     }
 
     public void updateSubTotalOnDiscountAdded() {
@@ -237,7 +269,7 @@ public class InvoiceController extends BaseController implements Serializable {
     }
 
     public List<Contact> contacts(final String searchQuery) {
-        return contactService.getContacts(searchQuery);
+        return contactService.getContacts(searchQuery, ContactTypeConstant.CUSTOMER);
     }
 
     public List<Project> projects(final String searchQuery) throws Exception {
@@ -363,12 +395,6 @@ public class InvoiceController extends BaseController implements Serializable {
         }
     }
 
-    public void updateCurrencyLabel() {  //--------------
-        if (null != selectedInvoiceModel.getCurrencyCode()) {
-            selectedInvoiceModel.setCurrencyCode(currencyService.getCurrency(selectedInvoiceModel.getCurrencyCode().getCurrencyCode()));
-        }
-    }
-
     public void updateSubTotal(final InvoiceItemModel invoiceItemModel) {
         final int quantity = invoiceItemModel.getQuatity();
         final BigDecimal unitPrice = invoiceItemModel.getUnitPrice();
@@ -408,7 +434,6 @@ public class InvoiceController extends BaseController implements Serializable {
     public void createContact() {
         Currency defaultCurrency = currencyService.getDefaultCurrency();
         final Contact contact = new Contact();
-
         contact.setBillingEmail(contactModel.getEmail());
         contact.setDeleteFlag(Boolean.FALSE);
         contact.setEmail(contactModel.getEmail());
@@ -417,6 +442,7 @@ public class InvoiceController extends BaseController implements Serializable {
         contact.setOrganization(contactModel.getOrganization());
         contact.setCreatedBy(FacesUtil.getLoggedInUser().getUserId());
         contact.setCurrency(defaultCurrency);
+        contact.setContactType(ContactTypeConstant.CUSTOMER);
         if (defaultCurrency != null) {
             contactModel.setCurrency(defaultCurrency);
         }

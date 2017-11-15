@@ -1,0 +1,62 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:h="http://java.sun.com/jsf/html"
+     xmlns:f="http://java.sun.com/jsf/core"
+     xmlns:ui="http://java.sun.com/jsf/facelets"
+     xmlns:p="http://primefaces.org/ui"
+     xmlns:si="http://java.sun.com/jsf/composite/ccomponent">
+    <h:form>
+        <p:dataTable var="tax"
+                     value="#{taxHistoryController.taxTransactionList}"
+                     rowIndexVar="index" 
+                     paginator="true" rows="10"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}"
+                     id="taxHistoryTable">
+
+            <f:facet name="{TableHeader}">
+                <p:outputLabel styleClass="tableCustomHeader" value="Tax Transaction History" />
+            </f:facet>
+
+            <p:column headerText="Start Date" width="80" sortBy="#{tax.startDate}" filterMatchMode="contains" filterBy="#{tax.startDate}">
+                <h:outputText value="#{tax.startDate}" >
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </p:column>
+
+            <p:column headerText="End Date" width="80" sortBy="#{tax.endDate}" filterMatchMode="contains" filterBy="#{tax.endDate}">
+                <h:outputText value="#{tax.endDate}" >
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </p:column>
+
+            <p:column headerText="VAT IN" filterMatchMode="contains" styleClass="amount" filterBy="#{tax.vatIn}">
+                <h:outputText value="#{tax.vatIn}"/><br/>
+            </p:column>
+
+            <p:column headerText="VAT OUT" filterMatchMode="contains" styleClass="amount" filterBy="#{tax.vatOut}">
+                <h:outputText value="#{tax.vatOut}"/><br/>
+            </p:column>
+
+            <p:column headerText="Total" styleClass="amount" filterMatchMode="contains" filterBy="#{tax.vatIn - tax.vatOut}">
+                <h:outputText value="#{tax.vatIn - tax.vatOut}" />
+            </p:column>
+
+            <p:column headerText="Payment Date" sortBy="#{tax.paymentDate}" width="80" filterMatchMode="contains" filterBy="#{tax.paymentDate}">
+                <h:outputText value="#{tax.paymentDate}" >
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputText>
+            </p:column>
+
+            <p:column headerText="Due Amount" styleClass="amount" filterMatchMode="contains" filterBy="#{tax.dueAmount}">
+                <h:outputText value="#{tax.dueAmount}"/>
+            </p:column>
+
+            <p:column headerText="Paid Amount" styleClass="amount" filterMatchMode="contains" filterBy="#{tax.paidAmount}">
+                <h:outputText value="#{tax.paidAmount}"/>
+            </p:column>
+
+            <p:column headerText="Status" filterMatchMode="contains" width="70" filterBy="#{tax.status}">
+                <h:outputText value="#{tax.status == 2?'Close':'Open'}"/>
+            </p:column>
+        </p:dataTable>
+    </h:form>
+</div>

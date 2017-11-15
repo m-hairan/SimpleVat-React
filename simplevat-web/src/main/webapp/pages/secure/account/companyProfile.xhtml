@@ -45,7 +45,7 @@
                                         itemValue="#{companyType}"
                                         itemLabel="#{companyType.companyTypeName}" 
                                         required="true"
-                                        requiredMessage="Please select Country"/>
+                                        requiredMessage="Please select company type"/>
                         <label>#{messages.CompanyTypeCode}</label>
                         <p:message for="CompanyTypeCode" />
                     </h:panelGroup>
@@ -84,6 +84,31 @@
                          styleClass="ui-panelgrid-blank form-group"
                          style="border:0px none; background-color:transparent;">
 
+                <p:outputLabel />
+                <h:panelGroup styleClass="md-inputfield">
+                    <p:autoComplete id="IndustryTypeCode"
+                                    converter="#{industryTypeConverter}" 
+                                    dropdown="true" 
+                                    forceSelection="true" 
+                                    effect="fold"
+                                    completeMethod="#{companyProfileController.completeIndustryType()}"
+                                    value="#{companyProfileController.companyModel.industryTypeCode}"
+                                    var="industryType"
+                                    itemValue="#{industryType}"
+                                    itemLabel="#{industryType.industryTypeName}" 
+                                    required="true"
+                                    requiredMessage="Please select industry type"/>
+                    <label>#{messages.CompanyTypeCode}</label>
+                    <p:message for="CompanyTypeCode" />
+                </h:panelGroup>
+
+                <p:outputLabel for="Website" />
+                <h:panelGroup styleClass="md-inputfield">
+                    <p:inputText id="Website" value="#{companyProfileController.companyModel.website}"/>
+                    <label>#{messages.Website}</label>
+                    <p:message for="Website" />
+                </h:panelGroup>
+
                 <p:outputLabel for="EmailAddress" />
                 <h:panelGroup styleClass="md-inputfield">
                     <p:inputText id="EmailAddress" value="#{companyProfileController.companyModel.emailAddress}"
@@ -100,16 +125,6 @@
                     <p:inputMask id="phone" mask="999999999" value="#{companyProfileController.companyModel.phoneNumber}"/>
                     <label>#{messages.PhoneNumber}</label>
                 </h:panelGroup>
-
-                <p:outputLabel for="Website" />
-                <h:panelGroup styleClass="md-inputfield">
-                    <p:inputText id="Website" value="#{companyProfileController.companyModel.website}"/>
-                    <label>#{messages.Website}</label>
-                    <p:message for="Website" />
-                </h:panelGroup>
-
-                <p:outputLabel />
-                <h:panelGroup />
             </p:panelGrid>
         </p:fieldset>
         <p:fieldset legend="#{messages.InvoicingAddress}" toggleable="false">

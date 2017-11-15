@@ -46,17 +46,14 @@
                     </f:facet>
                     <p:dataTable var="transaction"
                                  value="#{transactionListController.transactions}"
-                                 selectionMode="single"
                                  rowIndexVar="index"
                                  widgetVar="transactiondt"
                                  rowExpandMode="single" 
-                                 selection="#{transactionListController.selectedTransactionModel}"
                                  rowKey="#{transaction.transactionId}" 
                                  paginator="true" rows="#{transactionListController.datatableRowCount}"
                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}"
                                  id="transactionsTable">
                         <p:ajax event="page"  listener="#{transactionListController.refreshTableDataonPageChange()}"/>
-                        <p:ajax event="rowSelect" process="transactionsTable" listener="#{transactionListController.expandCollapseOnRowSelect(btnBinding.clientId)}" update="transactionsTable"/> 
 
                         <f:facet name="{TableHeader}">
                             <p:outputLabel styleClass="tableCustomHeader" value="#{transactionListController.selectedBankAccountModel.bankAccountName}" />
@@ -78,24 +75,36 @@
                         </p:column>
 
                         <p:column headerText="#{messages.description}" filterMatchMode="contains" filterBy="#{transaction.transactionDescription}">
-                            <p:outputLabel value="#{transaction.transactionDescription}"/>
+                            <p:outputLabel value="#{transaction.transactionDescription}"/><br/>
+                            <h:panelGroup rendered="#{transaction.transactionStatus.explainationStatusCode != 2 and transaction.suggestedTransactionString.length() > 0}" >
+                                <p:outputLabel value="#{transaction.suggestedTransactionString}" style="font-size: x-small;color:#ff0000" /> 
+                                <p:spacer width="10px"/>
+                                <p:commandLink value=" Accept " action="#{transactionListController.acceptSuggestion(transaction)}" update="transactionsTable" style="font-size: x-small; font-weight: bold"/>
+                                <p:outputLabel value="/" />
+                                <p:commandLink value=" Edit" action="#{transactionListController.expandCollapse(transaction, btnBinding.clientId)}" update="transactionsTable" style="font-size: x-small; font-weight: bold"/>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{transaction.transactionStatus.explainationStatusCode == 2}" >
+                                <p:outputLabel value="#{transaction.suggestedTransactionString}" style="font-size: x-small;color:#14ad3c" /> 
+                                <p:spacer width="10px"/>
+                                <p:commandLink value=" More" action="#{transactionListController.expandCollapse(transaction, btnBinding.clientId)}" update="transactionsTable" style="font-size: x-small; font-weight: bold" />
+                            </h:panelGroup>
                         </p:column>
 
-                        <p:column headerText="#{messages.credit}" sortBy="#{transaction.transactionAmount}" width="150" styleClass="amount" filterMatchMode="contains" filterBy="#{transaction.transactionAmount}">
+                        <p:column headerText="#{messages.credit}" sortBy="#{transaction.transactionAmount}" width="110" styleClass="amount" filterMatchMode="contains" filterBy="#{transaction.transactionAmount}">
                             <h:outputText value="#{transaction.bankAccount.bankAccountCurrency.currencySymbol} " rendered="#{transaction.debitCreditFlag.toString() eq 'C'}" />
                             <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString() eq 'C'}" >
                                 <f:convertNumber type="currency" currencySymbol=""/>
                             </h:outputText>
                         </p:column>
 
-                        <p:column headerText="#{messages.debit}" sortBy="#{transaction.transactionAmount}" width="150" styleClass="amount" filterMatchMode="contains" filterBy="#{transaction.transactionAmount}">
+                        <p:column headerText="#{messages.debit}" sortBy="#{transaction.transactionAmount}" width="110" styleClass="amount" filterMatchMode="contains" filterBy="#{transaction.transactionAmount}">
                             <h:outputText value="#{transaction.bankAccount.bankAccountCurrency.currencySymbol} " rendered="#{transaction.debitCreditFlag.toString() eq 'D'}" />
                             <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString() eq 'D'}" >
                                 <f:convertNumber type="currency" currencySymbol=""/>
                             </h:outputText>
                         </p:column>
 
-                        <p:column headerText="#{messages.current_balance}" styleClass="amount" width="150" filterMatchMode="contains" filterBy="#{transaction.currentBalance}">
+                        <p:column headerText="#{messages.current_balance}" styleClass="amount" width="110" filterMatchMode="contains" filterBy="#{transaction.currentBalance}">
                             <h:outputText value="#{transaction.bankAccount.bankAccountCurrency.currencySymbol} " />
                             <h:outputText value="#{transaction.currentBalance}" >
                                 <f:convertNumber type="currency" currencySymbol=""/>

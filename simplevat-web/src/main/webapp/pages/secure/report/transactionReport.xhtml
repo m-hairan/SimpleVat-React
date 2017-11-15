@@ -86,7 +86,7 @@
                                                 dropdown="true"
                                                 forceSelection="true"
                                                 effect="fold"
-                                                groupBy="#{transactionCategory.parentTransactionCategory.transactionCategoryName}"
+                                                groupBy="#{(transactionCategory.parentTransactionCategory.transactionCategoryName != null)?transactionCategory.parentTransactionCategory.transactionCategoryName:'Others'}"
                                                 completeMethod="#{transactionReport.transactionCategories(transactionReport.transactionType)}"
                                                 value="#{transactionReport.transactionCategory}"
                                                 var="transactionCategory"

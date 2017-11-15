@@ -1,7 +1,8 @@
 package com.simplevat.web.purchase.controller;
 
-import com.simplevat.web.expense.controller.*;
 import com.github.javaplugs.jsf.SpringScopeView;
+import com.simplevat.entity.Company;
+import com.simplevat.entity.Contact;
 import java.io.Serializable;
 
 import javax.faces.application.FacesMessage;
@@ -14,12 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.simplevat.entity.Currency;
+import com.simplevat.entity.CurrencyConversion;
 import com.simplevat.entity.Project;
 import com.simplevat.entity.Purchase;
 import com.simplevat.entity.User;
 import com.simplevat.entity.VatCategory;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionType;
+import com.simplevat.service.CompanyService;
+import com.simplevat.service.ContactService;
 import com.simplevat.service.CurrencyService;
 import com.simplevat.service.ProjectService;
 import com.simplevat.service.PurchaseService;
@@ -28,14 +32,17 @@ import com.simplevat.service.UserServiceNew;
 import com.simplevat.service.VatCategoryService;
 import com.simplevat.service.bankaccount.TransactionTypeService;
 import com.simplevat.web.common.controller.BaseController;
+import com.simplevat.web.constant.ContactTypeConstant;
 import com.simplevat.web.constant.ModuleName;
-import com.simplevat.web.expense.model.ExpenseItemModel;
+import com.simplevat.web.contact.model.ContactModel;
 import com.simplevat.web.purchase.model.PurchaseItemModel;
 import com.simplevat.web.purchase.model.PurchaseModel;
 import com.simplevat.web.utils.FacesUtil;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +65,9 @@ public class PurchaseController extends BaseController implements Serializable {
 
     @Autowired
     private TransactionCategoryServiceNew transactionCategoryService;
+
+    @Autowired
+    private CompanyService companyService;
 
     @Autowired
     private CurrencyService currencyService;
@@ -95,8 +105,20 @@ public class PurchaseController extends BaseController implements Serializable {
     String fileName;
 
     @Getter
+    private Company company;
+
+    @Getter
     @Setter
     PurchaseControllerHelper purchaseControllerHelper;
+
+    @Getter
+    @Setter
+    private ContactModel contactModel;
+    
+    private CurrencyConversion currencyConversion;
+
+    @Autowired
+    private ContactService contactService;
 
     public PurchaseController() {
         super(ModuleName.PURCHASE_MODULE);
@@ -104,12 +126,14 @@ public class PurchaseController extends BaseController implements Serializable {
 
     @PostConstruct
     public void init() {
+        company = companyService.findByPK(userServiceNew.findByPK(FacesUtil.getLoggedInUser().getUserId()).getCompany().getCompanyId());
+        contactModel = new ContactModel();
         purchaseControllerHelper = new PurchaseControllerHelper();
         Object objSelectedPurchaseModel = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedPurchaseModelId");
         selectedPurchaseModel = new PurchaseModel();
         if (objSelectedPurchaseModel == null) {
             selectedPurchaseModel.setPurchaseItems(new ArrayList<>());
-            Currency defaultCurrency = currencyService.getDefaultCurrency();
+            Currency defaultCurrency = company.getCompanyCountryCode().getCurrencyCode();
             if (defaultCurrency != null) {
                 selectedPurchaseModel.setCurrency(defaultCurrency);
             }
@@ -164,6 +188,22 @@ public class PurchaseController extends BaseController implements Serializable {
         return transactionCategoryList;
 
     }
+    
+    public String exchangeRate(Currency currency) {
+        String exchangeRateString = "";
+        currencyConversion = currencyService.getCurrencyRateFromCurrencyConversion(currency.getCurrencyCode());
+        if (currencyConversion != null) {
+            exchangeRateString = "1 " + currency.getCurrencyIsoCode() + " = " + new BigDecimal(BigInteger.ONE).divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP) + " " + company.getCompanyCountryCode().getCurrencyCode().getCurrencyIsoCode();
+        }
+        return exchangeRateString;
+    }
+
+    public BigDecimal totalAmountInHomeCurrency(Currency currency) {
+        if (total != null) {
+            return total.divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP);
+        }
+        return new BigDecimal(0);
+    }
 
     public void deleteLineItem(PurchaseItemModel itemModel) {
         selectedPurchaseModel.getPurchaseItems().remove(itemModel);
@@ -201,7 +241,7 @@ public class PurchaseController extends BaseController implements Serializable {
     private boolean validatePurchaseLineItems() { //---------------
         boolean validated = true;
         for (PurchaseItemModel lastItem : selectedPurchaseModel.getPurchaseItems()) {
-            if (lastItem.getUnitPrice() == null ||lastItem.getQuatity() < 1 || lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0) {
+            if (lastItem.getUnitPrice() == null || lastItem.getQuatity() < 1 || lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0) {
                 FacesMessage message = new FacesMessage("Please enter proper detail for all expence items.");
                 message.setSeverity(FacesMessage.SEVERITY_ERROR);
                 FacesContext.getCurrentInstance().addMessage("validationId", message);
@@ -227,6 +267,54 @@ public class PurchaseController extends BaseController implements Serializable {
         purchaseService.update(purchase);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Purchase deleted successfully"));
         return "purchase-list.xhtml?faces-redirect=true";
+    }
+
+    public void updateCurrency() {
+        setDefaultCurrency();
+        if (selectedPurchaseModel.getPurchaseContact() != null) {
+            final Contact contact = contactService
+                    .getContact(selectedPurchaseModel.getPurchaseContact().getContactId());
+            selectedPurchaseModel.setCurrency(contact.getCurrency());
+        }
+    }
+
+    private void setDefaultCurrency() {
+        Currency defaultCurrency = company.getCompanyCountryCode().getCurrencyCode();
+        if (defaultCurrency != null) {
+            selectedPurchaseModel.setCurrency(defaultCurrency);
+        }
+    }
+
+    public List<Contact> contacts(final String searchQuery) {
+        return contactService.getContacts(searchQuery, ContactTypeConstant.VENDOR);
+    }
+
+    public void initCreateContact() {
+        contactModel = new ContactModel();
+    }
+
+    public void createContact() {
+        Currency defaultCurrency = currencyService.getDefaultCurrency();
+        final Contact contact = new Contact();
+        contact.setBillingEmail(contactModel.getEmail());
+        contact.setDeleteFlag(Boolean.FALSE);
+        contact.setEmail(contactModel.getEmail());
+        contact.setFirstName(contactModel.getFirstName());
+        contact.setLastName(contactModel.getLastName());
+        contact.setOrganization(contactModel.getOrganization());
+        contact.setCreatedBy(FacesUtil.getLoggedInUser().getUserId());
+        contact.setCurrency(defaultCurrency);
+        contact.setContactType(ContactTypeConstant.VENDOR);
+        if (defaultCurrency != null) {
+            contactModel.setCurrency(defaultCurrency);
+        }
+        if (contact.getContactId() != null) {
+            contactService.update(contact);
+        } else {
+            contactService.persist(contact);
+        }
+        selectedPurchaseModel.setPurchaseContact(contact);
+
     }
 
     public String savePurchase() {
@@ -263,6 +351,10 @@ public class PurchaseController extends BaseController implements Serializable {
         if (selectedPurchaseModel.getUser() != null) {
             User user = userServiceNew.findByPK(selectedPurchaseModel.getUser().getUserId());
             purchase.setUser(user);
+        }
+        if (selectedPurchaseModel.getPurchaseContact() != null) {
+            Contact contact = contactService.findByPK(selectedPurchaseModel.getPurchaseContact().getContactId());
+            purchase.setPurchaseContact(contact);
         }
 
         purchase.setPurchaseAmount(total);
@@ -313,6 +405,10 @@ public class PurchaseController extends BaseController implements Serializable {
             purchase.setUser(user);
         }
 
+        if (selectedPurchaseModel.getPurchaseContact() != null) {
+            Contact contact = contactService.findByPK(selectedPurchaseModel.getPurchaseContact().getContactId());
+            purchase.setPurchaseContact(contact);
+        }
         purchase.setPurchaseAmount(total);
 
         if (purchase.getPurchaseId() == null || purchase.getPurchaseId() == 0) {

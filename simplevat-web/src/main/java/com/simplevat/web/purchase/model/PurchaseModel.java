@@ -5,6 +5,7 @@
  */
 package com.simplevat.web.purchase.model;
 
+import com.simplevat.entity.Contact;
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.Project;
 import com.simplevat.entity.PurchaseLineItem;
@@ -68,6 +69,9 @@ public class PurchaseModel {
     private StreamedContent attachmentFileContent;
     private List<PurchaseItemModel> purchaseItems;
     private Integer versionNumber;
+    private Contact purchaseContact;
+
+    
 
     public void addPurchaseItem(@Nonnull final PurchaseItemModel purchaseItemModel) {
         if (null == this.purchaseItems) {

@@ -9,9 +9,11 @@ import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.Company;
 import com.simplevat.entity.CompanyType;
 import com.simplevat.entity.Country;
+import com.simplevat.entity.IndustryType;
 import com.simplevat.service.CompanyService;
 import com.simplevat.service.CompanyTypeService;
 import com.simplevat.service.CountryService;
+import com.simplevat.service.IndustryTypeService;
 import com.simplevat.web.user.controller.UserProfileController;
 import com.simplevat.web.utils.FacesUtil;
 import java.io.Serializable;
@@ -46,6 +48,8 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
     @Autowired
     private CompanyTypeService companyTypeService;
     @Autowired
+    private IndustryTypeService industryTypeService;
+    @Autowired
     private CountryService countryService;
     @Getter
     @Setter
@@ -62,9 +66,9 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
     @Setter
     public Company company;
     @Getter
-    @Setter        
+    @Setter
     String fileName;
-    @Getter 
+    @Getter
     private boolean renderProfilePic;
 
     @PostConstruct
@@ -77,6 +81,10 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
 
     public List<CompanyType> completeCompanyType() {
         return companyTypeService.getCompanyTypes();
+    }
+
+    public List<IndustryType> completeIndustryType() {
+        return industryTypeService.getIndustryTypes();
     }
 
     public List<Country> completeCountry(String countryStr) {
@@ -107,7 +115,6 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
     public void saveUpdate() {
         try {
 
-           
             Company c = getCompanyFromCompanyModel(companyModel);
             c.setCompanyTypeCode(companyTypeService.findByPK(c.getCompanyTypeCode().getId()));
             if (c.getCompanyId() != null && c.getCompanyId() > 0) {
@@ -142,13 +149,13 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
             companyModel.setCompanyStateRegion("");
         }
     }
-    
+
     public void handleFileUpload(FileUploadEvent event) {
-       companyModel.setCompanyLogo(event.getFile().getContents());
-       fileName = event.getFile().getFileName();
-       FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_COMPANY_LOGO", event.getFile().getContents());
-       renderProfilePic = true;
-       FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
-       FacesContext.getCurrentInstance().addMessage(null, message);
+        companyModel.setCompanyLogo(event.getFile().getContents());
+        fileName = event.getFile().getFileName();
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_COMPANY_LOGO", event.getFile().getContents());
+        renderProfilePic = true;
+        FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 }

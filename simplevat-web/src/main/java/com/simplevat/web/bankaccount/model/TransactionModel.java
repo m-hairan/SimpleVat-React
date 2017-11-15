@@ -55,6 +55,7 @@ public class TransactionModel implements Comparable<TransactionModel> {
     private Transaction parentTransaction;
     private List<TransactionModel> childTransactionList = new ArrayList<>();
     private boolean expandIcon;
+    private String suggestedTransactionString;
 
     @Override
     public int compareTo(TransactionModel o) {

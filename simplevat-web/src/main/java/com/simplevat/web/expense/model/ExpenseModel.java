@@ -1,5 +1,6 @@
 package com.simplevat.web.expense.model;
 
+import com.simplevat.entity.Contact;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -47,6 +48,8 @@ public class ExpenseModel {
     private Integer versionNumber;
     byte[] receiptAttachmentBinary;
     private List<ExpenseItemModel> expenseItem;
+    private Contact expenseContact;
+
 
     public void addExpenseItem(@Nonnull final ExpenseItemModel expenseItemModel) {
         if (null == this.expenseItem) {

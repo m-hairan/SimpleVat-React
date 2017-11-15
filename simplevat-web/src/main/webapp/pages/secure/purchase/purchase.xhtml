@@ -136,22 +136,11 @@
                                                             itemValue="#{currency}"
                                                             itemLabel="#{currency.currencyIsoCode}  #{currency.currencySymbol} " 
                                                             required="true"
-                                                            requiredMessage="Please select currency"/>
+                                                            requiredMessage="Please select currency">
+                                                <p:ajax event="itemSelect" update="purchaseItemTable exchangeCurrency" />
+                                            </p:autoComplete>
                                             <label>#{messages.currency}</label>
                                             <p:message for="purchaseCurrency" />
-                                        </h:panelGroup>
-
-
-                                        <p:outputLabel for="purchaseDescription" />
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputTextarea
-                                                id="purchaseDescription"
-                                                value="#{purchaseController.selectedPurchaseModel.purchaseDescription}"
-                                                rows="5" cols="30" counter="counterValue" maxlength="100"
-                                                counterTemplate="{0} characters remaining."
-                                                autoResize="false" />
-                                            <h:outputText id="counterValue" />
-                                            <label>#{messages.description}</label>
                                         </h:panelGroup>
 
 
@@ -174,36 +163,63 @@
                                             </p:autoComplete>
                                             <label>#{messages.project}</label>
                                         </h:panelGroup>
+                                        <p:outputLabel for="conatcts"/>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:autoComplete id="conatcts" 
+                                                            converter="#{contactConverter}"
+                                                            dropdown="true" 
+                                                            forceSelection="true"
+                                                            effect="fold"
+                                                            required="true"
+                                                            requiredMessage="Please select Contact"
+                                                            completeMethod="#{purchaseController.contacts}" 
+                                                            value="#{purchaseController.selectedPurchaseModel.purchaseContact}" 
+                                                            var="contact"
+                                                            itemValue="#{contact.contactId}"
+                                                            itemLabel="#{contact.firstName} #{contact.lastName}"
 
-                                        <h:panelGroup />
-                                        <h:panelGroup />
-
+                                                            >
+                                                <p:ajax event="itemSelect" process="@this"
+                                                        listener="#{purchaseController.updateCurrency}" 
+                                                        update="purchaseCurrency purchaseItemTable exchangeCurrency" />
+                                            </p:autoComplete>
+                                            <label>#{messages.contact}</label>
+                                            <p:message for="conatcts" />
+                                        </h:panelGroup>
+                                        <p:outputLabel />
+                                        <p:outputLabel value="OR  ">
+                                            <p:commandLink onsuccess="PF('add_contact_popup').show();" 
+                                                           actionListener="#{purchaseController.initCreateContact()}"
+                                                           style="color: #009688" 
+                                                           value="Add New Contact" />
+                                        </p:outputLabel>
+                                        <p:outputLabel for="purchaseDescription" />
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputTextarea
+                                                id="purchaseDescription"
+                                                value="#{purchaseController.selectedPurchaseModel.purchaseDescription}"
+                                                rows="5" cols="30" counter="counterValue" maxlength="255"
+                                                counterTemplate="{0} characters remaining."
+                                                autoResize="false" />
+                                            <h:outputText id="counterValue" />
+                                            <label>#{messages.description}</label>
+                                        </h:panelGroup>
                                     </p:panelGrid>
                                 </p:fieldset>
                                 <br />
-
-
-
                                 <p:fieldset legend="Receipt" toggleable="true" toggleSpeed="500">
                                     <p:panelGrid columns="6"
                                                  columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
                                                  layout="grid" styleClass="ui-panelgrid-blank form-group"
                                                  style="border:0px none; background-color:transparent;">
-
-
                                         <p:outputLabel for="purchaseReceiptNumber"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText
                                                 id="purchaseReceiptNumber"
                                                 value="#{purchaseController.selectedPurchaseModel.receiptNumber}" />
-
-
                                             <label>#{messages.receiptnumber}</label>
                                         </h:panelGroup>
-
-
                                         <h:panelGroup />
-
                                         <h:panelGroup styleClass="md-inputfield">
                                             <div style="text-align: center">
                                                 <p:fileUpload auto="true" 
@@ -213,16 +229,7 @@
 
 
                                             </div>
-<!--                                            <h:panelGroup rendered="#{expenseController.selectedExpenseModel.attachmentFileContent != null}">
-
-                                                <p:commandButton value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
-                                                    <p:fileDownload value="#{expenseController.selectedExpenseModel.attachmentFileContent}" />
-                                                </p:commandButton>
-                                            </h:panelGroup>
-                                            -->
                                         </h:panelGroup>
-
-
                                         <p:outputLabel for="purchaseAttachmentDescription"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText
@@ -232,21 +239,12 @@
 
                                             <label>#{messages.attachment_description}</label>
                                         </h:panelGroup>
-
-
                                     </p:panelGrid>
                                 </p:fieldset>
-
-
-
-
                                 <p:fieldset legend="Purchase Item Details" toggleable="true" 
                                             toggleSpeed="500">
                                     <p:messages autoUpdate="true" id="validationId" closable="
                                                 true" for="validationId" />
-
-
-
                                     <p:dataTable 
                                         var="purchaseItem" 
                                         editMode="cell"
@@ -261,28 +259,23 @@
                                                              process="@this"
                                                              actionListener="#{purchaseController.deleteLineItem(purchaseItem)}"
                                                              icon="ui-icon-delete">
-                                                 
+
                                             </p:commandButton>
                                         </p:column>
-
-                                        
                                         <p:column headerText="Product/Service" style="width: 200px">
-                                        <p:cellEditor>
-                                            <f:facet name="output">
-                                                <h:outputText value="#{purchaseItem.productService}" />
-                                            </f:facet>
-                                            <f:facet name="input">
-                                                <p:inputText id="product_service" 
-                                                             value="#{purchaseItem.productService}" 
-                                                             style="width:100%">
-                                                    <p:ajax event="change" />
-                                                </p:inputText>
-                                            </f:facet>
-                                        </p:cellEditor>
-                                    </p:column>
-
-                                        
-                                        
+                                            <p:cellEditor>
+                                                <f:facet name="output">
+                                                    <h:outputText value="#{purchaseItem.productService}" />
+                                                </f:facet>
+                                                <f:facet name="input">
+                                                    <p:inputText id="product_service" 
+                                                                 value="#{purchaseItem.productService}" 
+                                                                 style="width:100%">
+                                                        <p:ajax event="change" />
+                                                    </p:inputText>
+                                                </f:facet>
+                                            </p:cellEditor>
+                                        </p:column>
                                         <p:column headerText="Description" styleClass="amount" style="width: 320px">
                                             <p:cellEditor>
                                                 <f:facet name="output">
@@ -297,8 +290,6 @@
                                                 </f:facet>
                                             </p:cellEditor>
                                         </p:column>
-
-
                                         <p:column headerText="Quantity" styleClass="amount">
                                             <p:cellEditor>
                                                 <f:facet name="output">
@@ -313,23 +304,20 @@
                                                                  value="#{purchaseItem.quatity}" 
                                                                  style="width:100%">
 
-                                                           <p:ajax event="change" 
+                                                        <p:ajax event="change" 
                                                                 listener="#{purchaseController.updateSubTotal(purchaseItem)}" 
                                                                 update="subTotal" />
-                                             
-
                                                     </p:inputText>
-
                                                 </f:facet>
                                             </p:cellEditor>
                                         </p:column>
 
-                                        <p:column headerText="Unit Price " styleClass="amount">
+                                        <p:column headerText="Unit Price (#{purchaseController.selectedPurchaseModel.currency.currencyIsoCode})" styleClass="amount">
                                             <p:cellEditor>
                                                 <f:facet name="output" >
 
                                                     <h:outputText  value="#{purchaseItem.unitPrice}" >
-                                                        <f:convertNumber type="currency"  />
+                                                        <f:convertNumber type="currency" currencySymbol="#{purchaseController.selectedPurchaseModel.currency.currencySymbol} " />
                                                     </h:outputText>
 
                                                 </f:facet>
@@ -344,7 +332,7 @@
 
                                                         <p:ajax event="change" 
                                                                 listener="#{purchaseController.updateSubTotal(purchaseItem)}" 
-                                                                update="subTotal" />
+                                                                update="subTotal @form:exchangeCurrency" />
 
                                                     </p:inputNumber>
                                                 </f:facet>
@@ -362,17 +350,13 @@
                                                         <f:selectItems value="#{purchaseController.vatCategorySelectItemList}" />
                                                         <p:ajax event="change" 
                                                                 listener="#{purchaseController.updateSubTotal(purchaseItem)}" 
-                                                                update="subTotal" />
+                                                                update="subTotal @form:exchangeCurrency" />
                                                     </p:selectOneMenu>
 
                                                 </f:facet>
                                             </p:cellEditor>
                                         </p:column>
-
-
-                                        
-
-                                        <p:column headerText="Subtotal" styleClass="amount">
+                                        <p:column headerText="Subtotal (#{purchaseController.selectedPurchaseModel.currency.currencyIsoCode})" styleClass="amount">
 
                                             <h:outputText id="subTotal"  value="#{purchaseItem.subTotal}" >
                                                 <f:convertNumber type="currency" currencySymbol="#{purchaseController.selectedPurchaseModel.currency.currencySymbol} " />
@@ -382,7 +366,7 @@
 
                                         <p:columnGroup type="footer"  rendered="#{purchaseController.selectedPurchaseModel.purchaseItems.size() > 0}">  
                                             <p:row >                                        
-                                            <p:column  colspan="6" footerText="Total" styleClass="amount"/>  
+                                                <p:column  colspan="6" footerText="Total" styleClass="amount"/>  
 
                                                 <p:column styleClass="amount">
                                                     <f:facet name="footer">
@@ -395,7 +379,6 @@
                                                 </p:column>  
                                             </p:row>  
                                         </p:columnGroup>
-
                                     </p:dataTable>
                                     <p:commandButton actionListener="#{purchaseController.addPurchaseItem()}"
                                                      style="width: 10%; margin-top: 3px" 
@@ -404,14 +387,39 @@
                                                      process="@this"
                                                      icon="ui-icon-plus" />
                                 </p:fieldset>
+                                <h:panelGroup id="exchangeCurrency"  >
+<!--                                    <p:fieldset legend="Currency Exchange Details" 
+                                                rendered="#{purchaseController.selectedPurchaseModel.currency.currencyCode != purchaseController.company.companyCountryCode.currencyCode.currencyCode}"
+                                                >
+
+                                        <p:panelGrid columns="6" 
+                                                     columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                                                     layout="grid" 
+                                                     styleClass="ui-panelgrid-blank form-group"
+                                                     style="border:0px none; background-color:transparent;">
+                                            <p:outputLabel for="exchangerate"  />
+                                        <h:panelGroup styleClass="md-inputwrapper-filled">
+                                            <label>Exchange Rate :-   </label>
+                                            <h:outputText id="exchangerate"
+                                                         value="#{purchaseController.exchangeRate(purchaseController.selectedPurchaseModel.currency)}" />
+                                        </h:panelGroup>
 
 
+                                        <p:outputLabel for="totalvalue"  />
+                                        <h:panelGroup styleClass="md-inputwrapper-filled">
+                                            <label>Total Value :-    </label>
+                                            <h:outputText id="totalvalue"
+                                                         value="#{purchaseController.totalAmountInHomeCurrency(purchaseController.selectedPurchaseModel.currency)}" >
+                                                    <f:convertNumber type="currency" currencySymbol="#{purchaseController.company.companyCountryCode.currencyCode.currencySymbol} "/>
+                                            </h:outputText>
+                                        </h:panelGroup>
+                                        </p:panelGrid>
+                                    </p:fieldset>-->
+                                </h:panelGroup>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
                 <p:toolbar>
                     <f:facet name="left">
                         <ui:fragment rendered="#{purchaseController.selectedPurchaseModel.purchaseId == null}">
@@ -431,28 +439,20 @@
                                              icon="ui-icon-forward"  update="createPurchaseForm"
                                              action="#{purchaseController.saveAndContinuePurchase}" />
                         </ui:fragment>
-
-
-
                         <span class="ui-separator" style="padding-right: 5px;"> <span
                                 class="fa fa-ellipsis-v SoftGray" />
                         </span>
-
-
                         <si:cbutton type="cancel"/>
                     </f:facet>
-
                     <f:facet name="right">
-
                         <si:cbutton type="home"/>
-
                     </f:facet>
-
                 </p:toolbar>
-
             </div>
 
         </h:form>
+        <ui:include src="add-contact-popup.xhtml" />
+
     </ui:define>
 
 </ui:composition>

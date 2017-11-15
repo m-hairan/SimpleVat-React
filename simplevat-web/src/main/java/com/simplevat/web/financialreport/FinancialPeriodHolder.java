@@ -26,11 +26,11 @@ public class FinancialPeriodHolder {
         if (year >= INITIALYEAR) {
             financialPeriodList.clear();
             for (int i = 0; i <= year - INITIALYEAR; i++) {
-                calendar.set(Calendar.YEAR, INITIALYEAR+i);
+                calendar.set(Calendar.YEAR, year-i);
                 calendar.set(Calendar.MONTH, 00);
                 calendar.set(Calendar.DAY_OF_MONTH, 01);
                 Date startDate = calendar.getTime();
-                calendar.set(Calendar.YEAR, INITIALYEAR+i);
+                calendar.set(Calendar.YEAR, year-i);
                 calendar.set(Calendar.MONTH, 11);
                 calendar.set(Calendar.DAY_OF_MONTH, 31);
                 Date endDate = calendar.getTime();

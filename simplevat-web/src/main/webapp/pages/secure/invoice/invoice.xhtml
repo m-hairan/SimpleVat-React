@@ -80,7 +80,7 @@
                                                         itemLabel="#{contact.firstName} #{contact.lastName}">
                                             <p:ajax event="itemSelect"
                                                     listener="#{invoiceController.updateCurrency}" 
-                                                    update="currency invoiceItemTable" />
+                                                    update="currency invoiceItemTable exchangeCurrency" />
                                         </p:autoComplete>
                                         <label>#{messages.contact}</label>
                                         <p:message for="conatcts" />
@@ -157,8 +157,7 @@
                                                         var="currency" itemValue="#{currency.currencyCode}"
                                                         itemLabel="#{currency.currencyIsoCode}  #{currency.currencySymbol}" >
                                             <p:ajax event="itemSelect" 
-                                                    listener="#{invoiceController.updateCurrencyLabel()}" 
-                                                    update="invoiceItemTable" />
+                                                    update="invoiceItemTable,exchangeCurrency" />
                                         </p:autoComplete>
 
                                         <label>#{messages.currency}</label>
@@ -263,7 +262,7 @@
                                                                style="width:100%">
                                                     <p:ajax event="change" 
                                                             listener="#{invoiceController.updateSubTotal(invoiceItem)}" 
-                                                            update="subTotal" />
+                                                            update="subTotal,@form:exchangeCurrency" />
                                                 </p:inputNumber>
                                             </f:facet>
                                         </p:cellEditor>
@@ -279,7 +278,7 @@
                                                     <f:selectItems value="#{invoiceController.vatCategorySelectItemList}" />
                                                     <p:ajax event="change" 
                                                             listener="#{invoiceController.updateSubTotal(invoiceItem)}" 
-                                                            update="subTotal" />
+                                                            update="subTotal,@form:exchangeCurrency" />
                                                 </p:selectOneMenu>
 
                                             </f:facet>
@@ -294,7 +293,7 @@
                                     <p:columnGroup type="footer" rendered="#{invoiceController.selectedInvoiceModel.invoiceItems.size() > 0}">  
                                         <p:row >  
 
-                                            
+
                                             <p:column colspan="6" footerText="Total" styleClass="amount"/>  
                                             <p:column styleClass="amount">
                                                 <f:facet name="footer">
@@ -316,8 +315,7 @@
                                                  process="@this"
                                                  icon="ui-icon-plus" />
                             </p:fieldset>
-                            <p:fieldset legend="Additional Details" toggleable="true" 
-                                        collapsed="true"
+                            <p:fieldset legend="Additional Details" toggleable="true" collapsed="true"
                                         toggleSpeed="300">
                                 <p:panelGrid columns="6" 
                                              columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
@@ -346,12 +344,12 @@
                                         <p:inputText id="discountValue"
                                                      value="#{invoiceController.selectedInvoiceModel.discount}"
                                                      converterMessage="Please enter digits only.">
-                                                            <p:ajax event="change" 
-                                                            listener="#{invoiceController.updateSubTotalOnDiscountAdded()}" 
-                                                            update=":#{p:component('subTotal')}" />
-                                         
-                                            
-                                                                         </p:inputText>
+                                            <p:ajax event="change" 
+                                                    listener="#{invoiceController.updateSubTotalOnDiscountAdded()}" 
+                                                    update=":#{p:component('subTotal')}" />
+
+
+                                        </p:inputText>
                                         <label>#{messages.discount}</label>
                                     </h:panelGroup>
 
@@ -366,6 +364,36 @@
 
                                 </p:panelGrid>
                             </p:fieldset>
+                            <h:panelGroup id="exchangeCurrency"  >
+<!--                                <p:fieldset legend="Currency Exchange Details"
+                                            rendered="#{invoiceController.selectedInvoiceModel.currencyCode.currencyCode != invoiceController.company.companyCountryCode.currencyCode.currencyCode}"
+                                           >
+
+                                    <p:panelGrid columns="6" 
+                                                 columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                                                 layout="grid" 
+                                                 styleClass="ui-panelgrid-blank form-group"
+                                                 style="border:0px none; background-color:transparent;">
+
+                                        <p:outputLabel for="exchangerate"  />
+                                        <h:panelGroup styleClass="md-inputwrapper-filled">
+                                            <label>Exchange Rate :-   </label>
+                                            <h:outputText id="exchangerate"
+                                                         value="#{invoiceController.exchangeRate(invoiceController.selectedInvoiceModel.currencyCode)}" />
+                                        </h:panelGroup>
+
+
+                                        <p:outputLabel for="totalvalue"  />
+                                        <h:panelGroup styleClass="md-inputwrapper-filled">
+                                            <label>Total Value :-    </label>
+                                            <h:outputText id="totalvalue"
+                                                         value="#{invoiceController.totalAmountInHomeCurrency(invoiceController.selectedInvoiceModel.currencyCode)}" >
+                                                <f:convertNumber type="currency" currencySymbol="#{invoiceController.company.companyCountryCode.currencyCode.currencySymbol} "/>
+                                            </h:outputText>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                </p:fieldset>-->
+                            </h:panelGroup>
                         </div>
                     </div>
                 </div>

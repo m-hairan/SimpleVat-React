@@ -50,6 +50,7 @@ public class ExpenseControllerHelper {
         expense.setReceiptAttachmentDescription(model.getReceiptAttachmentDescription());
         expense.setReceiptAttachmentPath(model.getReceiptAttachmentPath());
         expense.setReceiptNumber(model.getReceiptNumber());
+        expense.setExpenseContact(model.getExpenseContact());
         expense.setTransactionCategory(model.getTransactionCategory());
         expense.setTransactionType(model.getTransactionType());
         expense.setVersionNumber(model.getVersionNumber());
@@ -104,6 +105,7 @@ public class ExpenseControllerHelper {
         expenseModel.setReceiptAttachmentPath(entity.getReceiptAttachmentPath());
         expenseModel.setReceiptNumber(entity.getReceiptNumber());
         expenseModel.setTransactionCategory(entity.getTransactionCategory());
+        expenseModel.setExpenseContact(entity.getExpenseContact());
         expenseModel.setTransactionType(entity.getTransactionType());
         expenseModel.setVersionNumber(entity.getVersionNumber());
         expenseModel.setReceiptAttachmentBinary(entity.getReceiptAttachmentBinary());

@@ -43,6 +43,7 @@ public class MenuController implements Serializable {
         addPurchaseMenuItem(model);
         addBankAccountMenuItem(model);
         addTranscationReportMenuItem(model);
+        addTaxMenuItem(model);
     }
 
     private void addContactMenuItem(DefaultMenuModel model) {
@@ -104,6 +105,15 @@ public class MenuController implements Serializable {
             DefaultMenuItem item = new DefaultMenuItem("Expense");
             item.setIcon("exposure");
             item.setOutcome("/pages/secure/expense/expenses");
+            model.addElement(item);
+        }
+    }
+    
+    private void addTaxMenuItem(DefaultMenuModel model) {
+        if (PageAccessControl.hasAccess(ModuleName.TAX_MODULE)) {
+            DefaultMenuItem item = new DefaultMenuItem("Taxes");
+            item.setIcon("reply");
+            item.setOutcome("/pages/secure/tax/index");
             model.addElement(item);
         }
     }

@@ -95,6 +95,9 @@ public class HomeController implements Serializable {
     @Getter
     @Setter
     private int selectedBankAccountId;
+    @Getter
+    @Setter
+    private boolean renderVatInVatOutChart;
 
     @PostConstruct
     public void init() {
@@ -154,8 +157,8 @@ public class HomeController implements Serializable {
     public void lazyInitializationActivity() {
         populateLatestActivity();
     }
-    
-    public String loadBankAccountTransaction(){
+
+    public String loadBankAccountTransaction() {
         FacesUtil.setSelectedBankAccountId(selectedBankAccountId);
         return "/pages/secure/bankaccount/bank-transactions?faces-redirect=true";
     }
@@ -190,7 +193,7 @@ public class HomeController implements Serializable {
         cashFlowLineChartModel.setShowPointLabels(true);
         cashFlowLineChartModel.setAnimate(true);
 
-        Axis xAxis = new CategoryAxis("Months");        
+        Axis xAxis = new CategoryAxis("Months");
         xAxis.setTickAngle(45);
         cashFlowLineChartModel.getAxes().put(AxisType.X, xAxis);
         Axis yAxis = cashFlowLineChartModel.getAxis(AxisType.Y);
@@ -301,23 +304,28 @@ public class HomeController implements Serializable {
 
         model.addSeries(vatIn);
         model.addSeries(vatOut);
+        
+         if ((vatInData != null && !vatInData.isEmpty()) || (vatInData != null && !vatInData.isEmpty())) {
+             renderVatInVatOutChart = true;
+         }
 
         return model;
     }
 
     private LineChartModel initLinearModel(Map<Object, Number> invoiceData, Map<Object, Number> expenseData) {
         LineChartModel model = new LineChartModel();
-
-        LineChartSeries invoices = new LineChartSeries();
-        invoices.setData(invoiceData);
-        invoices.setLabel("Invoices");
-
-        LineChartSeries expenses = new LineChartSeries();
-        expenses.setLabel("Expenses");
-        expenses.setData(expenseData);
-
-        model.addSeries(invoices);
-        model.addSeries(expenses);
+        if (invoiceData != null && !invoiceData.isEmpty()) {
+            LineChartSeries invoices = new LineChartSeries();
+            invoices.setData(invoiceData);
+            invoices.setLabel("Invoices");
+            model.addSeries(invoices);
+        }
+        if (expenseData != null && !expenseData.isEmpty()) {
+            LineChartSeries expenses = new LineChartSeries();
+            expenses.setLabel("Expenses");
+            expenses.setData(expenseData);
+            model.addSeries(expenses);
+        }
 
         return model;
     }

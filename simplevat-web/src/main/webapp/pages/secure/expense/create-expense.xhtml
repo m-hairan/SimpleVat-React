@@ -129,23 +129,15 @@
                                                             itemValue="#{currency}"
                                                             itemLabel="#{currency.currencyIsoCode}  #{currency.currencySymbol} " 
                                                             required="true"
-                                                            requiredMessage="Please select currency"/>
+                                                            requiredMessage="Please select currency">
+                                                <p:ajax event="itemSelect" 
+                                                        update="expenseItemTable,exchangeCurrency" />
+                                            </p:autoComplete>
                                             <label>#{messages.currency}</label>
                                             <p:message for="expenseCurrency" />
                                         </h:panelGroup>
 
 
-                                        <p:outputLabel for="expenseDescription" />
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputTextarea
-                                                id="expenseDescription"
-                                                value="#{expenseController.selectedExpenseModel.expenseDescription}"
-                                                rows="5" cols="30" counter="counterValue" maxlength="100"
-                                                counterTemplate="{0} characters remaining."
-                                                autoResize="false" />
-                                            <h:outputText id="counterValue" />
-                                            <label>#{messages.description}</label>
-                                        </h:panelGroup>
 
                                         <p:outputLabel for="expenseProject"/>
                                         <h:panelGroup styleClass="md-inputfield">
@@ -164,6 +156,57 @@
                                             </p:autoComplete>
                                             <label>#{messages.project}</label>
                                         </h:panelGroup>
+
+
+
+
+                                        <p:outputLabel for="conatcts"/>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:autoComplete id="conatcts" 
+                                                            converter="#{contactConverter}"
+                                                            dropdown="true" 
+                                                            forceSelection="true"
+                                                            effect="fold"
+                                                            required="true"
+                                                            requiredMessage="Please select Contact"
+                                                            completeMethod="#{expenseController.contacts}" 
+                                                            value="#{expenseController.selectedExpenseModel.expenseContact}" 
+                                                            var="contact"
+                                                            itemValue="#{contact.contactId}"
+                                                            itemLabel="#{contact.firstName} #{contact.lastName}"
+
+                                                            >
+                                                <p:ajax event="itemSelect"
+                                                        listener="#{expenseController.updateCurrency}" 
+                                                        update="expenseCurrency expenseItemTable exchangeCurrency" />
+                                            </p:autoComplete>
+                                            <label>#{messages.contact}</label>
+                                            <p:message for="conatcts" />
+                                        </h:panelGroup>
+
+
+                                        <p:outputLabel />
+                                        <p:outputLabel value="OR  ">
+                                            <p:commandLink onsuccess="PF('add_contact_popup').show();" 
+                                                           actionListener="#{expenseController.initCreateContact()}"
+                                                           style="color: #009688" 
+                                                           value="Add New Contact" />
+                                        </p:outputLabel>
+
+
+
+                                        <p:outputLabel for="expenseDescription" />
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputTextarea
+                                                id="expenseDescription"
+                                                value="#{expenseController.selectedExpenseModel.expenseDescription}"
+                                                rows="5" cols="30" counter="counterValue" maxlength="100"
+                                                counterTemplate="{0} characters remaining."
+                                                autoResize="false" />
+                                            <h:outputText id="counterValue" />
+                                            <label>#{messages.description}</label>
+                                        </h:panelGroup>
+
 
                                         <h:panelGroup />
                                         <h:panelGroup />
@@ -288,7 +331,7 @@
                                                                    style="width:100%">
                                                         <p:ajax event="change" 
                                                                 listener="#{expenseController.updateSubTotal(expenseItem)}" 
-                                                                update="subTotal" />
+                                                                update="subTotal @form:exchangeCurrency" />
                                                     </p:inputNumber>
                                                 </f:facet>
                                             </p:cellEditor>
@@ -306,7 +349,7 @@
                                                         <f:selectItems value="#{expenseController.vatCategorySelectItemList}" />
                                                         <p:ajax event="change" 
                                                                 listener="#{expenseController.updateSubTotal(expenseItem)}" 
-                                                                update="subTotal" />
+                                                                update="subTotal @form:exchangeCurrency" />
                                                     </p:selectOneMenu>
 
                                                 </f:facet>
@@ -342,6 +385,36 @@
                                                      process="@this"
                                                      icon="ui-icon-plus" />
                                 </p:fieldset>
+                                <h:panelGroup id="exchangeCurrency"  >
+<!--                                    <p:fieldset legend="Currency Exchange Details"
+                                                rendered="#{expenseController.selectedExpenseModel.currency.currencyCode != expenseController.company.companyCountryCode.currencyCode.currencyCode}"
+                                                >
+
+                                        <p:panelGrid columns="6" 
+                                                     columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                                                     layout="grid" 
+                                                     styleClass="ui-panelgrid-blank form-group"
+                                                     style="border:0px none; background-color:transparent;">
+
+                                            <p:outputLabel for="exchangerate"  />
+                                            <h:panelGroup styleClass="md-inputwrapper-filled">
+                                                <label>Exchange Rate :-   </label>
+                                                <h:outputText id="exchangerate"
+                                                              value="#{expenseController.exchangeRate(expenseController.selectedExpenseModel.currency)}" />
+                                            </h:panelGroup>
+
+
+                                            <p:outputLabel for="totalvalue"  />
+                                            <h:panelGroup styleClass="md-inputwrapper-filled">
+                                                <label>Total Value :-    </label>
+                                                <h:outputText id="totalvalue"
+                                                              value="#{expenseController.totalAmountInHomeCurrency(expenseController.selectedExpenseModel.currency)}" >
+                                                    <f:convertNumber type="currency" currencySymbol="#{expenseController.company.companyCountryCode.currencyCode.currencySymbol} "/>
+                                                </h:outputText>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+                                    </p:fieldset>-->
+                                </h:panelGroup>
                             </div>
                         </div>
                     </div>
@@ -384,6 +457,7 @@
             </div>
 
         </h:form>
+        <ui:include src="add-contact-popup.xhtml" />
     </ui:define>
 
 </ui:composition>

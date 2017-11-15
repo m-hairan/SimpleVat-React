@@ -31,14 +31,15 @@ import com.simplevat.web.constant.TransactionStatusConstant;
 import com.simplevat.web.utils.FacesUtil;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.context.RequestContext;
@@ -145,9 +146,106 @@ public class TransactionListController extends TransactionControllerHelper imple
                 totalExplained++;
             }
             totalTransactions++;
+            if (model.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.UNEXPLIANED
+                    || model.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.PARTIALLYEXPLIANED) {
+                getSuggestionStringForUnexplainedOrPartial(model);
+            } else {
+                getSuggestionStringForExplianed(model);
+            }
             transactions.add(model);
         }
         Collections.sort(transactions);
+    }
+
+    private void getSuggestionStringForUnexplainedOrPartial(TransactionModel model) {
+        String suggestedTransactionString = "";
+        BigDecimal suggestionAmount = model.getTransactionAmount();
+        if (!model.getChildTransactionList().isEmpty()) {
+            int i = 0;
+            for (TransactionModel childModel : model.getChildTransactionList()) {
+                if (i == model.getChildTransactionList().size() - 1) {
+                    break;
+                }
+                suggestionAmount = suggestionAmount.subtract(childModel.getTransactionAmount());
+                i++;
+            }
+        }
+        List<Invoice> invoiceList = invoiceService.getInvoiceListByDueAmount();
+        if (invoiceList != null && !invoiceList.isEmpty()) {
+            for (Invoice invoice : invoiceList) {
+                if (suggestionAmount.doubleValue() == invoice.getDueAmount().doubleValue()) {
+                    model.setReferenceId(invoice.getInvoiceId());
+                    TransactionCategory category = transactionCategoryService.findByPK(TransactionCategoryConsatant.INVOICEPAYMENT_PK);
+                    suggestedTransactionString = category.getTransactionType().getTransactionTypeName() + " : " + category.getTransactionCategoryName()
+                            + " : Invoice Paid : " + invoice.getInvoiceReferenceNumber() + " : " + invoice.getInvoiceContact().getFirstName()
+                            + " : " + invoice.getCurrency().getCurrencySymbol() + " " + invoice.getDueAmount()
+                            + " : Due On : " + new SimpleDateFormat("MM/dd/yyyy").format(Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant()));
+                    break;
+                }
+            }
+        }
+        model.setSuggestedTransactionString(suggestedTransactionString);
+    }
+
+    private void getSuggestionStringForExplianed(TransactionModel model) {
+        String suggestedTransactionString = "";
+        if (!model.getChildTransactionList().isEmpty()) {
+            TransactionModel childModel = model.getChildTransactionList().get(0);
+            if (childModel.getRefObject() != null) {
+                if (childModel.getRefObject() instanceof Invoice) {
+                    Invoice invoice = (Invoice) childModel.getRefObject();
+                    suggestedTransactionString = childModel.getTransactionType().getTransactionTypeName() + " : " + childModel.getExplainedTransactionCategory().getTransactionCategoryName()
+                            + " : " + (childModel.getTransactionDescription() != null ? childModel.getTransactionDescription() + " : " : "") + invoice.getInvoiceReferenceNumber() + " : " + invoice.getInvoiceContact().getFirstName()
+                            + " : " + invoice.getCurrency().getCurrencySymbol() + " " + invoice.getDueAmount()
+                            + " : Due On : " + new SimpleDateFormat("MM/dd/yyyy").format(Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant()))
+                            + "......";
+                }
+            } else {
+                suggestedTransactionString = childModel.getTransactionType().getTransactionTypeName() + " : " + childModel.getExplainedTransactionCategory().getTransactionCategoryName()
+                        + " : " + (childModel.getTransactionDescription() != null ? childModel.getTransactionDescription() : "") + "......";
+            }
+        } else {
+            if (model.getRefObject() != null) {
+                if (model.getRefObject() instanceof Invoice) {
+                    Invoice invoice = (Invoice) model.getRefObject();
+                    suggestedTransactionString = model.getTransactionType().getTransactionTypeName() + " : " + model.getExplainedTransactionCategory().getTransactionCategoryName()
+                            + " : " + (model.getTransactionDescription() != null ? model.getTransactionDescription() + " : " : "") + invoice.getInvoiceReferenceNumber() + " : " + invoice.getInvoiceContact().getFirstName()
+                            + " : " + invoice.getCurrency().getCurrencySymbol() + " " + invoice.getDueAmount()
+                            + " : Due On : " + new SimpleDateFormat("MM/dd/yyyy").format(Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant()))
+                            + "......";
+                }
+            } else {
+                suggestedTransactionString = model.getTransactionType().getTransactionTypeName() + " : " + model.getExplainedTransactionCategory().getTransactionCategoryName()
+                        + " : " + (model.getTransactionDescription() != null ? model.getTransactionDescription() : "") + "......";
+            }
+        }
+        model.setSuggestedTransactionString(suggestedTransactionString);
+    }
+
+    public void acceptSuggestion(TransactionModel transactionModel) {
+        BigDecimal suggestionAmount = transactionModel.getTransactionAmount();
+        if (!transactionModel.getChildTransactionList().isEmpty()) {
+            int i = 0;
+            for (TransactionModel childModel : transactionModel.getChildTransactionList()) {
+                if (i == transactionModel.getChildTransactionList().size() - 1) {
+                    break;
+                }
+                suggestionAmount = suggestionAmount.subtract(childModel.getTransactionAmount());
+                i++;
+            }
+        }
+        if (transactionModel.getTransactionAmount().doubleValue() > suggestionAmount.doubleValue()) {
+            this.transactionModel = transactionModel.getChildTransactionList().get(transactionModel.getChildTransactionList().size() - 1);
+        } else {
+            this.transactionModel = transactionModel;
+        }
+        TransactionCategory category = transactionCategoryService.findByPK(TransactionCategoryConsatant.INVOICEPAYMENT_PK);
+        this.transactionModel.setTransactionType(category.getTransactionType());
+        this.transactionModel.setExplainedTransactionCategory(category);
+        this.transactionModel.setTransactionDescription("Invoice Paid");
+        this.transactionModel.setRefObject(invoiceService.findByPK(transactionModel.getReferenceId()));
+        this.transactionModel.setReferenceId(null);
+        updateTransactionDropDown();
     }
 
     public void updateTransactionDropDown() {
@@ -446,6 +544,12 @@ public class TransactionListController extends TransactionControllerHelper imple
             if (transactionModel.getChildTransactionList() != null && !transactionModel.getChildTransactionList().isEmpty()) {
                 datatableRowCount = datatableInitialRowCount;
                 for (TransactionModel childTransaction : transactionModel.getChildTransactionList()) {
+                    if (childTransaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.UNEXPLIANED
+                            || childTransaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.PARTIALLYEXPLIANED) {
+                        getSuggestionStringForUnexplainedOrPartial(childTransaction);
+                    } else {
+                        getSuggestionStringForExplianed(childTransaction);
+                    }
                     transactions.add(++parentTransIndex, childTransaction);
                     ++datatableRowCount;
                 }

@@ -112,6 +112,7 @@ public class TransactionControllerHelper {
             if (entity.getChildTransactionList() != null && !entity.getChildTransactionList().isEmpty()) {
                 TransactionModel remainingUnExplainedTransactionModel = new TransactionModel();
                 remainingUnExplainedTransactionModel.setTransactionId(0);
+                remainingUnExplainedTransactionModel.setBankAccount(entity.getBankAccount());
                 remainingUnExplainedTransactionModel.setDebitCreditFlag(entity.getDebitCreditFlag());
                 remainingUnExplainedTransactionModel.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.UNEXPLIANED));
                 remainingUnExplainedTransactionModel.setTransactionAmount(remainingUnExplainedAmount);

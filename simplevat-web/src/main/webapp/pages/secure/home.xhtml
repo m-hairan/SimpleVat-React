@@ -119,7 +119,7 @@
                                 <ui:include src="../content-loading-placeholder.xhtml"/>
                             </h:panelGroup>
                             <h:panelGroup id="vatActivityPanel" styleClass="vatActivityPanel">
-                                <p:chart type="bar" model="#{homeController.animatedModel2}" rendered="#{not empty homeController.animatedModel2.series}"
+                                <p:chart type="bar" model="#{homeController.animatedModel2}" rendered="#{homeController.renderVatInVatOutChart}"
                                          style="height:280px;margin-top: 20px;" responsive="true" />
                             </h:panelGroup>
                         </h:panelGroup>
