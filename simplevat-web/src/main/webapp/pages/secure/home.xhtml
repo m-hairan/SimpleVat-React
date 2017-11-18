@@ -109,12 +109,12 @@
                             <h:panelGroup styleClass="invoiceAndExpansePanelPlaceHolder" style="position:absolute;width:90%">
                                 <ui:include src="../content-loading-placeholder.xhtml"/>
                             </h:panelGroup>
-                            <h:panelGroup styleClass="invoiceAndExpansePanel" id="invoiceAndExpansePanel" style="display:none">
+                            <h:panelGroup styleClass="invoiceAndExpansePanel" id="invoiceAndExpansePanel">
                                 <p:chart type="line" model="#{homeController.animatedModel1}" rendered="#{not empty homeController.animatedModel1.series}"
                                          style="height:280px;margin-top: 20px;" responsive="true"/>
-                                <p:graphicImage value="/resources/images/placeholder/invoice_expanse_placeholder.png" width="360" height="300" rendered="#{empty homeController.animatedModel1.series}"/>
-                                <p:commandButton value="Create Your First Invoice" action="#{homeController.redirectToCreateInvoice}" style="position: absolute; top:115px;left:80px;padding-left: 17px;padding-right: 20px;" rendered="#{empty homeController.animatedModel1.series}"/>
-                                <p:commandButton value="Create Your First Expanse" action="#{homeController.redirectToCreateExpense}" style="position: absolute; top:155px;left:80px" rendered="#{empty homeController.animatedModel1.series}"/>
+                                <p:graphicImage styleClass="cashFlowChartPanel" value="/resources/images/placeholder/invoice_expanse_placeholder.png" width="360" height="300" style="display:none;" rendered="#{empty homeController.animatedModel1.series}"/>
+                                <p:commandButton styleClass="cashFlowChartPanel" value="Create Your First Invoice" action="#{homeController.redirectToCreateInvoice}" style="display:none;position: absolute; top:115px;left:80px;padding-left: 17px;padding-right: 20px;" rendered="#{empty homeController.animatedModel1.series}"/>
+                                <p:commandButton styleClass="cashFlowChartPanel" value="Create Your First Expanse" action="#{homeController.redirectToCreateExpense}" style="display:none;position: absolute; top:155px;left:80px" rendered="#{empty homeController.animatedModel1.series}"/>
                             </h:panelGroup>
                         </h:panelGroup>
                     </p:panel>
@@ -123,10 +123,10 @@
                             <h:panelGroup styleClass="vatActivityPanelPlaceHolder" style="position:absolute;width:90%">
                                 <ui:include src="../content-loading-placeholder.xhtml"/>
                             </h:panelGroup>
-                            <h:panelGroup id="vatActivityPanel" styleClass="vatActivityPanel" style="display:none">
+                            <h:panelGroup id="vatActivityPanel" styleClass="vatActivityPanel" >
                                 <p:chart type="bar" model="#{homeController.animatedModel2}" rendered="#{homeController.renderVatInVatOutChart}"
                                          style="height:280px;margin-top: 20px;" responsive="true" />
-                                <p:graphicImage value="/resources/images/placeholder/vatinout_placeholder.png" width="360" height="300" rendered="#{!homeController.renderVatInVatOutChart}"/>
+                                <p:graphicImage value="/resources/images/placeholder/vatinout_placeholder.png" styleClass="vatActivityPanel" style="display:none;" width="360" height="300" rendered="#{!homeController.renderVatInVatOutChart}"/>
                                 <!--<p:commandButton value="Create Your First Invoice" style="position: absolute; top:130px;left:85px" rendered="#{!homeController.renderVatInVatOutChart}"/>-->
                             </h:panelGroup>
                         </h:panelGroup>
@@ -146,7 +146,7 @@
                                                 <div class="ui-g">
                                                     <div class="ui-g-6">
                                                         <div style="color: #757575; font-size: 17px;">
-                                                            <p:commandLink value="#{value.bankName}" action="#{homeController.loadBankAccountTransaction}" style="color: #009688;">
+                                                            <p:commandLink value="#{value.bankAccountName}" action="#{homeController.loadBankAccountTransaction}" style="color: #009688;">
                                                                 <f:setPropertyActionListener value="#{value.bankAccountId}" target="#{homeController.selectedBankAccountId}"/>
                                                             </p:commandLink>
                                                         </div>
@@ -160,7 +160,7 @@
                                             </li>
                                         </ui:repeat>
                                     </ul>
-                                    <p:commandButton action="#{homeController.redirectToCreateBankAccount}" value="Create Your Bank Account" style="position: absolute; top:180px;left:95px"/>
+                                    <p:commandButton action="#{homeController.redirectToCreateBankAccount}"  value="Create Your Bank Account" style="position: absolute; top:180px;left:95px" rendered="#{homeController.bankAccountList.size() == 0}"/>
 
                                 </h:panelGroup>
                             </h:panelGroup>

@@ -175,7 +175,7 @@ public class TransactionListController extends TransactionControllerHelper imple
             for (Invoice invoice : invoiceList) {
                 if (suggestionAmount.doubleValue() == invoice.getDueAmount().doubleValue()) {
                     model.setReferenceId(invoice.getInvoiceId());
-                    TransactionCategory category = transactionCategoryService.findByPK(TransactionCategoryConsatant.INVOICEPAYMENT_PK);
+                    TransactionCategory category = transactionCategoryService.findByPK(TransactionCategoryConsatant.TRANSACTION_CATEGORY_INVOICE_PAYMENT);
                     suggestedTransactionString = category.getTransactionType().getTransactionTypeName() + " : " + category.getTransactionCategoryName()
                             + " : Invoice Paid : " + invoice.getInvoiceReferenceNumber() + " : " + invoice.getInvoiceContact().getFirstName()
                             + " : " + invoice.getCurrency().getCurrencySymbol() + " " + invoice.getDueAmount()
@@ -239,7 +239,7 @@ public class TransactionListController extends TransactionControllerHelper imple
         } else {
             this.transactionModel = transactionModel;
         }
-        TransactionCategory category = transactionCategoryService.findByPK(TransactionCategoryConsatant.INVOICEPAYMENT_PK);
+        TransactionCategory category = transactionCategoryService.findByPK(TransactionCategoryConsatant.TRANSACTION_CATEGORY_INVOICE_PAYMENT);
         this.transactionModel.setTransactionType(category.getTransactionType());
         this.transactionModel.setExplainedTransactionCategory(category);
         this.transactionModel.setTransactionDescription("Invoice Paid");
@@ -427,12 +427,6 @@ public class TransactionListController extends TransactionControllerHelper imple
         childTransaction.setTransactionDescription(transaction.getTransactionDescription());
         childTransaction.setTransactionAmount(transactionAmount);
         return childTransaction;
-    }
-
-    public void transactionCategoryListner(TransactionCategory category) {
-        if (category.getTransactionCategoryName().equals(TransactionCategoryConsatant.INVOICEPAYMENT)) {
-            renderedInvoice = true;
-        }
     }
 
     public void referenceListner(Object refObject) {
