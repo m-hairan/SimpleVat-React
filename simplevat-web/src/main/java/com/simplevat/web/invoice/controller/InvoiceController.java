@@ -218,6 +218,7 @@ public class InvoiceController extends BaseController implements Serializable {
         return validated;
     }
 
+    // TODO compare companycurrency and selected Currency
     public String exchangeRate(Currency currency) {
         String exchangeRateString = "";
         currencyConversion = currencyService.getCurrencyRateFromCurrencyConversion(currency.getCurrencyCode());

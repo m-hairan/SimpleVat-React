@@ -114,7 +114,7 @@ public class PurchaseController extends BaseController implements Serializable {
     @Getter
     @Setter
     private ContactModel contactModel;
-    
+
     private CurrencyConversion currencyConversion;
 
     @Autowired
@@ -188,7 +188,8 @@ public class PurchaseController extends BaseController implements Serializable {
         return transactionCategoryList;
 
     }
-    
+
+    // TODO compare companycurrency and selected Currency
     public String exchangeRate(Currency currency) {
         String exchangeRateString = "";
         currencyConversion = currencyService.getCurrencyRateFromCurrencyConversion(currency.getCurrencyCode());

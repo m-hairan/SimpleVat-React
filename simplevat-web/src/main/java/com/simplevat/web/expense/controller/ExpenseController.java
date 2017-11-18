@@ -71,7 +71,7 @@ public class ExpenseController extends BaseController implements Serializable {
 
     @Autowired
     private ProjectService projectService;
-    
+
     @Autowired
     private CompanyService companyService;
 
@@ -110,14 +110,14 @@ public class ExpenseController extends BaseController implements Serializable {
     @Getter
     @Setter
     String fileName;
-    
+
     @Getter
     @Setter
     private ContactModel contactModel;
-    
+
     @Getter
     private Company company;
-    
+
     private CurrencyConversion currencyConversion;
 
     @Getter
@@ -179,7 +179,8 @@ public class ExpenseController extends BaseController implements Serializable {
             selectedExpenseModel.setCurrency(defaultCurrency);
         }
     }
-    
+
+    // TODO compare companycurrency and selected Currency
     public String exchangeRate(Currency currency) {
         String exchangeRateString = "";
         currencyConversion = currencyService.getCurrencyRateFromCurrencyConversion(currency.getCurrencyCode());
@@ -224,7 +225,7 @@ public class ExpenseController extends BaseController implements Serializable {
     }
 
     public List<Contact> contacts(final String searchQuery) {
-        return contactService.getContacts(searchQuery,ContactTypeConstant.EMPLOYEE);
+        return contactService.getContacts(searchQuery, ContactTypeConstant.EMPLOYEE);
     }
 
     private boolean validateInvoiceLineItems() { //---------------
@@ -249,12 +250,11 @@ public class ExpenseController extends BaseController implements Serializable {
         }
         return true;
     }
-    
-    
+
     public void initCreateContact() {
         contactModel = new ContactModel();
     }
-    
+
     public void createContact() {
         Currency defaultCurrency = currencyService.getDefaultCurrency();
         final Contact contact = new Contact();
@@ -270,17 +270,15 @@ public class ExpenseController extends BaseController implements Serializable {
         if (defaultCurrency != null) {
             contactModel.setCurrency(defaultCurrency);
         }
-        
+
         if (contact.getContactId() != null) {
             contactService.update(contact);
         } else {
             contactService.persist(contact);
         }
-    selectedExpenseModel.setExpenseContact(contact);
-            
+        selectedExpenseModel.setExpenseContact(contact);
+
     }
-    
-    
 
     public String saveExpense() {
         if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
@@ -367,7 +365,7 @@ public class ExpenseController extends BaseController implements Serializable {
             User user = userServiceNew.findByPK(selectedExpenseModel.getUser().getUserId());
             expense.setUser(user);
         }
-         if (selectedExpenseModel.getExpenseContact() != null) {
+        if (selectedExpenseModel.getExpenseContact() != null) {
             Contact contact = contactService.findByPK(selectedExpenseModel.getExpenseContact().getContactId());
             expense.setExpenseContact(contact);
         }

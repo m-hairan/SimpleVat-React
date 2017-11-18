@@ -54,8 +54,8 @@
                     <p:message for="lastName" />
                 </h:panelGroup>
 
-                <p:outputLabel for="emailId" />
-                <h:panelGroup styleClass="md-inputfield">
+                <p:outputLabel for="emailId" rendered="#{userProfileController.currentUser.createdBy != 0}"/>
+                <h:panelGroup styleClass="md-inputfield" rendered="#{userProfileController.currentUser.createdBy != 0}">
                     <p:inputText id="emailId"
                                  required="true"
                                  maxlength="25"
@@ -67,6 +67,22 @@
                     </p:inputText>
                     <label>#{messages.emailId}</label>
                     <p:message for="emailId" />
+                </h:panelGroup>
+                
+                <p:outputLabel for="emailId1" rendered="#{userProfileController.currentUser.createdBy == 0}" />
+                <h:panelGroup styleClass="md-inputfield" rendered="#{userProfileController.currentUser.createdBy == 0}">
+                    <p:inputText id="emailId1"
+                                 required="true"
+                                 disabled="true"
+                                 maxlength="25"
+                                 requiredMessage="Please enter email address"
+                                 validatorMessage="Invalid email format"
+                                 value="#{userProfileController.currentUser.userEmailId}">
+                        <f:validateRegex
+                            pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                    </p:inputText>
+                    <label>#{messages.emailId}</label>
+                    <p:message for="emailId1" />
                 </h:panelGroup>
                 
                 <p:outputLabel for="dob" />

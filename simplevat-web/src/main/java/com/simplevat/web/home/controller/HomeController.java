@@ -162,6 +162,18 @@ public class HomeController implements Serializable {
         FacesUtil.setSelectedBankAccountId(selectedBankAccountId);
         return "/pages/secure/bankaccount/bank-transactions?faces-redirect=true";
     }
+    
+    public String redirectToCreateInvoice() {
+        return "/pages/secure/invoice/invoice?faces-redirect=true";
+    }
+    
+    public String redirectToCreateExpense() {
+        return "/pages/secure/expense/create-expense?faces-redirect=true";
+    }
+    
+    public String redirectToCreateBankAccount() {
+        return "/pages/secure/bankaccount/edit-bankaccount?faces-redirect=true";
+    }
 
     private void populateCashFlowChart() {
         renderCashFlowLineChartModel = false;

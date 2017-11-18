@@ -85,7 +85,7 @@ public class MenuController implements Serializable {
     private void addBankAccountMenuItem(DefaultMenuModel model) {
         if (PageAccessControl.hasAccess(ModuleName.BANK_MODULE)) {
             DefaultMenuItem item = new DefaultMenuItem("Bank Accounts");
-            item.setIcon("store");
+            item.setIcon("account_balance");
             item.setOutcome("/pages/secure/bankaccount/bankaccounts");
             model.addElement(item);
         }
@@ -112,7 +112,7 @@ public class MenuController implements Serializable {
     private void addTaxMenuItem(DefaultMenuModel model) {
         if (PageAccessControl.hasAccess(ModuleName.TAX_MODULE)) {
             DefaultMenuItem item = new DefaultMenuItem("Taxes");
-            item.setIcon("reply");
+            item.setIcon("exposure");
             item.setOutcome("/pages/secure/tax/index");
             model.addElement(item);
         }

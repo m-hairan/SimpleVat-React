@@ -87,8 +87,8 @@
                                         <label>#{messages.lastName}</label>
                                         <p:message for="lastName" />
                                     </h:panelGroup>
-                                    <p:outputLabel for="emailId" />
-                                    <h:panelGroup styleClass="md-inputfield">
+                                    <p:outputLabel for="emailId" rendered="#{userController.selectedUser.createdBy != 0}" />
+                                    <h:panelGroup styleClass="md-inputfield" rendered="#{userController.selectedUser.createdBy != 0}">
                                         <p:inputText id="emailId"
                                                      required="true"
                                                      maxlength="25"
@@ -100,6 +100,22 @@
                                         </p:inputText>
                                         <label>#{messages.emailId}</label>
                                         <p:message for="emailId" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="emailId1" rendered="#{userController.selectedUser.createdBy == 0}" />
+                                    <h:panelGroup styleClass="md-inputfield" rendered="#{userController.selectedUser.createdBy == 0}">
+                                        <p:inputText id="emailId1"
+                                                     required="true"
+                                                     disabled="true"
+                                                     maxlength="25"
+                                                     requiredMessage="Please enter email address"
+                                                     validatorMessage="Invalid email format"
+                                                     value="#{userController.selectedUser.userEmail}">
+                                            <f:validateRegex
+                                                pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                        </p:inputText>
+                                        <label>#{messages.emailId}</label>
+                                        <p:message for="emailId1" />
                                     </h:panelGroup>
 
                                     <p:outputLabel for="dob" />
@@ -114,8 +130,8 @@
                                         <p:message for="dob" />
                                     </h:panelGroup>
 
-                                    <p:outputLabel for="role" />
-                                    <h:panelGroup styleClass="md-inputfield">
+                                    <p:outputLabel for="role" rendered="#{userController.selectedUser.createdBy != 0}" />
+                                    <h:panelGroup styleClass="md-inputfield" rendered="#{userController.selectedUser.createdBy != 0}">
                                         <p:autoComplete
                                             id="role"
                                             converter="#{userRoleConverter}"
@@ -130,8 +146,25 @@
                                         <p:message for="role" />
                                     </h:panelGroup>
 
-                                    <p:outputLabel for="active" />
-                                    <h:panelGroup>
+                                    <p:outputLabel for="role1" rendered="#{userController.selectedUser.createdBy == 0}" />
+                                    <h:panelGroup styleClass="md-inputfield" rendered="#{userController.selectedUser.createdBy == 0}">
+                                        <p:autoComplete
+                                            id="role1"
+                                            converter="#{userRoleConverter}"
+                                            disabled="true"
+                                            dropdown="true"
+                                            forceSelection="true"
+                                            effect="fold"
+                                            completeMethod="#{userController.comoleteRole()}"
+                                            value="#{userController.selectedUser.role}"
+                                            var="role" itemLabel="#{role.roleName}" itemValue="#{role}"
+                                            required="true" requiredMessage="Please select Role."/>
+                                        <label>Role</label>
+                                        <p:message for="role1" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="active" rendered="#{userController.selectedUser.createdBy != 0}" />
+                                    <h:panelGroup rendered="#{userController.selectedUser.createdBy != 0}">
                                         <label>Status</label>
                                         <p:selectOneRadio value="#{userController.selectedUser.isActive}" id="active" required="true"
                                                           requiredMessage="Please select Status">
@@ -139,6 +172,17 @@
                                             <f:selectItem itemLabel="InActive" itemValue="false"/>
                                         </p:selectOneRadio>
                                         <p:message for="active" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="active1" rendered="#{userController.selectedUser.createdBy == 0}" />
+                                    <h:panelGroup rendered="#{userController.selectedUser.createdBy == 0}">
+                                        <label>Status</label>
+                                        <p:selectOneRadio value="#{userController.selectedUser.isActive}" disabled="true" id="active1" required="true"
+                                                          requiredMessage="Please select Status">
+                                            <f:selectItem itemLabel="Active" itemValue="true"/>
+                                            <f:selectItem itemLabel="InActive" itemValue="false"/>
+                                        </p:selectOneRadio>
+                                        <p:message for="active1" />
                                     </h:panelGroup>
                                 </p:panelGrid>
                             </p:fieldset>
