@@ -165,12 +165,17 @@ public class InvoiceController extends BaseController implements Serializable {
             selectedInvoiceModel.setInvoiceDate(new Date());
             selectedInvoiceModel.setInvoiceDueOn(30);
             selectedInvoiceModel.setInvoiceItems(new ArrayList());
+            selectedInvoiceModel.setInvoiceRefNo("1");
             configurationList = configurationService.getConfigurationList();
             if (configurationList != null) {
                 configuration = configurationList.stream().filter(conf -> conf.getName().equals(ConfigurationConstants.INVOICING_REFERENCE_PATTERN)).findFirst().get();
                 if (configuration.getValue() != null) {
                     selectedInvoiceModel.setInvoiceRefNo(invoiceModelHelper.getNextInvoiceRefNumber(configuration.getValue()));
                 }
+            }
+            if (configuration == null) {
+                configuration = new Configuration();
+                configuration.setName(ConfigurationConstants.INVOICING_REFERENCE_PATTERN);
             }
         }
         populateVatCategory();
@@ -352,7 +357,11 @@ public class InvoiceController extends BaseController implements Serializable {
             invoiceService.update(selectedInvoice);
         } else {
             configuration.setValue(selectedInvoice.getInvoiceReferenceNumber());
-            configurationService.update(configuration);
+            if (configuration.getId() != null) {
+                configurationService.update(configuration);
+            } else {
+                configurationService.persist(configuration);
+            }
             selectedInvoice.setCreatedBy(FacesUtil.getLoggedInUser().getUserId());
             invoiceService.persist(selectedInvoice);
         }
