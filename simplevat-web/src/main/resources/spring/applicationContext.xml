@@ -9,8 +9,8 @@
 
     <context:component-scan base-package="com.simplevat"/>
     <context:annotation-config/>
-    <bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration"/>
-    <bean class="org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory"/> 
+    <!--bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration"/>
+    <bean class="org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory"/--> 
      
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations" value="classpath:simplevat.properties"/>
