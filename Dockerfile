@@ -50,4 +50,4 @@ RUN set -x \
 EXPOSE 8080
 CMD ["catalina.sh", "run"]
 COPY /workspace/simplevat-web/target/ROOT.war  $CATALINA_HOME/webapps
-RUN cd $CATALINA_HOME/webapps && mv ROOT.war ROOT.war
+RUN cd $CATALINA_HOME/webapps
