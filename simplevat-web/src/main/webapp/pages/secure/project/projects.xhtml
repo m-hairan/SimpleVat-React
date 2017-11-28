@@ -31,8 +31,11 @@
                         <h:outputText value="#{project.projectName}"/>
                     </p:column>
 
-                    <p:column headerText="Project Budget" sortBy="#{project.projectBudget}" styleClass="amount" filterMatchMode="contains" filterBy="#{project.projectBudget}">
-                        <h:outputText value="#{project.projectBudget}"/>
+                    <p:column headerText="Expense Budget" sortBy="#{project.projectExpenseBudget}" styleClass="amount" filterMatchMode="contains" filterBy="#{project.projectExpenseBudget}">
+                        <h:outputText value="#{project.projectExpenseBudget}"/>
+                    </p:column>
+                    <p:column headerText="Revenue Budget" sortBy="#{project.projectRevenueBudget}" styleClass="amount" filterMatchMode="contains" filterBy="#{project.projectRevenueBudget}">
+                        <h:outputText value="#{project.projectRevenueBudget}"/>
                     </p:column>
                     <p:column headerText="VAT Number" sortBy="#{project.vatRegistrationNumber}" filterMatchMode="contains" filterBy="#{project.vatRegistrationNumber}">
                         <h:outputText value="#{project.vatRegistrationNumber}"/>

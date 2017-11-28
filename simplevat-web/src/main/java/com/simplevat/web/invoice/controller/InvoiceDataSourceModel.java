@@ -15,12 +15,14 @@ public class InvoiceDataSourceModel {
 
     String quantity;
     String details;
+    String productOrService;
     BigDecimal unitPrice;
     BigDecimal vat;
     BigDecimal netSubtotal;
 
-    public InvoiceDataSourceModel(String quantity, String details, BigDecimal unitPrice, BigDecimal vat, BigDecimal netSubtotal) {
+    public InvoiceDataSourceModel(String quantity, String productOrService, String details, BigDecimal unitPrice, BigDecimal vat, BigDecimal netSubtotal) {
         this.quantity = quantity;
+        this.productOrService = productOrService;
         this.details = details;
         this.unitPrice = unitPrice;
         this.vat = vat;
@@ -66,4 +68,14 @@ public class InvoiceDataSourceModel {
     public void setNetSubtotal(BigDecimal netSubtotal) {
         this.netSubtotal = netSubtotal;
     }
+
+    public String getProductOrService() {
+        return productOrService;
+    }
+
+    public void setProductOrService(String productOrService) {
+        this.productOrService = productOrService;
+    }
+    
+    
 }

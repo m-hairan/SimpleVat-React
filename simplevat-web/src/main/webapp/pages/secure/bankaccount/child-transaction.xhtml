@@ -57,11 +57,11 @@
                 <label>#{messages.description}</label>
             </h:panelGroup>
             <h:panelGroup id="referancePanelLabel">
-                <p:outputLabel for="invoice1" rendered="#{transaction.explainedTransactionCategory.transactionCategoryCode == 1}"/>
+                <p:outputLabel for="invoice1" rendered="#{transaction.explainedTransactionCategory.transactionCategoryId == 1}"/>
+                <p:outputLabel for="purchase1" rendered="#{transaction.explainedTransactionCategory.parentTransactionCategory.transactionCategoryId == 43}"/>
             </h:panelGroup>
             <h:panelGroup id="referancePanel">
-                <h:panelGroup id="InvoiceList" styleClass="md-inputfield" rendered="#{transaction.explainedTransactionCategory.transactionCategoryCode == 1}">
-                    <!--<p:outputLabel for="invoice1"  />-->
+                <h:panelGroup id="InvoiceList" styleClass="md-inputfield" rendered="#{transaction.explainedTransactionCategory.transactionCategoryId == 1}">
                     <p:autoComplete id="invoice1" converter="#{invoiceConverter}"
                                     dropdown="true"
                                     forceSelection="true"
@@ -73,16 +73,41 @@
                                     itemValue="#{invoice}"
                                     itemLabel="#{invoice.invoiceReferenceNumber} : #{invoice.dueAmount} (#{invoice.invoiceContact.firstName})"
                                     required="true" requiredMessage="Please select invoice reference.">
-                        <p:ajax event="itemSelect" listener="#{transactionListController.referenceListner(transaction.refObject)}"/>
                     </p:autoComplete>
                     <label>Invoice Reference</label>
                 </h:panelGroup>
+                <h:panelGroup id="PurchaseList" styleClass="md-inputfield" rendered="#{transaction.explainedTransactionCategory.parentTransactionCategory.transactionCategoryId == 43}">
+                    <p:autoComplete id="purchase1" converter="#{purchaseConverter}"
+                                    dropdown="true"
+                                    forceSelection="true"
+                                    effect="fold" 
+                                    groupBy="#{(transaction.transactionAmount == purchase.purchaseDueAmount)?'Suggested':'Others'}"
+                                    completeMethod="#{transactionListController.completePurchase()}"
+                                    value="#{transaction.refObject}"
+                                    var="purchase"
+                                    itemValue="#{purchase}"
+                                    itemLabel="#{purchase.receiptNumber} : #{purchase.purchaseDueAmount} (#{purchase.purchaseContact.firstName})"
+                                    required="true" requiredMessage="Please select purchase reference.">
+                    </p:autoComplete>
+                    <label>Purchase Reference</label>
+                </h:panelGroup>
             </h:panelGroup>
+
         </p:panelGrid>
-        <p:commandButton value="#{messages.save}" icon="ui-icon-save" update="transactionsTable"
-                         action="#{transactionListController.updateTransactionDropDown()}">
-            <f:setPropertyActionListener target="#{transactionListController.transactionModel}" value="#{transaction}" />
-        </p:commandButton>
+        <p:panelGrid  columns="3" 
+                      columnClasses="ui-grid-col-1, ui-grid-col-1, ui-grid-col-1"
+                      layout="grid" styleClass="ui-panelgrid-blank form-group">
+            <p:commandButton value="#{messages.explain}" icon="ui-icon-save" update="transactionsTable"
+                             action="#{transactionListController.updateTransactionDropDown()}">
+                <f:setPropertyActionListener target="#{transactionListController.transactionModel}" value="#{transaction}" />
+            </p:commandButton>
+            <p:commandButton value="#{messages.delete}" icon="ui-icon-delete" update="transactionsTable"
+                             action="#{transactionController.deleteTransaction}">
+                <f:setPropertyActionListener target="#{transactionController.selectedTransactionModel}" value="#{transaction}" />
+            </p:commandButton>
+            <p:commandButton value="#{messages.cancel}" icon="ui-icon-cancel" update="transactionsTable"
+                             action="#{transactionListController.expandCollapse(transaction, btnBinding.clientId)}"/>
+        </p:panelGrid>
 
     </p:panelGrid>
 </div>

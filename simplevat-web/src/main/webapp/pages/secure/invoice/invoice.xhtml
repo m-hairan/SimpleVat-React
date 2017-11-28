@@ -59,7 +59,7 @@
                                                      required="true"
                                                      disabled="true"
                                                      requiredMessage="Please enter Invoice Ref. No."
-                                                     value="#{invoiceController.selectedInvoiceModel.invoiceRefNo}"/>
+                                                     value="#{invoiceController.selectedInvoiceModel.invoiceReferenceNumber}"/>
                                         <label>#{messages.invoice_ref_no}</label>
                                         <p:message for="invoiceId" />
                                     </h:panelGroup>
@@ -74,7 +74,7 @@
                                                         required="true"
                                                         requiredMessage="Please select Contact"
                                                         completeMethod="#{invoiceController.contacts}" 
-                                                        value="#{invoiceController.selectedInvoiceModel.contact}" 
+                                                        value="#{invoiceController.selectedInvoiceModel.invoiceContact}" 
                                                         var="contact"
                                                         itemValue="#{contact.contactId}"
                                                         itemLabel="#{contact.firstName} #{contact.lastName}">
@@ -163,25 +163,25 @@
                                         <label>#{messages.currency}</label>
                                         <p:message for="currency" />
                                     </h:panelGroup>
-                                    <p:outputLabel for="description" />
+                                    <p:outputLabel for="notes" />
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputTextarea rows="5" 
-                                                         id="description"
+                                                         id="notes"
                                                          cols="30"
-                                                         value="#{invoiceController.selectedInvoiceModel.invoiceText}"
+                                                         value="#{invoiceController.selectedInvoiceModel.invoiceNotes}"
                                                          maxlength="255"
                                                          counter="counterValue"
                                                          counterTemplate="{0} characters remaining."
                                                          autoResize="false" />
                                         <h:outputText id="counterValue" />
-                                        <label>#{messages.invoice_text}</label>
+                                        <label>#{messages.invoice_notes}</label>
                                     </h:panelGroup>
                                 </p:panelGrid>
                             </p:fieldset>
                             <p:fieldset legend="Invoice Item Details" toggleable="true" 
                                         toggleSpeed="300">
                                 <p:messages autoUpdate="true" id="validationId" closable="true" for="validationId" />
-                                <p:dataTable value="#{invoiceController.selectedInvoiceModel.invoiceItems}"
+                                <p:dataTable value="#{invoiceController.selectedInvoiceModel.invoiceLineItems}"
                                              var="invoiceItem" 
                                              editMode="cell"
                                              editable="true"
@@ -290,7 +290,7 @@
                                         </h:outputText>
                                     </p:column>
 
-                                    <p:columnGroup type="footer" rendered="#{invoiceController.selectedInvoiceModel.invoiceItems.size() > 0}">  
+                                    <p:columnGroup type="footer" rendered="#{invoiceController.selectedInvoiceModel.invoiceLineItems.size() > 0}">  
                                         <p:row >  
 
 
@@ -365,7 +365,7 @@
                                 </p:panelGrid>
                             </p:fieldset>
                             <h:panelGroup id="exchangeCurrency"  >
-                               <p:fieldset legend="Currency Exchange Details"
+                                <p:fieldset legend="Currency Exchange Details"
                                             rendered="false">
 
                                     <p:panelGrid columns="6" 
@@ -378,7 +378,7 @@
                                         <h:panelGroup styleClass="md-inputwrapper-filled">
                                             <label>Exchange Rate :-   </label>
                                             <h:outputText id="exchangerate"
-                                                         value="#{invoiceController.exchangeRate(invoiceController.selectedInvoiceModel.currencyCode)}" />
+                                                          value="#{invoiceController.exchangeRate(invoiceController.selectedInvoiceModel.currencyCode)}" />
                                         </h:panelGroup>
 
 
@@ -386,13 +386,51 @@
                                         <h:panelGroup styleClass="md-inputwrapper-filled">
                                             <label>Total Value :-    </label>
                                             <h:outputText id="totalvalue"
-                                                         value="#{invoiceController.totalAmountInHomeCurrency(invoiceController.selectedInvoiceModel.currencyCode)}" >
+                                                          value="#{invoiceController.totalAmountInHomeCurrency(invoiceController.selectedInvoiceModel.currencyCode)}" >
                                                 <f:convertNumber type="currency" currencySymbol="#{invoiceController.company.companyCountryCode.currencyCode.currencySymbol} "/>
                                             </h:outputText>
                                         </h:panelGroup>
                                     </p:panelGrid>
                                 </p:fieldset>
                             </h:panelGroup>
+
+                            <style>
+                                .ui-dialog .ui-dialog-content {
+                                    padding: 0 !important;
+                                }
+
+                            </style>
+
+                            <p:dialog widgetVar="invoiceMailWidget" modal="true" resizable="false" 
+                                      draggable="false" style="padding: 0;"
+                                      responsive="true" header="Send Invoice"
+                                      hideEffect="scale">
+                                <p:panelGrid columns="1" 
+                                             columnClasses="ui-grid-col-0,ui-grid-col-12" 
+                                             layout="grid" 
+                                             styleClass="ui-panelgrid-blank form-group"
+                                             style="border:0px none; background-color:transparent;">
+                                    <h:panelGroup styleClass="md-inputwrapper-filled">
+                                        <label>Default E-Mail: </label>
+                                        <h:outputText id="defaultMail"
+                                                      value="#{invoiceController.selectedInvoiceModel.invoiceContact.billingEmail}" />
+                                    </h:panelGroup>
+
+                                    <label>Enter More Mail Addresses : </label>
+                                    <h:panelGroup styleClass="md-inputwrapper-filled">
+
+                                        <p:chips id="addMoreMail" value="#{invoiceMailController.moreEmails}" />
+                                    </h:panelGroup>
+                                </p:panelGrid>
+                                <f:facet name="footer" >
+                                    <p:commandButton value="Send" action="#{invoiceMailController.sendInvoiceMail()}" process="invoice" onclick="PF('invoiceMailWidget').hide();" />
+                                    <p:commandButton value="Cancel" onclick="PF('invoiceMailWidget').hide();" />
+                                </f:facet>
+                            </p:dialog>
+
+
+
+
                         </div>
                     </div>
                 </div>
@@ -409,6 +447,7 @@
                                              update="@form"
                                              validateClient="true"
                                              icon="ui-icon-forward" />
+
                         </ui:fragment>
                         <ui:fragment rendered="#{invoiceController.selectedInvoiceModel.invoiceId != null}">
                             <p:commandButton action="#{invoiceController.saveInvoice()}"
@@ -422,11 +461,17 @@
                                              validateClient="true"
                                              icon="ui-icon-forward" />
                         </ui:fragment>
-
+                        <p:commandButton action="#{invoiceController.saveInvoice()}" rendered="#{invoiceController.selectedInvoiceModel.status != 3}"
+                                         value="#{messages.CashPayment}"
+                                         validateClient="true"
+                                         update="@form"
+                                         icon="ui-icon-attach-money" >
+                            <f:setPropertyActionListener target="#{invoiceController.selectedInvoiceModel.paymentMode}" value="1" />
+                        </p:commandButton>
                         <p:commandButton action="#{invoiceController.printInvoice()}" rendered="#{invoiceController.renderPrintInvoice}"
-                                         value="#{messages.print_invoice}"
+                                         value="#{messages.print_invoice}" update="PDF" 
                                          icon="ui-icon-print" />
-                        <p:commandButton action="#{invoiceMailController.sendInvoiceMail()}" rendered="#{invoiceController.renderPrintInvoice}"
+                        <p:commandButton onclick="PF('invoiceMailWidget').show();" rendered="#{invoiceController.renderPrintInvoice}"
                                          value="#{messages.Send_By_Mail}"
                                          icon="ui-icon-mail" />
                         <span class="ui-separator" style="padding-right: 5px;">
@@ -440,8 +485,13 @@
                     </f:facet>
                 </p:toolbar>
             </div>
+
         </h:form>
-        <ui:include src="invoicePDF.xhtml"/>
+        <h:panelGroup id="PDF">
+            <h:panelGroup  rendered="#{invoiceController.renderPDF}">
+                <ui:include src="invoicePDF.xhtml" />
+            </h:panelGroup>
+        </h:panelGroup>
         <ui:include src="add-contact-popup.xhtml" />
     </ui:define>
 </ui:composition>

@@ -436,7 +436,10 @@
                                              action="#{expenseController.saveAndContinueExpense}" />
                         </ui:fragment>
 
-
+                        <p:commandButton value="#{messages.CashPayment}" icon="ui-icon-attach-money" update="createExpenseForm"
+                                             action="#{expenseController.saveExpense}" >
+                            <f:setPropertyActionListener target="#{expenseController.selectedExpenseModel.paymentMode}" value="1" />
+                        </p:commandButton>
                         <span class="ui-separator" style="padding-right: 5px;"> <span
                                 class="fa fa-ellipsis-v SoftGray" />
                         </span>

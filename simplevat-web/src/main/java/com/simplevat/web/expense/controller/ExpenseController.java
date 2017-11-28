@@ -284,51 +284,7 @@ public class ExpenseController extends BaseController implements Serializable {
         if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
             return "";
         }
-        User loggedInUser = FacesUtil.getLoggedInUser();
-        Expense expense = controllerHelper.getExpense(selectedExpenseModel);
-        expense.setLastUpdateDate(LocalDateTime.now());
-        expense.setLastUpdateBy(loggedInUser.getUserId());
-        expense.setDeleteFlag(false);
-        expense.setCreatedBy(loggedInUser.getUserId());
-
-        if (selectedExpenseModel.getReceiptAttachmentBinary() != null) {
-            expense.setReceiptAttachmentBinary(selectedExpenseModel.getReceiptAttachmentBinary());
-        }
-
-        if (selectedExpenseModel.getTransactionType() != null) {
-            TransactionType transactionType = transactionTypeService.getTransactionType(selectedExpenseModel.getTransactionType().getTransactionTypeCode());
-            expense.setTransactionType(transactionType);
-        }
-        if (selectedExpenseModel.getTransactionCategory() != null) {
-            TransactionCategory transactionCategory = transactionCategoryService.findByPK(selectedExpenseModel.getTransactionCategory().getTransactionCategoryCode());
-            expense.setTransactionCategory(transactionCategory);
-        }
-        if (selectedExpenseModel.getCurrency() != null) {
-            Currency currency = currencyService.getCurrency(selectedExpenseModel.getCurrency().getCurrencyCode());
-            expense.setCurrency(currency);
-        }
-        if (selectedExpenseModel.getProject() != null) {
-            Project project = projectService.findByPK(selectedExpenseModel.getProject().getProjectId());
-            expense.setProject(project);
-        }
-        if (selectedExpenseModel.getUser() != null) {
-            User user = userServiceNew.findByPK(selectedExpenseModel.getUser().getUserId());
-            expense.setUser(user);
-        }
-
-        if (selectedExpenseModel.getExpenseContact() != null) {
-            Contact contact = contactService.findByPK(selectedExpenseModel.getExpenseContact().getContactId());
-            expense.setExpenseContact(contact);
-        }
-
-        expense.setExpenseAmount(total);
-
-        if (expense.getExpenseId() == null || expense.getExpenseId() == 0) {
-            expenseService.persist(expense);
-        } else {
-
-            expenseService.update(expense, expense.getExpenseId());
-        }
+        save();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense saved successfully"));
         return "/pages/secure/expense/expenses.xhtml?faces-redirect=true";
     }
@@ -337,50 +293,38 @@ public class ExpenseController extends BaseController implements Serializable {
         if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
             return "";
         }
-        User loggedInUser = FacesUtil.getLoggedInUser();
-        Expense expense = controllerHelper.getExpense(selectedExpenseModel);
-
-        expense.setLastUpdateDate(LocalDateTime.now());
-        expense.setLastUpdateBy(loggedInUser.getUserId());
-        expense.setDeleteFlag(false);
-        expense.setCreatedBy(loggedInUser.getUserId());
-
-        if (selectedExpenseModel.getTransactionType() != null) {
-            TransactionType transactionType = transactionTypeService.getTransactionType(selectedExpenseModel.getTransactionType().getTransactionTypeCode());
-            expense.setTransactionType(transactionType);
-        }
-        if (selectedExpenseModel.getTransactionCategory() != null) {
-            TransactionCategory transactionCategory = transactionCategoryService.findByPK(selectedExpenseModel.getTransactionCategory().getTransactionCategoryCode());
-            expense.setTransactionCategory(transactionCategory);
-        }
-        if (selectedExpenseModel.getCurrency() != null) {
-            Currency currency = currencyService.getCurrency(selectedExpenseModel.getCurrency().getCurrencyCode());
-            expense.setCurrency(currency);
-        }
-        if (selectedExpenseModel.getProject() != null) {
-            Project project = projectService.findByPK(selectedExpenseModel.getProject().getProjectId());
-            expense.setProject(project);
-        }
-        if (selectedExpenseModel.getUser() != null) {
-            User user = userServiceNew.findByPK(selectedExpenseModel.getUser().getUserId());
-            expense.setUser(user);
-        }
-        if (selectedExpenseModel.getExpenseContact() != null) {
-            Contact contact = contactService.findByPK(selectedExpenseModel.getExpenseContact().getContactId());
-            expense.setExpenseContact(contact);
-        }
-
-        if (expense.getExpenseId() == null || expense.getExpenseId() == 0) {
-            expenseService.persist(expense);
-        } else {
-            if (selectedExpenseModel.getReceiptAttachmentBinary() != null) {
-                expense.setReceiptAttachmentBinary(selectedExpenseModel.getReceiptAttachmentBinary());
-            }
-            expenseService.update(expense, expense.getExpenseId());
-        }
-        this.setSelectedExpenseModel(new ExpenseModel());
+        save();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense saved successfully"));
         return "/pages/secure/expense/create-expense.xhtml?faces-redirect=true";
+    }
+
+    private void save() {
+        User loggedInUser = FacesUtil.getLoggedInUser();
+        Expense expense = controllerHelper.getExpense(selectedExpenseModel);
+        expense.setExpenseAmount(total);
+        if (selectedExpenseModel.getReceiptAttachmentBinary() != null) {
+            expense.setReceiptAttachmentBinary(selectedExpenseModel.getReceiptAttachmentBinary());
+        }
+        if (expense.getExpenseId() == null || expense.getExpenseId() == 0) {
+            expense.setDeleteFlag(false);
+            expense.setCreatedBy(loggedInUser.getUserId());
+            expense.setCreatedDate(LocalDateTime.now());
+            if (expense.getProject() != null) {
+                projectService.updateProjectExpenseBudget(expense.getExpenseAmount(), expense.getProject());
+            }
+            companyService.updateCompanyExpenseBudget(expense.getExpenseAmount(), company);
+            expenseService.persist(expense);
+        } else {
+            expense.setLastUpdateDate(LocalDateTime.now());
+            expense.setLastUpdateBy(loggedInUser.getUserId());
+            Expense prevExpense = expenseService.findByPK(expense.getExpenseId());
+            BigDecimal defferenceAmount = expense.getExpenseAmount().subtract(prevExpense.getExpenseAmount());
+            if (expense.getProject() != null) {
+                projectService.updateProjectExpenseBudget(defferenceAmount, expense.getProject());
+            }
+            companyService.updateCompanyExpenseBudget(defferenceAmount, company);
+            expenseService.update(expense);
+        }
     }
 
     public void fileUploadListener(FileUploadEvent e) {

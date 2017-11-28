@@ -6,7 +6,7 @@
                 xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
                 template="/WEB-INF/templates/template.xhtml">
 
-    <ui:define name="title">New #{message.transactioncategory}</ui:define>
+    <ui:define name="title">New #{messages.transactioncategory}</ui:define>
 
     <ui:define name="content">
 
@@ -18,10 +18,10 @@
                     <div class="ui-g">
 
                         <div class="ui-g-12">
-                            <ui:fragment rendered="#{transactionCategoryView.transactionCategoryModel.transactionCategoryCode != null}">
+                            <ui:fragment rendered="#{transactionCategoryView.transactionCategoryModel.transactionCategoryId != null}" >
                                 <h1>#{messages.EditTransactionCategory}</h1>
                             </ui:fragment>
-                            <ui:fragment rendered="#{transactionCategoryView.transactionCategoryModel.transactionCategoryCode == null}">
+                            <ui:fragment rendered="#{transactionCategoryView.transactionCategoryModel.transactionCategoryId == null}" >
                                 <h1>#{messages.NewTransactionCategory}</h1>
                             </ui:fragment>
                             <div class="card card-w-title">
@@ -35,16 +35,25 @@
                                         <p:outputLabel for="categoryName"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText id="categoryName"
-                                                value="#{transactionCategoryView.transactionCategoryModel.transactionCategoryName}" 
-                                                required="true" requiredMessage="Please enter Category Name."/>
+                                                         value="#{transactionCategoryView.transactionCategoryModel.transactionCategoryName}" 
+                                                         required="true" requiredMessage="Please enter Category Name."/>
                                             <label>#{messages.transactionCategoryName}</label>
                                             <p:message for="categoryName"/>
+                                        </h:panelGroup>
+
+                                        <p:outputLabel for="categoryCode"/>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText id="categoryCode"
+                                                         value="#{transactionCategoryView.transactionCategoryModel.transactionCategoryCode}" 
+                                                         required="true" requiredMessage="Please enter Category Name."/>
+                                            <label>#{messages.transactionCategoryCode}</label>
+                                            <p:message for="categoryCode"/>
                                         </h:panelGroup>
 
                                         <p:outputLabel for="CategoryDescription"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText id="CategoryDescription"
-                                                value="#{transactionCategoryView.transactionCategoryModel.transactionCategoryDescription}" />
+                                                         value="#{transactionCategoryView.transactionCategoryModel.transactionCategoryDescription}" />
                                             <label>#{messages.transactionCategoryDescription}</label>
                                         </h:panelGroup>
 
@@ -108,7 +117,7 @@
 
                 <p:toolbar>
                     <f:facet name="left">
-                        <ui:fragment rendered="#{transactionCategoryView.transactionCategoryModel.transactionCategoryCode == null}">
+                        <ui:fragment rendered="#{transactionCategoryView.transactionCategoryModel.transactionCategoryId == null}">
 
                             <p:commandButton value="#{messages.save}" icon="ui-icon-save" update="createTransactionCategoryForm"
                                              action="#{transactionCategoryView.save}" />
@@ -117,7 +126,7 @@
                                              icon="ui-icon-forward"
                                              action="#{transactionCategoryView.saveAndContinue}" />
                         </ui:fragment>
-                        <ui:fragment rendered="#{transactionCategoryView.selectedTransactionCategory.transactionCategoryCode > 0}">
+                        <ui:fragment rendered="#{transactionCategoryView.transactionCategoryModel.transactionCategoryId > 0}">
 
                             <p:commandButton value="#{messages.update}" icon="ui-icon-save" update="createTransactionCategoryForm"
                                              action="#{transactionCategoryView.update}" />

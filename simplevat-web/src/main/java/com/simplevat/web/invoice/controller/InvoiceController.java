@@ -46,7 +46,8 @@ import com.simplevat.service.VatCategoryService;
 import com.simplevat.web.common.controller.BaseController;
 import com.simplevat.web.constant.ConfigurationConstants;
 import com.simplevat.web.constant.ContactTypeConstant;
-import com.simplevat.web.constant.InvoiceStatusConstant;
+import com.simplevat.web.constant.InvoicePaymentModeConstant;
+import com.simplevat.web.constant.InvoicePurchaseStatusConstant;
 import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.utils.FacesUtil;
 import java.math.BigInteger;
@@ -129,7 +130,10 @@ public class InvoiceController extends BaseController implements Serializable {
     private List<VatCategory> vatCategoryList = new ArrayList<>();
 
     @Getter
-    private boolean renderPrintInvoice;
+    private boolean renderPrintInvoice = false;
+
+    @Getter
+    private boolean renderPDF = false;
 
     @Getter
     @Setter
@@ -151,10 +155,9 @@ public class InvoiceController extends BaseController implements Serializable {
         Object objSelectedInvoice = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedInvoiceModelId");
         System.out.println("objSelectedInvoice :" + objSelectedInvoice);
         if (objSelectedInvoice != null) {
-
+            renderPrintInvoice = true;
             selectedInvoice = invoiceService.findByPK(Integer.parseInt(objSelectedInvoice.toString()));
             selectedInvoiceModel = invoiceModelHelper.getInvoiceModel(selectedInvoice);
-            renderPrintInvoice = true;
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("invoiceId", selectedInvoice.getInvoiceId());
         } else {
             selectedInvoiceModel = new InvoiceModel();
@@ -164,13 +167,13 @@ public class InvoiceController extends BaseController implements Serializable {
             selectedInvoiceModel.setDiscount(new BigDecimal(0));
             selectedInvoiceModel.setInvoiceDate(new Date());
             selectedInvoiceModel.setInvoiceDueOn(30);
-            selectedInvoiceModel.setInvoiceItems(new ArrayList());
-            selectedInvoiceModel.setInvoiceRefNo("1");
+            selectedInvoiceModel.setInvoiceLineItems(new ArrayList());
+            selectedInvoiceModel.setInvoiceReferenceNumber("1");
             configurationList = configurationService.getConfigurationList();
             if (configurationList != null) {
                 configuration = configurationList.stream().filter(conf -> conf.getName().equals(ConfigurationConstants.INVOICING_REFERENCE_PATTERN)).findFirst().get();
                 if (configuration.getValue() != null) {
-                    selectedInvoiceModel.setInvoiceRefNo(invoiceModelHelper.getNextInvoiceRefNumber(configuration.getValue()));
+                    selectedInvoiceModel.setInvoiceReferenceNumber(invoiceModelHelper.getNextInvoiceRefNumber(configuration.getValue()));
                 }
             }
             if (configuration == null) {
@@ -201,7 +204,7 @@ public class InvoiceController extends BaseController implements Serializable {
     }
 
     public void deleteLineItem(InvoiceItemModel itemModel) {
-        selectedInvoiceModel.getInvoiceItems().remove(itemModel);
+        selectedInvoiceModel.getInvoiceLineItems().remove(itemModel);
         if (itemModel.getSubTotal() != null && discountAmount != null) {
             total = total.subtract(itemModel.getSubTotal()).add(discountAmount);
             updateSubTotalOnDiscountAdded();
@@ -210,7 +213,7 @@ public class InvoiceController extends BaseController implements Serializable {
 
     private boolean validateInvoiceLineItems() { //---------------
         boolean validated = true;
-        for (InvoiceItemModel lastItem : selectedInvoiceModel.getInvoiceItems()) {
+        for (InvoiceItemModel lastItem : selectedInvoiceModel.getInvoiceLineItems()) {
 
             if (lastItem.getUnitPrice() == null || lastItem.getQuatity() < 1 || lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0) {
                 FacesMessage message = new FacesMessage("Please enter proper detail for all invoice items.");
@@ -250,7 +253,7 @@ public class InvoiceController extends BaseController implements Serializable {
     public void calculateDiscount() {
         if (selectedInvoiceModel.getDiscount() != null && total != null) {
             totalInvoiceCalculation = new BigDecimal(0);
-            List<InvoiceItemModel> invoiceItem = selectedInvoiceModel.getInvoiceItems();
+            List<InvoiceItemModel> invoiceItem = selectedInvoiceModel.getInvoiceLineItems();
             if (invoiceItem != null) {
                 for (InvoiceItemModel invoice : invoiceItem) {
                     if (invoice.getSubTotal() != null) {
@@ -265,7 +268,7 @@ public class InvoiceController extends BaseController implements Serializable {
     }
 
     private boolean validateAtLeastOneItem() {
-        if (selectedInvoiceModel.getInvoiceItems().size() < 1) {
+        if (selectedInvoiceModel.getInvoiceLineItems().size() < 1) {
             FacesMessage message = new FacesMessage("Please add atleast one item to create Invoice.");
             message.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("validationId", message);
@@ -325,6 +328,7 @@ public class InvoiceController extends BaseController implements Serializable {
     }
 
     public void printInvoice() {
+        renderPDF = true;
         FacesContext facesContext = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
         session.setAttribute("invoiceId", selectedInvoice.getInvoiceId());
@@ -336,24 +340,45 @@ public class InvoiceController extends BaseController implements Serializable {
         if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
             return "";
         }
-        selectedInvoiceModel.setInvoiceDueDate(getDueDate(selectedInvoiceModel));
-        System.out.println("total===============" + total);
-        selectedInvoiceModel.setInvoiceAmount(total);
+        save();
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        context.addMessage(null, new FacesMessage("Invoice Saved SuccessFully"));
+        return "list?faces-redirect=true";
 
-        selectedInvoiceModel.setDueAmount(total);
-        if (selectedInvoiceModel.getDueAmount().doubleValue() == selectedInvoiceModel.getInvoiceAmount().doubleValue()) {
-            selectedInvoiceModel.setStatus(InvoiceStatusConstant.UNPAID);
-        } else if (selectedInvoiceModel.getDueAmount().doubleValue() < selectedInvoiceModel.getInvoiceAmount().doubleValue()) {
-            if (selectedInvoiceModel.getDueAmount().doubleValue() == 0) {
-                selectedInvoiceModel.setStatus(InvoiceStatusConstant.PAID);
-            } else {
-                selectedInvoiceModel.setStatus(InvoiceStatusConstant.PARTIALPAID);
-            }
+    }
+
+    public void saveAndAddMoreInvoice() {
+        if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
+            return;
         }
+        save();
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        context.addMessage(null, new FacesMessage("Invoice Saved SuccessFully"));
+        init();
+    }
+
+    private void save() {
+        selectedInvoiceModel.setInvoiceDueDate(getDueDate(selectedInvoiceModel));
+        selectedInvoiceModel.setInvoiceAmount(total);
         selectedInvoice = invoiceModelHelper.getInvoiceEntity(selectedInvoiceModel);
 
         if (selectedInvoice.getInvoiceId() != null && selectedInvoice.getInvoiceId() > 0) {
             selectedInvoice.setLastUpdateBy(FacesUtil.getLoggedInUser().getUserId());
+            Invoice prevInvoice = invoiceService.findByPK(selectedInvoice.getInvoiceId());
+            BigDecimal defferenceAmount = selectedInvoice.getInvoiceAmount().subtract(prevInvoice.getInvoiceAmount());
+            if (selectedInvoice.getPaymentMode() == null) {
+                selectedInvoice.setDueAmount(selectedInvoice.getDueAmount().add(defferenceAmount));
+                updateDueAmountAndStatus();
+            } else if (selectedInvoice.getPaymentMode() == InvoicePaymentModeConstant.CASH) {
+                selectedInvoice.setDueAmount(new BigDecimal(0));
+                selectedInvoice.setStatus(InvoicePurchaseStatusConstant.PAID);
+            }
+            if (selectedInvoice.getInvoiceProject() != null) {
+                projectService.updateProjectRevenueBudget(defferenceAmount, selectedInvoice.getInvoiceProject());
+            }
+            companyService.updateCompanyRevenueBudget(defferenceAmount, company);
             invoiceService.update(selectedInvoice);
         } else {
             configuration.setValue(selectedInvoice.getInvoiceReferenceNumber());
@@ -363,44 +388,38 @@ public class InvoiceController extends BaseController implements Serializable {
                 configurationService.persist(configuration);
             }
             selectedInvoice.setCreatedBy(FacesUtil.getLoggedInUser().getUserId());
+            if (selectedInvoice.getPaymentMode() == null) {
+                selectedInvoice.setDueAmount(selectedInvoice.getInvoiceAmount());
+                updateDueAmountAndStatus();
+            } else if (selectedInvoice.getPaymentMode() == InvoicePaymentModeConstant.CASH) {
+                selectedInvoice.setDueAmount(new BigDecimal(0));
+                selectedInvoice.setStatus(InvoicePurchaseStatusConstant.PAID);
+            }
+            if (selectedInvoice.getInvoiceProject() != null) {
+                projectService.updateProjectRevenueBudget(selectedInvoice.getInvoiceAmount(), selectedInvoice.getInvoiceProject());
+            }
+            companyService.updateCompanyRevenueBudget(selectedInvoice.getInvoiceAmount(), company);
             invoiceService.persist(selectedInvoice);
         }
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.getExternalContext().getFlash().setKeepMessages(true);
-
-        if (selectedInvoiceModel.getInvoiceId() != null && selectedInvoiceModel.getInvoiceId() > 0) {
-            context.addMessage(null, new FacesMessage("Invoice Updated SuccessFully"));
-        } else {
-            context.addMessage(null, new FacesMessage("Invoice Added SuccessFully"));
-        }
-        init();
-
-        return "list?faces-redirect=true";
-
     }
 
-    public void saveAndAddMoreInvoice() {
-        if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
-            return;
+    public void updateDueAmountAndStatus() {
+        if (selectedInvoice.getDueAmount().doubleValue() == selectedInvoice.getInvoiceAmount().doubleValue()) {
+            selectedInvoice.setStatus(InvoicePurchaseStatusConstant.UNPAID);
+        } else if (selectedInvoice.getDueAmount().doubleValue() < selectedInvoice.getInvoiceAmount().doubleValue()) {
+            if (selectedInvoice.getDueAmount().doubleValue() == 0) {
+                selectedInvoice.setStatus(InvoicePurchaseStatusConstant.PAID);
+            } else {
+                selectedInvoice.setStatus(InvoicePurchaseStatusConstant.PARTIALPAID);
+            }
         }
-        Invoice invoice = invoiceModelHelper.getInvoiceEntity(selectedInvoiceModel);
-        invoiceService.update(invoice, invoice.getInvoiceId());
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.getExternalContext().getFlash().setKeepMessages(true);
-        if (selectedInvoiceModel.getInvoiceId() > 0) {
-            context.addMessage(null, new FacesMessage("Invoice Updated SuccessFully"));
-        } else {
-            context.addMessage(null, new FacesMessage("Invoice Added SuccessFully"));
-        }
-        init();
-
     }
 
     public void updateCurrency() {
         setDefaultCurrency();
-        if (null != selectedInvoiceModel.getContact()) {
+        if (null != selectedInvoiceModel.getInvoiceContact()) {
             final Contact contact = contactService
-                    .getContact(selectedInvoiceModel.getContact().getContactId());
+                    .getContact(selectedInvoiceModel.getInvoiceContact().getContactId());
             selectedInvoiceModel.setCurrencyCode(contact.getCurrency());
         }
     }
@@ -423,7 +442,7 @@ public class InvoiceController extends BaseController implements Serializable {
 
     private void calculateTotal() {
         total = new BigDecimal(0);
-        List<InvoiceItemModel> invoiceItem = selectedInvoiceModel.getInvoiceItems();
+        List<InvoiceItemModel> invoiceItem = selectedInvoiceModel.getInvoiceLineItems();
         if (invoiceItem != null) {
             for (InvoiceItemModel invoice : invoiceItem) {
                 if (invoice.getSubTotal() != null) {
@@ -462,7 +481,7 @@ public class InvoiceController extends BaseController implements Serializable {
         } else {
             contactService.persist(contact);
         }
-        selectedInvoiceModel.setContact(contact);
+        selectedInvoiceModel.setInvoiceContact(contact);
 
     }
 

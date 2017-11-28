@@ -8,6 +8,7 @@ package com.simplevat.web.company.controller;
 import com.simplevat.entity.CompanyType;
 import com.simplevat.entity.Country;
 import com.simplevat.entity.IndustryType;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,6 +49,8 @@ public class CompanyModel {
     private String companyPostZipCode;
     private String companyPoBoxNumber;
     private Country companyCountryCode;
+    private BigDecimal companyExpenseBudget;
+    private BigDecimal companyRevenueBudget;
     private Integer createdBy;
     private LocalDateTime createdDate;
     private Integer lastUpdatedBy;

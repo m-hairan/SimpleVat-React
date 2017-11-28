@@ -16,7 +16,6 @@ import org.springframework.stereotype.Controller;
 
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.CurrencyConversion;
-import com.simplevat.entity.Project;
 import com.simplevat.entity.Purchase;
 import com.simplevat.entity.User;
 import com.simplevat.entity.VatCategory;
@@ -33,7 +32,10 @@ import com.simplevat.service.VatCategoryService;
 import com.simplevat.service.bankaccount.TransactionTypeService;
 import com.simplevat.web.common.controller.BaseController;
 import com.simplevat.web.constant.ContactTypeConstant;
+import com.simplevat.web.constant.InvoicePaymentModeConstant;
+import com.simplevat.web.constant.InvoicePurchaseStatusConstant;
 import com.simplevat.web.constant.ModuleName;
+import com.simplevat.web.constant.TransactionCategoryConsatant;
 import com.simplevat.web.contact.model.ContactModel;
 import com.simplevat.web.purchase.model.PurchaseItemModel;
 import com.simplevat.web.purchase.model.PurchaseModel;
@@ -45,6 +47,8 @@ import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.model.SelectItem;
@@ -133,6 +137,7 @@ public class PurchaseController extends BaseController implements Serializable {
         selectedPurchaseModel = new PurchaseModel();
         if (objSelectedPurchaseModel == null) {
             selectedPurchaseModel.setPurchaseItems(new ArrayList<>());
+            selectedPurchaseModel.setPurchaseDueOn(30);
             Currency defaultCurrency = company.getCompanyCountryCode().getCurrencyCode();
             if (defaultCurrency != null) {
                 selectedPurchaseModel.setCurrency(defaultCurrency);
@@ -146,15 +151,8 @@ public class PurchaseController extends BaseController implements Serializable {
                 selectedPurchaseModel.setAttachmentFileContent(new DefaultStreamedContent(stream));
             }
         }
-        updateCurrencyLabel();
         populateVatCategory();
         calculateTotal();
-    }
-
-    public String createExpense() {
-
-        return "/pages/secure/expense/create-expense.xhtml?faces-redirect=true";
-
     }
 
     public List<User> users(final String searchQuery) throws Exception {
@@ -174,19 +172,14 @@ public class PurchaseController extends BaseController implements Serializable {
     }
 
     public List<TransactionCategory> completeCategory() {
-        List<TransactionCategory> transactionCategoryParentList = new ArrayList<>();
-        List<TransactionCategory> transactionCategoryList = new ArrayList<>();
-        if (selectedPurchaseModel.getTransactionType() != null) {
-            transactionCategoryList = transactionCategoryService.findAllTransactionCategoryByTransactionType(selectedPurchaseModel.getTransactionType().getTransactionTypeCode());
-        }
-        for (TransactionCategory transactionCategory : transactionCategoryList) {
-            if (transactionCategory.getParentTransactionCategory() != null) {
-                transactionCategoryParentList.add(transactionCategory.getParentTransactionCategory());
-            }
-        }
-        transactionCategoryList.removeAll(transactionCategoryParentList);
-        return transactionCategoryList;
 
+        List<TransactionCategory> transactionCategoryList = transactionCategoryService.findTransactionCategoryListByParentCategory(TransactionCategoryConsatant.TRANSACTION_CATEGORY_PURCHASE);
+        if (transactionCategoryList != null) {
+            selectedPurchaseModel.setTransactionType(transactionCategoryList.get(0).getTransactionType());
+            return transactionCategoryList;
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     // TODO compare companycurrency and selected Currency
@@ -223,17 +216,10 @@ public class PurchaseController extends BaseController implements Serializable {
         }
     }
 
-    public void updateCurrencyLabel() {
-        if (null != selectedPurchaseModel.getCurrency()) {
-            selectedPurchaseModel.setCurrency(currencyService.getCurrency(selectedPurchaseModel.getCurrency().getCurrencyCode()));
-        }
-    }
-
     public void addPurchaseItem() {     //---------------
         boolean validated = validatePurchaseLineItems();
 
         if (validated) {
-            updateCurrencyLabel();
             selectedPurchaseModel.addPurchaseItem(new PurchaseItemModel());
         }
 
@@ -243,7 +229,7 @@ public class PurchaseController extends BaseController implements Serializable {
         boolean validated = true;
         for (PurchaseItemModel lastItem : selectedPurchaseModel.getPurchaseItems()) {
             if (lastItem.getUnitPrice() == null || lastItem.getQuatity() < 1 || lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0) {
-                FacesMessage message = new FacesMessage("Please enter proper detail for all expence items.");
+                FacesMessage message = new FacesMessage("Please enter proper detail for all purchase items.");
                 message.setSeverity(FacesMessage.SEVERITY_ERROR);
                 FacesContext.getCurrentInstance().addMessage("validationId", message);
                 validated = false;
@@ -254,7 +240,7 @@ public class PurchaseController extends BaseController implements Serializable {
 
     private boolean validateAtLeastOneItem() {
         if (selectedPurchaseModel.getPurchaseItems().size() < 1) {
-            FacesMessage message = new FacesMessage("Please add atleast one item to create Expense.");
+            FacesMessage message = new FacesMessage("Please add atleast one item to create purchase.");
             message.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("validationId", message);
             return false;
@@ -322,152 +308,72 @@ public class PurchaseController extends BaseController implements Serializable {
         if (!validatePurchaseLineItems() || !validateAtLeastOneItem()) {
             return "";
         }
-        User loggedInUser = FacesUtil.getLoggedInUser();
-        Purchase purchase = purchaseControllerHelper.getPurchase(selectedPurchaseModel);
-        purchase.setLastUpdateDate(LocalDateTime.now());
-        purchase.setLastUpdateBy(loggedInUser.getUserId());
-        purchase.setDeleteFlag(false);
-        purchase.setCreatedBy(loggedInUser.getUserId());
-
-        if (selectedPurchaseModel.getReceiptAttachmentBinary() != null) {
-            purchase.setReceiptAttachmentBinary(selectedPurchaseModel.getReceiptAttachmentBinary());
-        }
-
-        if (selectedPurchaseModel.getTransactionType() != null) {
-            TransactionType transactionType = transactionTypeService.getTransactionType(selectedPurchaseModel.getTransactionType().getTransactionTypeCode());
-            purchase.setTransactionType(transactionType);
-        }
-        if (selectedPurchaseModel.getTransactionCategory() != null) {
-            TransactionCategory transactionCategory = transactionCategoryService.findByPK(selectedPurchaseModel.getTransactionCategory().getTransactionCategoryCode());
-            purchase.setTransactionCategory(transactionCategory);
-        }
-        if (selectedPurchaseModel.getCurrency() != null) {
-            Currency currency = currencyService.getCurrency(selectedPurchaseModel.getCurrency().getCurrencyCode());
-            purchase.setCurrency(currency);
-        }
-        if (selectedPurchaseModel.getProject() != null) {
-            Project project = projectService.findByPK(selectedPurchaseModel.getProject().getProjectId());
-            purchase.setProject(project);
-        }
-        if (selectedPurchaseModel.getUser() != null) {
-            User user = userServiceNew.findByPK(selectedPurchaseModel.getUser().getUserId());
-            purchase.setUser(user);
-        }
-        if (selectedPurchaseModel.getPurchaseContact() != null) {
-            Contact contact = contactService.findByPK(selectedPurchaseModel.getPurchaseContact().getContactId());
-            purchase.setPurchaseContact(contact);
-        }
-
-        purchase.setPurchaseAmount(total);
-
-        if (purchase.getPurchaseId() == null || purchase.getPurchaseId() == 0) {
-            purchaseService.persist(purchase);
-        } else {
-            purchaseService.update(purchase, purchase.getPurchaseId());
-        }
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense saved successfully"));
-        return "/pages/secure/purchase/purchase-list.xhtml?faces-redirect=true";
+        save();
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Purchase saved successfully"));
+        return "purchase-list?faces-redirect=true";
     }
 
     public String saveAndContinuePurchase() {
         if (!validatePurchaseLineItems() || !validateAtLeastOneItem()) {
             return "";
         }
-        User loggedInUser = FacesUtil.getLoggedInUser();
-        Purchase purchase = purchaseControllerHelper.getPurchase(selectedPurchaseModel);
-
-        purchase.setLastUpdateDate(LocalDateTime.now());
-        purchase.setLastUpdateBy(loggedInUser.getUserId());
-        purchase.setDeleteFlag(false);
-        purchase.setCreatedBy(loggedInUser.getUserId());
-
-        if (selectedPurchaseModel.getReceiptAttachmentBinary() != null) {
-            purchase.setReceiptAttachmentBinary(selectedPurchaseModel.getReceiptAttachmentBinary());
-        }
-
-        if (selectedPurchaseModel.getTransactionType() != null) {
-            TransactionType transactionType = transactionTypeService.getTransactionType(selectedPurchaseModel.getTransactionType().getTransactionTypeCode());
-            purchase.setTransactionType(transactionType);
-        }
-        if (selectedPurchaseModel.getTransactionCategory() != null) {
-            TransactionCategory transactionCategory = transactionCategoryService.findByPK(selectedPurchaseModel.getTransactionCategory().getTransactionCategoryCode());
-            purchase.setTransactionCategory(transactionCategory);
-        }
-        if (selectedPurchaseModel.getCurrency() != null) {
-            Currency currency = currencyService.getCurrency(selectedPurchaseModel.getCurrency().getCurrencyCode());
-            purchase.setCurrency(currency);
-        }
-        if (selectedPurchaseModel.getProject() != null) {
-            Project project = projectService.findByPK(selectedPurchaseModel.getProject().getProjectId());
-            purchase.setProject(project);
-        }
-        if (selectedPurchaseModel.getUser() != null) {
-            User user = userServiceNew.findByPK(selectedPurchaseModel.getUser().getUserId());
-            purchase.setUser(user);
-        }
-
-        if (selectedPurchaseModel.getPurchaseContact() != null) {
-            Contact contact = contactService.findByPK(selectedPurchaseModel.getPurchaseContact().getContactId());
-            purchase.setPurchaseContact(contact);
-        }
-        purchase.setPurchaseAmount(total);
-
-        if (purchase.getPurchaseId() == null || purchase.getPurchaseId() == 0) {
-            purchaseService.persist(purchase);
-        } else {
-
-            purchaseService.update(purchase, purchase.getPurchaseId());
-        }
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense saved successfully"));
-        return "/pages/secure/purchase/purchase.xhtml?faces-redirect=true";
+        save();
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Purchase saved successfully"));
+        return "purchase?faces-redirect=true";
     }
 
-//
-//    public String saveAndContinueExpense() {
-//        if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
-//            return "";
-//        }
-//        User loggedInUser = FacesUtil.getLoggedInUser();
-//        Expense expense = getExpense(selectedExpenseModel);
-//
-//        expense.setLastUpdateDate(LocalDateTime.now());
-//        expense.setLastUpdateBy(loggedInUser.getUserId());
-//        expense.setDeleteFlag(false);
-//        expense.setCreatedBy(loggedInUser.getUserId());
-//
-//        if (selectedExpenseModel.getTransactionType() != null) {
-//            TransactionType transactionType = transactionTypeService.getTransactionType(selectedExpenseModel.getTransactionType().getTransactionTypeCode());
-//            expense.setTransactionType(transactionType);
-//        }
-//        if (selectedExpenseModel.getTransactionCategory() != null) {
-//            TransactionCategory transactionCategory = transactionCategoryService.findByPK(selectedExpenseModel.getTransactionCategory().getTransactionCategoryCode());
-//            expense.setTransactionCategory(transactionCategory);
-//        }
-//        if (selectedExpenseModel.getCurrency() != null) {
-//            Currency currency = currencyService.getCurrency(selectedExpenseModel.getCurrency().getCurrencyCode());
-//            expense.setCurrency(currency);
-//        }
-//        if (selectedExpenseModel.getProject() != null) {
-//            Project project = projectService.findByPK(selectedExpenseModel.getProject().getProjectId());
-//            expense.setProject(project);
-//        }
-//        if (selectedExpenseModel.getUser() != null) {
-//            User user = userServiceNew.findByPK(selectedExpenseModel.getUser().getUserId());
-//            expense.setUser(user);
-//        }
-//        if (expense.getExpenseId() == null || expense.getExpenseId() == 0) {
-//            expenseService.persist(expense);
-//        } else {
-//            if (selectedExpenseModel.getReceiptAttachmentBinary() != null) {
-//                expense.setReceiptAttachmentBinary(selectedExpenseModel.getReceiptAttachmentBinary());
-//            }
-//            expenseService.update(expense, expense.getExpenseId());
-//        }
-//        this.setSelectedExpenseModel(new ExpenseModel());
-//        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense saved successfully"));
-//        return "/pages/secure/expense/create-expense.xhtml?faces-redirect=true";
-//    }
-//
+    private void save() {
+        User loggedInUser = FacesUtil.getLoggedInUser();
+        selectedPurchaseModel.setPurchaseDueDate(getDueDate(selectedPurchaseModel));
+        selectedPurchaseModel.setPurchaseAmount(total);
+        Purchase purchase = purchaseControllerHelper.getPurchase(selectedPurchaseModel);
+        purchase.setDeleteFlag(false);
+        purchase.setCreatedBy(loggedInUser.getUserId());
+        if (purchase.getPurchaseId() == null || purchase.getPurchaseId() == 0) {
+            if (purchase.getPaymentMode() == null) {
+                purchase.setPurchaseDueAmount(purchase.getPurchaseAmount());
+                updateDueAmountAndStatus(purchase);
+            } else if (purchase.getPaymentMode() == InvoicePaymentModeConstant.CASH) {
+                purchase.setPurchaseDueAmount(new BigDecimal(0));
+                purchase.setStatus(InvoicePurchaseStatusConstant.PAID);
+            }
+            if (purchase.getProject() != null) {
+                projectService.updateProjectExpenseBudget(purchase.getPurchaseAmount(), purchase.getProject());
+            }
+            companyService.updateCompanyExpenseBudget(purchase.getPurchaseAmount(), company);
+            purchaseService.persist(purchase);
+        } else {
+            purchase.setLastUpdateDate(LocalDateTime.now());
+            purchase.setLastUpdateBy(loggedInUser.getUserId());
+            Purchase prevPurchase = purchaseService.findByPK(purchase.getPurchaseId());
+            BigDecimal defferenceAmount = purchase.getPurchaseAmount().subtract(prevPurchase.getPurchaseAmount());
+            if (purchase.getPaymentMode() == null) {
+                purchase.setPurchaseDueAmount(purchase.getPurchaseDueAmount().add(defferenceAmount));
+                updateDueAmountAndStatus(purchase);
+            } else if (purchase.getPaymentMode() == InvoicePaymentModeConstant.CASH) {
+                purchase.setPurchaseDueAmount(new BigDecimal(0));
+                purchase.setStatus(InvoicePurchaseStatusConstant.PAID);
+            }
+            if (purchase.getProject() != null) {
+                projectService.updateProjectExpenseBudget(defferenceAmount, purchase.getProject());
+            }
+            companyService.updateCompanyExpenseBudget(defferenceAmount, company);
+            purchaseService.update(purchase, purchase.getPurchaseId());
+        }
+    }
+
+    private void updateDueAmountAndStatus(Purchase purchase) {
+        if (purchase.getPurchaseDueAmount().doubleValue() == purchase.getPurchaseAmount().doubleValue()) {
+            purchase.setStatus(InvoicePurchaseStatusConstant.UNPAID);
+        } else if (purchase.getPurchaseDueAmount().doubleValue() < purchase.getPurchaseAmount().doubleValue()) {
+            if (purchase.getPurchaseDueAmount().doubleValue() == 0) {
+                purchase.setStatus(InvoicePurchaseStatusConstant.PAID);
+            } else {
+                purchase.setStatus(InvoicePurchaseStatusConstant.PARTIALPAID);
+            }
+        }
+    }
+
     public void fileUploadListener(FileUploadEvent e) {
         fileName = e.getFile().getFileName();
         selectedPurchaseModel.setReceiptAttachmentBinary(e.getFile().getContents());
@@ -506,97 +412,11 @@ public class PurchaseController extends BaseController implements Serializable {
         }
     }
 
-//
-//    public String deleteExpense() {
-//        System.out.println("selected Model : :" + selectedExpenseModel.getExpenseId());
-//        Expense expense = getExpense(selectedExpenseModel);
-//        expense.setDeleteFlag(true);
-//        expenseService.update(expense);
-//        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense deleted successfully"));
-//        return "expenses.xhtml?faces-redirect=true";
-//    }
-//
-//    public List<User> users(final String searchQuery) throws Exception {
-//        return userServiceNew.executeNamedQuery("findAllUsers");
-//
-//    }
-//
-//    public void addExpenseItem() {     //---------------
-//        boolean validated = validateExpenceLineItems();
-//
-//        if (validated) {
-//            updateCurrencyLabel();
-//            selectedExpenseModel.addExpenseItem(new ExpenseItemModel());
-//        }
-//
-//    }
-//
-//    private boolean validateExpenceLineItems() { //---------------
-//        boolean validated = true;
-//        for (ExpenseItemModel lastItem : selectedExpenseModel.getExpenseItem()) {
-//            if (lastItem.getQuatity() < 1 || lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0) {
-//                FacesMessage message = new FacesMessage("Please enter proper detail for all expence items.");
-//                message.setSeverity(FacesMessage.SEVERITY_ERROR);
-//                FacesContext.getCurrentInstance().addMessage("validationId", message);
-//                validated = false;
-//            }
-//        }
-//        return validated;
-//    }
-//
-//    public void updateCurrencyLabel() {
-//        if (null != selectedExpenseModel.getCurrency()) {
-//            selectedExpenseModel.setCurrency(currencyService.getCurrency(selectedExpenseModel.getCurrency().getCurrencyCode()));
-//        }
-//    }
-//
-//    public void updateSubTotal(final ExpenseItemModel expenseItemModel) {
-//        final int quantity = expenseItemModel.getQuatity();
-//        final BigDecimal unitPrice = expenseItemModel.getUnitPrice();
-//        final BigDecimal vatPer = expenseItemModel.getVatId();
-//        if (null != unitPrice) {
-//            final BigDecimal amountWithoutTax = unitPrice.multiply(new BigDecimal(quantity));
-//            expenseItemModel.setSubTotal(amountWithoutTax);
-//            if (vatPer != null && vatPer.compareTo(BigDecimal.ZERO) >= 1) {
-//                final BigDecimal amountWithTax = amountWithoutTax
-//                        .add(amountWithoutTax.multiply(vatPer).multiply(new BigDecimal(0.01)));
-//                expenseItemModel.setSubTotal(amountWithTax);
-//            }
-//        }
-//        calculateTotal();
-//    }
-//
-//    public List<TransactionType> getAllTransactionType(String str) {
-//        if (str == null) {
-//            return this.transactionTypes;
-//        }
-//        List<TransactionType> filterList = new ArrayList<>();
-//        transactionTypes = transactionTypeService.findAll();
-//        for (TransactionType type : transactionTypes) {
-//            filterList.add(type);
-//        }
-//        return filterList;
-//    }
-//
-//    private void calculateTotal() {
-//        total = new BigDecimal(0);
-//        List<ExpenseItemModel> expenseItem = selectedExpenseModel.getExpenseItem();
-//        if (expenseItem != null) {
-//            for (ExpenseItemModel expense : expenseItem) {
-//                if (expense.getSubTotal() != null) {
-//                    total = total.add(expense.getSubTotal());
-//                }
-//            }
-//        }
-//    }
-//
-//    private void populateVatCategory() {
-//        vatCategoryList = vatCategoryService.getVatCategoryList();
-//        if (vatCategoryList != null) {
-//            for (VatCategory vatCategory : vatCategoryList) {
-//                SelectItem item = new SelectItem(vatCategory.getVat(), vatCategory.getName());
-//                vatCategorySelectItemList.add(item);
-//            }
-//        }
-//    }
+    private Date getDueDate(PurchaseModel purchaseModel) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(purchaseModel.getPurchaseDate());
+        calendar.add(Calendar.DAY_OF_YEAR, purchaseModel.getPurchaseDueOn());
+        return calendar.getTime();
+    }
+
 }

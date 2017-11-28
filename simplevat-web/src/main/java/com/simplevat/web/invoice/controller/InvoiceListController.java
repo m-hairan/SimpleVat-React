@@ -23,6 +23,7 @@ import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.entity.invoice.InvoiceLineItem;
 import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.web.common.controller.BaseController;
+import com.simplevat.web.constant.InvoicePurchaseStatusConstant;
 import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.invoice.model.InvoiceModel;
 
@@ -36,9 +37,18 @@ public class InvoiceListController extends BaseController implements Serializabl
 
     private static final long serialVersionUID = 9066359395680732884L;
 
+    @Autowired
+    private InvoiceService invoiceService;
+    @Autowired
+    private InvoiceModelHelper invoiceModelHelper;
+
     @Setter
     @Getter
     private List<Invoice> invoices;
+
+    @Setter
+    @Getter
+    private List<InvoiceModel> invoiceList;
 
     @Getter
     @Setter
@@ -46,10 +56,23 @@ public class InvoiceListController extends BaseController implements Serializabl
 
     @Getter
     @Setter
-    private Invoice selectedInvoice;
+    private int totalInvoices;
 
-    @Autowired
-    private InvoiceService invoiceService;
+    @Getter
+    @Setter
+    private int totalPaid;
+
+    @Getter
+    @Setter
+    private int totalUnPaid;
+
+    @Getter
+    @Setter
+    private int totalPartiallyPaid;
+
+    @Getter
+    @Setter
+    private Invoice selectedInvoice;
 
     public InvoiceListController() {
         super(ModuleName.INVOICE_MODULE);
@@ -58,15 +81,59 @@ public class InvoiceListController extends BaseController implements Serializabl
     @PostConstruct
     public void initInvoices() {
         System.out.println("inside Post constructor");
-        invoices = new ArrayList<>();
         final InvoiceFilter invoiceFilter = new InvoiceFilter();
         invoices = invoiceService.filter(invoiceFilter);
+        populateList();
+    }
+
+    public void populateList() {
+        invoiceList = new ArrayList<>();
+        if (invoices != null) {
+            for (Invoice invoice : invoices) {
+                if (invoice.getStatus() == InvoicePurchaseStatusConstant.PAID) {
+                    totalPaid++;
+                } else if (invoice.getStatus() == InvoicePurchaseStatusConstant.PARTIALPAID) {
+                    totalPartiallyPaid++;
+                } else if (invoice.getStatus() == InvoicePurchaseStatusConstant.UNPAID) {
+                    totalUnPaid++;
+                }
+                totalInvoices++;
+                invoiceList.add(invoiceModelHelper.getInvoiceModel(invoice));
+            }
+        }
+    }
+
+    public void allPaidInvoice() {
+        invoiceList.clear();
+        for (Invoice invoice : invoices) {
+            if (invoice.getStatus() == InvoicePurchaseStatusConstant.PAID) {
+                invoiceList.add(invoiceModelHelper.getInvoiceModel(invoice));
+            }
+        }
+    }
+
+    public void allUnPaidInvoice() {
+        invoiceList.clear();
+        for (Invoice invoice : invoices) {
+            if (invoice.getStatus() == InvoicePurchaseStatusConstant.UNPAID) {
+                invoiceList.add(invoiceModelHelper.getInvoiceModel(invoice));
+            }
+        }
+    }
+
+    public void allPartialPaidInvoice() {
+        invoiceList.clear();
+        for (Invoice invoice : invoices) {
+            if (invoice.getStatus() == InvoicePurchaseStatusConstant.PARTIALPAID) {
+                invoiceList.add(invoiceModelHelper.getInvoiceModel(invoice));
+            }
+        }
     }
 
     public String redirectToCreateInvoice() {
         String selectedInvoiceId = "";
-        if (selectedInvoice != null) {
-            selectedInvoiceId = "&selectedInvoiceModelId=" + selectedInvoice.getInvoiceId();
+        if (selectedInvoiceModel != null) {
+            selectedInvoiceId = "&selectedInvoiceModelId=" + selectedInvoiceModel.getInvoiceId();
         }
         return "invoice.xhtml?faces-redirect=true" + selectedInvoiceId;
     }
@@ -109,9 +176,5 @@ public class InvoiceListController extends BaseController implements Serializabl
             }
         }
         return finalTotal;
-    }
-
-    public String redirectEditInvoice() {
-        return "invoice.xhtml?faces-redirect=true&invoiceId" + selectedInvoiceModel.getInvoiceId();
     }
 }

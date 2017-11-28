@@ -27,6 +27,8 @@ class CompanyHelper {
         companyModel.setCompanyRegistrationNumber(company.getCompanyRegistrationNumber());
         companyModel.setCompanyStateRegion(company.getCompanyStateRegion());
         companyModel.setCompanyTypeCode(company.getCompanyTypeCode());
+        companyModel.setCompanyExpenseBudget(company.getCompanyExpenseBudget());
+        companyModel.setCompanyRevenueBudget(company.getCompanyRevenueBudget());
         companyModel.setIndustryTypeCode(company.getIndustryTypeCode());
         companyModel.setCompanyName(company.getCompanyName());
         companyModel.setCreatedBy(company.getCreatedBy());
@@ -65,6 +67,8 @@ class CompanyHelper {
         company.setCompanyRegistrationNumber(companyModel.getCompanyRegistrationNumber());
         company.setCompanyStateRegion(companyModel.getCompanyStateRegion());
         company.setCompanyTypeCode(companyModel.getCompanyTypeCode());
+		company.setCompanyExpenseBudget(companyModel.getCompanyExpenseBudget());
+        company.setCompanyRevenueBudget(companyModel.getCompanyRevenueBudget());
         company.setIndustryTypeCode(companyModel.getIndustryTypeCode());
         company.setCompanyName(companyModel.getCompanyName());
         company.setCreatedBy(companyModel.getCreatedBy());

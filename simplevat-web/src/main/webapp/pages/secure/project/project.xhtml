@@ -109,10 +109,19 @@
                                         <p:message for="currency"/>
                                     </h:panelGroup>
 
-                                    <p:outputLabel for="projectBudget"/>
+                                    <p:outputLabel for="projectExpenseBudget"/>
                                     <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputNumber id="projectBudget" symbol="#{projectController.selectedProject.currency.currencySymbol} " symbolPosition="p"
-                                                     value="#{projectController.selectedProject.projectBudget}"/>
+                                        <p:inputText id="projectExpenseBudget"
+                                                     value="#{projectController.selectedProject.projectExpenseBudget}"
+                                        />
+                                        <label>Project Budget </label>
+                                    </h:panelGroup>
+                                    
+                                    <p:outputLabel for="projectRevenueBudget"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="projectRevenueBudget"
+                                                     value="#{projectController.selectedProject.projectRevenueBudget}"
+                                        />
                                         <label>Project Budget </label>
                                     </h:panelGroup>
 

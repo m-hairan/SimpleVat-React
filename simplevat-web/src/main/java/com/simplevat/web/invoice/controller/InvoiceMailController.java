@@ -19,6 +19,8 @@ import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.web.constant.ConfigurationConstants;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -26,6 +28,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -60,7 +64,14 @@ public class InvoiceMailController implements Serializable {
     @Autowired
     private ContactService contactService;
 
+    @Getter
+    @Setter
+    private ArrayList<String> moreEmails;
+
     public void sendInvoiceMail() throws Exception {
+        if (moreEmails == null) {
+            moreEmails = new ArrayList();
+        }
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         Integer invoiceId = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("invoiceId").toString());
         MailEnum mailEnum = MailEnum.INVOICE_PDF;
@@ -71,13 +82,16 @@ public class InvoiceMailController implements Serializable {
             Contact contactObj = contact.get();
             String firstName = contactObj.getFirstName();
             byte[] byteArray = invoiceUtil.prepareMailReport(outputStream, invoiceId).toByteArray();
-            sendInvoiceMail(mailEnum, summary, firstName, invoice.getInvoiceContact().getEmail(), byteArray);
+            moreEmails.add(invoice.getInvoiceContact().getEmail());
+            String[] emailsArray = Arrays.copyOf(moreEmails.toArray(), moreEmails.toArray().length, String[].class);
+            sendInvoiceMail(mailEnum, summary, firstName, emailsArray, byteArray);
+            moreEmails.clear();
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Email address provided."));
         }
     }
 
-    private void sendInvoiceMail(MailEnum mailEnum, String summary, String firstName, String senderMailAddress, byte[] byteArray) throws Exception {
+    private void sendInvoiceMail(MailEnum mailEnum, String summary, String firstName, String[] senderMailAddress, byte[] byteArray) throws Exception {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {

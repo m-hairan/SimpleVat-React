@@ -23,11 +23,11 @@ public class InvoiceModel {
 
     private Integer invoiceId;
 
-    private Contact contact;
+    private Contact invoiceContact;
 
     private Project project;
 
-    private String invoiceRefNo;
+    private String invoiceReferenceNumber;
 
     private Date invoiceDate;
 
@@ -37,9 +37,9 @@ public class InvoiceModel {
 
     private Currency currencyCode;
 
-    private String invoiceText;
+    private String invoiceNotes;
 
-    private List<InvoiceItemModel> invoiceItems;
+    private List<InvoiceItemModel> invoiceLineItems;
 
     private DiscountType discountType;
 
@@ -57,13 +57,15 @@ public class InvoiceModel {
 
     private Integer status;
     
+    private String statusName;
+    
     private Integer paymentMode;
 
     public void addInvoiceItem(@Nonnull final InvoiceItemModel invoiceItemModel) {
-        if (null == this.invoiceItems) {
-            invoiceItems = new ArrayList<>();
+        if (null == this.invoiceLineItems) {
+            invoiceLineItems = new ArrayList<>();
         }
-        invoiceItems.add(invoiceItemModel);
+        invoiceLineItems.add(invoiceItemModel);
     }
 
 }

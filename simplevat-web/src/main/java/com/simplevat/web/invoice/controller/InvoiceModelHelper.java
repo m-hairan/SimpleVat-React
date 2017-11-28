@@ -3,6 +3,7 @@ package com.simplevat.web.invoice.controller;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.entity.invoice.InvoiceLineItem;
 import com.simplevat.service.invoice.InvoiceService;
+import com.simplevat.web.constant.InvoicePurchaseStatusConstant;
 import com.simplevat.web.invoice.model.InvoiceItemModel;
 import com.simplevat.web.invoice.model.InvoiceModel;
 
@@ -48,17 +49,17 @@ public class InvoiceModelHelper {
         invoice.setContractPoNumber(invoiceModel.getContractPoNumber());
         invoice.setCurrency(invoiceModel.getCurrencyCode());
         invoice.setInvoiceProject(invoiceModel.getProject());
-        invoice.setInvoiceContact(invoiceModel.getContact());
+        invoice.setInvoiceContact(invoiceModel.getInvoiceContact());
         invoice.setInvoiceDate(invoiceDate);
         invoice.setInvoiceDiscount(invoiceModel.getDiscount());
         invoice.setDiscountType(invoiceModel.getDiscountType());
         invoice.setInvoiceDueOn(invoiceModel.getInvoiceDueOn());
         invoice.setInvoiceDueDate(invoiceDueDate);
-        invoice.setInvoiceReferenceNumber(invoiceModel.getInvoiceRefNo());
-        invoice.setInvoiceText(invoiceModel.getInvoiceText());
+        invoice.setInvoiceReferenceNumber(invoiceModel.getInvoiceReferenceNumber());
+        invoice.setInvoiceNotes(invoiceModel.getInvoiceNotes());
 
         final Collection<InvoiceLineItem> items = invoiceModel
-                .getInvoiceItems()
+                .getInvoiceLineItems()
                 .stream()
                 .map((item) -> convertToLineItem(item, invoice))
                 .collect(Collectors.toList());
@@ -90,7 +91,7 @@ public class InvoiceModelHelper {
         item.setCreatedBy(1);
         item.setLastUpdateDate(Calendar.getInstance().getTime());
         item.setVersionNumber(model.getVersionNumber());
-        if(model.getProductService()!=null){
+        if (model.getProductService() != null) {
             item.setInvoiceLineItemProductService(model.getProductService());
         }
         item.setInvoice(invoice);
@@ -105,15 +106,15 @@ public class InvoiceModelHelper {
         invoiceModel.setContractPoNumber(invoice.getContractPoNumber());
         invoiceModel.setCurrencyCode(invoice.getCurrency());
         invoiceModel.setInvoiceId(invoice.getInvoiceId());
-        invoiceModel.setContact(invoice.getInvoiceContact());
+        invoiceModel.setInvoiceContact(invoice.getInvoiceContact());
         invoiceModel.setProject(invoice.getInvoiceProject());
         invoiceModel.setInvoiceDueDate(null != invoice.getInvoiceDueDate() ? Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant()) : null);
         invoiceModel.setInvoiceDate(null != invoice.getInvoiceDate() ? Date.from(invoice.getInvoiceDate().atZone(ZoneId.systemDefault()).toInstant()) : null);
         invoiceModel.setDiscount(invoice.getInvoiceDiscount());
         invoiceModel.setDiscountType(invoice.getDiscountType());
         invoiceModel.setInvoiceDueOn(invoice.getInvoiceDueOn());
-        invoiceModel.setInvoiceRefNo(invoice.getInvoiceReferenceNumber());
-        invoiceModel.setInvoiceText(invoice.getInvoiceText());
+        invoiceModel.setInvoiceReferenceNumber(invoice.getInvoiceReferenceNumber());
+        invoiceModel.setInvoiceNotes(invoice.getInvoiceNotes());
 
         final List<InvoiceItemModel> items = invoice
                 .getInvoiceLineItems()
@@ -121,12 +122,19 @@ public class InvoiceModelHelper {
                 .map((lineItem) -> convertToItemModel(lineItem))
                 .collect(Collectors.toList());
 
-        invoiceModel.setInvoiceItems(items);
+        invoiceModel.setInvoiceLineItems(items);
         invoiceModel.setCreatedBy(invoice.getCreatedBy());
         invoiceModel.setLastUpdatedBy(invoice.getLastUpdateBy());
         invoiceModel.setInvoiceAmount(invoice.getInvoiceAmount());
         invoiceModel.setDueAmount(invoice.getDueAmount());
         invoiceModel.setStatus(invoice.getStatus());
+        if (invoice.getStatus() == InvoicePurchaseStatusConstant.PAID) {
+            invoiceModel.setStatusName("PAID");
+        } else if (invoice.getStatus() == InvoicePurchaseStatusConstant.PARTIALPAID) {
+            invoiceModel.setStatusName("PARTIALPAID");
+        } else if (invoice.getStatus() == InvoicePurchaseStatusConstant.UNPAID) {
+            invoiceModel.setStatusName("UNPAID");
+        }
         invoiceModel.setPaymentMode(invoice.getPaymentMode());
 
         return invoiceModel;
@@ -143,7 +151,7 @@ public class InvoiceModelHelper {
         model.setUnitPrice(invoiceLineItem.getInvoiceLineItemUnitPrice());
         model.setVatId(invoiceLineItem.getInvoiceLineItemVat());
         model.setVersionNumber(invoiceLineItem.getVersionNumber());
-        if(invoiceLineItem.getInvoiceLineItemProductService()!=null){
+        if (invoiceLineItem.getInvoiceLineItemProductService() != null) {
             model.setProductService(invoiceLineItem.getInvoiceLineItemProductService());
         }
         this.updateSubTotal(model);

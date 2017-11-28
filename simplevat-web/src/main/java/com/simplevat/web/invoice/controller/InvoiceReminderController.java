@@ -83,7 +83,8 @@ public class InvoiceReminderController implements Serializable {
                 Contact contactObj = contact.get();
                 String firstName = contactObj.getFirstName();
                 byte[] byteArray = invoiceUtil.prepareMailReport(outputStream, invoice.getInvoiceId()).toByteArray();
-                sendInvoiceMail(mailEnum, summary, firstName, invoice.getInvoiceContact().getEmail(), byteArray);
+                String[] email = {invoice.getInvoiceContact().getEmail()};
+                sendInvoiceMail(mailEnum, summary, firstName, email, byteArray);
             } catch (Exception ex) {
                 Logger.getLogger(InvoiceReminderController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -92,7 +93,7 @@ public class InvoiceReminderController implements Serializable {
         }
     }
 
-    private void sendInvoiceMail(MailEnum mailEnum, String summary, String firstName, String senderMailAddress, byte[] byteArray) {
+    private void sendInvoiceMail(MailEnum mailEnum, String summary, String firstName, String[] senderMailAddress, byte[] byteArray) {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {

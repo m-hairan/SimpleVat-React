@@ -62,8 +62,8 @@
 
 
 
-                                        <p:outputLabel for="purchaseTransactionType"/>
-                                        <h:panelGroup styleClass="md-inputfield">
+                                        <p:outputLabel for="purchaseTransactionType" rendered="false"/>
+                                        <h:panelGroup styleClass="md-inputfield" rendered="false">
                                             <p:autoComplete
                                                 id="purchaseTransactionType"
                                                 converter="#{transactionTypeConverter}"
@@ -97,7 +97,6 @@
                                                 dropdown="true"
                                                 forceSelection="true"
                                                 effect="fold"
-                                                groupBy="#{(transactionCategory.parentTransactionCategory.transactionCategoryName != null)?transactionCategory.parentTransactionCategory.transactionCategoryName:'Others'}"
                                                 completeMethod="#{purchaseController.completeCategory()}"
                                                 value="#{purchaseController.selectedPurchaseModel.transactionCategory}"
                                                 var="transactionCategory"
@@ -203,6 +202,19 @@
                                                 autoResize="false" />
                                             <h:outputText id="counterValue" />
                                             <label>#{messages.description}</label>
+                                        </h:panelGroup>
+
+                                        <p:outputLabel for="purchaseDueOn" />
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText 
+                                                value="#{purchaseController.selectedPurchaseModel.purchaseDueOn}"
+                                                required="true"
+                                                requiredMessage="Please enter Purchase Due On"
+                                                converterMessage="Please enter numbers only." 
+                                                id="purchaseDueOn" >
+                                            </p:inputText>
+                                            <label>#{messages.purchase_due_on}</label>
+                                            <p:message for="purchaseDueOn" />
                                         </h:panelGroup>
                                     </p:panelGrid>
                                 </p:fieldset>
@@ -388,7 +400,7 @@
                                                      icon="ui-icon-plus" />
                                 </p:fieldset>
                                 <h:panelGroup id="exchangeCurrency"  >
-                                   <p:fieldset legend="Currency Exchange Details" 
+                                    <p:fieldset legend="Currency Exchange Details" 
                                                 rendered="false">
 
                                         <p:panelGrid columns="6" 
@@ -397,21 +409,21 @@
                                                      styleClass="ui-panelgrid-blank form-group"
                                                      style="border:0px none; background-color:transparent;">
                                             <p:outputLabel for="exchangerate"  />
-                                        <h:panelGroup styleClass="md-inputwrapper-filled">
-                                            <label>Exchange Rate :-   </label>
-                                            <h:outputText id="exchangerate"
-                                                         value="#{purchaseController.exchangeRate(purchaseController.selectedPurchaseModel.currency)}" />
-                                        </h:panelGroup>
+                                            <h:panelGroup styleClass="md-inputwrapper-filled">
+                                                <label>Exchange Rate :-   </label>
+                                                <h:outputText id="exchangerate"
+                                                              value="#{purchaseController.exchangeRate(purchaseController.selectedPurchaseModel.currency)}" />
+                                            </h:panelGroup>
 
 
-                                        <p:outputLabel for="totalvalue"  />
-                                        <h:panelGroup styleClass="md-inputwrapper-filled">
-                                            <label>Total Value :-    </label>
-                                            <h:outputText id="totalvalue"
-                                                         value="#{purchaseController.totalAmountInHomeCurrency(purchaseController.selectedPurchaseModel.currency)}" >
+                                            <p:outputLabel for="totalvalue"  />
+                                            <h:panelGroup styleClass="md-inputwrapper-filled">
+                                                <label>Total Value :-    </label>
+                                                <h:outputText id="totalvalue"
+                                                              value="#{purchaseController.totalAmountInHomeCurrency(purchaseController.selectedPurchaseModel.currency)}" >
                                                     <f:convertNumber type="currency" currencySymbol="#{purchaseController.company.companyCountryCode.currencyCode.currencySymbol} "/>
-                                            </h:outputText>
-                                        </h:panelGroup>
+                                                </h:outputText>
+                                            </h:panelGroup>
                                         </p:panelGrid>
                                     </p:fieldset>
                                 </h:panelGroup>
@@ -438,6 +450,10 @@
                                              icon="ui-icon-forward"  update="createPurchaseForm"
                                              action="#{purchaseController.saveAndContinuePurchase}" />
                         </ui:fragment>
+                        <p:commandButton value="#{messages.CashPayment}" icon="ui-icon-save" update="createPurchaseForm"
+                                         action="#{purchaseController.savePurchase}" >
+                            <f:setPropertyActionListener target="#{purchaseController.selectedPurchaseModel.paymentMode}" value="1" />
+                        </p:commandButton>
                         <span class="ui-separator" style="padding-right: 5px;"> <span
                                 class="fa fa-ellipsis-v SoftGray" />
                         </span>

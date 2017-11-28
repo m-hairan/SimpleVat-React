@@ -61,7 +61,7 @@ public class SecurityBean implements PhaseListener, Serializable {
     @Autowired
     @Qualifier("authenticationManager")
     private AuthenticationManager authenticationManager;
-    
+
     @Autowired
     private ConfigurationService configurationService;
 
@@ -122,7 +122,8 @@ public class SecurityBean implements PhaseListener, Serializable {
             User userObj = user.get();
             String firstName = userObj.getFirstName();
             String randomPassword = updatedUserPassword(userObj);
-            sendPasswordNotificationMail(mailEnum, summary, randomPassword, firstName, username);
+            String[] email = {username};
+            sendPasswordNotificationMail(mailEnum, summary, randomPassword, firstName, email);
             return "/pages/public/login.xhtml?faces-redirect=true";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Email address provided."));
@@ -136,10 +137,11 @@ public class SecurityBean implements PhaseListener, Serializable {
     public void signupPasswordMailNotification(String userName, String randomPassword) throws Exception {
         MailEnum mailEnum = MailEnum.SIGN_UP_VERIFICATION;
         String summary = "User created successfully Please check your mail for further details";
-        sendPasswordNotificationMail(mailEnum, summary, randomPassword, userName, username);
+        String[] email = {username};
+        sendPasswordNotificationMail(mailEnum, summary, randomPassword, userName, email);
     }
 
-    private void sendPasswordNotificationMail(MailEnum mailEnum, String summary, String randomPassword, String firstName, String senderMailAddress) throws Exception {
+    private void sendPasswordNotificationMail(MailEnum mailEnum, String summary, String randomPassword, String firstName, String[] senderMailAddress) throws Exception {
         Mail mail = MailPreparer.generateForgotPasswordMail(
                 ADMIN_EMAIL,
                 ADMIN_USERNAME,
@@ -163,7 +165,7 @@ public class SecurityBean implements PhaseListener, Serializable {
         }
         return randomPassword;
     }
-    
+
     private JavaMailSender getJavaMailSender(List<Configuration> configurationList) {
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
         sender.setProtocol("smtp");

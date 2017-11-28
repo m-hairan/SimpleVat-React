@@ -8,6 +8,24 @@
 
     <ui:define name="head">
         <style type="text/css">
+            .ui-panel{
+                box-shadow: 1px 3px 5px #888888;
+                border-style: solid !important;
+                border-left-width: 2px !important;
+                border-bottom-width: 0px !important;
+            }
+            .ui-panel .ui-panel-content {
+                padding: 0 !important;
+            }
+            .ui-panel .ui-panel-titlebar {
+                padding: 0 !important;
+            }
+            .ui-panel .ui-panel-title{
+                margin: 0 !important;
+            }
+            .ui-panel.ui-widget-content{
+                padding: 0 !important;
+            }
             .contacts-datalist .text-column p:last-child{
                 color:#757575;
             }
@@ -30,17 +48,165 @@
                 font-weight: 700;
             }
             .fixed-length-text{         
-                 white-space: nowrap;
-                 overflow: hidden;
-                 text-overflow: ellipsis;
-                 max-width: 140px;
-           }
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 140px;
+            }
+
+            .contact-hr{
+                margin: 0;
+                border: 0; 
+                height: 1px; 
+                background-image: -webkit-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+                background-image: -moz-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+                background-image: -ms-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+                background-image: -o-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0); 
+            }
+
+
+            .Profile-PlaceHolder{
+                height:50px;
+                width: 50px;
+                padding: 5px;
+                margin: 6px 0px 0px 3px;
+                border: 1px solid;
+                color: #ffffff;
+                text-align: center; 
+                vertical-align: middle;
+                line-height: 50px;
+                background-color: #009688;
+                font-size: 25px;
+                text-transform:uppercase;
+            }
+            .Profile-PlaceHolder.Employee{
+                border-color: #e68a00;
+                background-color: #e68a00;
+            }
+
+            .Profile-PlaceHolder.Vendor{
+                border-color: #0099cc;
+                background-color: #0099cc;
+            }
+
+            .Profile-PlaceHolder.Customer{
+                border-color: #2eb82e;
+                background-color: #2eb82e;
+            }
+
+            .Contact-Type-BTN-Employee{
+                color: #e68a00 !important;
+            }
+
+            .Contact-Type-BTN-Vendor{
+                color: #0099cc !important;
+            }
+
+            .Contact-Type-BTN-Customer{
+                color: #2eb82e !important;
+            }
 
             @media (max-width:640px) {
                 .contacts-datalist .text-column {
                     text-align: center;
                 }
             }
+            .Contact-Employee {
+                width: 20px;
+                height: 20px;
+                background: url("#{resource['css:Contact-Employee-icon.png']}") no-repeat left top;
+            }
+            .Contact-Vendor {
+                width: 20px;
+                height: 20px;
+                background: url("#{resource['css:Contact-Vendor-icon.png']}") no-repeat left top;
+            }
+            .Contact-Customer {
+                width: 20px;
+                height: 20px;
+                background: url("#{resource['css:Contact-Customer-icon.png']}") no-repeat left top;
+            }
+            .folded-corner {
+                position: relative;
+                /*color: #fff;*/
+                background: #fff;
+                border:0px solid;
+            }
+            /*                        .folded-corner:before {
+                                        content: "";
+                                        position: absolute;
+                                        top: 0;
+                                        right: 0;
+                                        border-width: 0 16px 16px 0;
+                                        border-style: solid;
+                                        border-color: #658E15 #fff;
+                                        display: block;
+                                        width: 0;
+                                    }*/
+            .folded-corner:before {
+                content: '';
+                position: absolute;
+                top: -1px;
+                left: -3px;
+                width: 0;
+                height: 0;
+                border-top: 10px solid #fff;
+                border-left: 10px solid #fff;
+                -webkit-box-shadow: 1px 1px 1px hsla(0,0%,0%,.25);
+                -moz-box-shadow: 1px 1px 1px hsla(0,0%,0%,.25);
+                box-shadow: 1px 1px 1px hsla(0,0%,0%,.25);
+                -webkit-border-bottom-right-radius: 4px;
+                -moz-border-radius: 0 0 4px 0;
+                border-radius: 0 0 4px 0;
+            }
+            .folded-corner:after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 0;
+                height: 0;
+            }
+
+            .Contact-Type-Employee{
+                border-bottom-color: #e68a00 !important;
+                border-left-color: #e68a00 !important;
+            }
+
+            .Contact-Type-Vendor{
+                border-bottom-color: #0099cc !important;
+                border-left-color: #0099cc !important;
+            }
+
+            .Contact-Type-Customer{
+                border-bottom-color: #2eb82e !important;
+                border-left-color: #2eb82e !important;
+            }
+            .Contact-Type-Employee:before{
+                border-bottom: 10px solid #e68a00;
+                border-right: 10px solid #e68a00;
+            }
+
+            .Contact-Type-Vendor:before{
+                border-bottom: 10px solid #0099cc;
+                border-right: 10px solid #0099cc;
+            }
+
+            .Contact-Type-Customer:before{
+                border-bottom: 10px solid #2eb82e;
+                border-right: 10px solid #2eb82e;
+            }
+            .contacts{                
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;  
+            }
+            .ellipsis{ 
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
         </style>
     </ui:define>
 
@@ -49,10 +215,15 @@
 
         <h:form id="contactListForm">
             <si:cdataPanel newAction= "#{contactController.redirectToCreateContact()}" deleteAction="#{contactListController.delete()}">
+                <f:facet name="left">
+                    <p:commandButton icon="Contact-Employee" value="Employee (#{contactListController.totalEmployees})" action="#{contactListController.populateContactEmployeeList()}" styleClass="AquaButton" update="#{p:component('contacts')}" />
+                    <p:commandButton icon="Contact-Vendor" value="Vendor (#{contactListController.totalVendors})" action="#{contactListController.populateContactVendorList()}" styleClass="AquaButton" update="#{p:component('contacts')}" />
+                    <p:commandButton icon="Contact-Customer" value="Customer (#{contactListController.totalCustomers})" action="#{contactListController.populateContactCustomerList()}" styleClass="AquaButton" update="#{p:component('contacts')}"/>
+                </f:facet>
                 <p:dataGrid var="contact" 
                             value="#{contactListController.contacts}" 
-                            columns="6" layout="grid"
-                            paginator="true"
+                            columns="4" layout="grid"
+                            paginator="true" 
                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {TableHeader}"
                             rowsPerPageTemplate="6,12,18,24"
                             rows="18" id="contacts">
@@ -64,48 +235,61 @@
                         <p:selectOneButton id="filterChar"
                                            value="#{contactListController.selectedFilter}">
 
-                            <p:ajax update="contacts" listener="#{contactListController.populateContactList}"/>
+                            <p:ajax update="contactListForm" listener="#{contactListController.populateContactList}"/>
                             <f:selectItem itemLabel="All" itemValue="" />
-                            <f:selectItems value="#{contactListController.filters}" />
+                            <f:selectItems value="#{contactListController.filters}"/>
                         </p:selectOneButton>
                     </f:facet>
-                    <div class="contacts">
-                        <p:panel header="#{contact.firstName} #{contact.lastName}" 
-                                 style="text-align:center">
-                            <h:panelGrid columns="1" style="width:100%">
-                                <p:graphicImage name="images/user-avtar-icon2.png"
-                                                library="ultima-layout" 
-                                                width="45"/>
-                                <h:panelGroup layout="block" styleClass="fixed-length-text">
-                                    <p:outputLabel value="#{contact.telephone}" styleClass="phone"/>
+
+                    <div class="contacts" style="padding:0px 5px 5px 0px;box-sizing: content-box">
+
+                        <p:panel style="text-align:left; width: 100%;height:150px;" styleClass="Contact-Type-#{contact.contactType.name} folded-corner">
+
+                            <h:panelGrid columns="2" style="width:100%;padding: 0;vertical-align: middle" columnClasses="ui-grid-col-9,ui-grid-col-3"  styleClass="ui-panelgrid-blank">
+                                <h:panelGroup layout="block" style="line-height: 38px;height:40px" styleClass="ellipsis">
+                                    <h:outputText value="#{contact.fullName}" style="padding-left:20px;font-size: 15px"/>
                                 </h:panelGroup>
-                                <h:panelGroup layout="block" styleClass="fixed-length-text">
-                                    <p:outputLabel value="#{contact.email}" styleClass="email"/>
-                                </h:panelGroup>
-                                <h:panelGrid columns="1" style="margin: 0 auto">
-                                    <p:commandButton icon="ui-icon-edit" 
-                                                     title="Edit Contact"
-                                                     styleClass="AquaButton" 
+                                <h:panelGrid columns="2" style="font-size: 11px;">
+                                    <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" 
+                                                     title="Edit Contact" 
                                                      update="@form:selectedContactDetail" 
                                                      action="#{contactListController.redirectToEditContact}" >
                                         <f:setPropertyActionListener value="#{contact}" target="#{contactListController.contact}" />
                                     </p:commandButton>
-
                                     <p:commandButton icon="ui-icon-delete" styleClass="AquaButton"
-                                                     title="Delete Contact"
+                                                     title="Delete Contact" 
                                                      update="#{p:component('contactListForm')}" 
-                                                     action="#{contactListController.deleteContact()}">
+                                                     action="#{contactListController.deleteContact()}" >
                                         <f:setPropertyActionListener value="#{contact}" target="#{contactListController.contact}" />
                                         <p:confirm header="Delete contact" message="Are you sure you want to delete?" icon="ui-icon-alert" />
-
                                     </p:commandButton>
-
                                 </h:panelGrid>
+                            </h:panelGrid>
+                            <hr class="contact-hr"/>
+                            <h:panelGrid columns="2" style="width:100%;" columnClasses="ui-grid-col-3,ui-grid-col-9" styleClass="ui-panelgrid-blank form-group">
+                                <div class="Profile-PlaceHolder #{contact.contactType.name}" >
+                                    #{contact.firstName.substring(0,1)}#{contact.lastName.substring(0,1)}
+                                </div>
+                                <!--                                <p:graphicImage name="images/user-avtar-icon2.png" 
+                                                                                library="ultima-layout" stream="false"
+                                                                                width="70" height="90"/>-->
+                                <h:panelGroup style="font-size: 11.5px;color: #757575;display: block" layout="block" styleClass="ellipsis">
+                                    <h:outputText value="Company : " style="font-weight: bold;"/>
+                                    <h:outputText value="#{contact.organization}"/><br/>
+                                    <h:outputText value="Email : " style="font-weight: bold;"/>
+                                    <h:outputText value="#{contact.email}"/><br/>
+                                    <h:outputText value="Tel. No. : " style="font-weight: bold;"/>
+                                    <h:outputText value="#{contact.telephone}" /><br/>
+                                    <h:outputText value="Next Due Date : " rendered="#{contact.closestDueDate!=null}" style="font-weight: bold;"/>
+                                    <h:outputText value="#{contact.closestDueDate}" rendered="#{contact.closestDueDate!=null}">
+                                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                                    </h:outputText><br/>
+                                    <h:outputText value="Due Amount : " rendered="#{contact.dueAmount!=null}" style="font-weight: bold;"/>
+                                    <h:outputText value="#{contact.currency.currencySymbol} #{contact.dueAmount}" rendered="#{contact.dueAmount!=null}"/><br/>
+                                </h:panelGroup>
+                            </h:panelGrid>
 
-                            </h:panelGrid>
-                            <h:panelGrid columns="1" style="width:100%; text-align: left">
-                                <h:selectBooleanCheckbox value="#{contact.selected}" />
-                            </h:panelGrid>
+
                         </p:panel>
                     </div>
                 </p:dataGrid>

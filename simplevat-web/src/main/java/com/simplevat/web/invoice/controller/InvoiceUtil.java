@@ -50,7 +50,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Named
 public class InvoiceUtil extends AbstractReportBean {
 
-    private final String COMPILE_FILE_NAME = "Invoice_37";
+    private final String COMPILE_FILE_NAME = "Invoice";
     private int invoiceId;
 
     @Autowired
@@ -90,7 +90,7 @@ public class InvoiceUtil extends AbstractReportBean {
                 BigDecimal totalVat = new BigDecimal(0);
                 BigDecimal netSubtotal = new BigDecimal(0);
                 int quantity = 0;
-                List<InvoiceItemModel> invoiceItemModelList = invoiceModel.getInvoiceItems();
+                List<InvoiceItemModel> invoiceItemModelList = invoiceModel.getInvoiceLineItems();
                 for (InvoiceItemModel invoiceItem : invoiceItemModelList) {
                     if (invoiceItem.getVatId().compareTo(new BigDecimal(0)) > 0) {
                         totalVat = totalVat.add((invoiceItem.getUnitPrice().multiply(new BigDecimal(invoiceItem.getQuatity()))).divide(new BigDecimal(invoiceItem.getVatId().doubleValue())));
@@ -102,24 +102,29 @@ public class InvoiceUtil extends AbstractReportBean {
                 parameters.put("companyName", company.getCompanyName());
                 parameters.put("CompanyImage", new ByteArrayInputStream(company.getCompanyLogo()));
                 parameters.put("companyAddress", getComapnyAddress(company));
-                parameters.put("invoiceHolderAddress", getInvoiceHolderAddress(invoiceModel.getContact()));
-                parameters.put("invoiceNumber", "INVOICE " + invoiceModel.getInvoiceRefNo());
+                parameters.put("invoiceHolderAddress", getInvoiceHolderAddress(invoiceModel.getInvoiceContact()));
+                parameters.put("invoiceNumber", "INVOICE " + invoiceModel.getInvoiceReferenceNumber());
                 parameters.put("invoiceDate", String.valueOf(dateFormat.format(invoiceModel.getInvoiceDate())));
                 if (invoiceModel.getInvoiceDueDate() != null) {
                     parameters.put("paymentDueDate", String.valueOf(dateFormat.format(invoiceModel.getInvoiceDueDate())));
                 } else {
                     parameters.put("paymentDueDate", "");
                 }
+                parameters.put("notes", invoiceModel.getInvoiceNotes());
                 parameters.put("CurrencySymbol", currency.getCurrencySymbol());
                 parameters.put("CurrencyISOCode", currency.getCurrencyIsoCode());
                 parameters.put("quantity", String.valueOf(quantity));
                 parameters.put("details", "");
-                parameters.put("paymentReference", invoiceModel.getInvoiceRefNo());
+                parameters.put("paymentReference", invoiceModel.getInvoiceReferenceNumber());
                 parameters.put("vat", String.valueOf(totalVat));
                 parameters.put("netSubtotal", String.valueOf(netSubtotal));
                 parameters.put("netTotal", String.valueOf(netSubtotal.add(totalVat)));
-                parameters.put("paymentDetails", String.valueOf(invoiceModel.getInvoiceText()));
-                parameters.put("accountNumber", String.valueOf(invoiceModel.getContractPoNumber()));
+                parameters.put("paymentDetails", "");
+                if (invoiceModel.getContractPoNumber() != null) {
+                    parameters.put("accountNumber", String.valueOf(invoiceModel.getContractPoNumber()));
+                } else {
+                    parameters.put("accountNumber", "");
+                }
                 parameters.put("otherInformation", company.getCompanyRegistrationNumber());
 
             } catch (Exception ex) {
@@ -214,7 +219,7 @@ public class InvoiceUtil extends AbstractReportBean {
                 BigDecimal unitprice = new BigDecimal(0);
                 BigDecimal vat = new BigDecimal(0);
                 BigDecimal subTotal = new BigDecimal(0);
-                List<InvoiceItemModel> invoiceItemModelList = invoiceModel.getInvoiceItems();
+                List<InvoiceItemModel> invoiceItemModelList = invoiceModel.getInvoiceLineItems();
                 for (InvoiceItemModel invoiceItem : invoiceItemModelList) {
                     unitprice = invoiceItem.getUnitPrice();
                     if (invoiceItem.getVatId().compareTo(new BigDecimal(0)) > 0) {
@@ -222,7 +227,7 @@ public class InvoiceUtil extends AbstractReportBean {
                     }
                     subTotal = invoiceItem.getUnitPrice().multiply(new BigDecimal(invoiceItem.getQuatity()));
                     quantity = invoiceItem.getQuatity();
-                    dataBeanList.add(new InvoiceDataSourceModel(String.valueOf(quantity), invoiceItem.getDescription(), unitprice, vat, subTotal));
+                    dataBeanList.add(new InvoiceDataSourceModel(String.valueOf(quantity), invoiceItem.getProductService(), invoiceItem.getDescription(), unitprice, vat, subTotal));
                 }
 
             } catch (Exception ex) {

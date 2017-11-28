@@ -127,6 +127,33 @@
                 </h:panelGroup>
             </p:panelGrid>
         </p:fieldset>
+
+        <p:fieldset legend="#{messages.CompanyCostDetatil}" toggleable="false">
+            <p:panelGrid columns="6" id="CompanyCost"
+                         columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                         layout="grid" 
+                         styleClass="ui-panelgrid-blank form-group"
+                         style="border:0px none; background-color:transparent;">
+
+                <p:outputLabel for="CompanyExpenseBudget" />
+                <h:panelGroup styleClass="md-inputfield">
+                    <p:inputNumber id="CompanyExpenseBudget" disabled="true" value="#{companyProfileController.companyModel.companyExpenseBudget}" 
+                                   symbolPosition="p" symbol="#{companyProfileController.companyModel.companyCountryCode.currencyCode.currencySymbol}" />
+                    <label>#{messages.CompanyExpenseBudget}</label>
+                    <p:message for="CompanyExpenseBudget" />
+                </h:panelGroup>
+
+                <p:outputLabel for="CompanyRevenueBudget" />
+                <h:panelGroup styleClass="md-inputfield">
+                    <p:inputNumber id="CompanyRevenueBudget" disabled="true" value="#{companyProfileController.companyModel.companyRevenueBudget}" 
+                                   symbolPosition="p" symbol="#{companyProfileController.companyModel.companyCountryCode.currencyCode.currencySymbol}" />
+                    <label>#{messages.CompanyRevenueBudget}</label>
+                    <p:message for="CompanyRevenueBudget" />
+                </h:panelGroup>
+
+            </p:panelGrid>
+        </p:fieldset>
+
         <p:fieldset legend="#{messages.InvoicingAddress}" toggleable="false">
             <p:panelGrid columns="6" id="invoicingAdd"
                          columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 

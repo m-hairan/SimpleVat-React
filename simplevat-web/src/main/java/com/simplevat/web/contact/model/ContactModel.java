@@ -5,7 +5,9 @@ import com.simplevat.entity.Currency;
 import com.simplevat.entity.Language;
 import com.simplevat.entity.Title;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -74,9 +76,30 @@ public class ContactModel implements Serializable {
     private Currency currency;
 
     private Title title;
-    
+
     private ContactType contactType;
+    
+    private Date closestDueDate;
+
+    private BigDecimal dueAmount;
 
     private Boolean selected = Boolean.FALSE;
 
+    public String getFullName() {
+        StringBuilder sb = new StringBuilder();
+        if (title != null) {
+            sb.append(title.getTitleDescription()).append(" ");
+        }
+        if (firstName != null && !firstName.isEmpty()) {
+            sb.append(firstName).append(" ");
+        }
+        if (middleName != null && !middleName.isEmpty()) {
+            sb.append(middleName).append(" ");
+        }
+        if (lastName != null && !lastName.isEmpty()) {
+            sb.append(lastName);
+        }
+        return sb.toString();
+    }
+    
 }

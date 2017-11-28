@@ -20,6 +20,21 @@ and open the template in the editor.
 body.layout-compact .ui-datatable tbody tr.ui-widget-content td {
     padding: 3px 10px;
 }
+.status-PAID {
+    width: 20px;
+    height: 20px;
+    background: url("#{resource['css:paid-icon.png']}") no-repeat left top;
+}
+.status-PARTIALPAID {
+   width: 20px;
+    height: 20px;
+    background: url("#{resource['css:partial-paid-icon.png']}") no-repeat left top;
+}
+.status-UNPAID {
+    width: 20px;
+    height: 20px;
+    background: url("#{resource['css:unpaid-icon.png']}") no-repeat left top;
+}
 .transtype-EXPLAINED {
     width: 20px;
     height: 20px;

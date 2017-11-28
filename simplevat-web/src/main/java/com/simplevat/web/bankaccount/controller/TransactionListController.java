@@ -9,12 +9,14 @@ import org.springframework.stereotype.Controller;
 
 import com.simplevat.web.bankaccount.model.TransactionModel;
 import com.simplevat.criteria.bankaccount.TransactionCriteria;
+import com.simplevat.entity.Purchase;
 import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionStatus;
 import com.simplevat.entity.bankaccount.TransactionType;
 import com.simplevat.entity.invoice.Invoice;
+import com.simplevat.service.PurchaseService;
 import com.simplevat.service.TransactionCategoryServiceNew;
 import com.simplevat.service.bankaccount.BankAccountService;
 import com.simplevat.service.bankaccount.TransactionService;
@@ -22,7 +24,8 @@ import com.simplevat.service.bankaccount.TransactionStatusService;
 import com.simplevat.service.bankaccount.TransactionTypeService;
 import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.web.bankaccount.model.BankAccountModel;
-import com.simplevat.web.constant.InvoiceStatusConstant;
+import com.simplevat.web.bankaccount.model.ReferenceObjectClass;
+import com.simplevat.web.constant.InvoicePurchaseStatusConstant;
 import com.simplevat.web.constant.TransactionCategoryConsatant;
 import com.simplevat.web.constant.TransactionCreditDebitConstant;
 import com.simplevat.web.constant.TransactionEntryTypeConstant;
@@ -52,6 +55,8 @@ public class TransactionListController extends TransactionControllerHelper imple
     private TransactionService transactionService;
     @Autowired
     private InvoiceService invoiceService;
+    @Autowired
+    private PurchaseService purchaseService;
     @Autowired
     private TransactionCategoryServiceNew transactionCategoryService;
     @Autowired
@@ -108,8 +113,6 @@ public class TransactionListController extends TransactionControllerHelper imple
     int parentTransIndex;
     private int datatableInitialRowCount = 10;
     private int datatableRowCount = datatableInitialRowCount;
-    public Integer referenceType = null;
-    BigDecimal transactionAmount = null;
     TransactionModel currentTransactionModel;
 
     @PostConstruct
@@ -191,35 +194,37 @@ public class TransactionListController extends TransactionControllerHelper imple
         String suggestedTransactionString = "";
         if (!model.getChildTransactionList().isEmpty()) {
             TransactionModel childModel = model.getChildTransactionList().get(0);
-            if (childModel.getRefObject() != null) {
-                if (childModel.getRefObject() instanceof Invoice) {
-                    Invoice invoice = (Invoice) childModel.getRefObject();
-                    suggestedTransactionString = childModel.getTransactionType().getTransactionTypeName() + " : " + childModel.getExplainedTransactionCategory().getTransactionCategoryName()
-                            + " : " + (childModel.getTransactionDescription() != null ? childModel.getTransactionDescription() + " : " : "") + invoice.getInvoiceReferenceNumber() + " : " + invoice.getInvoiceContact().getFirstName()
-                            + " : " + invoice.getCurrency().getCurrencySymbol() + " " + invoice.getDueAmount()
-                            + " : Due On : " + new SimpleDateFormat("MM/dd/yyyy").format(Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant()))
-                            + "......";
-                }
-            } else {
-                suggestedTransactionString = childModel.getTransactionType().getTransactionTypeName() + " : " + childModel.getExplainedTransactionCategory().getTransactionCategoryName()
-                        + " : " + (childModel.getTransactionDescription() != null ? childModel.getTransactionDescription() : "") + "......";
-            }
+            suggestedTransactionString = generateSuggestedTransactionString(childModel);
         } else {
-            if (model.getRefObject() != null) {
-                if (model.getRefObject() instanceof Invoice) {
-                    Invoice invoice = (Invoice) model.getRefObject();
-                    suggestedTransactionString = model.getTransactionType().getTransactionTypeName() + " : " + model.getExplainedTransactionCategory().getTransactionCategoryName()
-                            + " : " + (model.getTransactionDescription() != null ? model.getTransactionDescription() + " : " : "") + invoice.getInvoiceReferenceNumber() + " : " + invoice.getInvoiceContact().getFirstName()
-                            + " : " + invoice.getCurrency().getCurrencySymbol() + " " + invoice.getDueAmount()
-                            + " : Due On : " + new SimpleDateFormat("MM/dd/yyyy").format(Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant()))
-                            + "......";
-                }
-            } else {
-                suggestedTransactionString = model.getTransactionType().getTransactionTypeName() + " : " + model.getExplainedTransactionCategory().getTransactionCategoryName()
-                        + " : " + (model.getTransactionDescription() != null ? model.getTransactionDescription() : "") + "......";
-            }
+            suggestedTransactionString = generateSuggestedTransactionString(model);
         }
         model.setSuggestedTransactionString(suggestedTransactionString);
+    }
+
+    private String generateSuggestedTransactionString(TransactionModel transactionModel) {
+        String[] transactionDecrpStringArr = transactionModel.getTransactionDescription().split(" ");
+        String transactionDecription = transactionDecrpStringArr.length > 1 ? transactionDecrpStringArr[0] + " " + transactionDecrpStringArr[1] : transactionDecrpStringArr[0];
+        if (transactionModel.getRefObject() != null) {
+            if (transactionModel.getRefObject() instanceof Invoice) {
+                Invoice invoice = (Invoice) transactionModel.getRefObject();
+                return transactionModel.getTransactionType().getTransactionTypeName() + " : " + transactionModel.getExplainedTransactionCategory().getTransactionCategoryName()
+                        + " : " + (transactionModel.getTransactionDescription() != null ? transactionDecription + " : " : "") + invoice.getInvoiceReferenceNumber() + " : " + invoice.getInvoiceContact().getFirstName()
+                        + " : " + invoice.getCurrency().getCurrencySymbol() + " " + invoice.getDueAmount()
+                        + " : Due On : " + new SimpleDateFormat("MM/dd/yyyy").format(Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant()))
+                        + "......";
+            } else if (transactionModel.getRefObject() instanceof Purchase) {
+                Purchase purchase = (Purchase) transactionModel.getRefObject();
+                return transactionModel.getTransactionType().getTransactionTypeName() + " : " + transactionModel.getExplainedTransactionCategory().getTransactionCategoryName()
+                        + " : " + (transactionModel.getTransactionDescription() != null ? transactionDecription + " : " : "") + (purchase.getReceiptNumber() != null ? purchase.getReceiptNumber() + " :" : "") + " " + purchase.getPurchaseContact().getFirstName()
+                        + " : " + purchase.getCurrency().getCurrencySymbol() + " " + purchase.getPurchaseDueAmount()
+                        + " : Due On : " + new SimpleDateFormat("MM/dd/yyyy").format(Date.from(purchase.getPurchaseDueDate().atZone(ZoneId.systemDefault()).toInstant()))
+                        + "......";
+            }
+        } else {
+            return transactionModel.getTransactionType().getTransactionTypeName() + " : " + transactionModel.getExplainedTransactionCategory().getTransactionCategoryName()
+                    + " : " + (transactionModel.getTransactionDescription() != null ? transactionDecription : "") + "......";
+        }
+        return "";
     }
 
     public void acceptSuggestion(TransactionModel transactionModel) {
@@ -262,7 +267,9 @@ public class TransactionListController extends TransactionControllerHelper imple
 
     private Object getRefObject() {
         Object refObject = null;
-        if (transactionModel.getExplainedTransactionCategory().getTransactionCategoryCode() == TransactionRefrenceTypeConstant.INVOICE) {
+        if (transactionModel.getExplainedTransactionCategory().getTransactionCategoryId() == TransactionCategoryConsatant.TRANSACTION_CATEGORY_INVOICE_PAYMENT) {
+            refObject = transactionModel.getRefObject();
+        } else if (transactionModel.getExplainedTransactionCategory().getParentTransactionCategory().getTransactionCategoryId() == TransactionCategoryConsatant.TRANSACTION_CATEGORY_PURCHASE) {
             refObject = transactionModel.getRefObject();
         }
         return refObject;
@@ -300,55 +307,12 @@ public class TransactionListController extends TransactionControllerHelper imple
                 Invoice invoice = (Invoice) referanceObject;
                 invoice = invoiceService.findByPK(invoice.getInvoiceId());// refreshing the object
                 referanceObject = invoice;
-                BigDecimal invoiceDueAmount = invoice.getDueAmount();
-                invoice.setLastUpdateDate(LocalDateTime.now());
-                invoice.setLastUpdateBy(FacesUtil.getLoggedInUser().getUserId());
-                if (transactionAmount.doubleValue() <= invoiceDueAmount.doubleValue()) {
-                    invoice.setDueAmount(invoiceDueAmount.subtract(transactionAmount));
-                    invoice.setStatus(InvoiceStatusConstant.PAID);
-                    if (invoiceDueAmount.doubleValue() > transactionAmount.doubleValue()) {
-                        invoice.setStatus(InvoiceStatusConstant.PARTIALPAID);
-                    }
-                    if (childTransaction != null) {
-//                        if (tempTransactionAmount != null && childTransaction.getTransactionId() != 0) {
-//                            transactionAmount = transactionAmount.add(tempTransactionAmount);
-//                        }
-                        if (childTransaction.getTransactionId() == 0) {
-                            childTransaction = createNewChildTransaction(childTransaction, TransactionCreditDebitConstant.CREDIT, transactionAmount);
-                        } else {
-                            childTransaction.setTransactionAmount(transactionAmount);
-                            childTransaction.setLastUpdateBy(FacesUtil.getLoggedInUser().getUserId());
-                            childTransaction.setLastUpdateDate(LocalDateTime.now());
-                        }
-                        childTransaction.setReferenceId(invoice.getInvoiceId());
-                        childTransaction.setReferenceType(TransactionRefrenceTypeConstant.INVOICE);
-                        childTransaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED));
-                    } else {
-                        transaction.setReferenceId(invoice.getInvoiceId());
-                        transaction.setReferenceType(TransactionRefrenceTypeConstant.INVOICE);
-                    }
-                } else {
-                    transaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.PARTIALLYEXPLIANED));
-                    Transaction newChildTransaction = null;
-                    if (childTransaction == null) {
-                        newChildTransaction = createNewChildTransaction(transaction, TransactionCreditDebitConstant.CREDIT, invoice.getDueAmount());
-                    } else if (childTransaction.getTransactionId() == 0) {
-                        newChildTransaction = createNewChildTransaction(childTransaction, TransactionCreditDebitConstant.CREDIT, invoice.getDueAmount());
-                    } else {
-                        childTransaction.setReferenceId(invoice.getInvoiceId());
-                        childTransaction.setReferenceType(TransactionRefrenceTypeConstant.INVOICE);
-                        childTransaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED));
-                        childTransaction.setTransactionAmount(invoice.getDueAmount());
-                    }
-                    if (newChildTransaction != null) {
-                        newChildTransaction.setReferenceId(invoice.getInvoiceId());
-                        newChildTransaction.setReferenceType(TransactionRefrenceTypeConstant.INVOICE);
-                        newChildTransaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED));
-                        transaction.getChildTransactionList().add(newChildTransaction);
-                    }
-                    invoice.setDueAmount(new BigDecimal(0));
-                    invoice.setStatus(InvoiceStatusConstant.PAID);
-                }
+                updateInvoiceReference(transaction, childTransaction, transactionAmount, invoice);
+            } else if (referanceObject instanceof Purchase) {
+                Purchase purchase = (Purchase) referanceObject;
+                purchase = purchaseService.findByPK(purchase.getPurchaseId());// refreshing the object
+                referanceObject = purchase;
+                updatePurchaseReference(transaction, childTransaction, transactionAmount, purchase);
             }
         } else {
             if (childTransaction == null) {
@@ -358,9 +322,6 @@ public class TransactionListController extends TransactionControllerHelper imple
                 childTransaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED));
                 childTransaction.setCurrentBalance(new BigDecimal(0.00));
                 childTransaction.setTransactionDate(LocalDateTime.now());
-//                if (tempTransactionAmount != null && childTransaction.getTransactionId() != 0) {
-//                    transactionAmount = transactionAmount.add(tempTransactionAmount);
-//                }
                 if (childTransaction.getTransactionId() == null || childTransaction.getTransactionId() == 0) {
                     childTransaction.setCreatedBy(FacesUtil.getLoggedInUser().getUserId());
                     childTransaction.setCreatedDate(LocalDateTime.now());
@@ -391,7 +352,77 @@ public class TransactionListController extends TransactionControllerHelper imple
         if (referanceObject != null) {
             if (referanceObject instanceof Invoice) {
                 invoiceService.update((Invoice) referanceObject);
+            } else if (referanceObject instanceof Purchase) {
+                purchaseService.update((Purchase) referanceObject);
             }
+        }
+    }
+
+    private void updateInvoiceReference(Transaction parentTransaction, Transaction childTransaction, BigDecimal transactionAmount, Invoice invoice) {
+        BigDecimal invoiceDueAmount = invoice.getDueAmount();
+        invoice.setLastUpdateDate(LocalDateTime.now());
+        invoice.setLastUpdateBy(FacesUtil.getLoggedInUser().getUserId());
+        ReferenceObjectClass referenceObjectClass = new ReferenceObjectClass(invoice.getInvoiceId(), invoice.getDueAmount(), TransactionRefrenceTypeConstant.INVOICE, invoice.getStatus());
+        updateTransactionByRefrenceObject(parentTransaction, childTransaction, transactionAmount, invoiceDueAmount, referenceObjectClass);
+        invoice.setDueAmount(referenceObjectClass.getDueAmount());
+        invoice.setStatus(referenceObjectClass.getStatus());
+    }
+
+    private void updatePurchaseReference(Transaction parentTransaction, Transaction childTransaction, BigDecimal transactionAmount, Purchase purchase) {
+        BigDecimal purchaseDueAmount = purchase.getPurchaseDueAmount();
+        purchase.setLastUpdateDate(LocalDateTime.now());
+        purchase.setLastUpdateBy(FacesUtil.getLoggedInUser().getUserId());
+        ReferenceObjectClass referenceObjectClass = new ReferenceObjectClass(purchase.getPurchaseId(), purchase.getPurchaseDueAmount(), TransactionRefrenceTypeConstant.PURCHASE, purchase.getStatus());
+        updateTransactionByRefrenceObject(parentTransaction, childTransaction, transactionAmount, purchaseDueAmount, referenceObjectClass);
+        purchase.setPurchaseDueAmount(referenceObjectClass.getDueAmount());
+        purchase.setStatus(referenceObjectClass.getStatus());
+    }
+
+    private void updateTransactionByRefrenceObject(Transaction parentTransaction, Transaction childTransaction, BigDecimal transactionAmount, BigDecimal prevDueAmount, ReferenceObjectClass referenceObject) {
+        if (transactionAmount.doubleValue() <= prevDueAmount.doubleValue()) {
+            referenceObject.setDueAmount(prevDueAmount.subtract(transactionAmount));
+            referenceObject.setStatus(InvoicePurchaseStatusConstant.PAID);
+            if (prevDueAmount.doubleValue() > transactionAmount.doubleValue()) {
+                referenceObject.setStatus(InvoicePurchaseStatusConstant.PARTIALPAID);
+            }
+            if (childTransaction != null) {
+                if (childTransaction.getTransactionId() == 0) {
+                    childTransaction = createNewChildTransaction(childTransaction, parentTransaction.getDebitCreditFlag(), transactionAmount);
+                } else {
+                    childTransaction.setTransactionAmount(transactionAmount);
+                    childTransaction.setLastUpdateBy(FacesUtil.getLoggedInUser().getUserId());
+                    childTransaction.setLastUpdateDate(LocalDateTime.now());
+                }
+                childTransaction.setReferenceId(referenceObject.getId());
+                childTransaction.setReferenceType(referenceObject.getReferenceType());
+                childTransaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED));
+            } else {
+                parentTransaction.setReferenceId(referenceObject.getId());
+                parentTransaction.setReferenceType(referenceObject.getReferenceType());
+            }
+        } else {
+            parentTransaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.PARTIALLYEXPLIANED));
+            Transaction newChildTransaction = null;
+            if (childTransaction == null) {
+                newChildTransaction = createNewChildTransaction(parentTransaction, parentTransaction.getDebitCreditFlag(), referenceObject.getDueAmount());
+            } else if (childTransaction.getTransactionId() == 0) {
+                newChildTransaction = createNewChildTransaction(childTransaction, parentTransaction.getDebitCreditFlag(), referenceObject.getDueAmount());
+            } else {
+                childTransaction.setReferenceId(referenceObject.getId());
+                childTransaction.setReferenceType(referenceObject.getReferenceType());
+                childTransaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED));
+                childTransaction.setTransactionAmount(referenceObject.getDueAmount());
+            }
+            if (newChildTransaction != null) {
+                newChildTransaction.setReferenceId(referenceObject.getId());
+                newChildTransaction.setReferenceType(referenceObject.getReferenceType());
+                newChildTransaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED));
+                parentTransaction.getChildTransactionList().add(newChildTransaction);
+            }
+            parentTransaction.setExplainedTransactionCategory(null);
+            parentTransaction.setTransactionType(null);
+            referenceObject.setDueAmount(new BigDecimal(0));
+            referenceObject.setStatus(InvoicePurchaseStatusConstant.PAID);
         }
     }
 
@@ -402,6 +433,10 @@ public class TransactionListController extends TransactionControllerHelper imple
                 Invoice invoice = invoiceService.findByPK(transaction.getReferenceId());
                 invoice.setDueAmount(invoice.getDueAmount().add(transaction.getTransactionAmount()));
                 invoiceService.update(invoice);
+            } else if (transaction.getReferenceType() == TransactionRefrenceTypeConstant.PURCHASE) {
+                Purchase purchase = purchaseService.findByPK(transaction.getReferenceId());
+                purchase.setPurchaseDueAmount(purchase.getPurchaseDueAmount().add(transaction.getTransactionAmount()));
+                purchaseService.update(purchase);
             }
             transaction.setReferenceId(null);
             transaction.setReferenceType(null);
@@ -412,7 +447,6 @@ public class TransactionListController extends TransactionControllerHelper imple
         Transaction childTransaction = new Transaction();
         childTransaction.setDebitCreditFlag(transactionCreditDebitConstant);
         childTransaction.setCreatedBy(FacesUtil.getLoggedInUser().getUserId());
-        childTransaction.setTransactionDate(LocalDateTime.now());
         childTransaction.setCurrentBalance(new BigDecimal(0.00));
         childTransaction.setCreatedDate(LocalDateTime.now());
         if (transaction.getParentTransaction() == null) {
@@ -420,6 +454,7 @@ public class TransactionListController extends TransactionControllerHelper imple
         } else {
             childTransaction.setParentTransaction(transaction.getParentTransaction());
         }
+        childTransaction.setTransactionDate(childTransaction.getTransactionDate());
         childTransaction.setBankAccount(transaction.getBankAccount());
         childTransaction.setEntryType(TransactionEntryTypeConstant.SYSTEM);
         childTransaction.setTransactionType(transaction.getTransactionType());
@@ -429,14 +464,13 @@ public class TransactionListController extends TransactionControllerHelper imple
         return childTransaction;
     }
 
-    public void referenceListner(Object refObject) {
-        if (refObject instanceof Invoice) {
-            referenceType = TransactionRefrenceTypeConstant.INVOICE;
-        }
-    }
-
     public List<Invoice> completeInvoice() {
         return invoiceService.getInvoiceListByDueAmount();
+    }
+
+    public List<Purchase> completePurchase() {
+        List<Purchase> purchaseList = purchaseService.getPurchaseListByDueAmount();
+        return purchaseList;
     }
 
     public List<TransactionCategory> transactionCategories(TransactionType transactionType) throws Exception {

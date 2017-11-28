@@ -35,7 +35,7 @@ public class TransactionCategoryConverter implements Converter {
 
         if (o instanceof TransactionCategory) {
             TransactionCategory transactionCategory = (TransactionCategory) o;
-            return Integer.toString(transactionCategory.getTransactionCategoryCode());
+            return Integer.toString(transactionCategory.getTransactionCategoryId());
         }
         return null;
     }

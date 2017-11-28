@@ -79,14 +79,14 @@
                             <h:panelGroup rendered="#{transaction.transactionStatus.explainationStatusCode != 2 and transaction.suggestedTransactionString.length() > 0}" >
                                 <p:outputLabel value="#{transaction.suggestedTransactionString}" style="font-size: x-small;color:#ff0000" /> 
                                 <p:spacer width="10px"/>
-                                <p:commandLink value=" Accept " action="#{transactionListController.acceptSuggestion(transaction)}" update="transactionsTable" style="font-size: x-small; font-weight: bold"/>
+                                <p:commandLink value=" Accept " action="#{transactionListController.acceptSuggestion(transaction)}" update="transactionsTable" style="font-size: x-small; font-weight: bold;color:#14ad3c"/>
                                 <p:outputLabel value="/" />
-                                <p:commandLink value=" Edit" action="#{transactionListController.expandCollapse(transaction, btnBinding.clientId)}" update="transactionsTable" style="font-size: x-small; font-weight: bold"/>
+                                <p:commandLink value=" Edit" action="#{transactionListController.expandCollapse(transaction, btnBinding.clientId)}" update="transactionsTable" style="font-size: x-small; font-weight: bold;color:#ff0000"/>
                             </h:panelGroup>
                             <h:panelGroup rendered="#{transaction.transactionStatus.explainationStatusCode == 2}" >
                                 <p:outputLabel value="#{transaction.suggestedTransactionString}" style="font-size: x-small;color:#14ad3c" /> 
                                 <p:spacer width="10px"/>
-                                <p:commandLink value=" More" action="#{transactionListController.expandCollapse(transaction, btnBinding.clientId)}" update="transactionsTable" style="font-size: x-small; font-weight: bold" />
+                                <p:commandLink value=" More" action="#{transactionListController.expandCollapse(transaction, btnBinding.clientId)}" update="transactionsTable" style="font-size: x-small; font-weight: bold;color:#14ad3c" />
                             </h:panelGroup>
                         </p:column>
 
@@ -130,6 +130,7 @@
                             <ui:include src="child-transaction.xhtml">
                                 <ui:param name="transaction" value="#{transaction}"/>
                                 <ui:param name="rowIdx" value="#{rowIdx}"/>
+                                <ui:param name="btnBinding" value="#{btnBinding}"/>
                             </ui:include>
                         </p:rowExpansion>
                     </p:dataTable>

@@ -162,15 +162,15 @@ public class HomeController implements Serializable {
         FacesUtil.setSelectedBankAccountId(selectedBankAccountId);
         return "/pages/secure/bankaccount/bank-transactions?faces-redirect=true";
     }
-    
+
     public String redirectToCreateInvoice() {
         return "/pages/secure/invoice/invoice?faces-redirect=true";
     }
-    
+
     public String redirectToCreateExpense() {
         return "/pages/secure/expense/create-expense?faces-redirect=true";
     }
-    
+
     public String redirectToCreateBankAccount() {
         return "/pages/secure/bankaccount/edit-bankaccount?faces-redirect=true";
     }
@@ -316,10 +316,10 @@ public class HomeController implements Serializable {
 
         model.addSeries(vatIn);
         model.addSeries(vatOut);
-        
-         if ((vatInData != null && !vatInData.isEmpty()) || (vatInData != null && !vatInData.isEmpty())) {
-             renderVatInVatOutChart = true;
-         }
+
+        if ((vatInData != null && !vatInData.isEmpty()) || (vatInData != null && !vatInData.isEmpty())) {
+            renderVatInVatOutChart = true;
+        }
 
         return model;
     }

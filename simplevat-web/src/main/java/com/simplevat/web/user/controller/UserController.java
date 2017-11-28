@@ -207,13 +207,14 @@ public class UserController implements Serializable {
                 + "<br>Your user account created successfully.<br> Your username is \""
                 + user.getUserEmail() + "\".<br> Your temparory password is \"" + passwordToMail + "\".";
         try {
-            sendMailToUser(mailEnum, summary, user.getUserEmail());
+            String[] email = {user.getUserEmail()};
+            sendMailToUser(mailEnum, summary, email);
         } catch (Exception ex) {
             Logger.getLogger(InvoiceReminderController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private void sendMailToUser(MailEnum mailEnum, String summary, String senderMailAddress) {
+    private void sendMailToUser(MailEnum mailEnum, String summary, String[] senderMailAddress) {
         Thread t = new Thread(() -> {
             try {
                 Mail mail = new Mail();

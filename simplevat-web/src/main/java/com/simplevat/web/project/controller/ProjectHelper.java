@@ -20,7 +20,8 @@ public class ProjectHelper {
         projectModel.setInvoiceLanguageCode(project.getInvoiceLanguageCode());
         projectModel.setLastUpdateDate(project.getLastUpdateDate());
         projectModel.setLastUpdatedBy(project.getLastUpdateBy());
-        projectModel.setProjectBudget(project.getProjectBudget());
+        projectModel.setProjectExpenseBudget(project.getProjectExpenseBudget());
+        projectModel.setProjectRevenueBudget(project.getProjectRevenueBudget());
         projectModel.setProjectId(project.getProjectId());
         projectModel.setProjectName(project.getProjectName());
         projectModel.setVatRegistrationNumber(project.getVatRegistrationNumber());

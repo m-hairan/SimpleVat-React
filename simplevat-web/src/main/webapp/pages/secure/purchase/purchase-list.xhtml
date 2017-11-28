@@ -11,6 +11,12 @@
 
         <h:form id="form">
             <si:cdataPanel newAction="#{purchaseListController.reDirectToCreate()}">
+                <f:facet name="left">
+                    <p:commandButton value="All (#{purchaseListController.totalPurchases})" styleClass="AquaButton" action="#{purchaseListController.populatePurchases()}" update="#{p:component('purchaseTable')}"/>
+                    <p:commandButton icon="status-PAID" value="Paid (#{purchaseListController.totalPaid})" styleClass="AquaButton" action="#{purchaseListController.allPaidPurchase()}" update="#{p:component('purchaseTable')}"/>
+                    <p:commandButton icon="status-UNPAID" value="Unpaid (#{purchaseListController.totalUnPaid})" styleClass="AquaButton" action="#{purchaseListController.allUnPaidPurchase()}" update="#{p:component('purchaseTable')}"/>
+                    <p:commandButton icon="status-PARTIALPAID" value="Partially Paid (#{purchaseListController.totalPartiallyPaid})" styleClass="AquaButton" action="#{purchaseListController.allPartialPaidPurchase()}" update="#{p:component('purchaseTable')}"/>
+                </f:facet>
                 <p:dataTable var="purchase" 
                              value="#{purchaseListController.purchaseModels}"
                              id="purchaseTable"
@@ -22,11 +28,19 @@
                         <p:outputLabel styleClass="tableCustomHeader" value="Purchases" />
                     </f:facet>
 
+                    <p:column width="30" style="text-align: center">
+                        <h:panelGroup layout="block">
+                            <h:panelGroup layout="block" style="display:block" styleClass="label status-#{purchase.statusName}" >
+                                <h:outputText value=" "/>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </p:column>
+
                     <p:column headerText="#{messages.receiptnumber}" sortBy="#{purchase.receiptNumber}" filterMatchMode="contains" filterBy="#{purchase.receiptNumber}">
                         <h:outputText value="#{purchase.receiptNumber}" />
                     </p:column>
 
-                    
+
                     <p:column headerText="#{messages.amount}" sortBy="#{purchase.purchaseAmount}" styleClass="amount" filterMatchMode="contains" filterBy="#{purchase.purchaseAmount}">
                         <h:outputText value="#{purchase.currency.currencySymbol} " />
                         <h:outputText value="#{purchase.purchaseAmount}" >
@@ -44,19 +58,19 @@
                         </h:outputText>
                     </p:column>
 
-                 <p:column headerText="Action">
+                    <p:column headerText="Action">
 
                         <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" action="#{purchaseListController.redirectToEdit}" title="edit purchase">
                             <f:setPropertyActionListener value="#{purchase}" target="#{purchaseListController.selectedPurchaseModel}" />
                         </p:commandButton>
 
-                     
-                     <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{purchaseController.deletePurchase}" update="purchaseTable" title="delete purchase">
-                         <f:setPropertyActionListener value="#{purchase}" target="#{purchaseController.selectedPurchaseModel}" />
+
+                        <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{purchaseController.deletePurchase}" update="purchaseTable" title="delete purchase">
+                            <f:setPropertyActionListener value="#{purchase}" target="#{purchaseController.selectedPurchaseModel}" />
                             <p:confirm header="#{messages.delete}" message="#{messages.are_you_sure_want_to_delete}" icon="ui-icon-alert" />
                         </p:commandButton>
 
-                     
+
                     </p:column>
 
                 </p:dataTable>

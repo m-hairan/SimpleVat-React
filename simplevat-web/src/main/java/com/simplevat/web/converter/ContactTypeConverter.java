@@ -1,6 +1,7 @@
 package com.simplevat.web.converter;
 
 import com.simplevat.web.constant.ContactTypeConstant;
+import com.simplevat.web.contact.controller.ContactUtil;
 import com.simplevat.web.contact.model.ContactType;
 import com.simplevat.web.financialreport.FinancialPeriod;
 import com.simplevat.web.financialreport.FinancialPeriodHolder;
@@ -37,20 +38,12 @@ public class ContactTypeConverter implements Converter {
     }
 
     private ContactType getContactType(int id) {
-        for (ContactType contactType : getContactTypeList()) {
+        for (ContactType contactType : ContactUtil.contactTypeList()) {
             if (contactType.getId() == id) {
                 return contactType;
             }
         }
         return new ContactType();
-    }
-
-    private List<ContactType> getContactTypeList() {
-        List<ContactType> contactTypeList = new ArrayList<>();
-        contactTypeList.add(new ContactType(ContactTypeConstant.VENDOR, "Vendor"));
-        contactTypeList.add(new ContactType(ContactTypeConstant.CUSTOMER, "Customer"));
-        contactTypeList.add(new ContactType(ContactTypeConstant.EMPLOYEE, "Employee"));
-        return contactTypeList;
     }
 
 }

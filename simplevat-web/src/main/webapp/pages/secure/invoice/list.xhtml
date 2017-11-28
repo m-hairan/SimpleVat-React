@@ -13,12 +13,18 @@
 
         <h:form>
             <si:cdataPanel newAction="#{invoiceListController.redirectToCreateInvoice()}">
+                <f:facet name="left">
+                    <p:commandButton value="All (#{invoiceListController.totalInvoices})" styleClass="AquaButton" action="#{invoiceListController.populateList()}" update="#{p:component('invoiceTable')}"/>
+                    <p:commandButton icon="status-PAID" value="Paid (#{invoiceListController.totalPaid})" styleClass="AquaButton" action="#{invoiceListController.allPaidInvoice()}" update="#{p:component('invoiceTable')}"/>
+                    <p:commandButton icon="status-UNPAID" value="Unpaid (#{invoiceListController.totalUnPaid})" styleClass="AquaButton" action="#{invoiceListController.allUnPaidInvoice()}" update="#{p:component('invoiceTable')}"/>
+                    <p:commandButton icon="status-PARTIALPAID" value="Partially Paid (#{invoiceListController.totalPartiallyPaid})" styleClass="AquaButton" action="#{invoiceListController.allPartialPaidInvoice()}" update="#{p:component('invoiceTable')}"/>
+                </f:facet>
                 <p:dataTable var="invoice" 
-                             value="#{invoiceListController.invoices}"
+                             value="#{invoiceListController.invoiceList}"
                              selectionMode="single"
                              reflow="true"
                              rowIndexVar="index"
-                             selection="#{invoiceListController.selectedInvoice}"
+                             selection="#{invoiceListController.selectedInvoiceModel}"
                              rowKey="#{invoice.invoiceId}" 
                              paginator="true" rows="10"
                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}"
@@ -27,14 +33,20 @@
                         <p:outputLabel styleClass="tableCustomHeader" value="#{messages.invoices}" />
 
                     </f:facet>
+                    <p:column width="30" style="text-align: center">
+                        <h:panelGroup layout="block">
+                            <h:panelGroup layout="block" style="display:block" styleClass="label status-#{invoice.statusName}" >
+                                <h:outputText value=" "/>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </p:column>
                     <p:column headerText="#{messages.refnumber}" sortBy="#{invoice.invoiceReferenceNumber}" filterMatchMode="contains" filterBy="#{invoice.invoiceReferenceNumber}">
                         <h:outputText value="#{invoice.invoiceReferenceNumber}" />
                     </p:column>
 
                     <p:column headerText="#{messages.date}" sortBy="#{invoice.invoiceDate}" filterMatchMode="contains" filterBy="#{invoice.invoiceDate}">
                         <h:outputText value="#{invoice.invoiceDate}" >
-                            <f:converter converterId="localDateTimeConverter" />
-                            <f:attribute name="pattern" value="dd/MM/yyyy"/>
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
                         </h:outputText>
                     </p:column>
 
@@ -44,11 +56,10 @@
 
                     <p:column headerText="#{messages.due_date}" sortBy="#{invoice.invoiceDueDate}" filterMatchMode="contains" filterBy="#{invoice.invoiceDueDate}">
                         <h:outputText value="#{invoice.invoiceDueDate}" >
-                            <f:converter converterId="localDateTimeConverter" />
-                            <f:attribute name="pattern" value="dd/MM/yyyy"/>
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
                         </h:outputText>
                     </p:column>
-                    
+
                     <p:column headerText="#{messages.contact_name}" filterMatchMode="contains" filterBy="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}"
                               sortBy="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}">
                         <h:outputText value="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}" />
@@ -61,7 +72,7 @@
                            var="total" />
                     <p:column headerText="#{messages.total_cost}" filterMatchMode="contains" filterBy="#{total}"
                               sortBy="#{invoice.invoiceAmount}" styleClass="amount">
-                        <h:outputText value="#{invoice.currency.currencySymbol} " />
+                        <h:outputText value="#{invoice.currencyCode.currencySymbol} " />
                         <h:outputText value="#{invoice.invoiceAmount}" >
                             <f:convertNumber type="currency" currencySymbol=""/>
                         </h:outputText>
@@ -69,7 +80,7 @@
 
                     <p:column headerText="#{messages.action}">
                         <p:commandButton title="#{messages.edit_invoice}" icon="ui-icon-edit" styleClass="AquaButton" action="#{invoiceListController.redirectToCreateInvoice}">
-                            <f:setPropertyActionListener value="#{invoice}" target="#{invoiceListController.selectedInvoice}" />
+                            <f:setPropertyActionListener value="#{invoice}" target="#{invoiceListController.selectedInvoiceModel}" />
                         </p:commandButton>
                         <p:commandButton style="margin-left: 7px" 
                                          title="Delete Invoice" 

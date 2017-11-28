@@ -35,7 +35,7 @@ public class TransactionCategoryNewDaoTest extends AbstractJUnit4SpringContextTe
 			TransactionCategory transactionCategory = getTransactionCategory();
 			transactionCategory = dao.persist(transactionCategory);
 			assertTrue("transactionCategory  is null ", transactionCategory != null);
-			PK = transactionCategory.getTransactionCategoryCode();
+			PK = transactionCategory.getTransactionCategoryId();
 	}
 
 	
@@ -55,7 +55,7 @@ public class TransactionCategoryNewDaoTest extends AbstractJUnit4SpringContextTe
 		assertTrue("Transaction Category is  null", transactionCategory != null);
 		transactionCategory = getTransactionCategory();
 		transactionCategory.setTransactionCategoryDescription("UPDATED_DESCRIPTION");
-		transactionCategory.setTransactionCategoryCode(PK);
+		transactionCategory.setTransactionCategoryId(PK);
 		dao.update(transactionCategory);
 		transactionCategory = dao.findByPK(PK);
 		assertTrue("Transaction Category is  null", transactionCategory != null);
@@ -79,9 +79,9 @@ public class TransactionCategoryNewDaoTest extends AbstractJUnit4SpringContextTe
 		TransactionCategoryFilter filter = new TransactionCategoryFilter(transactionCategory,0,2);
 		List<TransactionCategory> listTransactionCategory = dao.filter(filter);
 		assertTrue("testFilter Not working ", listTransactionCategory.size()==2);
-		int transactionCategoryCode = listTransactionCategory.get(0).getTransactionCategoryCode();
+		int transactionCategoryCode = listTransactionCategory.get(0).getTransactionCategoryId();
 		for(int i=1;i<=listTransactionCategory.size()-1;i++) {
-			int anotherCategory = listTransactionCategory.get(i).getTransactionCategoryCode();
+			int anotherCategory = listTransactionCategory.get(i).getTransactionCategoryId();
 			assertTrue("Not in proper order ", transactionCategoryCode < anotherCategory);
 			transactionCategoryCode = anotherCategory;
 			

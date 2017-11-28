@@ -46,6 +46,7 @@ public class ExpenseModel {
     private UploadedFile attachmentFile;
     private StreamedContent attachmentFileContent;
     private Integer versionNumber;
+    private Integer paymentMode;
     byte[] receiptAttachmentBinary;
     private List<ExpenseItemModel> expenseItem;
     private Contact expenseContact;

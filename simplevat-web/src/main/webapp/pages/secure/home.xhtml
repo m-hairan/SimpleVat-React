@@ -96,10 +96,10 @@
                             <h:panelGroup styleClass="cashFlowChartPanelPlaceHolder" style="position:absolute;width:90%">
                                 <ui:include src="../content-loading-placeholder.xhtml"/>
                             </h:panelGroup>
-                            <h:panelGroup styleClass="cashFlowChartPanel" id="cashFlowChartPanel" layout="block" style="display:none">
+                            <h:panelGroup styleClass="cashFlowChartPanel" id="cashFlowChartPanel" layout="block" >
                                 <p:chart type="line" model="#{homeController.cashFlowLineChartModel}" rendered="#{homeController.renderCashFlowLineChartModel}"
                                          style="height:280px;margin-top: 20px;" responsive="true" />
-                                <p:graphicImage value="/resources/images/placeholder/cashflow_placeholder.png" width="360" height="300" rendered="#{!homeController.renderCashFlowLineChartModel}"/>
+                                <p:graphicImage value="/resources/images/placeholder/cashflow_placeholder.png" width="360" height="300" style="display:none" rendered="#{!homeController.renderCashFlowLineChartModel}"/>
                                 <!--<p:commandButton value="Start Your First Cash Flow" style="position: absolute; top:130px;left:85px" rendered="#{!homeController.renderCashFlowLineChartModel}"/>-->
                             </h:panelGroup>
                         </h:panelGroup>

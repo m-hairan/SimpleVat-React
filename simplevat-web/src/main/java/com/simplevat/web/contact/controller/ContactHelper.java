@@ -7,6 +7,7 @@ package com.simplevat.web.contact.controller;
 
 import com.simplevat.entity.Contact;
 import com.simplevat.web.contact.model.ContactModel;
+import com.simplevat.web.contact.model.ContactType;
 
 /**
  *
@@ -43,10 +44,15 @@ public class ContactHelper {
         contactModel.setCreatedDate(contact.getCreatedDate());
         contactModel.setLastUpdateDate(contact.getLastUpdateDate());
         contactModel.setLastUpdatedBy(contact.getLastUpdatedBy());
-        contactModel.setDeleteFlag(contact.getDeleteFlag()); 
+        contactModel.setDeleteFlag(contact.getDeleteFlag());
+        for (ContactType contactType : ContactUtil.contactTypeList()) {
+            if (contactType.getId() == contact.getContactType()) {
+                contactModel.setContactType(contactType);
+            }
+        }
         return contactModel;
     }
-    
+
     public Contact getContact(ContactModel contactModel) {
         Contact contact = new Contact();
         contact.setContactId(contactModel.getContactId());
@@ -76,7 +82,8 @@ public class ContactHelper {
         contact.setCreatedDate(contactModel.getCreatedDate());
         contact.setLastUpdateDate(contactModel.getLastUpdateDate());
         contact.setLastUpdatedBy(contactModel.getLastUpdatedBy());
-        contact.setDeleteFlag(contactModel.getDeleteFlag()); 
+        contact.setDeleteFlag(contactModel.getDeleteFlag());
+        contact.setContactType(contactModel.getContactType().getId());
         return contact;
     }
 }

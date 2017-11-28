@@ -20,7 +20,9 @@ public class ProjectModel {
 
     private String projectName;
 
-    private BigDecimal projectBudget;
+    private BigDecimal projectExpenseBudget;
+    
+    private BigDecimal projectRevenueBudget;
 
     private String contractPoNumber;
 

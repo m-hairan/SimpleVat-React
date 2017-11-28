@@ -87,19 +87,14 @@ public class ContactController extends BaseController implements Serializable {
     public void init() {
         selectedContact = new Contact();
         contactModel = new ContactModel();
-        contactHelper=new ContactHelper();
-        
+        contactHelper = new ContactHelper();
+
         Object objContactId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedContactId");
         System.out.println("selected : :" + objContactId);
         if (objContactId != null) {
             Contact contact = contactService.findByPK(Integer.parseInt(objContactId.toString()));
-            BeanUtils.copyProperties(contact, contactModel);
-            for (ContactType contactType : completeContactType()) {
-                if (contactType.getId() == contact.getContactType()) {
-                    contactModel.setContactType(contactType);
-                }
-            }
-            
+            contactModel = contactHelper.getContactModel(contact);
+
             titles = titleService.getTitles();
         } else {
             contactModel = new ContactModel();
@@ -116,11 +111,7 @@ public class ContactController extends BaseController implements Serializable {
     }
 
     public List<ContactType> completeContactType() {
-        List<ContactType> contactTypeList = new ArrayList<>();
-        contactTypeList.add(new ContactType(ContactTypeConstant.VENDOR, "Vendor"));
-        contactTypeList.add(new ContactType(ContactTypeConstant.CUSTOMER, "Customer"));
-        contactTypeList.add(new ContactType(ContactTypeConstant.EMPLOYEE, "Employee"));
-        return contactTypeList;
+        return ContactUtil.contactTypeList();
     }
 
     private void setDefaultCurrency() {
@@ -155,46 +146,26 @@ public class ContactController extends BaseController implements Serializable {
 
     public String createOrUpdateContact() throws IOException {
         User loggedInUser = FacesUtil.getLoggedInUser();
-        BeanUtils.copyProperties(contactModel, selectedContact);
-        System.out.println("Creating contact " + selectedContact.getContactId());
-        selectedContact.setOrganization(contactModel.getOrganization());
-        selectedContact.setEmail(contactModel.getEmail());
-        selectedContact.setCreatedBy(loggedInUser.getUserId());
-        selectedContact.setContactType(contactModel.getContactType().getId());
+        selectedContact = contactHelper.getContact(contactModel);
         if (selectedContact.getContactId() != null && selectedContact.getContactId() > 0) {
-            this.contactService.update(selectedContact, selectedContact.getContactId());
+            this.contactService.update(selectedContact);
         } else {
+            selectedContact.setCreatedBy(loggedInUser.getUserId());
             this.contactService.persist(selectedContact);
         }
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-//        if(selectedContact.getContactId() != null){
-//            contactService.update(selectedContact);
-//            context.addMessage(null, new FacesMessage("Contact Updated SuccessFully"));
-//       }else{
-//            contactService.persist(selectedContact);
-//            context.addMessage(null, new FacesMessage("Contact Created SuccessFully"));
-//       }
-//        if (contactModel.getContactId() != null) {
-//            context.addMessage(null, new FacesMessage("Contact Updated SuccessFully"));
-//        } else {
-//            context.addMessage(null, new FacesMessage("Contact Created SuccessFully"));
-//        }
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Contact saved successfully"));
         return "list?faces-redirect=true";
     }
 
     public void createOrUpdateAndAddMore() {
         User loggedInUser = FacesUtil.getLoggedInUser();
-        final Contact contact = new Contact();
-        BeanUtils.copyProperties(contactModel, contact);
-        contact.setOrganization(contactModel.getOrganization());
-        contact.setEmail(contactModel.getEmail());
-        contact.setCreatedBy(loggedInUser.getUserId());
-        contact.setContactType(contactModel.getContactType().getId());
+        Contact contact = contactHelper.getContact(contactModel);
         if (selectedContact.getContactId() > 0) {
             this.contactService.update(contact);
         } else {
+            contact.setCreatedBy(loggedInUser.getUserId());
             this.contactService.persist(contact);
         }
         FacesContext context = FacesContext.getCurrentInstance();

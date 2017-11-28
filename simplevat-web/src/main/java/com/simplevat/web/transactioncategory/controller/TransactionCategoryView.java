@@ -24,7 +24,6 @@ import javax.faces.context.FacesContext;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.BeanUtils;
 
 @Controller
 //@ManagedBean(name = "transactionCategoryView")
@@ -144,7 +143,7 @@ public class TransactionCategoryView extends BaseController implements Serializa
         selectedTransactionCategory.setOrderSequence(1);
         selectedTransactionCategory.setCreatedDate(LocalDateTime.now());
         selectedTransactionCategory.setLastUpdateDate(LocalDateTime.now());
-        transactionCategoryService.persist(selectedTransactionCategory, selectedTransactionCategory.getTransactionCategoryCode());
+        transactionCategoryService.persist(selectedTransactionCategory, selectedTransactionCategory.getTransactionCategoryId());
         selectedTransactionCategory = new TransactionCategory();
 
         return CREATE_PAGE + "?faces-redirect=true";
@@ -181,7 +180,7 @@ public class TransactionCategoryView extends BaseController implements Serializa
             TransactionType transactionType = transactionTypeService.getTransactionType(transactionCategoryModel.getTransactionType().getTransactionTypeCode());
             selectedTransactionCategory.setTransactionType(transactionType);
         }
-        if (transactionCategoryModel.getTransactionCategoryCode() != null && transactionCategoryModel.getTransactionCategoryCode() > 0) {
+        if (transactionCategoryModel.getTransactionCategoryId() != null && transactionCategoryModel.getTransactionCategoryId() > 0) {
             transactionCategoryService.update(selectedTransactionCategory);
         }
         selectedTransactionCategory = new TransactionCategory();
@@ -196,7 +195,7 @@ public class TransactionCategoryView extends BaseController implements Serializa
         selectedTransactionCategory.setOrderSequence(1);
         selectedTransactionCategory.setLastUpdateDate(LocalDateTime.now());
         transactionCategoryService.update(selectedTransactionCategory,
-                selectedTransactionCategory.getTransactionCategoryCode());
+        selectedTransactionCategory.getTransactionCategoryId());
         selectedTransactionCategory = new TransactionCategory();
         init();
         return CREATE_PAGE + "?faces-redirect=true";
@@ -205,7 +204,8 @@ public class TransactionCategoryView extends BaseController implements Serializa
     public String editAction() {
         this.editMode = true;
         //return "create-transactioncategory?faces-redirect=true&selectedCategoryId="+transactionCategoryModel.getTransactionCategoryCode() ;
-        return CREATE_PAGE + "?faces-redirect=true&selectedCategoryId=" + transactionCategoryModel.getTransactionCategoryCode();
+        System.out.println("transactionCategoryModel.getTransactionCategoryId()======================"+transactionCategoryModel.getTransactionCategoryId());
+        return CREATE_PAGE + "?faces-redirect=true&selectedCategoryId=" + transactionCategoryModel.getTransactionCategoryId();
 
     }
 

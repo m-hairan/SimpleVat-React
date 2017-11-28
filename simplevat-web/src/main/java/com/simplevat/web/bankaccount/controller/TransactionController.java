@@ -33,7 +33,7 @@ import com.simplevat.service.bankaccount.TransactionStatusService;
 import com.simplevat.service.bankaccount.TransactionTypeService;
 import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.web.bankaccount.model.BankAccountModel;
-import com.simplevat.web.constant.InvoiceStatusConstant;
+import com.simplevat.web.constant.InvoicePurchaseStatusConstant;
 import com.simplevat.web.constant.TransactionCreditDebitConstant;
 import com.simplevat.web.constant.TransactionEntryTypeConstant;
 import com.simplevat.web.constant.TransactionRefrenceTypeConstant;
@@ -154,7 +154,7 @@ public class TransactionController extends TransactionControllerHelper implement
     private Object getRefObject() {
         Object refObject = null;
         if (selectedTransactionModel.getExplainedTransactionCategory() != null
-                && selectedTransactionModel.getExplainedTransactionCategory().getTransactionCategoryCode() == TransactionRefrenceTypeConstant.INVOICE) {
+                && selectedTransactionModel.getExplainedTransactionCategory().getTransactionCategoryId() == TransactionRefrenceTypeConstant.INVOICE) {
             refObject = selectedTransactionModel.getRefObject();
         }
         return refObject;
@@ -180,9 +180,9 @@ public class TransactionController extends TransactionControllerHelper implement
             BigDecimal invoiceDueAmount = invoice.getDueAmount();
             if (transaction.getTransactionAmount().doubleValue() <= invoiceDueAmount.doubleValue()) {
                 invoice.setDueAmount(invoiceDueAmount.subtract(transaction.getTransactionAmount()));
-                invoice.setStatus(InvoiceStatusConstant.PAID);
+                invoice.setStatus(InvoicePurchaseStatusConstant.PAID);
                 if (invoiceDueAmount.doubleValue() > transaction.getTransactionAmount().doubleValue()) {
-                    invoice.setStatus(InvoiceStatusConstant.PARTIALPAID);
+                    invoice.setStatus(InvoicePurchaseStatusConstant.PARTIALPAID);
                 }
                 transaction.setReferenceId(invoice.getInvoiceId());
                 transaction.setReferenceType(TransactionRefrenceTypeConstant.INVOICE);
@@ -195,7 +195,7 @@ public class TransactionController extends TransactionControllerHelper implement
                 newChildTransaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED));
                 transaction.getChildTransactionList().add(newChildTransaction);
                 invoice.setDueAmount(new BigDecimal(0));
-                invoice.setStatus(InvoiceStatusConstant.PAID);
+                invoice.setStatus(InvoicePurchaseStatusConstant.PAID);
             }
         }
     }
@@ -286,7 +286,7 @@ public class TransactionController extends TransactionControllerHelper implement
         }
 
         if (selectedTransactionModel.getExplainedTransactionCategory() != null) {
-            TransactionCategory transactionCategory = transactionCategoryService.findByPK(selectedTransactionModel.getExplainedTransactionCategory().getTransactionCategoryCode());
+            TransactionCategory transactionCategory = transactionCategoryService.findByPK(selectedTransactionModel.getExplainedTransactionCategory().getTransactionCategoryId());
             transaction.setExplainedTransactionCategory(transactionCategory);
         }
 

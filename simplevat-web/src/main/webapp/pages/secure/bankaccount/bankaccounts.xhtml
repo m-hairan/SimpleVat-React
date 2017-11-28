@@ -22,7 +22,9 @@
                     </f:facet>
 
                     <p:column headerText="#{messages.account_name}" sortBy="#{bankAccount.bankAccountName}" filterMatchMode="contains" filterBy="#{bankAccount.bankAccountName}">
-                        <h:outputText value="#{bankAccount.bankAccountName}" />
+                        <p:commandLink value="#{bankAccount.bankAccountName}" style="color: #00695C" action="#{bankAccountController.redirectToTransaction}">
+                            <f:setPropertyActionListener value="#{bankAccount}" target="#{bankAccountController.selectedBankAccount}" />
+                        </p:commandLink>
                     </p:column>
 
                     <p:column headerText="#{messages.account_number}" sortBy="#{bankAccount.accountNumber}" filterMatchMode="contains" filterBy="#{bankAccount.accountNumber}" styleClass="amount">
