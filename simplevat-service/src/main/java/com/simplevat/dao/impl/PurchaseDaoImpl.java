@@ -1,20 +1,17 @@
 package com.simplevat.dao.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Query;
-import javax.persistence.TemporalType;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.simplevat.dao.AbstractDao;
-import com.simplevat.dao.ExpenseDao;
 import com.simplevat.dao.PurchaseDao;
-import com.simplevat.entity.Expense;
 import com.simplevat.entity.Purchase;
+import com.simplevat.entity.invoice.Invoice;
+import java.math.BigDecimal;
+import javax.persistence.TypedQuery;
 
 @Repository
 @Transactional
@@ -23,8 +20,29 @@ public class PurchaseDaoImpl extends AbstractDao<Integer, Purchase> implements P
 	
     @Override
 	public List<Purchase> getAllPurchase() {
-		List<Purchase> expenses = this.executeNamedQuery("allPurchase");
-		return expenses;
+		List<Purchase> purchases = this.executeNamedQuery("allPurchase");
+		return purchases;
 	}
+
+    @Override
+    public Purchase getClosestDuePurchaseByContactId(Integer contactId) {
+        TypedQuery<Purchase> query = getEntityManager().createQuery("Select p from Purchase p where p.deleteFlag = false and p.purchaseDueAmount !=:dueAmount and p.purchaseContact.contactId =:contactId ORDER BY p.purchaseDueDate ASC", Purchase.class);
+        query.setParameter("contactId", contactId);
+        query.setParameter("dueAmount", new BigDecimal(0));
+        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
+            return query.getResultList().get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public List<Purchase> getPurchaseListByDueAmount() {
+        TypedQuery<Purchase> query = getEntityManager().createQuery("Select p from Purchase p where p.deleteFlag = false and p.purchaseDueAmount !=:dueAmount", Purchase.class);
+        query.setParameter("dueAmount", new BigDecimal(0.00));
+        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
+            return query.getResultList();
+        }
+        return null;
+    }
 
 }

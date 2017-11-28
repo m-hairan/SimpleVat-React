@@ -2,6 +2,7 @@ package com.simplevat.entity;
 
 import com.simplevat.entity.converter.DateConverter;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -127,6 +128,14 @@ public class Company implements Serializable{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COMPANY_COUNTRY_CODE")
     private Country companyCountryCode;
+    
+    @Column(name = "COMPANY_EXPENSE_BUDGET")
+    @ColumnDefault(value = "0.00")
+    private BigDecimal companyExpenseBudget;
+    
+    @Column(name = "COMPANY_REVENUE_BUDGET")
+    @ColumnDefault(value = "0.00")
+    private BigDecimal companyRevenueBudget;
     
     @Column(name = "CREATED_BY")
     @Basic(optional = false)

@@ -54,8 +54,8 @@ public class Invoice implements Serializable {
     @Convert(converter = DateConverter.class)
     private LocalDateTime invoiceDueDate;
 
-    @Column(name = "INVOICE_TEXT")
-    private String invoiceText;
+    @Column(name = "INVOICE_NOTES")
+    private String invoiceNotes;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DISCOUNT_TYPE_CODE")

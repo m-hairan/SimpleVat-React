@@ -29,4 +29,14 @@ public class PurchaseServiceImpl extends PurchaseService {
         return purchaseDao;
     }
 
+    @Override
+    public Purchase getClosestDuePurchaseByContactId(Integer contactId) {
+        return purchaseDao.getClosestDuePurchaseByContactId(contactId);
+    }
+
+    @Override
+    public List<Purchase> getPurchaseListByDueAmount() {
+        return purchaseDao.getPurchaseListByDueAmount();
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.simplevat.dao.invoice;
 
 import com.simplevat.dao.AbstractDao;
+import com.simplevat.entity.Contact;
 import com.simplevat.entity.invoice.Invoice;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -73,7 +74,7 @@ public class InvoiceDaoImpl extends AbstractDao<Integer, Invoice> implements Inv
         List<Object[]> invoices = new ArrayList<>(0);
         try {
             String queryString = "select "
-                    + "sum((li.invoiceLineItemUnitPrice*li.invoiceLineItemQuantity*li.invoiceLineItemVat)/100) as vatInTotal, "
+                    + "sum((li.invoiceLineItemUnitPrice*li.invoiceLineItemQuantity)*li.invoiceLineItemVat/100) as vatInTotal, "
                     + "CONCAT(MONTH(i.invoiceDate),'-' , Year(i.invoiceDate)) as month "
                     + "from Invoice i JOIN i.invoiceLineItems li "
                     + "where i.deleteFlag = 'false' and li.deleteFlag= 'false' "
@@ -95,7 +96,7 @@ public class InvoiceDaoImpl extends AbstractDao<Integer, Invoice> implements Inv
         List<Object[]> invoices = new ArrayList<>(0);
         try {
             String queryString = "select "
-                    + "invoiceReferenceNumber, invoiceText, invoiceDate, invoiceDueOn "
+                    + "invoiceReferenceNumber, invoiceNotes, invoiceDate, invoiceDueOn "
                     + "from Invoice i "
                     + "where i.deleteFlag = 'false' "
                     + "and i.invoiceDate BETWEEN :startDate AND :endDate ";
@@ -125,6 +126,17 @@ public class InvoiceDaoImpl extends AbstractDao<Integer, Invoice> implements Inv
         query.setParameter("dueAmount", new BigDecimal(0.00));
         if (query.getResultList() != null && !query.getResultList().isEmpty()) {
             return query.getResultList();
+        }
+        return null;
+    }
+
+    @Override
+    public Invoice getClosestDueInvoiceByContactId(Integer contactId) {
+        TypedQuery<Invoice> query = getEntityManager().createQuery("Select i from Invoice i where i.deleteFlag = false and i.dueAmount !=:dueAmount and i.invoiceContact.contactId =:contactId ORDER BY i.invoiceDueDate ASC", Invoice.class);
+        query.setParameter("contactId", contactId);
+        query.setParameter("dueAmount", new BigDecimal(0));
+        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
+            return query.getResultList().get(0);
         }
         return null;
     }

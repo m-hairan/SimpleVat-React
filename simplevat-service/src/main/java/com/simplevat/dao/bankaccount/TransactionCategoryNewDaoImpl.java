@@ -42,4 +42,14 @@ public class TransactionCategoryNewDaoImpl extends AbstractDao<Integer, Transact
         return null;
     }
 
+    @Override
+    public List<TransactionCategory> findTransactionCategoryListByParentCategory(Integer parentCategoryId) {
+        TypedQuery<TransactionCategory> query = getEntityManager().createQuery("SELECT t FROM TransactionCategory t where t.deleteFlag=FALSE AND t.parentTransactionCategory.transactionCategoryId =:parentCategoryId ORDER BY t.defaltFlag DESC , t.orderSequence ASC, t.transactionCategoryName ASC", TransactionCategory.class);
+        query.setParameter("parentCategoryId", parentCategoryId);
+        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
+            return query.getResultList();
+        }
+        return null;
+    }
+
 }

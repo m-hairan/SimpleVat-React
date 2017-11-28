@@ -34,7 +34,7 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
             String queryString = "select "
                     + "sum(transactionAmount) as total, CONCAT(MONTH(transactionDate),'-' , Year(transactionDate)) as month "
                     + "from Transaction "
-                    + "where debitCreditFlag = 'd' and transactionDate BETWEEN :startDate AND :endDate "
+                    + "where debitCreditFlag = 'c' and transactionDate BETWEEN :startDate AND :endDate "
                     + "group by CONCAT(MONTH(transactionDate),'-' , Year(transactionDate))";
 
             Query query = getEntityManager().createQuery(queryString)
@@ -54,7 +54,7 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
             String queryString = "select "
                     + "sum(transactionAmount) as total, CONCAT(MONTH(transactionDate),'-' , Year(transactionDate)) as month "
                     + "from Transaction "
-                    + "where debitCreditFlag = 'c' and transactionDate BETWEEN :startDate AND :endDate "
+                    + "where debitCreditFlag = 'd' and transactionDate BETWEEN :startDate AND :endDate "
                     + "group by CONCAT(MONTH(transactionDate),'-' , Year(transactionDate))";
             Query query = getEntityManager().createQuery(queryString)
                     .setParameter("startDate", startDate, TemporalType.DATE)

@@ -6,6 +6,7 @@
 package com.simplevat.service;
 
 import com.simplevat.entity.Company;
+import java.math.BigDecimal;
 
 /**
  *
@@ -13,4 +14,7 @@ import com.simplevat.entity.Company;
  */
 public abstract class CompanyService extends SimpleVatService<Integer, Company> {
 
+    public abstract void updateCompanyExpenseBudget(BigDecimal expenseAmount, Company company);
+
+    public abstract void updateCompanyRevenueBudget(BigDecimal revenueAmount, Company company);
 }

@@ -54,4 +54,9 @@ public class TransactionCategoryServiceNewImpl extends TransactionCategoryServic
         return dao.findAllTransactionCategoryByTransactionType(transactionTypeCode);
     }
 
+    @Override
+    public List<TransactionCategory> findTransactionCategoryListByParentCategory(Integer parentCategoryId) {
+        return dao.findTransactionCategoryListByParentCategory(parentCategoryId);
+    }
+
 }

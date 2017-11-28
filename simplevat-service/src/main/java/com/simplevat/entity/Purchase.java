@@ -40,11 +40,26 @@ public class Purchase implements Serializable {
     @Column(name = "PURCHASE_AMOUNT")
     @ColumnDefault(value = "0.00")
     private BigDecimal purchaseAmount;
+    
+    @Basic
+    @Column(name = "PURCHASE_DUE_AMOUNT")
+    @ColumnDefault(value = "0.00")
+    private BigDecimal purchaseDueAmount;
 
     @Basic
     @Column(name = "PURCHASE_DATE")
     @Convert(converter = DateConverter.class)
     private LocalDateTime purchaseDate;
+    
+    @Basic
+    @Column(name = "PURCHASE_DUE_DATE")
+    @Convert(converter = DateConverter.class)
+    private LocalDateTime purchaseDueDate;
+    
+    @Basic(optional = false)
+    @Column(name = "PURCHASE_DUE_ON")
+    @ColumnDefault(value = "0")
+    private Integer purchaseDueOn;
 
     @Basic
     @Column(name = "PURCHASE_DESCRIPTION")
@@ -120,6 +135,12 @@ public class Purchase implements Serializable {
     @Lob
     @Column(name = "RECEIPT_ATTACHMENT")
     private byte[] receiptAttachmentBinary;
+    
+    @Column(name = "STATUS")
+    private Integer status;
+    
+    @Column(name = "PAYMENTMODE")
+    private Integer paymentMode;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "purchase", orphanRemoval = true)
     private Collection<PurchaseLineItem> purchaseLineItems;

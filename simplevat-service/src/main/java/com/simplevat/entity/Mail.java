@@ -27,7 +27,7 @@ import javax.activation.FileTypeMap;
 public class Mail implements Serializable {
     public String from;
     public String fromName;
-    public String to;
+    public String[] to;
     public String subject;
     public String body;
     public Date date;

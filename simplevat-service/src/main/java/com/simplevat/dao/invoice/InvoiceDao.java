@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.simplevat.dao.Dao;
+import com.simplevat.entity.Contact;
 import com.simplevat.entity.invoice.Invoice;
 
 /**
@@ -53,4 +54,6 @@ public interface InvoiceDao extends Dao<Integer, Invoice> {
     public List<Invoice> getInvoiceListByDueDate();
 
     public List<Invoice> getInvoiceListByDueAmount();
+
+    public Invoice getClosestDueInvoiceByContactId(Integer contactId);
 }

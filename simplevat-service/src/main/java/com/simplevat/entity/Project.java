@@ -27,9 +27,13 @@ public class Project implements Serializable {
     @Column(name = "PROJECT_NAME")
     private String projectName;
 
-    @Column(name = "PROJECT_BUDGET")
+    @Column(name = "PROJECT_EXPENSE_BUDGET")
     @ColumnDefault(value = "0.00")
-    private BigDecimal projectBudget;
+    private BigDecimal projectExpenseBudget;
+    
+    @Column(name = "PROJECT_REVENUE_BUDGET")
+    @ColumnDefault(value = "0.00")
+    private BigDecimal projectRevenueBudget;
 
     @Column(name = "CONTRACT_PO_NUMBER")
     private String contractPoNumber;

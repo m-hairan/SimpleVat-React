@@ -12,12 +12,13 @@ import com.simplevat.dao.Dao;
 import com.simplevat.dao.ProjectDao;
 import com.simplevat.entity.Project;
 import com.simplevat.service.ProjectService;
+import java.math.BigDecimal;
 
 /**
  * Created by Utkarsh Bhavsar on 21/03/17.
  */
 @Service("projectService")
-public class ProjectServiceImpl   extends ProjectService {
+public class ProjectServiceImpl extends ProjectService {
 
     @Autowired
     private ProjectDao projectDao;
@@ -25,13 +26,24 @@ public class ProjectServiceImpl   extends ProjectService {
     @Override
     @Transactional(readOnly = true)
     public List<Project> getProjectsByCriteria(ProjectCriteria projectCriteria) throws Exception {
-    	ProjectFilter filter = new ProjectFilter(projectCriteria);
+        ProjectFilter filter = new ProjectFilter(projectCriteria);
         return getDao().filter(filter);
     }
 
+    @Override
+    public Dao<Integer, Project> getDao() {
+        return projectDao;
+    }
 
-	@Override
-	public Dao<Integer, Project> getDao() {
-			return projectDao;
-	}
+    @Override
+    public void updateProjectExpenseBudget(BigDecimal expenseAmount, Project project) {
+        project.setProjectExpenseBudget(project.getProjectExpenseBudget().add(expenseAmount));
+        update(project);
+    }
+
+    @Override
+    public void updateProjectRevenueBudget(BigDecimal revenueAmount, Project project) {
+        project.setProjectRevenueBudget(project.getProjectRevenueBudget().add(revenueAmount));
+        update(project);
+    }
 }

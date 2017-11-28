@@ -16,7 +16,8 @@ import org.hibernate.annotations.ColumnDefault;
 @NamedQueries({
     @NamedQuery(name = "findAllTransactionCategory",
             query = "SELECT t "
-            + "FROM TransactionCategory t where t.deleteFlag=false ORDER BY t.defaltFlag DESC , t.orderSequence ASC"),
+            + "FROM TransactionCategory t where t.deleteFlag=false ORDER BY t.defaltFlag DESC , t.orderSequence ASC")
+    ,
     @NamedQuery(name = "findAllTransactionCategoryByTransactionType",
             query = "SELECT t FROM TransactionCategory t where t.deleteFlag=FALSE AND t.transactionType.transactionTypeCode =:transactionTypeCode ORDER BY t.defaltFlag DESC , t.orderSequence ASC, t.transactionCategoryName ASC")
 })
@@ -26,19 +27,23 @@ import org.hibernate.annotations.ColumnDefault;
 public class TransactionCategory implements Serializable {
 
     private static final long serialVersionUID = 848122185643690684L;
-	
+
     @Id
-    @Column(name = "TRANSACTION_CATEGORY_CODE")
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Integer transactionCategoryCode;
-    
+    @Column(name = "TRANSACTION_CATEGORY_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer transactionCategoryId;
+
     @Basic(optional = false)
     @Column(name = "TRANSACTION_CATEGORY_NAME")
     private String transactionCategoryName;
-    
+
     @Basic
     @Column(name = "TRANSACTION_CATEGORY_DESCRIPTION")
     private String transactionCategoryDescription;
+
+    @Basic
+    @Column(name = "TRANSACTION_CATEGORY_CODE")
+    private String transactionCategoryCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TRANSACTION_TYPE_CODE")
@@ -47,7 +52,7 @@ public class TransactionCategory implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_TRANSACTION_CATEGORY_CODE")
     private TransactionCategory parentTransactionCategory;
-    
+
     @Column(name = "DEFAULT_FLAG")
     @ColumnDefault(value = "'N'")
     @Basic(optional = false)
@@ -57,7 +62,7 @@ public class TransactionCategory implements Serializable {
     @ColumnDefault(value = "1")
     @Basic(optional = false)
     private Integer orderSequence;
-    
+
     @Column(name = "CREATED_BY")
     @Basic(optional = false)
     private Integer createdBy;
@@ -85,6 +90,5 @@ public class TransactionCategory implements Serializable {
     @Basic(optional = false)
     @Version
     private Integer versionNumber;
-
 
 }

@@ -9,7 +9,11 @@ import com.simplevat.entity.Purchase;
 import com.simplevat.service.report.model.BankAccountTransactionReportModel;
 
 public abstract class PurchaseService extends SimpleVatService<Integer, Purchase> {
-	
-	public abstract  List<Purchase> getAllPurchase();
-	
+
+    public abstract List<Purchase> getAllPurchase();
+
+    public abstract Purchase getClosestDuePurchaseByContactId(Integer contactId);
+
+    public abstract List<Purchase> getPurchaseListByDueAmount();
+
 }

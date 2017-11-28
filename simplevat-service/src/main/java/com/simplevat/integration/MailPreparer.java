@@ -22,7 +22,7 @@ public final class MailPreparer {
         return contentSubstitutor.replace(content);
     }
 
-    public static Mail generateForgotPasswordMail(@Nonnull String from, @Nonnull String fromName, @Nonnull String receiverMail, @Nonnull String receiverName, @Nonnull String newPassword, @Nonnull MailEnum mailEnum) {
+    public static Mail generateForgotPasswordMail(@Nonnull String from, @Nonnull String fromName, @Nonnull String[] receiverMail, @Nonnull String receiverName, @Nonnull String newPassword, @Nonnull MailEnum mailEnum) {
 
         Map<String, String> placeHolders = preparePlaceholders(receiverName, newPassword);
         Mail mail = new Mail();

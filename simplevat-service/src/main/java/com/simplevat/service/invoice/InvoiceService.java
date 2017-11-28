@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.simplevat.dao.invoice.InvoiceDao;
+import com.simplevat.entity.Contact;
 import com.simplevat.entity.Event;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.service.SimpleVatService;
@@ -38,6 +39,8 @@ public abstract class InvoiceService extends SimpleVatService<Integer, Invoice> 
         public abstract  List<Invoice> getInvoiceListByDueDate();
         
         public abstract  List<Invoice> getInvoiceListByDueAmount();
+        
+        public abstract  Invoice getClosestDueInvoiceByContactId(Integer contactId);
         
 	@Override
 	protected InvoiceDao getDao() {

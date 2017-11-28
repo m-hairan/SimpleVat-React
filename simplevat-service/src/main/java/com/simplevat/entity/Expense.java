@@ -115,6 +115,12 @@ public class Expense implements Serializable {
     @Basic(optional = false)
     @Version
     private Integer versionNumber;
+    
+//    @Column(name = "STATUS")
+//    private Integer status;
+
+    @Column(name = "PAYMENTMODE")
+    private Integer paymentMode;
 
     @Basic
     @Lob

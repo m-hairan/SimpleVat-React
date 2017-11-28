@@ -201,7 +201,7 @@ public class TransactionServiceImpl extends TransactionService {
     @Override
     public Transaction deleteChildTransaction(Transaction transaction) {
         transaction.setDeleteFlag(true);
-        transactionDao.update(transaction);
+        transactionDao.delete(transaction);
         return transaction;
     }
 
