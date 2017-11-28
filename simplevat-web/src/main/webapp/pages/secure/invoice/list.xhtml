@@ -50,10 +50,6 @@
                         </h:outputText>
                     </p:column>
 
-                    <p:column headerText="#{messages.invoice_due_on}" sortBy="#{invoice.invoiceDueOn}" styleClass="amount" filterMatchMode="contains" filterBy="#{invoice.invoiceDueOn}">
-                        <h:outputText value="#{invoice.invoiceDueOn}" />
-                    </p:column>
-
                     <p:column headerText="#{messages.due_date}" sortBy="#{invoice.invoiceDueDate}" filterMatchMode="contains" filterBy="#{invoice.invoiceDueDate}">
                         <h:outputText value="#{invoice.invoiceDueDate}" >
                             <f:convertDateTime pattern="dd/MM/yyyy"/>

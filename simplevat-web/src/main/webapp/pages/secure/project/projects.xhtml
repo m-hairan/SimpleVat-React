@@ -40,9 +40,6 @@
                     <p:column headerText="VAT Number" sortBy="#{project.vatRegistrationNumber}" filterMatchMode="contains" filterBy="#{project.vatRegistrationNumber}">
                         <h:outputText value="#{project.vatRegistrationNumber}"/>
                     </p:column>
-                    <p:column headerText="Invoice Language" sortBy="#{project.invoiceLanguageCode.languageDescription}" filterMatchMode="contains" filterBy="#{project.invoiceLanguageCode.languageDescription}">
-                        <h:outputText value="#{project.invoiceLanguageCode.languageDescription}"/>
-                    </p:column>
                     <p:column headerText="Currency Code" sortBy="#{project.currency.currencyCode}" filterMatchMode="contains" filterBy="#{project.currency.currencyIsoCode}">
                         <h:outputText value="#{project.currency.currencyIsoCode}"/>
                     </p:column>

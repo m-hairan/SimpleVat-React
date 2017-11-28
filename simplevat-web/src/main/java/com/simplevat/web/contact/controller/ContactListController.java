@@ -117,28 +117,30 @@ public class ContactListController extends BaseController implements Serializabl
             contactList.clear();
             for (Contact contact : contactService.getContacts()) {
                 ContactModel contactModel = contactHelper.getContactModel(contact);
-                calculateContactsByType(contactModel);
+                contactCountByType(contactModel);
                 contactList.add(contactModel);
             }
             filteredContacts = contactList;
         }
     }
 
-    private void calculateContactsByType(ContactModel contactModel) {
-        if (contactModel.getContactType().getId() == ContactTypeConstant.EMPLOYEE) {
-            totalEmployees++;
-        } else if (contactModel.getContactType().getId() == ContactTypeConstant.CUSTOMER) {
-            Invoice invoice = invoiceService.getClosestDueInvoiceByContactId(contactModel.getContactId());
-            Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant());
-            contactModel.setClosestDueDate(Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant()));
-            contactModel.setDueAmount(invoice.getDueAmount());
-            totalCustomers++;
-        } else {
-            Purchase purchase = purchaseService.getClosestDuePurchaseByContactId(contactModel.getContactId());
-            Date.from(purchase.getPurchaseDueDate().atZone(ZoneId.systemDefault()).toInstant());
-            contactModel.setClosestDueDate(Date.from(purchase.getPurchaseDueDate().atZone(ZoneId.systemDefault()).toInstant()));
-            contactModel.setDueAmount(purchase.getPurchaseDueAmount());
-            totalVendors++;
+    private void contactCountByType(ContactModel contactModel) {
+        if (contactModel.getContactType() != null) {
+            if (contactModel.getContactType().getId() == ContactTypeConstant.EMPLOYEE) {
+                totalEmployees++;
+            } else if (contactModel.getContactType().getId() == ContactTypeConstant.CUSTOMER) {
+                Invoice invoice = invoiceService.getClosestDueInvoiceByContactId(contactModel.getContactId());
+                Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant());
+                contactModel.setClosestDueDate(Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant()));
+                contactModel.setDueAmount(invoice.getDueAmount());
+                totalCustomers++;
+            } else {
+                Purchase purchase = purchaseService.getClosestDuePurchaseByContactId(contactModel.getContactId());
+                Date.from(purchase.getPurchaseDueDate().atZone(ZoneId.systemDefault()).toInstant());
+                contactModel.setClosestDueDate(Date.from(purchase.getPurchaseDueDate().atZone(ZoneId.systemDefault()).toInstant()));
+                contactModel.setDueAmount(purchase.getPurchaseDueAmount());
+                totalVendors++;
+            }
         }
         totalContacts++;
     }
@@ -164,7 +166,7 @@ public class ContactListController extends BaseController implements Serializabl
         for (ContactModel contactModel : contactList) {
             if (contactModel.getFirstName() != null && !contactModel.getFirstName().isEmpty()) {
                 if (contactModel.getFirstName().substring(0, 1).toUpperCase().equals(filterChar.toUpperCase())) {
-                    calculateContactsByType(contactModel);
+                    contactCountByType(contactModel);
                     returnContacts.add(contactModel);
                 }
             }

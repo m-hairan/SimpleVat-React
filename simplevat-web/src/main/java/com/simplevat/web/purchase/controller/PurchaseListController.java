@@ -68,12 +68,14 @@ public class PurchaseListController extends BaseController implements Serializab
     public void populatePurchases() {
         if (purchaseService.getAllPurchase() != null) {
             for (Purchase purchase : purchaseService.getAllPurchase()) {
-                if (purchase.getStatus() == InvoicePurchaseStatusConstant.PAID) {
-                    totalPaid++;
-                } else if (purchase.getStatus() == InvoicePurchaseStatusConstant.PARTIALPAID) {
-                    totalPartiallyPaid++;
-                } else if (purchase.getStatus() == InvoicePurchaseStatusConstant.UNPAID) {
-                    totalUnPaid++;
+                if (purchase.getStatus() != null) {
+                    if (purchase.getStatus() == InvoicePurchaseStatusConstant.PAID) {
+                        totalPaid++;
+                    } else if (purchase.getStatus() == InvoicePurchaseStatusConstant.PARTIALPAID) {
+                        totalPartiallyPaid++;
+                    } else if (purchase.getStatus() == InvoicePurchaseStatusConstant.UNPAID) {
+                        totalUnPaid++;
+                    }
                 }
                 totalPurchases++;
                 PurchaseModel model = purchaseControllerHelper.getPurchaseModel(purchase);
@@ -85,7 +87,7 @@ public class PurchaseListController extends BaseController implements Serializab
     public void allPaidPurchase() {
         purchaseModels.clear();
         for (Purchase purchase : purchaseService.getAllPurchase()) {
-            if (purchase.getStatus() == InvoicePurchaseStatusConstant.PAID) {
+            if (purchase.getStatus() != null && purchase.getStatus() == InvoicePurchaseStatusConstant.PAID) {
                 purchaseModels.add(purchaseControllerHelper.getPurchaseModel(purchase));
             }
         }
@@ -94,7 +96,7 @@ public class PurchaseListController extends BaseController implements Serializab
     public void allUnPaidPurchase() {
         purchaseModels.clear();
         for (Purchase purchase : purchaseService.getAllPurchase()) {
-            if (purchase.getStatus() == InvoicePurchaseStatusConstant.UNPAID) {
+            if (purchase.getStatus() != null && purchase.getStatus() == InvoicePurchaseStatusConstant.UNPAID) {
                 purchaseModels.add(purchaseControllerHelper.getPurchaseModel(purchase));
             }
         }
@@ -103,7 +105,7 @@ public class PurchaseListController extends BaseController implements Serializab
     public void allPartialPaidPurchase() {
         purchaseModels.clear();
         for (Purchase purchase : purchaseService.getAllPurchase()) {
-            if (purchase.getStatus() == InvoicePurchaseStatusConstant.PARTIALPAID) {
+            if (purchase.getStatus() != null && purchase.getStatus() == InvoicePurchaseStatusConstant.PARTIALPAID) {
                 purchaseModels.add(purchaseControllerHelper.getPurchaseModel(purchase));
             }
         }
