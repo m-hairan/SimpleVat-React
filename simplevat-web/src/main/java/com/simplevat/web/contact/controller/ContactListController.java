@@ -130,15 +130,19 @@ public class ContactListController extends BaseController implements Serializabl
                 totalEmployees++;
             } else if (contactModel.getContactType().getId() == ContactTypeConstant.CUSTOMER) {
                 Invoice invoice = invoiceService.getClosestDueInvoiceByContactId(contactModel.getContactId());
-                Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant());
-                contactModel.setClosestDueDate(Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant()));
-                contactModel.setDueAmount(invoice.getDueAmount());
+                if (invoice != null) {
+                    Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant());
+                    contactModel.setClosestDueDate(Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant()));
+                    contactModel.setDueAmount(invoice.getDueAmount());
+                }
                 totalCustomers++;
             } else {
                 Purchase purchase = purchaseService.getClosestDuePurchaseByContactId(contactModel.getContactId());
-                Date.from(purchase.getPurchaseDueDate().atZone(ZoneId.systemDefault()).toInstant());
-                contactModel.setClosestDueDate(Date.from(purchase.getPurchaseDueDate().atZone(ZoneId.systemDefault()).toInstant()));
-                contactModel.setDueAmount(purchase.getPurchaseDueAmount());
+                if (purchase != null) {
+                    Date.from(purchase.getPurchaseDueDate().atZone(ZoneId.systemDefault()).toInstant());
+                    contactModel.setClosestDueDate(Date.from(purchase.getPurchaseDueDate().atZone(ZoneId.systemDefault()).toInstant()));
+                    contactModel.setDueAmount(purchase.getPurchaseDueAmount());
+                }
                 totalVendors++;
             }
         }
