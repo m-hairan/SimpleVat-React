@@ -47,7 +47,7 @@ RUN set -x \
   && sed -i 's/SSLEngine="on"/SSLEngine="off"/g' "${CATALINA_HOME}/conf/server.xml" \
   && apk del --purge build-dependencies
 
-COPY /root/.m2/repository/com/simplevat/simplevat-web/0.0.1-SNAPSHOT/simplevat-web-0.0.1-SNAPSHOT.war  $CATALINA_HOME/webapps/simplevat-web.war
+COPY /workspace/simplevat-web/target/ROOT.war  $CATALINA_HOME/webapps/simplevat-web.war
 
 EXPOSE 8080
 CMD ["catalina.sh", "run"]
