@@ -47,7 +47,5 @@ RUN set -x \
   && sed -i 's/SSLEngine="on"/SSLEngine="off"/g' "${CATALINA_HOME}/conf/server.xml" \
   && apk del --purge build-dependencies
 
-ADD ./target/*.war $CATALINA_HOME/webapps/
-
 EXPOSE 8080
 CMD ["catalina.sh", "run"]
