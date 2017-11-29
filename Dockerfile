@@ -49,5 +49,5 @@ RUN set -x \
 
 EXPOSE 8080
 CMD ["catalina.sh", "run"]
-COPY /workspace/simplevat-web/target/ROOT.war /var/lib/docker/tmp/docker-builder174633153/workspace/simplevat-web/target/
-COPY /workspace/simplevat-web/target/ROOT.war  $CATALINA_HOME/webapps/simplevat-web.war
+
+COPY /root/.m2/repository/com/simplevat/simplevat-web/0.0.1-SNAPSHOT/simplevat-web-0.0.1-SNAPSHOT.war  $CATALINA_HOME/webapps/simplevat-web.war
