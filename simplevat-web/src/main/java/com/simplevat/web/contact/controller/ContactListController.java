@@ -111,6 +111,7 @@ public class ContactListController extends BaseController implements Serializabl
         totalCustomers = 0;
         totalVendors = 0;
         totalContacts = 0;
+        Date startTime = new Date();
         if (this.selectedFilter != null && !this.selectedFilter.isEmpty()) {
             filteredContacts = this.getFilteredContacts(this.selectedFilter);
         } else {
@@ -122,6 +123,8 @@ public class ContactListController extends BaseController implements Serializabl
             }
             filteredContacts = contactList;
         }
+        Date endTime = new Date();
+        System.out.println("Time Required : "+ (endTime.getTime() - startTime.getTime())/1000);
     }
 
     private void contactCountByType(ContactModel contactModel) {
@@ -217,9 +220,11 @@ public class ContactListController extends BaseController implements Serializabl
         List<ContactModel> returnContacts = new ArrayList<>();
         for (ContactModel contactModel : contactList) {
             if (this.selectedFilter != null && !this.selectedFilter.isEmpty()) {
-                if (contactModel.getFirstName().substring(0, 1).toUpperCase().equals(selectedFilter.toUpperCase())) {
-                    if (contactModel.getContactType().getId() == ContactTypeConstant.EMPLOYEE) {
-                        returnContacts.add(contactModel);
+                if (contactModel.getFirstName() != null && !contactModel.getFirstName().isEmpty()) {
+                    if (contactModel.getFirstName().substring(0, 1).toUpperCase().equals(selectedFilter.toUpperCase())) {
+                        if (contactModel.getContactType().getId() == ContactTypeConstant.EMPLOYEE) {
+                            returnContacts.add(contactModel);
+                        }
                     }
                 }
             } else {
@@ -235,9 +240,11 @@ public class ContactListController extends BaseController implements Serializabl
         List<ContactModel> returnContacts = new ArrayList<>();
         for (ContactModel contactModel : contactList) {
             if (this.selectedFilter != null && !this.selectedFilter.isEmpty()) {
-                if (contactModel.getFirstName().substring(0, 1).toUpperCase().equals(selectedFilter.toUpperCase())) {
-                    if (contactModel.getContactType().getId() == ContactTypeConstant.VENDOR) {
-                        returnContacts.add(contactModel);
+                if (contactModel.getFirstName() != null && !contactModel.getFirstName().isEmpty()) {
+                    if (contactModel.getFirstName().substring(0, 1).toUpperCase().equals(selectedFilter.toUpperCase())) {
+                        if (contactModel.getContactType().getId() == ContactTypeConstant.VENDOR) {
+                            returnContacts.add(contactModel);
+                        }
                     }
                 }
             } else {
@@ -253,9 +260,11 @@ public class ContactListController extends BaseController implements Serializabl
         List<ContactModel> returnContacts = new ArrayList<>();
         for (ContactModel contactModel : contactList) {
             if (this.selectedFilter != null && !this.selectedFilter.isEmpty()) {
-                if (contactModel.getFirstName().substring(0, 1).toUpperCase().equals(selectedFilter.toUpperCase())) {
-                    if (contactModel.getContactType().getId() == ContactTypeConstant.CUSTOMER) {
-                        returnContacts.add(contactModel);
+                if (contactModel.getFirstName() != null && !contactModel.getFirstName().isEmpty()) {
+                    if (contactModel.getFirstName().substring(0, 1).toUpperCase().equals(selectedFilter.toUpperCase())) {
+                        if (contactModel.getContactType().getId() == ContactTypeConstant.CUSTOMER) {
+                            returnContacts.add(contactModel);
+                        }
                     }
                 }
             } else {
