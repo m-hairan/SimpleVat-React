@@ -116,15 +116,21 @@ public class ContactListController extends BaseController implements Serializabl
             filteredContacts = this.getFilteredContacts(this.selectedFilter);
         } else {
             contactList.clear();
-            for (Contact contact : contactService.getContacts()) {
+            List<Contact> contactList1 = contactService.getContacts();
+            System.out.println("Time Required 1 : " + (new Date().getTime() - startTime.getTime()) / 1000);
+            for (Contact contact : contactList1) {
+                System.out.println("Time Required 2 : " + (new Date().getTime() - startTime.getTime()) / 1000);
                 ContactModel contactModel = contactHelper.getContactModel(contact);
+                System.out.println("Time Required 3 : " + (new Date().getTime() - startTime.getTime()) / 1000);
                 contactCountByType(contactModel);
+                System.out.println("Time Required 4 : " + (new Date().getTime() - startTime.getTime()) / 1000);
                 contactList.add(contactModel);
             }
             filteredContacts = contactList;
         }
+        
         Date endTime = new Date();
-        System.out.println("Time Required : "+ (endTime.getTime() - startTime.getTime())/1000);
+        System.out.println("Time Required 5 : " + (endTime.getTime() - startTime.getTime()) / 1000);
     }
 
     private void contactCountByType(ContactModel contactModel) {
