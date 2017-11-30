@@ -23,22 +23,69 @@ public class FinancialPeriodHolder {
         List<FinancialPeriod> financialPeriodList = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
+        int id = 1;
+        int monthCount = 2;
+        int monthDecrement = 0;
         if (year >= INITIALYEAR) {
             financialPeriodList.clear();
             for (int i = 0; i <= year - INITIALYEAR; i++) {
-                calendar.set(Calendar.YEAR, year-i);
+                String name = "";
+                FinancialPeriod financialPeriod = new FinancialPeriod();
+                if (i == 0) {
+                    FinancialPeriod financialPeriod1 = new FinancialPeriod();
+                    Calendar calendar1 = Calendar.getInstance();
+                    calendar1.set(Calendar.YEAR, year - i);
+                    calendar1.set(Calendar.DAY_OF_MONTH, 01);
+                    Date startCurrentMonthDate = calendar1.getTime();
+                    calendar1.set(Calendar.YEAR, year - i);
+                    calendar1.set(Calendar.DAY_OF_MONTH, calendar1.getActualMaximum(Calendar.DATE));
+                    Date endCurrentMonthDate = calendar1.getTime();
+                    financialPeriod1.setId(id);
+                    financialPeriod1.setLastDate(endCurrentMonthDate);
+                    financialPeriod1.setStartDate(startCurrentMonthDate);
+                    name = "Current Month";
+                    financialPeriod1.setName(name);
+                    financialPeriodList.add(financialPeriod1);
+                    id++;
+                    Calendar calendar2 = Calendar.getInstance();
+                    FinancialPeriod financialPeriod2 = new FinancialPeriod();
+                    calendar2.set(Calendar.YEAR, year - i);
+                    calendar2.add(Calendar.MONTH, -1);
+                    calendar2.set(Calendar.DAY_OF_MONTH, 01);
+                    Date startPreviousMonthDate = calendar2.getTime();
+                    calendar2.set(Calendar.YEAR, year - i);
+                    calendar2.add(Calendar.MONTH, 0);
+                    calendar2.set(Calendar.DAY_OF_MONTH, calendar2.getActualMaximum(Calendar.DATE));
+                    Date endPreviousMonthDate = calendar2.getTime();
+                    financialPeriod2.setId(id);
+                    financialPeriod2.setLastDate(endPreviousMonthDate);
+                    financialPeriod2.setStartDate(startPreviousMonthDate);
+                    name ="Previous Month";
+                    financialPeriod2.setName(name);
+                    financialPeriodList.add(financialPeriod2);
+                    
+                }
+                id++;
+                calendar.set(Calendar.YEAR, year - i);
                 calendar.set(Calendar.MONTH, 00);
                 calendar.set(Calendar.DAY_OF_MONTH, 01);
                 Date startDate = calendar.getTime();
-                calendar.set(Calendar.YEAR, year-i);
+                calendar.set(Calendar.YEAR, year - i);
                 calendar.set(Calendar.MONTH, 11);
                 calendar.set(Calendar.DAY_OF_MONTH, 31);
                 Date endDate = calendar.getTime();
-                FinancialPeriod financialPeriod = new FinancialPeriod();
-                financialPeriod.setId(i + 1);
+                financialPeriod.setId(id);
                 financialPeriod.setLastDate(endDate);
                 financialPeriod.setStartDate(startDate);
-                String name = new SimpleDateFormat("MM/dd/yyyy").format(startDate) + " To " + new SimpleDateFormat("MM/dd/yyyy").format(endDate);
+
+                if (i > 1) {
+                    name = new SimpleDateFormat("MM/dd/yyyy").format(startDate) + " To " + new SimpleDateFormat("MM/dd/yyyy").format(endDate);
+                } else if (i == 1) {
+                    name = "Previous Year";
+                } else {
+                    name = "Current Year";
+                }
+                //name = new SimpleDateFormat("MM/dd/yyyy").format(startDate) + " To " + new SimpleDateFormat("MM/dd/yyyy").format(endDate);
                 financialPeriod.setName(name);
                 financialPeriodList.add(financialPeriod);
             }

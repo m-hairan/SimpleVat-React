@@ -174,10 +174,10 @@
                                         </h:panelGroup>
 
                                         <h:panelGroup id="InvoiceLabel" >
-                                            <p:outputLabel for="invoice1" rendered="#{transactionController.selectedTransactionModel.explainedTransactionCategory.transactionCategoryCode == 1 and transactionController.selectedTransactionModel.childTransactionList.size() == 0}" />
+                                            <p:outputLabel for="invoice1" rendered="#{transactionController.selectedTransactionModel.explainedTransactionCategory.transactionCategoryId == 1 and transactionController.selectedTransactionModel.childTransactionList.size() == 0}" />
                                         </h:panelGroup>
                                         <h:panelGroup id="InvoiceList" >
-                                            <h:panelGroup styleClass="md-inputfield" rendered="#{transactionController.selectedTransactionModel.explainedTransactionCategory.transactionCategoryCode == 1 and transactionController.selectedTransactionModel.childTransactionList.size() == 0}">
+                                            <h:panelGroup styleClass="md-inputfield" rendered="#{transactionController.selectedTransactionModel.explainedTransactionCategory.transactionCategoryId == 1 and transactionController.selectedTransactionModel.childTransactionList.size() == 0}">
                                                 <p:autoComplete id="invoice1" converter="#{invoiceConverter}"
                                                                 dropdown="true"
                                                                 forceSelection="true"
@@ -189,7 +189,6 @@
                                                                 itemValue="#{invoice}"
                                                                 itemLabel="#{transactionController.autocompleteInvoiceLebal(invoice)}"
                                                                 required="true" requiredMessage="Please select invoice reference.">
-                                                    <p:ajax event="itemSelect" listener="#{transactionListController.referenceListner(transaction.refObject)}"/>
                                                 </p:autoComplete>
                                                 <label>Invoice Reference</label>
                                             </h:panelGroup>

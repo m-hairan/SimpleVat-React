@@ -33,6 +33,8 @@ import com.simplevat.web.utils.FacesUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;
@@ -65,11 +67,11 @@ public class TransactionReport extends BaseController {
 
     @Getter
     @Setter
-    private TransactionType transactionType;
+    private TransactionType transactionType = null;
 
     @Getter
     @Setter
-    private TransactionCategory transactionCategory;
+    private TransactionCategory transactionCategory = null;
 
     @Autowired
     private TransactionTypeService transactionTypeService;
@@ -80,8 +82,7 @@ public class TransactionReport extends BaseController {
 
     List<TransactionCategory> categorys = new ArrayList<>();
 
-    @Getter
-    @Setter
+    @Autowired
     TransactionControllerHelper transactionControllerHelper;
 
     @Getter
@@ -98,7 +99,6 @@ public class TransactionReport extends BaseController {
     @PostConstruct
     public void init() {
         transactionTypeList = transactionTypeService.findAll();
-        transactionControllerHelper = new TransactionControllerHelper();
     }
 
     public void preProcessPDF(Object document) throws IOException, BadElementException, DocumentException {
@@ -142,41 +142,40 @@ public class TransactionReport extends BaseController {
     }
 
     public List<TransactionType> transactionTypes(String type) throws Exception {
+        transactionType = null;
         return transactionTypeList;
     }
 
     public void view() {
         transactionList.clear();
-        List<Transaction> transactions = new ArrayList<Transaction>();
+        List<Transaction> transactions = new ArrayList<>();
+        System.out.println("entered");
         transactions = transactionService.getTransactionsByDateRangeAndTranscationTypeAndTranscationCategory(transactionType, transactionCategory, financialPeriod.getStartDate(), financialPeriod.getLastDate());
-        //   System.out.println("dataa========="+transactionService.getTransactionsByDateRangeAndTranscationTypeAndTranscationCategory(transactionType, transactionCategory, financialPeriod.getStartDate(), financialPeriod.getLastDate()));
         if (transactions != null && !transactions.isEmpty()) {
             for (Transaction transaction : transactions) {
-                totalTransactionAmount=totalTransactionAmount+transaction.getTransactionAmount().doubleValue();
+                totalTransactionAmount = totalTransactionAmount + transaction.getTransactionAmount().doubleValue();
                 transactionList.add(transactionControllerHelper.getTransactionModel(transaction));
             }
         }
     }
 
-    
-      public List<TransactionCategory> transactionCategories(TransactionType transactionType) throws Exception {
+    public List<TransactionCategory> transactionCategories() throws Exception {
+        System.out.println("transactionType==" + transactionType);
         List<TransactionCategory> transactionCategoryParentList = new ArrayList<>();
         List<TransactionCategory> transactionCategoryList = new ArrayList<>();
+        transactionCategoryList.clear();
         if (transactionType != null) {
             transactionCategoryList = transactionCategoryService.findAllTransactionCategoryByTransactionType(transactionType.getTransactionTypeCode());
-        }
-        for (TransactionCategory transactionCategory : transactionCategoryList) {
-            if (transactionCategory.getParentTransactionCategory() != null) {
-                transactionCategoryParentList.add(transactionCategory.getParentTransactionCategory());
+            for (TransactionCategory transactionCategory : transactionCategoryList) {
+                if (transactionCategory.getParentTransactionCategory() != null) {
+                    transactionCategoryParentList.add(transactionCategory.getParentTransactionCategory());
+                }
             }
+            transactionCategoryList.removeAll(transactionCategoryParentList);
+            return transactionCategoryList;
         }
-        transactionCategoryList.removeAll(transactionCategoryParentList);
         return transactionCategoryList;
     }
-
-    
-    
-    
 
     public BankAccount getBankAccount() {
         return bankAccount;

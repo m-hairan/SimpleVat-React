@@ -172,7 +172,6 @@ public class TransactionController extends TransactionControllerHelper implement
             transaction.setReferenceType(null);
         }
     }
-
     private void updateRefObjectAmount(Transaction transaction, Object object) {
         updatePrevReference(transaction);
         if (object instanceof Invoice) {

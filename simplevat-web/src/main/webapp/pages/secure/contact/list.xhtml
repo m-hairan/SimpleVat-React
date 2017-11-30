@@ -280,12 +280,12 @@
                                     <h:outputText value="#{contact.email}"/><br/>
                                     <h:outputText value="Tel. No. : " style="font-weight: bold;"/>
                                     <h:outputText value="#{contact.telephone}" /><br/>
-                                    <h:outputText value="Next Due Date : " rendered="#{contact.closestDueDate!=null}" style="font-weight: bold;"/>
-                                    <h:outputText value="#{contact.closestDueDate}" rendered="#{contact.closestDueDate!=null}">
+                                    <h:outputText value="Next Due Date : " rendered="#{contact.nextDueDate!=null}" style="font-weight: bold;"/>
+                                    <h:outputText value="#{contact.nextDueDate}" rendered="#{contact.nextDueDate!=null}">
                                         <f:convertDateTime pattern="MM/dd/yyyy" />
                                     </h:outputText><br/>
                                     <h:outputText value="Due Amount : " rendered="#{contact.dueAmount!=null}" style="font-weight: bold;"/>
-                                    <h:outputText value="#{contact.currency.currencySymbol} #{contact.dueAmount}" rendered="#{contact.dueAmount!=null}"/><br/>
+                                    <h:outputText value="#{contact.currencySymbol} #{contact.dueAmount}" rendered="#{contact.dueAmount!=null}"/><br/>
                                 </h:panelGroup>
                             </h:panelGrid>
 

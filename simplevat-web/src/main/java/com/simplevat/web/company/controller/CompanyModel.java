@@ -58,4 +58,8 @@ public class CompanyModel {
     private UploadedFile profileImage;
     private Boolean deleteFlag = Boolean.FALSE;
     private Integer versionNumber;
+
+    void setCompanyAddressLine1(String companyAddressLine1) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

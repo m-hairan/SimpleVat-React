@@ -5,17 +5,12 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
                 template="/WEB-INF/templates/template.xhtml">
-
-
     <ui:define name="content">
-
         <h:form id="TransactionReport"
                 enctype="multipart/form-data">
-
             <div class="card card-w-title">
                 <div class="ui-fluid">
                     <div class="ui-g">
-
                         <div class="ui-g-12">
                             <ui:fragment>
                                 <h1>#{messages.TransactionReport}</h1>
@@ -42,17 +37,11 @@
                                                 itemValue="#{financialPeriod}"
                                                 itemLabel="#{financialPeriod.name}"
                                                 required="true"
-                                                requiredMessage="Please select Claimant">
+                                                requiredMessage="Please select financial period">
                                             </p:autoComplete>
                                             <label>#{messages.FinancialPeriod}</label>
                                             <p:message for="year" />
                                         </h:panelGroup>
-
-
-
-
-
-
                                         <p:outputLabel for="purchaseTransactionType"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete
@@ -67,48 +56,44 @@
                                                 itemValue="#{transactionType}" 
                                                 itemLabel="#{transactionType.transactionTypeName}" 
                                                 effect="fold"
-                                                required="true"
-                                                requiredMessage="Please select purchase Type">
-
-                                                <p:ajax update="transactionCategory" event="itemSelect" />
-
-                                            </p:autoComplete>
-                                            <label>#{messages.type}</label>
-                                            <p:message for="purchaseTransactionType" />
-                                        </h:panelGroup>
-
-
-                                        <p:outputLabel for="transactionCategory"/>
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:autoComplete
-                                                id="transactionCategory"
-                                                converter="#{transactionCategoryConverter}"
-                                                dropdown="true"
-                                                forceSelection="true"
-                                                effect="fold"
-                                                groupBy="#{(transactionCategory.parentTransactionCategory.transactionCategoryName != null)?transactionCategory.parentTransactionCategory.transactionCategoryName:'Others'}"
-                                                completeMethod="#{transactionReport.transactionCategories(transactionReport.transactionType)}"
-                                                value="#{transactionReport.transactionCategory}"
-                                                var="transactionCategory"
-                                                itemValue="#{transactionCategory}"
-                                                itemLabel="#{transactionCategory.transactionCategoryName}"
-                                                required="true"
-                                                requiredMessage="Please select purchase Category"
                                                 >
+                                                <p:ajax update="transactionCategoryLabel transactionCategoryAuto" event="itemSelect" />
+                                                <p:ajax update="transactionCategoryLabel transactionCategoryAuto" event="change" />
                                             </p:autoComplete>
-                                            <label>#{messages.category}</label>
+
+                                            <label>#{messages.type}</label>
                                         </h:panelGroup>
+                                        <h:panelGroup id="transactionCategoryLabel">
+                                            <p:outputLabel for="transactionCategory" rendered="#{transactionReport.transactionType != null}"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup id="transactionCategoryAuto">
+                                            <h:panelGroup styleClass="md-inputfield" rendered="#{transactionReport.transactionType != null}">
+                                                <p:autoComplete
+                                                    id="transactionCategory"
+                                                    converter="#{transactionCategoryConverter}"
+                                                    dropdown="true"
+                                                    forceSelection="true"
+                                                    effect="fold"
+                                                    groupBy="#{(transactionCategory.parentTransactionCategory.transactionCategoryName != null)?transactionCategory.parentTransactionCategory.transactionCategoryName:'Others'}"
+                                                    completeMethod="#{transactionReport.transactionCategories()}"
+                                                    value="#{transactionReport.transactionCategory}"
+                                                    var="transactionCategory"
+                                                    itemValue="#{transactionCategory}"
+                                                    itemLabel="#{transactionCategory.transactionCategoryName}"
 
-
-
-
-
-                                        <p:commandButton value="#{messages.View}" process="TransactionReport" update="@form"
-                                                         action="#{transactionReport.view()}" />
+                                                    >
+                                                </p:autoComplete>
+                                                <label>#{messages.category}</label>
+                                            </h:panelGroup>
+                                        </h:panelGroup>
+                                        <p:commandButton value="#{messages.View}" update="@form"
+                                                         action="#{transactionReport.view}" />
                                     </p:panelGrid>
                                 </p:fieldset>
-                                <h:panelGroup id="transaction" rendered="#{transactionReport.transactionList.size() > 0}" >
-                                    <p:fieldset legend="Vat Category Details" 
+                                
+                                <h:panelGroup id="transaction"  >
+                                   
+                                    <p:fieldset legend="Vat Category Details" rendered="#{transactionReport.transactionList.size() > 0}"
                                                 toggleable="false" toggleSpeed="500">
                                         <p:dataTable id="transactionTable" var="transaction" value="#{transactionReport.transactionList}" 
                                                      paginator="true" rows="10" emptyMessage="Transaction record not found."
@@ -160,6 +145,8 @@
                                         </p:dataTable>
                                     </p:fieldset>
                                 </h:panelGroup>
+                                
+                                
                                 <br />
 
                             </div>
@@ -175,10 +162,7 @@
                     </f:facet>
 
                 </p:toolbar>
-
             </div>
-
         </h:form>
     </ui:define>
-
 </ui:composition>

@@ -2,8 +2,7 @@ package com.simplevat.web.contact.controller;
 
 import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.Contact;
-import com.simplevat.entity.Purchase;
-import com.simplevat.entity.invoice.Invoice;
+import com.simplevat.entity.ContactView;
 
 import com.simplevat.service.ContactService;
 import com.simplevat.service.PurchaseService;
@@ -12,10 +11,9 @@ import com.simplevat.web.common.controller.BaseController;
 import com.simplevat.web.constant.ContactTypeConstant;
 import com.simplevat.web.constant.ModuleName;
 
-import com.simplevat.web.contact.model.ContactModel;
+import com.simplevat.web.contact.model.ContactViewModel;
 
 import java.io.Serializable;
-import java.time.ZoneId;
 import java.util.*;
 import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
@@ -49,8 +47,8 @@ public class ContactListController extends BaseController implements Serializabl
     @Setter
     private Map<Integer, Boolean> selectedContactIds = new HashMap<>();
 
-    private List<ContactModel> filteredContacts;
-    private List<ContactModel> contactList;
+    private List<ContactViewModel> filteredContacts;
+    private List<ContactViewModel> contactList;
 
     @Getter
     @Setter
@@ -62,7 +60,7 @@ public class ContactListController extends BaseController implements Serializabl
 
     @Getter
     @Setter
-    private ContactModel contact;
+    private ContactViewModel contact;
 
     @Getter
     @Setter
@@ -116,42 +114,28 @@ public class ContactListController extends BaseController implements Serializabl
             filteredContacts = this.getFilteredContacts(this.selectedFilter);
         } else {
             contactList.clear();
-            List<Contact> contactList1 = contactService.getContacts();
-            System.out.println("Time Required 1 : " + (new Date().getTime() - startTime.getTime()) / 1000);
-            for (Contact contact : contactList1) {
-                System.out.println("Time Required 2 : " + (new Date().getTime() - startTime.getTime()) / 1000);
-                ContactModel contactModel = contactHelper.getContactModel(contact);
-                System.out.println("Time Required 3 : " + (new Date().getTime() - startTime.getTime()) / 1000);
-                contactCountByType(contactModel);
-                System.out.println("Time Required 4 : " + (new Date().getTime() - startTime.getTime()) / 1000);
-                contactList.add(contactModel);
+            List<ContactView> contactViewList = contactService.getContactViewList();
+            if (contactViewList != null) {
+                for (ContactView contactView : contactViewList) {
+                    ContactViewModel contactViewModel = contactHelper.getContactViewModel(contactView);
+                    contactCountByType(contactViewModel);
+                    contactList.add(contactViewModel);
+                }
             }
             filteredContacts = contactList;
         }
-        
         Date endTime = new Date();
-        System.out.println("Time Required 5 : " + (endTime.getTime() - startTime.getTime()) / 1000);
+
+        System.out.println("Time Required : " + (endTime.getTime() - startTime.getTime()) / 1000);
     }
 
-    private void contactCountByType(ContactModel contactModel) {
-        if (contactModel.getContactType() != null) {
-            if (contactModel.getContactType().getId() == ContactTypeConstant.EMPLOYEE) {
+    private void contactCountByType(ContactViewModel contactViewModel) {
+        if (contactViewModel.getContactType() != null) {
+            if (contactViewModel.getContactType().getId() == ContactTypeConstant.EMPLOYEE) {
                 totalEmployees++;
-            } else if (contactModel.getContactType().getId() == ContactTypeConstant.CUSTOMER) {
-                Invoice invoice = invoiceService.getClosestDueInvoiceByContactId(contactModel.getContactId());
-                if (invoice != null) {
-                    Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant());
-                    contactModel.setClosestDueDate(Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant()));
-                    contactModel.setDueAmount(invoice.getDueAmount());
-                }
+            } else if (contactViewModel.getContactType().getId() == ContactTypeConstant.CUSTOMER) {
                 totalCustomers++;
             } else {
-                Purchase purchase = purchaseService.getClosestDuePurchaseByContactId(contactModel.getContactId());
-                if (purchase != null) {
-                    Date.from(purchase.getPurchaseDueDate().atZone(ZoneId.systemDefault()).toInstant());
-                    contactModel.setClosestDueDate(Date.from(purchase.getPurchaseDueDate().atZone(ZoneId.systemDefault()).toInstant()));
-                    contactModel.setDueAmount(purchase.getPurchaseDueAmount());
-                }
                 totalVendors++;
             }
         }
@@ -170,17 +154,17 @@ public class ContactListController extends BaseController implements Serializabl
         });
     }
 
-    private List<ContactModel> getFilteredContacts(String filterChar) {
+    private List<ContactViewModel> getFilteredContacts(String filterChar) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Changing Filter to :" + filterChar);
             LOGGER.debug("Number of contacts :" + contactList.size());
         }
-        List<ContactModel> returnContacts = new ArrayList<>();
-        for (ContactModel contactModel : contactList) {
-            if (contactModel.getFirstName() != null && !contactModel.getFirstName().isEmpty()) {
-                if (contactModel.getFirstName().substring(0, 1).toUpperCase().equals(filterChar.toUpperCase())) {
-                    contactCountByType(contactModel);
-                    returnContacts.add(contactModel);
+        List<ContactViewModel> returnContacts = new ArrayList<>();
+        for (ContactViewModel contactViewModel : contactList) {
+            if (contactViewModel.getFirstName() != null && !contactViewModel.getFirstName().isEmpty()) {
+                if (contactViewModel.getFirstName().substring(0, 1).toUpperCase().equals(filterChar.toUpperCase())) {
+                    contactCountByType(contactViewModel);
+                    returnContacts.add(contactViewModel);
                 }
             }
         }
@@ -188,9 +172,9 @@ public class ContactListController extends BaseController implements Serializabl
     }
 
     public void delete() {
-        for (ContactModel contactModel : filteredContacts) {
-            if (contactModel.getSelected()) {
-                Contact contact1 = contactHelper.getContact(contactModel);
+        for (ContactViewModel contactViewModel : filteredContacts) {
+            if (contactViewModel.getSelected()) {
+                Contact contact1 = contactService.findByPK(contactViewModel.getContactId());
                 contact1.setDeleteFlag(Boolean.TRUE);
                 contactService.update(contact1);
             }
@@ -200,7 +184,7 @@ public class ContactListController extends BaseController implements Serializabl
     }
 
     @Nonnull
-    public List<ContactModel> getContacts() {
+    public List<ContactViewModel> getContacts() {
         return filteredContacts;
     }
 
@@ -210,11 +194,9 @@ public class ContactListController extends BaseController implements Serializabl
     }
 
     public void deleteContact() {
-
-        contact.setDeleteFlag(Boolean.TRUE);
-        selectedContact = contactHelper.getContact(contact);
-
-        contactService.update(selectedContact);
+        Contact contact1 = contactService.findByPK(contact.getContactId());
+        contact1.setDeleteFlag(Boolean.TRUE);
+        contactService.update(contact1);
         populateContactList();
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
@@ -223,19 +205,19 @@ public class ContactListController extends BaseController implements Serializabl
     }
 
     public void populateContactEmployeeList() {
-        List<ContactModel> returnContacts = new ArrayList<>();
-        for (ContactModel contactModel : contactList) {
+        List<ContactViewModel> returnContacts = new ArrayList<>();
+        for (ContactViewModel contactViewModel : contactList) {
             if (this.selectedFilter != null && !this.selectedFilter.isEmpty()) {
-                if (contactModel.getFirstName() != null && !contactModel.getFirstName().isEmpty()) {
-                    if (contactModel.getFirstName().substring(0, 1).toUpperCase().equals(selectedFilter.toUpperCase())) {
-                        if (contactModel.getContactType().getId() == ContactTypeConstant.EMPLOYEE) {
-                            returnContacts.add(contactModel);
+                if (contactViewModel.getFirstName() != null && !contactViewModel.getFirstName().isEmpty()) {
+                    if (contactViewModel.getFirstName().substring(0, 1).toUpperCase().equals(selectedFilter.toUpperCase())) {
+                        if (contactViewModel.getContactType().getId() == ContactTypeConstant.EMPLOYEE) {
+                            returnContacts.add(contactViewModel);
                         }
                     }
                 }
             } else {
-                if (contactModel.getContactType().getId() == ContactTypeConstant.EMPLOYEE) {
-                    returnContacts.add(contactModel);
+                if (contactViewModel.getContactType().getId() == ContactTypeConstant.EMPLOYEE) {
+                    returnContacts.add(contactViewModel);
                 }
             }
         }
@@ -243,19 +225,19 @@ public class ContactListController extends BaseController implements Serializabl
     }
 
     public void populateContactVendorList() {
-        List<ContactModel> returnContacts = new ArrayList<>();
-        for (ContactModel contactModel : contactList) {
+        List<ContactViewModel> returnContacts = new ArrayList<>();
+        for (ContactViewModel contactViewModel : contactList) {
             if (this.selectedFilter != null && !this.selectedFilter.isEmpty()) {
-                if (contactModel.getFirstName() != null && !contactModel.getFirstName().isEmpty()) {
-                    if (contactModel.getFirstName().substring(0, 1).toUpperCase().equals(selectedFilter.toUpperCase())) {
-                        if (contactModel.getContactType().getId() == ContactTypeConstant.VENDOR) {
-                            returnContacts.add(contactModel);
+                if (contactViewModel.getFirstName() != null && !contactViewModel.getFirstName().isEmpty()) {
+                    if (contactViewModel.getFirstName().substring(0, 1).toUpperCase().equals(selectedFilter.toUpperCase())) {
+                        if (contactViewModel.getContactType().getId() == ContactTypeConstant.VENDOR) {
+                            returnContacts.add(contactViewModel);
                         }
                     }
                 }
             } else {
-                if (contactModel.getContactType().getId() == ContactTypeConstant.VENDOR) {
-                    returnContacts.add(contactModel);
+                if (contactViewModel.getContactType().getId() == ContactTypeConstant.VENDOR) {
+                    returnContacts.add(contactViewModel);
                 }
             }
         }
@@ -263,19 +245,19 @@ public class ContactListController extends BaseController implements Serializabl
     }
 
     public void populateContactCustomerList() {
-        List<ContactModel> returnContacts = new ArrayList<>();
-        for (ContactModel contactModel : contactList) {
+        List<ContactViewModel> returnContacts = new ArrayList<>();
+        for (ContactViewModel contactViewModel : contactList) {
             if (this.selectedFilter != null && !this.selectedFilter.isEmpty()) {
-                if (contactModel.getFirstName() != null && !contactModel.getFirstName().isEmpty()) {
-                    if (contactModel.getFirstName().substring(0, 1).toUpperCase().equals(selectedFilter.toUpperCase())) {
-                        if (contactModel.getContactType().getId() == ContactTypeConstant.CUSTOMER) {
-                            returnContacts.add(contactModel);
+                if (contactViewModel.getFirstName() != null && !contactViewModel.getFirstName().isEmpty()) {
+                    if (contactViewModel.getFirstName().substring(0, 1).toUpperCase().equals(selectedFilter.toUpperCase())) {
+                        if (contactViewModel.getContactType().getId() == ContactTypeConstant.CUSTOMER) {
+                            returnContacts.add(contactViewModel);
                         }
                     }
                 }
             } else {
-                if (contactModel.getContactType().getId() == ContactTypeConstant.CUSTOMER) {
-                    returnContacts.add(contactModel);
+                if (contactViewModel.getContactType().getId() == ContactTypeConstant.CUSTOMER) {
+                    returnContacts.add(contactViewModel);
                 }
             }
         }

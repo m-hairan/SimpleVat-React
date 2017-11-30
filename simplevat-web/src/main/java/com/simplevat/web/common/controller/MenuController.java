@@ -44,6 +44,7 @@ public class MenuController implements Serializable {
         addBankAccountMenuItem(model);
         addTranscationReportMenuItem(model);
         addTaxMenuItem(model);
+        addInvoiceTranscationReportMenuItem(model);
     }
 
     private void addContactMenuItem(DefaultMenuModel model) {
@@ -108,7 +109,7 @@ public class MenuController implements Serializable {
             model.addElement(item);
         }
     }
-    
+
     private void addTaxMenuItem(DefaultMenuModel model) {
         if (PageAccessControl.hasAccess(ModuleName.TAX_MODULE)) {
             DefaultMenuItem item = new DefaultMenuItem("Taxes");
@@ -116,7 +117,19 @@ public class MenuController implements Serializable {
             item.setOutcome("/pages/secure/tax/index");
             model.addElement(item);
         }
+
+}
+    
+
+    private void addInvoiceTranscationReportMenuItem(DefaultMenuModel model) {
+        if (PageAccessControl.hasAccess(ModuleName.REPORT_MODULE)) {
+            DefaultMenuItem item = new DefaultMenuItem("Invoice Report");
+            item.setIcon("book");
+            item.setOutcome("/pages/secure/report/invoiceReport");
+            model.addElement(item);
+        }
     }
+
 
 //                        <p:menuitem id="st_dashboard" value="Home" icon="&#xE871;"
 //                                    outcome="/pages/secure/home" />

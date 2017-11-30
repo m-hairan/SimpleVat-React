@@ -6,8 +6,13 @@
 package com.simplevat.web.contact.controller;
 
 import com.simplevat.entity.Contact;
+import com.simplevat.entity.ContactView;
 import com.simplevat.web.contact.model.ContactModel;
 import com.simplevat.web.contact.model.ContactType;
+import com.simplevat.web.contact.model.ContactViewModel;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.util.Date;
 
 /**
  *
@@ -86,4 +91,43 @@ public class ContactHelper {
         contact.setContactType(contactModel.getContactType().getId());
         return contact;
     }
+
+    public ContactView getContactView(ContactViewModel contactViewModel) {
+        ContactView contactView = new ContactView();
+        contactView.setContactId(contactViewModel.getContactId());
+        contactView.setEmail(contactViewModel.getEmail());
+        contactView.setFirstName(contactViewModel.getFirstName());
+        contactView.setLastName(contactViewModel.getLastName());
+        contactView.setMiddleName(contactViewModel.getMiddleName());
+        contactView.setOrganization(contactViewModel.getOrganization());
+        contactView.setTelephone(contactViewModel.getTelephone());
+        contactView.setTitle(contactViewModel.getTitle());
+        contactView.setCurrencySymbol(contactViewModel.getCurrencySymbol());
+        contactView.setNextDueDate(contactViewModel.getNextDueDate());
+        contactView.setDueAmount(contactViewModel.getDueAmount());
+        contactView.setContactType(contactViewModel.getContactType().getId());
+        return contactView;
+    }
+
+    public ContactViewModel getContactViewModel(ContactView contactView) {
+        ContactViewModel contactViewModel = new ContactViewModel();
+        contactViewModel.setContactId(contactView.getContactId());
+        contactViewModel.setEmail(contactView.getEmail());
+        contactViewModel.setFirstName(contactView.getFirstName());
+        contactViewModel.setLastName(contactView.getLastName());
+        contactViewModel.setMiddleName(contactView.getMiddleName());
+        contactViewModel.setOrganization(contactView.getOrganization());
+        contactViewModel.setTelephone(contactView.getTelephone());
+        contactViewModel.setNextDueDate(contactView.getNextDueDate());
+        contactViewModel.setTitle(contactView.getTitle());
+        contactViewModel.setCurrencySymbol(contactView.getCurrencySymbol());
+        contactViewModel.setDueAmount(contactView.getDueAmount());
+        for (ContactType contactType : ContactUtil.contactTypeList()) {
+            if (contactType.getId() == contactView.getContactType()) {
+                contactViewModel.setContactType(contactType);
+            }
+        }
+        return contactViewModel;
+    }
+
 }
