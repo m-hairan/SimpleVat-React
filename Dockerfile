@@ -59,4 +59,4 @@ RUN set -x \
 
 EXPOSE 8080
 CMD ["catalina.sh", "run"]
-COPY simplevat-web/target/ROOT.war ${CATALINA_HOME}/webapps/
+COPY simplevat-web/target/ROOT.war ${CATALINA_HOME}/webapps/simplevat-web.war
