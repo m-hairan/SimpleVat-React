@@ -91,11 +91,29 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
 
     @Override
     public List<Transaction> getTransactionsByDateRangeAndTranscationTypeAndTranscationCategory(TransactionType transactionType, TransactionCategory category, Date startDate, Date lastDate) {
-        TypedQuery<Transaction> query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.deleteFlag = false and t.transactionType.transactionTypeCode =:transactionTypeCode and t.explainedTransactionCategory.transactionCategoryCode =:transactionCategoryCode and t.transactionDate BETWEEN :startDate AND :lastDate ORDER BY t.transactionDate ASC", Transaction.class);
-        query.setParameter("transactionTypeCode", transactionType.getTransactionTypeCode());
-        query.setParameter("transactionCategoryCode", category.getTransactionCategoryCode());
-        query.setParameter("startDate", Instant.ofEpochMilli(startDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
-        query.setParameter("lastDate", Instant.ofEpochMilli(lastDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
+       
+        StringBuilder builder = new StringBuilder();
+        if (transactionType != null) {
+            builder.append("and t.transactionType.transactionTypeCode =:transactionTypeCode ");
+        }
+        if (category != null) {
+            builder.append("and t.explainedTransactionCategory.transactionCategoryId =:transactionCategoryId ");
+        }
+        if (startDate != null && lastDate != null) {
+            builder.append("and t.transactionDate BETWEEN :startDate AND :lastDate ");
+        }
+        TypedQuery<Transaction> query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.deleteFlag = false " + builder.toString() + "ORDER BY t.transactionDate ASC", Transaction.class);
+        if (transactionType != null) {
+            query.setParameter("transactionTypeCode", transactionType.getTransactionTypeCode());
+        }
+        if (category != null) {
+            query.setParameter("transactionCategoryId", category.getTransactionCategoryId());
+        }
+        if (startDate != null && lastDate != null) {
+            query.setParameter("startDate", Instant.ofEpochMilli(startDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
+            query.setParameter("lastDate", Instant.ofEpochMilli(lastDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
+        }
+        
         if (query.getResultList() != null && !query.getResultList().isEmpty()) {
             return query.getResultList();
         }

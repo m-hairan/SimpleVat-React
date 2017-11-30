@@ -28,8 +28,8 @@ public class TransactionCategoryFilterNew extends AbstractFilter<TransactionCate
 	@Override
 	protected void buildPredicates(Root<TransactionCategory> root, CriteriaBuilder criteriaBuilder) {
 		
-        if (transactionCategoryCriteria.getTransactionCategoryCode() != null) {
-            add(criteriaBuilder.and(criteriaBuilder.equal(root.get("transactionCategoryCode"), transactionCategoryCriteria.getTransactionCategoryCode())));
+        if (transactionCategoryCriteria.getTransactionCategoryId() != null) {
+            add(criteriaBuilder.and(criteriaBuilder.equal(root.get("transactionCategoryId"), transactionCategoryCriteria.getTransactionCategoryId())));
         }
         if (BooleanUtils.isTrue(transactionCategoryCriteria.getActive())) {
             add(criteriaBuilder.and(criteriaBuilder.equal(root.get("deleteFlag"), Boolean.FALSE)));

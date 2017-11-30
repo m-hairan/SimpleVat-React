@@ -4,7 +4,9 @@ import com.simplevat.dao.AbstractDao;
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.invoice.Invoice;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -137,6 +139,17 @@ public class InvoiceDaoImpl extends AbstractDao<Integer, Invoice> implements Inv
         query.setParameter("dueAmount", new BigDecimal(0));
         if (query.getResultList() != null && !query.getResultList().isEmpty()) {
             return query.getResultList().get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public List<Invoice> getInvoicesForReports(Date startDate, Date endDate) {
+        TypedQuery<Invoice> query = getEntityManager().createQuery("SELECT i FROM Invoice i WHERE i.deleteFlag = false AND i.invoiceDate BETWEEN :startDate AND :endDate ORDER BY i.invoiceDate ASC", Invoice.class);
+        query.setParameter("startDate",Instant.ofEpochMilli(startDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
+        query.setParameter("endDate", Instant.ofEpochMilli(endDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
+        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
+            return query.getResultList();
         }
         return null;
     }

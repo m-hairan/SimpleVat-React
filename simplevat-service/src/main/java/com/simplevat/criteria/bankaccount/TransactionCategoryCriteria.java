@@ -36,7 +36,7 @@ public class TransactionCategoryCriteria extends AbstractCriteria {
 		}
 	}
 
-	private Integer transactionCategoryCode;
+	private Integer transactionCategoryId;
 	
 	private Boolean active;
 

@@ -24,7 +24,7 @@ public class TransactionCategoryFilter extends AbstractFilter<TransactionCategor
 	
 	@Override
 	protected void addOrderCriteria(Root<TransactionCategory> root, CriteriaBuilder cb) {
-		addOrder(cb.asc(root.get("transactionCategoryCode")));
+		addOrder(cb.asc(root.get("transactionCategoryId")));
 	}
 	
 	@Override

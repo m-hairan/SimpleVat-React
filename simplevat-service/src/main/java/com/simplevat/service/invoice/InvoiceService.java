@@ -42,6 +42,8 @@ public abstract class InvoiceService extends SimpleVatService<Integer, Invoice> 
         
         public abstract  Invoice getClosestDueInvoiceByContactId(Integer contactId);
         
+        public abstract List<Invoice> getInvoicesForReports(Date startDate, Date endDate);
+	
 	@Override
 	protected InvoiceDao getDao() {
 		return invoiceDao;

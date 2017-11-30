@@ -56,4 +56,6 @@ public interface InvoiceDao extends Dao<Integer, Invoice> {
     public List<Invoice> getInvoiceListByDueAmount();
 
     public Invoice getClosestDueInvoiceByContactId(Integer contactId);
+
+    public List<Invoice> getInvoicesForReports(Date startDate, Date endDate);
 }

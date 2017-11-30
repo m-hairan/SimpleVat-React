@@ -3,6 +3,7 @@ package com.simplevat.service.impl;
 import com.simplevat.dao.ContactDao;
 import com.simplevat.dao.Dao;
 import com.simplevat.entity.Contact;
+import com.simplevat.entity.ContactView;
 import com.simplevat.service.ContactService;
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +48,11 @@ public class ContactServiceImpl extends ContactService {
     @Override
     public Optional<Contact> getContactByEmail(String Email) {
          return contactDao.getContactByEmail(Email);
+    }
+
+    @Override
+    public List<ContactView> getContactViewList() {
+        return contactDao.getContactViewList();
     }
 
 }
