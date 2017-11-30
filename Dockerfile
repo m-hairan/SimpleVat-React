@@ -50,5 +50,3 @@ RUN set -x \
 
 EXPOSE 8080
 CMD ["catalina.sh", "run"]
-
-ADD target/*.war ${CATALINA_HOME}/webapps/simplevat-web.war
