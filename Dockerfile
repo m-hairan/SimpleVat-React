@@ -54,6 +54,19 @@ RUN set -x \
   && echo '               url="jdbc:mysql://localhost:3306/simplevat"/>                                           ' >> ${CATALINA_HOME}/conf/context.xml \
   && echo '                                                                                                       ' >> ${CATALINA_HOME}/conf/context.xml \
   && echo '</Context>                                                                                             ' >> ${CATALINA_HOME}/conf/context.xml \ 
+  && echo  '<?xml version="1.0" encoding="UTF-8"?>                                                                ' > ${CATALINA_HOME}/conf/tomcat-users.xml \
+  && echo  '                                                                                                      ' >> ${CATALINA_HOME}/conf/tomcat-users.xml \
+  && echo  '<tomcat-users xmlns="http://tomcat.apache.org/xml"                                                    ' >> ${CATALINA_HOME}/conf/tomcat-users.xml \
+  && echo  '              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"                                   ' >> ${CATALINA_HOME}/conf/tomcat-users.xml \
+  && echo  '              xsi:schemaLocation="http://tomcat.apache.org/xml tomcat-users.xsd"                      ' >> ${CATALINA_HOME}/conf/tomcat-users.xml \
+  && echo  '              version="1.0">                                                                          ' >> ${CATALINA_HOME}/conf/tomcat-users.xml \
+  && echo  '                                                                                                      ' >> ${CATALINA_HOME}/conf/tomcat-users.xml \
+  && echo  '  <role rolename="tomcat"/>                                                                           ' >> ${CATALINA_HOME}/conf/tomcat-users.xml \
+  && echo  '  <role rolename="manager-gui"/>                                                                      ' >> ${CATALINA_HOME}/conf/tomcat-users.xml \
+  && echo  '  <role rolename="admin-gui"/>                                                                        ' >> ${CATALINA_HOME}/conf/tomcat-users.xml \
+  && echo  '  <user username="tomcat" password="Pulsor123$" roles="tomcat,manager-gui,admin-gui"/>                ' >> ${CATALINA_HOME}/conf/tomcat-users.xml \
+  && echo  '                                                                                                      ' >> ${CATALINA_HOME}/conf/tomcat-users.xml \
+  && echo  '</tomcat-users>                                                                                       ' >> ${CATALINA_HOME}/conf/tomcat-users.xml \
   && apk del --purge build-dependencies
   
 
