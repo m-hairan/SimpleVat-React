@@ -45,6 +45,15 @@ RUN set -x \
   && cd / \
   && rm -rf /tmp/* \
   && sed -i 's/SSLEngine="on"/SSLEngine="off"/g' "${CATALINA_HOME}/conf/server.xml" \
+  && echo '<?xml version="1.0" encoding="UTF-8"?>                                                                 ' > context.xml  \
+  && echo '<Context>                                                                                              ' >> context.xml \
+  && echo '                                                                                                       ' >> context.xml \
+  && echo '  <Resource name="jdbc/simplevatDS" auth="Container" type="javax.sql.DataSource"                       ' >> context.xml \
+  && echo '               maxTotal="100" maxIdle="30" maxWaitMillis="10000"                                       ' >> context.xml \
+  && echo '               username="simplevat" password="BlackSea123$" driverClassName="com.mysql.jdbc.Driver"    ' >> context.xml \
+  && echo '               url="jdbc:mysql://localhost:3306/simplevat"/>                                           ' >> context.xml \
+  && echo '                                                                                                       ' >> context.xml \
+  && echo '</Context>                                                                                             ' >> context.xml \
   && apk del --purge build-dependencies
   
 
