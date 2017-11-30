@@ -54,7 +54,6 @@ RUN set -x \
   && echo '               url="jdbc:mysql://localhost:3306/simplevat"/>                                           ' >> ${CATALINA_HOME}/conf/context.xml \
   && echo '                                                                                                       ' >> ${CATALINA_HOME}/conf/context.xml \
   && echo '</Context>                                                                                             ' >> ${CATALINA_HOME}/conf/context.xml \ 
-  && echo  '<?xml version="1.0" encoding="UTF-8"?>                                                                ' > ${CATALINA_HOME}/conf/tomcat-users.txt \
   && apk del --purge build-dependencies
   
 
