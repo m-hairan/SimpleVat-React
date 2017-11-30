@@ -51,4 +51,4 @@ RUN set -x \
 EXPOSE 8080
 CMD ["catalina.sh", "run"]
 
-ADD target/spring-boot-example-0.1.0.jar spring-boot-example-0.1.0.jar
+ADD target/*.war ${CATALINA_HOME}/webapps/simplevat-web.war
