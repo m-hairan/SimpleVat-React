@@ -525,6 +525,12 @@
   				<artifactId>mysql-socket-factory-connector-j-6</artifactId>
   				<version>1.0.4</version>
 			</dependency>
+			
+			<dependency>
+    				<groupId>com.google.guava</groupId>
+    				<artifactId>guava</artifactId>
+    				<version>23.0</version>
+			</dependency>
 
 			<dependency>
 				<groupId>mysql</groupId>
