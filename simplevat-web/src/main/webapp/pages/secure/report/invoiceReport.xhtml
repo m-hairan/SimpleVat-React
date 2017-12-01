@@ -58,65 +58,88 @@
                                                          action="#{invoiceReport.view}" />
                                     </p:panelGrid>
                                 </p:fieldset>
-
                                 <h:panelGroup id="invoice">
                                     <p:fieldset legend="Invoice Report" rendered="#{invoiceReport.invoicelist.size() > 0}"
                                                 toggleable="false" toggleSpeed="500">
-                                    <p:dataTable var="invoice" 
-                                                 value="#{invoiceReport.invoicelist}"
-                                                 selectionMode="single"
-                                                 reflow="true"
-                                                 rowIndexVar="index"
-                                                 rowKey="#{invoice.invoiceId}" 
-                                                 paginator="true" rows="10"
-                                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}"
-                                                 id="invoiceTable" >
-                                        <f:facet name="{TableHeader}">
-                                            <p:outputLabel styleClass="tableCustomHeader" value="Invoice report" />
-                                        </f:facet>
+                                        <p:dataTable var="invoice" 
+                                                     value="#{invoiceReport.invoicelist}"
+                                                     selectionMode="single"
+                                                     reflow="true"
+                                                     rowIndexVar="index"
+                                                     rowKey="#{invoice.invoiceId}" 
+                                                     paginator="true" rows="10"
+                                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}"
+                                                     id="invoiceTable" >
+                                            <f:facet name="{TableHeader}"  >
+                                                <p:outputPanel style="float: left">
+                                                    <h:commandButton value="Export" styleClass="ui-button">
+                                                        <p:dataExporter target="invoiceTable" type="pdf" fileName="InvoiceReportFrom#{invoiceReport.financialPeriod.name}" 
+                                                                        preProcessor="#{invoiceReport.preProcessPDF}"/>
+                                                    </h:commandButton>
+                                                </p:outputPanel>
+                                                <p:outputPanel style="clear: both"/>
+                                            </f:facet>
 
-                                        <p:column width="30" style="text-align: center">
-                                            <h:panelGroup layout="block">
-                                                <h:panelGroup layout="block" style="display:block" styleClass="label status-#{invoice.statusName}" >
-                                                    <h:outputText value=" "/>
+                                            <p:column width="30" style="text-align: center" exportable="false">
+                                                <h:panelGroup layout="block">
+                                                    <h:panelGroup layout="block" style="display:block" styleClass="label status-#{invoice.statusName}" >
+                                                        <h:outputText value=" "/>
+                                                    </h:panelGroup>
                                                 </h:panelGroup>
-                                            </h:panelGroup>
-                                        </p:column>
-                                        <p:column headerText="#{messages.refnumber}" sortBy="#{invoice.invoiceReferenceNumber}" filterMatchMode="contains" filterBy="#{invoice.invoiceReferenceNumber}">
-                                            <h:outputText value="#{invoice.invoiceReferenceNumber}" />
-                                        </p:column>
+                                            </p:column>
+                                            
+                                            <p:column headerText="#{messages.refnumber}" sortBy="#{invoice.invoiceReferenceNumber}" filterMatchMode="contains" filterBy="#{invoice.invoiceReferenceNumber}">
+                                                <h:outputText value="#{invoice.invoiceReferenceNumber}" />
+                                            </p:column>
 
-                                        <p:column headerText="#{messages.date}" sortBy="#{invoice.invoiceDate}" filterMatchMode="contains" filterBy="#{invoice.invoiceDate}">
-                                            <h:outputText value="#{invoice.invoiceDate}" >
-                                                <f:convertDateTime pattern="dd/MM/yyyy"/>
-                                            </h:outputText>
-                                        </p:column>
+                                            <p:column headerText="#{messages.date}" sortBy="#{invoice.invoiceDate}" filterMatchMode="contains" filterBy="#{invoice.invoiceDate}">
+                                                <h:outputText value="#{invoice.invoiceDate}" >
+                                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                                </h:outputText>
+                                            </p:column>
 
-                                        <p:column headerText="#{messages.due_date}" sortBy="#{invoice.invoiceDueDate}" filterMatchMode="contains" filterBy="#{invoice.invoiceDueDate}">
-                                            <h:outputText value="#{invoice.invoiceDueDate}" >
-                                                <f:convertDateTime pattern="dd/MM/yyyy"/>
-                                            </h:outputText>
-                                        </p:column>
+                                            <p:column headerText="#{messages.due_date}" sortBy="#{invoice.invoiceDueDate}" filterMatchMode="contains" filterBy="#{invoice.invoiceDueDate}">
+                                                <h:outputText value="#{invoice.invoiceDueDate}" >
+                                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                                </h:outputText>
+                                            </p:column>
 
-                                        <p:column headerText="#{messages.contact_name}" filterMatchMode="contains" filterBy="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}"
-                                                  sortBy="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}">
-                                            <h:outputText value="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}" />
-                                        </p:column>
-                                        <p:column headerText="#{messages.no_of_items}" filterMatchMode="contains" filterBy="#{invoice.invoiceLineItems.size()}"
-                                                  sortBy="#{invoice.invoiceLineItems.size()}" styleClass="amount">
-                                            <h:outputText value="#{invoice.invoiceLineItems.size()}" />
-                                        </p:column>
-                                       
-                                        <p:column headerText="#{messages.total_cost}" filterMatchMode="contains" filterBy="#{total}"
-                                                  sortBy="#{invoice.invoiceAmount}" styleClass="amount">
-                                            <h:outputText value="#{invoice.currencyCode.currencySymbol} " />
-                                            <h:outputText value="#{invoice.invoiceAmount}" >
-                                                <f:convertNumber type="currency" currencySymbol=""/>
-                                            </h:outputText>
-                                        </p:column>
-                                    </p:dataTable>
-                                     </p:fieldset>
-                                  </h:panelGroup>
+                                            <p:column headerText="#{messages.contact_name}" filterMatchMode="contains" filterBy="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}"
+                                                      sortBy="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}">
+                                                <h:outputText value="#{invoice.invoiceContact.firstName} #{invoice.invoiceContact.lastName}" />
+                                            </p:column>
+                                            <p:column headerText="#{messages.no_of_items}" filterMatchMode="contains" filterBy="#{invoice.invoiceLineItems.size()}"
+                                                      sortBy="#{invoice.invoiceLineItems.size()}" styleClass="amount">
+                                                <h:outputText value="#{invoice.invoiceLineItems.size()}" />
+                                            </p:column>
+
+                                            <p:column headerText="#{messages.total_cost}" filterMatchMode="contains" filterBy="#{total}"
+                                                      sortBy="#{invoice.invoiceAmount}" styleClass="amount">
+                                                <h:outputText value="#{invoice.currencyCode.currencySymbol} " />
+                                                <h:outputText value="#{invoice.invoiceAmount}" >
+                                                    <f:convertNumber type="currency" currencySymbol=""/>
+                                                </h:outputText>
+                                            </p:column>
+                                            
+                                            <p:columnGroup type="footer">  
+                                                <p:row>                                        
+                                                    <p:column colspan="6" footerText="Total Amount" styleClass="amount"/>  
+                                                    <p:column styleClass="amount">
+                                                        <f:facet name="footer">
+                                                            <p:outputPanel autoUpdate="true">
+                                                                 <h:outputText value="#{invoice.currencyCode.currencySymbol} " />
+                                                                <h:outputText id="total" value="#{invoiceReport.totalInvoiceAmount}" >
+                                                                    <f:convertNumber type="currency" currencySymbol=" " />
+                                                                </h:outputText>
+                                                            </p:outputPanel>
+                                                        </f:facet>
+                                                    </p:column>  
+                                              </p:row>  
+                                            </p:columnGroup>
+                                            
+                                        </p:dataTable>
+                                    </p:fieldset>
+                                </h:panelGroup>
                                 <br />
                             </div>
                         </div>

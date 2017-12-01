@@ -60,7 +60,6 @@
                                                 <p:ajax update="transactionCategoryLabel transactionCategoryAuto" event="itemSelect" />
                                                 <p:ajax update="transactionCategoryLabel transactionCategoryAuto" event="change" />
                                             </p:autoComplete>
-
                                             <label>#{messages.type}</label>
                                         </h:panelGroup>
                                         <h:panelGroup id="transactionCategoryLabel">
@@ -80,19 +79,19 @@
                                                     var="transactionCategory"
                                                     itemValue="#{transactionCategory}"
                                                     itemLabel="#{transactionCategory.transactionCategoryName}"
-
                                                     >
                                                 </p:autoComplete>
                                                 <label>#{messages.category}</label>
                                             </h:panelGroup>
                                         </h:panelGroup>
+                                        <p:outputLabel/>
                                         <p:commandButton value="#{messages.View}" update="@form"
                                                          action="#{transactionReport.view}" />
                                     </p:panelGrid>
                                 </p:fieldset>
-                                
+
                                 <h:panelGroup id="transaction"  >
-                                   
+
                                     <p:fieldset legend="Vat Category Details" rendered="#{transactionReport.transactionList.size() > 0}"
                                                 toggleable="false" toggleSpeed="500">
                                         <p:dataTable id="transactionTable" var="transaction" value="#{transactionReport.transactionList}" 
@@ -128,12 +127,14 @@
                                                     <f:convertNumber type="currency" currencySymbol=" " />
                                                 </p:outputLabel> 
                                             </p:column>
+
                                             <p:columnGroup type="footer" rendered="#{transactionReport.transactionList.size() > 0}">  
                                                 <p:row >                                        
                                                     <p:column colspan="4" footerText="Balance" styleClass="amount"/>  
                                                     <p:column styleClass="amount">
                                                         <f:facet name="footer">
                                                             <p:outputPanel autoUpdate="true">
+                                                                <p:outputLabel value="#{transactionReport.bankAccount.bankAccountCurrency.currencySymbol}" />
                                                                 <h:outputText id="total" value="#{transactionReport.totalTransactionAmount}" >
                                                                     <f:convertNumber type="currency" currencySymbol=" " />
                                                                 </h:outputText>
@@ -142,11 +143,12 @@
                                                     </p:column>  
                                                 </p:row>  
                                             </p:columnGroup>
+
                                         </p:dataTable>
                                     </p:fieldset>
                                 </h:panelGroup>
-                                
-                                
+
+
                                 <br />
 
                             </div>

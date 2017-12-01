@@ -31,7 +31,6 @@ public class MenuController implements Serializable {
     @PostConstruct
     public void init() {
         model = new DefaultMenuModel();
-
         DefaultMenuItem item = new DefaultMenuItem("Home");
         item.setIcon("home");
         item.setOutcome("/pages/secure/home");
@@ -44,7 +43,8 @@ public class MenuController implements Serializable {
         addBankAccountMenuItem(model);
         addTranscationReportMenuItem(model);
         addTaxMenuItem(model);
-        addInvoiceTranscationReportMenuItem(model);
+        addInvoiceReportMenuItem(model);
+        addExpenseReportsMenuItem(model);
     }
 
     private void addContactMenuItem(DefaultMenuModel model) {
@@ -121,7 +121,7 @@ public class MenuController implements Serializable {
 }
     
 
-    private void addInvoiceTranscationReportMenuItem(DefaultMenuModel model) {
+    private void addInvoiceReportMenuItem(DefaultMenuModel model) {
         if (PageAccessControl.hasAccess(ModuleName.REPORT_MODULE)) {
             DefaultMenuItem item = new DefaultMenuItem("Invoice Report");
             item.setIcon("book");
@@ -129,6 +129,16 @@ public class MenuController implements Serializable {
             model.addElement(item);
         }
     }
+    
+     private void addExpenseReportsMenuItem(DefaultMenuModel model) {
+        if (PageAccessControl.hasAccess(ModuleName.REPORT_MODULE)) {
+            DefaultMenuItem item = new DefaultMenuItem("Expense Report");
+            item.setIcon("book");
+            item.setOutcome("/pages/secure/report/expenseReport");
+            model.addElement(item);
+        }
+    }
+    
 
 
 //                        <p:menuitem id="st_dashboard" value="Home" icon="&#xE871;"

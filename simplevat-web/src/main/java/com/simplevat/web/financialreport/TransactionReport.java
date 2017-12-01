@@ -147,6 +147,7 @@ public class TransactionReport extends BaseController {
     }
 
     public void view() {
+        totalTransactionAmount=0.00;
         transactionList.clear();
         List<Transaction> transactions = new ArrayList<>();
         System.out.println("entered");

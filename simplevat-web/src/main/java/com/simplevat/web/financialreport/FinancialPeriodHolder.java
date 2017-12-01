@@ -60,10 +60,9 @@ public class FinancialPeriodHolder {
                     financialPeriod2.setId(id);
                     financialPeriod2.setLastDate(endPreviousMonthDate);
                     financialPeriod2.setStartDate(startPreviousMonthDate);
-                    name ="Previous Month";
+                    name = "Previous Month";
                     financialPeriod2.setName(name);
                     financialPeriodList.add(financialPeriod2);
-                    
                 }
                 id++;
                 calendar.set(Calendar.YEAR, year - i);
