@@ -514,11 +514,11 @@
 				<version>${jsr305.version}</version>
 			</dependency>
 			
-			<dependency>                        <!-- http://dev.mysql.com/doc/connector-j/en/ -->
+			<!--dependency>                        
   				<groupId>mysql</groupId>
   				<artifactId>mysql-connector-java</artifactId>
   				<version>6.0.5</version>
-			</dependency>
+			</dependency-->
 
 			<dependency>
   				<groupId>com.google.cloud.sql</groupId>
@@ -526,11 +526,11 @@
   				<version>1.0.4</version>
 			</dependency>
 
-			<!--dependency>
+			<dependency>
 				<groupId>mysql</groupId>
 				<artifactId>mysql-connector-java</artifactId>
 				<version>${mysql-connector-java.version}</version>
-			</dependency-->
+			</dependency>
 						
 			<dependency>
 				<groupId>net.sf.jasperreports</groupId>
