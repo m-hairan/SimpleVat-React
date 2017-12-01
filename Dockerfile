@@ -55,18 +55,16 @@ RUN set -x \
   && echo '                                                                                                       ' >> ${CATALINA_HOME}/conf/context.xml \
   && echo '</Context>                                                                                             ' >> ${CATALINA_HOME}/conf/context.xml \ 
   && echo '<?xml version="1.0" encoding="UTF-8"?>                                                                 ' > ${CATALINA_HOME}/conf/context.txt  \
-  && echo '<?xml version="1.0" encoding="UTF-8"?>                                                                 ' >> ${CATALINA_HOME}/conf/context.txt  \
-  && echo '<?xml version="1.0" encoding="UTF-8"?>                                                                 ' >> ${CATALINA_HOME}/conf/context.txt  \
-  && echo '<?xml version="1.0" encoding="UTF-8"?>                                                                 ' >> ${CATALINA_HOME}/conf/context.txt  \
-  && echo '<?xml version="1.0" encoding="UTF-8"?>                                                                 ' >> ${CATALINA_HOME}/conf/context.txt  \
-  && echo '<?xml version="1.0" encoding="UTF-8"?>                                                                 ' >> ${CATALINA_HOME}/conf/context.txt  \
-  && echo '<?xml version="1.0" encoding="UTF-8"?>                                                                 ' >> ${CATALINA_HOME}/conf/context.txt  \
-  && echo '<?xml version="1.0" encoding="UTF-8"?>                                                                 ' >> ${CATALINA_HOME}/conf/context.txt  \
-  && echo '<?xml version="1.0" encoding="UTF-8"?>                                                                 ' >> ${CATALINA_HOME}/conf/context.txt  \
-  && echo '<?xml version="1.0" encoding="UTF-8"?>                                                                 ' >> ${CATALINA_HOME}/conf/context.txt  \
-  && echo '<?xml version="1.0" encoding="UTF-8"?>                                                                 ' >> ${CATALINA_HOME}/conf/context.txt  \
-  && echo '<?xml version="1.0" encoding="UTF-8"?>                                                                 ' >> ${CATALINA_HOME}/conf/context.txt  \
-  && echo '<?xml version="1.0" encoding="UTF-8"?>                                                                 ' >> ${CATALINA_HOME}/conf/context.txt  \
+  && echo '<tomcat-users xmlns="http://tomcat.apache.org/xml"                                                     ' >> ${CATALINA_HOME}/conf/context.txt  \
+  && echo '              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"                                    ' >> ${CATALINA_HOME}/conf/context.txt  \
+  && echo '              xsi:schemaLocation="http://tomcat.apache.org/xml tomcat-users.xsd"                       ' >> ${CATALINA_HOME}/conf/context.txt  \
+  && echo '              version="1.0">                                                                           ' >> ${CATALINA_HOME}/conf/context.txt  \
+  && echo '                                                                                                       ' >> ${CATALINA_HOME}/conf/context.txt  \
+  && echo '  <role rolename="tomcat"/>                                                                            ' >> ${CATALINA_HOME}/conf/context.txt  \
+  && echo '  <role rolename="manager-gui"/>                                                                       ' >> ${CATALINA_HOME}/conf/context.txt  \
+  && echo '  <user username="tomcat" password="Pulsor123$" roles="tomcat,manager-gui"/>                           ' >> ${CATALINA_HOME}/conf/context.txt  \
+  && echo '                                                                                                       ' >> ${CATALINA_HOME}/conf/context.txt  \
+  && echo '</tomcat-users>                                                                                        ' >> ${CATALINA_HOME}/conf/context.txt  \
   && apk del --purge build-dependencies
   
 
