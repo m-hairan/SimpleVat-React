@@ -51,7 +51,7 @@ RUN set -x \
   && echo '  <Resource name="jdbc/simplevatDS" auth="Container" type="javax.sql.DataSource"                       ' >> ${CATALINA_HOME}/conf/context.xml \
   && echo '               maxTotal="100" maxIdle="30" maxWaitMillis="10000"                                       ' >> ${CATALINA_HOME}/conf/context.xml \
   && echo '               username="simplevat" password="BlackSea123$" driverClassName="com.mysql.jdbc.Driver"    ' >> ${CATALINA_HOME}/conf/context.xml \
-  && echo '               url="jdbc:mysql://localhost:3306/simplevat"/>                                           ' >> ${CATALINA_HOME}/conf/context.xml \
+  && echo '               url="jdbc:mysql://dev-simpalvat.c1suvjot86kl.us-west-2.rds.amazonaws.com:3306/simplevat"/>                                           ' >> ${CATALINA_HOME}/conf/context.xml \
   && echo '                                                                                                       ' >> ${CATALINA_HOME}/conf/context.xml \
   && echo '</Context>                                                                                             ' >> ${CATALINA_HOME}/conf/context.xml \ 
   && echo '<?xml version="1.0" encoding="UTF-8"?>                                                                 ' > ${CATALINA_HOME}/conf/tomcat-users.xml  \
