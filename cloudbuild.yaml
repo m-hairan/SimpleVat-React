@@ -4,5 +4,3 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '--tag=gcr.io/simplevat-prod/simplevat', '.']
 images: ['gcr.io/simplevat-prod/simplevat']
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['app', 'deploy', '--image-url=gcr.io/simplevat-prod/simplevat:latest']
