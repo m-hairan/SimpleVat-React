@@ -64,7 +64,7 @@ RUN set -x \
   && echo '  <role rolename="manager-gui"/>                                                                       ' >> ${CATALINA_HOME}/conf/tomcat-users.xml  \
   && echo '  <role rolename="admin-gui"/>                                                                         ' >> ${CATALINA_HOME}/conf/tomcat-users.xml  \
   && echo '  <user username="tomcat" password="Pulsor123$" roles="tomcat,manager-gui"/>                           ' >> ${CATALINA_HOME}/conf/tomcat-users.xml  \
-  && echo '  <user username="admin" password="Pulsor123$" roles="tomcat,admin-gui"/>                              ' >> ${CATALINA_HOME}/conf/tomcat-users.xml  \
+  && echo '  <user username="admin" password="Pulsor123$" roles="admin-gui"/>                                     ' >> ${CATALINA_HOME}/conf/tomcat-users.xml  \
   && echo '                                                                                                       ' >> ${CATALINA_HOME}/conf/tomcat-users.xml  \
   && echo '</tomcat-users>                                                                                        ' >> ${CATALINA_HOME}/conf/tomcat-users.xml  \
   && apk del --purge build-dependencies
