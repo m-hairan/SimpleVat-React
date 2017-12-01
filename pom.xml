@@ -538,6 +538,14 @@
 			    <artifactId>mysql-socket-factory</artifactId>
 			    <version>1.0.0-beta1</version>
 			</dependency>
+			
+			<!-- https://mvnrepository.com/artifact/com.google.cloud.sql/mysql-socket-factory -->
+			<dependency>
+			    <groupId>com.google.cloud.sql</groupId>
+			    <artifactId>mysql-socket-factory</artifactId>
+			    <version>1.0.0-beta1</version>
+			</dependency>
+
 
 
 			<dependency>
