@@ -520,6 +520,11 @@
 				<version>${mysql-connector-java.version}</version>
 			</dependency>
 			<dependency>
+			  <groupId>com.google.cloud.sql</groupId>
+			  <artifactId>mysql-socket-factory-connector-j-6</artifactId>
+			  <version>1.0.4</version>
+			</dependency>			
+			<dependency>
 				<groupId>net.sf.jasperreports</groupId>
 				<artifactId>jasperreports</artifactId>
 				<!-- <version>6.4.1</version> -->
