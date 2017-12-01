@@ -46,6 +46,7 @@ RUN set -x \
   && rm -rf /tmp/* \
   && sed -i 's/SSLEngine="on"/SSLEngine="off"/g' "${CATALINA_HOME}/conf/server.xml" \
   && wget http://central.maven.org/maven2/com/google/cloud/sql/mysql-socket-factory-connector-j-6/1.0.4/mysql-socket-factory-connector-j-6-1.0.4.jar -P ${CATALINA_HOME}/lib  \  
+  && wget http://central.maven.org/maven2/mysql/mysql-connector-java/6.0.5/mysql-connector-java-6.0.5.jar  -P ${CATALINA_HOME}/lib  \  
   && echo '<?xml version="1.0" encoding="UTF-8"?>                                                                 ' > ${CATALINA_HOME}/conf/context.xml  \
   && echo '<Context>                                                                                              ' >> ${CATALINA_HOME}/conf/context.xml \
   && echo '                                                                                                       ' >> ${CATALINA_HOME}/conf/context.xml \
