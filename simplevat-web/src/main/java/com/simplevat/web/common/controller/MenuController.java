@@ -32,20 +32,22 @@ public class MenuController implements Serializable {
     @PostConstruct
     public void init() {
         model = new DefaultMenuModel();
+        addHomeMenuItem(model);
+        addBankAccountMenuItem(model);
+        addProjectMenuItem(model);
+        addInvoiceMenuItem(model);
+        addExpenseMenuItem(model);
+        addTaxMenuItem(model);
+        addReportMenuItem(model);
+        addContactMenuItem(model);
+    }
+
+    private void addHomeMenuItem(DefaultMenuModel model) {
         DefaultMenuItem item = new DefaultMenuItem("Home");
         item.setIcon("home");
         item.setOutcome("/pages/secure/home");
         model.addElement(item);
-        addContactMenuItem(model);
-        addProjectMenuItem(model);
-        addInvoiveMenuItem(model);
-        addExpenseMenuItem(model);
-        addPurchaseMenuItem(model);
-        addBankAccountMenuItem(model);
-        addTaxMenuItem(model);
-        addReportMenuItem(model);
     }
-    
 
     private void addContactMenuItem(DefaultMenuModel model) {
         if (PageAccessControl.hasAccess(ModuleName.CONTACT_MODULE)) {
@@ -65,20 +67,11 @@ public class MenuController implements Serializable {
         }
     }
 
-    private void addInvoiveMenuItem(DefaultMenuModel model) {
+    private void addInvoiceMenuItem(DefaultMenuModel model) {
         if (PageAccessControl.hasAccess(ModuleName.INVOICE_MODULE)) {
             DefaultMenuItem item = new DefaultMenuItem("Invoice");
             item.setIcon("receipt");
             item.setOutcome("/pages/secure/invoice/list");
-            model.addElement(item);
-        }
-    }
-
-    private void addPurchaseMenuItem(DefaultMenuModel model) {
-        if (PageAccessControl.hasAccess(ModuleName.PURCHASE_MODULE)) {
-            DefaultMenuItem item = new DefaultMenuItem("Purchase");
-            item.setIcon("receipt");
-            item.setOutcome("/pages/secure/purchase/purchase-list");
             model.addElement(item);
         }
     }
@@ -93,12 +86,21 @@ public class MenuController implements Serializable {
     }
 
     private void addExpenseMenuItem(DefaultMenuModel model) {
+        DefaultSubMenu submenu = new DefaultSubMenu("Expense");
+        submenu.setIcon("exposure");
         if (PageAccessControl.hasAccess(ModuleName.EXPENSE_MODULE)) {
             DefaultMenuItem item = new DefaultMenuItem("Expense");
             item.setIcon("exposure");
             item.setOutcome("/pages/secure/expense/expenses");
-            model.addElement(item);
+            submenu.addElement(item);
         }
+        if (PageAccessControl.hasAccess(ModuleName.PURCHASE_MODULE)) {
+            DefaultMenuItem item = new DefaultMenuItem("Purchase");
+            item.setIcon("receipt");
+            item.setOutcome("/pages/secure/purchase/purchase-list");
+            submenu.addElement(item);
+        }
+        model.addElement(submenu);
     }
 
     private void addTaxMenuItem(DefaultMenuModel model) {
@@ -113,7 +115,7 @@ public class MenuController implements Serializable {
     private void addReportMenuItem(DefaultMenuModel model) {
         if (PageAccessControl.hasAccess(ModuleName.REPORT_MODULE)) {
             DefaultSubMenu submenu = new DefaultSubMenu("Report");
-            submenu.setIcon("book");
+            submenu.setIcon("insert_chart");
             addTranscationReportMenuItem(submenu);
             addInvoiceReportMenuItem(submenu);
             addExpenseReportMenuItem(submenu);
@@ -124,7 +126,7 @@ public class MenuController implements Serializable {
     private void addTranscationReportMenuItem(DefaultSubMenu subMenu) {
         if (PageAccessControl.hasAccess(ModuleName.REPORT_MODULE)) {
             DefaultMenuItem item = new DefaultMenuItem("Transaction Report");
-            item.setIcon("book");
+            item.setIcon("swap_vert");
             item.setOutcome("/pages/secure/report/transactionReport");
             subMenu.addElement(item);
         }
@@ -133,7 +135,7 @@ public class MenuController implements Serializable {
     private void addInvoiceReportMenuItem(DefaultSubMenu subMenu) {
         if (PageAccessControl.hasAccess(ModuleName.REPORT_MODULE)) {
             DefaultMenuItem item = new DefaultMenuItem("Invoice Report");
-            item.setIcon("book");
+            item.setIcon("receipt");
             item.setOutcome("/pages/secure/report/invoiceReport");
             subMenu.addElement(item);
         }
@@ -142,37 +144,9 @@ public class MenuController implements Serializable {
     private void addExpenseReportMenuItem(DefaultSubMenu subMenu) {
         if (PageAccessControl.hasAccess(ModuleName.REPORT_MODULE)) {
             DefaultMenuItem item = new DefaultMenuItem("Expense Report");
-            item.setIcon("book");
+            item.setIcon("assignment");
             item.setOutcome("/pages/secure/report/expenseReport");
             subMenu.addElement(item);
         }
     }
-
-//                        <p:menuitem id="st_dashboard" value="Home" icon="&#xE871;"
-//                                    outcome="/pages/secure/home" />
-//
-//                        <p:menuitem id="st_contact" update="@form contactForm"
-//                                    value="Contacts" icon="contacts"
-//                                    outcome="/pages/secure/contact/list" />
-//
-//                        <p:menuitem id="st_project" value="Projects" icon="book"
-//                                    outcome="/pages/secure/project/projects" />
-//
-//                        <p:menuitem id="st_invoice" update="@form invoice"
-//                                    value="Invoices" icon="receipt" 
-//                                    outcome="/pages/secure/invoice/list" />                        
-//
-//                        <p:menuitem id="st_expense" value="#{messages.expenses}"
-//                                    icon="exposure" outcome="#{expenseMenuLink}" />
-//
-//                        
-//                        <p:menuitem id="st_purchase" 
-//                                    value="Purchase" icon="receipt" 
-//                                    outcome="/pages/secure/purchase/purchase-list" />
-//
-//                        <p:menuitem id="st_bankaccount" value="#{messages.bank_accounts}"
-//                                    icon="store" outcome="#{bankAccountMenuLink}" />
-//                        
-//                        <p:menuitem id="st_transactionreport" value="#{messages.TransactionReport}"
-//                                    icon="store" outcome="/pages/secure/report/transactionReport" />
 }

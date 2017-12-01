@@ -1,7 +1,6 @@
 package com.simplevat.web.project.controller;
 
 import com.github.javaplugs.jsf.SpringScopeView;
-//import com.mysql.jdbc.StringUtils.isNullOrEmpty;
 import com.simplevat.criteria.ProjectCriteria;
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Currency;
