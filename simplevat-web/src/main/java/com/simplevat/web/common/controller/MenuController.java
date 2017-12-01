@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
+import org.primefaces.model.menu.DefaultSubMenu;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -38,14 +39,13 @@ public class MenuController implements Serializable {
         addContactMenuItem(model);
         addProjectMenuItem(model);
         addInvoiveMenuItem(model);
-        addExpenseReportMenuItem(model);
+        addExpenseMenuItem(model);
         addPurchaseMenuItem(model);
         addBankAccountMenuItem(model);
-        addTranscationReportMenuItem(model);
         addTaxMenuItem(model);
-        addInvoiceReportMenuItem(model);
-        addExpenseReportsMenuItem(model);
+        addReportMenuItem(model);
     }
+    
 
     private void addContactMenuItem(DefaultMenuModel model) {
         if (PageAccessControl.hasAccess(ModuleName.CONTACT_MODULE)) {
@@ -92,16 +92,7 @@ public class MenuController implements Serializable {
         }
     }
 
-    private void addTranscationReportMenuItem(DefaultMenuModel model) {
-        if (PageAccessControl.hasAccess(ModuleName.REPORT_MODULE)) {
-            DefaultMenuItem item = new DefaultMenuItem("Transaction Report");
-            item.setIcon("book");
-            item.setOutcome("/pages/secure/report/transactionReport");
-            model.addElement(item);
-        }
-    }
-
-    private void addExpenseReportMenuItem(DefaultMenuModel model) {
+    private void addExpenseMenuItem(DefaultMenuModel model) {
         if (PageAccessControl.hasAccess(ModuleName.EXPENSE_MODULE)) {
             DefaultMenuItem item = new DefaultMenuItem("Expense");
             item.setIcon("exposure");
@@ -117,29 +108,45 @@ public class MenuController implements Serializable {
             item.setOutcome("/pages/secure/tax/index");
             model.addElement(item);
         }
+    }
 
-}
-    
+    private void addReportMenuItem(DefaultMenuModel model) {
+        if (PageAccessControl.hasAccess(ModuleName.REPORT_MODULE)) {
+            DefaultSubMenu submenu = new DefaultSubMenu("Report");
+            submenu.setIcon("book");
+            addTranscationReportMenuItem(submenu);
+            addInvoiceReportMenuItem(submenu);
+            addExpenseReportMenuItem(submenu);
+            model.addElement(submenu);
+        }
+    }
 
-    private void addInvoiceReportMenuItem(DefaultMenuModel model) {
+    private void addTranscationReportMenuItem(DefaultSubMenu subMenu) {
+        if (PageAccessControl.hasAccess(ModuleName.REPORT_MODULE)) {
+            DefaultMenuItem item = new DefaultMenuItem("Transaction Report");
+            item.setIcon("book");
+            item.setOutcome("/pages/secure/report/transactionReport");
+            subMenu.addElement(item);
+        }
+    }
+
+    private void addInvoiceReportMenuItem(DefaultSubMenu subMenu) {
         if (PageAccessControl.hasAccess(ModuleName.REPORT_MODULE)) {
             DefaultMenuItem item = new DefaultMenuItem("Invoice Report");
             item.setIcon("book");
             item.setOutcome("/pages/secure/report/invoiceReport");
-            model.addElement(item);
+            subMenu.addElement(item);
         }
     }
-    
-     private void addExpenseReportsMenuItem(DefaultMenuModel model) {
+
+    private void addExpenseReportMenuItem(DefaultSubMenu subMenu) {
         if (PageAccessControl.hasAccess(ModuleName.REPORT_MODULE)) {
             DefaultMenuItem item = new DefaultMenuItem("Expense Report");
             item.setIcon("book");
             item.setOutcome("/pages/secure/report/expenseReport");
-            model.addElement(item);
+            subMenu.addElement(item);
         }
     }
-    
-
 
 //                        <p:menuitem id="st_dashboard" value="Home" icon="&#xE871;"
 //                                    outcome="/pages/secure/home" />
