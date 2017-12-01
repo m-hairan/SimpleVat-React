@@ -1,7 +1,7 @@
 package com.simplevat.web.project.controller;
 
 import com.github.javaplugs.jsf.SpringScopeView;
-import static com.mysql.jdbc.StringUtils.isNullOrEmpty;
+//import com.mysql.jdbc.StringUtils.isNullOrEmpty;
 import com.simplevat.criteria.ProjectCriteria;
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Currency;
@@ -113,7 +113,7 @@ public class ProjectController extends BaseController implements Serializable {
         try {
             ProjectCriteria criteria = new ProjectCriteria();
             criteria.setActive(Boolean.TRUE);
-            if (!isNullOrEmpty(searchQuery)) {
+            if (searchQuery != null && !searchQuery.isEmpty()) {
                 criteria.setProjectName(searchQuery);
             }
             return projectService.getProjectsByCriteria(criteria);

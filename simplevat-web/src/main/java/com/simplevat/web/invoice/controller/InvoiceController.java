@@ -34,7 +34,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import static com.mysql.jdbc.StringUtils.isNullOrEmpty;
 import com.simplevat.entity.Company;
 import com.simplevat.entity.Configuration;
 import com.simplevat.entity.CurrencyConversion;
@@ -284,7 +283,7 @@ public class InvoiceController extends BaseController implements Serializable {
     public List<Project> projects(final String searchQuery) throws Exception {
         ProjectCriteria criteria = new ProjectCriteria();
         criteria.setActive(Boolean.TRUE);
-        if (!isNullOrEmpty(searchQuery)) {
+        if (searchQuery != null && !searchQuery.isEmpty()) {
             criteria.setProjectName(searchQuery);
         }
         return projectService.getProjectsByCriteria(criteria);
