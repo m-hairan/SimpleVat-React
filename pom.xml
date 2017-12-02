@@ -40,7 +40,6 @@
 		<maven-compiler-plugin.source>1.8</maven-compiler-plugin.source>
 		<maven-compiler-plugin.target>${maven-compiler-plugin.source}</maven-compiler-plugin.target>
 		<jsr305.version>3.0.1</jsr305.version>
-		<mysql-connector-java.version>6.0.6</mysql-connector-java.version>
 		<commons-lang3.version>3.5</commons-lang3.version>
 		<commons-collections4.version>4.0</commons-collections4.version>
 		<lombok.version>1.14.8</lombok.version>
