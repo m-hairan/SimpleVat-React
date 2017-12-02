@@ -54,6 +54,7 @@ RUN set -x \
   && echo '               url="jdbc:mysql://google/simplevat?cloudSqlInstance=simplevat-prod:us-central1:simplevat-dev&amp;socketFactory=com.google.cloud.sql.mysql.SocketFactory&amp;useSSL=false"/>                                           ' >> ${CATALINA_HOME}/conf/context.xml \
   && echo '                                                                                                       ' >> ${CATALINA_HOME}/conf/context.xml \
   && echo '</Context>                                                                                             ' >> ${CATALINA_HOME}/conf/context.xml \                                                                                       ' >> ${CATALINA_HOME}/conf/tomcat-users.xml  \
+  && rm -rf ${CATALINA_HOME}/webapps/* \
   && apk del --purge build-dependencies
   
 
