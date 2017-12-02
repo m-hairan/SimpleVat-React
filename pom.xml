@@ -537,13 +537,13 @@
 			    <groupId>com.google.cloud.sql</groupId>
 			    <artifactId>mysql-socket-factory</artifactId>
 			    <version>1.0.0-beta1</version>
-			</dependency>
+			</dependency-->
 			
 			<dependency>
 				<groupId>mysql</groupId>
 				<artifactId>mysql-connector-java</artifactId>
 				<version>${mysql-connector-java.version}</version>
-			</dependency-->
+			</dependency>
 						
 			<dependency>
 				<groupId>net.sf.jasperreports</groupId>
