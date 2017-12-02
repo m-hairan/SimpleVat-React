@@ -519,25 +519,6 @@
   				<artifactId>mysql-socket-factory-connector-j-6</artifactId>
   				<version>1.0.4</version>
 			</dependency>
-			
-			<!--dependency>
-    				<groupId>com.google.guava</groupId>
-    				<artifactId>guava</artifactId>
-    				<version>23.0</version>
-			</dependency>
-			
-
-			<dependency>
-			    <groupId>com.google.cloud.sql</groupId>
-			    <artifactId>mysql-socket-factory</artifactId>
-			    <version>1.0.0-beta1</version>
-			</dependency>
-			
-			<dependency>
-				<groupId>mysql</groupId>
-				<artifactId>mysql-connector-java</artifactId>
-				<version>${mysql-connector-java.version}</version>
-			</dependency-->
 						
 			<dependency>
 				<groupId>net.sf.jasperreports</groupId>
