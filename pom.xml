@@ -132,7 +132,7 @@
 							<rules>
 								<bannedDependencies>
 									<excludes>
-										<exclude>commons-logging:commons-logging:jar:1.1.1</exclude>
+										<exclude>commons-logging-1.1.1.jar</exclude>
 										<exclude>commons-logging
 										</exclude> <!-- using slf4j (with the jcl bridge) instead of this -->
 										<exclude>log4j
