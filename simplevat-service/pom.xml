@@ -126,10 +126,10 @@
 		<version>1.0.4</version>
 	</dependency>	    
 
-        <!--dependency>
+        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-        </dependency-->
+        </dependency>
 
     </dependencies>
 </project>
