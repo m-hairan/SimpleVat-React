@@ -518,7 +518,7 @@
   				<groupId>mysql</groupId>
   				<artifactId>mysql-connector-java</artifactId>
   				<version>6.0.5</version>
-			</dependency-->
+			</dependency>
 
 			<dependency>
   				<groupId>com.google.cloud.sql</groupId>
@@ -532,12 +532,12 @@
     				<version>23.0</version>
 			</dependency>
 			
-			<!-- https://mvnrepository.com/artifact/com.google.cloud.sql/mysql-socket-factory -->
+
 			<dependency>
 			    <groupId>com.google.cloud.sql</groupId>
 			    <artifactId>mysql-socket-factory</artifactId>
 			    <version>1.0.0-beta1</version>
-			</dependency>
+			</dependency-->
 			
 			<dependency>
 				<groupId>mysql</groupId>
