@@ -55,7 +55,7 @@ RUN set -x \
   && echo '                                                                                                       ' >> ${CATALINA_HOME}/conf/context.xml \
   && echo '</Context>                                                                                             ' >> ${CATALINA_HOME}/conf/context.xml \ 
   && rm -rf ${CATALINA_HOME}/webapps/* \ 
-  && apk del --purge build-dependencies
+  && apk del --purge build-dependencies 
   
 
 EXPOSE 8080
