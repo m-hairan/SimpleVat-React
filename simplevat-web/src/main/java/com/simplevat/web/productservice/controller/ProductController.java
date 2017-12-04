@@ -109,7 +109,7 @@ public class ProductController extends BaseController {
         } else {
             productService.update(product);
         }
-        return "create-product-service?faces-redirect=true";
+        return "product?faces-redirect=true";
 
     }
 }

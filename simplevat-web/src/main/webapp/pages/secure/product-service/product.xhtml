@@ -1,0 +1,123 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
+                template="/WEB-INF/templates/template.xhtml">
+
+
+    <ui:define name="content">
+        <h:form id="createProductServiceForm"
+                enctype="multipart/form-data">
+
+            <div class="card card-w-title">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+
+                        <div class="ui-g-12">
+                            <ui:fragment rendered="#{productController.productModel.productID != null}">
+                                <h1>#{messages.EditProductService}</h1>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{productController.productModel.productID == null}">
+                                <h1>#{messages.NewProductService}</h1>
+                            </ui:fragment>
+                            <div class="card card-w-title">
+                                <p:fieldset legend="Product And Service Details"
+                                            toggleable="false" toggleSpeed="500">
+                                    <p:panelGrid columns="6"
+                                                 columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+                                                 layout="grid" styleClass="ui-panelgrid-blank form-group"
+                                                 style="border:0px none; background-color:transparent;">
+
+                                        <p:outputLabel for="name"/>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText id="name"  required="true" value="#{productController.productModel.productName}" requiredMessage="please enter name."/>
+                                            <label>#{messages.name}</label>
+                                            <p:message for="name" />
+                                        </h:panelGroup>
+
+                                        <p:outputLabel for="purchase_code"/>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText id="purchase_code" value="#{productController.productModel.productCode}"/>
+                                            <label>#{messages.product_code}</label>
+                                            <p:message for="purchase_code" />
+                                        </h:panelGroup>
+
+                                        <p:outputLabel for="vat"/>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:autoComplete id="vat" 
+                                                            converter="#{vatCategoryConverter}"
+                                                            dropdown="true" 
+                                                            forceSelection="true"
+                                                            effect="fold"
+                                                            value="#{productController.productModel.vatCategory}"
+                                                            completeMethod="#{productController.vatCategorys}" 
+                                                            var="vat"
+                                                            itemValue="#{vat}"
+                                                            itemLabel="#{vat.name}"
+                                                            >
+                                            </p:autoComplete>
+                                            <label>#{messages.vat}</label>
+                                            <p:message for="vat" />
+                                        </h:panelGroup>
+                                        <p:outputLabel for="productDescription" />
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputTextarea
+                                                id="productDescription"
+                                                value="#{productController.productModel.productDescription}"
+                                                rows="5" cols="30" counter="counterValue" maxlength="250"
+                                                counterTemplate="{0} characters remaining."
+                                                autoResize="false" />
+                                            <h:outputText id="counterValue" />
+                                            <label>#{messages.description}</label>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                </p:fieldset>
+                                <br />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <p:toolbar>
+                    <f:facet name="left">
+                        <ui:fragment rendered="#{productController.productModel.productID == null}">
+
+                            <p:commandButton value="#{messages.save}" icon="ui-icon-save" update="createProductServiceForm"
+                                             action="#{productController.save}" />
+                            <p:commandButton action="#{productController.saveAndAddMoreInvoice()}"
+                                             value="#{messages.save_and_add_more}"
+                                             update="@form"
+                                             validateClient="true"
+                                             icon="ui-icon-forward" />
+                        </ui:fragment>
+
+                        <ui:fragment rendered="#{productController.productModel.productID > 0}">
+
+                            <p:commandButton value="#{messages.update}" icon="ui-icon-save" update="createProductServiceForm"
+                                             action="#{productController.save}" />
+                            <p:commandButton action="#{productController.saveAndAddMoreInvoice()}"
+                                             value="#{messages.update_and_add_more}"
+                                             update="@form"
+                                             validateClient="true"
+                                             icon="ui-icon-forward" />
+                        </ui:fragment>
+                        <span class="ui-separator" style="padding-right: 5px;"> <span
+                                class="fa fa-ellipsis-v SoftGray" />
+                        </span>
+                        <si:cbutton type="cancel"/>
+                    </f:facet>
+                    <f:facet name="right">
+                        <si:cbutton type="home"/>
+                    </f:facet>
+
+                </p:toolbar>
+
+            </div>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

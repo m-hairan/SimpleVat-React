@@ -17,6 +17,8 @@ import com.simplevat.web.common.controller.BaseController;
 import com.simplevat.web.constant.ModuleName;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 @Controller
 @SpringScopeView
@@ -54,7 +56,16 @@ public class ExpenseListController extends BaseController implements Serializabl
     }
 
     public String redirectToEdit() {
-        return "create-expense?faces-redirect=true&selectedExpenseModelId=" + selectedExpenseModel.getExpenseId();
+        return "expense?faces-redirect=true&selectedExpenseModelId=" + selectedExpenseModel.getExpenseId();
+    }
+
+    public String deleteExpense() {
+        System.out.println("selected Model : :" + selectedExpenseModel.getExpenseId());
+        Expense expense = controllerHelper.getExpense(selectedExpenseModel);
+        expense.setDeleteFlag(true);
+        expenseService.update(expense);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense deleted successfully"));
+        return "list.xhtml?faces-redirect=true";
     }
 
 }

@@ -53,12 +53,12 @@ public class ProductListController extends BaseController {
     }
 
     public String productCreatePage() {
-        return "create-product-service?faces-redirect=true";
+        return "product?faces-redirect=true";
     }
 
     public String editUser() {
         if (productModel.getProductID() != null) {
-            return "create-product-service?faces-redirect=true&productId=" + productModel.getProductID();
+            return "product?faces-redirect=true&productId=" + productModel.getProductID();
         }
 
         return null;
@@ -71,7 +71,7 @@ public class ProductListController extends BaseController {
             productService.update(product, product.getProductID());
             FacesContext context = FacesContext.getCurrentInstance();
             context.getExternalContext().getFlash().setKeepMessages(true);
-            context.addMessage(null, new FacesMessage("VatCategory deleted SuccessFully"));
+            context.addMessage(null, new FacesMessage("Product/Service deleted SuccessFully"));
             init();
         }
 

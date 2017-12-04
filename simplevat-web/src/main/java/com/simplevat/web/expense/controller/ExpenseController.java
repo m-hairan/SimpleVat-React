@@ -160,7 +160,7 @@ public class ExpenseController extends BaseController implements Serializable {
 
     public String createExpense() {
 
-        return "/pages/secure/expense/create-expense.xhtml?faces-redirect=true";
+        return "/pages/secure/expense/expense.xhtml?faces-redirect=true";
 
     }
 
@@ -293,7 +293,7 @@ public class ExpenseController extends BaseController implements Serializable {
         }
         save();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense saved successfully"));
-        return "/pages/secure/expense/expenses.xhtml?faces-redirect=true";
+        return "/pages/secure/expense/list.xhtml?faces-redirect=true";
     }
 
     public String saveAndContinueExpense() {
@@ -302,7 +302,7 @@ public class ExpenseController extends BaseController implements Serializable {
         }
         save();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense saved successfully"));
-        return "/pages/secure/expense/create-expense.xhtml?faces-redirect=true";
+        return "/pages/secure/expense/expense.xhtml?faces-redirect=true";
     }
 
     private void save() {
@@ -341,15 +341,6 @@ public class ExpenseController extends BaseController implements Serializable {
             InputStream stream = new ByteArrayInputStream(selectedExpenseModel.getReceiptAttachmentBinary());
             selectedExpenseModel.setAttachmentFileContent(new DefaultStreamedContent(stream));
         }
-    }
-
-    public String deleteExpense() {
-        System.out.println("selected Model : :" + selectedExpenseModel.getExpenseId());
-        Expense expense = controllerHelper.getExpense(selectedExpenseModel);
-        expense.setDeleteFlag(true);
-        expenseService.update(expense);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense deleted successfully"));
-        return "expenses.xhtml?faces-redirect=true";
     }
 
     public List<User> users(final String searchQuery) throws Exception {
