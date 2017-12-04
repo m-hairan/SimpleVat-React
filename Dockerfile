@@ -50,8 +50,8 @@ RUN set -x \
   && echo '                                                                                                             ' >> ${CATALINA_HOME}/conf/context.xml \
   && echo '<Resource name="jdbc/simplevatDS" auth="Container" type="javax.sql.DataSource"                               ' >> ${CATALINA_HOME}/conf/context.xml \
   && echo '               maxTotal="100" maxIdle="30" maxWaitMillis="10000"                                             ' >> ${CATALINA_HOME}/conf/context.xml \
-  && echo '               username="proxyuser" password="SimpleVat123$" driverClassName="com.mysql.cj.jdbc.Driver"                 ' >> ${CATALINA_HOME}/conf/context.xml \
-  && echo '               url="jdbc:mysql://127.0.0.1:3306/simplevat"      />                                           ' >> ${CATALINA_HOME}/conf/context.xml \
+  && echo '               username="proxyuser" password="SimpleVat123$" driverClassName="com.mysql.jdbc.Driver"                 ' >> ${CATALINA_HOME}/conf/context.xml \
+  && echo '               url="jdbc:mysql://127.0.0.1:3306/simplevat?socketFactory=com.google.cloud.sql.mysql.SocketFactory&amp;useSSL=false"      />                                           ' >> ${CATALINA_HOME}/conf/context.xml \
   && echo '                                                                                                             ' >> ${CATALINA_HOME}/conf/context.xml \
   && echo '</Context>                                                                                                   ' >> ${CATALINA_HOME}/conf/context.xml \ 
   && echo '<?xml version="1.0" encoding="UTF-8"?>                                                                 ' > ${CATALINA_HOME}/conf/tomcat-users.xml  \
