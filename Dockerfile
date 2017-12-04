@@ -45,15 +45,15 @@ RUN set -x \
   && cd / \
   && rm -rf /tmp/* \
   && sed -i 's/SSLEngine="on"/SSLEngine="off"/g' "${CATALINA_HOME}/conf/server.xml" \
-  && echo '<?xml version="1.0" encoding="UTF-8"?>                                                                 ' > ${CATALINA_HOME}/conf/context.xml  \
-  && echo '<Context>                                                                                              ' >> ${CATALINA_HOME}/conf/context.xml \
-  && echo '                                                                                                       ' >> ${CATALINA_HOME}/conf/context.xml \
-  && echo '  <Resource name="jdbc/simplevatDS" auth="Container" type="javax.sql.DataSource"                       ' >> ${CATALINA_HOME}/conf/context.xml \
-  && echo '               maxTotal="100" maxIdle="30" maxWaitMillis="10000"                                       ' >> ${CATALINA_HOME}/conf/context.xml \
+  && echo '<?xml version="1.0" encoding="UTF-8"?>                                                                       ' > ${CATALINA_HOME}/conf/context.xml  \
+  && echo '<Context>                                                                                                    ' >> ${CATALINA_HOME}/conf/context.xml \
+  && echo '                                                                                                             ' >> ${CATALINA_HOME}/conf/context.xml \
+  && echo '  <Resource name="jdbc/simplevatDS" auth="Container" type="javax.sql.DataSource"                             ' >> ${CATALINA_HOME}/conf/context.xml \
+  && echo '               maxTotal="100" maxIdle="30" maxWaitMillis="10000"                                             ' >> ${CATALINA_HOME}/conf/context.xml \
   && echo '               username="simplevat-user" password="SimpleVat123$" driverClassName="com.mysql.jdbc.Driver"    ' >> ${CATALINA_HOME}/conf/context.xml \
   && echo '               url="jdbc:mysql://google/simplevat?cloudSqlInstance=simplevat-app:us-central1:simplevat-dev&amp;socketFactory=com.google.cloud.sql.mysql.SocketFactory&amp;useSSL=false"/>                                           ' >> ${CATALINA_HOME}/conf/context.xml \
-  && echo '                                                                                                       ' >> ${CATALINA_HOME}/conf/context.xml \
-  && echo '</Context>                                                                                             ' >> ${CATALINA_HOME}/conf/context.xml \ 
+  && echo '                                                                                                             ' >> ${CATALINA_HOME}/conf/context.xml \
+  && echo '</Context>                                                                                                   ' >> ${CATALINA_HOME}/conf/context.xml \ 
   && echo '<?xml version="1.0" encoding="UTF-8"?>                                                                 ' > ${CATALINA_HOME}/conf/tomcat-users.xml  \
   && echo '<tomcat-users xmlns="http://tomcat.apache.org/xml"                                                     ' >> ${CATALINA_HOME}/conf/tomcat-users.xml  \
   && echo '              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"                                    ' >> ${CATALINA_HOME}/conf/tomcat-users.xml  \
