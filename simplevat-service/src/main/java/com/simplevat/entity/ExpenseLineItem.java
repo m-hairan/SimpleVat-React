@@ -35,10 +35,10 @@ public class ExpenseLineItem implements Serializable {
     @Column(name = "EXPENSE_LINE_ITEM_UNIT_PRICE")
     private BigDecimal expenseLineItemUnitPrice;
 
-    @Basic
-    @Column(name = "EXPENSE_LINE_ITEM_VAT")
-    private BigDecimal expenseLineItemVat;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "EXPENSE_LINE_ITEM_VAT_ID")
+    private VatCategory expenseLineItemVat;
+    
     @Column(name = "DELETE_FLAG")
     @ColumnDefault(value = "0")
     @Basic(optional = false)

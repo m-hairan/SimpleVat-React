@@ -21,41 +21,31 @@ public class PurchaseLineItem implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PURCHASE_LINE_ITEM_ID")
     private int purchaseLineItemId;
-
     @Basic
     @Column(name = "PURCHASE_LINE_ITEM_QUANTITY")
     private Integer purchaseLineItemQuantity;
-
     @Basic
     @Column(name = "PURCHASE_LINE_ITEM_DESCRIPTION")
     private String purchaseLineItemDescription;
-
-    @Basic
-    @Column(name = "PURCHASE_LINE_ITEM_PRODUCT_SERVICE")
-    private String purchaseLineItemProductService;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PURCHASE_LINE_ITEM_PRODUCT")
+    private Product purchaseLineItemProductService;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PURCHASE_LINE_ITEM_VAT_PERCENTAGE")
+    private VatCategory purchaseLineItemVat;
     @Basic
     @Column(name = "PURCHASE_LINE_ITEM_UNIT_PRICE")
     private BigDecimal purchaseLineItemUnitPrice;
-
-    @Basic
-    @Column(name = "PURCHASE_LINE_ITEM_VAT")
-    private BigDecimal purchaseLineItemVat;
-
     @Column(name = "DELETE_FLAG")
     @ColumnDefault(value = "0")
     @Basic(optional = false)
     private Boolean deleteFlag = Boolean.FALSE;
-
     @Column(name = "VERSION_NUMBER")
     @ColumnDefault(value = "1")
     @Basic(optional = false)
     @Version
     private Integer versionNumber;
-
     @ManyToOne
     @JoinColumn(name = "PURCHASE_ID")
     private Purchase purchase;
-
-    
 }

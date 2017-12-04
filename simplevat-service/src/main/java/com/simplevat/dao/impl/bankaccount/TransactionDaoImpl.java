@@ -15,6 +15,7 @@ import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionType;
+import com.simplevat.entity.bankaccount.TransactionView;
 import java.time.Instant;
 import java.time.ZoneId;
 import javax.persistence.TypedQuery;
@@ -158,6 +159,26 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
         List<Transaction> transactionList = query.getResultList();
         if (transactionList != null && !transactionList.isEmpty()) {
             return transactionList;
+        }
+        return null;
+    }
+
+    @Override
+    public List<TransactionView> getAllTransactionViewList(Integer bankAccountId) {
+        TypedQuery<TransactionView> query = getEntityManager().createQuery("SELECT t FROM TransactionView t WHERE t.bankAccountId =:bankAccountId ORDER BY t.transactionDate DESC", TransactionView.class);
+        query.setParameter("bankAccountId", bankAccountId);
+        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
+            return query.getResultList();
+        }
+        return null;
+    }
+
+    @Override
+    public List<TransactionView> getChildTransactionViewListByParentId(Integer parentTransaction) {
+        TypedQuery<TransactionView> query = getEntityManager().createQuery("SELECT t FROM TransactionView t WHERE t.parentTransaction =:parentTransaction ORDER BY t.transactionDate ASC", TransactionView.class);
+        query.setParameter("parentTransaction", parentTransaction);
+        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
+            return query.getResultList();
         }
         return null;
     }

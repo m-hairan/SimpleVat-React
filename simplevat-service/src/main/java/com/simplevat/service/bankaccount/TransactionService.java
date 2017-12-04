@@ -8,9 +8,11 @@ import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionType;
+import com.simplevat.entity.bankaccount.TransactionView;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.service.SimpleVatService;
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Date;
 
 public abstract class TransactionService extends SimpleVatService<Integer, Transaction> {
@@ -43,5 +45,9 @@ public abstract class TransactionService extends SimpleVatService<Integer, Trans
     
     public abstract List<Transaction> getAllParentTransactions(BankAccount bankAccount);
     
+    public abstract List<TransactionView> getAllTransactionViewList(Integer bankAccountId);
+    
     public abstract List<Transaction> getAllTransactions();
+
+    public abstract List<TransactionView> getChildTransactionViewListByParentId(Integer parentTransaction);
 }

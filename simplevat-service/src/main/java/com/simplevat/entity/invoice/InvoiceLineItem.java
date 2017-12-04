@@ -1,12 +1,12 @@
 package com.simplevat.entity.invoice;
 
-import com.simplevat.entity.converter.DateConverter;
+import com.simplevat.entity.Product;
+import com.simplevat.entity.VatCategory;
 import java.io.Serializable;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -34,19 +34,17 @@ public class InvoiceLineItem implements Serializable {
     private String invoiceLineItemDescription;
 
     @Basic
-    @Column(name = "INVOICE_LINE_ITEM_PRODUCT_SERVICE")
-    private String invoiceLineItemProductService;
-
-    
-    @Basic
     @Column(name = "INVOICE_LINE_ITEM_UNIT_PRICE")
     @ColumnDefault(value = "0.00")
     private BigDecimal invoiceLineItemUnitPrice;
 
-    @Basic
-    @Column(name = "INVOICE_LINE_ITEM_VAT")
-    @ColumnDefault(value = "0.00")
-    private BigDecimal invoiceLineItemVat;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "INVOICE_LINE_ITEM_PRODUCT_SERVICE")
+    private Product invoiceLineItemProductService;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "INVOICE_LINE_ITEM_VAT")
+    private VatCategory invoiceLineItemVat;
 
     @Column(name = "CREATED_BY")
     @Basic(optional = false)

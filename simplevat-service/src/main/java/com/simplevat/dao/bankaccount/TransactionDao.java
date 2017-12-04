@@ -8,6 +8,7 @@ import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionType;
+import com.simplevat.entity.bankaccount.TransactionView;
 import java.time.LocalDateTime;
 
 public interface TransactionDao extends Dao<Integer, Transaction> {
@@ -31,5 +32,9 @@ public interface TransactionDao extends Dao<Integer, Transaction> {
     public List<Transaction> getTransactionsByDateRangeAndBankAccountId(BankAccount bankAccount, Date startDate, Date lastDate);
 
     public List<Transaction> getAllTransactions();
+
+    public List<TransactionView> getAllTransactionViewList(Integer bankAccountId);
+
+    public List<TransactionView> getChildTransactionViewListByParentId(Integer parentTransaction);
 
 }

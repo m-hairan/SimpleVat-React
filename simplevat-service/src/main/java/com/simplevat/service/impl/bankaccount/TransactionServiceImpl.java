@@ -24,6 +24,7 @@ import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionStatus;
 import com.simplevat.entity.bankaccount.TransactionType;
+import com.simplevat.entity.bankaccount.TransactionView;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.service.bankaccount.TransactionService;
 import com.simplevat.util.ChartUtil;
@@ -197,7 +198,7 @@ public class TransactionServiceImpl extends TransactionService {
         updateAccountBalance(balanceAmount, transaction);
         return transaction;
     }
-    
+
     @Override
     public Transaction deleteChildTransaction(Transaction transaction) {
         transaction.setDeleteFlag(true);
@@ -231,7 +232,17 @@ public class TransactionServiceImpl extends TransactionService {
 
     @Override
     public List<Transaction> getAllTransactions() {
-         return transactionDao.getAllTransactions();
+        return transactionDao.getAllTransactions();
+    }
+
+    @Override
+    public List<TransactionView> getAllTransactionViewList(Integer bankAccountId) {
+        return transactionDao.getAllTransactionViewList(bankAccountId);
+    }
+
+    @Override
+    public List<TransactionView> getChildTransactionViewListByParentId(Integer parentTransaction) {
+        return transactionDao.getChildTransactionViewListByParentId(parentTransaction);
     }
 
 }
