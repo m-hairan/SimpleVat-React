@@ -65,7 +65,6 @@ public class TaxTransactionController implements Serializable {
     private TaxTransaction taxTransaction;
 
     private List<Transaction> creditTransactionList = new ArrayList<>();
-
     private List<Transaction> debitTransactionList = new ArrayList<>();
 
     private BigDecimal vatIn = new BigDecimal(0);
@@ -139,11 +138,15 @@ public class TaxTransactionController implements Serializable {
     private BigDecimal getVatFromTransaction(Transaction transaction) {
         Integer refId = transaction.getReferenceId();
         BigDecimal totalVat = BigDecimal.ZERO;
+        BigDecimal vatPercent = BigDecimal.ZERO;;
         if (transaction.getReferenceType() == TransactionRefrenceTypeConstant.INVOICE) {
             Invoice invoice = invoiceService.findByPK(refId);
             for (InvoiceLineItem invoiceLineItem : invoice.getInvoiceLineItems()) {
                 BigDecimal totalAmount = invoiceLineItem.getInvoiceLineItemUnitPrice().multiply(new BigDecimal(invoiceLineItem.getInvoiceLineItemQuantity()));
-                totalVat = (totalAmount.multiply(invoiceLineItem.getInvoiceLineItemVat())).divide(new BigDecimal(100));
+                if (invoiceLineItem.getInvoiceLineItemVat() != null) {
+                    vatPercent=invoiceLineItem.getInvoiceLineItemVat().getVat();
+                }
+                totalVat = (totalAmount.multiply(vatPercent)).divide(new BigDecimal(100));
             }
         }
         return totalVat;

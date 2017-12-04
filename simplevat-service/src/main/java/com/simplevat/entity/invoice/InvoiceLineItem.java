@@ -39,11 +39,11 @@ public class InvoiceLineItem implements Serializable {
     private BigDecimal invoiceLineItemUnitPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "INVOICE_LINE_ITEM_PRODUCT_SERVICE")
+    @JoinColumn(name = "INVOICE_LINE_ITEM_PRODUCT_SERVICE_ID")
     private Product invoiceLineItemProductService;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "INVOICE_LINE_ITEM_VAT")
+    @JoinColumn(name = "INVOICE_LINE_ITEM_VAT_ID")
     private VatCategory invoiceLineItemVat;
 
     @Column(name = "CREATED_BY")

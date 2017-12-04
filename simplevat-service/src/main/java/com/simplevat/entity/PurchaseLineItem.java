@@ -28,10 +28,10 @@ public class PurchaseLineItem implements Serializable {
     @Column(name = "PURCHASE_LINE_ITEM_DESCRIPTION")
     private String purchaseLineItemDescription;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PURCHASE_LINE_ITEM_PRODUCT")
+    @JoinColumn(name = "PURCHASE_LINE_ITEM_PRODUCT_ID")
     private Product purchaseLineItemProductService;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PURCHASE_LINE_ITEM_VAT_PERCENTAGE")
+    @JoinColumn(name = "PURCHASE_LINE_ITEM_VAT_ID")
     private VatCategory purchaseLineItemVat;
     @Basic
     @Column(name = "PURCHASE_LINE_ITEM_UNIT_PRICE")
