@@ -15,23 +15,26 @@ public class TransactionStatusConverter implements Converter {
 
     @Autowired
     private TransactionStatusService transactionStatusService;
-    
-	@Override
-	public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
-		if (string != null && !string.isEmpty()) {
-			TransactionStatus transactionStatus = transactionStatusService.findByPK(Integer.parseInt(string));
-			return transactionStatus;
-		}
-		return null;
-	}
 
-	@Override
-	public String getAsString(FacesContext fc, UIComponent uic, Object o) {
-		
-		if (o instanceof TransactionStatus) {
-			TransactionStatus transactionStatus = (TransactionStatus) o;
-			return Integer.toString(transactionStatus.getExplainationStatusCode());
-		}
-		return null;
-	}
+    @Override
+    public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
+        if (string != null && !string.isEmpty()) {
+            try {
+                TransactionStatus transactionStatus = transactionStatusService.findByPK(Integer.parseInt(string));
+                return transactionStatus;
+            } catch (Exception e) {
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String getAsString(FacesContext fc, UIComponent uic, Object o) {
+
+        if (o instanceof TransactionStatus) {
+            TransactionStatus transactionStatus = (TransactionStatus) o;
+            return Integer.toString(transactionStatus.getExplainationStatusCode());
+        }
+        return null;
+    }
 }

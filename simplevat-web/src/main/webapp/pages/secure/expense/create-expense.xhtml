@@ -77,7 +77,6 @@
                                                 requiredMessage="Please select expense Type">
                                                 <p:ajax event="itemSelect"
                                                         update="expenseTransactionCategory"  />
-
                                             </p:autoComplete>
                                             <label>#{messages.type}</label>
                                             <p:message for="expenseTransactionType" />
@@ -112,10 +111,6 @@
                                             <label>#{messages.expense_date}</label>
                                             <p:message for="expenseDate" />
                                         </h:panelGroup>
-
-
-
-
                                         <p:outputLabel for="expenseCurrency" />
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete id="expenseCurrency" 
@@ -136,9 +131,6 @@
                                             <label>#{messages.currency}</label>
                                             <p:message for="expenseCurrency" />
                                         </h:panelGroup>
-
-
-
                                         <p:outputLabel for="expenseProject"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete
@@ -156,10 +148,6 @@
                                             </p:autoComplete>
                                             <label>#{messages.project}</label>
                                         </h:panelGroup>
-
-
-
-
                                         <p:outputLabel for="conatcts"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete id="conatcts" 
@@ -183,8 +171,6 @@
                                             <label>#{messages.contact}</label>
                                             <p:message for="conatcts" />
                                         </h:panelGroup>
-
-
                                         <p:outputLabel />
                                         <p:outputLabel value="OR  ">
                                             <p:commandLink onsuccess="PF('add_contact_popup').show();" 
@@ -192,9 +178,6 @@
                                                            style="color: #009688" 
                                                            value="Add New Contact" />
                                         </p:outputLabel>
-
-
-
                                         <p:outputLabel for="expenseDescription" />
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputTextarea
@@ -206,14 +189,10 @@
                                             <h:outputText id="counterValue" />
                                             <label>#{messages.description}</label>
                                         </h:panelGroup>
-
-
                                         <h:panelGroup />
                                         <h:panelGroup />
-
                                     </p:panelGrid>
                                 </p:fieldset>
-
                                 <br />
                                 <p:fieldset legend="Receipt" toggleable="true" toggleSpeed="500">
                                     <p:panelGrid columns="6"
@@ -228,9 +207,7 @@
                                                 value="#{expenseController.selectedExpenseModel.receiptNumber}" />
                                             <label>#{messages.receiptnumber}</label>
                                         </h:panelGroup>
-
                                         <h:panelGroup />
-
                                         <h:panelGroup styleClass="md-inputfield">
                                             <div style="text-align: center">
                                                 <p:fileUpload auto="true" 
@@ -255,15 +232,11 @@
                                                 value="#{expenseController.selectedExpenseModel.receiptAttachmentDescription}" />
                                             <label>#{messages.attachment_description}</label>
                                         </h:panelGroup>
-
                                     </p:panelGrid>
                                 </p:fieldset>
-
-
                                 <p:fieldset legend="Expense Item Details" toggleable="true" 
                                             toggleSpeed="300">
                                     <p:messages autoUpdate="true" id="validationId" closable="true" for="validationId" />
-
                                     <p:dataTable value="#{expenseController.selectedExpenseModel.expenseItem}"
                                                  var="expenseItem" 
                                                  editMode="cell"
@@ -340,23 +313,29 @@
                                         <p:column headerText="VAT (%)" styleClass="amount">
                                             <p:cellEditor>
                                                 <f:facet name="output">
-                                                    <h:outputText value="#{expenseItem.vatId} %" />
+                                                    <h:outputText value="#{expenseItem.vatId.name}" />
                                                 </f:facet>
                                                 <f:facet name="input">
-                                                    <p:selectOneMenu id="vatId"   value="#{expenseItem.vatId}"   style="width:100%">
-
-                                                        <f:selectItem itemLabel="Select One" itemValue="" />
-                                                        <f:selectItems value="#{expenseController.vatCategorySelectItemList}" />
+                                                    <p:autoComplete id="vatId" 
+                                                                    converter="#{vatCategoryConverter}"
+                                                                    dropdown="true" 
+                                                                    forceSelection="true"
+                                                                    effect="fold"
+                                                                    value="#{expenseItem.vatId}"
+                                                                    completeMethod="#{expenseController.vatCategorys}" 
+                                                                    var="vat"
+                                                                    itemValue="#{vat}"
+                                                                    itemLabel="#{vat.name}"
+                                                                    >
+                                                        <p:ajax update="subTotal @form:exchangeCurrency" event="itemSelect" listener="#{expenseController.updateSubTotal(expenseItem)}" />
                                                         <p:ajax event="change" 
                                                                 listener="#{expenseController.updateSubTotal(expenseItem)}" 
                                                                 update="subTotal @form:exchangeCurrency" />
-                                                    </p:selectOneMenu>
+                                                    </p:autoComplete>
 
                                                 </f:facet>
                                             </p:cellEditor>
                                         </p:column>
-
-
                                         <p:column headerText="Subtotal (#{expenseController.selectedExpenseModel.currency.currencyIsoCode})" styleClass="amount">
                                             <h:outputText id="subTotal" value="#{expenseItem.subTotal}" >
                                                 <f:convertNumber type="currency" currencySymbol="#{expenseController.selectedExpenseModel.currency.currencySymbol} " />
@@ -437,7 +416,7 @@
                         </ui:fragment>
 
                         <p:commandButton value="#{messages.CashPayment}" icon="ui-icon-attach-money" update="createExpenseForm"
-                                             action="#{expenseController.saveExpense}" >
+                                         action="#{expenseController.saveExpense}" >
                             <f:setPropertyActionListener target="#{expenseController.selectedExpenseModel.paymentMode}" value="1" />
                         </p:commandButton>
                         <span class="ui-separator" style="padding-right: 5px;"> <span

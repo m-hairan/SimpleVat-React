@@ -159,9 +159,9 @@ public class InvoiceListController extends BaseController implements Serializabl
         for (InvoiceLineItem item : invoice.getInvoiceLineItems()) {
             BigDecimal itemAmount = item.getInvoiceLineItemUnitPrice()
                     .multiply(new BigDecimal(item.getInvoiceLineItemQuantity()));
-            if (null != item.getInvoiceLineItemVat()) {
+            if (item.getInvoiceLineItemVat() != null) {
                 itemAmount = itemAmount.add(itemAmount
-                        .multiply(item.getInvoiceLineItemVat())
+                        .multiply(item.getInvoiceLineItemVat().getVat())
                         .multiply((new BigDecimal(0.01))));
             }
             finalTotal = finalTotal.add(itemAmount);

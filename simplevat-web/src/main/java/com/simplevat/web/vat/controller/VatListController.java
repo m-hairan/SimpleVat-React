@@ -58,9 +58,7 @@ public class VatListController extends BaseController {
 
     public String editUser() {
         if (vatCategory.getId() != null) {
-
             return "createVatcategory?faces-redirect=true&vatCategoryId=" + vatCategory.getId();
-
         }
         return null;
     }

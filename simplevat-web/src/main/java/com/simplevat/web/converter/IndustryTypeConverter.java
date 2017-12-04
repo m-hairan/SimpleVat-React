@@ -26,8 +26,11 @@ public class IndustryTypeConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
         if (string != null && !string.isEmpty()) {
-            IndustryType industryType = industryTypeService.findByPK(Integer.parseInt(string));
-            return industryType;
+            try {
+                IndustryType industryType = industryTypeService.findByPK(Integer.parseInt(string));
+                return industryType;
+            } catch (Exception e) {
+            }
         }
         return null;
     }

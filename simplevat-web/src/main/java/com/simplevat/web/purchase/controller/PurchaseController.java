@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.CurrencyConversion;
+import com.simplevat.entity.Product;
 import com.simplevat.entity.Purchase;
 import com.simplevat.entity.User;
 import com.simplevat.entity.VatCategory;
@@ -24,6 +25,7 @@ import com.simplevat.entity.bankaccount.TransactionType;
 import com.simplevat.service.CompanyService;
 import com.simplevat.service.ContactService;
 import com.simplevat.service.CurrencyService;
+import com.simplevat.service.ProductService;
 import com.simplevat.service.ProjectService;
 import com.simplevat.service.PurchaseService;
 import com.simplevat.service.TransactionCategoryServiceNew;
@@ -63,6 +65,9 @@ public class PurchaseController extends BaseController implements Serializable {
 
     @Autowired
     private PurchaseService purchaseService;
+
+    @Autowired
+    private ProductService productService;
 
     @Autowired
     private TransactionTypeService transactionTypeService;
@@ -180,6 +185,32 @@ public class PurchaseController extends BaseController implements Serializable {
         } else {
             return new ArrayList<>();
         }
+    }
+
+    public List<Product> products(final String searchQuery) throws Exception {
+        if (productService.getProductList() != null) {
+            return productService.getProductList();
+        }
+        return null;
+    }
+
+    public List<VatCategory> vatCategorys(final String searchQuery) throws Exception {
+        if (vatCategoryService.getVatCategoryList() != null) {
+            return vatCategoryService.getVatCategoryList();
+        }
+        return null;
+    }
+
+    public void updateVatPercentage(PurchaseItemModel purchaseItemModel) {
+        if (purchaseItemModel.getProductService() != null) {
+            if (purchaseItemModel.getProductService().getVatCategory() != null) {
+                VatCategory vatCategory = vatCategoryService.findByPK(purchaseItemModel.getProductService().getVatCategory().getId());
+                purchaseItemModel.setVatId(vatCategory);
+            } else {
+                purchaseItemModel.setVatId(null);
+            }
+        }
+        updateSubTotal(purchaseItemModel);
     }
 
     // TODO compare companycurrency and selected Currency
@@ -385,9 +416,12 @@ public class PurchaseController extends BaseController implements Serializable {
     }
 
     public void updateSubTotal(final PurchaseItemModel itemModel) {
+        BigDecimal vatPer = new BigDecimal(BigInteger.ZERO);
         final int quantity = itemModel.getQuatity();
         final BigDecimal unitPrice = itemModel.getUnitPrice();
-        final BigDecimal vatPer = itemModel.getVatId();
+        if (itemModel.getVatId() != null) {
+            vatPer = itemModel.getVatId().getVat();
+        }
         if (null != unitPrice) {
             final BigDecimal amountWithoutTax = unitPrice.multiply(new BigDecimal(quantity));
             itemModel.setSubTotal(amountWithoutTax);

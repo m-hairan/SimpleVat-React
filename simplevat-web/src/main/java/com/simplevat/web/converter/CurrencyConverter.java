@@ -15,15 +15,18 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CurrencyConverter implements Converter {
-    
+
     @Autowired
     private CurrencyService currencyService;
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         if (value != null && !value.isEmpty()) {
-            Currency currency = currencyService.getCurrency(Integer.parseInt(value));
-            return currency;
+            try {
+                Currency currency = currencyService.getCurrency(Integer.parseInt(value));
+                return currency;
+            } catch (Exception e) {
+            }
         }
 
         return null;

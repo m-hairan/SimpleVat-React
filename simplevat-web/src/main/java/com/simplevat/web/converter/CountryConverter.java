@@ -24,8 +24,12 @@ public class CountryConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         if (value != null && !value.isEmpty()) {
-            Country country = countryService.getCountry(Integer.parseInt(value));
-            return country;
+            try {
+                Integer countryId = Integer.parseInt(value);
+                Country country = countryService.getCountry(countryId);
+                return country;
+            } catch (Exception e) {
+            }
         }
 
         return null;

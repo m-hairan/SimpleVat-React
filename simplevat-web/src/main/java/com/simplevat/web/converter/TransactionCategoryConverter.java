@@ -24,8 +24,11 @@ public class TransactionCategoryConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
         if (string != null && !string.isEmpty()) {
-            TransactionCategory transactionCategory = transactionCategoryService.findByPK(Integer.parseInt(string));
-            return transactionCategory;
+            try {
+                TransactionCategory transactionCategory = transactionCategoryService.findByPK(Integer.parseInt(string));
+                return transactionCategory;
+            } catch (Exception e) {
+            }
         }
         return null;
     }

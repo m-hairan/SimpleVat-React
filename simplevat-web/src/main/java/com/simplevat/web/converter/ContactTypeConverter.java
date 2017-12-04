@@ -22,8 +22,12 @@ public class ContactTypeConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
         if (string != null && !string.isEmpty()) {
-            ContactType contactType = getContactType(Integer.parseInt(string));
-            return contactType;
+            try {
+                Integer contactTypeId = Integer.parseInt(string);
+                ContactType contactType = getContactType(contactTypeId);
+                return contactType;
+            } catch (Exception e) {
+            }
         }
         return null;
     }

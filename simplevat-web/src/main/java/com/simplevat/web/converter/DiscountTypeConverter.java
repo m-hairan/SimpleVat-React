@@ -16,10 +16,11 @@ public class DiscountTypeConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
         if (string != null && !string.isEmpty()) {
-            DiscountType discountType = new DiscountType();
-
-            discountType.setDiscountTypeCode(Integer.parseInt(string));
-            return discountType;
+            try {
+                DiscountType discountType = new DiscountType();
+                discountType.setDiscountTypeCode(Integer.parseInt(string));
+                return discountType;
+            }catch(Exception e){}
         }
         return null;
     }

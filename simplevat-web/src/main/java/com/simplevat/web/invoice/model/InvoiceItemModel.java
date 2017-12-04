@@ -1,5 +1,7 @@
 package com.simplevat.web.invoice.model;
 
+import com.simplevat.entity.Product;
+import com.simplevat.entity.VatCategory;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,10 +18,10 @@ public class InvoiceItemModel {
 
     private int quatity;
     private BigDecimal unitPrice;
-    private BigDecimal vatId = BigDecimal.ZERO;
+    private VatCategory vatId;
     private String description;
     private BigDecimal subTotal;
     private Integer versionNumber;
-    private String productService;
+    private Product productService;
     
 }

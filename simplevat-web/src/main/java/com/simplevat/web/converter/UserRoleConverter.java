@@ -26,8 +26,11 @@ public class UserRoleConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
         if (string != null && !string.isEmpty()) {
-            Role role = roleService.findByPK(Integer.parseInt(string));
-            return role;
+            try {
+                Role role = roleService.findByPK(Integer.parseInt(string));
+                return role;
+            } catch (Exception e) {
+            }
         }
         return null;
     }
@@ -41,5 +44,5 @@ public class UserRoleConverter implements Converter {
         }
         return null;
     }
-    
+
 }

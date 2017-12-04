@@ -142,7 +142,7 @@ public class TransactionImportController implements Serializable {
                 transaction1.setTransactionAmount(BigDecimal.valueOf(Double.parseDouble(transaction.getCrAmount().replaceAll(",", ""))));
                 transaction1.setDebitCreditFlag(TransactionCreditDebitConstant.CREDIT);
             }
-            transaction1.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.UNEXPLIANED));
+            transaction1.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.UNEXPLAINED));
             transactionService.persist(transaction1);
         } catch (Exception e) {
             e.printStackTrace();

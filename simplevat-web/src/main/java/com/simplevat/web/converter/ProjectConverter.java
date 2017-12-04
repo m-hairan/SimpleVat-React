@@ -25,18 +25,21 @@ public class ProjectConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
         if (string != null && !string.isEmpty()) {
-            ProjectCriteria pc = new ProjectCriteria();
-            pc.setProjectId(Integer.parseInt(string));
-            Project project = new Project();
             try {
-                project = projectService.getProjectsByCriteria(pc)
-                        .stream()
-                        .findFirst()
-                        .orElse(new Project());
-            } catch (Exception ex) {
-                Logger.getLogger(ProjectConverter.class.getName()).log(Level.SEVERE, null, ex);
+                ProjectCriteria pc = new ProjectCriteria();
+                pc.setProjectId(Integer.parseInt(string));
+                Project project = new Project();
+                try {
+                    project = projectService.getProjectsByCriteria(pc)
+                            .stream()
+                            .findFirst()
+                            .orElse(new Project());
+                } catch (Exception ex) {
+                    Logger.getLogger(ProjectConverter.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                return project;
+            } catch (Exception e) {
             }
-            return project;
         }
         return null;
     }

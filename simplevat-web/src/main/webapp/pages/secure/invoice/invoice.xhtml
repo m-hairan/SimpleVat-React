@@ -193,23 +193,28 @@
                                                          icon="ui-icon-delete">
                                         </p:commandButton>
                                     </p:column>
-
                                     <p:column headerText="Product/Service"  style="width: 200px">
                                         <p:cellEditor>
                                             <f:facet name="output">
-                                                <h:outputText value="#{invoiceItem.productService}" />
+                                                <h:outputText value="#{invoiceItem.productService.productName}" id="product_service_label"  />
                                             </f:facet>
                                             <f:facet name="input">
-                                                <p:inputText id="product_service" 
-                                                             value="#{invoiceItem.productService}" 
-                                                             style="width:100%">
-                                                    <p:ajax event="change" />
-                                                </p:inputText>
+                                                <p:autoComplete id="product_service" 
+                                                                converter="#{productConverter}"
+                                                                dropdown="true" 
+                                                                forceSelection="true"
+                                                                effect="fold"
+                                                                value="#{invoiceItem.productService}"
+                                                                completeMethod="#{invoiceController.products}" 
+                                                                var="product"
+                                                                itemValue="#{product}"
+                                                                itemLabel="#{product.productName}">
+                                                    <!--<p:ajax update="product_service product_service_label" listener="#{invoiceController.refreshProductService(invoiceItem)}" event="change"/>-->
+                                                    <p:ajax update="vatIdLabel vatId subTotal" event="itemSelect" listener="#{invoiceController.updateVatPercentage(invoiceItem)}" />
+                                                </p:autoComplete>
                                             </f:facet>
                                         </p:cellEditor>
                                     </p:column>
-
-
                                     <p:column headerText="Description"  style="width: 320px">
                                         <p:cellEditor>
                                             <f:facet name="output">
@@ -224,8 +229,6 @@
                                             </f:facet>
                                         </p:cellEditor>
                                     </p:column>
-
-
                                     <p:column headerText="Quantity" styleClass="amount">
                                         <p:cellEditor>
                                             <f:facet name="output">
@@ -268,17 +271,26 @@
                                     <p:column headerText="VAT (%)" styleClass="amount">
                                         <p:cellEditor>
                                             <f:facet name="output">
-                                                <h:outputText value="#{invoiceItem.vatId} %" />
+                                                <h:outputText value="#{invoiceItem.vatId.name}" id="vatIdLabel" />
                                             </f:facet>
                                             <f:facet name="input">
-                                                <p:selectOneMenu id="vatId" value="#{invoiceItem.vatId}"  style="width:100%">
-                                                    <f:selectItem itemLabel="Select One" itemValue="" />
-                                                    <f:selectItems value="#{invoiceController.vatCategorySelectItemList}" />
+
+                                                <p:autoComplete id="vatId" 
+                                                                converter="#{vatCategoryConverter}"
+                                                                dropdown="true" 
+                                                                forceSelection="true"
+                                                                effect="fold"
+                                                                value="#{invoiceItem.vatId}"
+                                                                completeMethod="#{invoiceController.vatCategorys}" 
+                                                                var="vat"
+                                                                itemValue="#{vat}"
+                                                                itemLabel="#{vat.name}"
+                                                                >
+                                                    <p:ajax update="subTotal @form:exchangeCurrency" event="itemSelect" listener="#{invoiceController.updateSubTotal(invoiceItem)}" />
                                                     <p:ajax event="change" 
                                                             listener="#{invoiceController.updateSubTotal(invoiceItem)}" 
-                                                            update="subTotal,@form:exchangeCurrency" />
-                                                </p:selectOneMenu>
-
+                                                            update="subTotal @form:exchangeCurrency" />
+                                                </p:autoComplete>
                                             </f:facet>
                                         </p:cellEditor>
                                     </p:column>

@@ -20,8 +20,11 @@ public class LanguageConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         if (value != null && !value.isEmpty()) {
-            Language language = languageService.getLanguage(Integer.parseInt(value));
-            return language;
+            try {
+                Language language = languageService.getLanguage(Integer.parseInt(value));
+                return language;
+            } catch (Exception e) {
+            }
         }
 
         return null;

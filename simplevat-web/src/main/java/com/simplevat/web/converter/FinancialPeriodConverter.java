@@ -17,8 +17,11 @@ public class FinancialPeriodConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
         if (string != null && !string.isEmpty()) {
-            FinancialPeriod financialPeriod = getFinancialPeriodById(Integer.parseInt(string));
-            return financialPeriod;
+            try {
+                FinancialPeriod financialPeriod = getFinancialPeriodById(Integer.parseInt(string));
+                return financialPeriod;
+            } catch (Exception e) {
+            }
         }
         return null;
     }

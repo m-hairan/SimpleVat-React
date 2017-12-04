@@ -37,9 +37,11 @@ import java.util.List;
 import com.simplevat.entity.Company;
 import com.simplevat.entity.Configuration;
 import com.simplevat.entity.CurrencyConversion;
+import com.simplevat.entity.Product;
 import com.simplevat.entity.VatCategory;
 import com.simplevat.service.CompanyService;
 import com.simplevat.service.ConfigurationService;
+import com.simplevat.service.ProductService;
 import com.simplevat.service.UserServiceNew;
 import com.simplevat.service.VatCategoryService;
 import com.simplevat.web.common.controller.BaseController;
@@ -95,6 +97,9 @@ public class InvoiceController extends BaseController implements Serializable {
     @Autowired
     private VatCategoryService vatCategoryService;
 
+    @Autowired
+    private ProductService productService;
+
     @Getter
     private InvoiceModel selectedInvoiceModel;
 
@@ -133,6 +138,10 @@ public class InvoiceController extends BaseController implements Serializable {
 
     @Getter
     private boolean renderPDF = false;
+
+    @Getter
+    @Setter
+    InvoiceItemModel invoiceItemModel;
 
     @Getter
     @Setter
@@ -181,7 +190,6 @@ public class InvoiceController extends BaseController implements Serializable {
             }
         }
         populateVatCategory();
-
         calculateTotal();
     }
 
@@ -197,9 +205,7 @@ public class InvoiceController extends BaseController implements Serializable {
 
         if (validated) {
             selectedInvoiceModel.addInvoiceItem(new InvoiceItemModel());
-
         }
-
     }
 
     public void deleteLineItem(InvoiceItemModel itemModel) {
@@ -278,6 +284,40 @@ public class InvoiceController extends BaseController implements Serializable {
 
     public List<Contact> contacts(final String searchQuery) {
         return contactService.getContacts(searchQuery, ContactTypeConstant.CUSTOMER);
+    }
+
+    public List<Product> products(final String searchQuery) throws Exception {
+        if (invoiceItemModel != null) {
+            invoiceItemModel.setProductService(null);
+        }
+
+        if (productService.getProductList() != null) {
+            return productService.getProductList();
+        }
+        return null;
+    }
+
+    public void refreshProductService(InvoiceItemModel itemModel) {
+        itemModel.setProductService(null);
+    }
+
+    public List<VatCategory> vatCategorys(final String searchQuery) throws Exception {
+        if (vatCategoryService.getVatCategoryList() != null) {
+            return vatCategoryService.getVatCategoryList();
+        }
+        return null;
+    }
+
+    public void updateVatPercentage(InvoiceItemModel invoiceItemModel) {
+        if (invoiceItemModel.getProductService() != null) {
+            if (invoiceItemModel.getProductService().getVatCategory() != null) {
+                VatCategory vatCategory = vatCategoryService.findByPK(invoiceItemModel.getProductService().getVatCategory().getId());
+                invoiceItemModel.setVatId(vatCategory);
+            } else {
+                invoiceItemModel.setVatId(null);
+            }
+        }
+        updateSubTotal(invoiceItemModel);
     }
 
     public List<Project> projects(final String searchQuery) throws Exception {
@@ -424,9 +464,12 @@ public class InvoiceController extends BaseController implements Serializable {
     }
 
     public void updateSubTotal(final InvoiceItemModel invoiceItemModel) {
+        BigDecimal vatPer = new BigDecimal(BigInteger.ZERO);
         final int quantity = invoiceItemModel.getQuatity();
         final BigDecimal unitPrice = invoiceItemModel.getUnitPrice();
-        final BigDecimal vatPer = invoiceItemModel.getVatId();
+        if (invoiceItemModel.getVatId() != null) {
+            vatPer = invoiceItemModel.getVatId().getVat();
+        }
         if (null != unitPrice) {
             final BigDecimal amountWithoutTax = unitPrice.multiply(new BigDecimal(quantity));
             invoiceItemModel.setSubTotal(amountWithoutTax);

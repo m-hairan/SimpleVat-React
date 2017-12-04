@@ -9,6 +9,7 @@ import com.simplevat.web.constant.InvoicePurchaseStatusConstant;
 import com.simplevat.web.purchase.model.PurchaseItemModel;
 import com.simplevat.web.purchase.model.PurchaseModel;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +17,6 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 
 public class PurchaseControllerHelper {
-
     public Purchase getPurchase(PurchaseModel model) {
         Purchase purchase = new Purchase();
         purchase.setPurchaseId(model.getPurchaseId());
@@ -148,9 +148,12 @@ public class PurchaseControllerHelper {
     }
 
     private void updateSubTotal(@Nonnull final PurchaseItemModel purchaseItemModel) {
+        BigDecimal vatPer = new BigDecimal(BigInteger.ZERO);
         final int quantity = purchaseItemModel.getQuatity();
         final BigDecimal unitPrice = purchaseItemModel.getUnitPrice();
-        final BigDecimal vatPer = purchaseItemModel.getVatId();
+        if (purchaseItemModel.getVatId() != null) {
+            vatPer = purchaseItemModel.getVatId().getVat();
+        }
         if (null != unitPrice) {
             final BigDecimal amountWithoutTax = unitPrice.multiply(new BigDecimal(quantity));
             purchaseItemModel.setSubTotal(amountWithoutTax);
@@ -161,7 +164,5 @@ public class PurchaseControllerHelper {
                 purchaseItemModel.setSubTotal(amountWithTax);
             }
         }
-
     }
-
 }

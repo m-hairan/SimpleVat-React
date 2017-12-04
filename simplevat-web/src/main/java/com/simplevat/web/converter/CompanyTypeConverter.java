@@ -26,8 +26,12 @@ public class CompanyTypeConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
         if (string != null && !string.isEmpty()) {
-            CompanyType companyType = companyTypeService.findByPK(Integer.parseInt(string));
-            return companyType;
+            try {
+                Integer companyTypeId = Integer.parseInt(string);
+                CompanyType companyType = companyTypeService.findByPK(companyTypeId);
+                return companyType;
+            } catch (Exception e) {
+            }
         }
         return null;
     }

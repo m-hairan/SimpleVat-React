@@ -21,8 +21,11 @@ public class PurchaseConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
         if (string != null && !string.isEmpty()) {
-            Purchase purchase = purchaseService.findByPK(Integer.parseInt(string));
-            return purchase;
+            try {
+                Purchase purchase = purchaseService.findByPK(Integer.parseInt(string));
+                return purchase;
+            } catch (Exception e) {
+            }
         }
         return null;
     }

@@ -21,8 +21,11 @@ public class TitleConverter implements Converter {
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
 
         if (value != null && !value.isEmpty()) {
-            Title title = (Title) titleService.findByPK(Integer.parseInt(value));
-            return title;
+            try {
+                Title title = (Title) titleService.findByPK(Integer.parseInt(value));
+                return title;
+            } catch (Exception e) {
+            }
         }
         return null;
     }

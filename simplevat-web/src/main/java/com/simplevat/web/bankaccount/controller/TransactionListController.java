@@ -141,7 +141,7 @@ public class TransactionListController extends TransactionControllerHelper imple
     private void populateTransactionList(List<Transaction> transactionList) {
         for (Transaction transaction : transactionList) {
             TransactionModel model = this.getTransactionModel(transaction);
-            if (transaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.UNEXPLIANED) {
+            if (transaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.UNEXPLAINED) {
                 totalUnExplained++;
             } else if (transaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.PARTIALLYEXPLIANED) {
                 totalPartiallyExplained++;
@@ -149,7 +149,7 @@ public class TransactionListController extends TransactionControllerHelper imple
                 totalExplained++;
             }
             totalTransactions++;
-            if (model.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.UNEXPLIANED
+            if (model.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.UNEXPLAINED
                     || model.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.PARTIALLYEXPLIANED) {
                 getSuggestionStringForUnexplainedOrPartial(model);
             } else {
@@ -572,7 +572,7 @@ public class TransactionListController extends TransactionControllerHelper imple
             if (transactionModel.getChildTransactionList() != null && !transactionModel.getChildTransactionList().isEmpty()) {
                 datatableRowCount = datatableInitialRowCount;
                 for (TransactionModel childTransaction : transactionModel.getChildTransactionList()) {
-                    if (childTransaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.UNEXPLIANED
+                    if (childTransaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.UNEXPLAINED
                             || childTransaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.PARTIALLYEXPLIANED) {
                         getSuggestionStringForUnexplainedOrPartial(childTransaction);
                     } else {
@@ -648,7 +648,7 @@ public class TransactionListController extends TransactionControllerHelper imple
         transactions.clear();
         for (Transaction transaction : transactionService.getAllParentTransactions(bankAccount)) {
             TransactionModel model = this.getTransactionModel(transaction);
-            if (transaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.UNEXPLIANED) {
+            if (transaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.UNEXPLAINED) {
                 transactions.add(model);
             }
         }
@@ -690,7 +690,7 @@ public class TransactionListController extends TransactionControllerHelper imple
 
         for (Transaction transaction : transactionService.getAllParentTransactions(bankAccount)) {
             TransactionModel model = this.getTransactionModel(transaction);
-            if (transaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.UNEXPLIANED) {
+            if (transaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.UNEXPLAINED) {
                 totalUnExplained++;
             } else if (transaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.PARTIALLYEXPLIANED) {
                 totalPartiallyExplained++;

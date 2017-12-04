@@ -11,7 +11,7 @@ package com.simplevat.web.constant;
  */
 public final class TransactionStatusConstant {
 
-    public static final int UNEXPLIANED = 1;
+    public static final int UNEXPLAINED = 1;
     public static final int EXPLIANED = 2;
     public static final int PARTIALLYEXPLIANED = 3;
     

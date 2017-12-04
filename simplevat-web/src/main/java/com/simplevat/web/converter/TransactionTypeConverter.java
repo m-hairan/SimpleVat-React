@@ -25,8 +25,11 @@ public class TransactionTypeConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
         if (string != null && !string.isEmpty()) {
-            TransactionType transactionType = transactionTypeService.findByPK(Integer.parseInt(string));
-            return transactionType;
+            try {
+                TransactionType transactionType = transactionTypeService.findByPK(Integer.parseInt(string));
+                return transactionType;
+            } catch (Exception e) {
+            }
         }
         return null;
     }

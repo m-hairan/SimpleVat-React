@@ -8,6 +8,7 @@ import com.simplevat.web.invoice.model.InvoiceItemModel;
 import com.simplevat.web.invoice.model.InvoiceModel;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Calendar;
@@ -76,7 +77,7 @@ public class InvoiceModelHelper {
     }
 
     @Nonnull
-    private InvoiceLineItem convertToLineItem(@Nonnull final InvoiceItemModel model,
+     InvoiceLineItem convertToLineItem(@Nonnull final InvoiceItemModel model,
             @Nonnull final Invoice invoice) {
         final InvoiceLineItem item = new InvoiceLineItem();
         if (model.getId() > 0) {
@@ -149,21 +150,24 @@ public class InvoiceModelHelper {
         model.setDescription(invoiceLineItem.getInvoiceLineItemDescription());
         model.setQuatity(invoiceLineItem.getInvoiceLineItemQuantity());
         model.setUnitPrice(invoiceLineItem.getInvoiceLineItemUnitPrice());
-        model.setVatId(invoiceLineItem.getInvoiceLineItemVat());
+        if (invoiceLineItem.getInvoiceLineItemVat() != null) {
+            model.setVatId(invoiceLineItem.getInvoiceLineItemVat());
+        }
         model.setVersionNumber(invoiceLineItem.getVersionNumber());
         if (invoiceLineItem.getInvoiceLineItemProductService() != null) {
             model.setProductService(invoiceLineItem.getInvoiceLineItemProductService());
         }
         this.updateSubTotal(model);
-
         return model;
-
     }
 
     private void updateSubTotal(@Nonnull final InvoiceItemModel invoiceItemModel) {
+        BigDecimal vatPer = new BigDecimal(BigInteger.ZERO);
         final int quantity = invoiceItemModel.getQuatity();
         final BigDecimal unitPrice = invoiceItemModel.getUnitPrice();
-        final BigDecimal vatPer = invoiceItemModel.getVatId();
+        if (invoiceItemModel.getVatId() != null) {
+            vatPer = invoiceItemModel.getVatId().getVat();
+        }
         if (null != unitPrice) {
             final BigDecimal amountWithoutTax = unitPrice.multiply(new BigDecimal(quantity));
             invoiceItemModel.setSubTotal(amountWithoutTax);
@@ -174,7 +178,6 @@ public class InvoiceModelHelper {
                 invoiceItemModel.setSubTotal(amountWithTax);
             }
         }
-
     }
 
     public String getNextInvoiceRefNumber(String invoicingReferencePattern) {

@@ -22,8 +22,11 @@ public class InvoiceConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
         if (string != null && !string.isEmpty()) {
-            Invoice invoice = invoiceService.findByPK(Integer.parseInt(string));
-            return invoice;
+            try {
+                Invoice invoice = invoiceService.findByPK(Integer.parseInt(string));
+                return invoice;
+            } catch (Exception e) {
+            }
         }
         return null;
     }

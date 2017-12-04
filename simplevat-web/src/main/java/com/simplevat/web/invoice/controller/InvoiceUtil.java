@@ -80,7 +80,6 @@ public class InvoiceUtil extends AbstractReportBean {
     protected Map<String, Object> getReportParameters() {
         HashMap<String, Object> parameters = new HashMap<String, Object>();
         InvoiceModel invoiceModel = null;
-
         if (invoiceId > 0) {
             Invoice invoice = invoiceService.findByPK(invoiceId);
             Currency currency = currencyService.findByPK(invoice.getCurrency().getCurrencyCode());
@@ -89,11 +88,15 @@ public class InvoiceUtil extends AbstractReportBean {
             try {
                 BigDecimal totalVat = new BigDecimal(0);
                 BigDecimal netSubtotal = new BigDecimal(0);
+                BigDecimal vatPercentage = new BigDecimal(0);//changes
                 int quantity = 0;
                 List<InvoiceItemModel> invoiceItemModelList = invoiceModel.getInvoiceLineItems();
                 for (InvoiceItemModel invoiceItem : invoiceItemModelList) {
-                    if (invoiceItem.getVatId().compareTo(new BigDecimal(0)) > 0) {
-                        totalVat = totalVat.add((invoiceItem.getUnitPrice().multiply(new BigDecimal(invoiceItem.getQuatity()))).divide(new BigDecimal(invoiceItem.getVatId().doubleValue())));
+                    if (invoiceItem.getVatId() != null) {  //changes
+                        vatPercentage = invoiceItem.getVatId().getVat();  //changes
+                    }
+                    if (vatPercentage.compareTo(new BigDecimal(0)) > 0) {
+                        totalVat = totalVat.add((invoiceItem.getUnitPrice().multiply(new BigDecimal(invoiceItem.getQuatity()))).divide(new BigDecimal(vatPercentage.doubleValue())));
                     }
                     netSubtotal = netSubtotal.add(invoiceItem.getUnitPrice().multiply(new BigDecimal(invoiceItem.getQuatity())));
                     quantity += invoiceItem.getQuatity();
@@ -219,15 +222,24 @@ public class InvoiceUtil extends AbstractReportBean {
                 BigDecimal unitprice = new BigDecimal(0);
                 BigDecimal vat = new BigDecimal(0);
                 BigDecimal subTotal = new BigDecimal(0);
+                BigDecimal vatPercentage = new BigDecimal(0);//changes
+                String productServiceName = "";//changes
+
                 List<InvoiceItemModel> invoiceItemModelList = invoiceModel.getInvoiceLineItems();
                 for (InvoiceItemModel invoiceItem : invoiceItemModelList) {
                     unitprice = invoiceItem.getUnitPrice();
-                    if (invoiceItem.getVatId().compareTo(new BigDecimal(0)) > 0) {
-                        vat = (invoiceItem.getUnitPrice().multiply(new BigDecimal(invoiceItem.getQuatity()))).divide(new BigDecimal(invoiceItem.getVatId().doubleValue()));
+                    if (invoiceItem.getVatId() != null) {  //changes
+                        vatPercentage = invoiceItem.getVatId().getVat();  //changes
+                    }
+                    if (vatPercentage.compareTo(new BigDecimal(0)) > 0) {
+                        vat = (invoiceItem.getUnitPrice().multiply(new BigDecimal(invoiceItem.getQuatity()))).divide(new BigDecimal(vatPercentage.doubleValue()));   //changes
                     }
                     subTotal = invoiceItem.getUnitPrice().multiply(new BigDecimal(invoiceItem.getQuatity()));
                     quantity = invoiceItem.getQuatity();
-                    dataBeanList.add(new InvoiceDataSourceModel(String.valueOf(quantity), invoiceItem.getProductService(), invoiceItem.getDescription(), unitprice, vat, subTotal));
+                    if (invoiceItem.getProductService() != null) { //changes
+                        productServiceName = invoiceItem.getProductService().getProductName(); //changes
+                    }
+                    dataBeanList.add(new InvoiceDataSourceModel(String.valueOf(quantity), productServiceName, invoiceItem.getDescription(), unitprice, vat, subTotal));
                 }
 
             } catch (Exception ex) {

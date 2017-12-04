@@ -22,8 +22,13 @@ public class BankAccountConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
         if (string != null && !string.isEmpty()) {
-            BankAccount bankAccount = bankAccountService.getBankAccountById(Integer.parseInt(string));
-            return bankAccount;
+            try {
+                Integer bankId = Integer.parseInt(string);
+                BankAccount bankAccount = bankAccountService.getBankAccountById(bankId);
+                return bankAccount;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }

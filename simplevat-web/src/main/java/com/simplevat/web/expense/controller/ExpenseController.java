@@ -228,6 +228,13 @@ public class ExpenseController extends BaseController implements Serializable {
         return contactService.getContacts(searchQuery, ContactTypeConstant.EMPLOYEE);
     }
 
+    public List<VatCategory> vatCategorys(final String searchQuery) throws Exception {
+        if (vatCategoryService.getVatCategoryList() != null) {
+            return vatCategoryService.getVatCategoryList();
+        }
+        return null;
+    }
+
     private boolean validateInvoiceLineItems() { //---------------
         boolean validated = true;
         for (ExpenseItemModel lastItem : selectedExpenseModel.getExpenseItem()) {
@@ -382,7 +389,10 @@ public class ExpenseController extends BaseController implements Serializable {
     public void updateSubTotal(final ExpenseItemModel expenseItemModel) {
         final int quantity = expenseItemModel.getQuatity();
         final BigDecimal unitPrice = expenseItemModel.getUnitPrice();
-        final BigDecimal vatPer = expenseItemModel.getVatId();
+        BigDecimal vatPer = new BigDecimal(BigInteger.ZERO);
+        if (expenseItemModel.getVatId() != null) {
+            vatPer = expenseItemModel.getVatId().getVat();
+        }
         if (null != unitPrice) {
             final BigDecimal amountWithoutTax = unitPrice.multiply(new BigDecimal(quantity));
             expenseItemModel.setSubTotal(amountWithoutTax);

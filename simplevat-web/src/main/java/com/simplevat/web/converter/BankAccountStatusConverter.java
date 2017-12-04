@@ -23,8 +23,12 @@ public class BankAccountStatusConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
         if (string != null && !string.isEmpty()) {
-            BankAccountStatus bankAccountStatus = bankAccountStatusService.getBankAccountStatus(Integer.parseInt(string));
-            return bankAccountStatus;
+            try {
+                Integer bankAccountStatusId = Integer.parseInt(string);
+                BankAccountStatus bankAccountStatus = bankAccountStatusService.getBankAccountStatus(bankAccountStatusId);
+                return bankAccountStatus;
+            } catch (Exception e) {
+            }
         }
         return null;
     }

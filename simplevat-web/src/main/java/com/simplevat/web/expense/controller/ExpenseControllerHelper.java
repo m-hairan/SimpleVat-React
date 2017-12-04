@@ -23,6 +23,7 @@ import com.simplevat.web.constant.ExpenseConstants;
 import com.simplevat.web.expense.model.ExpenseItemModel;
 import com.simplevat.web.expense.model.ExpenseModel;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -68,7 +69,6 @@ public class ExpenseControllerHelper {
     @Nonnull
     private ExpenseLineItem convertToLineItem(@Nonnull final ExpenseItemModel model,
             @Nonnull final Expense expense) {
-
         final ExpenseLineItem item = new ExpenseLineItem();
         if (model.getId() > 0) {
             item.setExpenseLineItemId(model.getId());
@@ -81,7 +81,7 @@ public class ExpenseControllerHelper {
         item.setExpense(expense);
         return item;
     }
-
+ 
     public ExpenseModel getExpenseModel(Expense entity) {
         ExpenseModel expenseModel = new ExpenseModel();
         expenseModel.setExpenseId(entity.getExpenseId());
@@ -91,12 +91,10 @@ public class ExpenseControllerHelper {
         expenseModel.setCurrency(entity.getCurrency());
         expenseModel.setDeleteFlag(entity.getDeleteFlag());
         expenseModel.setExpenseAmount(entity.getExpenseAmount());
-
         if (entity.getExpenseDate() != null) {
             Date expenseDate = Date.from(entity.getExpenseDate().atZone(ZoneId.systemDefault()).toInstant());
             expenseModel.setExpenseDate(expenseDate);
         }
-
         expenseModel.setExpenseDescription(entity.getExpenseDescription());
         expenseModel.setLastUpdateDate(entity.getLastUpdateDate());
         expenseModel.setLastUpdatedBy(entity.getLastUpdateBy());
@@ -122,7 +120,6 @@ public class ExpenseControllerHelper {
     public ExpenseItemModel convertToItemModel(@Nonnull final ExpenseLineItem expenseLineItem) {
 
         final ExpenseItemModel model = new ExpenseItemModel();
-
         model.setId(expenseLineItem.getExpenseLineItemId());
         model.setDescription(expenseLineItem.getExpenseLineItemDescription());
         model.setQuatity(expenseLineItem.getExpenseLineItemQuantity());
@@ -131,13 +128,15 @@ public class ExpenseControllerHelper {
         model.setVersionNumber(expenseLineItem.getVersionNumber());
         this.updateSubTotal(model);
         return model;
-
     }
 
     private void updateSubTotal(@Nonnull final ExpenseItemModel expenseItemModel) {
         final int quantity = expenseItemModel.getQuatity();
         final BigDecimal unitPrice = expenseItemModel.getUnitPrice();
-        final BigDecimal vatPer = expenseItemModel.getVatId();
+        BigDecimal vatPer = new BigDecimal(BigInteger.ZERO);
+        if (expenseItemModel.getVatId() != null) {
+            vatPer = expenseItemModel.getVatId().getVat();
+        }
         if (null != unitPrice) {
             final BigDecimal amountWithoutTax = unitPrice.multiply(new BigDecimal(quantity));
             expenseItemModel.setSubTotal(amountWithoutTax);

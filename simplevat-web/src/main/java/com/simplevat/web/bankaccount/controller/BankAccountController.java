@@ -198,7 +198,7 @@ public class BankAccountController extends BankAccountHelper implements Serializ
 
     public String redirectToTransaction() {
         FacesUtil.setSelectedBankAccountId(selectedBankAccount.getBankAccountId());
-        return "bank-transactions?faces-redirect=true";
+        return "bank-transactions_1?faces-redirect=true";
     }
 
     public List<BankAccountStatus> bankAccountStatuses(final String searchQuery) {
