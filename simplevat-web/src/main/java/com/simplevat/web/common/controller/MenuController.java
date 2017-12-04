@@ -91,7 +91,7 @@ public class MenuController implements Serializable {
         if (PageAccessControl.hasAccess(ModuleName.EXPENSE_MODULE)) {
             DefaultMenuItem item = new DefaultMenuItem("Expense");
             item.setIcon("exposure");
-            item.setOutcome("/pages/secure/expense/expenses");
+            item.setOutcome("/pages/secure/expense/list");
             submenu.addElement(item);
         }
         if (PageAccessControl.hasAccess(ModuleName.PURCHASE_MODULE)) {
