@@ -62,9 +62,9 @@
         <property name="password" value="${db.password}"/>
     </bean>
     
-    <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+    <!--bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
         <property name="jndiName" value="java:comp/env/jdbc/simplevatDS" />
-    </bean>
+    </bean-->
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
