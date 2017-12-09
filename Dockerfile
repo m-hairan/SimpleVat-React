@@ -44,7 +44,8 @@ RUN set -x \
   && ln -sv "${CATALINA_HOME}/lib/libtcnative-1.so" "/usr/lib/" && ln -sv "/lib/libz.so.1" "/usr/lib/libz.so.1" \
   && cd / \
   && rm -rf /tmp/* \
-  && rm -rf ${CATALINA_HOME}/webapps/* \ 
+  && rm -rf ${CATALINA_HOME}/webapps/* \
+  && sed -i 's/SSLEngine=\"on\"/SSLEngine=\"off\"/g' server.xml \
   && apk del --purge build-dependencies 
   
 
