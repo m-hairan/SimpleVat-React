@@ -45,6 +45,7 @@ RUN set -x \
   && cd / \
   && rm -rf /tmp/* \
   && rm -rf ${CATALINA_HOME}/webapps/* \
+  && sed -i 's/SSLEngine=\"on\"/SSLEngine=\"off\"/g' server.xml \ 
   && apk del --purge build-dependencies 
   
 
