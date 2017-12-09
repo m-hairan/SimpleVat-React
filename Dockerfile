@@ -44,20 +44,6 @@ RUN set -x \
   && ln -sv "${CATALINA_HOME}/lib/libtcnative-1.so" "/usr/lib/" && ln -sv "/lib/libz.so.1" "/usr/lib/libz.so.1" \
   && cd / \
   && rm -rf /tmp/* \
-  && echo 'export CATALINA_OPTS=" $CATALINA_OPTS -Dsimplevat.db.user=$SIMPLEVAT_DB_USER"           ' >  ${CATALINA_HOME}/bin/setenv.sh \
-  && echo 'export CATALINA_OPTS=" $CATALINA_OPTS -Dsimplevat.db.password=$SIMPLEVAT_DB_PASSWORD"   ' >> ${CATALINA_HOME}/bin/setenv.sh \
-  && echo 'export CATALINA_OPTS=" $CATALINA_OPTS -Dsimplevat.db.host=$SIMPLEVAT_DB_HOST"           ' >> ${CATALINA_HOME}/bin/setenv.sh \
-  && echo 'export CATALINA_OPTS=" $CATALINA_OPTS -Dsimplevat.db=$SIMPLEVAT_DB"                     ' >> ${CATALINA_HOME}/bin/setenv.sh \
-  && sed -i 's/SSLEngine="on"/SSLEngine="off"/g' "${CATALINA_HOME}/conf/server.xml" \
-  && echo '<?xml version="1.0" encoding="UTF-8"?>                                                                       ' > ${CATALINA_HOME}/conf/context.xml  \
-  && echo '<Context>                                                                                                    ' >> ${CATALINA_HOME}/conf/context.xml \
-  && echo '                                                                                                             ' >> ${CATALINA_HOME}/conf/context.xml \
-  && echo ' <Resource name="jdbc/simplevatDS" auth="Container" type="javax.sql.DataSource"                               ' >> ${CATALINA_HOME}/conf/context.xml \
-  && echo '               maxTotal="100" maxIdle="30" maxWaitMillis="10000"                                             ' >> ${CATALINA_HOME}/conf/context.xml \
-  && echo '               username="${simplevat.db.user}" password="${simplevat.db.password}" driverClassName="com.mysql.jdbc.Driver"         ' >> ${CATALINA_HOME}/conf/context.xml \
-  && echo '               url="jdbc:mysql://${simplevat.db.host}/${simplevat.db}" />                                                ' >> ${CATALINA_HOME}/conf/context.xml \
-  && echo '                                                                                                             ' >> ${CATALINA_HOME}/conf/context.xml \
-  && echo '</Context>                                                                                                   ' >> ${CATALINA_HOME}/conf/context.xml \ 
   && rm -rf ${CATALINA_HOME}/webapps/* \ 
   && apk del --purge build-dependencies 
   
