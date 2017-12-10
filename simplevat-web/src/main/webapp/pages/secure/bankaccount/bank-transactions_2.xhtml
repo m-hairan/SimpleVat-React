@@ -1,0 +1,153 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
+                template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="title">#{messages.bank_accounts}</ui:define>
+
+    <ui:define name="content">
+        <style>
+            .ui-widget-content .ui-inputfield {
+                padding-right: 24em;
+            }
+            .label{
+                font-size: 75%;
+            }
+            /*            .eligibility-EXPLAINED {
+                            width: 60px;
+                            color: #5cb85c;
+                        }
+                        .eligibility-UNEXPLAINED {
+                            color: #d9534f;
+                            width: 50px;
+                        }
+                        .eligibility-PARTIALLY-EXPLAINED {
+                            width: 60px;
+                            color: #f98e03;
+                        }*/
+
+
+            .ui-row-toggler{
+                display: none !important;
+            }
+            .hideTransaction-false{
+                visibility: hidden;
+                display: none;
+            }
+        </style>
+
+        <h:form>
+            <div class="ui-fluid tree">
+                <si:cdataPanel newAction= "#{transactionController.createTransaction()}" importAction="#{transactionController.importTransaction()}">
+                    <f:facet name="left">
+                        <p:commandButton value="All (#{transactionListControllerScndDemo.totalTransactions})" styleClass="AquaButton" action="#{transactionListControllerScndDemo.allTransactions()}" update="#{p:component('transactionsTable')}"/>
+                        <p:commandButton icon="transtype-EXPLAINED" value="Explained (#{transactionListControllerScndDemo.totalExplained})" styleClass="AquaButton" action="#{transactionListControllerScndDemo.allExplainedTransactions()}" update="#{p:component('transactionsTable')}"/>
+                        <p:commandButton icon="transtype-UNEXPLAINED" value="Unexplained (#{transactionListControllerScndDemo.totalUnExplained})" styleClass="AquaButton" action="#{transactionListControllerScndDemo.allUnExplainedTransactions()}" update="#{p:component('transactionsTable')}"/>
+                        <p:commandButton icon="transtype-PARTIALLY-EXPLAINED" value="Partially Explained (#{transactionListControllerScndDemo.totalPartiallyExplained})" styleClass="AquaButton" action="#{transactionListControllerScndDemo.allPartiallyExplainedTransactions()}" update="#{p:component('transactionsTable')}"/>
+                    </f:facet>
+                    <p:dataTable var="transaction"
+                                 value="#{transactionListControllerScndDemo.transactionViewModelList}"
+                                 rowIndexVar="index"
+                                 widgetVar="transactiondt" styleClass="outerTable"
+                                 rowExpandMode="single" 
+                                 rowStyleClass="hideTransaction-#{transaction.parent} child-#{transaction.parentTransaction}"
+                                 rowKey="#{transaction.transactionId}" 
+                                 paginator="true" rows="10"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}"
+                                 id="transactionsTable">
+                        <p:ajax event="rowToggle" listener="#{transactionListControllerScndDemo.expandToggler(transaction)}" />
+                        <f:facet name="{TableHeader}">
+                            <p:outputLabel styleClass="tableCustomHeader" value="#{transactionListControllerScndDemo.selectedBankAccountModel.bankAccountName}" />
+                        </f:facet>
+
+                        <p:column width="30" style="text-align: center">
+                            <h:panelGroup layout="block">
+                                <h:panelGroup layout="block" style="display:block" styleClass="label transtype-#{transaction.explanationStatusName}#{transaction.parent ? '': '-child'}" >
+                                    <h:outputText value=" "/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </p:column>
+
+                        <p:column headerText="#{messages.date}" width="80" sortBy="#{transaction.transactionDate.time}" filterMatchMode="contains" filterBy="#{transaction.transactionDate.time}">
+                            <h:outputText value="#{transaction.transactionDate.time}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="#{messages.description}" filterMatchMode="contains" filterBy="#{transaction.transactionDescription}">
+                            <p:outputLabel value="#{transaction.transactionDescription}"/><br/>
+                            <h:panelGroup rendered="#{transaction.explanationStatusCode != 2 and transaction.suggestedTransactionString.length() > 0}" >
+                                <p:outputLabel value="#{transaction.suggestedTransactionString}" style="font-size: x-small;color:#ff0000" /> 
+                                <p:spacer width="10px"/>
+                                <p:commandLink value=" Accept " action="#{transactionListControllerScndDemo.acceptSuggestion(transaction)}" update="transactionsTable" style="font-size: x-small; font-weight: bold;color:#14ad3c"/>
+                                <p:outputLabel value="/" />
+                                <p:commandLink value=" Edit" action="#{transactionListControllerScndDemo.expandToggler(transaction)}" update="transactionsTable" style="font-size: x-small; font-weight: bold;color:#ff0000"/>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{transaction.explanationStatusCode == 2}" >
+                                <p:outputLabel value="#{transaction.suggestedTransactionString}" style="font-size: x-small;color:#14ad3c" /> 
+                                <p:spacer width="10px"/>
+                                <p:commandLink value=" More" action="#{transactionListControllerScndDemo.expandToggler(transaction)}" update="transactionsTable" style="font-size: x-small; font-weight: bold;color:#14ad3c" />
+                            </h:panelGroup>
+                        </p:column>
+
+                        <p:column headerText="#{messages.credit}" sortBy="#{transaction.transactionAmount}" width="110" styleClass="amount" filterMatchMode="contains" filterBy="#{transaction.transactionAmount}">
+                            <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString() eq 'C'}" >
+                                <f:convertNumber type="currency" currencySymbol=""/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="#{messages.debit}" sortBy="#{transaction.transactionAmount}" width="110" styleClass="amount" filterMatchMode="contains" filterBy="#{transaction.transactionAmount}">
+                            <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString() eq 'D'}" >
+                                <f:convertNumber type="currency" currencySymbol=""/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="#{messages.current_balance}" styleClass="amount" width="110" filterMatchMode="contains" filterBy="#{transaction.currentBalance}">
+                            <h:outputText value="#{transaction.currentBalance}" >
+                                <f:convertNumber type="currency" currencySymbol=""/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Action" width="130">
+
+                            <p:rowToggler/>
+                            <p:commandButton  icon="#{transaction.expandIcon ? 'ui-icon-expand-less' : 'ui-icon-expand-more'}" onclick="expandCollapse(event, #{index})" action="#{transactionListControllerScndDemo.expandCollapse(transaction)}" styleClass="AquaButton parentExpandButton rowExpand#{index}" update="transactionsTable:@row(#{index}) @(.parentExpandButton)"/>
+                            <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" action="#{transactionListControllerScndDemo.editTransection}" >
+                                <f:setPropertyActionListener value="#{transaction}" target="#{transactionListControllerScndDemo.selectedTransactionViewModel}" />
+                            </p:commandButton>
+
+                            <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{transactionListControllerScndDemo.deleteTransaction}" update="transactionsTable">
+                                <f:setPropertyActionListener value="#{transaction}" target="#{transactionListControllerScndDemo.selectedTransactionViewModel}" />
+                                <p:confirm header="#{messages.delete}" message="#{messages.are_you_sure_want_to_delete}" icon="ui-icon-alert" />
+                            </p:commandButton>
+
+                        </p:column>
+
+                        <p:rowExpansion>
+                            <ui:include src="child-transaction_2.xhtml">
+                                <ui:param name="transaction" value="#{transaction}"/>
+                                <ui:param name="rowIdx" value="#{rowIdx}"/>
+                                <ui:param name="btnBinding" value="#{btnBinding}"/>
+                            </ui:include>
+                        </p:rowExpansion>
+                    </p:dataTable>
+                </si:cdataPanel>
+            </div>
+        </h:form>
+        <ui:include src="import-transaction-popup.xhtml"/>
+        <script type="text/javascript">
+            function expandCollapse(event, rowIndex) {
+                $(".rowExpand" + rowIndex).parent().find('.ui-row-toggler').trigger('click');
+                event.preventDefault();
+            }
+            function childExpandCollapse(event, rowIndex) {
+                $(".childRowExpand" + rowIndex).parent().find('.ui-row-toggler').trigger('click');
+                event.preventDefault();
+            }
+        </script>
+    </ui:define>
+
+</ui:composition>

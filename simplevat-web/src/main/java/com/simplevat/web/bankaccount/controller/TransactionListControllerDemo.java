@@ -43,9 +43,17 @@ import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
+import org.omnifaces.util.Ajax;
+import org.primefaces.component.api.Widget;
+import org.primefaces.component.datatable.DataTable;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.data.PageEvent;
+import org.primefaces.expression.impl.WidgetVarVisitCallback;
+import org.primefaces.model.LazyDataModel;
 
 @Controller
 @SpringScopeView
@@ -65,22 +73,36 @@ public class TransactionListControllerDemo extends TransactionControllerHelperDe
     private TransactionTypeService transactionTypeService;
     @Autowired
     private BankAccountService bankAccountService;
-    private List<TransactionViewModel> transactions;
+    private List<TransactionViewModel> transactionViewModelList = new ArrayList<>();
+    @Getter
+    @Setter
+    @Autowired
+    private TransactionViewLazyModel transactionViewLazyModel;
+    private List<TransactionModel> transactionModelList = new ArrayList<>();
 
-    private List<Invoice> invoiceList;
+    private List<Invoice> invoiceList = new ArrayList<>();
 
     @Getter
     @Setter
-    private List<TransactionViewModel> childTransactions;
+    private List<TransactionViewModel> childTransactions = new ArrayList<>();
+
+    private List<TransactionStatus> transactionStatuseList = new ArrayList<>();
 
     @Getter
     private BankAccountModel selectedBankAccountModel;
 
-    private BankAccount bankAccount;
+    private Integer bankAccountId;
 
     @Getter
     @Setter
     private TransactionModel transactionModel;
+
+    @Getter
+    private BankAccount bankAccount;
+
+    @Getter
+    @Setter
+    private TransactionViewModel selectedTransactionViewModel;
 
     @Getter
     @Setter
@@ -124,6 +146,12 @@ public class TransactionListControllerDemo extends TransactionControllerHelperDe
     private int datatableInitialRowCount = 10;
     private int datatableRowCount = datatableInitialRowCount;
     TransactionViewModel currentTransactionModel;
+    @Getter
+    @Setter
+    private DataTable datatable;
+    @Getter
+    RowCountPerPage rowCountPerPage;
+    private int rowCount;
 
     @PostConstruct
     public void init() {
@@ -131,19 +159,32 @@ public class TransactionListControllerDemo extends TransactionControllerHelperDe
         totalExplained = 0;
         totalPartiallyExplained = 0;
         try {
-            Integer bankAccountId = FacesUtil.getSelectedBankAccountId();
+            bankAccountId = FacesUtil.getSelectedBankAccountId();
             bankAccount = bankAccountService.findByPK(bankAccountId);
-            selectedBankAccountModel = new BankAccountHelper().getBankAccountModel(bankAccount);
-            List<TransactionView> transactionList = transactionService.getAllTransactionViewList(bankAccountId);
-            transactions = new ArrayList<TransactionViewModel>();
-            populateChildTransaction(transactionList);
-            populateTransactionList(transactionList);
+            List<Transaction> transactionList = transactionService.getAllTransactionListByBankAccountId(bankAccountId);
+            transactionStatuseList = transactionStatusService.findAllTransactionStatues();
+            if (transactionList != null) {
+                for (Transaction transaction : transactionList) {
+                    transactionModelList.add(getTransactionModel(transaction));
+                }
+                transactionViewLazyModel.setTransactionModelList(transactionModelList);
+            }
+            transactionViewLazyModel.setBankAccountId(bankAccountId);
+            rowCountPerPage = new RowCountPerPage();
+            transactionViewLazyModel.setExpandedTransactionModel(new TransactionModel());
+
+            List<TransactionView> transactionViewList = transactionService.getAllTransactionViewList(bankAccountId);
+            transactionViewModelList = new ArrayList<TransactionViewModel>();
+            populateChildTransaction(transactionViewList);
+            populateTransactionList(transactionViewList);
             transactionModel = new TransactionModel();
             expandedTransactionModel = new TransactionModel();
             invoiceList = invoiceService.getInvoiceListByDueAmount();
-            if (invoiceList == null) {
-                invoiceList = new ArrayList();
+            if (invoiceList != null) {
+                transactionViewLazyModel.setInvoiceList(invoiceList);
             }
+//            Ajax.oncomplete("updatePaginator()");
+//            Ajax.update("@(.transactiondt)");
         } catch (Exception ex) {
             Logger.getLogger(TransactionListControllerDemo.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -152,58 +193,85 @@ public class TransactionListControllerDemo extends TransactionControllerHelperDe
 
     private void populateChildTransaction(List<TransactionView> transactionList) {
         super.getChildTransactions().clear();
-        for (TransactionView transactionView : transactionList) {
-            if (transactionView.getParentTransaction() != null) {
-                TransactionViewModel transactionViewModel = this.getTransactionViewModel(transactionView);
-                super.getChildTransactions().add(transactionViewModel);
+        if (transactionList != null) {
+            for (TransactionView transactionView : transactionList) {
+                if (transactionView.getParentTransaction() != null) {
+                    TransactionViewModel transactionViewModel = this.getTransactionViewModel(transactionView);
+                    super.getChildTransactions().add(transactionViewModel);
+                }
             }
         }
     }
 
     private void populateTransactionList(List<TransactionView> transactionList) {
-        for (TransactionView transactionView : transactionList) {
-            if (transactionView.getParentTransaction() == null) {
-                TransactionViewModel transactionViewModel = this.getTransactionViewModel(transactionView);
-                if (transactionView.getExplanationStatusCode() == TransactionStatusConstant.UNEXPLAINED) {
-                    totalUnExplained++;
-                } else if (transactionView.getExplanationStatusCode() == TransactionStatusConstant.PARTIALLYEXPLIANED) {
-                    totalPartiallyExplained++;
-                } else if (transactionView.getExplanationStatusCode() == TransactionStatusConstant.EXPLIANED) {
-                    totalExplained++;
+        if (transactionList != null) {
+            for (TransactionView transactionView : transactionList) {
+                if (transactionView.getParentTransaction() == null) {
+                    TransactionViewModel transactionViewModel = this.getTransactionViewModel(transactionView);
+                    if (transactionView.getExplanationStatusCode() == TransactionStatusConstant.UNEXPLAINED) {
+                        totalUnExplained++;
+                    } else if (transactionView.getExplanationStatusCode() == TransactionStatusConstant.PARTIALLYEXPLIANED) {
+                        totalPartiallyExplained++;
+                    } else if (transactionView.getExplanationStatusCode() == TransactionStatusConstant.EXPLIANED) {
+                        totalExplained++;
+                    }
+                    totalTransactions++;
+                    if (transactionViewModel.getExplanationStatusCode() == TransactionStatusConstant.UNEXPLAINED
+                            || transactionViewModel.getExplanationStatusCode() == TransactionStatusConstant.PARTIALLYEXPLIANED) {
+                        getSuggestionStringForUnexplainedOrPartial(transactionViewModel);
+                    } else {
+                        getSuggestionStringForExplianed(transactionViewModel);
+                    }
+                    transactionViewModelList.add(transactionViewModel);
                 }
-                totalTransactions++;
+            }
+            List<TransactionViewModel> childTransactionViewModel = new ArrayList();
+            for (TransactionViewModel transactionViewModel : transactionViewModelList) {
+                if (transactionViewModel.isParent()) {
+                    childTransactionViewModel.addAll(transactionViewModel.getChildTransactionList());
+                }
+            }
+            for (TransactionViewModel transactionViewModel : childTransactionViewModel) {
+                int parentIndex = 0;
+                for (TransactionViewModel transactionViewModel1 : transactionViewModelList) {
+                    if (transactionViewModel1.isParent()) {
+                        if (transactionViewModel1.getTransactionId() == transactionViewModel.getParentTransaction()) {
+                            parentIndex = transactionViewModelList.indexOf(transactionViewModel1);
+                        }
+                    }
+                }
                 if (transactionViewModel.getExplanationStatusCode() == TransactionStatusConstant.UNEXPLAINED
                         || transactionViewModel.getExplanationStatusCode() == TransactionStatusConstant.PARTIALLYEXPLIANED) {
                     getSuggestionStringForUnexplainedOrPartial(transactionViewModel);
                 } else {
                     getSuggestionStringForExplianed(transactionViewModel);
                 }
-                transactions.add(transactionViewModel);
+                transactionViewModelList.add(++parentIndex, transactionViewModel);
             }
+            populateRowCount(transactionViewModelList);
         }
-        List<TransactionViewModel> childTransactionViewModel = new ArrayList();
-        for (TransactionViewModel transactionViewModel : transactions) {
+    }
+
+    private void populateRowCount(List<TransactionViewModel> transactionViewModelList) {
+        int rowcount = 0;
+        int parentcount = 0;
+        for (TransactionViewModel transactionViewModel : transactionViewModelList) {
+            ++rowcount;
             if (transactionViewModel.isParent()) {
-                childTransactionViewModel.addAll(transactionViewModel.getChildTransactionList());
-            }
-        }
-        for (TransactionViewModel transactionViewModel : childTransactionViewModel) {
-            int parentIndex = 0;
-            for (TransactionViewModel transactionViewModel1 : transactions) {
-                if (transactionViewModel1.isParent()) {
-                    if (transactionViewModel1.getTransactionId() == transactionViewModel.getParentTransaction()) {
-                        parentIndex = transactions.indexOf(transactionViewModel1);
-                    }
+                ++parentcount;
+                if (parentcount == 10) {
+                    break;
                 }
             }
-            if (transactionViewModel.getExplanationStatusCode() == TransactionStatusConstant.UNEXPLAINED
-                    || transactionViewModel.getExplanationStatusCode() == TransactionStatusConstant.PARTIALLYEXPLIANED) {
-                getSuggestionStringForUnexplainedOrPartial(transactionViewModel);
-            } else {
-                getSuggestionStringForExplianed(transactionViewModel);
-            }
-            transactions.add(++parentIndex, transactionViewModel);
         }
+        for (TransactionViewModel transactionViewModel : transactionViewModelList) {
+            if (!transactionViewModel.isParent()) {
+                if (transactionViewModelList.get(rowcount).getTransactionId() == transactionViewModel.getParentTransaction()) {
+                    ++rowcount;
+                }
+            }
+        }
+        datatableRowCount = rowcount;
     }
 
     private void getSuggestionStringForUnexplainedOrPartial(TransactionViewModel transactionViewModel) {
@@ -374,7 +442,7 @@ public class TransactionListControllerDemo extends TransactionControllerHelperDe
             }
         }
 
-        if (childTransaction != null) {
+        if (childTransaction != null && childTransaction.getTransactionId() != 0) {
             transaction.setVersionNumber(childTransaction.getParentTransaction().getVersionNumber());
             transaction.setChildTransactionList(null);
             if (childTransaction.getTransactionAmount().doubleValue() == transaction.getTransactionAmount().doubleValue()) {
@@ -397,6 +465,7 @@ public class TransactionListControllerDemo extends TransactionControllerHelperDe
                 purchaseService.update((Purchase) referanceObject);
             }
         }
+        updateAllRows();
     }
 
     private void updateInvoiceReference(Transaction parentTransaction, Transaction childTransaction, BigDecimal transactionAmount, Invoice invoice) {
@@ -496,7 +565,7 @@ public class TransactionListControllerDemo extends TransactionControllerHelperDe
             childTransaction.setParentTransaction(transaction.getParentTransaction());
         }
         childTransaction.setTransactionDate(childTransaction.getParentTransaction().getTransactionDate());
-        childTransaction.setBankAccount(transaction.getBankAccount());
+        childTransaction.setBankAccount(transaction.getParentTransaction().getBankAccount());
         childTransaction.setEntryType(TransactionEntryTypeConstant.SYSTEM);
         childTransaction.setTransactionType(transaction.getTransactionType());
         childTransaction.setExplainedTransactionCategory(transaction.getExplainedTransactionCategory());
@@ -515,10 +584,11 @@ public class TransactionListControllerDemo extends TransactionControllerHelperDe
     }
 
     public List<TransactionCategory> transactionCategories() throws Exception {
+        TransactionModel transactionModel = transactionViewLazyModel.getExpandedTransactionModel();
         List<TransactionCategory> transactionCategoryParentList = new ArrayList<>();
         List<TransactionCategory> transactionCategoryList = new ArrayList<>();
-        if (expandedTransactionModel.getTransactionType() != null) {
-            transactionCategoryList = transactionCategoryService.findAllTransactionCategoryByTransactionType(expandedTransactionModel.getTransactionType().getTransactionTypeCode());
+        if (transactionModel.getTransactionType() != null) {
+            transactionCategoryList = transactionCategoryService.findAllTransactionCategoryByTransactionType(transactionModel.getTransactionType().getTransactionTypeCode());
         }
         System.out.println("transactionCategoryList" + transactionCategoryList);
         for (TransactionCategory transactionCategory : transactionCategoryList) {
@@ -547,25 +617,62 @@ public class TransactionListControllerDemo extends TransactionControllerHelperDe
 //        expandCollapse(selectedTransactionModel, clientId);
     }
 
-    public void refreshTableDataonPageChange() {
-        datatableRowCount = datatableInitialRowCount;
-        System.out.println("datatableRowCount ===================" + datatableRowCount);
-        if (prevParentTransactionModel != null && prevParentTransactionModel.isParent()) {
-            if (prevParentTransactionModel.getChildTransactionList() != null && !prevParentTransactionModel.getChildTransactionList().isEmpty()) {
-                for (TransactionViewModel transactionViewModel : prevParentTransactionModel.getChildTransactionList()) {
-                    transactions.remove(transactionViewModel);
-                }
-            }
-            expanded = false;
+    public void refreshTableDataonPageChange(PageEvent event) {
+//        List<TransactionViewModel> nextPageList = transactionViewModelList.subList(datatableRowCount, transactionViewModelList.size());
+//        System.out.println("transactionViewModelList"+transactionViewModelList.size());
+//        System.out.println("nextPageList"+nextPageList.size());
+//        int rowcount = 0;
+//        int parentcount = 0;
+//        for (TransactionViewModel transactionViewModel : nextPageList) {
+//            ++rowcount;
+//            if (transactionViewModel.isParent()) {
+//                ++parentcount;
+//                if (parentcount == 10) {
+//                    break;
+//                }
+//            }
+//        }
+//        for (TransactionViewModel transactionViewModel : nextPageList) {
+//            if (!transactionViewModel.isParent()) {
+//                if (nextPageList.get(rowcount).getTransactionId() == transactionViewModel.getParentTransaction()) {
+//                    ++rowcount;
+//                }
+//            }
+//        }
+//        System.out.println("rowcount"+rowcount);
+//        datatableRowCount = rowcount;
+        int i = event.getPage();
+//        RequestContext.getCurrentInstance().update("@(.hiddenText)");
+        int rows = ((DataTable) event.getSource()).getRows();
+        transactionViewLazyModel.setPreviousPageNo(i);
+        
+//        ((DataTable) event.getSource()).setRows(transactionViewLazyModel.getRows());
+        System.out.println("page===============" + i + "rows===============" + rows);
+//        datatableRowCount = datatableInitialRowCount;
+//        System.out.println("datatableRowCount ===================" + datatableRowCount);
+//        if (prevParentTransactionModel != null && prevParentTransactionModel.isParent()) {
+//            if (prevParentTransactionModel.getChildTransactionList() != null && !prevParentTransactionModel.getChildTransactionList().isEmpty()) {
+//                for (TransactionViewModel transactionViewModel : prevParentTransactionModel.getChildTransactionList()) {
+//                    transactionViewModelList.remove(transactionViewModel);
+//                }
+//            }
+        updateAllRows();
+//        }
+    }
+
+    private void updateAllRows() {
+        for (TransactionViewModel viewModel : transactionViewModelList) {
+            viewModel.setExpandIcon(false);
         }
+        expanded = false;
     }
 
     public void expandCollapse(String btnComponentId, TransactionViewModel currentTransactionViewModel) throws Exception {
-        System.out.println("transactions size :" + transactions.size());
+        System.out.println("transactions size :" + transactionViewModelList.size());
         this.currentTransactionModel = currentTransactionViewModel;
         currentTransactionViewModel.setExpandIcon(!currentTransactionViewModel.isExpandIcon());
         if (!expanded) {
-            expandTransaction(btnComponentId, currentTransactionViewModel);
+            expanded = transactionViewLazyModel.expandTransaction(btnComponentId, currentTransactionViewModel);
             if (currentTransactionViewModel.isParent()) {
                 prevParentTransactionModel = currentTransactionViewModel;
             } else {
@@ -573,9 +680,9 @@ public class TransactionListControllerDemo extends TransactionControllerHelperDe
             }
         } else {
             System.out.println("currentTransactionModel :" + currentTransactionViewModel);
-            if (Objects.equals(currentTransactionViewModel.getTransactionId(), prevParentTransactionModel.getTransactionId())
-                    || (prevChildTransactionModel != null && Objects.equals(currentTransactionViewModel.getTransactionId(), prevChildTransactionModel.getTransactionId()))) {
-                collapseTransaction(currentTransactionViewModel);
+            if ((prevParentTransactionModel != null && currentTransactionViewModel.getTransactionId() == prevParentTransactionModel.getTransactionId())
+                    || (prevChildTransactionModel != null && currentTransactionViewModel.getTransactionId() == prevChildTransactionModel.getTransactionId())) {
+                expanded = transactionViewLazyModel.collapseTransaction(currentTransactionViewModel);
                 if (currentTransactionViewModel.isParent()) {
                     prevParentTransactionModel = null;
                     prevChildTransactionModel = null;
@@ -585,19 +692,23 @@ public class TransactionListControllerDemo extends TransactionControllerHelperDe
             } else {
                 if (!currentTransactionViewModel.isParent()) {
                     if (prevChildTransactionModel == null) {
-                        expandTransaction(btnComponentId,currentTransactionViewModel);
+                        expanded = transactionViewLazyModel.expandTransaction(btnComponentId, currentTransactionViewModel);
                     } else {
                         if (Objects.equals(currentTransactionViewModel.getTransactionId(), prevChildTransactionModel.getTransactionId())) {
-                            collapseTransaction(currentTransactionViewModel);
+                            expanded = transactionViewLazyModel.collapseTransaction(currentTransactionViewModel);
                         } else {
-                            collapseTransaction(prevChildTransactionModel);
-                            expandTransaction(btnComponentId,currentTransactionViewModel);
+                            expanded = transactionViewLazyModel.collapseTransaction(prevChildTransactionModel, currentTransactionViewModel);
+                            expanded = transactionViewLazyModel.expandTransaction(btnComponentId, currentTransactionViewModel);
                         }
                     }
                     prevChildTransactionModel = currentTransactionViewModel;
                 } else {
-                    collapseTransaction(prevParentTransactionModel);
-                    expandTransaction(btnComponentId,currentTransactionViewModel);
+                    if (prevParentTransactionModel != null) {
+                        expanded = transactionViewLazyModel.collapseTransaction(prevParentTransactionModel, currentTransactionViewModel);
+                    } else {
+                        expanded = transactionViewLazyModel.collapseTransaction(prevParentTransactionModel, currentTransactionViewModel);
+                    }
+                    expanded = transactionViewLazyModel.expandTransaction(btnComponentId, currentTransactionViewModel);
                     prevChildTransactionModel = null;
                     prevParentTransactionModel = currentTransactionViewModel;
                 }
@@ -607,36 +718,9 @@ public class TransactionListControllerDemo extends TransactionControllerHelperDe
     }
 
     public void expandTransaction(String btnComponentId, TransactionViewModel transactionViewModel) throws Exception {
-//        if (transactionViewModel.isParent()
-//                && transactionViewModel.getChildTransactionList() != null
-//                && !transactionViewModel.getChildTransactionList().isEmpty()) {
-//            parentTransIndex = transactions.indexOf(transactionViewModel);
-//            if (transactionViewModel.getChildTransactionList() != null && !transactionViewModel.getChildTransactionList().isEmpty()) {
-//                datatableRowCount = datatableInitialRowCount;
-//                System.out.println("transactionViewModel.getChildTransactionList() :" + transactionViewModel.getChildTransactionList());
-//                for (TransactionViewModel childTransactionViewModel : transactionViewModel.getChildTransactionList()) {
-//                    if (childTransactionViewModel.getExplanationStatusCode() == TransactionStatusConstant.UNEXPLAINED
-//                            || childTransactionViewModel.getExplanationStatusCode() == TransactionStatusConstant.PARTIALLYEXPLIANED) {
-//                        getSuggestionStringForUnexplainedOrPartial(childTransactionViewModel);
-//                    } else {
-//                        getSuggestionStringForExplianed(childTransactionViewModel);
-//                    }
-//                    transactions.add(++parentTransIndex, childTransactionViewModel);
-//                    System.out.println("childTransactionViewModel :" + transactions.get(parentTransIndex).getParentTransaction());
-//                    ++datatableRowCount;
-//                    System.out.println("childTransactionViewModel datatableRowCount:" + datatableRowCount);
-//                }
-//            }
-//        } else {
-////            if (!transactionModel.isParent() && transactionModel.getParentTransaction().getChildTransactionList() != null) {
-////                for (TransactionModel transModel : transactionModel.getParentTransaction().getChildTransactionList()) {
-////                    transModel.setExpandIcon(false);
-////                }
-////                transactionModel.setExpandIcon(true);
-////           }
-//            expandToggler(clientId, transactionViewModel);
-//        }
-        expandToggler(btnComponentId, transactionViewModel);
+        if (transactionViewModel.getChildTransactionList().isEmpty()) {
+            expandToggler(btnComponentId, transactionViewModel);
+        }
         expanded = true;
     }
 
@@ -646,7 +730,7 @@ public class TransactionListControllerDemo extends TransactionControllerHelperDe
             if (!parentTransactionViewModel.isParent()) {
                 parentTransactionViewModel = prevParentTransactionModel;
             }
-            int startIndex = transactions.indexOf(parentTransactionViewModel);
+            int startIndex = transactionViewModelList.indexOf(parentTransactionViewModel);
             System.out.println("startIndex :" + startIndex);
             int childTransCount = parentTransactionViewModel.getChildTransactionList().size();
             if (childTransCount > 0) {
@@ -661,46 +745,69 @@ public class TransactionListControllerDemo extends TransactionControllerHelperDe
     }
 
     public void collapseTransaction(TransactionViewModel parentTransactionViewModelId) throws Exception {
-        //Collapse
-//        if (parentTransactionViewModelId.isParent()) {
-//            parentTransactionViewModelId.setExpandIcon(false);
-//            if (parentTransactionViewModelId.getChildTransactionList() != null && !parentTransactionViewModelId.getChildTransactionList().isEmpty()) {
-//                for (TransactionViewModel childTransactionViewModel : parentTransactionViewModelId.getChildTransactionList()) {
-//                    transactions.remove(childTransactionViewModel);
-//                }
-//                datatableRowCount = datatableInitialRowCount;
-//            }
+        if (!parentTransactionViewModelId.isParent()) {
+            for (TransactionViewModel viewModel : transactionViewModelList) {
+                if (parentTransactionViewModelId.getTransactionId() != viewModel.getTransactionId()
+                        && viewModel.getParentTransaction() == parentTransactionViewModelId.getParentTransaction()) {
+                    viewModel.setExpandIcon(false);
+                }
+            }
+        } else {
+            parentTransactionViewModelId.setExpandIcon(false);
+            for (TransactionViewModel viewModel : transactionViewModelList) {
+                if (parentTransactionViewModelId.getTransactionId() != viewModel.getTransactionId()) {
+                    viewModel.setExpandIcon(false);
+                }
+            }
+        }
         expanded = false;
-//        } else {
-////            expandToggler(clientId);
-//        }
+    }
+
+    public void collapseTransaction(TransactionViewModel parentTransactionViewModelId, TransactionViewModel currentTransactionViewModelId) throws Exception {
+        parentTransactionViewModelId.setExpandIcon(false);
+        for (TransactionViewModel viewModel : transactionViewModelList) {
+            if (parentTransactionViewModelId.getTransactionId() != viewModel.getTransactionId()) {
+                if (currentTransactionViewModelId.getTransactionId() != viewModel.getTransactionId()) {
+                    viewModel.setExpandIcon(false);
+                }
+            }
+        }
+        expanded = false;
     }
 
     public void expandToggler(String btnComponentId, TransactionViewModel transactionViewModel) {
-        System.out.println("btnComponentId :" + btnComponentId);
         expandedTransactionModel = new TransactionModel();
-        if (!transactionViewModel.isExpandIcon()) {
-            transactionViewModel.setExpandIcon(true);
-        } else {
-            transactionViewModel.setExpandIcon(false);
-        }
         if (transactionViewModel.getTransactionId() > 0) {
-            expandedTransactionModel = getTransactionModel(transactionService.findByPK(transactionViewModel.getTransactionId()));
+            for (TransactionModel transactionModel : transactionModelList) {
+                if (transactionViewModel.getTransactionId() == transactionModel.getTransactionId()) {
+                    System.out.println("time before" + new Date());
+                    expandedTransactionModel = transactionModel;
+                    System.out.println("time after" + new Date());
+                }
+            }
         } else {
             expandedTransactionModel.setTransactionId(transactionViewModel.getTransactionId());
             expandedTransactionModel.setDebitCreditFlag(transactionViewModel.getDebitCreditFlag());
-            expandedTransactionModel.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.UNEXPLAINED));
+            for (TransactionStatus transactionStatus : transactionStatuseList) {
+                if (transactionStatus.getExplainationStatusCode() == TransactionStatusConstant.UNEXPLAINED) {
+                    expandedTransactionModel.setTransactionStatus(transactionStatus);
+                }
+            }
             expandedTransactionModel.setTransactionAmount(transactionViewModel.getTransactionAmount());
-            expandedTransactionModel.setParentTransaction(transactionService.findByPK(transactionViewModel.getParentTransaction()));
+            for (TransactionModel model : transactionModelList) {
+                if (model.getParentTransaction() != null) {
+                    if (transactionViewModel.getParentTransaction() == model.getParentTransaction().getTransactionId()) {
+                        expandedTransactionModel.setParentTransaction(model.getParentTransaction());
+                    }
+                }
+            }
         }
-        int itemIndex = transactions.indexOf(transactionViewModel);
-        System.out.println("itemIndex :" + itemIndex);
-//        itemIndex = itemIndex % datatableInitialRowCount;
-        System.out.println("itemIndex2 :" + itemIndex);
+        int itemIndex = transactionViewModelList.indexOf(transactionViewModel);
         String tempBtnComponentId = btnComponentId.substring(0, btnComponentId.indexOf("transactionsTable:") + 18) + itemIndex + ":collapseExpandBtn";
-        System.out.println("tempBtnComponentId :" + tempBtnComponentId);
         btnComponentId = tempBtnComponentId.replace(":", "\\\\:");
-        RequestContext.getCurrentInstance().execute(" $('#" + btnComponentId + "').parent().find('.ui-row-toggler').trigger('click');");
+
+        RequestContext.getCurrentInstance()
+                .execute(" $('#" + btnComponentId + "').parent().find('.ui-row-toggler').trigger('click');");
     }
 
     public String redirectToReference() {
@@ -711,41 +818,41 @@ public class TransactionListControllerDemo extends TransactionControllerHelperDe
     }
 
     public void allUnExplainedTransactions() {
-        transactions.clear();
-        for (TransactionView transactionView : transactionService.getAllTransactionViewList(bankAccount.getBankAccountId())) {
+        transactionViewModelList.clear();
+        for (TransactionView transactionView : transactionService.getAllTransactionViewList(bankAccountId)) {
             TransactionViewModel transactionViewModel = this.getTransactionViewModel(transactionView);
             if (transactionView.getExplanationStatusCode() == TransactionStatusConstant.UNEXPLAINED) {
-                transactions.add(transactionViewModel);
+                transactionViewModelList.add(transactionViewModel);
             }
         }
     }
 
     public void allExplainedTransactions() {
-        transactions.clear();
-        for (TransactionView transactionView : transactionService.getAllTransactionViewList(bankAccount.getBankAccountId())) {
+        transactionViewModelList.clear();
+        for (TransactionView transactionView : transactionService.getAllTransactionViewList(bankAccountId)) {
             TransactionViewModel transactionViewModel = this.getTransactionViewModel(transactionView);
             if (transactionView.getExplanationStatusCode() == TransactionStatusConstant.EXPLIANED) {
-                transactions.add(transactionViewModel);
+                transactionViewModelList.add(transactionViewModel);
             }
         }
     }
 
     public void allPartiallyExplainedTransactions() {
-        transactions.clear();
-        for (TransactionView transactionView : transactionService.getAllTransactionViewList(bankAccount.getBankAccountId())) {
+        transactionViewModelList.clear();
+        for (TransactionView transactionView : transactionService.getAllTransactionViewList(bankAccountId)) {
             TransactionViewModel transactionViewModel = this.getTransactionViewModel(transactionView);
             if (transactionView.getExplanationStatusCode() == TransactionStatusConstant.PARTIALLYEXPLIANED) {
-                transactions.add(transactionViewModel);
+                transactionViewModelList.add(transactionViewModel);
             }
         }
     }
 
-    public List<TransactionViewModel> getTransactions() throws Exception {
-        return transactions;
+    public List<TransactionViewModel> getTransactionViewModelList() throws Exception {
+        return transactionViewModelList;
     }
 
-    public void setTransactions(List<TransactionViewModel> transactions) {
-        this.transactions = transactions;
+    public void setTransactionViewModelList(List<TransactionViewModel> transactionViewModelList) {
+        this.transactionViewModelList = transactionViewModelList;
     }
 
     public int getDatatableRowCount() {
@@ -753,7 +860,7 @@ public class TransactionListControllerDemo extends TransactionControllerHelperDe
     }
 
     public void allTransactions() {
-        for (TransactionView transactionView : transactionService.getAllTransactionViewList(bankAccount.getBankAccountId())) {
+        for (TransactionView transactionView : transactionService.getAllTransactionViewList(bankAccountId)) {
             TransactionViewModel transactionViewModel = this.getTransactionViewModel(transactionView);
             if (transaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.UNEXPLAINED) {
                 totalUnExplained++;
@@ -763,7 +870,48 @@ public class TransactionListControllerDemo extends TransactionControllerHelperDe
                 totalExplained++;
             }
             totalTransactions++;
-            transactions.add(transactionViewModel);
+            transactionViewModelList.add(transactionViewModel);
         }
+    }
+
+    public String editTransection() {
+        System.out.println("selectedM :" + selectedTransactionModel);
+        return "edit-bank-transaction?faces-redirect=true&selectedTransactionId=" + selectedTransactionViewModel.getTransactionId();
+    }
+
+    public String deleteTransaction() {
+        Transaction transaction = new Transaction();
+        for (TransactionModel model : transactionModelList) {
+            if (model.getTransactionId() == selectedTransactionViewModel.getTransactionId()) {
+                transaction = getTransactionEntity(model);
+            }
+        }
+        transaction.setDeleteFlag(true);
+        if (transaction.getParentTransaction() != null) {
+            transactionService.deleteChildTransaction(transaction);
+        } else {
+            transactionService.deleteTransaction(transaction);
+        }
+
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transaction deleted successfully"));
+        return "bank-transactions?faces-redirect=true";
+    }
+
+    class RowCountPerPage {
+
+        @Getter
+        @Setter
+        private Integer rowCount;
+    }
+
+    /**
+     * @return the rowCount
+     */
+    public int getRowCount() {
+        if (rowCountPerPage.getRowCount() == null) {
+            return 10;
+        }
+        System.out.println("rowCountPerPage.getRowCount() :" + rowCountPerPage.getRowCount());
+        return rowCountPerPage.getRowCount();
     }
 }

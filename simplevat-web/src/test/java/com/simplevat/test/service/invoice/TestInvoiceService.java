@@ -42,7 +42,7 @@ public class TestInvoiceService extends BaseManagerTest {
             item.setInvoiceLineItemDescription("desc" + i);
             item.setInvoiceLineItemQuantity(5 + i);
             item.setInvoiceLineItemUnitPrice(new BigDecimal(50 * i));
-            item.setInvoiceLineItemVat(new BigDecimal(10));
+//            item.setInvoiceLineItemVat(new BigDecimal(10));
             items.add(item);
         }
         return items;
