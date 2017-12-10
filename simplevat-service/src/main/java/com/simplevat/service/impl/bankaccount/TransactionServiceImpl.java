@@ -202,7 +202,7 @@ public class TransactionServiceImpl extends TransactionService {
     @Override
     public Transaction deleteChildTransaction(Transaction transaction) {
         transaction.setDeleteFlag(true);
-        transactionDao.delete(transaction);
+        transactionDao.update(transaction);
         return transaction;
     }
 
@@ -231,6 +231,11 @@ public class TransactionServiceImpl extends TransactionService {
     }
 
     @Override
+    public List<Transaction> getAllTransactionListByBankAccountId(Integer bankAccountId) {
+        return transactionDao.getAllTransactionListByBankAccountId(bankAccountId);
+    }
+
+    @Override
     public List<Transaction> getAllTransactions() {
         return transactionDao.getAllTransactions();
     }
@@ -243,6 +248,26 @@ public class TransactionServiceImpl extends TransactionService {
     @Override
     public List<TransactionView> getChildTransactionViewListByParentId(Integer parentTransaction) {
         return transactionDao.getChildTransactionViewListByParentId(parentTransaction);
+    }
+
+    @Override
+    public List<TransactionView> getTransactionViewList(int pageSize, Integer bankAccountId,int rowCount) {
+        return transactionDao.getTransactionViewList(pageSize, bankAccountId,rowCount);
+    }
+
+    @Override
+    public Integer getTotalTransactionCountByBankAccountId(Integer bankAccountId) {
+        return transactionDao.getTotalTransactionCountByBankAccountId(bankAccountId);
+    }
+    
+    @Override
+    public Integer getTotalPartiallyExplainedTransactionCountByBankAccountId(Integer bankAccountId) {
+        return transactionDao.getTotalPartiallyExplainedTransactionCountByBankAccountId(bankAccountId);
+    }
+
+    @Override
+    public Integer getTransactionCountByRangeAndBankAccountId(int pageSize, Integer bankAccountId, int rowCount) {
+        return transactionDao.getTransactionCountByRangeAndBankAccountId(pageSize, bankAccountId,rowCount);
     }
 
 }

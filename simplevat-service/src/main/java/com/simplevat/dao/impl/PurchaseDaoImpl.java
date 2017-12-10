@@ -29,8 +29,9 @@ public class PurchaseDaoImpl extends AbstractDao<Integer, Purchase> implements P
         TypedQuery<Purchase> query = getEntityManager().createQuery("Select p from Purchase p where p.deleteFlag = false and p.purchaseDueAmount !=:dueAmount and p.purchaseContact.contactId =:contactId ORDER BY p.purchaseDueDate ASC", Purchase.class);
         query.setParameter("contactId", contactId);
         query.setParameter("dueAmount", new BigDecimal(0));
-        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
-            return query.getResultList().get(0);
+        List<Purchase> purchaseList = query.getResultList();
+        if (purchaseList != null && !purchaseList.isEmpty()) {
+            return purchaseList.get(0);
         }
         return null;
     }
@@ -39,8 +40,9 @@ public class PurchaseDaoImpl extends AbstractDao<Integer, Purchase> implements P
     public List<Purchase> getPurchaseListByDueAmount() {
         TypedQuery<Purchase> query = getEntityManager().createQuery("Select p from Purchase p where p.deleteFlag = false and p.purchaseDueAmount !=:dueAmount", Purchase.class);
         query.setParameter("dueAmount", new BigDecimal(0.00));
-        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
-            return query.getResultList();
+        List<Purchase> purchaseList = query.getResultList();
+        if (purchaseList != null && !purchaseList.isEmpty()) {
+            return purchaseList;
         }
         return null;
     }

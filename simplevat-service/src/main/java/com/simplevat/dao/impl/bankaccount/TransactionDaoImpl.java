@@ -1,5 +1,6 @@
 package com.simplevat.dao.impl.bankaccount;
 
+import com.simplevat.constants.TransactionStatusConstant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -73,8 +74,9 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
         query.setParameter("transactionDate", transaction.getTransactionDate());
         query.setParameter("bankAccountId", transaction.getBankAccount().getBankAccountId());
         query.setParameter("transactionId", transaction.getTransactionId());
-        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
-            return query.getResultList().get(query.getResultList().size() - 1);
+        List<Transaction> transactionList = query.getResultList();
+        if (transactionList != null && !transactionList.isEmpty()) {
+            return transactionList.get(transactionList.size() - 1);
         }
         return null;
     }
@@ -84,15 +86,17 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
         TypedQuery<Transaction> query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.transactionDate > :transactionDate and t.deleteFlag = false and t.bankAccount.bankAccountId = :bankAccountId ORDER BY t.transactionDate ASC", Transaction.class);
         query.setParameter("transactionDate", transaction.getTransactionDate());
         query.setParameter("bankAccountId", transaction.getBankAccount().getBankAccountId());
-        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
-            return query.getResultList();
+        query.setParameter("transactionId", transaction.getTransactionId());
+        List<Transaction> transactionList = query.getResultList();
+        if (transactionList != null && !transactionList.isEmpty()) {
+            return transactionList;
         }
         return null;
     }
 
     @Override
     public List<Transaction> getTransactionsByDateRangeAndTranscationTypeAndTranscationCategory(TransactionType transactionType, TransactionCategory category, Date startDate, Date lastDate) {
-       
+
         StringBuilder builder = new StringBuilder();
         if (transactionType != null) {
             builder.append("and t.transactionType.transactionTypeCode =:transactionTypeCode ");
@@ -114,9 +118,10 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
             query.setParameter("startDate", Instant.ofEpochMilli(startDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
             query.setParameter("lastDate", Instant.ofEpochMilli(lastDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
         }
-        
-        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
-            return query.getResultList();
+
+        List<Transaction> transactionList = query.getResultList();
+        if (transactionList != null && !transactionList.isEmpty()) {
+            return transactionList;
         }
         return null;
     }
@@ -127,8 +132,9 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
         query.setParameter("bankAccountId", bankAccount.getBankAccountId());
         query.setParameter("startDate", Instant.ofEpochMilli(startDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
         query.setParameter("lastDate", Instant.ofEpochMilli(lastDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
-        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
-            return query.getResultList();
+        List<Transaction> transactionList = query.getResultList();
+        if (transactionList != null && !transactionList.isEmpty()) {
+            return transactionList;
         }
         return null;
     }
@@ -137,8 +143,9 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
     public List<Transaction> getChildTransactionListByParentId(int parentId) {
         TypedQuery<Transaction> query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.deleteFlag = false and t.parentTransaction.transactionId =:parentId ORDER BY t.transactionDate ASC", Transaction.class);
         query.setParameter("parentId", parentId);
-        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
-            return query.getResultList();
+        List<Transaction> transactionList = query.getResultList();
+        if (transactionList != null && !transactionList.isEmpty()) {
+            return transactionList;
         }
         return null;
     }
@@ -147,8 +154,20 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
     public List<Transaction> getAllParentTransactions(BankAccount bankAccount) {
         TypedQuery<Transaction> query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.deleteFlag = false and t.parentTransaction = null and t.bankAccount.bankAccountId = :bankAccountId ORDER BY t.transactionDate DESC", Transaction.class);
         query.setParameter("bankAccountId", bankAccount.getBankAccountId());
-        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
-            return query.getResultList();
+        List<Transaction> transactionList = query.getResultList();
+        if (transactionList != null && !transactionList.isEmpty()) {
+            return transactionList;
+        }
+        return null;
+    }
+
+    @Override
+    public List<Transaction> getAllTransactionListByBankAccountId(Integer bankAccountId) {
+        TypedQuery<Transaction> query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.deleteFlag = false AND t.bankAccount.bankAccountId =:bankAccountId ORDER BY t.transactionDate ASC", Transaction.class);
+        query.setParameter("bankAccountId", bankAccountId);
+        List<Transaction> transactionList = query.getResultList();
+        if (transactionList != null && !transactionList.isEmpty()) {
+            return transactionList;
         }
         return null;
     }
@@ -167,8 +186,9 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
     public List<TransactionView> getAllTransactionViewList(Integer bankAccountId) {
         TypedQuery<TransactionView> query = getEntityManager().createQuery("SELECT t FROM TransactionView t WHERE t.bankAccountId =:bankAccountId ORDER BY t.transactionDate DESC", TransactionView.class);
         query.setParameter("bankAccountId", bankAccountId);
-        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
-            return query.getResultList();
+        List<TransactionView> transactionViewList = query.getResultList();
+        if (transactionViewList != null && !transactionViewList.isEmpty()) {
+            return transactionViewList;
         }
         return null;
     }
@@ -177,8 +197,58 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
     public List<TransactionView> getChildTransactionViewListByParentId(Integer parentTransaction) {
         TypedQuery<TransactionView> query = getEntityManager().createQuery("SELECT t FROM TransactionView t WHERE t.parentTransaction =:parentTransaction ORDER BY t.transactionDate ASC", TransactionView.class);
         query.setParameter("parentTransaction", parentTransaction);
-        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
-            return query.getResultList();
+        List<TransactionView> transactionViewList = query.getResultList();
+        if (transactionViewList != null && !transactionViewList.isEmpty()) {
+            return transactionViewList;
+        }
+        return null;
+    }
+
+    @Override
+    public List<TransactionView> getTransactionViewList(int pageSize, Integer bankAccountId, int rowCount) {
+        TypedQuery<TransactionView> query = getEntityManager().createQuery("SELECT t FROM TransactionView t WHERE t.bankAccountId =:bankAccountId AND t.parentTransaction = null ORDER BY t.transactionDate DESC", TransactionView.class);
+        query.setParameter("bankAccountId", bankAccountId);
+        query.setFirstResult(pageSize);
+        query.setMaxResults(rowCount);
+        List<TransactionView> transactionViewList = query.getResultList();
+        if (transactionViewList != null && !transactionViewList.isEmpty()) {
+            return transactionViewList;
+        }
+        return null;
+    }
+
+    @Override
+    public Integer getTotalTransactionCountByBankAccountId(Integer bankAccountId) {
+        Query query = getEntityManager().createQuery("SELECT COUNT(t) FROM TransactionView t WHERE t.parentTransaction = null AND t.bankAccountId =:bankAccountId");
+        query.setParameter("bankAccountId", bankAccountId);
+        List<Object> countList = query.getResultList();
+        if (countList != null && !countList.isEmpty()) {
+            return ((Long) countList.get(0)).intValue();
+        }
+        return null;
+    }
+
+    @Override
+    public Integer getTotalPartiallyExplainedTransactionCountByBankAccountId(Integer bankAccountId) {
+        Query query = getEntityManager().createQuery("SELECT COUNT(t) FROM TransactionView t WHERE t.explanationStatusCode =:explanationStatusCode AND t.bankAccountId =:bankAccountId");
+        query.setParameter("bankAccountId", bankAccountId);
+        query.setParameter("explanationStatusCode", TransactionStatusConstant.PARTIALLYEXPLIANED);
+        List<Object> countList = query.getResultList();
+        if (countList != null && !countList.isEmpty()) {
+            return ((Long) countList.get(0)).intValue();
+        }
+        return null;
+    }
+
+    @Override
+    public Integer getTransactionCountByRangeAndBankAccountId(int pageSize, Integer bankAccountId, int rowCount) {
+        TypedQuery<TransactionView> query = getEntityManager().createQuery("SELECT t FROM TransactionView t WHERE t.bankAccountId =:bankAccountId AND t.parentTransaction = null ORDER BY t.transactionDate DESC", TransactionView.class);
+        query.setParameter("bankAccountId", bankAccountId);
+        query.setFirstResult(pageSize);
+        query.setMaxResults(rowCount);
+        List<TransactionView> transactionViewList = query.getResultList();
+        if (transactionViewList != null && !transactionViewList.isEmpty()) {
+            return transactionViewList.size();
         }
         return null;
     }

@@ -22,8 +22,9 @@ public class CompanyTypeDaoImpl extends AbstractDao<Integer, CompanyType> implem
     @Override
     public List<CompanyType> getCompanyTypes() {
         TypedQuery<CompanyType> query = getEntityManager().createQuery("Select c From CompanyType c", CompanyType.class);
-        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
-            return query.getResultList();
+        List<CompanyType> companyTypeList = query.getResultList();
+        if (companyTypeList != null && !companyTypeList.isEmpty()) {
+            return companyTypeList;
         }
         return null;
     }

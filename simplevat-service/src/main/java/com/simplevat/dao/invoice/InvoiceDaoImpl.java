@@ -116,8 +116,9 @@ public class InvoiceDaoImpl extends AbstractDao<Integer, Invoice> implements Inv
     public List<Invoice> getInvoiceListByDueDate() {
         TypedQuery<Invoice> query = getEntityManager().createQuery("Select i from Invoice i where i.deleteFlag = false and i.invoiceDueDate =:invoiceDueDate", Invoice.class);
         query.setParameter("invoiceDueDate", LocalDateTime.now());
-        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
-            return query.getResultList();
+        List<Invoice> invoiceList = query.getResultList();
+        if (invoiceList != null && !invoiceList.isEmpty()) {
+            return invoiceList;
         }
         return null;
     }
@@ -126,8 +127,9 @@ public class InvoiceDaoImpl extends AbstractDao<Integer, Invoice> implements Inv
     public List<Invoice> getInvoiceListByDueAmount() {
         TypedQuery<Invoice> query = getEntityManager().createQuery("Select i from Invoice i where i.deleteFlag = false and i.dueAmount !=:dueAmount", Invoice.class);
         query.setParameter("dueAmount", new BigDecimal(0.00));
-        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
-            return query.getResultList();
+        List<Invoice> invoiceList = query.getResultList();
+        if (invoiceList != null && !invoiceList.isEmpty()) {
+            return invoiceList;
         }
         return null;
     }
@@ -137,8 +139,9 @@ public class InvoiceDaoImpl extends AbstractDao<Integer, Invoice> implements Inv
         TypedQuery<Invoice> query = getEntityManager().createQuery("Select i from Invoice i where i.deleteFlag = false and i.dueAmount !=:dueAmount and i.invoiceContact.contactId =:contactId ORDER BY i.invoiceDueDate ASC", Invoice.class);
         query.setParameter("contactId", contactId);
         query.setParameter("dueAmount", new BigDecimal(0));
-        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
-            return query.getResultList().get(0);
+        List<Invoice> invoiceList = query.getResultList();
+        if (invoiceList != null && !invoiceList.isEmpty()) {
+            return invoiceList.get(0);
         }
         return null;
     }
@@ -148,8 +151,9 @@ public class InvoiceDaoImpl extends AbstractDao<Integer, Invoice> implements Inv
         TypedQuery<Invoice> query = getEntityManager().createQuery("SELECT i FROM Invoice i WHERE i.deleteFlag = false AND i.invoiceDate BETWEEN :startDate AND :endDate ORDER BY i.invoiceDate ASC", Invoice.class);
         query.setParameter("startDate",Instant.ofEpochMilli(startDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
         query.setParameter("endDate", Instant.ofEpochMilli(endDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
-        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
-            return query.getResultList();
+        List<Invoice> invoiceList = query.getResultList();
+        if (invoiceList != null && !invoiceList.isEmpty()) {
+            return invoiceList;
         }
         return null;
     }

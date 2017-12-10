@@ -41,8 +41,9 @@ public class BankAccountDaoImpl extends AbstractDao<Integer, BankAccount> implem
     public BankAccount getBankAccountById(int id) {
         TypedQuery<BankAccount> query = getEntityManager().createQuery("SELECT b FROM BankAccount b WHERE b.bankAccountId =:id", BankAccount.class);
         query.setParameter("id", id);
-        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
-            return query.getResultList().get(0);
+        List<BankAccount> bankAccountList = query.getResultList();
+        if (bankAccountList != null && !bankAccountList.isEmpty()) {
+            return bankAccountList.get(0);
         }
         return null;
     }

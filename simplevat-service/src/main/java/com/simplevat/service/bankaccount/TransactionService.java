@@ -47,7 +47,16 @@ public abstract class TransactionService extends SimpleVatService<Integer, Trans
     
     public abstract List<TransactionView> getAllTransactionViewList(Integer bankAccountId);
     
+    public abstract List<Transaction> getAllTransactionListByBankAccountId(Integer bankAccountId);
     public abstract List<Transaction> getAllTransactions();
 
     public abstract List<TransactionView> getChildTransactionViewListByParentId(Integer parentTransaction);
+
+    public abstract Integer getTotalTransactionCountByBankAccountId(Integer bankAccountId);
+    
+    public abstract Integer getTransactionCountByRangeAndBankAccountId(int pageSize,Integer bankAccountId,int rowCount);
+    
+    public abstract Integer getTotalPartiallyExplainedTransactionCountByBankAccountId(Integer bankAccountId);
+    
+    public abstract List<TransactionView> getTransactionViewList(int pageSize,Integer bankAccountId,int rowCount);
 }

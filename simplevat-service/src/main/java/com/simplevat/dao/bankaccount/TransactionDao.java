@@ -31,10 +31,20 @@ public interface TransactionDao extends Dao<Integer, Transaction> {
 
     public List<Transaction> getTransactionsByDateRangeAndBankAccountId(BankAccount bankAccount, Date startDate, Date lastDate);
 
+    public List<Transaction> getAllTransactionListByBankAccountId(Integer bankAccountId);
+    
     public List<Transaction> getAllTransactions();
 
     public List<TransactionView> getAllTransactionViewList(Integer bankAccountId);
 
     public List<TransactionView> getChildTransactionViewListByParentId(Integer parentTransaction);
+
+    public List<TransactionView> getTransactionViewList(int pageSize, Integer bankAccountId,int rowCount);
+
+    public Integer getTotalTransactionCountByBankAccountId(Integer bankAccountId);
+
+    public Integer getTotalPartiallyExplainedTransactionCountByBankAccountId(Integer bankAccountId);
+
+    public Integer getTransactionCountByRangeAndBankAccountId(int pageSize, Integer bankAccountId, int rowCount);
 
 }

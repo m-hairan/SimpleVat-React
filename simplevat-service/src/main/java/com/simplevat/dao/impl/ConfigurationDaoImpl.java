@@ -21,11 +21,11 @@ public class ConfigurationDaoImpl extends AbstractDao<Integer, Configuration> im
 
     @Override
     public Configuration getConfigurationByName(String cofigurationName) {
-        
-    TypedQuery<Configuration> query = getEntityManager().createNamedQuery("Configuration.findByName", Configuration.class);
+        TypedQuery<Configuration> query = getEntityManager().createNamedQuery("Configuration.findByName", Configuration.class);
         query.setParameter("name", cofigurationName);
-        if(query.getResultList() != null && !query.getResultList().isEmpty()){
-            return query.getResultList().get(0);
+        List<Configuration> configurationList = query.getResultList();
+        if (configurationList != null && !configurationList.isEmpty()) {
+            return configurationList.get(0);
         }
         return null;
     }
@@ -33,8 +33,9 @@ public class ConfigurationDaoImpl extends AbstractDao<Integer, Configuration> im
     @Override
     public List<Configuration> getConfigurationList() {
         TypedQuery<Configuration> query = getEntityManager().createQuery("SELECT c FROM Configuration c", Configuration.class);
-        if(query.getResultList() != null && !query.getResultList().isEmpty()){
-            return query.getResultList();
+        List<Configuration> configurationList = query.getResultList();
+        if (configurationList != null && !configurationList.isEmpty()) {
+            return configurationList;
         }
         return null;
     }

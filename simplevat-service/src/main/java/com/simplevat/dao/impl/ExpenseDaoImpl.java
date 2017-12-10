@@ -100,8 +100,9 @@ public class ExpenseDaoImpl extends AbstractDao<Integer, Expense> implements Exp
         TypedQuery<Expense> query = getEntityManager().createQuery("SELECT i FROM Expense i WHERE i.deleteFlag = false AND i.expenseDate BETWEEN :startDate AND :endDate ORDER BY i.expenseDate ASC", Expense.class);
         query.setParameter("startDate", Instant.ofEpochMilli(startDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
         query.setParameter("endDate", Instant.ofEpochMilli(endDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
-        if (query.getResultList() != null && !query.getResultList().isEmpty()) {
-            return query.getResultList();
+        List<Expense> expenseList = query.getResultList();
+        if (expenseList != null && !expenseList.isEmpty()) {
+            return expenseList;
         }
         return null;
     }
