@@ -9,7 +9,7 @@
 4. Form within a panel and tool par outside panel
 5. Componenet and managed bean annotation to be used.
 6. Multiple pages instead of sinple page module
-7. Use of java constants for page path or all path
+7. Use of java constants for page path or all path.
 8. Use of internationalization. Message property file for lebels and messages.
 9. One controller per view. 
 10. Plural names for listing and single name for create and edit pages.
