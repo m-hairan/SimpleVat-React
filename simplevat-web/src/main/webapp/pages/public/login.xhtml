@@ -45,7 +45,9 @@
         </div>
     </h:form>
 
-    <div class="login-footer">#{messages.application_footer_lbl}</div>
+    <div class="login-footer">
+        <div><p:outputLabel value="Version: #{securityBean.versionNumber}"/></div>
+    </div>
 
     <h:outputStylesheet name="css/ripple.css" library="ultima-layout"/>
     <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="ultima-layout"/>

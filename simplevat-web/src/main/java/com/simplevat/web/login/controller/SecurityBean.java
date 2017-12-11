@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.Level;
+import javax.annotation.PostConstruct;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
@@ -57,6 +58,8 @@ public class SecurityBean implements PhaseListener, Serializable {
     @Getter
     @Setter
     private String password;
+    @Getter
+    private String versionNumber;
 
     @Autowired
     @Qualifier("authenticationManager")
@@ -77,6 +80,11 @@ public class SecurityBean implements PhaseListener, Serializable {
     @Override
     public void afterPhase(PhaseEvent event) {
     }
+    
+    @PostConstruct
+    public void init(){        
+        versionNumber = System.getenv("SIMPLEVAT_RELEASE");
+    }
 
     @Override
     public void beforePhase(PhaseEvent event) {
@@ -91,6 +99,7 @@ public class SecurityBean implements PhaseListener, Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid credentials!",
                             "Please check you login details."));
         }
+        
     }
 
     @Override
