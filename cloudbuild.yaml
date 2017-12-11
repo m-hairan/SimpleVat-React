@@ -2,5 +2,5 @@ steps:
 - name: 'gcr.io/cloud-builders/mvn'
   args: ['clean','install']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '--tag=gcr.io/simplevat-cluster/simplevat:$TAG_NAME', '.']
-images: ['gcr.io/simplevat-cluster/simplevat:$TAG_NAME']
+  args: ['build', '--tag=gcr.io/simplevat-cluster/simplevat', '.']
+images: ['gcr.io/simplevat-cluster/simplevat']
