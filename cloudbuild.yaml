@@ -3,4 +3,17 @@ steps:
   args: ['clean','install']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '--tag=gcr.io/simplevat-cluster/simplevat:$TAG_NAME', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/simplevat-cluster/simplevat:$TAG_NAME']
+- name: 'gcr.io/cloud-builders/kubectl'
+  args:
+  - 'set'
+  - 'image'
+  - 'replicationcontroller/alpha-rep'
+  - 'simplevat-web=gcr.io/simplevat-cluster/simplevat:$TAG_NAME'
+  - '--namespace=simplevat-dev'
+  env:
+  - 'CLOUDSDK_COMPUTE_ZONE=asia-south1-b'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=simplevat-prod-cluster'
+  - 'SIMPLEVAT_RELEASE=$TAG_NAME'
 images: ['gcr.io/simplevat-cluster/simplevat:$TAG_NAME']
