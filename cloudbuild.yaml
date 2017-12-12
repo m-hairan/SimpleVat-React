@@ -5,11 +5,4 @@ steps:
   args: ['build', '--tag=gcr.io/simplevat-cluster/simplevat', '.']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/simplevat-cluster/simplevat']
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-f', 'Dockerfile.bash-kube', '-t', 'script-runner', '.']
-- name: 'script-runner'
-  args: ['bash', './deploy/rolling-update-new-release.bash','0.0.1-alpha.2'] 
-  env:
-  - 'CLOUDSDK_COMPUTE_ZONE=asia-south1-b'
-  - 'CLOUDSDK_CONTAINER_CLUSTER=simplevat-prod-cluster'
 images: ['gcr.io/simplevat-cluster/simplevat']
