@@ -6,6 +6,8 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/simplevat-cluster/simplevat']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-f', 'Dockerfile.bash-kube', '-t', 'script-runner', '.']  
+  args: ['build', '-f', 'Dockerfile.bash-kube', '-t', 'script-runner', '.']
+- name: 'script-runner'
+  args: ['bash', './deploy/hello.bash']
 images: ['gcr.io/simplevat-cluster/simplevat']
 
