@@ -15,5 +15,4 @@ steps:
   env:
   - 'CLOUDSDK_COMPUTE_ZONE=asia-south1-b'
   - 'CLOUDSDK_CONTAINER_CLUSTER=simplevat-prod-cluster'
-  - 'SIMPLEVAT_RELEASE=$TAG_NAME'
 images: ['gcr.io/simplevat-cluster/simplevat']
