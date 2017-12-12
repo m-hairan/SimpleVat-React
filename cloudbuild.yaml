@@ -5,6 +5,12 @@ steps:
   args: ['build', '--tag=gcr.io/simplevat-cluster/simplevat', '.']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/simplevat-cluster/simplevat']
+- name: 'gcr.io/cloud-builders/kubectl'
+  args:
+  - 'get'
+  - 'replicationcontroller'
+  - '>'
+  - './deploy/rc.txt'
 - name: 'ubuntu'
   args: ['bash', './deploy/rolling-update-new-release.bash','0.0.1-alpha.2']
   env:
