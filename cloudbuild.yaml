@@ -9,11 +9,12 @@ steps:
   args:
   - 'get'
   - 'replicationcontroller'
+  - '--namespace=simplevat-dev'
   - '>'
   - './deploy/rc.txt'
-- name: 'ubuntu'
-  args: ['bash', './deploy/rolling-update-new-release.bash','0.0.1-alpha.2']
   env:
   - 'CLOUDSDK_COMPUTE_ZONE=asia-south1-b'
   - 'CLOUDSDK_CONTAINER_CLUSTER=simplevat-prod-cluster'
+- name: 'ubuntu'
+  args: ['bash', './deploy/rolling-update-new-release.bash','0.0.1-alpha.2']
 images: ['gcr.io/simplevat-cluster/simplevat']
