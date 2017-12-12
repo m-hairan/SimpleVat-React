@@ -14,7 +14,7 @@ do
     if [ $domain == "alpha" ]
     then
 
-      ./simplevat-new-release-script.bash "$domain" dev 0.0.1-alpha.1
+      ./simplevat-new-release-script.bash "$domain" dev "$1"
 
     fi
 
