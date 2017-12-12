@@ -8,10 +8,7 @@ steps:
 - name: 'gcr.io/cloud-builders/kubectl'
   args:
   - 'get'
-  - 'replicationcontroller'
-  - '--namespace=simplevat-dev'
-  - '>'
-  - './deploy/rc.txt'
+  - 'replicationcontrollers --namespace=simplevat-dev > ./deploy/rc.txt'
   env:
   - 'CLOUDSDK_COMPUTE_ZONE=asia-south1-b'
   - 'CLOUDSDK_CONTAINER_CLUSTER=simplevat-prod-cluster'
