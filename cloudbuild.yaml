@@ -5,7 +5,7 @@ steps:
   args: ['build', '--tag=gcr.io/simplevat-cluster/simplevat', '.']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/simplevat-cluster/simplevat']
-- name: 'gcr.io/cloud-builders/kubectl'
+- name: 'gcr.io/simplevat-cluster/simplevat-bash-kube'
   args:
   - 'ls'
   env:
