@@ -1,9 +1,5 @@
 package com.simplevat.service.impl.bankaccount;
 
-import com.simplevat.constants.InvoiceStatusConstant;
-import com.simplevat.constants.TransactionCreditDebitConstant;
-import com.simplevat.constants.TransactionRefrenceTypeConstant;
-import com.simplevat.constants.TransactionStatusConstant;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -22,14 +18,11 @@ import com.simplevat.dao.invoice.InvoiceDao;
 import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.entity.bankaccount.TransactionCategory;
-import com.simplevat.entity.bankaccount.TransactionStatus;
 import com.simplevat.entity.bankaccount.TransactionType;
 import com.simplevat.entity.bankaccount.TransactionView;
-import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.service.bankaccount.TransactionService;
 import com.simplevat.util.ChartUtil;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -251,23 +244,43 @@ public class TransactionServiceImpl extends TransactionService {
     }
 
     @Override
-    public List<TransactionView> getTransactionViewList(int pageSize, Integer bankAccountId,int rowCount) {
-        return transactionDao.getTransactionViewList(pageSize, bankAccountId,rowCount);
+    public List<TransactionView> getTransactionViewList(int pageSize, Integer bankAccountId, int rowCount, Integer transactionStatus) {
+        return transactionDao.getTransactionViewList(pageSize, bankAccountId, rowCount, transactionStatus);
     }
 
     @Override
-    public Integer getTotalTransactionCountByBankAccountId(Integer bankAccountId) {
-        return transactionDao.getTotalTransactionCountByBankAccountId(bankAccountId);
+    public Integer getTotalTransactionCountByBankAccountIdForLazyModel(Integer bankAccountId, Integer transactionStatus) {
+        return transactionDao.getTotalTransactionCountByBankAccountIdForLazyModel(bankAccountId, transactionStatus);
     }
-    
+
+    @Override
+    public Integer getTransactionCountByRangeAndBankAccountId(int pageSize, Integer bankAccountId, int rowCount) {
+        return transactionDao.getTransactionCountByRangeAndBankAccountId(pageSize, bankAccountId, rowCount);
+    }
+
+    @Override
+    public List<Transaction> getParentTransactionListByRangeAndBankAccountId(int pageSize, Integer bankAccountId, int rowCount, Integer transactionStatus) {
+        return transactionDao.getParentTransactionListByRangeAndBankAccountId(pageSize, bankAccountId, rowCount, transactionStatus);
+    }
+
+    @Override
+    public Integer getTotalExplainedTransactionCountByBankAccountId(Integer bankAccountId) {
+        return transactionDao.getTotalExplainedTransactionCountByBankAccountId(bankAccountId);
+    }
+
+    @Override
+    public Integer getTotalUnexplainedTransactionCountByBankAccountId(Integer bankAccountId) {
+        return transactionDao.getTotalUnexplainedTransactionCountByBankAccountId(bankAccountId);
+    }
+
     @Override
     public Integer getTotalPartiallyExplainedTransactionCountByBankAccountId(Integer bankAccountId) {
         return transactionDao.getTotalPartiallyExplainedTransactionCountByBankAccountId(bankAccountId);
     }
 
     @Override
-    public Integer getTransactionCountByRangeAndBankAccountId(int pageSize, Integer bankAccountId, int rowCount) {
-        return transactionDao.getTransactionCountByRangeAndBankAccountId(pageSize, bankAccountId,rowCount);
+    public Integer getTotalAllTransactionCountByBankAccountId(Integer bankAccountId) {
+        return transactionDao.getTotalAllTransactionCountByBankAccountId(bankAccountId);
     }
 
 }

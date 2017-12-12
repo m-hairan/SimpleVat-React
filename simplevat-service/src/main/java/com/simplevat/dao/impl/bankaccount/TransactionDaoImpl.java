@@ -205,8 +205,12 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
     }
 
     @Override
-    public List<TransactionView> getTransactionViewList(int pageSize, Integer bankAccountId, int rowCount) {
-        TypedQuery<TransactionView> query = getEntityManager().createQuery("SELECT t FROM TransactionView t WHERE t.bankAccountId =:bankAccountId AND t.parentTransaction = null ORDER BY t.transactionDate DESC", TransactionView.class);
+    public List<TransactionView> getTransactionViewList(int pageSize, Integer bankAccountId, int rowCount, Integer transactionStatus) {
+        StringBuilder builder = new StringBuilder("");
+        if (transactionStatus != null) {
+            builder.append(" AND t.explanationStatusCode = ").append(transactionStatus);
+        }
+        TypedQuery<TransactionView> query = getEntityManager().createQuery("SELECT t FROM TransactionView t WHERE t.bankAccountId =:bankAccountId AND t.parentTransaction = null" + builder.toString() + " ORDER BY t.transactionDate DESC", TransactionView.class);
         query.setParameter("bankAccountId", bankAccountId);
         query.setFirstResult(pageSize);
         query.setMaxResults(rowCount);
@@ -218,8 +222,12 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
     }
 
     @Override
-    public Integer getTotalTransactionCountByBankAccountId(Integer bankAccountId) {
-        Query query = getEntityManager().createQuery("SELECT COUNT(t) FROM TransactionView t WHERE t.parentTransaction = null AND t.bankAccountId =:bankAccountId");
+    public Integer getTotalTransactionCountByBankAccountIdForLazyModel(Integer bankAccountId, Integer transactionStatus) {
+        StringBuilder builder = new StringBuilder("");
+        if (transactionStatus != null) {
+            builder.append(" AND t.explanationStatusCode = ").append(transactionStatus);
+        }
+        Query query = getEntityManager().createQuery("SELECT COUNT(t) FROM TransactionView t WHERE t.parentTransaction = null AND t.bankAccountId =:bankAccountId" + builder.toString());
         query.setParameter("bankAccountId", bankAccountId);
         List<Object> countList = query.getResultList();
         if (countList != null && !countList.isEmpty()) {
@@ -229,10 +237,45 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
     }
 
     @Override
+    public Integer getTotalExplainedTransactionCountByBankAccountId(Integer bankAccountId) {
+        Query query = getEntityManager().createQuery("SELECT COUNT(t) FROM TransactionView t WHERE t.parentTransaction = null AND t.bankAccountId =:bankAccountId AND t.explanationStatusCode =:explanationStatusCode");
+        query.setParameter("bankAccountId", bankAccountId);
+        query.setParameter("explanationStatusCode", TransactionStatusConstant.EXPLIANED);
+        List<Object> countList = query.getResultList();
+        if (countList != null && !countList.isEmpty()) {
+            return ((Long) countList.get(0)).intValue();
+        }
+        return null;
+    }
+
+    @Override
+    public Integer getTotalUnexplainedTransactionCountByBankAccountId(Integer bankAccountId) {
+        Query query = getEntityManager().createQuery("SELECT COUNT(t) FROM TransactionView t WHERE t.parentTransaction = null AND t.bankAccountId =:bankAccountId AND t.explanationStatusCode =:explanationStatusCode");
+        query.setParameter("bankAccountId", bankAccountId);
+        query.setParameter("explanationStatusCode", TransactionStatusConstant.UNEXPLIANED);
+        List<Object> countList = query.getResultList();
+        if (countList != null && !countList.isEmpty()) {
+            return ((Long) countList.get(0)).intValue();
+        }
+        return null;
+    }
+
+    @Override
     public Integer getTotalPartiallyExplainedTransactionCountByBankAccountId(Integer bankAccountId) {
-        Query query = getEntityManager().createQuery("SELECT COUNT(t) FROM TransactionView t WHERE t.explanationStatusCode =:explanationStatusCode AND t.bankAccountId =:bankAccountId");
+        Query query = getEntityManager().createQuery("SELECT COUNT(t) FROM TransactionView t WHERE t.parentTransaction = null AND t.bankAccountId =:bankAccountId AND t.explanationStatusCode =:explanationStatusCode");
         query.setParameter("bankAccountId", bankAccountId);
         query.setParameter("explanationStatusCode", TransactionStatusConstant.PARTIALLYEXPLIANED);
+        List<Object> countList = query.getResultList();
+        if (countList != null && !countList.isEmpty()) {
+            return ((Long) countList.get(0)).intValue();
+        }
+        return null;
+    }
+
+    @Override
+    public Integer getTotalAllTransactionCountByBankAccountId(Integer bankAccountId) {
+        Query query = getEntityManager().createQuery("SELECT COUNT(t) FROM TransactionView t WHERE t.parentTransaction = null AND t.bankAccountId =:bankAccountId");
+        query.setParameter("bankAccountId", bankAccountId);
         List<Object> countList = query.getResultList();
         if (countList != null && !countList.isEmpty()) {
             return ((Long) countList.get(0)).intValue();
@@ -249,6 +292,23 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
         List<TransactionView> transactionViewList = query.getResultList();
         if (transactionViewList != null && !transactionViewList.isEmpty()) {
             return transactionViewList.size();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Transaction> getParentTransactionListByRangeAndBankAccountId(int pageSize, Integer bankAccountId, int rowCount, Integer transactionStatus) {
+        StringBuilder builder = new StringBuilder("");
+        if (transactionStatus != null) {
+            builder.append(" AND t.transactionStatus.explainationStatusCode = ").append(transactionStatus);
+        }
+        TypedQuery<Transaction> query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.bankAccount.bankAccountId =:bankAccountId AND t.parentTransaction = null" + builder.toString() + " ORDER BY t.transactionDate DESC", Transaction.class);
+        query.setParameter("bankAccountId", bankAccountId);
+        query.setFirstResult(pageSize);
+        query.setMaxResults(rowCount);
+        List<Transaction> transactionList = query.getResultList();
+        if (transactionList != null && !transactionList.isEmpty()) {
+            return transactionList;
         }
         return null;
     }

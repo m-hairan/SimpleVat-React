@@ -9,10 +9,7 @@ import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionType;
 import com.simplevat.entity.bankaccount.TransactionView;
-import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.service.SimpleVatService;
-import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Date;
 
 public abstract class TransactionService extends SimpleVatService<Integer, Transaction> {
@@ -33,30 +30,38 @@ public abstract class TransactionService extends SimpleVatService<Integer, Trans
     public abstract Transaction update(Transaction transaction);
 
     public abstract Transaction deleteTransaction(Transaction transaction);
-    
+
     public abstract Transaction deleteChildTransaction(Transaction transaction);
 
-   
     public abstract List<Transaction> getTransactionsByDateRangeAndTranscationTypeAndTranscationCategory(TransactionType transactionType, TransactionCategory category, Date startDate, Date lastDate);
 
-    public abstract List<Transaction> getChildTransactionListByParentId(int parentId) ;
+    public abstract List<Transaction> getChildTransactionListByParentId(int parentId);
 
     public abstract void persistChildTransaction(Transaction transaction);
-    
+
     public abstract List<Transaction> getAllParentTransactions(BankAccount bankAccount);
-    
+
     public abstract List<TransactionView> getAllTransactionViewList(Integer bankAccountId);
-    
+
     public abstract List<Transaction> getAllTransactionListByBankAccountId(Integer bankAccountId);
+
     public abstract List<Transaction> getAllTransactions();
 
     public abstract List<TransactionView> getChildTransactionViewListByParentId(Integer parentTransaction);
 
-    public abstract Integer getTotalTransactionCountByBankAccountId(Integer bankAccountId);
+    public abstract Integer getTotalTransactionCountByBankAccountIdForLazyModel(Integer bankAccountId, Integer transactionStatus);
+
+    public abstract Integer getTotalExplainedTransactionCountByBankAccountId(Integer bankAccountId);
     
-    public abstract Integer getTransactionCountByRangeAndBankAccountId(int pageSize,Integer bankAccountId,int rowCount);
+    public abstract Integer getTotalUnexplainedTransactionCountByBankAccountId(Integer bankAccountId);
     
     public abstract Integer getTotalPartiallyExplainedTransactionCountByBankAccountId(Integer bankAccountId);
     
-    public abstract List<TransactionView> getTransactionViewList(int pageSize,Integer bankAccountId,int rowCount);
+    public abstract Integer getTotalAllTransactionCountByBankAccountId(Integer bankAccountId);
+
+    public abstract Integer getTransactionCountByRangeAndBankAccountId(int pageSize, Integer bankAccountId, int rowCount);
+
+    public abstract List<TransactionView> getTransactionViewList(int pageSize, Integer bankAccountId, int rowCount, Integer transactionStatus);
+
+    public abstract List<Transaction> getParentTransactionListByRangeAndBankAccountId(int pageSize, Integer bankAccountId, int rowCount, Integer transactionStatus);
 }
