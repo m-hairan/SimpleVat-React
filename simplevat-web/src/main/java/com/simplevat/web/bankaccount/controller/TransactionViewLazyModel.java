@@ -6,6 +6,7 @@
 package com.simplevat.web.bankaccount.controller;
 
 import com.github.javaplugs.jsf.SpringScopeView;
+import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.entity.bankaccount.TransactionStatus;
 import com.simplevat.entity.bankaccount.TransactionView;
 import com.simplevat.entity.invoice.Invoice;
@@ -23,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
-import org.primefaces.context.RequestContext;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,39 +38,30 @@ import org.springframework.stereotype.Component;
 public class TransactionViewLazyModel extends LazyDataModel<TransactionViewModel> {
 
     @Autowired
-    private TransactionControllerHelperDemo transactionControllerHelperDemo;
+    private TransactionControllerHelper transactionControllerHelper;
     @Autowired
     private TransactionService transactionService;
-    private List<TransactionView> transactionViewList = new ArrayList<>();
     private List<TransactionView> childTransactionViewList = new ArrayList<>();
     @Setter
     private List<Invoice> invoiceList = new ArrayList<>();
     @Setter
     private List<TransactionModel> transactionModelList = new ArrayList<>();
     @Setter
-    private List<TransactionStatus> transactionStatuseList = new ArrayList<>();
+    private List<TransactionStatus> transactionStatusList = new ArrayList<>();
     @Getter
     @Setter
     private TransactionModel expandedTransactionModel;
+    @Setter
+    private Integer transactionStatus;
     @Getter
     @Setter
-    private List<TransactionViewModel> data = new ArrayList<>();
+    private List<TransactionViewModel> transactionViewModelList = new ArrayList<>();
 
     @Setter
     private Integer bankAccountId;
 
-    @Setter
-    @Getter
-    private Integer calculateRows;
-    @Setter
-    @Getter
-    private Integer pageCount;
-    @Setter
-    private Integer previousPageNo = 0;
-    private Integer defaultRowsPerPage = 5;
-    private int numberOfRow = 0;
-
     public TransactionViewLazyModel() {
+
     }
 
     @Override
@@ -80,27 +71,27 @@ public class TransactionViewLazyModel extends LazyDataModel<TransactionViewModel
 
     @Override
     public List<TransactionViewModel> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
-        data = new ArrayList<>();
+        transactionViewModelList = new ArrayList<>();
+        transactionModelList.clear();
         childTransactionViewList.clear();
-        
-        first = defaultRowsPerPage * previousPageNo;
-        System.out.println("first" + first + " ::befor pageSize :" + pageSize);
-        List<TransactionView> list = transactionService.getTransactionViewList(first, bankAccountId, defaultRowsPerPage);
-
-        if (list != null) {
-            transactionViewList = list;
-        }
-//        System.out.println("data List Size :"+list.size());
-        for (TransactionView transactionView : transactionViewList) {
-            List<TransactionView> childList = transactionService.getChildTransactionViewListByParentId(transactionView.getTransactionId());
-            if (childList != null) {
-                childTransactionViewList.addAll(childList);
+        List<Transaction> transactionList = transactionService.getParentTransactionListByRangeAndBankAccountId(first, bankAccountId, pageSize, transactionStatus);
+        if (transactionList != null) {
+            for (Transaction transaction : transactionList) {
+                TransactionModel transactionModel = transactionControllerHelper.getTransactionModel(transaction);
+                transactionModelList.add(transactionModel);
+                transactionModelList.addAll(transactionModel.getChildTransactionList());
             }
         }
-        populateChildTransaction();
-        populateTransactionList();
-        calculateRows = data.size();
-        System.out.println("first " + first + "=============pageCount" + pageCount + "============previousPageNo" + previousPageNo);
+        List<TransactionView> transactionViewList;
+        if (transactionStatus == null) {
+            transactionViewList = transactionService.getTransactionViewList(first, bankAccountId, pageSize, transactionStatus);
+        } else {
+            transactionViewList = transactionService.getTransactionViewList(first, bankAccountId, pageSize, transactionStatus);
+            if(transactionViewList == null){
+                transactionViewList = transactionService.getTransactionViewList(0, bankAccountId, pageSize, transactionStatus);
+            }
+        }
+        populateTransactionList(transactionViewList);
         //filter
 //        for (TransactionViewModel transactionViewModel : data) {
 //            boolean match = true;
@@ -134,23 +125,9 @@ public class TransactionViewLazyModel extends LazyDataModel<TransactionViewModel
 //        }
         //rowCount
 
-        int dataBaseRowCount = transactionService.getTotalTransactionCountByBankAccountId(bankAccountId);// + transactionService.getTotalPartiallyExplainedTransactionCountByBankAccountId(bankAccountId);
-        //        int rowCount = ((1+previousPageNo)*dataSize)+dataBaseRowCount;
-        pageCount = dataBaseRowCount / defaultRowsPerPage;
-        if (dataBaseRowCount % defaultRowsPerPage > 0) {
-            ++pageCount;
-        }
-        numberOfRow = dataBaseRowCount;
-        int dataSize = data.size();
-        if (dataSize > defaultRowsPerPage) {
-            numberOfRow = ((dataSize - defaultRowsPerPage) * pageCount) + dataBaseRowCount;
-        } else {
-            numberOfRow = (defaultRowsPerPage * pageCount);
-        }
-
-        this.setRowCount(numberOfRow);
-//        this.setPageSize(dataSize);
-        System.out.println("rowcount" + this.getRowCount() + "::after PageSize" + getCalculateRows());
+        int dataBaseRowCount = transactionService.getTotalTransactionCountByBankAccountIdForLazyModel(bankAccountId, transactionStatus);// + transactionService.getTotalPartiallyExplainedTransactionCountByBankAccountId(bankAccountId);
+        this.setRowCount(dataBaseRowCount);
+        this.setPageSize(transactionViewList.size());
         //paginate
 //        if (dataSize > pageSize) {
 //            try {
@@ -159,60 +136,54 @@ public class TransactionViewLazyModel extends LazyDataModel<TransactionViewModel
 //                return data.subList(first, first + (dataSize % pageSize));
 //            }
 //        } else { 
-
-        return data;
+        System.out.println("transactionViewModelList" + transactionViewModelList);
+        return transactionViewModelList;
 //        }
     }
 
 //    public int getCalculateRows() {
 //        return data.size();
 //    }
-    private void populateTransactionList() {
+    private void populateTransactionList(List<TransactionView> transactionViewList) {
+        List<TransactionView> childTransactionViewList = new ArrayList<>();
         for (TransactionView transactionView : transactionViewList) {
-            TransactionViewModel transactionViewModel = transactionControllerHelperDemo.getTransactionViewModel(transactionView);
-            if (transactionViewModel.getExplanationStatusCode() == TransactionStatusConstant.UNEXPLAINED
-                    || transactionViewModel.getExplanationStatusCode() == TransactionStatusConstant.PARTIALLYEXPLIANED) {
-                getSuggestionStringForUnexplainedOrPartial(transactionViewModel);
-            } else {
-                getSuggestionStringForExplianed(transactionViewModel);
-            }
-            data.add(transactionViewModel);
-        }
-        List<TransactionViewModel> childTransactionViewModelList = new ArrayList();
-        for (TransactionViewModel transactionViewModel : data) {
-            if (transactionViewModel.isParent()) {
-                childTransactionViewModelList.addAll(transactionViewModel.getChildTransactionList());
+            List<TransactionView> childList = transactionService.getChildTransactionViewListByParentId(transactionView.getTransactionId());
+            if (childList != null) {
+                childTransactionViewList.addAll(childList);
             }
         }
-        System.out.println("previousPageChildCount :" + previousPageNo);
-        for (TransactionViewModel transactionViewModel : childTransactionViewModelList) {
-            int parentIndex = 0;
-            for (TransactionViewModel transactionViewModel1 : data) {
-                if (transactionViewModel1.isParent()) {
-                    if (transactionViewModel1.getTransactionId() == transactionViewModel.getParentTransaction()) {
-                        parentIndex = data.indexOf(transactionViewModel1);
-                    }
-                }
-            }
-            if (transactionViewModel.getExplanationStatusCode() == TransactionStatusConstant.UNEXPLAINED
-                    || transactionViewModel.getExplanationStatusCode() == TransactionStatusConstant.PARTIALLYEXPLIANED) {
-                getSuggestionStringForUnexplainedOrPartial(transactionViewModel);
-            } else {
-                getSuggestionStringForExplianed(transactionViewModel);
-            }
-            data.add(++parentIndex, transactionViewModel);
-        }
+        populateChildTransaction(childTransactionViewList);
+        populateParentTransactionList(transactionViewList);
     }
 
-    private void populateChildTransaction() {
-        transactionControllerHelperDemo.getChildTransactions().clear();
+    private void populateChildTransaction(List<TransactionView> childTransactionViewList) {
+        transactionControllerHelper.getChildTransactions().clear();
         if (childTransactionViewList != null) {
             for (TransactionView transactionView : childTransactionViewList) {
                 if (transactionView.getParentTransaction() != null) {
-                    TransactionViewModel transactionViewModel = transactionControllerHelperDemo.getTransactionViewModel(transactionView);
-                    transactionControllerHelperDemo.getChildTransactions().add(transactionViewModel);
+                    TransactionViewModel transactionViewModel = transactionControllerHelper.getTransactionViewModel(transactionView);
+                    if (transactionViewModel.getExplanationStatusCode() == TransactionStatusConstant.UNEXPLAINED
+                            || transactionViewModel.getExplanationStatusCode() == TransactionStatusConstant.PARTIALLYEXPLIANED) {
+                        getSuggestionStringForUnexplainedOrPartial(transactionViewModel);
+                    } else {
+                        getSuggestionStringForExplianed(transactionViewModel);
+                    }
+                    transactionControllerHelper.getChildTransactions().add(transactionViewModel);
                 }
             }
+        }
+    }
+
+    private void populateParentTransactionList(List<TransactionView> transactionViewList) {
+        for (TransactionView transactionView : transactionViewList) {
+            TransactionViewModel transactionViewModel = transactionControllerHelper.getTransactionViewModel(transactionView);
+            if (transactionViewModel.getExplanationStatusCode() == TransactionStatusConstant.UNEXPLAINED
+                    || transactionViewModel.getExplanationStatusCode() == TransactionStatusConstant.PARTIALLYEXPLIANED) {
+                getSuggestionStringForUnexplainedOrPartial(transactionViewModel);
+            } else {
+                getSuggestionStringForExplianed(transactionViewModel);
+            }
+            transactionViewModelList.add(transactionViewModel);
         }
     }
 
@@ -276,55 +247,23 @@ public class TransactionViewLazyModel extends LazyDataModel<TransactionViewModel
         }
     }
 
-    public boolean expandTransaction(String btnComponentId, TransactionViewModel transactionViewModel) throws Exception {
-        if (transactionViewModel.getChildTransactionList().isEmpty()) {
-            expandToggler(btnComponentId, transactionViewModel);
-        }
-        return true;
-    }
-
-    public boolean collapseTransaction(TransactionViewModel parentTransactionViewModelId) throws Exception {
-        if (!parentTransactionViewModelId.isParent()) {
-            for (TransactionViewModel viewModel : data) {
-                if (parentTransactionViewModelId.getTransactionId() != viewModel.getTransactionId()
-                        && viewModel.getParentTransaction() == parentTransactionViewModelId.getParentTransaction()) {
-                    viewModel.setExpandIcon(false);
-                }
-            }
-        } else {
-            parentTransactionViewModelId.setExpandIcon(false);
-            for (TransactionViewModel viewModel : data) {
-                if (parentTransactionViewModelId.getTransactionId() != viewModel.getTransactionId()) {
-                    viewModel.setExpandIcon(false);
-                }
-            }
-        }
-        return false;
-    }
-
-    public boolean collapseTransaction(TransactionViewModel parentTransactionViewModelId, TransactionViewModel currentTransactionViewModelId) throws Exception {
-        for (TransactionViewModel viewModel : data) {
-            if (currentTransactionViewModelId.getTransactionId() != viewModel.getTransactionId()) {
-                viewModel.setExpandIcon(false);
-            }
-        }
-        return false;
-    }
-
-    public void expandToggler(String btnComponentId, TransactionViewModel transactionViewModel) {
+    public void expandToggler(TransactionViewModel transactionViewModel) {
         expandedTransactionModel = new TransactionModel();
         if (transactionViewModel.getTransactionId() > 0) {
             for (TransactionModel transactionModel : transactionModelList) {
                 if (transactionViewModel.getTransactionId() == transactionModel.getTransactionId()) {
                     System.out.println("time before" + new Date());
+                    System.out.println("transactionModel======" + transactionModel.getTransactionId());
+                    System.out.println("transactionViewModel======" + transactionViewModel.getTransactionId());
                     expandedTransactionModel = transactionModel;
+                    System.out.println("expandedTransactionModel======" + expandedTransactionModel.getTransactionId());
                     System.out.println("time after" + new Date());
                 }
             }
         } else {
             expandedTransactionModel.setTransactionId(transactionViewModel.getTransactionId());
             expandedTransactionModel.setDebitCreditFlag(transactionViewModel.getDebitCreditFlag());
-            for (TransactionStatus transactionStatus : transactionStatuseList) {
+            for (TransactionStatus transactionStatus : transactionStatusList) {
                 if (transactionStatus.getExplainationStatusCode() == TransactionStatusConstant.UNEXPLAINED) {
                     expandedTransactionModel.setTransactionStatus(transactionStatus);
                 }
@@ -338,11 +277,5 @@ public class TransactionViewLazyModel extends LazyDataModel<TransactionViewModel
                 }
             }
         }
-        int itemIndex = data.indexOf(transactionViewModel);
-        String tempBtnComponentId = btnComponentId.substring(0, btnComponentId.indexOf("transactionsTable:") + 18) + itemIndex + ":collapseExpandBtn";
-        btnComponentId = tempBtnComponentId.replace(":", "\\\\:");
-
-        RequestContext.getCurrentInstance()
-                .execute(" $('#" + btnComponentId + "').parent().find('.ui-row-toggler').trigger('click');");
     }
 }

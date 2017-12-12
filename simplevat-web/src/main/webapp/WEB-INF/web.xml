@@ -92,6 +92,11 @@
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>PatchExecutionServlet</servlet-name>
+        <servlet-class>com.simplevat.user.config.PatchExecutionServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.jsf</url-pattern>
@@ -169,7 +174,6 @@
         <exception-type>com.simplevat.web.exceptions.UnauthorizedException</exception-type>
         <location>/pages/public/common/unauthorized.xhtml</location>
     </error-page>
-    
     <servlet>
         <servlet-name>PdfServlet</servlet-name>
         <servlet-class>net.sf.jasperreports.j2ee.servlets.PdfServlet</servlet-class>
@@ -186,7 +190,7 @@
         <servlet-name>ImageServlet</servlet-name>
         <servlet-class>net.sf.jasperreports.j2ee.servlets.ImageServlet</servlet-class>
     </servlet>
-    <!-- JasperReports Servlet Mapping -->   
+    <!-- JasperReports Servlet Mapping -->
     <servlet-mapping>
         <servlet-name>PdfServlet</servlet-name>
         <url-pattern>/servlets/report/PDF</url-pattern>
@@ -202,5 +206,5 @@
     <servlet-mapping>
         <servlet-name>ImageServlet</servlet-name>
         <url-pattern>/servlets/image</url-pattern>
-    </servlet-mapping>    
+    </servlet-mapping>
 </web-app>

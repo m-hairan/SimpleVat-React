@@ -33,36 +33,39 @@
             .ui-row-toggler{
                 display: none !important;
             }
+            .hideTransaction-false{
+                visibility: hidden;
+                display: none;
+            }
         </style>
 
-        <h:form>
+        <h:form id="transactionListForm">
             <div class="ui-fluid tree">
                 <si:cdataPanel newAction= "#{transactionController.createTransaction()}" importAction="#{transactionController.importTransaction()}">
                     <f:facet name="left">
-                        <p:commandButton value="All (#{transactionListController.totalTransactions})" styleClass="AquaButton" action="#{transactionListController.allTransactions()}" update="#{p:component('transactionsTable')}"/>
-                        <p:commandButton icon="transtype-EXPLAINED" value="Explained (#{transactionListController.totalExplained})" styleClass="AquaButton" action="#{transactionListController.allExplainedTransactions()}" update="#{p:component('transactionsTable')}"/>
-                        <p:commandButton icon="transtype-UNEXPLAINED" value="Unexplained (#{transactionListController.totalUnExplained})" styleClass="AquaButton" action="#{transactionListController.allUnExplainedTransactions()}" update="#{p:component('transactionsTable')}"/>
-                        <p:commandButton icon="transtype-PARTIALLY-EXPLAINED" value="Partially Explained (#{transactionListController.totalPartiallyExplained})" styleClass="AquaButton" action="#{transactionListController.allPartiallyExplainedTransactions()}" update="#{p:component('transactionsTable')}"/>
+                        <p:commandButton value="All (#{transactionListController.totalTransactions})" styleClass="AquaButton" action="#{transactionListController.allTransactions()}" onstart="updatePaginator()" update="transactionListForm"/>
+                        <p:commandButton icon="transtype-EXPLAINED" value="Explained (#{transactionListController.totalExplained})" styleClass="AquaButton" action="#{transactionListController.allExplainedTransactions()}" onstart="updatePaginator()" update="transactionListForm"/>
+                        <p:commandButton icon="transtype-UNEXPLAINED" value="Unexplained (#{transactionListController.totalUnExplained})" styleClass="AquaButton" action="#{transactionListController.allUnExplainedTransactions()}" onstart="updatePaginator()" update="transactionListForm"/>
+                        <p:commandButton icon="transtype-PARTIALLY-EXPLAINED" value="Partially Explained (#{transactionListController.totalPartiallyExplained})" styleClass="AquaButton" action="#{transactionListController.allPartiallyExplainedTransactions()}" onstart="updatePaginator()" update="transactionListForm"/>
                     </f:facet>
                     <p:dataTable var="transaction"
-                                 value="#{transactionListController.transactions}"
+                                 value="#{transactionListController.transactionViewLazyModel}"
                                  rowIndexVar="index"
-                                 widgetVar="transactiondt"
-                                 rowExpandMode="single" 
+                                 widgetVar="transactiondt" styleClass="outerTable"
+                                 rowExpandMode="single" lazy="true"
+                                 rowStyleClass="hideTransaction-#{transaction.parent} child-#{transaction.parentTransaction}"
                                  rowKey="#{transaction.transactionId}" 
-                                 paginator="true" rows="#{transactionListController.datatableRowCount}"
+                                 paginator="true" rows="10"
                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}"
                                  id="transactionsTable">
-                        <p:ajax event="page"  listener="#{transactionListController.refreshTableDataonPageChange()}"/>
-
+                        <p:ajax event="rowToggle" listener="#{transactionListController.transactionViewLazyModel.expandToggler(transaction)}" process="@this"/>
                         <f:facet name="{TableHeader}">
                             <p:outputLabel styleClass="tableCustomHeader" value="#{transactionListController.selectedBankAccountModel.bankAccountName}" />
                         </f:facet>
 
                         <p:column width="30" style="text-align: center">
                             <h:panelGroup layout="block">
-                                <h:panelGroup layout="block" style="display:block" styleClass="label transtype-#{transaction.transactionStatus.explainationStatusName}#{transaction.parent ? '': '-child'}" 
-                                              >
+                                <h:panelGroup layout="block" style="display:block" styleClass="label transtype-#{transaction.explanationStatusName}#{transaction.parent ? '': '-child'}" >
                                     <h:outputText value=" "/>
                                 </h:panelGroup>
                             </h:panelGroup>
@@ -76,51 +79,48 @@
 
                         <p:column headerText="#{messages.description}" filterMatchMode="contains" filterBy="#{transaction.transactionDescription}">
                             <p:outputLabel value="#{transaction.transactionDescription}"/><br/>
-                            <h:panelGroup rendered="#{transaction.transactionStatus.explainationStatusCode != 2 and transaction.suggestedTransactionString.length() > 0}" >
+                            <h:panelGroup rendered="#{transaction.explanationStatusCode != 2 and transaction.suggestedTransactionString.length() > 0}" >
                                 <p:outputLabel value="#{transaction.suggestedTransactionString}" style="font-size: x-small;color:#ff0000" /> 
                                 <p:spacer width="10px"/>
                                 <p:commandLink value=" Accept " action="#{transactionListController.acceptSuggestion(transaction)}" update="transactionsTable" style="font-size: x-small; font-weight: bold;color:#14ad3c"/>
                                 <p:outputLabel value="/" />
-                                <p:commandLink value=" Edit" action="#{transactionListController.expandCollapse(transaction, btnBinding.clientId)}" update="transactionsTable" style="font-size: x-small; font-weight: bold;color:#ff0000"/>
+                                <p:commandLink value=" Edit" action="#{transactionListController.transactionViewLazyModel.expandToggler(transaction)}" update="transactionsTable" style="font-size: x-small; font-weight: bold;color:#ff0000"/>
                             </h:panelGroup>
-                            <h:panelGroup rendered="#{transaction.transactionStatus.explainationStatusCode == 2}" >
+                            <h:panelGroup rendered="#{transaction.explanationStatusCode == 2}" >
                                 <p:outputLabel value="#{transaction.suggestedTransactionString}" style="font-size: x-small;color:#14ad3c" /> 
                                 <p:spacer width="10px"/>
-                                <p:commandLink value=" More" action="#{transactionListController.expandCollapse(transaction, btnBinding.clientId)}" update="transactionsTable" style="font-size: x-small; font-weight: bold;color:#14ad3c" />
+                                <p:commandLink value=" More" action="#{transactionListController.transactionViewLazyModel.expandToggler(transaction)}" update="transactionsTable" style="font-size: x-small; font-weight: bold;color:#14ad3c" />
                             </h:panelGroup>
                         </p:column>
 
                         <p:column headerText="#{messages.credit}" sortBy="#{transaction.transactionAmount}" width="110" styleClass="amount" filterMatchMode="contains" filterBy="#{transaction.transactionAmount}">
-                            <h:outputText value="#{transaction.bankAccount.bankAccountCurrency.currencySymbol} " rendered="#{transaction.debitCreditFlag.toString() eq 'C'}" />
                             <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString() eq 'C'}" >
                                 <f:convertNumber type="currency" currencySymbol=""/>
                             </h:outputText>
                         </p:column>
 
                         <p:column headerText="#{messages.debit}" sortBy="#{transaction.transactionAmount}" width="110" styleClass="amount" filterMatchMode="contains" filterBy="#{transaction.transactionAmount}">
-                            <h:outputText value="#{transaction.bankAccount.bankAccountCurrency.currencySymbol} " rendered="#{transaction.debitCreditFlag.toString() eq 'D'}" />
                             <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString() eq 'D'}" >
                                 <f:convertNumber type="currency" currencySymbol=""/>
                             </h:outputText>
                         </p:column>
 
                         <p:column headerText="#{messages.current_balance}" styleClass="amount" width="110" filterMatchMode="contains" filterBy="#{transaction.currentBalance}">
-                            <h:outputText value="#{transaction.bankAccount.bankAccountCurrency.currencySymbol} " />
                             <h:outputText value="#{transaction.currentBalance}" >
                                 <f:convertNumber type="currency" currencySymbol=""/>
                             </h:outputText>
                         </p:column>
 
                         <p:column headerText="Action" width="130">
-                            <p:rowToggler />
-                            <p:commandButton icon="#{transaction.expandIcon ? 'ui-icon-expand-less' : 'ui-icon-expand-more'}" styleClass="AquaButton" action="#{transactionListController.expandCollapse(transaction, btnBinding.clientId)}" binding="#{btnBinding}" update="transactionsTable" id="collapseExpandBtn">
-                            </p:commandButton>
-                            <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" action="#{transactionController.editTransection}"  rendered="#{transaction.parentTransaction == null}">
-                                <f:setPropertyActionListener value="#{transaction}" target="#{transactionController.selectedTransactionModel}" />
+
+                            <p:rowToggler/>
+                            <p:commandButton  icon="#{transaction.expandIcon ? 'ui-icon-expand-less' : 'ui-icon-expand-more'}" onclick="expandCollapse(event, #{index})" action="#{transactionListController.expandCollapse(transaction)}" styleClass="AquaButton parentExpandButton rowExpand#{index}" update="transactionsTable:@row(#{index}) @(.parentExpandButton)"/>
+                            <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" action="#{transactionListController.editTransection}" >
+                                <f:setPropertyActionListener value="#{transaction}" target="#{transactionListController.selectedTransactionViewModel}" />
                             </p:commandButton>
 
-                            <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{transactionController.deleteTransaction}" update="transactionsTable">
-                                <f:setPropertyActionListener value="#{transaction}" target="#{transactionController.selectedTransactionModel}" />
+                            <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{transactionListController.deleteTransaction}" update="transactionsTable">
+                                <f:setPropertyActionListener value="#{transaction}" target="#{transactionListController.selectedTransactionViewModel}" />
                                 <p:confirm header="#{messages.delete}" message="#{messages.are_you_sure_want_to_delete}" icon="ui-icon-alert" />
                             </p:commandButton>
 
@@ -138,8 +138,21 @@
             </div>
         </h:form>
         <ui:include src="import-transaction-popup.xhtml"/>
-
-
+        <script type="text/javascript">
+            function expandCollapse(event, rowIndex) {
+                $(".rowExpand" + rowIndex).parent().find('.ui-row-toggler').trigger('click');
+                event.preventDefault();
+            }
+            function childExpandCollapse(event, rowIndex) {
+                $(".childRowExpand" + rowIndex).parent().find('.ui-row-toggler').trigger('click');
+                event.preventDefault();
+            }
+            function updatePaginator() {
+                var paginator = PF('transactiondt').paginator;
+                paginator.setPage(0);
+                paginator.updateUI();
+            }
+        </script>
     </ui:define>
 
 </ui:composition>

@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.simplevat.web.bankaccount.model.TransactionModel;
-import com.simplevat.criteria.bankaccount.TransactionCriteria;
 import com.simplevat.entity.Purchase;
 import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionStatus;
 import com.simplevat.entity.bankaccount.TransactionType;
+import com.simplevat.entity.bankaccount.TransactionView;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.service.PurchaseService;
 import com.simplevat.service.TransactionCategoryServiceNew;
@@ -25,6 +25,7 @@ import com.simplevat.service.bankaccount.TransactionTypeService;
 import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.web.bankaccount.model.BankAccountModel;
 import com.simplevat.web.bankaccount.model.ReferenceObjectClass;
+import com.simplevat.web.bankaccount.model.TransactionViewModel;
 import com.simplevat.web.constant.InvoicePurchaseStatusConstant;
 import com.simplevat.web.constant.TransactionCategoryConsatant;
 import com.simplevat.web.constant.TransactionCreditDebitConstant;
@@ -37,12 +38,13 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.context.RequestContext;
@@ -65,16 +67,38 @@ public class TransactionListController extends TransactionControllerHelper imple
     private TransactionTypeService transactionTypeService;
     @Autowired
     private BankAccountService bankAccountService;
-    private List<TransactionModel> transactions;
+    private List<TransactionViewModel> transactionViewModelList = new ArrayList<>();
+    private List<TransactionModel> transactionModelList = new ArrayList<>();
+
+    private List<Invoice> invoiceList = new ArrayList<>();
+
+    @Getter
+    @Setter
+    @Autowired
+    private TransactionViewLazyModel transactionViewLazyModel;
+
+    @Getter
+    @Setter
+    private List<TransactionViewModel> childTransactions = new ArrayList<>();
+
+    private List<TransactionStatus> transactionStatuseList = new ArrayList<>();
 
     @Getter
     private BankAccountModel selectedBankAccountModel;
 
-    private BankAccount bankAccount;
+    private Integer bankAccountId;
 
     @Getter
     @Setter
     private TransactionModel transactionModel;
+
+    @Getter
+    @Setter
+    private TransactionViewModel selectedTransactionViewModel;
+
+    @Getter
+    @Setter
+    private TransactionModel expandedTransactionModel;
 
     @Getter
     @Setter
@@ -106,125 +130,37 @@ public class TransactionListController extends TransactionControllerHelper imple
 
     @Getter
     @Setter
-    private TransactionModel selectedTransactionModel;
-    private TransactionModel prevParentTransactionModel;
-    private TransactionModel prevChildTransactionModel;
+    private TransactionViewModel selectedTransactionModel;
+    private TransactionViewModel prevParentTransactionModel;
+    private TransactionViewModel prevChildTransactionModel;
     private boolean expanded = false;
     int parentTransIndex;
     private int datatableInitialRowCount = 10;
     private int datatableRowCount = datatableInitialRowCount;
-    TransactionModel currentTransactionModel;
+    TransactionViewModel currentTransactionModel;
 
     @PostConstruct
     public void init() {
-        totalUnExplained = 0;
-        totalExplained = 0;
-        totalPartiallyExplained = 0;
         try {
-            Integer bankAccountId = FacesUtil.getSelectedBankAccountId();
-            bankAccount = bankAccountService.findByPK(bankAccountId);
-            selectedBankAccountModel = new BankAccountHelper().getBankAccountModel(bankAccount);
-            BankAccountHelper bankAccountHelper = new BankAccountHelper();
-            TransactionCriteria transactionCriteria = new TransactionCriteria();
-            transactionCriteria.setActive(Boolean.TRUE);
-            transactionCriteria.setBankAccount(bankAccountHelper.getBankAccount(selectedBankAccountModel));
-            List<Transaction> transactionList = transactionService.getAllParentTransactions(bankAccount);
-            transactions = new ArrayList<TransactionModel>();
-            populateTransactionList(transactionList);
+            bankAccountId = FacesUtil.getSelectedBankAccountId();
+            totalUnExplained = transactionService.getTotalUnexplainedTransactionCountByBankAccountId(bankAccountId);
+            totalExplained = transactionService.getTotalExplainedTransactionCountByBankAccountId(bankAccountId);
+            totalPartiallyExplained = transactionService.getTotalPartiallyExplainedTransactionCountByBankAccountId(bankAccountId);
+            totalTransactions = transactionService.getTotalAllTransactionCountByBankAccountId(bankAccountId);
+            transactionStatuseList = transactionStatusService.findAllTransactionStatues();
+            transactionViewLazyModel.setTransactionStatusList(transactionStatuseList);
+            transactionViewLazyModel.setBankAccountId(bankAccountId);
+            transactionViewModelList = new ArrayList<TransactionViewModel>();
             transactionModel = new TransactionModel();
+            expandedTransactionModel = new TransactionModel();
+            invoiceList = invoiceService.getInvoiceListByDueAmount();
+            if (invoiceList != null) {
+                transactionViewLazyModel.setInvoiceList(invoiceList);
+            }
         } catch (Exception ex) {
             Logger.getLogger(TransactionListController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }
-
-    private void populateTransactionList(List<Transaction> transactionList) {
-        for (Transaction transaction : transactionList) {
-            TransactionModel model = this.getTransactionModel(transaction);
-            if (transaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.UNEXPLAINED) {
-                totalUnExplained++;
-            } else if (transaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.PARTIALLYEXPLIANED) {
-                totalPartiallyExplained++;
-            } else if (transaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.EXPLIANED) {
-                totalExplained++;
-            }
-            totalTransactions++;
-            if (model.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.UNEXPLAINED
-                    || model.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.PARTIALLYEXPLIANED) {
-                getSuggestionStringForUnexplainedOrPartial(model);
-            } else {
-                getSuggestionStringForExplianed(model);
-            }
-            transactions.add(model);
-        }
-        Collections.sort(transactions);
-    }
-
-    private void getSuggestionStringForUnexplainedOrPartial(TransactionModel model) {
-        String suggestedTransactionString = "";
-        BigDecimal suggestionAmount = model.getTransactionAmount();
-        if (!model.getChildTransactionList().isEmpty()) {
-            int i = 0;
-            for (TransactionModel childModel : model.getChildTransactionList()) {
-                if (i == model.getChildTransactionList().size() - 1) {
-                    break;
-                }
-                suggestionAmount = suggestionAmount.subtract(childModel.getTransactionAmount());
-                i++;
-            }
-        }
-        List<Invoice> invoiceList = invoiceService.getInvoiceListByDueAmount();
-        if (invoiceList != null && !invoiceList.isEmpty()) {
-            for (Invoice invoice : invoiceList) {
-                if (suggestionAmount.doubleValue() == invoice.getDueAmount().doubleValue()) {
-                    model.setReferenceId(invoice.getInvoiceId());
-                    TransactionCategory category = transactionCategoryService.findByPK(TransactionCategoryConsatant.TRANSACTION_CATEGORY_INVOICE_PAYMENT);
-                    suggestedTransactionString = category.getTransactionType().getTransactionTypeName() + " : " + category.getTransactionCategoryName()
-                            + " : Invoice Paid : " + invoice.getInvoiceReferenceNumber() + " : " + invoice.getInvoiceContact().getFirstName()
-                            + " : " + invoice.getCurrency().getCurrencySymbol() + " " + invoice.getDueAmount()
-                            + " : Due On : " + new SimpleDateFormat("MM/dd/yyyy").format(Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant()));
-                    break;
-                }
-            }
-        }
-        model.setSuggestedTransactionString(suggestedTransactionString);
-    }
-
-    private void getSuggestionStringForExplianed(TransactionModel model) {
-        String suggestedTransactionString = "";
-        if (!model.getChildTransactionList().isEmpty()) {
-            TransactionModel childModel = model.getChildTransactionList().get(0);
-            suggestedTransactionString = generateSuggestedTransactionString(childModel);
-        } else {
-            suggestedTransactionString = generateSuggestedTransactionString(model);
-        }
-        model.setSuggestedTransactionString(suggestedTransactionString);
-    }
-
-    private String generateSuggestedTransactionString(TransactionModel transactionModel) {
-        String[] transactionDecrpStringArr = transactionModel.getTransactionDescription().split(" ");
-        String transactionDecription = transactionDecrpStringArr.length > 1 ? transactionDecrpStringArr[0] + " " + transactionDecrpStringArr[1] : transactionDecrpStringArr[0];
-        if (transactionModel.getRefObject() != null) {
-            if (transactionModel.getRefObject() instanceof Invoice) {
-                Invoice invoice = (Invoice) transactionModel.getRefObject();
-                return transactionModel.getTransactionType().getTransactionTypeName() + " : " + transactionModel.getExplainedTransactionCategory().getTransactionCategoryName()
-                        + " : " + (transactionModel.getTransactionDescription() != null ? transactionDecription + " : " : "") + invoice.getInvoiceReferenceNumber() + " : " + invoice.getInvoiceContact().getFirstName()
-                        + " : " + invoice.getCurrency().getCurrencySymbol() + " " + invoice.getDueAmount()
-                        + " : Due On : " + new SimpleDateFormat("MM/dd/yyyy").format(Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant()))
-                        + "......";
-            } else if (transactionModel.getRefObject() instanceof Purchase) {
-                Purchase purchase = (Purchase) transactionModel.getRefObject();
-                return transactionModel.getTransactionType().getTransactionTypeName() + " : " + transactionModel.getExplainedTransactionCategory().getTransactionCategoryName()
-                        + " : " + (transactionModel.getTransactionDescription() != null ? transactionDecription + " : " : "") + (purchase.getReceiptNumber() != null ? purchase.getReceiptNumber() + " :" : "") + " " + purchase.getPurchaseContact().getFirstName()
-                        + " : " + purchase.getCurrency().getCurrencySymbol() + " " + purchase.getPurchaseDueAmount()
-                        + " : Due On : " + new SimpleDateFormat("MM/dd/yyyy").format(Date.from(purchase.getPurchaseDueDate().atZone(ZoneId.systemDefault()).toInstant()))
-                        + "......";
-            }
-        } else {
-            return transactionModel.getTransactionType().getTransactionTypeName() + " : " + transactionModel.getExplainedTransactionCategory().getTransactionCategoryName()
-                    + " : " + (transactionModel.getTransactionDescription() != null ? transactionDecription : "") + "......";
-        }
-        return "";
     }
 
     public void acceptSuggestion(TransactionModel transactionModel) {
@@ -269,8 +205,10 @@ public class TransactionListController extends TransactionControllerHelper imple
         Object refObject = null;
         if (transactionModel.getExplainedTransactionCategory().getTransactionCategoryId() == TransactionCategoryConsatant.TRANSACTION_CATEGORY_INVOICE_PAYMENT) {
             refObject = transactionModel.getRefObject();
-        } else if (transactionModel.getExplainedTransactionCategory().getParentTransactionCategory().getTransactionCategoryId() == TransactionCategoryConsatant.TRANSACTION_CATEGORY_PURCHASE) {
-            refObject = transactionModel.getRefObject();
+        } else if (transactionModel.getExplainedTransactionCategory().getParentTransactionCategory() != null) {
+            if (transactionModel.getExplainedTransactionCategory().getParentTransactionCategory().getTransactionCategoryId() == TransactionCategoryConsatant.TRANSACTION_CATEGORY_PURCHASE) {
+                refObject = transactionModel.getRefObject();
+            }
         }
         return refObject;
     }
@@ -323,8 +261,10 @@ public class TransactionListController extends TransactionControllerHelper imple
                 childTransaction.setCurrentBalance(new BigDecimal(0.00));
                 childTransaction.setTransactionDate(LocalDateTime.now());
                 if (childTransaction.getTransactionId() == null || childTransaction.getTransactionId() == 0) {
+                    childTransaction = createNewChildTransaction(childTransaction, transaction.getDebitCreditFlag(), childTransaction.getTransactionAmount());
                     childTransaction.setCreatedBy(FacesUtil.getLoggedInUser().getUserId());
                     childTransaction.setCreatedDate(LocalDateTime.now());
+                    transaction.getChildTransactionList().add(childTransaction);
                 } else {
                     childTransaction.setTransactionAmount(transactionAmount);
                     childTransaction.setLastUpdateBy(FacesUtil.getLoggedInUser().getUserId());
@@ -334,18 +274,20 @@ public class TransactionListController extends TransactionControllerHelper imple
         }
 
         if (childTransaction != null) {
-            transaction.setVersionNumber(childTransaction.getParentTransaction().getVersionNumber());
-            transaction.setChildTransactionList(null);
-            if (childTransaction.getTransactionAmount().doubleValue() == transaction.getTransactionAmount().doubleValue()) {
-                transaction.setReferenceId(childTransaction.getReferenceId());
-                transaction.setReferenceType(childTransaction.getReferenceType());
-                transaction.setTransactionType(childTransaction.getTransactionType());
-                transaction.setExplainedTransactionCategory(childTransaction.getExplainedTransactionCategory());
-                transaction.setTransactionDescription(childTransaction.getTransactionDescription());
-                transactionService.deleteChildTransaction(childTransaction);
-            } else {
-                childTransaction.setBankAccount(transaction.getBankAccount());
-                transactionService.persistChildTransaction(childTransaction);
+            if (childTransaction.getTransactionId() != null && childTransaction.getTransactionId() > 0) {
+                transaction.setVersionNumber(childTransaction.getParentTransaction().getVersionNumber());
+                transaction.setChildTransactionList(null);
+                if (childTransaction.getTransactionAmount().doubleValue() == transaction.getTransactionAmount().doubleValue()) {
+                    transaction.setReferenceId(childTransaction.getReferenceId());
+                    transaction.setReferenceType(childTransaction.getReferenceType());
+                    transaction.setTransactionType(childTransaction.getTransactionType());
+                    transaction.setExplainedTransactionCategory(childTransaction.getExplainedTransactionCategory());
+                    transaction.setTransactionDescription(childTransaction.getTransactionDescription());
+                    transactionService.deleteChildTransaction(childTransaction);
+                } else {
+                    childTransaction.setBankAccount(transaction.getBankAccount());
+                    transactionService.persistChildTransaction(childTransaction);
+                }
             }
         }
         transactionService.update(transaction);
@@ -395,7 +337,6 @@ public class TransactionListController extends TransactionControllerHelper imple
                 }
                 childTransaction.setReferenceId(referenceObject.getId());
                 childTransaction.setReferenceType(referenceObject.getReferenceType());
-                childTransaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED));
             } else {
                 parentTransaction.setReferenceId(referenceObject.getId());
                 parentTransaction.setReferenceType(referenceObject.getReferenceType());
@@ -416,7 +357,6 @@ public class TransactionListController extends TransactionControllerHelper imple
             if (newChildTransaction != null) {
                 newChildTransaction.setReferenceId(referenceObject.getId());
                 newChildTransaction.setReferenceType(referenceObject.getReferenceType());
-                newChildTransaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED));
                 parentTransaction.getChildTransactionList().add(newChildTransaction);
             }
             parentTransaction.setExplainedTransactionCategory(null);
@@ -454,10 +394,11 @@ public class TransactionListController extends TransactionControllerHelper imple
         } else {
             childTransaction.setParentTransaction(transaction.getParentTransaction());
         }
-        childTransaction.setTransactionDate(childTransaction.getTransactionDate());
-        childTransaction.setBankAccount(transaction.getBankAccount());
+        childTransaction.setTransactionDate(childTransaction.getParentTransaction().getTransactionDate());
+        childTransaction.setBankAccount(transaction.getParentTransaction().getBankAccount());
         childTransaction.setEntryType(TransactionEntryTypeConstant.SYSTEM);
         childTransaction.setTransactionType(transaction.getTransactionType());
+        childTransaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED));
         childTransaction.setExplainedTransactionCategory(transaction.getExplainedTransactionCategory());
         childTransaction.setTransactionDescription(transaction.getTransactionDescription());
         childTransaction.setTransactionAmount(transactionAmount);
@@ -479,6 +420,7 @@ public class TransactionListController extends TransactionControllerHelper imple
         if (transactionType != null) {
             transactionCategoryList = transactionCategoryService.findAllTransactionCategoryByTransactionType(transactionType.getTransactionTypeCode());
         }
+        System.out.println("transactionCategoryList" + transactionCategoryList);
         for (TransactionCategory transactionCategory : transactionCategoryList) {
             if (transactionCategory.getParentTransactionCategory() != null) {
                 transactionCategoryParentList.add(transactionCategory.getParentTransactionCategory());
@@ -501,107 +443,44 @@ public class TransactionListController extends TransactionControllerHelper imple
         return new ArrayList<>();
     }
 
-    public void expandCollapseOnRowSelect(String clientId) throws Exception {
-        expandCollapse(selectedTransactionModel, clientId);
-    }
-
-    public void refreshTableDataonPageChange() {
-        datatableRowCount = datatableInitialRowCount;
-        System.out.println("datatableRowCount ===================" + datatableRowCount);
-        if (prevParentTransactionModel != null && prevParentTransactionModel.isParent()) {
-            if (prevParentTransactionModel.getChildTransactionList() != null && !prevParentTransactionModel.getChildTransactionList().isEmpty()) {
-                for (TransactionModel model : prevParentTransactionModel.getChildTransactionList()) {
-                    transactions.remove(model);
+    public void expandCollapse(TransactionViewModel transactionViewModel) throws Exception {
+        transactionViewModel.setExpandIcon(!transactionViewModel.isExpandIcon());
+        if (transactionViewModel.isParent()) {
+            for (TransactionViewModel transactionViewModel2 : transactionViewModelList) {
+                if (transactionViewModel.getTransactionId() != transactionViewModel2.getTransactionId()) {
+                    transactionViewModel2.setExpandIcon(false);
+                    for (TransactionViewModel childTransactionViewModel : transactionViewModel2.getChildTransactionList()) {
+                        childTransactionViewModel.setExpandIcon(false);
+                    }
                 }
             }
-            expanded = false;
-        }
-    }
-
-    public void expandCollapse(TransactionModel currentTransactionModel, String clientId) throws Exception {
-        System.out.println("transactions size :" + transactions.size());
-        this.currentTransactionModel = currentTransactionModel;
-        currentTransactionModel.setExpandIcon(!currentTransactionModel.isExpandIcon());
-        if (!expanded) {
-            expandTransaction(currentTransactionModel, clientId);
-            if (currentTransactionModel.isParent()) {
-                prevParentTransactionModel = currentTransactionModel;
-            } else {
-                prevChildTransactionModel = currentTransactionModel;
+            for (TransactionViewModel childTransactionViewModel : transactionViewModel.getChildTransactionList()) {
+                childTransactionViewModel.setExpandIcon(false);
             }
         } else {
-            System.out.println("currentTransactionModel :" + currentTransactionModel);
-            if (Objects.equals(currentTransactionModel.getTransactionId(), prevParentTransactionModel.getTransactionId())
-                    || (prevChildTransactionModel != null && Objects.equals(currentTransactionModel.getTransactionId(), prevChildTransactionModel.getTransactionId()))) {
-                collapseTransaction(currentTransactionModel, clientId);
-                if (currentTransactionModel.isParent()) {
-                    prevParentTransactionModel = null;
-                    prevChildTransactionModel = null;
-                } else {
-                    prevChildTransactionModel = null;
+            TransactionViewModel parentTransactionViewModel = new TransactionViewModel();
+            for (TransactionViewModel transactionViewModel2 : transactionViewModelList) {
+                if (transactionViewModel.getParentTransaction() == transactionViewModel2.getTransactionId()) {
+                    parentTransactionViewModel = transactionViewModel2;
                 }
-            } else {
-                if (!currentTransactionModel.isParent()) {
-                    if (prevChildTransactionModel == null) {
-                        expandTransaction(currentTransactionModel, clientId);
-                    } else {
-                        if (Objects.equals(currentTransactionModel.getTransactionId(), prevChildTransactionModel.getTransactionId())) {
-                            collapseTransaction(currentTransactionModel, clientId);
-                        } else {
-                            collapseTransaction(prevChildTransactionModel, clientId);
-                            expandTransaction(currentTransactionModel, clientId);
-                        }
-                    }
-                    prevChildTransactionModel = currentTransactionModel;
-                } else {
-                    collapseTransaction(prevParentTransactionModel, clientId);
-                    expandTransaction(currentTransactionModel, clientId);
-                    prevChildTransactionModel = null;
-                    prevParentTransactionModel = currentTransactionModel;
+            }
+            for (TransactionViewModel childTransactionViewModel : parentTransactionViewModel.getChildTransactionList()) {
+                if (transactionViewModel.getTransactionId() != childTransactionViewModel.getTransactionId()) {
+                    childTransactionViewModel.setExpandIcon(false);
                 }
             }
         }
-        displayTreeIcon();
-    }
-
-    public void expandTransaction(TransactionModel transactionModel, String clientId) throws Exception {
-        if (transactionModel.isParent()
-                && transactionModel.getChildTransactionList() != null
-                && !transactionModel.getChildTransactionList().isEmpty()) {
-            parentTransIndex = transactions.indexOf(transactionModel);
-            if (transactionModel.getChildTransactionList() != null && !transactionModel.getChildTransactionList().isEmpty()) {
-                datatableRowCount = datatableInitialRowCount;
-                for (TransactionModel childTransaction : transactionModel.getChildTransactionList()) {
-                    if (childTransaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.UNEXPLAINED
-                            || childTransaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.PARTIALLYEXPLIANED) {
-                        getSuggestionStringForUnexplainedOrPartial(childTransaction);
-                    } else {
-                        getSuggestionStringForExplianed(childTransaction);
-                    }
-                    transactions.add(++parentTransIndex, childTransaction);
-                    ++datatableRowCount;
-                }
-            }
-        } else {
-//            if (!transactionModel.isParent() && transactionModel.getParentTransaction().getChildTransactionList() != null) {
-//                for (TransactionModel transModel : transactionModel.getParentTransaction().getChildTransactionList()) {
-//                    transModel.setExpandIcon(false);
-//                }
-//                transactionModel.setExpandIcon(true);
-//            }
-            expandToggler(clientId);
-        }
-        expanded = true;
     }
 
     private void displayTreeIcon() {
         if (expanded) {
-            TransactionModel parentTransactionModel = currentTransactionModel;
-            if (!parentTransactionModel.isParent()) {
-                parentTransactionModel = prevParentTransactionModel;
+            TransactionViewModel parentTransactionViewModel = currentTransactionModel;
+            if (!parentTransactionViewModel.isParent()) {
+                parentTransactionViewModel = prevParentTransactionModel;
             }
-            int startIndex = transactions.indexOf(parentTransactionModel);
-            int childTransCount = parentTransactionModel.getChildTransactionList().size();
+            int startIndex = transactionViewModelList.indexOf(parentTransactionViewModel);
+            System.out.println("startIndex :" + startIndex);
+            int childTransCount = parentTransactionViewModel.getChildTransactionList().size();
             if (childTransCount > 0) {
                 RequestContext.getCurrentInstance().execute(" $('.ui-datatable-data').find('tr').eq(" + startIndex + ").addClass('first-child');");
                 RequestContext.getCurrentInstance().execute(" $('.ui-datatable-data').find('tr').eq(" + startIndex + ").find('td').eq(0).addClass('first-child');");
@@ -613,30 +492,6 @@ public class TransactionListController extends TransactionControllerHelper imple
         }
     }
 
-    public void collapseTransaction(TransactionModel parentTransactionModelId, String clientId) throws Exception {
-        //Collapse
-        if (parentTransactionModelId.isParent()) {
-            parentTransactionModelId.setExpandIcon(false);
-            if (parentTransactionModelId.getChildTransactionList() != null && !parentTransactionModelId.getChildTransactionList().isEmpty()) {
-                for (TransactionModel model : parentTransactionModelId.getChildTransactionList()) {
-                    transactions.remove(model);
-                }
-                datatableRowCount = datatableInitialRowCount;
-            }
-            expanded = false;
-        } else {
-//            expandToggler(clientId);
-        }
-    }
-
-    private void expandToggler(String btnComponentId) {
-        int itemIndex = transactions.indexOf(currentTransactionModel);
-        itemIndex = itemIndex % datatableInitialRowCount;
-        String tempBtnComponentId = btnComponentId.substring(0, btnComponentId.indexOf("transactionsTable:") + 18) + itemIndex + ":collapseExpandBtn";
-        btnComponentId = tempBtnComponentId.replace(":", "\\\\:");
-        RequestContext.getCurrentInstance().execute(" $('#" + btnComponentId + "').parent().find('.ui-row-toggler').trigger('click');");
-    }
-
     public String redirectToReference() {
         if (childTransactionModel.getReferenceType() == TransactionRefrenceTypeConstant.INVOICE) {
             return "/pages/secure/invoice/invoice.xhtml?faces-redirect=true&selectedInvoiceModelId=" + childTransactionModel.getReferenceId();
@@ -645,41 +500,23 @@ public class TransactionListController extends TransactionControllerHelper imple
     }
 
     public void allUnExplainedTransactions() {
-        transactions.clear();
-        for (Transaction transaction : transactionService.getAllParentTransactions(bankAccount)) {
-            TransactionModel model = this.getTransactionModel(transaction);
-            if (transaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.UNEXPLAINED) {
-                transactions.add(model);
-            }
-        }
+        transactionViewLazyModel.setTransactionStatus(TransactionStatusConstant.UNEXPLAINED);
     }
 
     public void allExplainedTransactions() {
-        transactions.clear();
-        for (Transaction transaction : transactionService.getAllParentTransactions(bankAccount)) {
-            TransactionModel model = this.getTransactionModel(transaction);
-            if (transaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.EXPLIANED) {
-                transactions.add(model);
-            }
-        }
+        transactionViewLazyModel.setTransactionStatus(TransactionStatusConstant.EXPLIANED);
     }
 
     public void allPartiallyExplainedTransactions() {
-        transactions.clear();
-        for (Transaction transaction : transactionService.getAllParentTransactions(bankAccount)) {
-            TransactionModel model = this.getTransactionModel(transaction);
-            if (transaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.PARTIALLYEXPLIANED) {
-                transactions.add(model);
-            }
-        }
+        transactionViewLazyModel.setTransactionStatus(TransactionStatusConstant.PARTIALLYEXPLIANED);
     }
 
-    public List<TransactionModel> getTransactions() throws Exception {
-        return transactions;
+    public List<TransactionViewModel> getTransactionViewModelList() throws Exception {
+        return transactionViewModelList;
     }
 
-    public void setTransactions(List<TransactionModel> transactions) {
-        this.transactions = transactions;
+    public void setTransactionViewModelList(List<TransactionViewModel> transactionViewModelList) {
+        this.transactionViewModelList = transactionViewModelList;
     }
 
     public int getDatatableRowCount() {
@@ -687,18 +524,30 @@ public class TransactionListController extends TransactionControllerHelper imple
     }
 
     public void allTransactions() {
-
-        for (Transaction transaction : transactionService.getAllParentTransactions(bankAccount)) {
-            TransactionModel model = this.getTransactionModel(transaction);
-            if (transaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.UNEXPLAINED) {
-                totalUnExplained++;
-            } else if (transaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.PARTIALLYEXPLIANED) {
-                totalPartiallyExplained++;
-            } else if (transaction.getTransactionStatus().getExplainationStatusCode() == TransactionStatusConstant.EXPLIANED) {
-                totalExplained++;
-            }
-            totalTransactions++;
-            transactions.add(model);
-        }
+        transactionViewLazyModel.setTransactionStatus(null);
     }
+
+    public String editTransection() {
+        System.out.println("selectedM :" + selectedTransactionModel);
+        return "edit-bank-transaction?faces-redirect=true&selectedTransactionId=" + selectedTransactionViewModel.getTransactionId();
+    }
+
+    public String deleteTransaction() {
+        Transaction transaction = new Transaction();
+        for (TransactionModel model : transactionModelList) {
+            if (model.getTransactionId() == selectedTransactionViewModel.getTransactionId()) {
+                transaction = getTransactionEntity(model);
+            }
+        }
+        transaction.setDeleteFlag(true);
+        if (transaction.getParentTransaction() != null) {
+            transactionService.deleteChildTransaction(transaction);
+        } else {
+            transactionService.deleteTransaction(transaction);
+        }
+
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transaction deleted successfully"));
+        return "bank-transactions?faces-redirect=true";
+    }
+
 }
