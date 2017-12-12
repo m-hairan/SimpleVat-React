@@ -5,7 +5,7 @@ steps:
   args: ['build', '--tag=gcr.io/simplevat-cluster/simplevat', '.']
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/simplevat-cluster/simplevat']
-- name: 'gcr.io/simplevat-cluster/gsutil'
+- name: 'gcr.io/cloud-builders/gsutil'
   args: ['ls']
   env:
   - 'CLOUDSDK_COMPUTE_ZONE=asia-south1-b'
