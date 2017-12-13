@@ -37,14 +37,14 @@ do
     domain=${rc:0:-4}
     echo "Upgrading Replication Controller for $domain"
     
-    if [ $domain == "alpha" ]
-    then
+    #if [ $domain == "alpha" ]
+    #then
 
       ./deploy/simplevat-new-release-script.bash "$domain" dev "$1"
       
       echo "Replication Controller for $domain upgraded"
 
-    fi
+    #fi
 
   fi
   i=$((i+1))
