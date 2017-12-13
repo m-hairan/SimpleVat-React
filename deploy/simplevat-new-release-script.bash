@@ -13,8 +13,8 @@ fi
 
 set -e
 
+echo "Setting contianer credentials"
 gcloud container clusters get-credentials simplevat-prod-cluster --zone asia-south1-b --project simplevat-cluster
-kubectl config use-context dev
 
 SUB_DOMAIN=$1
 NAMESPACE_NAME=$2
@@ -27,6 +27,7 @@ BACKEND_SERVICE_NAME="$SUB_DOMAIN-serv"
 BACKEND_SERVICE_LABEL="$SUB_DOMAIN-serv"
 echo "Started to deploy subdomain: $SUB_DOMAIN"
 
+echo "Copying configuration template files"
 cp ./deploy/simplevat-service-template.yaml ./"simplevat-service-deploy-$SUB_DOMAIN-$today.yaml"
 cp ./deploy/simplevat-replicationcontroller-template.yaml ./"simplevat-replicationcontroller-rolling-update-$SUB_DOMAIN-$today.yaml"
 
@@ -46,26 +47,32 @@ sed -i "s/{REPLICATION-CONTROLLER-LABEL}/${REPLICATION_CONTROLLER_LABEL}-${RELEA
 sed -i "s/{TOMCAT-CONTAINER-NAME}/${TOMCAT_CONTAINER_NAME}/g" "simplevat-replicationcontroller-rolling-update-$SUB_DOMAIN-$today.yaml" 
 sed -i "s/{SIMPLEVAT-DB-NAME}/${SIMPLEVAT_DB_NAME}/g" "simplevat-replicationcontroller-rolling-update-$SUB_DOMAIN-$today.yaml" 
 sed -i "s/{NAMESPACE-NAME}/${NAMESPACE_NAME}/g" "simplevat-replicationcontroller-rolling-update-$SUB_DOMAIN-$today.yaml"
+echo "simplevat-replicationcontroller-rolling-update-$SUB_DOMAIN-$today.yaml ready"
 
 sed -i "s/{BACKEND-SERVICE-NAME}/${BACKEND_SERVICE_NAME}/g" "simplevat-service-deploy-$SUB_DOMAIN-$today.yaml" 
 sed -i "s/{BACKEND-SERVICE-LABEL}/${BACKEND_SERVICE_LABEL}/g" "simplevat-service-deploy-$SUB_DOMAIN-$today.yaml"
 sed -i "s/{REPLICATION-CONTROLLER-NAME}/${REPLICATION_CONTROLLER_NAME}-${RELEASE_TAG}/g" "simplevat-service-deploy-$SUB_DOMAIN-$today.yaml" 
 sed -i "s/{NAMESPACE-NAME}/${NAMESPACE_NAME}/g" "simplevat-service-deploy-$SUB_DOMAIN-$today.yaml"
+echo "simplevat-service-deploy-$SUB_DOMAIN-$today.yaml ready" 
 
 echo "Rolling-update replicationcontroller: $REPLICATION_CONTROLLER_NAME with $REPLICATION_CONTROLLER_NAME-$RELEASE_TAG" 
-kubectl rolling-update "$REPLICATION_CONTROLLER_NAME" -f "simplevat-replicationcontroller-rolling-update-$SUB_DOMAIN-$today.yaml"
+kubectl rolling-update "$REPLICATION_CONTROLLER_NAME" -f "simplevat-replicationcontroller-rolling-update-$SUB_DOMAIN-$today.yaml" --namespace=simplevat-dev
 echo "Creating service: $BACKEND_SERVICE_NAME" 
-kubectl apply -f "simplevat-service-deploy-$SUB_DOMAIN-$today.yaml"
+kubectl apply -f "simplevat-service-deploy-$SUB_DOMAIN-$today.yaml" --namespace=simplevat-dev
 
 sed -i "s/${REPLICATION_CONTROLLER_NAME}-${RELEASE_TAG}/${REPLICATION_CONTROLLER_NAME}/g" "simplevat-replicationcontroller-rolling-update-$SUB_DOMAIN-$today.yaml"
 sed -i "s/${REPLICATION_CONTROLLER_NAME}-${RELEASE_TAG}/${REPLICATION_CONTROLLER_NAME}/g" "simplevat-service-deploy-$SUB_DOMAIN-$today.yaml" 
 
-kubectl rolling-update "$REPLICATION_CONTROLLER_NAME-$RELEASE_TAG" -f "simplevat-replicationcontroller-rolling-update-$SUB_DOMAIN-$today.yaml"
-echo "Creating service: $BACKEND_SERVICE_NAME" 
-kubectl apply -f "simplevat-service-deploy-$SUB_DOMAIN-$today.yaml"
+echo "Restoring replication controller and service names"
+
+kubectl rolling-update "$REPLICATION_CONTROLLER_NAME-$RELEASE_TAG" -f "simplevat-replicationcontroller-rolling-update-$SUB_DOMAIN-$today.yaml" --namespace=simplevat-dev
+kubectl apply -f "simplevat-service-deploy-$SUB_DOMAIN-$today.yaml" --namespace=simplevat-dev
+
+echo "Rolling Upgrade complete" 
 
 mkdir -p ./deploy/archive-deployment
 mv "simplevat-service-deploy-$SUB_DOMAIN-$today.yaml" ./deploy/archive-deployment/
 mv "simplevat-replicationcontroller-rolling-update-$SUB_DOMAIN-$today.yaml" ./deploy/archive-deployment/
+echo "Configuration files archived"
 echo "Application deployment sccess full at http://$SUB_DOMAIN.app.simplevat.com"
 #mv "${0:0:-3}_$1_$today.log" ./deploy/archive-deployment/
