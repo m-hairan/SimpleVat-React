@@ -9,7 +9,7 @@ steps:
   args:
   - 'bash'
   - './deploy/rolling-update-new-release.bash'
-  - ':$TAG_NAME'
+  - '$TAG_NAME'
   env:
   - 'CLOUDSDK_COMPUTE_ZONE=asia-south1-b'
   - 'CLOUDSDK_CONTAINER_CLUSTER=simplevat-prod-cluster'   
