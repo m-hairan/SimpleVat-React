@@ -1,9 +1,9 @@
 #!/bin/bash
 # New Subdomain deployment
 today=$(date +"%Y%m%d%H%M")
-exec 3>&1 4>&2
-trap 'exec 2>&4 1>&3' 0 1 2 3
-exec 1>"${0:0:-3}_$1_$today.log" 2>&1
+#exec 3>&1 4>&2
+#trap 'exec 2>&4 1>&3' 0 1 2 3
+#exec 1>"${0:0:-3}_$1_$today.log" 2>&1
 # Everything below will go to the file 'log.out':
 
 if [ "$#" -ne 3 ]; then
@@ -27,8 +27,8 @@ BACKEND_SERVICE_NAME="$SUB_DOMAIN-serv"
 BACKEND_SERVICE_LABEL="$SUB_DOMAIN-serv"
 echo "Started to deploy subdomain: $SUB_DOMAIN"
 
-cp simplevat-service-template.yaml ./"simplevat-service-deploy-$SUB_DOMAIN-$today.yaml"
-cp simplevat-replicationcontroller-template.yaml ./"simplevat-replicationcontroller-rolling-update-$SUB_DOMAIN-$today.yaml"
+cp ./deploy/simplevat-service-template.yaml ./"simplevat-service-deploy-$SUB_DOMAIN-$today.yaml"
+cp ./deploy/simplevat-replicationcontroller-template.yaml ./"simplevat-replicationcontroller-rolling-update-$SUB_DOMAIN-$today.yaml"
 
 echo "Configuring application deployment yaml" 
 echo "Set REPLICATION-CONTROLLER-NAME   : $REPLICATION_CONTROLLER_NAME"
@@ -64,8 +64,8 @@ kubectl rolling-update "$REPLICATION_CONTROLLER_NAME-$RELEASE_TAG" -f "simplevat
 echo "Creating service: $BACKEND_SERVICE_NAME" 
 kubectl apply -f "simplevat-service-deploy-$SUB_DOMAIN-$today.yaml"
 
-mkdir -p archive-deployment
-mv "simplevat-service-deploy-$SUB_DOMAIN-$today.yaml" archive-deployment/
-mv "simplevat-replicationcontroller-rolling-update-$SUB_DOMAIN-$today.yaml" archive-deployment/
+mkdir -p ./deploy/archive-deployment
+mv "simplevat-service-deploy-$SUB_DOMAIN-$today.yaml" ./deploy/archive-deployment/
+mv "simplevat-replicationcontroller-rolling-update-$SUB_DOMAIN-$today.yaml" ./deploy/archive-deployment/
 echo "Application deployment sccess full at http://$SUB_DOMAIN.app.simplevat.com"
-mv "${0:0:-3}_$1_$today.log" archive-deployment/
+#mv "${0:0:-3}_$1_$today.log" ./deploy/archive-deployment/
