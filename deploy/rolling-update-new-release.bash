@@ -40,7 +40,7 @@ do
     if [ $domain == "alpha" ]
     then
 
-      ./simplevat-new-release-script.bash "$domain" dev "$1"
+      ./deploy/simplevat-new-release-script.bash "$domain" dev "$1"
       
       echo "Replication Controller for $domain upgraded"
 
