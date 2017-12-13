@@ -8,7 +8,7 @@ steps:
 - name: 'gcr.io/simplevat-cluster/simplevat-bash-kube'
   args:
   - 'bash'
-  - './hello.bash'
+  - './deploy/hello.bash'
   env:
   - 'CLOUDSDK_COMPUTE_ZONE=asia-south1-b'
   - 'CLOUDSDK_CONTAINER_CLUSTER=simplevat-prod-cluster'   
