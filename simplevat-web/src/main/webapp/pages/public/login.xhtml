@@ -40,10 +40,10 @@
                                      icon="ui-icon-person"/>
                     <p:button outcome="/pages/public/forget-password" value="Forgot Password" icon="ui-icon-help" styleClass="secondary"/>
                 </div>
-                <p:growl showDetail="true"/>
-            </div>
-            <div class="login-footer">
-                  <div><p:outputLabel value="Version: #{securityBean.versionNumber}"/></div>
+                  <p:growl showDetail="true"/>
+                <div class="ui-g-12">
+                  <p:outputLabel value="Version: #{securityBean.versionNumber}"/>
+                </div>
             </div>
         </div>
 
