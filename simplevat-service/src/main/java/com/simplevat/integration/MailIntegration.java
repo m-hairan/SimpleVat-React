@@ -2,7 +2,7 @@ package com.simplevat.integration;
 
 import com.simplevat.entity.Mail;
 import com.simplevat.entity.MailAttachment;
-import java.io.FileOutputStream;
+import java.io.FileOutputStream; 
 import java.io.OutputStream;
 import javax.activation.FileTypeMap;
 import javax.activation.MimetypesFileTypeMap;
@@ -13,6 +13,7 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Component;
 
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMultipart;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.InputStreamSource;
@@ -27,7 +28,7 @@ public class MailIntegration {
 
     private final JavaMailSender mailSender;
 
-    @Autowired
+    @Autowired 
     public MailIntegration(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
@@ -69,6 +70,19 @@ public class MailIntegration {
             mimeMessagePreparator.setFrom(new InternetAddress(mail.getFrom(), mail.getFromName()));
             mimeMessagePreparator.setText(mail.getBody(), html);
             mimeMessagePreparator.setSubject(mail.getSubject());
+        };
+        javaMailSender.send(preparator);
+    }
+    
+    public void sendHtmlEmail(final MimeMultipart mimeMultipart,final Mail mail, JavaMailSender javaMailSender) throws Exception {
+
+        MimeMessagePreparator preparator = mimeMessage -> {
+            MimeMessageHelper mimeMessagePreparator = new MimeMessageHelper(mimeMessage, true, UTF_8);
+            mimeMessagePreparator.setTo(mail.getTo());
+            mimeMessagePreparator.setFrom(new InternetAddress(mail.getFrom(), mail.getFromName()));
+//            mimeMessagePreparator.setText(mail.getBody(), true);
+            mimeMessagePreparator.setSubject(mail.getSubject());
+            mimeMessagePreparator.getMimeMessage().setContent(mimeMultipart);
         };
         javaMailSender.send(preparator);
     }
