@@ -1,0 +1,142 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
+                template="/WEB-INF/templates/initialsetup-template.xhtml">
+    <style>
+        .ui-fileupload-content{
+            display:none !important;  
+        }
+    </style>
+    <ui:define name="content">
+        <h:form id="companyProfile" prependId="false">
+            <div class="card ui-fluid">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <p:graphicImage name="images/logo-ultima.png" library="ultima-layout"/>
+                    </div>
+                    <div class="ui-g-12">
+                        <div class="card card-w-title">
+
+<!--    heading===                        <h1>#{messages.user}</h1>-->
+
+                            <p:fieldset legend="#{messages.user_detail}" toggleable="false">
+                                <p:panelGrid columns="6" 
+                                             columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                                             layout="grid" 
+                                             styleClass="ui-panelgrid-blank form-group"
+                                             style="border:0px none; background-color:transparent;">
+
+                                    <p:outputLabel for="userId"  />
+                                    <h:panelGroup styleClass="md-inputfield" >
+                                        <p:inputText id="userId"
+                                                     required="true"
+                                                     requiredMessage="Please enter user id"
+                                                     validatorMessage="Invalid email format"
+                                                     value="#{initialUserController.selectedUser.userEmail}">
+                                            <f:validateRegex
+                                                pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                        </p:inputText>
+                                        <label>#{messages.user_id}</label>
+                                        <p:message for="userId" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="password"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:password id="password" autocomplete="false"
+                                                    value="#{initialUserController.password}"
+                                                    required="true" 
+                                                    requiredMessage="Please enter Password"/>
+                                        <label>Password</label>
+                                        <p:message for="password" />
+                                    </h:panelGroup>
+                                    <p:outputLabel for="cpassword"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:password id="cpassword" autocomplete="false"
+                                                    required="true"
+                                                    requiredMessage="Please enter Confirm Password"/>
+                                        <label>Confirm Password</label>
+                                        <h:panelGroup>
+                                            <p:message for="cpassword" />
+                                            <o:validateEqual components="password cpassword"
+                                                             message="Passwords are not equal" showMessageFor="password" />
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+
+                                </p:panelGrid>
+                            </p:fieldset>
+
+                            <p:fieldset legend="#{messages.CompanyDetail}" toggleable="false" >
+                                <p:panelGrid columns="6" 
+                                             columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                                             layout="grid" 
+                                             styleClass="ui-panelgrid-blank form-group"
+                                             style="border:0px none; background-color:transparent;">
+
+                                    <p:outputLabel for="CompanyName"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="CompanyName" required="true"
+                                                     requiredMessage="Please enter company name"
+                                                     value="#{initialUserController.companyModel.companyName}" />
+                                        <label>#{messages.CompanyName}</label>
+                                        <p:message for="CompanyName" />
+                                    </h:panelGroup>
+                                    <p:outputLabel for="IndustryTypeCode"/>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="IndustryTypeCode"
+                                                        converter="#{industryTypeConverter}" 
+                                                        dropdown="true" 
+                                                        forceSelection="true" 
+                                                        effect="fold"
+                                                        completeMethod="#{initialUserController.completeIndustryType()}"
+                                                        value="#{initialUserController.companyModel.industryTypeCode}"
+                                                        var="industryType"
+                                                        required="true"
+                                                        scrollHeight="250"
+                                                        requiredMessage="Please select industry type code"
+                                                        itemValue="#{industryType}"
+                                                        itemLabel="#{industryType.industryTypeName}"
+                                                        />
+                                        <label>#{messages.IndustryTypeCode}</label>
+                                        <p:message for="IndustryTypeCode" />
+                                    </h:panelGroup>
+
+                                    <p:outputLabel for="CompanyCountryCode" />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="CompanyCountryCode"
+                                                        converter="#{countryConverter}" 
+                                                        dropdown="true" 
+                                                        forceSelection="true" 
+                                                        effect="fold"
+                                                        required="true"
+                                                        scrollHeight="250"
+                                                        requiredMessage="Please select country code"
+                                                        completeMethod="#{initialUserController.completeCountry}"
+                                                        value="#{initialUserController.companyModel.companyCountryCode}"
+                                                        var="country" 
+                                                        itemValue="#{country.countryCode}"
+                                                        itemLabel="#{country.countryFullName}" 
+                                                        />
+                                        <label>#{messages.CompanyCountryCode}</label>
+                                        <p:message for="CompanyCountryCode" />
+                                    </h:panelGroup>
+
+                                </p:panelGrid>
+                            </p:fieldset>
+
+                            <h:panelGroup >
+                                <p:commandButton action="#{initialUserController.saveUpdate()}"
+                                                 value="#{messages.save}"
+                                                 update="@form" style="margin: 20px 10px"
+                                                 icon="ui-icon-save" />
+                            </h:panelGroup>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

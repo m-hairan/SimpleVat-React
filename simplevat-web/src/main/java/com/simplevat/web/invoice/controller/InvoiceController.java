@@ -127,6 +127,8 @@ public class InvoiceController extends BaseController implements Serializable {
     @Getter
     private BigDecimal total;
 
+    @Getter
+    @Setter
     private CurrencyConversion currencyConversion;
 
     @Getter
@@ -243,7 +245,9 @@ public class InvoiceController extends BaseController implements Serializable {
 
     public BigDecimal totalAmountInHomeCurrency(Currency currency) {
         if (total != null && currencyConversion != null) {
-            return total.divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP);
+            if (currencyConversion != null) {
+                return total.divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP);
+            }
         }
         return new BigDecimal(0);
     }

@@ -53,6 +53,7 @@
                                                             completeMethod="#{currencyController.completeCurrency}"
                                                             value="#{bankAccountController.selectedBankAccount.bankAccountCurrency}"
                                                             var="currency" 
+                                                            scrollHeight="250"
                                                             itemValue="#{currency}"
                                                             itemLabel="#{currency.currencyDescription} #{currency.currencySymbol}" 
                                                             required="true" requiredMessage="Please select bank account currency"/>
@@ -72,6 +73,7 @@
                                                 completeMethod="#{bankAccountController.bankAccountStatuses}"
                                                 value="#{bankAccountController.selectedBankAccount.bankAccountStatus}"
                                                 var="bankAccountStatus"
+                                                scrollHeight="250"
                                                 itemValue="#{bankAccountStatus}"
                                                 itemLabel="#{bankAccountStatus.bankAccountStatusName}"
                                                 required="true" requiredMessage="Please select bank account status">
@@ -123,6 +125,7 @@
                                                 completeMethod="#{bankAccountController.completeBankAccontType()}"
                                                 value="#{bankAccountController.selectedBankAccount.bankAccountType}"
                                                 var="bankAccountType"
+                                                scrollHeight="250"
                                                 itemValue="#{bankAccountType}"
                                                 itemLabel="#{bankAccountType.name}"
                                                 required="true" requiredMessage="Please select account type"/>
@@ -179,6 +182,7 @@
                                                             dropdown="true" 
                                                             forceSelection="true" 
                                                             effect="fold"
+                                                            scrollHeight="250"
                                                             completeMethod="#{countryController.completeCountry}" 
                                                             value="#{bankAccountController.selectedBankAccount.bankCountry}"
                                                             var="country" itemValue="#{country.countryCode}" 

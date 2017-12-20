@@ -11,6 +11,7 @@ import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.UserServiceNew;
 import com.simplevat.web.constant.ConfigurationConstants;
 import com.simplevat.web.utils.SessionIdentifierGenerator;
+import java.io.IOException;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -77,13 +78,26 @@ public class SecurityBean implements PhaseListener, Serializable {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    @PostConstruct
+    public void init() {
+        versionNumber = System.getenv("SIMPLEVAT_RELEASE"); 
+        String token = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("token");
+        String envToken = System.getenv("SIMPLEVAT_TOKEN");
+        if (userService.findAll().isEmpty()) {
+            try {
+                if (token != null && token.equals(envToken)) {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("initial-setup/firstUserAccount.xhtml");
+                } else {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("/pages/public/common/error.xhtml");
+                }
+            } catch (IOException ex) {
+                java.util.logging.Logger.getLogger(SecurityBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
     @Override
     public void afterPhase(PhaseEvent event) {
-    }
-    
-    @PostConstruct
-    public void init(){        
-        versionNumber = System.getenv("SIMPLEVAT_RELEASE");
     }
 
     @Override
@@ -99,7 +113,7 @@ public class SecurityBean implements PhaseListener, Serializable {
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid credentials!",
                             "Please check you login details."));
         }
-        
+
     }
 
     @Override

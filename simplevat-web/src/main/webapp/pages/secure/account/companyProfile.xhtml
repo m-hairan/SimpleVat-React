@@ -6,14 +6,15 @@
      xmlns:si="http://java.sun.com/jsf/composite/ccomponent">
 
     <h:form id="companyProfile" enctype="multipart/form-data">
+       
         <p:fieldset legend="#{messages.CompanyDetail}" toggleable="false">
             <p:panelGrid columns="4" 
                          columnClasses="ui-grid-col-0,ui-grid-col-6,ui-grid-col-0,ui-grid-col-6" 
                          layout="grid" 
                          styleClass="ui-panelgrid-blank form-group"
                          style="border:0px none; background-color:transparent;">
-
                 <p:outputLabel for="CompanyName" />
+               
                 <h:panelGroup>
                     <h:panelGroup styleClass="md-inputfield">
                         <p:inputText id="CompanyName" disabled="true" value="#{companyProfileController.companyModel.companyName}" />
@@ -45,6 +46,7 @@
                                         itemValue="#{companyType}"
                                         itemLabel="#{companyType.companyTypeName}" 
                                         required="true"
+                                        scrollHeight="250"
                                         requiredMessage="Please select company type"/>
                         <label>#{messages.CompanyTypeCode}</label>
                         <p:message for="CompanyTypeCode" />
@@ -68,9 +70,6 @@
                             <p:fileUpload fileUploadListener="#{companyProfileController.handleFileUpload}" mode="advanced" update="logo" id="CompanyLogo" 
                                           label="Upload Profile"  auto="true" sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
                             <h:outputText value="#{companyProfileController.fileName}" />
-
-
-
                         </div>
 
                     </div>
@@ -97,6 +96,7 @@
                                     itemValue="#{industryType}"
                                     itemLabel="#{industryType.industryTypeName}" 
                                     required="true"
+                                    scrollHeight="250"
                                     requiredMessage="Please select industry type"/>
                     <label>#{messages.IndustryTypeCode}</label>
                     <p:message for="CompanyTypeCode" />
@@ -220,6 +220,7 @@
                                     itemValue="#{country.countryCode}"
                                     itemLabel="#{country.countryFullName}" 
                                     required="true"
+                                    scrollHeight="250"
                                     requiredMessage="Please select Country"/>
                     <label>#{messages.InvoicingCountryCode}</label>
                     <p:message for="InvoicingCountryCode" />
@@ -334,6 +335,7 @@
                                     itemValue="#{country.countryCode}"
                                     itemLabel="#{country.countryFullName}" 
                                     required="true"
+                                    scrollHeight="250"
                                     requiredMessage="Please select Country"/>
                     <label>#{messages.CompanyCountryCode}</label>
                     <p:message for="CompanyCountryCode" />

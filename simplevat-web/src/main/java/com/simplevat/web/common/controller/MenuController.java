@@ -41,6 +41,7 @@ public class MenuController implements Serializable {
         addReportMenuItem(model);
         addContactMenuItem(model);
         addProductServiceItem(model);
+       
     }
 
     private void addHomeMenuItem(DefaultMenuModel model) {
@@ -76,6 +77,7 @@ public class MenuController implements Serializable {
             model.addElement(item);
         }
     }
+
     private void addBankAccountMenuItem(DefaultMenuModel model) {
         if (PageAccessControl.hasAccess(ModuleName.BANK_MODULE)) {
             DefaultMenuItem item = new DefaultMenuItem("Bank Accounts");
@@ -158,4 +160,6 @@ public class MenuController implements Serializable {
             model.addElement(item);
         }
     }
+
+
 }

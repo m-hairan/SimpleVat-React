@@ -11,7 +11,7 @@ import com.simplevat.entity.Company;
  *
  * @author uday
  */
-class CompanyHelper {
+public class CompanyHelper {
 
     public CompanyModel getCompanyModelFromCompany(Company company) {
         CompanyModel companyModel = new CompanyModel();

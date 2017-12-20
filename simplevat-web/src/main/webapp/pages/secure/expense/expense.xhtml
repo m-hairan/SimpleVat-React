@@ -54,32 +54,11 @@
                                                 itemValue="#{user}"
                                                 itemLabel="#{user.firstName}"
                                                 required="true"
+                                                scrollHeight="250"
                                                 requiredMessage="Please select Claimant">
                                             </p:autoComplete>
                                             <label>#{messages.claimant}</label>
                                             <p:message for="expenseClaimantId" />
-                                        </h:panelGroup>
-
-                                        <p:outputLabel for="expenseTransactionType"/>
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:autoComplete
-                                                id="expenseTransactionType"
-                                                converter="#{transactionTypeConverter}"
-                                                dropdown="true"
-                                                forceSelection="true" 
-                                                effect="fold"
-                                                completeMethod="#{expenseController.getAllTransactionType}"
-                                                value="#{expenseController.selectedExpenseModel.transactionType}"
-                                                var="transactionType"
-                                                itemValue="#{transactionType}"
-                                                itemLabel="#{transactionType.transactionTypeName}"
-                                                required="true"
-                                                requiredMessage="Please select expense Type">
-                                                <p:ajax event="itemSelect"
-                                                        update="expenseTransactionCategory"  />
-                                            </p:autoComplete>
-                                            <label>#{messages.type}</label>
-                                            <p:message for="expenseTransactionType" />
                                         </h:panelGroup>
 
                                         <p:outputLabel for="expenseTransactionCategory"/>
@@ -94,6 +73,7 @@
                                                 completeMethod="#{expenseController.completeCategory()}"
                                                 value="#{expenseController.selectedExpenseModel.transactionCategory}"
                                                 var="transactionCategory"
+                                                scrollHeight="250"
                                                 itemValue="#{transactionCategory}"
                                                 itemLabel="#{transactionCategory.transactionCategoryName}"
                                                 >
@@ -121,6 +101,7 @@
                                                             completeMethod="#{currencyController.completeCurrency}"
                                                             value="#{expenseController.selectedExpenseModel.currency}"
                                                             var="currency" 
+                                                            scrollHeight="250"
                                                             itemValue="#{currency}"
                                                             itemLabel="#{currency.currencyIsoCode}  #{currency.currencySymbol} " 
                                                             required="true"
@@ -131,23 +112,6 @@
                                             <label>#{messages.currency}</label>
                                             <p:message for="expenseCurrency" />
                                         </h:panelGroup>
-                                        <p:outputLabel for="expenseProject"/>
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:autoComplete
-                                                id="expenseProject"
-                                                converter="#{projectConverter}"
-                                                dropdown="true"
-                                                forceSelection="true"
-                                                effect="fold"
-                                                completeMethod="#{projectController.projects}"
-                                                value="#{expenseController.selectedExpenseModel.project}"
-                                                var="project"
-                                                itemValue="#{project}"
-                                                itemLabel="#{project.projectName}"
-                                                >
-                                            </p:autoComplete>
-                                            <label>#{messages.project}</label>
-                                        </h:panelGroup>
                                         <p:outputLabel for="conatcts"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete id="conatcts" 
@@ -156,6 +120,7 @@
                                                             forceSelection="true"
                                                             effect="fold"
                                                             required="true"
+                                                            scrollHeight="250"
                                                             requiredMessage="Please select Contact"
                                                             completeMethod="#{expenseController.contacts}" 
                                                             value="#{expenseController.selectedExpenseModel.expenseContact}" 
@@ -178,6 +143,24 @@
                                                            style="color: #009688" 
                                                            value="Add New Contact" />
                                         </p:outputLabel>
+                                        <p:outputLabel for="expenseProject"/>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:autoComplete
+                                                id="expenseProject"
+                                                converter="#{projectConverter}"
+                                                dropdown="true"
+                                                forceSelection="true"
+                                                effect="fold"
+                                                scrollHeight="250"
+                                                completeMethod="#{projectController.projects}"
+                                                value="#{expenseController.selectedExpenseModel.project}"
+                                                var="project"
+                                                itemValue="#{project}"
+                                                itemLabel="#{project.projectName}"
+                                                >
+                                            </p:autoComplete>
+                                            <label>#{messages.project}</label>
+                                        </h:panelGroup>
                                         <p:outputLabel for="expenseDescription" />
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputTextarea
@@ -321,6 +304,7 @@
                                                                     dropdown="true" 
                                                                     forceSelection="true"
                                                                     effect="fold"
+                                                                    scrollHeight="250"
                                                                     value="#{expenseItem.vatId}"
                                                                     completeMethod="#{expenseController.vatCategorys}" 
                                                                     var="vat"
@@ -365,8 +349,9 @@
                                                      icon="ui-icon-plus" />
                                 </p:fieldset>
                                 <h:panelGroup id="exchangeCurrency"  >
-                                    <p:fieldset legend="Currency Exchange Details"
-                                                rendered="false">
+                                    <p:fieldset legend="Currency Exchange Details" 
+                                                rendered="#{expenseController.selectedExpenseModel.currency.currencyCode != expenseController.company.companyCountryCode.currencyCode.currencyCode 
+                                                            and expenseController.currencyConversion != null}">
 
                                         <p:panelGrid columns="6" 
                                                      columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 

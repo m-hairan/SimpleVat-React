@@ -36,6 +36,7 @@ import com.simplevat.service.bankaccount.TransactionTypeService;
 import com.simplevat.web.common.controller.BaseController;
 import com.simplevat.web.constant.ContactTypeConstant;
 import com.simplevat.web.constant.ModuleName;
+import com.simplevat.web.constant.TransactionTypeConstant;
 import com.simplevat.web.contact.model.ContactModel;
 import com.simplevat.web.expense.model.ExpenseItemModel;
 import com.simplevat.web.utils.FacesUtil;
@@ -118,6 +119,8 @@ public class ExpenseController extends BaseController implements Serializable {
     @Getter
     private Company company;
 
+    @Getter
+    @Setter
     private CurrencyConversion currencyConversion;
 
     @Getter
@@ -192,7 +195,9 @@ public class ExpenseController extends BaseController implements Serializable {
 
     public BigDecimal totalAmountInHomeCurrency(Currency currency) {
         if (total != null) {
-            return total.divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP);
+            if (currencyConversion != null) {
+                return total.divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP);
+            }
         }
         return new BigDecimal(0);
     }
@@ -200,14 +205,13 @@ public class ExpenseController extends BaseController implements Serializable {
     public List<TransactionCategory> completeCategory() {
         List<TransactionCategory> transactionCategoryParentList = new ArrayList<>();
         List<TransactionCategory> transactionCategoryList = new ArrayList<>();
-        if (selectedExpenseModel.getTransactionType() != null) {
-            transactionCategoryList = transactionCategoryService.findAllTransactionCategoryByTransactionType(selectedExpenseModel.getTransactionType().getTransactionTypeCode());
-        }
+        transactionCategoryList = transactionCategoryService.findAllTransactionCategoryByTransactionType(TransactionTypeConstant.TRANSACTION_TYPE_EXPENSE);
         for (TransactionCategory transactionCategory : transactionCategoryList) {
             if (transactionCategory.getParentTransactionCategory() != null) {
                 transactionCategoryParentList.add(transactionCategory.getParentTransactionCategory());
             }
         }
+        selectedExpenseModel.setTransactionType(transactionCategoryList.get(0).getTransactionType());
         transactionCategoryList.removeAll(transactionCategoryParentList);
         return transactionCategoryList;
 
@@ -307,6 +311,7 @@ public class ExpenseController extends BaseController implements Serializable {
 
     private void save() {
         User loggedInUser = FacesUtil.getLoggedInUser();
+        selectedExpenseModel.setTransactionType(selectedExpenseModel.getTransactionCategory().getTransactionType());
         Expense expense = controllerHelper.getExpense(selectedExpenseModel);
         expense.setExpenseAmount(total);
         if (selectedExpenseModel.getReceiptAttachmentBinary() != null) {

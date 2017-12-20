@@ -70,6 +70,7 @@
                                                         forceSelection="true"
                                                         effect="fold"
                                                         required="true"
+                                                        scrollHeight="250"
                                                         requiredMessage="Please select Contact"
                                                         completeMethod="#{invoiceController.contacts}" 
                                                         value="#{invoiceController.selectedInvoiceModel.invoiceContact}" 
@@ -99,6 +100,7 @@
                                                         dropdown="true" 
                                                         forceSelection="true"
                                                         effect="fold"
+                                                        scrollHeight="250"
                                                         completeMethod="#{invoiceController.projects}" 
                                                         value="#{invoiceController.selectedInvoiceModel.project}" 
                                                         var="project"
@@ -149,6 +151,7 @@
                                                         requiredMessage="Please select Currency"
                                                         forceSelection="true"
                                                         effect="fold" 
+                                                        scrollHeight="250"
                                                         converter="#{currencyConverter}"
                                                         completeMethod="#{invoiceController.completeCurrency}" 
                                                         value="#{invoiceController.selectedInvoiceModel.currencyCode}"
@@ -207,6 +210,7 @@
                                                                 value="#{invoiceItem.productService}"
                                                                 completeMethod="#{invoiceController.products}" 
                                                                 var="product"
+                                                                scrollHeight="250"
                                                                 itemValue="#{product}"
                                                                 itemLabel="#{product.productName}">
                                                     <!--<p:ajax update="product_service product_service_label" listener="#{invoiceController.refreshProductService(invoiceItem)}" event="change"/>-->
@@ -283,6 +287,7 @@
                                                                 value="#{invoiceItem.vatId}"
                                                                 completeMethod="#{invoiceController.vatCategorys}" 
                                                                 var="vat"
+                                                                scrollHeight="250"
                                                                 itemValue="#{vat}"
                                                                 itemLabel="#{vat.name}"
                                                                 >
@@ -339,6 +344,7 @@
                                                         dropdown="true" 
                                                         forceSelection="true"
                                                         effect="fold" 
+                                                        scrollHeight="250"
                                                         converter="discountTypeConverter"
                                                         completeMethod="#{invoiceController.discountTypes}" 
                                                         value="#{invoiceController.selectedInvoiceModel.discountType}"
@@ -376,7 +382,8 @@
                             </p:fieldset>
                             <h:panelGroup id="exchangeCurrency"  >
                                 <p:fieldset legend="Currency Exchange Details"
-                                            rendered="false">
+                                            rendered="#{invoiceController.selectedInvoiceModel.currencyCode.currencyCode != invoiceController.company.companyCountryCode.currencyCode.currencyCode 
+                                                        and invoiceController.currencyConversion != null}">
 
                                     <p:panelGrid columns="6" 
                                                  columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 

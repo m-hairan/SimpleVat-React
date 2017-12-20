@@ -124,6 +124,8 @@ public class PurchaseController extends BaseController implements Serializable {
     @Setter
     private ContactModel contactModel;
 
+    @Getter
+    @Setter
     private CurrencyConversion currencyConversion;
 
     @Autowired
@@ -225,7 +227,9 @@ public class PurchaseController extends BaseController implements Serializable {
 
     public BigDecimal totalAmountInHomeCurrency(Currency currency) {
         if (total != null) {
-            return total.divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP);
+            if (currencyConversion != null) {
+                return total.divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP);
+            }
         }
         return new BigDecimal(0);
     }
