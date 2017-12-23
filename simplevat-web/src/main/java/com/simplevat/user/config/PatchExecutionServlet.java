@@ -36,7 +36,7 @@ public class PatchExecutionServlet extends HttpServlet {
         super.init();
         Connection connection = null;
         try {
-            StringBuilder patchPath = new StringBuilder(getServletContext().getRealPath("\\resources\\patch\\"));
+            StringBuilder patchPath = new StringBuilder(getServletContext().getRealPath("/resources/patch/"));
             Class.forName("com.mysql.jdbc.Driver");
             String dbHost = System.getenv("SIMPLEVAT_DB_HOST");
             String dbName = System.getenv("SIMPLEVAT_DB");
@@ -51,9 +51,9 @@ public class PatchExecutionServlet extends HttpServlet {
                 ps.setString(1, folderName);
                 ResultSet rs = ps.executeQuery();
                 if (!rs.next()) {
-                    File patchfile = new File(patchPath.toString() + "\\" + folderName);
+                    File patchfile = new File(patchPath.toString() + "/" + folderName);
                     for (String scriptName : patchfile.list()) {
-                        File scriptfile = new File(patchPath.toString() + "\\" + folderName + "\\" + scriptName);
+                        File scriptfile = new File(patchPath.toString() + "/" + folderName + "/" + scriptName);
                         if (scriptfile.exists()) { 
                             ScriptRunner sr = new ScriptRunner(connection);
                             Reader reader = new BufferedReader(
