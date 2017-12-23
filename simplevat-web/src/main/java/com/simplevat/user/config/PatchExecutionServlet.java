@@ -42,7 +42,7 @@ public class PatchExecutionServlet extends HttpServlet {
             String dbName = System.getenv("SIMPLEVAT_DB");
             String dbUserName = System.getenv("SIMPLEVAT_DB_USER");
             String dbPass = System.getenv("SIMPLEVAT_DB_PASSWORD");
-            connection = DriverManager.getConnection("jdbc:mysql://" + dbHost + ":3306/" + dbName, dbUserName, dbPass);
+            connection = DriverManager.getConnection("jdbc:mysql://" + dbHost + "/" + dbName, dbUserName, dbPass);
             String query = "select * from patch where patch_no = ?";
             File file = new File(patchPath.toString());
             List<String> patchNoList = new ArrayList<>();
@@ -69,7 +69,9 @@ public class PatchExecutionServlet extends HttpServlet {
             Logger.getLogger(PatchExecutionServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
-                connection.close();
+                if(connection != null && !connection.isClosed()){
+                    connection.close();
+                }
             } catch (Exception ex) {
                 Logger.getLogger(PatchExecutionServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
