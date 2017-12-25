@@ -16,16 +16,14 @@ import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-
+import lombok.Data;
 /**
  *
  * @author daynil
  */
-
+@Data
 @Entity
-@Table(name = "document_template")
-@XmlRootElement
+@Table(name = "DOCUMENT_TEMPLATE")
 @NamedQueries({
     @NamedQuery(name = "DocumentTemplate.findAll", query = "SELECT d FROM DocumentTemplate d")
     , @NamedQuery(name = "DocumentTemplate.findById", query = "SELECT d FROM DocumentTemplate d WHERE d.id = :id")
@@ -47,7 +45,7 @@ public class DocumentTemplate implements Serializable {
     
     @Basic(optional = false)
     @Column(name = "TYPE")
-    private int type;
+    private Integer type;
     
     @Basic(optional = false)
     @Lob
@@ -61,42 +59,10 @@ public class DocumentTemplate implements Serializable {
         this.id = id;
     }
 
-    public DocumentTemplate(Integer id, String name, int type, byte[] template) {
+    public DocumentTemplate(Integer id, String name, Integer type, byte[] template) {
         this.id = id;
         this.name = name;
         this.type = type;
-        this.template = template;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public byte[] getTemplate() {
-        return template;
-    }
-
-    public void setTemplate(byte[] template) {
         this.template = template;
     }
 

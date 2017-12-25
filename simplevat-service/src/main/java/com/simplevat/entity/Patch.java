@@ -17,7 +17,7 @@ import lombok.Data;
 @Entity
 @Table(name = "PATCH")
 @Data
-public class DBpatch implements Serializable {
+public class Patch implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

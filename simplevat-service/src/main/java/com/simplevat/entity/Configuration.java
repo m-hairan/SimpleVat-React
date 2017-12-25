@@ -26,7 +26,7 @@ import lombok.Data;
  */
 @Data
 @Entity
-@Table(name = "configuration")
+@Table(name = "CONFIGURATION")
 @NamedQueries({
     @NamedQuery(name = "Configuration.findAll", query = "SELECT c FROM Configuration c")
     , @NamedQuery(name = "Configuration.findById", query = "SELECT c FROM Configuration c WHERE c.id = :id")
