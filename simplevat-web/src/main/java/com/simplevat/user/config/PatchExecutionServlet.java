@@ -43,11 +43,11 @@ public class PatchExecutionServlet extends HttpServlet {
             String dbUserName = System.getenv("SIMPLEVAT_DB_USER");
             String dbPass = System.getenv("SIMPLEVAT_DB_PASSWORD");
             connection = DriverManager.getConnection("jdbc:mysql://" + dbHost + "/" + dbName, dbUserName, dbPass);
-            String query = "select * from patch where patch_no = ?";
+            String query = "SELECT * FROM PATCH WHERE PATCH_NO = ?";
             File file = new File(patchPath.toString());
             List<String> patchNoList = new ArrayList<>();
             for (String folderName : file.list()) {
-                PreparedStatement ps = connection.prepareStatement(query);
+                PreparedStatement ps = connection.prepareStatement(query.toUpperCase());
                 ps.setString(1, folderName);
                 ResultSet rs = ps.executeQuery();
                 if (!rs.next()) {

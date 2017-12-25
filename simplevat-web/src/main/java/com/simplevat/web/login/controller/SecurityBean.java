@@ -86,9 +86,9 @@ public class SecurityBean implements PhaseListener, Serializable {
         if (userService.findAll().isEmpty()) {
             try {
                 if (token != null && token.equals(envToken)) {
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("initial-setup/firstUserAccount.xhtml");
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("initial-setup.xhtml");
                 } else {
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("/pages/public/common/error.xhtml");
+                    FacesContext.getCurrentInstance().getExternalContext().redirect("/pages/public/token-mismatched-error.xhtml");
                 }
             } catch (IOException ex) {
                 java.util.logging.Logger.getLogger(SecurityBean.class.getName()).log(Level.SEVERE, null, ex);

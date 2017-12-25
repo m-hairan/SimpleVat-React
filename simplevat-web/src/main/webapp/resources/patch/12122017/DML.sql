@@ -43,7 +43,7 @@ INSERT INTO `CURRENCY` (`CURRENCY_CODE`, `CREATED_BY`, `CREATED_DATE`, `CURRENCY
 (29, 1, '2017-04-01 11:32:37', 'Colombia Peso', 'COP', 'Colombian Peso', '$', 'N', b'0', NULL, NULL, 30, 1),
 (30, 1, '2017-04-01 11:32:37', 'Comoros Franc', 'KMF', 'Comoro Franc', 'Fr', 'N', b'0', NULL, NULL, 31, 1),
 (31, 1, '2017-04-01 11:32:37', 'Congo/Kinshasa Franc', 'CDF', 'Congolese Franc', 'Fr', 'N', b'0', NULL, NULL, 32, 1),
-(32, 1, '2017-04-01 11:32:38', 'Bosnia and Herzegovina Convertible Marka', 'BAM', 'Convertible Mark', 'KM', 'N', b'0', NULL, NULL, 33, 1),
+(32, 1, '2017-04-01 11:32:38', 'Bosnia AND Herzegovina Convertible Marka', 'BAM', 'Convertible Mark', 'KM', 'N', b'0', NULL, NULL, 33, 1),
 (33, 1, '2017-04-01 11:32:38', 'Nicaragua Cordoba', 'NIO', 'Cordoba Oro', 'C$', 'N', b'0', NULL, NULL, 34, 1),
 (34, 1, '2017-04-01 11:32:38', 'Costa Rica Colon', 'CRC', 'Costa Rican Colon', '₡', 'N', b'0', NULL, NULL, 35, 1),
 (35, 1, '2017-04-01 11:32:38', 'Cuba Peso', 'CUP', 'Cuban Peso', '₱', 'N', b'0', NULL, NULL, 36, 1),
@@ -52,7 +52,7 @@ INSERT INTO `CURRENCY` (`CURRENCY_CODE`, `CREATED_BY`, `CREATED_DATE`, `CURRENCY
 (38, 1, '2017-04-01 11:32:39', 'Denmark Krone', 'DKK', 'Danish Krone', 'kr', 'N', b'0', NULL, NULL, 39, 1),
 (39, 1, '2017-04-01 11:32:40', 'Macedonia Denar', 'MKD', 'Denar', 'ден', 'N', b'0', NULL, NULL, 40, 1),
 (40, 1, '2017-04-01 11:32:40', 'Djibouti Franc', 'DJF', 'Djibouti Franc', 'Fr', 'N', b'0', NULL, NULL, 41, 1),
-(41, 1, '2017-04-01 11:32:40', 'São Tomé and Príncipe Dobra', 'STD', 'Dobra', 'Db', 'N', b'0', NULL, NULL, 42, 1),
+(41, 1, '2017-04-01 11:32:40', 'São Tomé AND Príncipe Dobra', 'STD', 'Dobra', 'Db', 'N', b'0', NULL, NULL, 42, 1),
 (42, 1, '2017-04-01 11:32:40', 'Dominican Republic Peso', 'DOP', 'Dominican Peso', 'RD$', 'N', b'0', NULL, NULL, 43, 1),
 (43, 1, '2017-04-01 11:32:41', 'Viet Nam Dong', 'VND', 'Dong', '₫', 'N', b'0', NULL, NULL, 44, 1),
 (44, 1, '2017-04-01 11:32:41', 'East Caribbean Dollar', 'XCD', 'East Caribbean Dollar', '$', 'N', b'0', NULL, NULL, 45, 1),
@@ -155,7 +155,7 @@ INSERT INTO `CURRENCY` (`CURRENCY_CODE`, `CREATED_BY`, `CREATED_DATE`, `CURRENCY
 (141, 1, '2017-04-01 11:33:09', 'Samoa Tala', 'WST', 'Tala', 'T', 'N', b'0', NULL, NULL, 142, 1),
 (142, 1, '2017-04-01 11:33:09', 'Tanzania Shilling', 'TZS', 'Tanzanian Shilling', 'Sh', 'N', b'0', NULL, NULL, 143, 1),
 (143, 1, '2017-04-01 11:33:09', 'Kazakhstan Tenge', 'KZT', 'Tenge', 'лв', 'N', b'0', NULL, NULL, 144, 1),
-(144, 1, '2017-04-01 11:33:09', 'Trinidad and Tobago Dollar', 'TTD', 'Trinidad and Tobago Dollar', 'TT$', 'N', b'0', NULL, NULL, 145, 1),
+(144, 1, '2017-04-01 11:33:09', 'Trinidad AND Tobago Dollar', 'TTD', 'Trinidad AND Tobago Dollar', 'TT$', 'N', b'0', NULL, NULL, 145, 1),
 (145, 1, '2017-04-01 11:33:10', 'Mongolia Tughrik', 'MNT', 'Tugrik', '₮', 'N', b'0', NULL, NULL, 146, 1),
 (146, 1, '2017-04-01 11:33:10', 'Tunisia Dinar', 'TND', 'Tunisian Dinar', 'د.ت', 'N', b'0', NULL, NULL, 147, 1),
 (147, 1, '2017-04-01 11:33:10', 'Turkey Lira', 'TRY', 'Turkish Lira', 'TL', 'N', b'0', NULL, NULL, 148, 1),
@@ -179,7 +179,7 @@ INSERT INTO `COUNTRY` (`COUNTRY_CODE`, `COUNTRY_DESCRIPTION`, `COUNTRY_NAME`, `C
 (3, 'People\'s Democratic Republic of Algeria', 'Algeria', 1, '2017-06-21 07:54:26', 'N', b'0', 'DZA', NULL, NULL, 4, 1, NULL),
 (4, 'Principality of Andorra', 'Andorra', 1, '2017-06-21 07:54:26', 'N', b'0', 'AND', NULL, NULL, 5, 1, NULL),
 (5, 'Republic of Angola', 'Angola', 1, '2017-06-21 07:54:26', 'N', b'0', 'AGO', NULL, NULL, 6, 1, NULL),
-(6, NULL, 'Antigua and Barbuda', 1, '2017-06-21 07:54:26', 'N', b'0', 'ATG', NULL, NULL, 7, 1, NULL),
+(6, NULL, 'Antigua AND Barbuda', 1, '2017-06-21 07:54:26', 'N', b'0', 'ATG', NULL, NULL, 7, 1, NULL),
 (7, 'Argentine Republic', 'Argentina', 1, '2017-06-21 07:54:26', 'N', b'0', 'ARG', NULL, NULL, 8, 1, NULL),
 (8, 'Republic of Armenia', 'Armenia', 1, '2017-06-21 07:54:26', 'N', b'0', 'ARM', NULL, NULL, 9, 1, NULL),
 (9, 'Commonwealth of Australia', 'Australia', 1, '2017-06-21 07:54:26', 'N', b'0', 'AUS', NULL, NULL, 10, 1, NULL),
@@ -195,7 +195,7 @@ INSERT INTO `COUNTRY` (`COUNTRY_CODE`, `COUNTRY_DESCRIPTION`, `COUNTRY_NAME`, `C
 (19, 'Republic of Benin', 'Benin', 1, '2017-06-21 07:54:27', 'N', b'0', 'BEN', NULL, NULL, 20, 1, NULL),
 (20, 'Kingdom of Bhutan', 'Bhutan', 1, '2017-06-21 07:54:27', 'N', b'0', 'BTN', NULL, NULL, 21, 1, NULL),
 (21, 'Republic of Bolivia', 'Bolivia', 1, '2017-06-21 07:54:27', 'N', b'0', 'BOL', NULL, NULL, 22, 1, NULL),
-(22, NULL, 'Bosnia and Herzegovina', 1, '2017-06-21 07:54:27', 'N', b'0', 'BIH', NULL, NULL, 23, 1, NULL),
+(22, NULL, 'Bosnia AND Herzegovina', 1, '2017-06-21 07:54:27', 'N', b'0', 'BIH', NULL, NULL, 23, 1, NULL),
 (23, 'Republic of Botswana', 'Botswana', 1, '2017-06-21 07:54:27', 'N', b'0', 'BWA', NULL, NULL, 24, 1, NULL),
 (24, 'Federative Republic of Brazil', 'Brazil', 1, '2017-06-21 07:54:27', 'N', b'0', 'BRA', NULL, NULL, 25, 1, NULL),
 (25, 'Negara Brunei Darussalam', 'Brunei', 1, '2017-06-21 07:54:27', 'N', b'0', 'BRN', NULL, NULL, 26, 1, NULL),
@@ -315,12 +315,12 @@ INSERT INTO `COUNTRY` (`COUNTRY_CODE`, `COUNTRY_DESCRIPTION`, `COUNTRY_NAME`, `C
 (139, NULL, 'Romania', 1, '2017-06-21 07:54:33', 'N', b'0', 'ROU', NULL, NULL, 142, 1, NULL),
 (140, 'Russian Federation', 'Russia', 1, '2017-06-21 07:54:33', 'N', b'0', 'RUS', NULL, NULL, 143, 1, NULL),
 (141, 'Republic of Rwanda', 'Rwanda', 1, '2017-06-21 07:54:33', 'N', b'0', 'RWA', NULL, NULL, 144, 1, NULL),
-(142, 'Federation of Saint Kitts and Nevis', 'Saint Kitts and Nevis', 1, '2017-06-21 07:54:33', 'N', b'0', 'KNA', NULL, NULL, 145, 1, NULL),
+(142, 'Federation of Saint Kitts AND Nevis', 'Saint Kitts AND Nevis', 1, '2017-06-21 07:54:33', 'N', b'0', 'KNA', NULL, NULL, 145, 1, NULL),
 (143, NULL, 'Saint Lucia', 1, '2017-06-21 07:54:33', 'N', b'0', 'LCA', NULL, NULL, 146, 1, NULL),
-(144, NULL, 'Saint Vincent and the Grenadines', 1, '2017-06-21 07:54:33', 'N', b'0', 'VCT', NULL, NULL, 147, 1, NULL),
+(144, NULL, 'Saint Vincent AND the Grenadines', 1, '2017-06-21 07:54:33', 'N', b'0', 'VCT', NULL, NULL, 147, 1, NULL),
 (145, 'Independent State of Samoa', 'Samoa', 1, '2017-06-21 07:54:33', 'N', b'0', 'WSM', NULL, NULL, 148, 1, NULL),
 (146, 'Republic of San Marino', 'San Marino', 1, '2017-06-21 07:54:33', 'N', b'0', 'SMR', NULL, NULL, 149, 1, NULL),
-(147, 'Democratic Republic of Sao Tome and Principe', 'Sao Tome and Principe', 1, '2017-06-21 07:54:33', 'N', b'0', 'STP', NULL, NULL, 150, 1, NULL),
+(147, 'Democratic Republic of Sao Tome AND Principe', 'Sao Tome AND Principe', 1, '2017-06-21 07:54:33', 'N', b'0', 'STP', NULL, NULL, 150, 1, NULL),
 (148, 'Kingdom of Saudi Arabia', 'Saudi Arabia', 1, '2017-06-21 07:54:33', 'N', b'0', 'SAU', NULL, NULL, 151, 1, NULL),
 (149, 'Republic of Senegal', 'Senegal', 1, '2017-06-21 07:54:33', 'N', b'0', 'SEN', NULL, NULL, 152, 1, NULL),
 (150, 'Republic of Serbia', 'Serbia', 1, '2017-06-21 07:54:33', 'N', b'0', 'SRB', NULL, NULL, 153, 1, NULL),
@@ -346,7 +346,7 @@ INSERT INTO `COUNTRY` (`COUNTRY_CODE`, `COUNTRY_DESCRIPTION`, `COUNTRY_NAME`, `C
 (170, 'Democratic Republic of Timor-Leste', 'Timor-Leste (East Timor)', 1, '2017-06-21 07:54:34', 'N', b'0', 'TLS', NULL, NULL, 173, 1, NULL),
 (171, 'Togolese Republic', 'Togo', 1, '2017-06-21 07:54:34', 'N', b'0', 'TGO', NULL, NULL, 174, 1, NULL),
 (172, 'Kingdom of Tonga', 'Tonga', 1, '2017-06-21 07:54:34', 'N', b'0', 'TON', NULL, NULL, 175, 1, NULL),
-(173, 'Republic of Trinidad and Tobago', 'Trinidad and Tobago', 1, '2017-06-21 07:54:34', 'N', b'0', 'TTO', NULL, NULL, 176, 1, NULL),
+(173, 'Republic of Trinidad AND Tobago', 'Trinidad AND Tobago', 1, '2017-06-21 07:54:34', 'N', b'0', 'TTO', NULL, NULL, 176, 1, NULL),
 (174, 'Tunisian Republic', 'Tunisia', 1, '2017-06-21 07:54:34', 'N', b'0', 'TUN', NULL, NULL, 177, 1, NULL),
 (175, 'Republic of Turkey', 'Turkey', 1, '2017-06-21 07:54:34', 'N', b'0', 'TUR', NULL, NULL, 178, 1, NULL),
 (176, NULL, 'Turkmenistan', 1, '2017-06-21 07:54:34', 'N', b'0', 'TKM', NULL, NULL, 179, 1, NULL),
@@ -354,7 +354,7 @@ INSERT INTO `COUNTRY` (`COUNTRY_CODE`, `COUNTRY_DESCRIPTION`, `COUNTRY_NAME`, `C
 (178, 'Republic of Uganda', 'Uganda', 1, '2017-06-21 07:54:35', 'N', b'0', 'UGA', NULL, NULL, 181, 1, NULL),
 (179, NULL, 'Ukraine', 1, '2017-06-21 07:54:35', 'N', b'0', 'UKR', NULL, NULL, 182, 1, NULL),
 (180, 'United Arab Emirates', 'United Arab Emirates', 1, '2017-06-21 07:54:35', 'Y', b'0', 'ARE', NULL, NULL, 1, 1, NULL),
-(181, 'United Kingdom of Great Britain and Northern Ireland', 'United Kingdom', 1, '2017-06-21 07:54:35', 'N', b'0', 'GBR', NULL, NULL, 184, 1, NULL),
+(181, 'United Kingdom of Great Britain AND Northern Ireland', 'United Kingdom', 1, '2017-06-21 07:54:35', 'N', b'0', 'GBR', NULL, NULL, 184, 1, NULL),
 (182, 'United States of America', 'United States', 1, '2017-06-21 07:54:35', 'N', b'0', 'USA', NULL, NULL, 185, 1, 152),
 (183, 'Oriental Republic of Uruguay', 'Uruguay', 1, '2017-06-21 07:54:35', 'N', b'0', 'URY', NULL, NULL, 186, 1, NULL),
 (184, 'Republic of Uzbekistan', 'Uzbekistan', 1, '2017-06-21 07:54:35', 'N', b'0', 'UZB', NULL, NULL, 187, 1, NULL),
@@ -372,20 +372,20 @@ INSERT INTO `COUNTRY` (`COUNTRY_CODE`, `COUNTRY_DESCRIPTION`, `COUNTRY_NAME`, `C
 (196, 'Pridnestrovian Moldavian Republic', 'Pridnestrovie (Transnistria)', 1, '2017-06-21 07:54:35', 'N', b'0', 'MDA', NULL, NULL, 199, 1, NULL),
 (197, 'Republic of Somaliland', 'Somaliland', 1, '2017-06-21 07:54:35', 'N', b'0', 'SOM', NULL, NULL, 200, 1, NULL),
 (198, 'Republic of South Ossetia', 'South Ossetia', 1, '2017-06-21 07:54:35', 'N', b'0', 'GEO', NULL, NULL, 201, 1, NULL),
-(199, 'Territory of Ashmore and Cartier Islands', 'Ashmore and Cartier Islands', 1, '2017-06-21 07:54:36', 'N', b'0', 'AUS', NULL, NULL, 202, 1, NULL),
+(199, 'Territory of Ashmore AND Cartier Islands', 'Ashmore AND Cartier Islands', 1, '2017-06-21 07:54:36', 'N', b'0', 'AUS', NULL, NULL, 202, 1, NULL),
 (200, 'Territory of Christmas Island', 'Christmas Island', 1, '2017-06-21 07:54:36', 'N', b'0', 'CXR', NULL, NULL, 203, 1, NULL),
 (201, 'Territory of Cocos (Keeling) Islands', 'Cocos (Keeling) Islands', 1, '2017-06-21 07:54:36', 'N', b'0', 'CCK', NULL, NULL, 204, 1, NULL),
 (202, 'Coral Sea Islands Territory', 'Coral Sea Islands', 1, '2017-06-21 07:54:36', 'N', b'0', 'AUS', NULL, NULL, 205, 1, NULL),
-(203, 'Territory of Heard Island and McDonald Islands', 'Heard Island and McDonald Islands', 1, '2017-06-21 07:54:36', 'N', b'0', 'HMD', NULL, NULL, 206, 1, NULL),
+(203, 'Territory of Heard Island AND McDonald Islands', 'Heard Island AND McDonald Islands', 1, '2017-06-21 07:54:36', 'N', b'0', 'HMD', NULL, NULL, 206, 1, NULL),
 (204, 'Territory of Norfolk Island', 'Norfolk Island', 1, '2017-06-21 07:54:36', 'N', b'0', 'NFK', NULL, NULL, 207, 1, NULL),
 (205, NULL, 'New Caledonia', 1, '2017-06-21 07:54:36', 'N', b'0', 'NCL', NULL, NULL, 208, 1, NULL),
 (206, 'Overseas Country of French Polynesia', 'French Polynesia', 1, '2017-06-21 07:54:36', 'N', b'0', 'PYF', NULL, NULL, 209, 1, NULL),
 (207, 'Departmental Collectivity of Mayotte', 'Mayotte', 1, '2017-06-21 07:54:36', 'N', b'0', 'MYT', NULL, NULL, 210, 1, NULL),
 (208, 'Collectivity of Saint Barthelemy', 'Saint Barthelemy', 1, '2017-06-21 07:54:36', 'N', b'0', 'GLP', NULL, NULL, 211, 1, NULL),
 (209, 'Collectivity of Saint Martin', 'Saint Martin', 1, '2017-06-21 07:54:36', 'N', b'0', 'GLP', NULL, NULL, 212, 1, NULL),
-(210, 'Territorial Collectivity of Saint Pierre and Miquelon', 'Saint Pierre and Miquelon', 1, '2017-06-21 07:54:36', 'N', b'0', 'SPM', NULL, NULL, 213, 1, NULL),
-(211, 'Collectivity of the Wallis and Futuna Islands', 'Wallis and Futuna', 1, '2017-06-21 07:54:36', 'N', b'0', 'WLF', NULL, NULL, 214, 1, NULL),
-(212, 'Territory of the French Southern and Antarctic Lands', 'French Southern and Antarctic Lands', 1, '2017-06-21 07:54:36', 'N', b'0', 'ATF', NULL, NULL, 215, 1, NULL),
+(210, 'Territorial Collectivity of Saint Pierre AND Miquelon', 'Saint Pierre AND Miquelon', 1, '2017-06-21 07:54:36', 'N', b'0', 'SPM', NULL, NULL, 213, 1, NULL),
+(211, 'Collectivity of the Wallis AND Futuna Islands', 'Wallis AND Futuna', 1, '2017-06-21 07:54:36', 'N', b'0', 'WLF', NULL, NULL, 214, 1, NULL),
+(212, 'Territory of the French Southern AND Antarctic Lands', 'French Southern AND Antarctic Lands', 1, '2017-06-21 07:54:36', 'N', b'0', 'ATF', NULL, NULL, 215, 1, NULL),
 (213, NULL, 'Clipperton Island', 1, '2017-06-21 07:54:36', 'N', b'0', 'PYF', NULL, NULL, 216, 1, NULL),
 (214, NULL, 'Bouvet Island', 1, '2017-06-21 07:54:36', 'N', b'0', 'BVT', NULL, NULL, 217, 1, NULL),
 (215, NULL, 'Cook Islands', 1, '2017-06-21 07:54:36', 'N', b'0', 'COK', NULL, NULL, 218, 1, NULL),
@@ -406,7 +406,7 @@ INSERT INTO `COUNTRY` (`COUNTRY_CODE`, `COUNTRY_DESCRIPTION`, `COUNTRY_NAME`, `C
 (230, NULL, 'Pitcairn Islands', 1, '2017-06-21 07:54:37', 'N', b'0', 'PCN', NULL, NULL, 233, 1, NULL),
 (231, NULL, 'Saint Helena', 1, '2017-06-21 07:54:38', 'N', b'0', 'SHN', NULL, NULL, 234, 1, NULL),
 (232, NULL, 'South Georgia & South Sandwich Islands', 1, '2017-06-21 07:54:38', 'N', b'0', 'SGS', NULL, NULL, 235, 1, NULL),
-(233, NULL, 'Turks and Caicos Islands', 1, '2017-06-21 07:54:38', 'N', b'0', 'TCA', NULL, NULL, 236, 1, NULL),
+(233, NULL, 'Turks AND Caicos Islands', 1, '2017-06-21 07:54:38', 'N', b'0', 'TCA', NULL, NULL, 236, 1, NULL),
 (234, 'Commonwealth of The Northern Mariana Islands', 'Northern Mariana Islands', 1, '2017-06-21 07:54:38', 'N', b'0', 'MNP', NULL, NULL, 237, 1, NULL),
 (235, 'Commonwealth of Puerto Rico', 'Puerto Rico', 1, '2017-06-21 07:54:38', 'N', b'0', 'PRI', NULL, NULL, 238, 1, NULL),
 (236, 'Territory of American Samoa', 'American Samoa', 1, '2017-06-21 07:54:38', 'N', b'0', 'ASM', NULL, NULL, 239, 1, NULL),
@@ -486,21 +486,21 @@ INSERT INTO `TRANSACTION_CATEGORY` (`TRANSACTION_CATEGORY_CODE`, `CREATED_BY`, `
 (7, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 7, 'Transfer From User', 'Transfer From User', 0, NULL, 5),
 (8, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 8, 'Loan From Third Party', 'Loan From Third Party', 0, NULL, 6),
 (9, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 9, 'Accountancy fees', 'Accountancy fees', 0, NULL, 8),
-(10, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 10, 'Advertising and promotional costs', 'Advertising and promotional costs', 0, NULL, 8),
+(10, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 10, 'Advertising AND promotional costs', 'Advertising AND promotional costs', 0, NULL, 8),
 (11, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 11, 'Charitable donations', 'Charitable donations', 0, NULL, 8),
 (12, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 12, 'Computer software costs', 'Computer software costs', 0, NULL, 8),
 (13, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 13, 'Consumable items', 'Consumable items', 0, NULL, 8),
 (14, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 14, 'Finance charges', 'Finance charges', 0, NULL, 8),
-(15, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 15, 'Gain (loss) on foreign currency transactions', 'Gain (loss) on foreign currency transactions', 0, NULL, 8),
+(15, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 15, 'Gain (loss) ON foreign CURRENCY transactions', 'Gain (loss) ON foreign CURRENCY transactions', 0, NULL, 8),
 (16, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 16, 'General consultancy fees', 'General consultancy fees', 0, NULL, 8),
 (17, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 17, 'General maintenance', 'General maintenance', 0, NULL, 8),
-(18, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 18, 'Hire and leasing of other assets', 'Hire and leasing of other assets', 0, NULL, 8),
+(18, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 18, 'Hire AND leasing of other assets', 'Hire AND leasing of other assets', 0, NULL, 8),
 (19, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 19, 'Insurance', 'Insurance', 0, NULL, 8),
-(20, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 20, 'Interest Payable and similar charges', 'Interest Payable and similar charges', 0, NULL, 8),
-(21, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 21, 'IT and computer consumables', 'IT and computer consumables', 0, NULL, 8),
+(20, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 20, 'Interest Payable AND similar charges', 'Interest Payable AND similar charges', 0, NULL, 8),
+(21, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 21, 'IT AND computer consumables', 'IT AND computer consumables', 0, NULL, 8),
 (22, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 22, 'Late payment of tax (disallowable)', 'Late payment of tax (disallowable)', 0, NULL, 8),
 (23, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 23, 'Legal fees', 'Legal fees', 0, NULL, 8),
-(24, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 24, 'Other legal and professional fees (disallowable)', 'Other legal and professional fees (disallowable)', 0, NULL, 8),
+(24, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 24, 'Other legal AND professional fees (disallowable)', 'Other legal AND professional fees (disallowable)', 0, NULL, 8),
 (25, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 25, 'Postage costs', 'Postage costs', 0, NULL, 8),
 (26, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 26, 'Printing costs', 'Printing costs', 0, NULL, 8),
 (27, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 27, 'Rent of premises', 'Rent of premises', 0, NULL, 8),
@@ -509,10 +509,10 @@ INSERT INTO `TRANSACTION_CATEGORY` (`TRANSACTION_CATEGORY_CODE`, `CREATED_BY`, `
 (30, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 30, 'Staff training', 'Staff training', 0, NULL, 8),
 (31, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 31, 'Staff welfare', 'Staff welfare', 0, NULL, 8),
 (32, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 32, 'Stationery', 'Stationery', 0, NULL, 8),
-(33, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 33, 'Subscriptions to professional and trade bodies', 'Subscriptions to professional and trade bodies', 0, NULL, 8),
+(33, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 33, 'Subscriptions to professional AND trade bodies', 'Subscriptions to professional AND trade bodies', 0, NULL, 8),
 (34, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 34, 'Sundry expenses', 'Sundry expenses', 0, NULL, 8),
 (35, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 35, 'Telecommunications costs', 'Telecommunications costs', 0, NULL, 8),
-(36, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 36, 'Travel and subsistence expenses', 'Travel and subsistence expenses', 0, NULL, 8),
+(36, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 36, 'Travel AND subsistence expenses', 'Travel AND subsistence expenses', 0, NULL, 8),
 (37, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 37, 'Use of residence for business purposes', 'Use of residence for business purposes', 0, NULL, 8),
 (38, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 38, 'Vehicle running costs', 'Vehicle running costs', 0, NULL, 8),
 (39, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 39, 'Employee Salary', 'Employee Salary', 0, NULL, 9),
@@ -524,7 +524,7 @@ INSERT INTO `TRANSACTION_CATEGORY` (`TRANSACTION_CATEGORY_CODE`, `CREATED_BY`, `
 (45, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 45, 'Directors Capital', 'Directors Capital', 0, 7, 5),
 (46, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 46, 'Director Loan Payment', 'Director Loan Payment', 0, 7, 5),
 (47, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 47, 'Accountancy Fees', 'Accountancy Fees', 0, 9, 8),
-(48, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 48, 'Advertising and Promotion', 'Advertising and Promotion', 0, 10, 8),
+(48, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 48, 'Advertising AND Promotion', 'Advertising AND Promotion', 0, 10, 8),
 (49, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 49, 'Business Entertaining', 'Business Entertaining', 0, 10, 8),
 (50, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 50, 'Charitable Donations', 'Charitable Donations', 0, 11, 8),
 (51, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 51, 'Web Hosting', 'Web Hosting', 0, 12, 8),
@@ -543,7 +543,7 @@ INSERT INTO `TRANSACTION_CATEGORY` (`TRANSACTION_CATEGORY_CODE`, `CREATED_BY`, `
 (64, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 64, 'VAT Penalty', 'VAT Penalty', 0, 22, 8),
 (65, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 65, 'Corporation Tax Penalty', 'Corporation Tax Penalty', 0, 22, 8),
 (66, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 66, 'PAYE/NI Penalty', 'PAYE/NI Penalty', 0, 22, 8),
-(67, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 67, 'Legal and Professional Fees', 'Legal and Professional Fees', 0, 23, 8),
+(67, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 67, 'Legal AND Professional Fees', 'Legal AND Professional Fees', 0, 23, 8),
 (68, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 68, 'Formation Costs', 'Formation Costs', 0, 24, 8),
 (69, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 69, 'Postage', 'Postage', 0, 25, 8),
 (70, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 70, 'Printing', 'Printing', 0, 26, 8),
@@ -554,12 +554,12 @@ INSERT INTO `TRANSACTION_CATEGORY` (`TRANSACTION_CATEGORY_CODE`, `CREATED_BY`, `
 (75, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 75, 'Staff Training', 'Staff Training', 0, 30, 8),
 (76, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 76, 'Childcare Vouchers', 'Childcare Vouchers', 0, 31, 8),
 (77, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 77, 'Stationery', 'Stationery', 0, 32, 8),
-(78, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 78, 'Books and Journals', 'Books and Journals', 0, 32, 8),
+(78, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 78, 'Books AND Journals', 'Books AND Journals', 0, 32, 8),
 (79, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 79, 'Subscriptions', 'Subscriptions', 0, 33, 8),
 (80, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 80, 'Sundries', 'Sundries', 0, 34, 8),
 (81, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 81, 'Internet & Telephone', 'Internet & Telephone', 0, 35, 8),
 (82, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 82, 'Mobile Phone', 'Mobile Phone', 0, 35, 8),
-(83, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 83, 'Accommodation and Meals', 'Accommodation and Meals', 0, 36, 8),
+(83, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 83, 'Accommodation AND Meals', 'Accommodation AND Meals', 0, 36, 8),
 (84, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 84, 'Travel', 'Travel', 0, 36, 8),
 (85, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 85, 'Use Of Home', 'Use Of Home', 0, 37, 8),
 (86, 1, '2017-10-12 10:09:44', 'N', b'0', 1, '2017-10-12 10:09:44', 86, 'Mileage', 'Mileage', 0, 38, 8),
@@ -570,83 +570,83 @@ INSERT INTO `TRANSACTION_CATEGORY` (`TRANSACTION_CATEGORY_CODE`, `CREATED_BY`, `
 
 -- --------------------------------------------------------
 
-DROP TABLE IF EXISTS `transactionview`;
+DROP TABLE IF EXISTS `TRANSACTIONVIEW`;
 
-create view transactionview as 
-select t.transaction_id as transaction_id,t.current_balance as current_balance,t.debit_credit_flag as debit_credit_flag,t.entry_type as entry_type,t.reference_id as reference_id,t.reference_type as reference_type,t.transaction_amount as transaction_amount,t.transaction_date as transaction_date,t.transaction_description as transaction_description,t.bank_account_id as bank_account_id,t.parent_transaction as parent_transaction,
-(select tc.transaction_category_name from transaction_category tc where tc.delete_flag = 0 and t.explained_transaction_category_code = tc.transaction_category_id) as transaction_category_name,
-(select tt.transaction_type_name from transaction_type tt where tt.delete_flag = 0 and t.transaction_type_code = tt.transaction_type_code) as transaction_type_name,
-(select es.explanation_status_code from explanation_status es where es.delete_flag = 0 and t.explanation_status_code = es.explanation_status_code) as explanation_status_code,
-(select es.explanation_status_name from explanation_status es where es.delete_flag = 0 and t.explanation_status_code = es.explanation_status_code) as explanation_status_name,
-(select i.invoice_reference_number from invoice as i where i.delete_flag = 0 and t.reference_id = i.invoice_id) as reference_name,
-(select i.due_amount from invoice as i where i.delete_flag = 0 and t.reference_id = i.invoice_id) as due_amount,
-(select c.first_name from invoice as i join contact as c on c.contact_id=i.contact_id where i.delete_flag = 0 and t.reference_id = i.invoice_id) as contact_name,
-(select i.invoice_due_date from invoice as i where i.delete_flag = 0 and t.reference_id = i.invoice_id) as due_on,
-(select cr.currency_symbol from currency as cr join bank_account as ba on ba.bank_account_currency_code = cr.currency_code where t.bank_account_id = ba.bank_account_id) as currency_symbol
-from transacton t where t.delete_flag = 0 and t.reference_type = 1
-union
-select t.transaction_id as transaction_id,t.current_balance as current_balance,t.debit_credit_flag as debit_credit_flag,t.entry_type as entry_type,t.reference_id as reference_id,t.reference_type as reference_type,t.transaction_amount as transaction_amount,t.transaction_date as transaction_date,t.transaction_description as transaction_description,t.bank_account_id as bank_account_id,t.parent_transaction as parent_transaction,
-(select tc.transaction_category_name from transaction_category tc where tc.delete_flag = 0 and t.explained_transaction_category_code = tc.transaction_category_id) as transaction_category_name,
-(select tt.transaction_type_name from transaction_type tt where tt.delete_flag = 0 and t.transaction_type_code = tt.transaction_type_code) as transaction_type_name,
-(select es.explanation_status_code from explanation_status es where es.delete_flag = 0 and t.explanation_status_code = es.explanation_status_code) as explanation_status_code,
-(select es.explanation_status_name from explanation_status es where es.delete_flag = 0 and t.explanation_status_code = es.explanation_status_code) as explanation_status_name,
-(select p.receipt_number from purchase as p where p.delete_flag = 0 and t.reference_id = p.purchase_id ) as reference_name,
-(select p.purchase_due_amount from purchase as p where p.delete_flag = 0 and t.reference_id = p.purchase_id) as due_amount,
-(select c.first_name from purchase as p join contact as c on c.contact_id = p.contact_id where p.delete_flag = 0 and t.reference_id = p.purchase_id) as contact_name,
-(select p.purchase_due_date from purchase as p where p.delete_flag = 0 and t.reference_id = p.purchase_id) as due_on,
-(select cr.currency_symbol from currency as cr join bank_account as ba on ba.bank_account_currency_code = cr.currency_code where t.bank_account_id = ba.bank_account_id) as currency_symbol
-from transacton t where t.delete_flag = 0 and t.reference_type = 2
-union
-select t.transaction_id as transaction_id,t.current_balance as current_balance,t.debit_credit_flag as debit_credit_flag,t.entry_type as entry_type,t.reference_id as reference_id,t.reference_type as reference_type,t.transaction_amount as transaction_amount,t.transaction_date as transaction_date,t.transaction_description as transaction_description,t.bank_account_id as bank_account_id,t.parent_transaction as parent_transaction,
-(select tc.transaction_category_name from transaction_category tc where tc.delete_flag = 0 and t.explained_transaction_category_code = tc.transaction_category_id) as transaction_category_name,
-(select tt.transaction_type_name from transaction_type tt where tt.delete_flag = 0 and t.transaction_type_code = tt.transaction_type_code) as transaction_type_name,
-(select es.explanation_status_code from explanation_status es where es.delete_flag = 0 and t.explanation_status_code = es.explanation_status_code) as explanation_status_code,
-(select es.explanation_status_name from explanation_status es where es.delete_flag = 0 and t.explanation_status_code = es.explanation_status_code) as explanation_status_name,
+CREATE VIEW TRANSACTIONVIEW AS 
+SELECT t.TRANSACTION_ID AS TRANSACTION_ID,t.CURRENT_BALANCE AS CURRENT_BALANCE,t.DEBIT_CREDIT_FLAG AS DEBIT_CREDIT_FLAG,t.ENTRY_TYPE AS ENTRY_TYPE,t.REFERENCE_ID AS REFERENCE_ID,t.REFERENCE_TYPE AS REFERENCE_TYPE,t.TRANSACTION_AMOUNT AS TRANSACTION_AMOUNT,t.TRANSACTION_DATE AS TRANSACTION_DATE,t.TRANSACTION_DESCRIPTION AS TRANSACTION_DESCRIPTION,t.BANK_ACCOUNT_ID AS BANK_ACCOUNT_ID,t.PARENT_TRANSACTION AS PARENT_TRANSACTION,
+(SELECT tc.TRANSACTION_CATEGORY_NAME FROM TRANSACTION_CATEGORY tc WHERE tc.DELETE_FLAG = 0 AND t.EXPLAINED_TRANSACTION_CATEGORY_CODE = tc.TRANSACTION_CATEGORY_ID) AS TRANSACTION_CATEGORY_NAME,
+(SELECT tt.TRANSACTION_TYPE_NAME FROM TRANSACTION_TYPE tt WHERE tt.DELETE_FLAG = 0 AND t.TRANSACTION_TYPE_CODE = tt.TRANSACTION_TYPE_CODE) AS TRANSACTION_TYPE_NAME,
+(SELECT es.EXPLANATION_STATUS_CODE FROM EXPLANATION_STATUS es WHERE es.DELETE_FLAG = 0 AND t.EXPLANATION_STATUS_CODE = es.EXPLANATION_STATUS_CODE) AS EXPLANATION_STATUS_CODE,
+(SELECT es.EXPLANATION_STATUS_NAME FROM EXPLANATION_STATUS es WHERE es.DELETE_FLAG = 0 AND t.EXPLANATION_STATUS_CODE = es.EXPLANATION_STATUS_CODE) AS EXPLANATION_STATUS_NAME,
+(SELECT i.INVOICE_REFERENCE_NUMBER FROM INVOICE AS i WHERE i.DELETE_FLAG = 0 AND t.REFERENCE_ID = i.INVOICE_ID) AS REFERENCE_NAME,
+(SELECT i.DUE_AMOUNT FROM INVOICE AS i WHERE i.DELETE_FLAG = 0 AND t.REFERENCE_ID = i.INVOICE_ID) AS DUE_AMOUNT,
+(SELECT c.FIRST_NAME FROM INVOICE AS i JOIN CONTACT AS c ON c.CONTACT_ID=i.CONTACT_ID WHERE i.DELETE_FLAG = 0 AND t.REFERENCE_ID = i.INVOICE_ID) AS CONTACT_NAME,
+(SELECT i.INVOICE_DUE_DATE FROM INVOICE AS i WHERE i.DELETE_FLAG = 0 AND t.REFERENCE_ID = i.INVOICE_ID) AS DUE_ON,
+(SELECT cr.CURRENCY_SYMBOL FROM CURRENCY AS cr JOIN BANK_ACCOUNT AS ba ON ba.BANK_ACCOUNT_CURRENCY_CODE = cr.CURRENCY_CODE WHERE t.BANK_ACCOUNT_ID = ba.BANK_ACCOUNT_ID) AS CURRENCY_SYMBOL
+FROM TRANSACTON t WHERE t.DELETE_FLAG = 0 AND t.REFERENCE_TYPE = 1
+UNION
+SELECT t.TRANSACTION_ID AS TRANSACTION_ID,t.CURRENT_BALANCE AS CURRENT_BALANCE,t.DEBIT_CREDIT_FLAG AS DEBIT_CREDIT_FLAG,t.ENTRY_TYPE AS ENTRY_TYPE,t.REFERENCE_ID AS REFERENCE_ID,t.REFERENCE_TYPE AS REFERENCE_TYPE,t.TRANSACTION_AMOUNT AS TRANSACTION_AMOUNT,t.TRANSACTION_DATE AS TRANSACTION_DATE,t.TRANSACTION_DESCRIPTION AS TRANSACTION_DESCRIPTION,t.BANK_ACCOUNT_ID AS BANK_ACCOUNT_ID,t.PARENT_TRANSACTION AS PARENT_TRANSACTION,
+(SELECT tc.TRANSACTION_CATEGORY_NAME FROM TRANSACTION_CATEGORY tc WHERE tc.DELETE_FLAG = 0 AND t.EXPLAINED_TRANSACTION_CATEGORY_CODE = tc.TRANSACTION_CATEGORY_ID) AS TRANSACTION_CATEGORY_NAME,
+(SELECT tt.TRANSACTION_TYPE_NAME FROM TRANSACTION_TYPE tt WHERE tt.DELETE_FLAG = 0 AND t.TRANSACTION_TYPE_CODE = tt.TRANSACTION_TYPE_CODE) AS TRANSACTION_TYPE_NAME,
+(SELECT es.EXPLANATION_STATUS_CODE FROM EXPLANATION_STATUS es WHERE es.DELETE_FLAG = 0 AND t.EXPLANATION_STATUS_CODE = es.EXPLANATION_STATUS_CODE) AS EXPLANATION_STATUS_CODE,
+(SELECT es.EXPLANATION_STATUS_NAME FROM EXPLANATION_STATUS es WHERE es.DELETE_FLAG = 0 AND t.EXPLANATION_STATUS_CODE = es.EXPLANATION_STATUS_CODE) AS EXPLANATION_STATUS_NAME,
+(SELECT p.RECEIPT_NUMBER FROM PURCHASE AS p WHERE p.DELETE_FLAG = 0 AND t.REFERENCE_ID = p.PURCHASE_ID ) AS REFERENCE_NAME,
+(SELECT p.PURCHASE_DUE_AMOUNT FROM PURCHASE AS p WHERE p.DELETE_FLAG = 0 AND t.REFERENCE_ID = p.PURCHASE_ID) AS DUE_AMOUNT,
+(SELECT c.FIRST_NAME FROM PURCHASE AS p JOIN CONTACT AS c ON c.CONTACT_ID = p.CONTACT_ID WHERE p.DELETE_FLAG = 0 AND t.REFERENCE_ID = p.PURCHASE_ID) AS CONTACT_NAME,
+(SELECT p.PURCHASE_DUE_DATE FROM PURCHASE AS p WHERE p.DELETE_FLAG = 0 AND t.REFERENCE_ID = p.PURCHASE_ID) AS DUE_ON,
+(SELECT cr.CURRENCY_SYMBOL FROM CURRENCY AS cr JOIN BANK_ACCOUNT AS ba ON ba.BANK_ACCOUNT_CURRENCY_CODE = cr.CURRENCY_CODE WHERE t.BANK_ACCOUNT_ID = ba.BANK_ACCOUNT_ID) AS CURRENCY_SYMBOL
+FROM TRANSACTON t WHERE t.DELETE_FLAG = 0 AND t.REFERENCE_TYPE = 2
+UNION
+SELECT t.TRANSACTION_ID AS TRANSACTION_ID,t.CURRENT_BALANCE AS CURRENT_BALANCE,t.DEBIT_CREDIT_FLAG AS DEBIT_CREDIT_FLAG,t.ENTRY_TYPE AS ENTRY_TYPE,t.REFERENCE_ID AS REFERENCE_ID,t.REFERENCE_TYPE AS REFERENCE_TYPE,t.TRANSACTION_AMOUNT AS TRANSACTION_AMOUNT,t.TRANSACTION_DATE AS TRANSACTION_DATE,t.TRANSACTION_DESCRIPTION AS TRANSACTION_DESCRIPTION,t.BANK_ACCOUNT_ID AS BANK_ACCOUNT_ID,t.PARENT_TRANSACTION AS PARENT_TRANSACTION,
+(SELECT tc.TRANSACTION_CATEGORY_NAME FROM TRANSACTION_CATEGORY tc WHERE tc.DELETE_FLAG = 0 AND t.EXPLAINED_TRANSACTION_CATEGORY_CODE = tc.TRANSACTION_CATEGORY_ID) AS TRANSACTION_CATEGORY_NAME,
+(SELECT tt.TRANSACTION_TYPE_NAME FROM TRANSACTION_TYPE tt WHERE tt.DELETE_FLAG = 0 AND t.TRANSACTION_TYPE_CODE = tt.TRANSACTION_TYPE_CODE) AS TRANSACTION_TYPE_NAME,
+(SELECT es.EXPLANATION_STATUS_CODE FROM EXPLANATION_STATUS es WHERE es.DELETE_FLAG = 0 AND t.EXPLANATION_STATUS_CODE = es.EXPLANATION_STATUS_CODE) AS EXPLANATION_STATUS_CODE,
+(SELECT es.EXPLANATION_STATUS_NAME FROM EXPLANATION_STATUS es WHERE es.DELETE_FLAG = 0 AND t.EXPLANATION_STATUS_CODE = es.EXPLANATION_STATUS_CODE) AS EXPLANATION_STATUS_NAME,
 null,
 null,
 null,
 null,
-(select cr.currency_symbol from currency as cr join bank_account as ba on ba.bank_account_currency_code = cr.currency_code where t.bank_account_id = ba.bank_account_id) as currency_symbol
-from transacton t where t.delete_flag = 0 and t.transaction_id not in (select t.transaction_id from transacton t where t.delete_flag = 0 and t.reference_type = 2) and 
-t.transaction_id not in (select t.transaction_id from transacton t where t.delete_flag = 0 and t.reference_type = 1);
+(SELECT cr.CURRENCY_SYMBOL FROM CURRENCY AS cr JOIN BANK_ACCOUNT AS ba ON ba.BANK_ACCOUNT_CURRENCY_CODE = cr.CURRENCY_CODE WHERE t.BANK_ACCOUNT_ID = ba.BANK_ACCOUNT_ID) AS CURRENCY_SYMBOL
+FROM TRANSACTON t WHERE t.DELETE_FLAG = 0 AND t.TRANSACTION_ID NOT IN (SELECT t.TRANSACTION_ID FROM TRANSACTON t WHERE t.DELETE_FLAG = 0 AND t.REFERENCE_TYPE = 2) AND 
+t.TRANSACTION_ID NOT IN (SELECT t.TRANSACTION_ID FROM TRANSACTON t WHERE t.DELETE_FLAG = 0 AND t.REFERENCE_TYPE = 1);
 
-DROP TABLE IF EXISTS `contactview`;
+DROP TABLE IF EXISTS `CONTACTVIEW`;
 
-create view contactview as
-select c.contact_id ,c.contact_type,c.email,c.first_name,c.middle_name,c.last_name,c.organization,
-(select cr.currency_symbol as currency_symbol from currency cr where c.currency_code = cr.currency_code) as currency_symbol,
-(select t.title_description as next_due_date from title t where c.title_code = t.title_code) as title,
-c.telephone, 
-(select i.invoice_due_date as next_due_date from invoice as i where c.contact_id = i.contact_id and i.due_amount != 0 order by i.invoice_due_date limit 0,1) as next_due_date ,
-(select i.due_amount as due_amount from invoice as i where c.contact_id = i.contact_id and i.due_amount != 0 order by i.invoice_due_date limit 0,1) as due_amount 
-from contact as c where c.contact_type = 2 and c.delete_flag !=1
-union
-select c.contact_id ,c.contact_type,c.email,c.first_name,c.middle_name,c.last_name,c.organization,
-(select cr.currency_symbol as currency_symbol from currency cr where c.currency_code = cr.currency_code) as currency_symbol,
-(select t.title_description as next_due_date from title t where c.title_code = t.title_code) as title,
-c.telephone, 
-(select p.purchase_due_date as next_due_date from purchase as p where c.contact_id = p.contact_id and p.purchase_due_amount != 0 order by p.purchase_due_date limit 0,1) as next_due_date ,
-(select p.purchase_due_amount as due_amount from purchase as p where c.contact_id = p.contact_id and p.purchase_due_amount != 0 order by p.purchase_due_date limit 0,1) as due_amount 
-from contact as c where c.contact_type = 1 and c.delete_flag !=1
-union
-select c.contact_id ,c.contact_type,c.email,c.first_name,c.middle_name,c.last_name,c.organization,
-(select cr.currency_symbol as currency_symbol from currency cr where c.currency_code = cr.currency_code) as currency_symbol,
-(select t.title_description as next_due_date from title t where c.title_code = t.title_code) as title,
-c.telephone,null,null 
-from contact as c where c.contact_type = 3 and c.delete_flag !=1
-union
-select c.contact_id,c.contact_type,c.email,c.first_name,c.middle_name,c.last_name,c.organization,
-(select cr.currency_symbol as currency_symbol from currency cr where c.currency_code = cr.currency_code) as currency_symbol,
-(select t.title_description as next_due_date from title t where c.title_code = t.title_code) as title,
-c.telephone,null,null from contact as c where c.contact_id not in 
-(select 
-(select c.contact_id as next_due_date from invoice as i where c.contact_id = i.contact_id and i.due_amount != 0 order by i.invoice_due_date limit 0,1) as contact_id
-from contact as c where c.contact_type = 2 and c.delete_flag !=1 ) 
-and c.contact_id not in 
-(select 
-(select p.contact_id as next_due_date from purchase as p where c.contact_id = p.contact_id and p.purchase_due_amount != 0 order by p.purchase_due_date limit 0,1) as contact_id 
-from contact as c where c.contact_type = 1 and c.delete_flag !=1)
-and c.contact_id not in 
-(select c.contact_id from contact as c where c.contact_type = 3 and c.delete_flag !=1) and c.delete_flag !=1;
+CREATE VIEW CONTACTVIEW AS
+SELECT c.CONTACT_ID ,c.CONTACT_TYPE,c.EMAIL,c.FIRST_NAME,c.MIDDLE_NAME,c.LAST_NAME,c.ORGANIZATION,
+(SELECT cr.CURRENCY_SYMBOL AS CURRENCY_SYMBOL FROM CURRENCY cr WHERE c.CURRENCY_CODE = cr.CURRENCY_CODE) AS CURRENCY_SYMBOL,
+(SELECT t.TITLE_DESCRIPTION AS NEXT_DUE_DATE FROM TITLE t WHERE c.TITLE_CODE = t.TITLE_CODE) AS TITLE,
+c.TELEPHONE, 
+(SELECT i.INVOICE_DUE_DATE AS NEXT_DUE_DATE FROM INVOICE AS i WHERE c.CONTACT_ID = i.CONTACT_ID AND i.DUE_AMOUNT != 0 ORDER BY i.INVOICE_DUE_DATE LIMIT 0,1) AS NEXT_DUE_DATE ,
+(SELECT i.DUE_AMOUNT AS DUE_AMOUNT FROM INVOICE AS i WHERE c.CONTACT_ID = i.CONTACT_ID AND i.DUE_AMOUNT != 0 ORDER BY i.INVOICE_DUE_DATE LIMIT 0,1) AS DUE_AMOUNT 
+FROM CONTACT AS c WHERE c.CONTACT_TYPE = 2 AND c.DELETE_FLAG !=1
+UNION
+SELECT c.CONTACT_ID ,c.CONTACT_TYPE,c.EMAIL,c.FIRST_NAME,c.MIDDLE_NAME,c.LAST_NAME,c.ORGANIZATION,
+(SELECT cr.CURRENCY_SYMBOL AS CURRENCY_SYMBOL FROM CURRENCY cr WHERE c.CURRENCY_CODE = cr.CURRENCY_CODE) AS CURRENCY_SYMBOL,
+(SELECT t.TITLE_DESCRIPTION AS NEXT_DUE_DATE FROM TITLE t WHERE c.TITLE_CODE = t.TITLE_CODE) AS TITLE,
+c.TELEPHONE, 
+(SELECT p.PURCHASE_DUE_DATE AS NEXT_DUE_DATE FROM PURCHASE AS p WHERE c.CONTACT_ID = p.CONTACT_ID AND p.PURCHASE_DUE_AMOUNT != 0 ORDER BY p.PURCHASE_DUE_DATE LIMIT 0,1) AS NEXT_DUE_DATE ,
+(SELECT p.PURCHASE_DUE_AMOUNT AS DUE_AMOUNT FROM PURCHASE AS p WHERE c.CONTACT_ID = p.CONTACT_ID AND p.PURCHASE_DUE_AMOUNT != 0 ORDER BY p.PURCHASE_DUE_DATE LIMIT 0,1) AS DUE_AMOUNT 
+FROM CONTACT AS c WHERE c.CONTACT_TYPE = 1 AND c.DELETE_FLAG !=1
+UNION
+SELECT c.CONTACT_ID ,c.CONTACT_TYPE,c.EMAIL,c.FIRST_NAME,c.MIDDLE_NAME,c.LAST_NAME,c.ORGANIZATION,
+(SELECT cr.CURRENCY_SYMBOL AS CURRENCY_SYMBOL FROM CURRENCY cr WHERE c.CURRENCY_CODE = cr.CURRENCY_CODE) AS CURRENCY_SYMBOL,
+(SELECT t.TITLE_DESCRIPTION AS NEXT_DUE_DATE FROM TITLE t WHERE c.TITLE_CODE = t.TITLE_CODE) AS TITLE,
+c.TELEPHONE,null,null 
+FROM CONTACT AS c WHERE c.CONTACT_TYPE = 3 AND c.DELETE_FLAG !=1
+UNION
+SELECT c.CONTACT_ID,c.CONTACT_TYPE,c.EMAIL,c.FIRST_NAME,c.MIDDLE_NAME,c.LAST_NAME,c.ORGANIZATION,
+(SELECT cr.CURRENCY_SYMBOL AS CURRENCY_SYMBOL FROM CURRENCY cr WHERE c.CURRENCY_CODE = cr.CURRENCY_CODE) AS CURRENCY_SYMBOL,
+(SELECT t.TITLE_DESCRIPTION AS NEXT_DUE_DATE FROM TITLE t WHERE c.TITLE_CODE = t.TITLE_CODE) AS TITLE,
+c.TELEPHONE,null,null FROM CONTACT AS c WHERE c.CONTACT_ID NOT IN 
+(SELECT 
+(SELECT c.CONTACT_ID AS NEXT_DUE_DATE FROM INVOICE AS i WHERE c.CONTACT_ID = i.CONTACT_ID AND i.DUE_AMOUNT != 0 ORDER BY i.INVOICE_DUE_DATE LIMIT 0,1) AS CONTACT_ID
+FROM CONTACT AS c WHERE c.CONTACT_TYPE = 2 AND c.DELETE_FLAG !=1 ) 
+AND c.CONTACT_ID NOT IN 
+(SELECT 
+(SELECT p.CONTACT_ID AS NEXT_DUE_DATE FROM PURCHASE AS p WHERE c.CONTACT_ID = p.CONTACT_ID AND p.PURCHASE_DUE_AMOUNT != 0 ORDER BY p.PURCHASE_DUE_DATE LIMIT 0,1) AS CONTACT_ID 
+FROM CONTACT AS c WHERE c.CONTACT_TYPE = 1 AND c.DELETE_FLAG !=1)
+AND c.CONTACT_ID NOT IN 
+(SELECT c.CONTACT_ID FROM CONTACT AS c WHERE c.CONTACT_TYPE = 3 AND c.DELETE_FLAG !=1) AND c.DELETE_FLAG !=1;
 
-insert into patch(execution_date,patch_no) values(NOW(),'12122017');
+INSERT INTO PATCH(EXECUTION_DATE,PATCH_NO) VALUES(NOW(),'12122017');
