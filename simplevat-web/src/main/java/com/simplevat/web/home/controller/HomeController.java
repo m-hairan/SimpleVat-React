@@ -168,7 +168,7 @@ public class HomeController implements Serializable {
     }
 
     public String redirectToCreateExpense() {
-        return "/pages/secure/expense/create-expense?faces-redirect=true";
+        return "/pages/secure/expense/expense?faces-redirect=true";
     }
 
     public String redirectToCreateBankAccount() {

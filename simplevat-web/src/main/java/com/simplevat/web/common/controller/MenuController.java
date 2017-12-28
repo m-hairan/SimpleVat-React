@@ -33,15 +33,14 @@ public class MenuController implements Serializable {
     public void init() {
         model = new DefaultMenuModel();
         addHomeMenuItem(model);
-        addBankAccountMenuItem(model);
+        addContactMenuItem(model);
         addProjectMenuItem(model);
+        addProductServiceItem(model);
         addInvoiceMenuItem(model);
         addExpenseMenuItem(model);
+        addBankAccountMenuItem(model);
         addTaxMenuItem(model);
         addReportMenuItem(model);
-        addContactMenuItem(model);
-        addProductServiceItem(model);
-       
     }
 
     private void addHomeMenuItem(DefaultMenuModel model) {

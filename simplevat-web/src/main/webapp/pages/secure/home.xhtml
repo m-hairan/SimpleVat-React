@@ -70,8 +70,12 @@
             .main-content {
                 padding: 0;
             }
-            .simplevat-dashboardpanel{
+            .simplevat-dashboardupperpanel{
                 height:350px;
+                margin-bottom: 15px;
+            }
+            .simplevat-dashboardlowerpanel{
+                height:400px;
                 margin-bottom: 15px;
             }
             .ui-state-hover{
@@ -91,7 +95,7 @@
                 <p:dashboard id="board" model="#{homeController.model}" styleClass="ui-g-12 ui-md-12">
                     <p:ajax event="reorder" />
 
-                    <p:panel id="cashflow" header="Cash Flow" styleClass="simplevat-dashboardpanel">
+                    <p:panel id="cashflow" header="Cash Flow" styleClass="simplevat-dashboardupperpanel">
                         <h:panelGroup layout="block" style="width: auto;position:relative;">
                             <h:panelGroup styleClass="cashFlowChartPanelPlaceHolder" style="position:absolute;width:90%">
                                 <ui:include src="../content-loading-placeholder.xhtml"/>
@@ -104,7 +108,7 @@
                             </h:panelGroup>
                         </h:panelGroup>
                     </p:panel>
-                    <p:panel id="invoiceExpanse" header="Invoices and Expense"  styleClass="simplevat-dashboardpanel">
+                    <p:panel id="invoiceExpanse" header="Invoices and Expense"  styleClass="simplevat-dashboardupperpanel">
                         <h:panelGroup layout="block" style="width: 100%;position:relative;">
                             <h:panelGroup styleClass="invoiceAndExpansePanelPlaceHolder" style="position:absolute;width:90%">
                                 <ui:include src="../content-loading-placeholder.xhtml"/>
@@ -118,7 +122,7 @@
                             </h:panelGroup>
                         </h:panelGroup>
                     </p:panel>
-                    <p:panel id="vatActivity" header="VAT Acivity"  styleClass="simplevat-dashboardpanel">
+                    <p:panel id="vatActivity" header="VAT Acivity"  styleClass="simplevat-dashboardupperpanel">
                         <h:panelGroup layout="block" style="position:relative">
                             <h:panelGroup styleClass="vatActivityPanelPlaceHolder" style="position:absolute;width:90%">
                                 <ui:include src="../content-loading-placeholder.xhtml"/>
@@ -131,7 +135,7 @@
                             </h:panelGroup>
                         </h:panelGroup>
                     </p:panel>
-                    <p:panel id="bankAccount"  header="Bank Account" styleClass="simplevat-dashboardpanel" style="position:relative">
+                    <p:panel id="bankAccount"  header="Bank Account" styleClass="simplevat-dashboardlowerpanel" style="position:relative">
                         <p:scrollPanel mode="native" style="border: none">
                             <h:panelGroup layout="block"  style="border:none;">
                                 <h:panelGroup styleClass="bankAccountPanelPlaceHolder">
@@ -166,7 +170,7 @@
                             </h:panelGroup>
                         </p:scrollPanel>
                     </p:panel>
-                    <p:panel id="scheduler" header="Calendar" styleClass="simplevat-dashboardpanel">
+                    <p:panel id="scheduler" header="Calendar" styleClass="simplevat-dashboardlowerpanel">
                         <h:panelGroup layout="block" style="position:relative">
                             <h:panelGroup styleClass="eventPanelPlaceHolder" style="position:absolute;width:90%">
                                 <ui:include src="../content-loading-placeholder.xhtml"/>
@@ -176,7 +180,7 @@
                             </h:panelGroup>
                         </h:panelGroup>
                     </p:panel>
-                    <p:panel id="activity" header="Activity" styleClass="simplevat-dashboardpanel">
+                    <p:panel id="activity" header="Activity" styleClass="simplevat-dashboardlowerpanel">
                         <h:panelGroup layout="block" id="activityPanel">
                             <ul class="activity-list">
                                 <ui:repeat var="activity" value="#{homeController.activities}">
