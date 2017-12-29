@@ -87,9 +87,12 @@ public class TransactionViewLazyModel extends LazyDataModel<TransactionViewModel
             transactionViewList = transactionService.getTransactionViewList(first, bankAccountId, pageSize, transactionStatus);
         } else {
             transactionViewList = transactionService.getTransactionViewList(first, bankAccountId, pageSize, transactionStatus);
-            if(transactionViewList == null){
+            if (transactionViewList == null) {
                 transactionViewList = transactionService.getTransactionViewList(0, bankAccountId, pageSize, transactionStatus);
             }
+        }
+        if (transactionViewList == null) {
+            transactionViewList = new ArrayList<>();
         }
         populateTransactionList(transactionViewList);
         //filter

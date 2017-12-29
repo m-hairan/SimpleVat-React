@@ -61,6 +61,10 @@ public class PurchaseListController extends BaseController implements Serializab
 
     @PostConstruct
     public void init() {
+        totalPurchases = 0;
+        totalPaid = 0;
+        totalPartiallyPaid = 0;
+        totalUnPaid = 0;
         purchaseControllerHelper = new PurchaseControllerHelper();
         populatePurchases();
     }

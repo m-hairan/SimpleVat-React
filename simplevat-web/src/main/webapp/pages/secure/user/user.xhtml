@@ -69,7 +69,6 @@
                                     <p:outputLabel for="firstName" />
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="firstName"
-                                                     maxlength="25"
                                                      required="true"
                                                      requiredMessage="Please enter First Name"
                                                      value="#{userController.selectedUser.firstName}"/>
@@ -82,7 +81,6 @@
                                         <p:inputText id="lastName"
                                                      required="true"
                                                      requiredMessage="Please enter Last Name"
-                                                     maxlength="25"
                                                      value="#{userController.selectedUser.lastName}"/>
                                         <label>#{messages.lastName}</label>
                                         <p:message for="lastName" />
@@ -91,7 +89,6 @@
                                     <h:panelGroup styleClass="md-inputfield" rendered="#{userController.selectedUser.createdBy != 0}">
                                         <p:inputText id="emailId"
                                                      required="true"
-                                                     maxlength="25"
                                                      requiredMessage="Please enter email address"
                                                      validatorMessage="Invalid email format"
                                                      value="#{userController.selectedUser.userEmail}">
@@ -107,7 +104,6 @@
                                         <p:inputText id="emailId1"
                                                      required="true"
                                                      disabled="true"
-                                                     maxlength="25"
                                                      requiredMessage="Please enter email address"
                                                      validatorMessage="Invalid email format"
                                                      value="#{userController.selectedUser.userEmail}">
