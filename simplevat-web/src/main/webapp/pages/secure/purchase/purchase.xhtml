@@ -434,7 +434,7 @@
                                              icon="ui-icon-forward"  update="createPurchaseForm"
                                              action="#{purchaseController.saveAndContinuePurchase}" />
                         </ui:fragment>
-                        <p:commandButton value="#{messages.CashPayment}" icon="ui-icon-save" update="createPurchaseForm"
+                        <p:commandButton value="#{messages.CashPayment}" icon="ui-icon-attach-money" update="createPurchaseForm"
                                          action="#{purchaseController.savePurchase}" >
                             <f:setPropertyActionListener target="#{purchaseController.selectedPurchaseModel.paymentMode}" value="1" />
                         </p:commandButton>

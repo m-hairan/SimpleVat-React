@@ -12,16 +12,19 @@
     <ui:define name="content">
 
         <h:form>
-           
+
             <si:cdataPanel newAction="#{invoiceListController.redirectToCreateInvoice()}">
-               
+
                 <f:facet name="left">
+                    <span class="ui-separator" style="padding-right: 5px;">
+                        <span class="fa fa-ellipsis-v SoftGray" />
+                    </span>
                     <p:commandButton value="All (#{invoiceListController.totalInvoices})" styleClass="AquaButton" action="#{invoiceListController.populateList()}" update="#{p:component('invoiceTable')}"/>
                     <p:commandButton icon="status-PAID" value="Paid (#{invoiceListController.totalPaid})" styleClass="AquaButton" action="#{invoiceListController.allPaidInvoice()}" update="#{p:component('invoiceTable')}"/>
                     <p:commandButton icon="status-UNPAID" value="Unpaid (#{invoiceListController.totalUnPaid})" styleClass="AquaButton" action="#{invoiceListController.allUnPaidInvoice()}" update="#{p:component('invoiceTable')}"/>
                     <p:commandButton icon="status-PARTIALPAID" value="Partially Paid (#{invoiceListController.totalPartiallyPaid})" styleClass="AquaButton" action="#{invoiceListController.allPartialPaidInvoice()}" update="#{p:component('invoiceTable')}"/>
                 </f:facet>
-          
+
                 <p:dataTable var="invoice" 
                              value="#{invoiceListController.invoiceList}"
                              selectionMode="single"
@@ -35,7 +38,7 @@
                     <f:facet name="{TableHeader}">
                         <p:outputLabel styleClass="tableCustomHeader" value="#{messages.invoices}" />
                     </f:facet>
-                   
+
                     <p:column width="30" style="text-align: center">
                         <h:panelGroup layout="block">
                             <h:panelGroup layout="block" style="display:block" styleClass="label status-#{invoice.statusName}" >
@@ -92,7 +95,7 @@
                         </p:commandButton>
                     </p:column>
                 </p:dataTable>
-                
+
             </si:cdataPanel>
         </h:form>
 

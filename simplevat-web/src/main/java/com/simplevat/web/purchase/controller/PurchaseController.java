@@ -263,8 +263,25 @@ public class PurchaseController extends BaseController implements Serializable {
     private boolean validatePurchaseLineItems() { //---------------
         boolean validated = true;
         for (PurchaseItemModel lastItem : selectedPurchaseModel.getPurchaseItems()) {
-            if (lastItem.getUnitPrice() == null || lastItem.getQuatity() < 1 || lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0) {
-                FacesMessage message = new FacesMessage("Please enter proper detail for all purchase items.");
+            StringBuilder validationMessage=new StringBuilder("Please Enter ");
+            if (lastItem.getUnitPrice() == null) {
+                validationMessage.append("Unit Price ");
+                validated = false;
+            }
+            if(validated && lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0){
+                validationMessage=new StringBuilder("Unit price should be greater than 0 ");
+                validated = false;
+            }
+            if(lastItem.getQuatity() < 1 ){
+                if(!validated){
+                    validationMessage.append("and ");
+                }
+                validationMessage.append("Quantity should be greater than 0 ");
+                validated = false;
+            }
+            if(!validated){
+                validationMessage.append("in Purchase items ");
+                FacesMessage message = new FacesMessage(validationMessage.toString());
                 message.setSeverity(FacesMessage.SEVERITY_ERROR);
                 FacesContext.getCurrentInstance().addMessage("validationId", message);
                 validated = false;

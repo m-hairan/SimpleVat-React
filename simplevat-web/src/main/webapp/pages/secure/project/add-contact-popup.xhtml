@@ -20,26 +20,30 @@
                         
                         <p:outputLabel />
                         <h:panelGroup styleClass="md-inputfield">
-                            <p:inputText value="#{projectController.contactModel.firstName}"/>
+                            <p:inputText id="firstname" value="#{projectController.contactModel.firstName}" required="true" requiredMessage="Enter First name"/>
                             <label>First Name</label>
+                            <p:message for="firstname"/>
                         </h:panelGroup>
                         
                         <p:outputLabel />
                         <h:panelGroup styleClass="md-inputfield">
-                            <p:inputText value="#{projectController.contactModel.lastName}"/>
+                            <p:inputText id="lastname" value="#{projectController.contactModel.lastName}" required="true" requiredMessage="Enter Last name"/>
                             <label>Last Name</label>
+                            <p:message for="lastname"/>
                         </h:panelGroup>
                         
                         <p:outputLabel />
                         <h:panelGroup styleClass="md-inputfield">
-                            <p:inputText value="#{projectController.contactModel.organization}"/>
+                            <p:inputText id="organizationname" value="#{projectController.contactModel.organization}" required="true" requiredMessage="Enter Organization"/>
                             <label>Organization Name</label>
+                            <p:message for="organization"/>
                         </h:panelGroup>
                         
                         <p:outputLabel />
                         <h:panelGroup styleClass="md-inputfield">
-                            <p:inputText value="#{projectController.contactModel.email}"/>
+                            <p:inputText id="emailid" value="#{projectController.contactModel.email}" required="true" requiredMessage="Enter Email"/>
                             <label>Email</label>
+                            <p:message for="emailid"/>
                         </h:panelGroup>
                         
                     </p:panelGrid>

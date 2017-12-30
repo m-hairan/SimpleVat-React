@@ -12,6 +12,9 @@
         <h:form id="form">
             <si:cdataPanel newAction="#{purchaseListController.reDirectToCreate()}">
                 <f:facet name="left">
+                    <span class="ui-separator" style="padding-right: 5px;">
+                        <span class="fa fa-ellipsis-v SoftGray" />
+                    </span>
                     <p:commandButton value="All (#{purchaseListController.totalPurchases})" styleClass="AquaButton" action="#{purchaseListController.populatePurchases()}" update="#{p:component('purchaseTable')}"/>
                     <p:commandButton icon="status-PAID" value="Paid (#{purchaseListController.totalPaid})" styleClass="AquaButton" action="#{purchaseListController.allPaidPurchase()}" update="#{p:component('purchaseTable')}"/>
                     <p:commandButton icon="status-UNPAID" value="Unpaid (#{purchaseListController.totalUnPaid})" styleClass="AquaButton" action="#{purchaseListController.allUnPaidPurchase()}" update="#{p:component('purchaseTable')}"/>

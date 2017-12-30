@@ -80,20 +80,20 @@
                 font-size: 25px;
                 text-transform:uppercase;
             }
-/*            .Profile-PlaceHolder.Employee{
-                border-color: #e68a00;
-                background-color: #e68a00;
-            }
-
-            .Profile-PlaceHolder.Vendor{
-                border-color: #0099cc;
-                background-color: #0099cc;
-            }
-
-            .Profile-PlaceHolder.Customer{
-                border-color: #2eb82e;
-                background-color: #2eb82e;
-            }*/
+            /*            .Profile-PlaceHolder.Employee{
+                            border-color: #e68a00;
+                            background-color: #e68a00;
+                        }
+            
+                        .Profile-PlaceHolder.Vendor{
+                            border-color: #0099cc;
+                            background-color: #0099cc;
+                        }
+            
+                        .Profile-PlaceHolder.Customer{
+                            border-color: #2eb82e;
+                            background-color: #2eb82e;
+                        }*/
 
             .Contact-Type-BTN-Employee{
                 color: #e68a00 !important;
@@ -215,8 +215,11 @@
     <ui:define name="content">
 
         <h:form id="contactListForm">
-            <si:cdataPanel newAction= "#{contactController.redirectToCreateContact()}" deleteAction="#{contactListController.delete()}">
+            <si:cdataPanel newAction= "#{contactController.redirectToCreateContact()}" >
                 <f:facet name="left">
+                    <span class="ui-separator" style="padding-right: 5px;">
+                        <span class="fa fa-ellipsis-v SoftGray" />
+                    </span>
                     <p:commandButton icon="Contact-Employee" value="Employee (#{contactListController.totalEmployees})" action="#{contactListController.populateContactEmployeeList()}" styleClass="AquaButton" update="#{p:component('contacts')}" />
                     <p:commandButton icon="Contact-Vendor" value="Vendor (#{contactListController.totalVendors})" action="#{contactListController.populateContactVendorList()}" styleClass="AquaButton" update="#{p:component('contacts')}" />
                     <p:commandButton icon="Contact-Customer" value="Customer (#{contactListController.totalCustomers})" action="#{contactListController.populateContactCustomerList()}" styleClass="AquaButton" update="#{p:component('contacts')}"/>
