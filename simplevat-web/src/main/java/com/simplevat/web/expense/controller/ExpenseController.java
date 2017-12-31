@@ -49,6 +49,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.model.SelectItem;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 
@@ -306,7 +307,8 @@ public class ExpenseController extends BaseController implements Serializable {
             contactService.persist(contact);
         }
         selectedExpenseModel.setExpenseContact(contact);
-
+        RequestContext.getCurrentInstance().execute("PF('add_contact_popup').hide();");
+        initCreateContact();
     }
 
     public String saveExpense() {

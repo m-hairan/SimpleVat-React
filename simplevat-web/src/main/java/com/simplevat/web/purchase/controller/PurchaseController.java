@@ -54,6 +54,7 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.model.SelectItem;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 
@@ -263,23 +264,23 @@ public class PurchaseController extends BaseController implements Serializable {
     private boolean validatePurchaseLineItems() { //---------------
         boolean validated = true;
         for (PurchaseItemModel lastItem : selectedPurchaseModel.getPurchaseItems()) {
-            StringBuilder validationMessage=new StringBuilder("Please Enter ");
+            StringBuilder validationMessage = new StringBuilder("Please Enter ");
             if (lastItem.getUnitPrice() == null) {
                 validationMessage.append("Unit Price ");
                 validated = false;
             }
-            if(validated && lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0){
-                validationMessage=new StringBuilder("Unit price should be greater than 0 ");
+            if (validated && lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0) {
+                validationMessage = new StringBuilder("Unit price should be greater than 0 ");
                 validated = false;
             }
-            if(lastItem.getQuatity() < 1 ){
-                if(!validated){
+            if (lastItem.getQuatity() < 1) {
+                if (!validated) {
                     validationMessage.append("and ");
                 }
                 validationMessage.append("Quantity should be greater than 0 ");
                 validated = false;
             }
-            if(!validated){
+            if (!validated) {
                 validationMessage.append("in Purchase items ");
                 FacesMessage message = new FacesMessage(validationMessage.toString());
                 message.setSeverity(FacesMessage.SEVERITY_ERROR);
@@ -353,7 +354,8 @@ public class PurchaseController extends BaseController implements Serializable {
             contactService.persist(contact);
         }
         selectedPurchaseModel.setPurchaseContact(contact);
-
+        RequestContext.getCurrentInstance().execute("PF('add_contact_popup').hide();");
+        initCreateContact();
     }
 
     public String savePurchase() {

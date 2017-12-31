@@ -543,7 +543,9 @@ public class InvoiceController extends BaseController implements Serializable {
             contactService.persist(contact);
         }
         selectedInvoiceModel.setInvoiceContact(contact);
-
+        RequestContext.getCurrentInstance().execute("PF('add_contact_popup').hide();");
+        initCreateContact();
+       
     }
 
     private void populateVatCategory() {
