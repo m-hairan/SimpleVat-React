@@ -10,9 +10,10 @@ import org.springframework.stereotype.Service;
 import com.simplevat.dao.UserNewDao;
 import com.simplevat.entity.User;
 import com.simplevat.service.UserServiceNew;
+import java.io.Serializable;
 
 @Service("userServiceNew")
-public class UserServiceNewImpl extends UserServiceNew {
+public class UserServiceNewImpl extends UserServiceNew implements Serializable{
 
 	@Autowired
     @Qualifier(value = "userDao")
