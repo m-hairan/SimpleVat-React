@@ -5,6 +5,7 @@ import com.simplevat.entity.Currency;
 import com.simplevat.entity.Project;
 import com.simplevat.entity.User;
 import com.simplevat.entity.invoice.DiscountType;
+import com.simplevat.web.constant.RecurringNameValueMapping;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,14 +53,28 @@ public class InvoiceModel {
     private String contractPoNumber;
 
     private BigDecimal invoiceAmount;
-    
+
     private BigDecimal dueAmount;
 
     private Integer status;
-    
+
     private String statusName;
-    
+
+    private Boolean recurringFlag;
+
     private Integer paymentMode;
+    
+    private RecurringNameValueMapping recurringInterval;
+
+    private RecurringNameValueMapping recurringWeekDays;
+
+    private RecurringNameValueMapping recurringMonth;
+
+    private RecurringNameValueMapping recurringDays;
+
+    private RecurringNameValueMapping recurringFistToLast;
+
+    private RecurringNameValueMapping recurringByAfter;
 
     public void addInvoiceItem(@Nonnull final InvoiceItemModel invoiceItemModel) {
         if (null == this.invoiceLineItems) {

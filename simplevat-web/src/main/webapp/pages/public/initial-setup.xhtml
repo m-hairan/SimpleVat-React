@@ -20,55 +20,7 @@
                     </div>
                     <div class="ui-g-12">
                         <div class="card card-w-title">
-
-<!--    heading===                        <h1>#{messages.user}</h1>-->
-
-                            <p:fieldset legend="#{messages.user_detail}" toggleable="false">
-                                <p:panelGrid columns="6" 
-                                             columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
-                                             layout="grid" 
-                                             styleClass="ui-panelgrid-blank form-group"
-                                             style="border:0px none; background-color:transparent;">
-
-                                    <p:outputLabel for="userId"  />
-                                    <h:panelGroup styleClass="md-inputfield" >
-                                        <p:inputText id="userId"
-                                                     required="true"
-                                                     requiredMessage="Please enter user id"
-                                                     validatorMessage="Invalid email format"
-                                                     value="#{initialUserController.selectedUser.userEmail}">
-                                            <f:validateRegex
-                                                pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-                                        </p:inputText>
-                                        <label>#{messages.user_id}</label>
-                                        <p:message for="userId" />
-                                    </h:panelGroup>
-
-                                    <p:outputLabel for="password"/>
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:password id="password" autocomplete="false"
-                                                    value="#{initialUserController.password}"
-                                                    required="true" 
-                                                    requiredMessage="Please enter Password"/>
-                                        <label>Password</label>
-                                        <p:message for="password" />
-                                    </h:panelGroup>
-                                    <p:outputLabel for="cpassword"/>
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:password id="cpassword" autocomplete="false"
-                                                    required="true"
-                                                    requiredMessage="Please enter Confirm Password"/>
-                                        <label>Confirm Password</label>
-                                        <h:panelGroup>
-                                            <p:message for="cpassword" />
-                                            <o:validateEqual components="password cpassword"
-                                                             message="Passwords are not equal" showMessageFor="password" />
-                                        </h:panelGroup>
-                                    </h:panelGroup>
-
-                                </p:panelGrid>
-                            </p:fieldset>
-
+<!-- <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />-->
                             <p:fieldset legend="#{messages.CompanyDetail}" toggleable="false" >
                                 <p:panelGrid columns="6" 
                                              columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 

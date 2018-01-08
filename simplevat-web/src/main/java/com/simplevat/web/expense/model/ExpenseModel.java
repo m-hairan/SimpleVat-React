@@ -12,6 +12,7 @@ import com.simplevat.entity.Project;
 import com.simplevat.entity.User;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionType;
+import com.simplevat.web.constant.RecurringNameValueMapping;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -50,7 +51,13 @@ public class ExpenseModel {
     byte[] receiptAttachmentBinary;
     private List<ExpenseItemModel> expenseItem;
     private Contact expenseContact;
-
+//    private Boolean recurringFlag;
+//    private RecurringNameValueMapping recurringInterval;
+//    private RecurringNameValueMapping recurringWeekDays;
+//    private RecurringNameValueMapping recurringMonth;
+//    private RecurringNameValueMapping recurringDays;
+//    private RecurringNameValueMapping recurringFistToLast;
+//    private RecurringNameValueMapping recurringByAfter;
 
     public void addExpenseItem(@Nonnull final ExpenseItemModel expenseItemModel) {
         if (null == this.expenseItem) {

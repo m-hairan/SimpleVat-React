@@ -138,7 +138,8 @@ public class InvoiceListController extends BaseController implements Serializabl
         return "invoice.xhtml?faces-redirect=true" + selectedInvoiceId;
     }
 
-    public void deleteInvoice(final Invoice invoice) {
+    public void deleteInvoice(final InvoiceModel invoiceModel) {
+        Invoice invoice = invoiceModelHelper.getInvoiceEntity(invoiceModel);
         invoice.setDeleteFlag(Boolean.TRUE);
         invoiceService.update(invoice, invoice.getInvoiceId());
         initInvoices();

@@ -172,11 +172,217 @@
                                             <h:outputText id="counterValue" />
                                             <label>#{messages.description}</label>
                                         </h:panelGroup>
-                                        <h:panelGroup />
-                                        <h:panelGroup />
+                                        <h:panelGroup styleClass="md-inputfield"/>
+                                        <h:panelGroup styleClass="md-inputfield"/>
+                                        <h:panelGroup rendered="false">
+                                        <p:outputLabel for="makeRecurring"/>
+                                        <p:selectBooleanButton id="makeRecurring" onLabel="Remove Recurring" offLabel="Make Recurring" value="#{expenseController.selectedExpenseModel.recurringFlag}">
+                                            <p:ajax event="change" update="recurringDetails"/>
+                                        </p:selectBooleanButton>
+                                        </h:panelGroup>
                                     </p:panelGrid>
                                 </p:fieldset>
                                 <br />
+                                <h:panelGroup id="recurringDetails" rendered="false" >
+                                    <p:fieldset legend="Recurring Details" toggleSpeed="300" rendered="#{expenseController.selectedExpenseModel.recurringFlag}">
+                                        <p:panelGrid columns="8" id="recurringPanel"
+                                                     columnClasses="ui-grid-col-0,ui-grid-col-3,ui-grid-col-0,ui-grid-col-3,ui-grid-col-0,ui-grid-col-3,ui-grid-col-0,ui-grid-col-3" 
+                                                     layout="grid" 
+                                                     styleClass="ui-panelgrid-blank form-group"
+                                                     style="border:0px none; background-color:transparent;">
+
+                                            <p:outputLabel for="intervals"/>
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:autoComplete id="intervals"
+                                                                converter="#{recurringIntervalConverter}"
+                                                                dropdown="true"
+                                                                forceSelection="true"
+                                                                effect="fold"
+                                                                scrollHeight="250"
+                                                                completeMethod="#{expenseController.recurringUtility.completeRecurringInterval()}"
+                                                                value="#{expenseController.selectedExpenseModel.recurringInterval}"
+                                                                var="interval" 
+                                                                itemValue="#{interval}"
+                                                                itemLabel="#{interval.name}"
+                                                                required="true"
+                                                                requiredMessage="Select recurring interval"
+                                                                >
+                                                    <p:ajax event="itemSelect" process="@this" update="recurringPanel"/>
+                                                </p:autoComplete>
+                                                <label>#{messages.Interval}</label>
+                                                <p:message for="intervals"/>
+                                            </h:panelGroup>
+
+                                            <p:outputLabel for="days" rendered="#{expenseController.selectedExpenseModel.recurringInterval.value == 3}" />
+                                            <h:panelGroup styleClass="md-inputfield" rendered="#{expenseController.selectedExpenseModel.recurringInterval.value == 3}">
+                                                <p:autoComplete
+                                                    id="days"
+                                                    converter="#{recurringDaysConverter}"
+                                                    dropdown="true"
+                                                    forceSelection="true"
+                                                    effect="fold"
+                                                    scrollHeight="250"
+                                                    completeMethod="#{expenseController.recurringUtility.completeDaysRecurring()}"
+                                                    value="#{expenseController.selectedExpenseModel.recurringDays}"
+                                                    var="days"
+                                                    itemValue="#{days}"
+                                                    itemLabel="#{days.name}"
+                                                    required="true"
+                                                    requiredMessage="Select recurring day"
+                                                    >
+                                                    <p:ajax event="itemSelect" process="@this" update="recurringPanel"/>
+                                                </p:autoComplete>
+                                                <label>#{messages.On}</label>
+                                                <p:message for="days"/>
+                                            </h:panelGroup>
+
+                                            <p:outputLabel for="firsttolast" rendered="#{expenseController.selectedExpenseModel.recurringInterval.value == 4 
+                                                                                         or (expenseController.selectedExpenseModel.recurringInterval.value == 3 
+                                                                                         and expenseController.selectedExpenseModel.recurringDays.value == 0 )}"/>
+                                            <h:panelGroup styleClass="md-inputfield" rendered="#{expenseController.selectedExpenseModel.recurringInterval.value == 4 
+                                                                                                 or (expenseController.selectedExpenseModel.recurringInterval.value == 3 
+                                                                                                 and expenseController.selectedExpenseModel.recurringDays.value == 0 )}">
+                                                <p:autoComplete
+                                                    id="firsttolast"
+                                                    converter="#{recurringFirstToLastConverter}"
+                                                    dropdown="true"
+                                                    forceSelection="true"
+                                                    effect="fold"
+                                                    scrollHeight="250"
+                                                    completeMethod="#{expenseController.recurringUtility.completeFirstToLastRecurring()}"
+                                                    value="#{expenseController.selectedExpenseModel.fistToLastRecurring}"
+                                                    var="firsttolast"
+                                                    itemValue="#{firsttolast}"
+                                                    itemLabel="#{firsttolast.name}"
+                                                    required="true"
+                                                    requiredMessage="Select recurring day"
+                                                    >
+                                                </p:autoComplete>
+                                                <p:message for="firsttolast"/>
+                                            </h:panelGroup>
+
+                                            <p:outputLabel for="weeks" rendered="#{expenseController.selectedExpenseModel.recurringInterval.value == 2 
+                                                                                   or (expenseController.selectedExpenseModel.recurringInterval.value == 3
+                                                                                   and expenseController.selectedExpenseModel.recurringDays.value != null
+                                                                                   and expenseController.selectedExpenseModel.recurringDays.value != 0)
+                                                                      }"/>
+
+                                            <h:panelGroup styleClass="md-inputfield" rendered="#{expenseController.selectedExpenseModel.recurringInterval.value == 2 
+                                                                                                 or (expenseController.selectedExpenseModel.recurringInterval.value == 3
+                                                                                                 and expenseController.selectedExpenseModel.recurringDays.value != null
+                                                                                                 and expenseController.selectedExpenseModel.recurringDays.value != 0)
+                                                                      }">
+                                                <p:autoComplete
+                                                    id="weeks"
+                                                    converter="#{recurringWeekslConverter}"
+                                                    dropdown="true"
+                                                    forceSelection="true"
+                                                    effect="fold"
+                                                    scrollHeight="250"
+                                                    completeMethod="#{expenseController.recurringUtility.completeWeekRecurring()}"
+                                                    value="#{expenseController.selectedExpenseModel.recurringWeekDays}"
+                                                    var="weeks"
+                                                    itemValue="#{weeks}"
+                                                    itemLabel="#{weeks.name}"
+                                                    required="true"
+                                                    requiredMessage="Select recurring week day"
+                                                    >
+                                                </p:autoComplete>
+                                                <label>#{messages.Week}</label>
+                                                <p:message for="weeks"/>
+                                            </h:panelGroup>
+
+                                            <p:outputLabel for="every" rendered="#{expenseController.selectedExpenseModel.recurringInterval.value == 1 
+                                                                                   or expenseController.selectedExpenseModel.recurringInterval.value == 2
+                                                                                   or expenseController.selectedExpenseModel.recurringInterval.value == 3}"/>
+                                            <h:panelGroup styleClass="md-inputfield" rendered="#{expenseController.selectedExpenseModel.recurringInterval.value == 1 
+                                                                                                 or expenseController.selectedExpenseModel.recurringInterval.value == 2
+                                                                                                 or expenseController.selectedExpenseModel.recurringInterval.value == 3}">
+                                                <p:inputText id="every" 
+                                                             style="width:100%"
+                                                             required="true"
+                                                             requiredMessage="Enter day in number">
+                                                </p:inputText>
+                                                <label>#{messages.Every}</label>
+                                                <p:message for="every"/>
+                                            </h:panelGroup>
+
+                                            <p:outputLabel for="months"  rendered="#{expenseController.selectedExpenseModel.recurringInterval.value == 4}"/>
+                                            <h:panelGroup styleClass="md-inputfield"  rendered="#{expenseController.selectedExpenseModel.recurringInterval.value == 4}">
+                                                <p:autoComplete
+                                                    id="months"
+                                                    converter="#{recurringMonthsConverter}"
+                                                    dropdown="true"
+                                                    forceSelection="true"
+                                                    effect="fold"
+                                                    scrollHeight="250"
+                                                    completeMethod="#{expenseController.recurringUtility.completeMonthRecurring()}"
+                                                    value="#{expenseController.selectedExpenseModel.recurringMonth}"
+                                                    var="months"
+                                                    itemValue="#{months}"
+                                                    itemLabel="#{months.name}"
+                                                    required="true"
+                                                    requiredMessage="Select recurring month"
+                                                    >
+                                                </p:autoComplete>
+                                                <label>#{messages.Every}</label>
+                                                <p:message for="months"/>
+                                            </h:panelGroup>
+
+                                            <p:outputLabel for="startDate" />
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:calendar id="startDate" 
+                                                            required="true"
+                                                            requiredMessage="Select recurring Start date"/>
+                                                <label>#{messages.Start_Date}</label>
+                                                <p:message for="startDate"/>
+                                            </h:panelGroup>
+
+
+                                            <p:outputLabel for="nonebyafter" />
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:autoComplete
+                                                    id="nonebyafter"
+                                                    converter="#{recurringNoneByAfterConverter}"
+                                                    dropdown="true"
+                                                    forceSelection="true"
+                                                    effect="fold"
+                                                    scrollHeight="250"
+                                                    completeMethod="#{expenseController.recurringUtility.completeNoneByAfterRecurring()}"
+                                                    value="#{expenseController.selectedExpenseModel.recurringByAfter}"
+                                                    var="nonebyafter"
+                                                    itemValue="#{nonebyafter}"
+                                                    itemLabel="#{nonebyafter.name}"
+                                                    required="true"
+                                                    requiredMessage="Select duration"
+                                                    >
+                                                    <p:ajax event="itemSelect" process="@this" update="recurringPanel"/>
+                                                </p:autoComplete>
+                                                <label>#{messages.End}</label>
+                                                <p:message for="nonebyafter"/>
+                                            </h:panelGroup>
+
+                                            <p:outputLabel for="endDate" rendered="#{expenseController.selectedExpenseModel.recurringByAfter.value == 2}"/>                                   
+                                            <h:panelGroup styleClass="md-inputfield" rendered="#{expenseController.selectedExpenseModel.recurringByAfter.value == 2}">
+                                                <p:calendar id="endDate"
+                                                            required="true"
+                                                            requiredMessage="Select End date"/>
+                                                <label>#{messages.End_Date}</label>
+                                                <p:message for="endDate"/>
+                                            </h:panelGroup>
+
+                                            <p:outputLabel for="occurences" rendered="#{expenseController.selectedExpenseModel.recurringByAfter.value == 3}"/>
+                                            <h:panelGroup styleClass="md-inputfield" rendered="#{expenseController.selectedExpenseModel.recurringByAfter.value == 3}">
+                                                <p:inputText id="occurences"
+                                                             style="width:100%"
+                                                             required="true"
+                                                             requiredMessage="Enter Occurrences">
+                                                </p:inputText>
+                                                <label>#{messages.Occurrences}</label>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+                                    </p:fieldset>
+                                </h:panelGroup>
                                 <p:fieldset legend="Receipt" toggleable="true" toggleSpeed="500">
                                     <p:panelGrid columns="6"
                                                  columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
@@ -215,8 +421,11 @@
                                                 value="#{expenseController.selectedExpenseModel.receiptAttachmentDescription}" />
                                             <label>#{messages.attachment_description}</label>
                                         </h:panelGroup>
+
+
                                     </p:panelGrid>
                                 </p:fieldset>
+
                                 <p:fieldset legend="Expense Item Details" toggleable="true" 
                                             toggleSpeed="300">
                                     <p:messages autoUpdate="true" id="validationId" closable="true" for="validationId" />

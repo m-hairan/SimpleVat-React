@@ -106,6 +106,7 @@
                                                         var="project"
                                                         itemValue="#{project.projectId}"
                                                         itemLabel="#{project.projectName}">
+                                            <p:ajax event="itemSelect" listener="#{invoiceController.updateContact()}" process="project" update="conatcts"/>
                                         </p:autoComplete>
                                         <label>#{messages.project}</label>
                                         <p:message for="project" />
@@ -177,8 +178,219 @@
                                         <h:outputText id="counterValue" />
                                         <label>#{messages.invoice_notes}</label>
                                     </h:panelGroup>
+                                    <h:panelGroup />
+                                    <h:panelGroup />
+                                    <h:panelGroup rendered="false">
+                                        <p:outputLabel for="makeRecurring"/>
+                                        <p:selectBooleanButton id="makeRecurring" onLabel="Remove Recurring" offLabel="Make Recurring" value="#{invoiceController.selectedInvoiceModel.recurringFlag}">
+                                            <p:ajax event="change" update="recurringDetails"/>
+                                        </p:selectBooleanButton>
+                                    </h:panelGroup>
                                 </p:panelGrid>
                             </p:fieldset>
+                            <h:panelGroup id="recurringDetails"  rendered="false">
+                                <p:fieldset legend="Recurring Details" toggleSpeed="300" rendered="#{invoiceController.selectedInvoiceModel.recurringFlag}">
+                                    <p:panelGrid id="recurringPanel" columns="8" 
+                                                 columnClasses="ui-grid-col-0,ui-grid-col-3,ui-grid-col-0,ui-grid-col-3,ui-grid-col-0,ui-grid-col-3,ui-grid-col-0,ui-grid-col-3" 
+                                                 layout="grid" 
+                                                 styleClass="ui-panelgrid-blank form-group"
+                                                 style="border:0px none; background-color:transparent;">
+                                        <p:outputLabel for="intervals"/>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:autoComplete id="intervals"
+                                                            converter="#{recurringIntervalConverter}"
+                                                            dropdown="true"
+                                                            forceSelection="true"
+                                                            effect="fold"
+                                                            scrollHeight="250"
+                                                            completeMethod="#{invoiceController.recurringUtility.completeRecurringInterval()}"
+                                                            value="#{invoiceController.selectedInvoiceModel.recurringInterval}"
+                                                            var="intervals"
+                                                            itemValue="#{intervals}"
+                                                            itemLabel="#{intervals.name}"
+                                                            required="true"
+                                                            requiredMessage="Select recurring interval"
+                                                            >
+                                                <p:ajax event="itemSelect" process="@this" update="recurringPanel"/>
+                                            </p:autoComplete>
+                                            <label>#{messages.Interval}</label>
+                                            <p:message for="intervals"/>
+                                        </h:panelGroup>
+
+                                        <p:outputLabel for="days" rendered="#{invoiceController.selectedInvoiceModel.recurringInterval.value == 3}"/>
+                                        <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.recurringInterval.value == 3}">
+                                            <p:autoComplete
+                                                id="days"
+                                                converter="#{recurringDaysConverter}"
+                                                dropdown="true"
+                                                forceSelection="true"
+                                                effect="fold"
+                                                scrollHeight="250"
+                                                completeMethod="#{invoiceController.recurringUtility.completeDaysRecurring()}"
+                                                value="#{invoiceController.selectedInvoiceModel.recurringDays}"
+                                                var="days"
+                                                itemValue="#{days}"
+                                                itemLabel="#{days.name}"
+                                                required="true"
+                                                requiredMessage="Select recurring day"
+                                                >
+                                                <p:ajax event="itemSelect" process="@this" update="recurringPanel"/>
+                                            </p:autoComplete>
+                                            <label>#{messages.On}</label>
+                                            <p:message for="days"/>
+                                        </h:panelGroup>
+
+                                        <p:outputLabel for="firsttolast" rendered="#{invoiceController.selectedInvoiceModel.recurringInterval.value == 4 
+                                                                                     or (invoiceController.selectedInvoiceModel.recurringInterval.value == 3 
+                                                                                     and invoiceController.selectedInvoiceModel.recurringDays.value == 0) }"/>
+                                        <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.recurringInterval.value == 4 
+                                                                                             or (invoiceController.selectedInvoiceModel.recurringInterval.value == 3 
+                                                                                             and invoiceController.selectedInvoiceModel.recurringDays.value == 0) }">
+                                            <p:autoComplete
+                                                id="firsttolast"
+                                                converter="#{recurringFirstToLastConverter}"
+                                                dropdown="true"
+                                                forceSelection="true"
+                                                effect="fold"
+                                                scrollHeight="250"
+                                                completeMethod="#{invoiceController.recurringUtility.completeFirstToLastRecurring()}"
+                                                value="#{invoiceController.selectedInvoiceModel.recurringFistToLast}"
+                                                var="firsttolast"
+                                                itemValue="#{firsttolast}"
+                                                itemLabel="#{firsttolast.name}"
+                                                required="true"
+                                                requiredMessage="Select day from month"
+                                                >
+                                            </p:autoComplete>
+                                            <p:message for="firsttolast"/>
+                                        </h:panelGroup>
+                                        <p:outputLabel for="weeks" rendered="#{invoiceController.selectedInvoiceModel.recurringInterval.value == 2
+                                                                               or (invoiceController.selectedInvoiceModel.recurringInterval.value == 3
+                                                                               and invoiceController.selectedInvoiceModel.recurringDays.value != null
+                                                                               and invoiceController.selectedInvoiceModel.recurringDays.value != 0) }"/>
+                                        <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.recurringInterval.value == 2
+                                                                                             or (invoiceController.selectedInvoiceModel.recurringInterval.value == 3
+                                                                                             and invoiceController.selectedInvoiceModel.recurringDays.value != null
+                                                                                             and invoiceController.selectedInvoiceModel.recurringDays.value != 0) }">
+
+                                            <p:autoComplete
+                                                id="weeks"
+                                                converter="#{recurringWeekslConverter}"
+                                                dropdown="true"
+                                                forceSelection="true"
+                                                effect="fold"
+                                                scrollHeight="250"
+                                                completeMethod="#{invoiceController.recurringUtility.completeWeekRecurring()}"
+                                                value="#{invoiceController.selectedInvoiceModel.recurringWeekDays}"
+                                                var="weeks"
+                                                itemValue="#{weeks}"
+                                                itemLabel="#{weeks.name}"
+                                                required="true"
+                                                requiredMessage="Select week day"
+                                                >
+                                            </p:autoComplete>
+                                            <label>#{messages.Week}</label>
+                                            <p:message for="weeks"/>
+                                        </h:panelGroup>
+
+                                        <p:outputLabel for="every" rendered="#{invoiceController.selectedInvoiceModel.recurringInterval.value == 1
+                                                                               or invoiceController.selectedInvoiceModel.recurringInterval.value == 2
+                                                                               or invoiceController.selectedInvoiceModel.recurringInterval.value == 3}"/>
+                                        <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.recurringInterval.value == 1
+                                                                                             or invoiceController.selectedInvoiceModel.recurringInterval.value == 2
+                                                                                             or invoiceController.selectedInvoiceModel.recurringInterval.value == 3}">
+
+                                            <p:inputText id="every" 
+
+                                                         style="width:100%"
+                                                         required="true"
+                                                         requiredMessage="Enter day mumber">
+                                            </p:inputText>
+                                            <label>#{messages.Every}</label>
+                                            <p:message for="every"/>
+                                        </h:panelGroup>
+
+
+                                        <p:outputLabel for="months" rendered="#{invoiceController.selectedInvoiceModel.recurringInterval.value == 4}" />
+                                        <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.recurringInterval.value == 4}">
+                                            <p:autoComplete
+                                                id="months"
+                                                converter="#{recurringMonthsConverter}"
+                                                dropdown="true"
+                                                forceSelection="true"
+                                                effect="fold"
+                                                scrollHeight="250"
+                                                completeMethod="#{invoiceController.recurringUtility.completeMonthRecurring()}"
+                                                value="#{invoiceController.selectedInvoiceModel.recurringMonth}"
+                                                var="months"
+                                                itemValue="#{months}"
+                                                itemLabel="#{months.name}"
+                                                required="true"
+                                                requiredMessage="Select Month"
+                                                >
+                                            </p:autoComplete>
+                                            <label>#{messages.Every}</label>
+                                            <p:message for="months"/>
+                                        </h:panelGroup>
+
+
+                                        <p:outputLabel for="startDate" />
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:calendar id="startDate" 
+                                                        required="true"
+                                                        requiredMessage="Select Start Date"/>
+                                            <label>#{messages.Start_Date}</label>
+                                            <p:message for="startDate"/>
+                                        </h:panelGroup>
+
+
+                                        <p:outputLabel for="nonebyafter" />
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:autoComplete
+                                                id="nonebyafter"
+                                                converter="#{recurringNoneByAfterConverter}"
+                                                dropdown="true"
+                                                forceSelection="true"
+                                                effect="fold"
+                                                scrollHeight="250"
+                                                completeMethod="#{invoiceController.recurringUtility.completeNoneByAfterRecurring()}"
+                                                value="#{invoiceController.selectedInvoiceModel.recurringByAfter}"
+                                                var="nonebyafter"
+                                                itemValue="#{nonebyafter}"
+                                                itemLabel="#{nonebyafter.name}"
+                                                required="true"
+                                                requiredMessage="Select duration"
+                                                >
+                                                <p:ajax event="itemSelect" process="@this" update="recurringPanel"/>
+                                            </p:autoComplete>
+                                            <label>#{messages.End}</label>
+                                            <p:message for="nonebyafter"/>
+                                        </h:panelGroup>
+
+                                        <p:outputLabel for="endDate" rendered="#{invoiceController.selectedInvoiceModel.recurringByAfter.value == 2}"/>
+                                        <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.recurringByAfter.value == 2}">
+                                            <p:calendar id="endDate" 
+                                                        required="true"
+                                                        requiredMessage="Enter End date"/>
+                                            <label>#{messages.End_Date}</label>
+                                            <p:message for="endDate"/>
+                                        </h:panelGroup>
+
+
+                                        <p:outputLabel for="occurences" rendered="#{invoiceController.selectedInvoiceModel.recurringByAfter.value == 3}"/>
+                                        <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.recurringByAfter.value == 3}">
+                                            <p:inputText id="occurences" 
+                                                         style="width:100%"
+                                                         required="true"
+                                                         requiredMessage="Enter Occurrence">
+                                            </p:inputText>
+                                            <label>#{messages.Occurrences}</label>
+                                            <p:message for="occurences"/>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                </p:fieldset>
+                            </h:panelGroup>
+
                             <p:fieldset legend="Invoice Item Details" toggleable="true" 
                                         toggleSpeed="300">
                                 <p:messages autoUpdate="true" id="validationId" closable="true" for="validationId" />
@@ -456,7 +668,6 @@
                                              update="@form"
                                              validateClient="true"
                                              icon="ui-icon-forward" />
-
                         </ui:fragment>
                         <ui:fragment rendered="#{invoiceController.selectedInvoiceModel.invoiceId != null}">
                             <p:commandButton action="#{invoiceController.saveInvoice()}"

@@ -51,6 +51,7 @@ import com.simplevat.web.constant.InvoicePaymentModeConstant;
 import com.simplevat.web.constant.InvoicePurchaseStatusConstant;
 import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.utils.FacesUtil;
+import com.simplevat.web.utils.RecurringUtility;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.Calendar;
@@ -118,6 +119,10 @@ public class InvoiceController extends BaseController implements Serializable {
 
     @Getter
     @Setter
+    private RecurringUtility recurringUtility;
+    
+    @Getter
+    @Setter
     private List<Currency> currencies;
 
     @Getter
@@ -155,12 +160,15 @@ public class InvoiceController extends BaseController implements Serializable {
     @Getter
     BigDecimal totalInvoiceCalculation = new BigDecimal(0);
 
+    
     public InvoiceController() {
         super(ModuleName.INVOICE_MODULE);
     }
 
     @PostConstruct
     public void init() {
+        
+        recurringUtility=new RecurringUtility();
         company = companyService.findByPK(userServiceNew.findByPK(FacesUtil.getLoggedInUser().getUserId()).getCompany().getCompanyId());
         Object objSelectedInvoice = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedInvoiceModelId");
         System.out.println("objSelectedInvoice :" + objSelectedInvoice);
@@ -193,6 +201,13 @@ public class InvoiceController extends BaseController implements Serializable {
         }
         populateVatCategory();
         calculateTotal();
+    }
+    
+     public void updateContact() {
+        setDefaultCurrency();
+        if (selectedInvoiceModel.getProject()!= null) {
+           selectedInvoiceModel.setInvoiceContact(selectedInvoiceModel.getProject().getContact());
+        }
     }
 
     private void setDefaultCurrency() {

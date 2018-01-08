@@ -1,27 +1,15 @@
 package com.simplevat.web.expense.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import javax.activation.MimetypesFileTypeMap;
-import org.apache.commons.io.FilenameUtils;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.UploadedFile;
 import com.simplevat.entity.Expense;
 import com.simplevat.entity.ExpenseLineItem;
-import com.simplevat.web.constant.ExpenseConstants;
+import com.simplevat.web.constant.RecurringNameValueMapping;
 import com.simplevat.web.expense.model.ExpenseItemModel;
 import com.simplevat.web.expense.model.ExpenseModel;
+import com.simplevat.web.utils.RecurringUtility;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Collection;
@@ -30,6 +18,8 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 
 public class ExpenseControllerHelper {
+
+    private RecurringUtility recurringUtility = new RecurringUtility();
 
     public Expense getExpense(ExpenseModel model) {
         Expense expense = new Expense();
@@ -55,6 +45,13 @@ public class ExpenseControllerHelper {
         expense.setTransactionCategory(model.getTransactionCategory());
         expense.setTransactionType(model.getTransactionType());
         expense.setVersionNumber(model.getVersionNumber());
+//        expense.setRecurringFlag(model.getRecurringFlag());
+//        expense.setRecurringInterval(model.getRecurringInterval().getValue());
+//        expense.setRecurringMonth(model.getRecurringMonth().getValue());
+//        expense.setRecurringWeekDays(model.getRecurringWeekDays().getValue());
+//        expense.setRecurringFistToLast(model.getRecurringFistToLast().getValue());
+//        expense.setRecurringDays(model.getRecurringDays().getValue());
+//        expense.setRecurringByAfter(model.getRecurringByAfter().getValue());
         final Collection<ExpenseLineItem> items = model
                 .getExpenseItem()
                 .stream()
@@ -81,7 +78,7 @@ public class ExpenseControllerHelper {
         item.setExpense(expense);
         return item;
     }
- 
+
     public ExpenseModel getExpenseModel(Expense entity) {
         ExpenseModel expenseModel = new ExpenseModel();
         expenseModel.setExpenseId(entity.getExpenseId());
@@ -107,12 +104,22 @@ public class ExpenseControllerHelper {
         expenseModel.setTransactionType(entity.getTransactionType());
         expenseModel.setVersionNumber(entity.getVersionNumber());
         expenseModel.setReceiptAttachmentBinary(entity.getReceiptAttachmentBinary());
+
         final List<ExpenseItemModel> items = entity
                 .getExpenseLineItems()
                 .stream()
                 .map((lineItem) -> convertToItemModel(lineItem))
                 .collect(Collectors.toList());
         expenseModel.setExpenseItem(items);
+//        expenseModel.setRecurringFlag(entity.getRecurringFlag());
+//        for (RecurringNameValueMapping nameValueMapping : recurringUtility.completeRecurringInterval()) {
+//            expenseModel.setRecurringInterval(entity.getRecurringInterval().getValue());
+//        }
+//        expenseModel.setRecurringMonth(entity.getRecurringMonth().getValue());
+//        expenseModel.setRecurringWeekDays(entity.getRecurringWeekDays().getValue());
+//        expenseModel.setRecurringFistToLast(entity.getRecurringFistToLast().getValue());
+//        expenseModel.setRecurringDays(entity.getRecurringDays().getValue());
+//        expenseModel.setRecurringByAfter(entity.getRecurringByAfter().getValue());
         return expenseModel;
     }
 

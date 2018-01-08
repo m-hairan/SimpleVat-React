@@ -94,30 +94,40 @@ public class InitialUserController implements Serializable {
 
     @PostConstruct
     public void init() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        String token = context.getExternalContext().getRequestParameterMap().get("token");
+        String envToken = System.getenv("SIMPLEVAT_TOKEN");
         if (!userService.findAll().isEmpty()) {
             try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("pages/public/login.xhtml");
+                context.getExternalContext().redirect("pages/public/login.xhtml");
             } catch (IOException ex) {
                 java.util.logging.Logger.getLogger(SecurityBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        if (token == null && !token.equals(envToken)) {
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/pages/public/token-mismatched-error.xhtml");
+            } catch (IOException ex) {
+                java.util.logging.Logger.getLogger(InitialUserController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         companyModel = new CompanyModel();
+        companyModel.setCompanyName(context.getExternalContext().getRequestParameterMap().get("companyname"));
         companyHelper = new CompanyHelper();
         selectedUser = new UserDTO();
+        selectedUser.setUserEmail(context.getExternalContext().getRequestParameterMap().get("username"));
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(context.getExternalContext().getRequestParameterMap().get("password"));
+        selectedUser.setPassword(encodedPassword);
         Role role = roleService.getDefaultRole();
-        countries = countryService.getCountries();
         if (role != null) {
             selectedUser.setRole(role);
         }
+        countries = countryService.getCountries();
     }
 
     public String saveUpdate() {
         try {
-            if (password != null && !password.trim().isEmpty()) {
-                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-                String encodedPassword = passwordEncoder.encode(password);
-                selectedUser.setPassword(encodedPassword);
-            }
             Company c = companyHelper.getCompanyFromCompanyModel(companyModel);
             c.setCompanyExpenseBudget(BigDecimal.ZERO);
             c.setCompanyRevenueBudget(BigDecimal.ZERO);
@@ -134,7 +144,7 @@ public class InitialUserController implements Serializable {
             FacesContext context = FacesContext.getCurrentInstance();
             context.getExternalContext().getFlash().setKeepMessages(true);
             userService.persist(user);
-            sendNewUserMail(user, password);
+            sendNewUserMail(user);
 
             return "/pages/public/login.xhtml?faces-redirect=true";
         } catch (IllegalArgumentException ex) {
@@ -167,12 +177,12 @@ public class InitialUserController implements Serializable {
         return industryTypeService.getIndustryTypes();
     }
 
-    private void sendNewUserMail(User user, String passwordToMail) {
+    private void sendNewUserMail(User user) {
 
         MailEnum mailEnum = MailEnum.NEW_USER_CREATED;
         String summary = "Hello " + user.getFirstName() + " " + user.getLastName()
                 + "<br>Your user account created successfully.<br> Your username is \""
-                + user.getUserEmail() + "\".<br> Your temparory password is \"" + passwordToMail + "\".";
+                + user.getUserEmail() + "\".<br>Please use the same password you used for signup on simplevat.com.";
         try {
             String[] email = {user.getUserEmail()};
             sendMailToUser(mailEnum, summary, email);

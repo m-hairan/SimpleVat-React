@@ -40,6 +40,7 @@ import com.simplevat.web.constant.TransactionTypeConstant;
 import com.simplevat.web.contact.model.ContactModel;
 import com.simplevat.web.expense.model.ExpenseItemModel;
 import com.simplevat.web.utils.FacesUtil;
+import com.simplevat.web.utils.RecurringUtility;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -118,6 +119,10 @@ public class ExpenseController extends BaseController implements Serializable {
     private ContactModel contactModel;
 
     @Getter
+    @Setter
+    private RecurringUtility recurringUtility;
+
+    @Getter
     private Company company;
 
     @Getter
@@ -134,6 +139,7 @@ public class ExpenseController extends BaseController implements Serializable {
 
     @PostConstruct
     public void init() {
+        recurringUtility = new RecurringUtility();
         company = companyService.findByPK(userServiceNew.findByPK(FacesUtil.getLoggedInUser().getUserId()).getCompany().getCompanyId());
         contactModel = new ContactModel();
         controllerHelper = new ExpenseControllerHelper();
@@ -253,7 +259,7 @@ public class ExpenseController extends BaseController implements Serializable {
                 validated = false;
             }
             if (lastItem.getQuatity() < 1) {
-                if(!validated){
+                if (!validated) {
                     validationMessage.append("and ");
                 }
                 validationMessage.append("Quantity should be greater than 0 ");

@@ -1,0 +1,54 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes"/>
+        </f:facet>
+        <title>#{messages.application_name}</title>
+        <h:outputScript name="js/ripple.js" library="ultima-layout"/>
+        <h:outputScript name="js/layout.js" library="ultima-layout"/>
+    </h:head>
+
+    <h:body styleClass="login-body">
+
+        <h:form id="loginFormId" prependId="false">
+            <div class="card login-panel ui-fluid">
+                <div class="ui-g">
+                    <h:panelGroup class="ui-g-12">
+                        <p:graphicImage name="images/logo-ultima.png" library="ultima-layout"/>
+                    </h:panelGroup>
+                    <h:panelGroup class="ui-g-12" id="heading" rendered="#{newActivationMailSender.configuration == null}">
+                        <h1>Your account is not activated</h1> <br/>
+                        <p:commandButton  value="Click Here To Activate" action="#{newActivationMailSender.sendActivationMail()}" oncomplete="activate()"/>
+                    </h:panelGroup>
+                    <h:panelGroup class="ui-g-12" >
+                        <h:outputText value="Your account activation link has been sent to your registered e-mail address." styleClass="emailsent"
+                                      style="display: #{newActivationMailSender.configuration == null?'none':'block'}" />
+                        <h3 style="display: #{newActivationMailSender.configuration == null?'none':'block'}" class="emailsent">Please check your mailbox.</h3>
+                        <p:commandButton  value="Click Here To Resend" action="#{newActivationMailSender.sendActivationMail()}" 
+                                          style="display: #{newActivationMailSender.configuration == null?'none':'block'}" id="resendBTN" />
+                    </h:panelGroup>
+                    <p:growl showDetail="true"/>
+                </div>
+            </div>
+        </h:form>
+
+        <h:outputStylesheet name="css/ripple.css" library="ultima-layout"/>
+        <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="ultima-layout"/>
+    </h:body>
+    <script type="text/javascript">
+        function activate() {
+            $('#heading').fadeOut('slow', function () {
+                $(".emailsent").fadeIn(1000);
+                $("#resendBTN").delay(60000).fadeIn(1000);
+            });
+        }
+    </script>
+
+</html>
