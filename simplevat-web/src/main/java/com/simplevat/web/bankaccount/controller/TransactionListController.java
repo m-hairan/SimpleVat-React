@@ -533,12 +533,7 @@ public class TransactionListController extends TransactionControllerHelper imple
     }
 
     public String deleteTransaction() {
-        Transaction transaction = new Transaction();
-        for (TransactionModel model : transactionModelList) {
-            if (model.getTransactionId() == selectedTransactionViewModel.getTransactionId()) {
-                transaction = getTransactionEntity(model);
-            }
-        }
+        Transaction transaction = transactionService.findByPK(selectedTransactionViewModel.getTransactionId());
         transaction.setDeleteFlag(true);
         if (transaction.getParentTransaction() != null) {
             transactionService.deleteChildTransaction(transaction);

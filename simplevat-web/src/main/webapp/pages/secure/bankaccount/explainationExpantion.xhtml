@@ -111,7 +111,7 @@
                              action="#{transactionListController.deleteTransaction}">
                 <f:setPropertyActionListener target="#{transactionListController.selectedTransactionViewModel}" value="#{transaction}" />
             </p:commandButton>
-            <p:commandButton value="#{messages.cancel}" icon="ui-icon-cancel"
+            <p:commandButton value="#{messages.cancel}" icon="ui-icon-cancel" onclick="expandCollapse(event, #{index})"
                              action="#{transactionListController.expandCollapse(transaction)}"/>
         </p:panelGrid>
 

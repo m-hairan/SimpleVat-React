@@ -92,7 +92,7 @@
         <p:rowExpansion>
             <ui:include src="explainationExpantion.xhtml">
                 <ui:param name="transaction" value="#{childTransaction}"/>
-                <ui:param name="rowIdx" value="#{rowIdx}"/>
+                <ui:param name="index" value="#{index}"/>
                 <ui:param name="btnBinding" value="#{btnBinding}"/>
             </ui:include>
         </p:rowExpansion>
@@ -101,7 +101,7 @@
         <h:panelGroup  rendered="#{transaction.childTransactionList.size() == 0}" >
             <ui:include src="explainationExpantion.xhtml" >
                 <ui:param name="transaction" value="#{transaction}"/>
-                <ui:param name="rowIdx" value="#{rowIdx}"/>
+                <ui:param name="index" value="#{index}"/>
                 <ui:param name="btnBinding" value="#{btnBinding}"/>
             </ui:include>
         </h:panelGroup>

@@ -10,6 +10,8 @@ import com.simplevat.integration.MailPreparer;
 import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.UserServiceNew;
 import com.simplevat.web.constant.ConfigurationConstants;
+import com.simplevat.web.constant.EncryptionTypeConstant;
+import com.simplevat.web.utils.FacesUtil;
 import com.simplevat.web.utils.SessionIdentifierGenerator;
 import java.io.IOException;
 import lombok.Getter;
@@ -33,11 +35,14 @@ import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import java.io.Serializable;
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.logging.Level;
 import javax.annotation.PostConstruct;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
@@ -78,18 +83,21 @@ public class SecurityBean implements PhaseListener, Serializable {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    String mailhost = System.getenv("SIMPLEVAT_MAIL_HOST");
+    String mailport = System.getenv("SIMPLEVAT_MAIL_PORT");
+    String mailusername = System.getenv("SIMPLEVAT_MAIL_USERNAME");
+    String mailpassword = System.getenv("SIMPLEVAT_MAIL_PASSWORD");
+    String mailsmtpAuth = System.getenv("SIMPLEVAT_MAIL_SMTP_AUTH");
+    String mailstmpStartTLSEnable = System.getenv("SIMPLEVAT_MAIL_SMTP_STARTTLS_ENABLE");
+
     @PostConstruct
     public void init() {
-        versionNumber = System.getenv("SIMPLEVAT_RELEASE"); 
-        String token = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("token");
-        String envToken = System.getenv("SIMPLEVAT_TOKEN");
+        versionNumber = System.getenv("SIMPLEVAT_RELEASE");
+//        String token = "12345";//FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("token");
+//        String envToken = System.getenv("SIMPLEVAT_TOKEN");
         if (userService.findAll().isEmpty()) {
             try {
-                if (token != null && token.equals(envToken)) {
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("initial-setup.xhtml");
-                } else {
-                    FacesContext.getCurrentInstance().getExternalContext().redirect("/pages/public/token-mismatched-error.xhtml");
-                }
+                FacesContext.getCurrentInstance().getExternalContext().redirect("/pages/public/token-mismatched-error.xhtml");
             } catch (IOException ex) {
                 java.util.logging.Logger.getLogger(SecurityBean.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -129,12 +137,17 @@ public class SecurityBean implements PhaseListener, Serializable {
             SecurityContextHolder.getContext().setAuthentication(authenticate);
             return "/pages/secure/home.xhtml?faces-redirect=true";
         } catch (final Exception e) {
+            e.printStackTrace();
             LOGGER.error("Error log in " + e);
-            FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_FATAL,
-                            "Invalid login", "Bad Credential. Try again"));
+            invalidLoginMessage();
         }
         return null;
+    }
+
+    public void invalidLoginMessage() {
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_FATAL,
+                        "Invalid login", "Bad Credential. Try again"));
     }
 
     public String forgotPassword() throws Exception {
@@ -189,22 +202,75 @@ public class SecurityBean implements PhaseListener, Serializable {
         return randomPassword;
     }
 
-    private JavaMailSender getJavaMailSender(List<Configuration> configurationList) {
+    public JavaMailSender getJavaMailSender(List<Configuration> configurationList) {
+        verifyMailConfigurationList(configurationList);
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
         sender.setProtocol("smtp");
-        sender.setHost(configurationList.stream().filter(host -> host.getName().equals(ConfigurationConstants.MAIL_HOST)).findAny().get().getValue());
-        sender.setPort(Integer.parseInt(configurationList.stream().filter(host -> host.getName().equals(ConfigurationConstants.MAIL_PORT)).findAny().get().getValue()));
-        sender.setUsername(configurationList.stream().filter(host -> host.getName().equals(ConfigurationConstants.MAIL_USERNAME)).findAny().get().getValue());
-        sender.setPassword(configurationList.stream().filter(host -> host.getName().equals(ConfigurationConstants.MAIL_PASSWORD)).findAny().get().getValue());
-
+        sender.setHost(mailhost);
+        sender.setPort(Integer.parseInt(mailport));
+        sender.setUsername(mailusername);
+        sender.setPassword(mailpassword);
         Properties mailProps = new Properties();
-        mailProps.put("mail.smtps.auth", configurationList.stream().filter(host -> host.getName().equals(ConfigurationConstants.MAIL_SMTP_AUTH)).findAny().get().getValue());
-        mailProps.put("mail.smtp.starttls.enable", configurationList.stream().filter(host -> host.getName().equals(ConfigurationConstants.MAIL_SMTP_STARTTLS_ENABLE)).findAny().get().getValue());
+        mailProps.put("mail.smtps.auth", mailsmtpAuth);
+        mailProps.put("mail.smtp.starttls.enable", mailstmpStartTLSEnable);
         mailProps.put("mail.smtp.debug", "true");
-
         sender.setJavaMailProperties(mailProps);
-
         return sender;
+    }
+
+    public void verifyMailConfigurationList(List<Configuration> configurationList) {
+        boolean incompleteConfiguration = false;
+        if (configurationList != null && !configurationList.isEmpty()) {
+            for (Configuration configuration : configurationList) {
+                if (configuration.getName().equals(ConfigurationConstants.MAIL_HOST)) {
+                    if (configuration.getValue() == null) {
+                        incompleteConfiguration = true;
+                        break;
+                    }
+                }
+                if (configuration.getName().equals(ConfigurationConstants.MAIL_PORT)) {
+                    if (configuration.getValue() == null) {
+                        incompleteConfiguration = true;
+                        break;
+                    }
+                }
+                if (configuration.getName().equals(ConfigurationConstants.MAIL_USERNAME)) {
+                    if (configuration.getValue() == null) {
+                        incompleteConfiguration = true;
+                        break;
+                    }
+                }
+                if (configuration.getName().equals(ConfigurationConstants.MAIL_PASSWORD)) {
+                    if (configuration.getValue() == null) {
+                        incompleteConfiguration = true;
+                        break;
+                    }
+                }
+                if (configuration.getName().equals(ConfigurationConstants.MAIL_SMTP_AUTH)) {
+                    if (configuration.getValue() == null) {
+                        incompleteConfiguration = true;
+                        break;
+                    }
+                }
+                if (configuration.getName().equals(ConfigurationConstants.MAIL_SMTP_STARTTLS_ENABLE)) {
+                    if (configuration.getValue() == null) {
+                        incompleteConfiguration = true;
+                        break;
+                    }
+                }
+            }
+        } else {
+            incompleteConfiguration = true;
+        }
+        if (!incompleteConfiguration) {
+            mailhost = configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_HOST)).findAny().get().getValue();
+            mailport = configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_PORT)).findAny().get().getValue();
+            mailusername = configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_USERNAME)).findAny().get().getValue();
+            mailpassword = configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_PASSWORD)).findAny().get().getValue();
+            mailsmtpAuth = configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_SMTP_AUTH)).findAny().get().getValue();
+            mailstmpStartTLSEnable = configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_SMTP_STARTTLS_ENABLE)).findAny().get().getValue();
+        }
+
     }
 
 }
