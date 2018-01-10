@@ -172,6 +172,7 @@ public class TransactionController extends TransactionControllerHelper implement
             transaction.setReferenceType(null);
         }
     }
+
     private void updateRefObjectAmount(Transaction transaction, Object object) {
         updatePrevReference(transaction);
         if (object instanceof Invoice) {
@@ -239,7 +240,7 @@ public class TransactionController extends TransactionControllerHelper implement
         if (transaction.getChildTransactionList() != null && !transaction.getChildTransactionList().isEmpty()) {
             BigDecimal totalAmount = new BigDecimal(0);
             for (Transaction tempTransaction : transaction.getChildTransactionList()) {
-                System.out.println("tempTransaction createdBy :"+tempTransaction.getCreatedBy());
+                System.out.println("tempTransaction createdBy :" + tempTransaction.getCreatedBy());
                 totalAmount = totalAmount.add(tempTransaction.getTransactionAmount());
             }
             if (selectedTransactionModel.getTransactionAmount().doubleValue() > totalAmount.doubleValue()) {
@@ -254,7 +255,7 @@ public class TransactionController extends TransactionControllerHelper implement
                 transaction.setTransactionType(null);
             }
         }
-        System.out.println("transaction createdBy :"+transaction.getCreatedBy());
+        System.out.println("transaction createdBy :" + transaction.getCreatedBy());
         if (transaction.getTransactionId() == null) {
             transactionService.persist(transaction);
         } else {
@@ -271,42 +272,58 @@ public class TransactionController extends TransactionControllerHelper implement
     }
 
     public String saveAndContinueTransaction() {
+
         User loggedInUser = FacesUtil.getLoggedInUser();
         Transaction transaction = getTransactionEntity(selectedTransactionModel);
-
+        if (transaction.getTransactionId() != null) {
+            if (!validTransactionAmount(transaction)) {
+                return "";
+            }
+        }
+        selectedBankAccount = getBankAccount(selectedBankAccountModel);
         transaction.setLastUpdateBy(loggedInUser.getUserId());
-        transaction.setCreatedBy(loggedInUser.getUserId());
+        if (transaction.getTransactionId() == null) {
+            transaction.setCreatedBy(loggedInUser.getUserId());
+        }
         transaction.setBankAccount(selectedBankAccount);
-
+        transaction.setEntryType(TransactionEntryTypeConstant.MANUALLY);
+        transaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED));
         if (selectedTransactionModel.getTransactionType() != null) {
-            TransactionType transactionType = transactionTypeService.getTransactionType(selectedTransactionModel.getTransactionType().getTransactionTypeCode());
-            transaction.setTransactionType(transactionType);
-            transaction.setDebitCreditFlag(transactionType.getDebitCreditFlag());
+            transaction.setDebitCreditFlag(selectedTransactionModel.getTransactionType().getDebitCreditFlag());
+        }
+        if (selectedTransactionModel.getProject() != null) {
+            Project project = projectService.findByPK(selectedTransactionModel.getProject().getProjectId());
+            transaction.setProject(project);
+        }
+        if (transaction.getChildTransactionList() != null && !transaction.getChildTransactionList().isEmpty()) {
+            BigDecimal totalAmount = new BigDecimal(0);
+            for (Transaction tempTransaction : transaction.getChildTransactionList()) {
+                System.out.println("tempTransaction createdBy :" + tempTransaction.getCreatedBy());
+                totalAmount = totalAmount.add(tempTransaction.getTransactionAmount());
+            }
+            if (selectedTransactionModel.getTransactionAmount().doubleValue() > totalAmount.doubleValue()) {
+                transaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.PARTIALLYEXPLIANED));
+            }
         }
 
-        if (selectedTransactionModel.getExplainedTransactionCategory() != null) {
-            TransactionCategory transactionCategory = transactionCategoryService.findByPK(selectedTransactionModel.getExplainedTransactionCategory().getTransactionCategoryId());
-            transaction.setExplainedTransactionCategory(transactionCategory);
+        if (getRefObject() != null) {
+            updateRefObjectAmount(transaction, getRefObject());
+            if (transaction.getChildTransactionList() != null && !transaction.getChildTransactionList().isEmpty()) {
+                transaction.setExplainedTransactionCategory(null);
+                transaction.setTransactionType(null);
+            }
         }
-
-        if (selectedTransactionModel.getTransactionStatus() != null) {
-            TransactionStatus transactionStatus = transactionStatusService.findByPK(selectedTransactionModel.getTransactionStatus().getExplainationStatusCode());
-            transaction.setTransactionStatus(transactionStatus);
-        }
-
-        if (selectedTransactionModel.getTransactionStatus().getExplainationStatusCode() == 0) {
-            Map<String, String> map = new HashMap<>();
-            map.put("explainationStatusName", "EXPLAINED");
-            TransactionStatus transactionStatus = transactionStatusService.findByAttributes(map).get(0);
-            transaction.setTransactionStatus(transactionStatus);
-        }
+        System.out.println("transaction createdBy :" + transaction.getCreatedBy());
         if (transaction.getTransactionId() == null) {
             transactionService.persist(transaction);
         } else {
             transactionService.update(transaction);
         }
-
-        this.setSelectedTransactionModel(new TransactionModel());
+        if (getRefObject() != null) {
+            if (getRefObject() instanceof Invoice) {
+                invoiceService.update((Invoice) getRefObject());
+            }
+        }
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transaction saved successfully"));
         return "/pages/secure/bankaccount/edit-bank-transaction.xhtml?faces-redirect=true";
 
