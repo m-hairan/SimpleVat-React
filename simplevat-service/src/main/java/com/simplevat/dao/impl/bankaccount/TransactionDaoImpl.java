@@ -86,7 +86,6 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
         TypedQuery<Transaction> query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.transactionDate > :transactionDate and t.deleteFlag = false and t.bankAccount.bankAccountId = :bankAccountId ORDER BY t.transactionDate ASC", Transaction.class);
         query.setParameter("transactionDate", transaction.getTransactionDate());
         query.setParameter("bankAccountId", transaction.getBankAccount().getBankAccountId());
-        query.setParameter("transactionId", transaction.getTransactionId());
         List<Transaction> transactionList = query.getResultList();
         if (transactionList != null && !transactionList.isEmpty()) {
             return transactionList;

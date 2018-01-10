@@ -29,11 +29,11 @@ public class Project implements Serializable {
 
     @Column(name = "PROJECT_EXPENSE_BUDGET")
     @ColumnDefault(value = "0.00")
-    private BigDecimal projectExpenseBudget;
-    
+    private BigDecimal projectExpenseBudget = BigDecimal.ZERO;
+
     @Column(name = "PROJECT_REVENUE_BUDGET")
     @ColumnDefault(value = "0.00")
-    private BigDecimal projectRevenueBudget;
+    private BigDecimal projectRevenueBudget = BigDecimal.ZERO;
 
     @Column(name = "CONTRACT_PO_NUMBER")
     private String contractPoNumber;
@@ -52,7 +52,6 @@ public class Project implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CURRENCY_CODE")
     private Currency currency;
-
 
     @Column(name = "CREATED_BY")
     @Basic(optional = false)
