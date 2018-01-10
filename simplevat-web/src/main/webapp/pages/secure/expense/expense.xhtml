@@ -76,9 +76,12 @@
                                                 scrollHeight="250"
                                                 itemValue="#{transactionCategory}"
                                                 itemLabel="#{transactionCategory.transactionCategoryName}"
+                                                required="true"
+                                                requiredMessage="Please Select Transaction Category"
                                                 >
                                             </p:autoComplete>
                                             <label>#{messages.category}</label>
+                                            <p:message for="expenseTransactionCategory"/>
                                         </h:panelGroup>
 
                                         <p:outputLabel for="expenseDate"/>
@@ -596,14 +599,14 @@
                     <f:facet name="left">
                         <ui:fragment rendered="#{expenseController.selectedExpenseModel.expenseId == null}">
                             <p:commandButton value="#{messages.save}" icon="ui-icon-save" update="createExpenseForm"
-                                             action="#{expenseController.saveExpense}" />
+                                             action="#{expenseController.saveExpense()}" />
                             <p:commandButton value="#{messages.save_and_add_more}"
                                              icon="ui-icon-forward"  update="createExpenseForm"
                                              action="#{expenseController.saveAndContinueExpense}" />
                         </ui:fragment>
                         <ui:fragment rendered="#{expenseController.selectedExpenseModel.expenseId != null}">
                             <p:commandButton value="#{messages.update}" icon="ui-icon-save" update="createExpenseForm"
-                                             action="#{expenseController.saveExpense}" />
+                                             action="#{expenseController.saveExpense()}" />
                             <p:commandButton value="#{messages.update_and_add_more}"
                                              icon="ui-icon-forward" update="createExpenseForm"
                                              action="#{expenseController.saveAndContinueExpense}" />

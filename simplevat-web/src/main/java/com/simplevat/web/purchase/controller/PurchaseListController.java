@@ -70,6 +70,7 @@ public class PurchaseListController extends BaseController implements Serializab
     }
 
     public void populatePurchases() {
+        purchaseModels.clear();
         if (purchaseService.getAllPurchase() != null) {
             for (Purchase purchase : purchaseService.getAllPurchase()) {
                 if (purchase.getStatus() != null) {
