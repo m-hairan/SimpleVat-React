@@ -48,6 +48,7 @@ import com.simplevat.web.company.controller.CompanyHelper;
 import com.simplevat.web.company.controller.CompanyModel;
 import com.simplevat.web.invoice.controller.InvoiceReminderController;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
 
@@ -90,6 +91,7 @@ public class InitialUserController implements Serializable {
     private CompanyHelper companyHelper;
     @Getter
     private List<Country> countries = new ArrayList<>();
+    private Base64.Decoder decoder = Base64.getDecoder();
     String userId;
     String mailhost = System.getenv("SIMPLEVAT_MAIL_HOST");
     String mailport = System.getenv("SIMPLEVAT_MAIL_PORT");
@@ -117,13 +119,14 @@ public class InitialUserController implements Serializable {
                 java.util.logging.Logger.getLogger(InitialUserController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        password = new String(decoder.decode(context.getExternalContext().getRequestParameterMap().get("password"))).replace(token, "");
         companyModel = new CompanyModel();
         companyModel.setCompanyName(context.getExternalContext().getRequestParameterMap().get("companyname"));
         companyHelper = new CompanyHelper();
         selectedUser = new UserDTO();
         selectedUser.setUserEmail(context.getExternalContext().getRequestParameterMap().get("username"));
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedPassword = passwordEncoder.encode(context.getExternalContext().getRequestParameterMap().get("password"));
+        String encodedPassword = passwordEncoder.encode(password);
         selectedUser.setPassword(encodedPassword);
         Role role = roleService.getDefaultRole();
         if (role != null) {
