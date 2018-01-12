@@ -96,7 +96,7 @@ public class PageAccessControl {
     public static boolean hasAccess(ModuleName moduleName) {
         User user = FacesUtil.getLoggedInUser();
         List<String> roleAccessList = accessMap.get(user.getRole().getRoleCode());
-        System.out.println("Display=========");
+//        System.out.println("Display=========");
         if (roleAccessList != null && !roleAccessList.isEmpty()) {
             if (roleAccessList.contains(moduleName.getName())) {
                 return true;

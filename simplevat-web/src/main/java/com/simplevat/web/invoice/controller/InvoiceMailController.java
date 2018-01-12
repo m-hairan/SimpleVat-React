@@ -17,6 +17,8 @@ import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.ContactService;
 import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.web.constant.ConfigurationConstants;
+import com.simplevat.web.utils.MailDefaultConfigurationModel;
+import com.simplevat.web.utils.MailUtility;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -68,13 +70,6 @@ public class InvoiceMailController implements Serializable {
     @Setter
     private ArrayList<String> moreEmails;
 
-    String mailhost = System.getenv("SIMPLEVAT_MAIL_HOST");
-    String mailport = System.getenv("SIMPLEVAT_MAIL_PORT");
-    String mailusername = System.getenv("SIMPLEVAT_MAIL_USERNAME");
-    String mailpassword = System.getenv("SIMPLEVAT_MAIL_PASSWORD");
-    String mailsmtpAuth = System.getenv("SIMPLEVAT_MAIL_SMTP_AUTH");
-    String mailstmpStartTLSEnable = System.getenv("SIMPLEVAT_MAIL_SMTP_STARTTLS_ENABLE");
-
     public void sendInvoiceMail() throws Exception {
         if (moreEmails == null) {
             moreEmails = new ArrayList();
@@ -112,7 +107,7 @@ public class InvoiceMailController implements Serializable {
                     MailAttachment attachment = new MailAttachment();
                     attachment.setAttachmentName("Invoice");
                     attachment.setAttachmentObject(new ByteArrayResource(byteArray));
-                    mailIntegration.sendHtmlMail(mail, attachment, getJavaMailSender(configurationService.getConfigurationList()));
+                    mailIntegration.sendHtmlMail(mail, attachment, MailUtility.getJavaMailSender(configurationService.getConfigurationList()));
                 } catch (Exception ex) {
                     Logger.getLogger(InvoiceMailController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -120,76 +115,6 @@ public class InvoiceMailController implements Serializable {
         });
         t.start();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(summary));
-    }
-
-    public JavaMailSender getJavaMailSender(List<Configuration> configurationList) {
-        verifyMailConfigurationList(configurationList);
-        JavaMailSenderImpl sender = new JavaMailSenderImpl();
-        sender.setProtocol("smtp");
-        sender.setHost(mailhost);
-        sender.setPort(Integer.parseInt(mailport));
-        sender.setUsername(mailusername);
-        sender.setPassword(mailpassword);
-        Properties mailProps = new Properties();
-        mailProps.put("mail.smtps.auth", mailsmtpAuth);
-        mailProps.put("mail.smtp.starttls.enable", mailstmpStartTLSEnable);
-        mailProps.put("mail.smtp.debug", "true");
-        sender.setJavaMailProperties(mailProps);
-        return sender;
-    }
-
-    public void verifyMailConfigurationList(List<Configuration> configurationList) {
-        boolean incompleteConfiguration = false;
-        if (configurationList != null && !configurationList.isEmpty()) {
-            for (Configuration configuration : configurationList) {
-                if (configuration.getName().equals(ConfigurationConstants.MAIL_HOST)) {
-                    if (configuration.getValue() == null) {
-                        incompleteConfiguration = true;
-                        break;
-                    }
-                }
-                if (configuration.getName().equals(ConfigurationConstants.MAIL_PORT)) {
-                    if (configuration.getValue() == null) {
-                        incompleteConfiguration = true;
-                        break;
-                    }
-                }
-                if (configuration.getName().equals(ConfigurationConstants.MAIL_USERNAME)) {
-                    if (configuration.getValue() == null) {
-                        incompleteConfiguration = true;
-                        break;
-                    }
-                }
-                if (configuration.getName().equals(ConfigurationConstants.MAIL_PASSWORD)) {
-                    if (configuration.getValue() == null) {
-                        incompleteConfiguration = true;
-                        break;
-                    }
-                }
-                if (configuration.getName().equals(ConfigurationConstants.MAIL_SMTP_AUTH)) {
-                    if (configuration.getValue() == null) {
-                        incompleteConfiguration = true;
-                        break;
-                    }
-                }
-                if (configuration.getName().equals(ConfigurationConstants.MAIL_SMTP_STARTTLS_ENABLE)) {
-                    if (configuration.getValue() == null) {
-                        incompleteConfiguration = true;
-                        break;
-                    }
-                }
-            }
-        } else {
-            incompleteConfiguration = true;
-        }
-        if (!incompleteConfiguration) {
-            mailhost = configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_HOST)).findAny().get().getValue();
-            mailport = configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_PORT)).findAny().get().getValue();
-            mailusername = configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_USERNAME)).findAny().get().getValue();
-            mailpassword = configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_PASSWORD)).findAny().get().getValue();
-            mailsmtpAuth = configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_SMTP_AUTH)).findAny().get().getValue();
-            mailstmpStartTLSEnable = configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_SMTP_STARTTLS_ENABLE)).findAny().get().getValue();
-        }
     }
 
 }

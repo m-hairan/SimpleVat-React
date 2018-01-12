@@ -33,12 +33,6 @@ import com.simplevat.entity.Mail;
 import com.simplevat.entity.MailEnum;
 import com.simplevat.entity.Role;
 import com.simplevat.entity.User;
-import com.simplevat.web.constant.ConfigurationConstants;
-import com.simplevat.web.invoice.controller.InvoiceMailController;
-import java.util.Properties;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import com.simplevat.entity.Configuration;
 import com.simplevat.integration.MailIntegration;
 import com.simplevat.service.CompanyService;
 import com.simplevat.service.ConfigurationService;
@@ -46,7 +40,7 @@ import com.simplevat.service.CountryService;
 import com.simplevat.service.IndustryTypeService;
 import com.simplevat.web.company.controller.CompanyHelper;
 import com.simplevat.web.company.controller.CompanyModel;
-import com.simplevat.web.invoice.controller.InvoiceReminderController;
+import com.simplevat.web.utils.MailUtility;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Iterator;
@@ -93,12 +87,6 @@ public class InitialUserController implements Serializable {
     private List<Country> countries = new ArrayList<>();
     private Base64.Decoder decoder = Base64.getDecoder();
     String userId;
-    String mailhost = System.getenv("SIMPLEVAT_MAIL_HOST");
-    String mailport = System.getenv("SIMPLEVAT_MAIL_PORT");
-    String mailusername = System.getenv("SIMPLEVAT_MAIL_USERNAME");
-    String mailpassword = System.getenv("SIMPLEVAT_MAIL_PASSWORD");
-    String mailsmtpAuth = System.getenv("SIMPLEVAT_MAIL_SMTP_AUTH");
-    String mailstmpStartTLSEnable = System.getenv("SIMPLEVAT_MAIL_SMTP_STARTTLS_ENABLE");
 
     @PostConstruct
     public void init() {
@@ -196,7 +184,7 @@ public class InitialUserController implements Serializable {
             String[] email = {user.getUserEmail()};
             sendMailToUser(mailEnum, summary, email);
         } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(InvoiceReminderController.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InitialUserController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -209,83 +197,12 @@ public class InitialUserController implements Serializable {
                 mail.setFromName(ADMIN_USERNAME);
                 mail.setTo(senderMailAddress);
                 mail.setSubject(mailEnum.getSubject());
-                mailIntegration.sendHtmlMail(mail, getJavaMailSender(configurationService.getConfigurationList()));
+                mailIntegration.sendHtmlMail(mail, MailUtility.getJavaMailSender(configurationService.getConfigurationList()));
             } catch (Exception ex) {
-                java.util.logging.Logger.getLogger(InvoiceMailController.class
+                java.util.logging.Logger.getLogger(InitialUserController.class
                         .getName()).log(Level.SEVERE, null, ex);
             }
         });
         t.start();
-    }
-
-    public JavaMailSender getJavaMailSender(List<Configuration> configurationList) {
-        verifyMailConfigurationList(configurationList);
-        JavaMailSenderImpl sender = new JavaMailSenderImpl();
-        sender.setProtocol("smtp");
-        sender.setHost(mailhost);
-        sender.setPort(Integer.parseInt(mailport));
-        sender.setUsername(mailusername);
-        sender.setPassword(mailpassword);
-        Properties mailProps = new Properties();
-        mailProps.put("mail.smtps.auth", mailsmtpAuth);
-        mailProps.put("mail.smtp.starttls.enable", mailstmpStartTLSEnable);
-        mailProps.put("mail.smtp.debug", "true");
-        sender.setJavaMailProperties(mailProps);
-        return sender;
-    }
-
-    public void verifyMailConfigurationList(List<Configuration> configurationList) {
-        boolean incompleteConfiguration = false;
-        if (configurationList != null && !configurationList.isEmpty()) {
-            for (Configuration configuration : configurationList) {
-                if (configuration.getName().equals(ConfigurationConstants.MAIL_HOST)) {
-                    if (configuration.getValue() == null) {
-                        incompleteConfiguration = true;
-                        break;
-                    }
-                }
-                if (configuration.getName().equals(ConfigurationConstants.MAIL_PORT)) {
-                    if (configuration.getValue() == null) {
-                        incompleteConfiguration = true;
-                        break;
-                    }
-                }
-                if (configuration.getName().equals(ConfigurationConstants.MAIL_USERNAME)) {
-                    if (configuration.getValue() == null) {
-                        incompleteConfiguration = true;
-                        break;
-                    }
-                }
-                if (configuration.getName().equals(ConfigurationConstants.MAIL_PASSWORD)) {
-                    if (configuration.getValue() == null) {
-                        incompleteConfiguration = true;
-                        break;
-                    }
-                }
-                if (configuration.getName().equals(ConfigurationConstants.MAIL_SMTP_AUTH)) {
-                    if (configuration.getValue() == null) {
-                        incompleteConfiguration = true;
-                        break;
-                    }
-                }
-                if (configuration.getName().equals(ConfigurationConstants.MAIL_SMTP_STARTTLS_ENABLE)) {
-                    if (configuration.getValue() == null) {
-                        incompleteConfiguration = true;
-                        break;
-                    }
-                }
-            }
-        } else {
-            incompleteConfiguration = true;
-        }
-        if (!incompleteConfiguration) {
-            mailhost = configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_HOST)).findAny().get().getValue();
-            mailport = configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_PORT)).findAny().get().getValue();
-            mailusername = configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_USERNAME)).findAny().get().getValue();
-            mailpassword = configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_PASSWORD)).findAny().get().getValue();
-            mailsmtpAuth = configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_SMTP_AUTH)).findAny().get().getValue();
-            mailstmpStartTLSEnable = configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_SMTP_STARTTLS_ENABLE)).findAny().get().getValue();
-        }
-
     }
 }
