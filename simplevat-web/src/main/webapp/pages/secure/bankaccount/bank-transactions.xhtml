@@ -41,8 +41,15 @@
 
         <h:form id="transactionListForm">
             <div class="ui-fluid tree">
-                <si:cdataPanel newAction= "#{transactionController.createTransaction()}" importAction="#{transactionController.importTransaction()}">
+                <si:cdataPanel newAction= "#{transactionController.createTransaction()}" >
                     <f:facet name="left">
+                        <span class="ui-separator" style="padding-right: 5px;">
+                            <span class="fa fa-ellipsis-v SoftGray" />
+                        </span>
+                        <p:commandButton icon="ui-icon-file-download" styleClass="AquaButton" 
+                                         action="#{transactionController.importTransaction()}" >
+                            <f:setPropertyActionListener value="#{contact}" target="#{contactListController.contact}" />
+                        </p:commandButton>
                         <span class="ui-separator" style="padding-right: 5px;">
                             <span class="fa fa-ellipsis-v SoftGray" />
                         </span>
