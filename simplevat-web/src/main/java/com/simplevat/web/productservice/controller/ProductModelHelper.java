@@ -18,6 +18,8 @@ public class ProductModelHelper {
         product.setProductCode(productModel.getProductCode());
         product.setVersionNumber(productModel.getVersionNumber());
         product.setProductDescription(productModel.getProductDescription());
+        product.setParentProduct(productModel.getParentProduct());
+        product.setProductWarehouse(productModel.getProductWarehouse());
         return product;
     }
 
@@ -34,6 +36,8 @@ public class ProductModelHelper {
         productModel.setProductCode(product.getProductCode());
         productModel.setVersionNumber(product.getVersionNumber());
         productModel.setProductDescription(product.getProductDescription());
+        productModel.setParentProduct(product.getParentProduct());
+        productModel.setProductWarehouse(product.getProductWarehouse());
         return productModel;
     }
 }

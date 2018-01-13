@@ -247,7 +247,7 @@
 
                     <div class="contacts" style="padding:0px 5px 5px 0px;box-sizing: content-box">
 
-                        <p:panel style="text-align:left; width: 100%;height:150px;" styleClass="Contact-Type-#{contact.contactType.name} folded-corner">
+                        <p:panel style="text-align:left; width: 100%;height:180px;" styleClass="Contact-Type-#{contact.contactType.name} folded-corner">
 
                             <h:panelGrid columns="2" style="width:100%;padding: 0;vertical-align: middle" columnClasses="ui-grid-col-9,ui-grid-col-3"  styleClass="ui-panelgrid-blank">
                                 <h:panelGroup layout="block" style="line-height: 38px;height:40px" styleClass="ellipsis">
@@ -277,6 +277,7 @@
                                 <!--                                <p:graphicImage name="images/user-avtar-icon2.png" 
                                                                                 library="ultima-layout" stream="false"
                                                                                 width="70" height="90"/>-->
+
                                 <h:panelGroup style="font-size: 11.5px;color: #757575;display: block" layout="block" styleClass="ellipsis">
                                     <h:outputText value="Company : " style="font-weight: bold;"/>
                                     <h:outputText value="#{contact.organization}"/><br/>
@@ -292,8 +293,12 @@
                                     <h:outputText value="#{contact.currencySymbol} #{contact.dueAmount}" rendered="#{contact.dueAmount!=null}"/><br/>
                                 </h:panelGroup>
                             </h:panelGrid>
-
-
+                            <p:commandButton styleClass="AquaButton" 
+                                             style="float: right;margin-right: 5px;" 
+                                             action="#{contactListController.contactCreateIncvoiceOrExpense()}"
+                                             value="#{contact.contactType.id == 1 ? 'Create Purchase' : contact.contactType.id == 2 ? 'Create Invoice' : 'Create Expense'}" >
+                                <f:setPropertyActionListener value="#{contact}" target="#{contactListController.contact}" />
+                            </p:commandButton>
                         </p:panel>
                     </div>
                 </p:dataGrid>

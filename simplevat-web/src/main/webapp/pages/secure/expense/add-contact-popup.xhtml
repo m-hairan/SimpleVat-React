@@ -12,36 +12,40 @@
                   hideEffect="scale">
             <div class="ui-g form-group" style="margin-bottom: 16px;">
                 <div class="ui-g-12">
-                    <p:panelGrid columns="4" 
+                    <p:panelGrid columns="4" id="contactPanel"
                                  columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
                                  layout="grid" 
                                  styleClass="ui-panelgrid-blank form-group"
                                  style="border:0px none; background-color:transparent;">
-                        
+
                         <p:outputLabel />
                         <h:panelGroup styleClass="md-inputfield">
                             <p:inputText value="#{expenseController.contactModel.firstName}"/>
                             <label>First Name</label>
                         </h:panelGroup>
-                        
+
                         <p:outputLabel />
                         <h:panelGroup styleClass="md-inputfield">
                             <p:inputText value="#{expenseController.contactModel.lastName}"/>
                             <label>Last Name</label>
                         </h:panelGroup>
-                        
+
                         <p:outputLabel />
                         <h:panelGroup styleClass="md-inputfield">
                             <p:inputText value="#{expenseController.contactModel.organization}"/>
                             <label>Organization Name</label>
                         </h:panelGroup>
-                        
+
                         <p:outputLabel />
                         <h:panelGroup styleClass="md-inputfield">
-                            <p:inputText value="#{expenseController.contactModel.email}"/>
-                            <label>Email</label>
+                            <p:inputText id="emailid" value="#{expenseController.contactModel.email}" required="true" validatorMessage="Invalid email format" requiredMessage="Enter EmailId">
+                                <f:validateRegex
+                                    pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                </p:inputText>
+                                <label>Email</label>
+                                <p:message for="emailid"/>
                         </h:panelGroup>
-                        
+
                     </p:panelGrid>
                 </div>
 
@@ -51,8 +55,7 @@
                 <p:commandButton 
                     actionListener="#{expenseController.createContact()}"
                     value="Save"
-                    update="createExpenseForm:conatcts @form"
-                    onsuccess="PF('add_contact_popup').hide()" style="width:auto" 
+                    update="createExpenseForm:conatcts contactPanel" style="width:auto" 
                     icon="ui-icon-save"/>
             </f:facet>  
         </p:dialog>

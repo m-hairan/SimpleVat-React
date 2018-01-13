@@ -12,40 +12,43 @@
                   hideEffect="scale">
             <div class="ui-g form-group" style="margin-bottom: 16px;">
                 <div class="ui-g-12">
-                    <p:panelGrid columns="4" 
+                    <p:panelGrid columns="4" id="contactPanel"
                                  columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
                                  layout="grid" 
                                  styleClass="ui-panelgrid-blank form-group"
                                  style="border:0px none; background-color:transparent;">
-                        
+
                         <p:outputLabel />
                         <h:panelGroup styleClass="md-inputfield">
                             <p:inputText id="firstname" value="#{invoiceController.contactModel.firstName}" required="true" requiredMessage="Enter First Name"/>
                             <label>First Name</label>
                             <p:message for="firstname"/>
                         </h:panelGroup>
-                        
+
                         <p:outputLabel />
                         <h:panelGroup styleClass="md-inputfield">
                             <p:inputText id="lastname" value="#{invoiceController.contactModel.lastName}" required="true" requiredMessage="Enter Last name"/>
                             <label>Last Name</label>
                             <p:message for="lastname"/>
                         </h:panelGroup>
-                        
+
                         <p:outputLabel />
                         <h:panelGroup styleClass="md-inputfield">
                             <p:inputText id="organizationname" value="#{invoiceController.contactModel.organization}" required="true" requiredMessage="Enter Organization "/>
                             <label>Organization Name</label>
                             <p:message for="organizationname"/>
                         </h:panelGroup>
-                        
+
                         <p:outputLabel />
                         <h:panelGroup styleClass="md-inputfield">
-                            <p:inputText id="emailid" value="#{invoiceController.contactModel.email}" required="true" requiredMessage="Enter EmailId"/>
+                            <p:inputText id="emailid" value="#{invoiceController.contactModel.email}" required="true" validatorMessage="Invalid email format" requiredMessage="Enter EmailId">
+                                <f:validateRegex
+                                    pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                            </p:inputText>
                             <label>Email</label>
                             <p:message for="emailid"/>
                         </h:panelGroup>
-                        
+
                     </p:panelGrid>
                 </div>
 
@@ -55,8 +58,7 @@
                 <p:commandButton 
                     actionListener="#{invoiceController.createContact()}"
                     value="Save"
-                    update="invoice:conatcts @form"
-                    onsuccess="PF('add_contact_popup').hide()" style="width:auto" 
+                    update="invoice:conatcts contactPanel" style="width:auto" 
                     icon="ui-icon-save"/>
             </f:facet>  
         </p:dialog>

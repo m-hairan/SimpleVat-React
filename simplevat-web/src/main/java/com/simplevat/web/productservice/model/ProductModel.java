@@ -1,9 +1,13 @@
 package com.simplevat.web.productservice.model;
 
+import com.simplevat.entity.Product;
 import com.simplevat.entity.VatCategory;
+import com.simplevat.entity.ProductWarehouse;
 import java.time.LocalDateTime;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+
 
 @Getter
 @Setter
@@ -19,5 +23,9 @@ public class ProductModel {
     private Integer lastUpdatedBy;
     private LocalDateTime lastUpdateDate;
     private Boolean deleteFlag = Boolean.FALSE;
+    private Boolean active;
     private Integer versionNumber;
+    private Product parentProduct;
+    private ProductWarehouse productWarehouse;
+      
 }

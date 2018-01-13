@@ -56,8 +56,9 @@
                                                             scrollHeight="250"
                                                             itemValue="#{currency}"
                                                             itemLabel="#{currency.currencyDescription} #{currency.currencySymbol}" 
-                                                            required="true" requiredMessage="Please select bank account currency"/>
-
+                                                            required="true" requiredMessage="Please select bank account currency">
+                                                <p:ajax event="itemSelect" process="bankAccountcurrency" update="bankOpeningBalance" />
+                                            </p:autoComplete>
                                             <label>#{messages.currency}</label>
                                             <p:message for="bankAccountcurrency" />
                                         </h:panelGroup>

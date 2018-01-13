@@ -264,4 +264,15 @@ public class ContactListController extends BaseController implements Serializabl
         filteredContacts = returnContacts;
     }
 
+    public String contactCreateIncvoiceOrExpense() {
+        if (contact.getContactType().getId() == ContactTypeConstant.CUSTOMER) {
+            return "/pages/secure/invoice/invoice?faces-redirect=true&contactId=" + contact.getContactId();
+        } else if (contact.getContactType().getId() == ContactTypeConstant.EMPLOYEE) {
+            return "/pages/secure/expense/expense?faces-redirect=true&contactId=" + contact.getContactId();
+        } else if (contact.getContactType().getId() == ContactTypeConstant.VENDOR) {
+            return "/pages/secure/purchase/purchase?faces-redirect=true&contactId=" + contact.getContactId();
+        }
+        return null;
+    }
+
 }

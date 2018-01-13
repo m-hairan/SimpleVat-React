@@ -121,7 +121,7 @@
                                                             converter="#{contactConverter}"
                                                             dropdown="true" 
                                                             forceSelection="true"
-                                                            effect="fold"
+                                                            effect="fold" disabled="#{expenseController.selectedExpenseModel.project != null}"
                                                             required="true"
                                                             scrollHeight="250"
                                                             requiredMessage="Please select Contact"

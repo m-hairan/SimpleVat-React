@@ -12,7 +12,7 @@
                   hideEffect="scale">
             <div class="ui-g form-group" style="margin-bottom: 16px;">
                 <div class="ui-g-12">
-                    <p:panelGrid columns="4" 
+                    <p:panelGrid columns="4" id="contactPanel"
                                  columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
                                  layout="grid" 
                                  styleClass="ui-panelgrid-blank form-group"
@@ -41,7 +41,10 @@
                         
                         <p:outputLabel />
                         <h:panelGroup styleClass="md-inputfield">
-                            <p:inputText id="emailid" value="#{purchaseController.contactModel.email}" required="true" requiredMessage="Enter EmailId"/>
+                            <p:inputText id="emailid" value="#{purchaseController.contactModel.email}" required="true" validatorMessage="Invalid email format" requiredMessage="Enter EmailId">
+                                <f:validateRegex
+                                    pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                            </p:inputText>
                             <label>Email</label>
                             <p:message for="emailid"/>
                         </h:panelGroup>
@@ -55,8 +58,7 @@
                 <p:commandButton 
                     actionListener="#{purchaseController.createContact()}"
                     value="Save"
-                    update="createPurchaseForm:conatcts @form"
-                    onsuccess="PF('add_contact_popup').hide()" style="width:auto" 
+                    update="createPurchaseForm:conatcts contactPanel" style="width:auto" 
                     icon="ui-icon-save"/>
             </f:facet>  
         </p:dialog>

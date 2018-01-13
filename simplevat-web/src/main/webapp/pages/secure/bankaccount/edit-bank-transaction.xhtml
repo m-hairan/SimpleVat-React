@@ -288,7 +288,7 @@
                         </ui:fragment>
                         <ui:fragment rendered="#{transactionController.selectedTransactionModel.transactionId != null}">
                             <p:commandButton value="#{messages.update}" icon="ui-icon-save"  update="createTransactionForm"
-                                             action="#{transactionController.saveTransaction}"/>
+                                             action="#{transactionController.saveTransaction()}"/>
                             <p:commandButton value="#{messages.update_and_add_more}"
                                              icon="ui-icon-forward"
                                              action="#{transactionController.saveAndContinueTransaction}"

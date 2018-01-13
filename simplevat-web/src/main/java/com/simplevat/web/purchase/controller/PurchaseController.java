@@ -144,6 +144,10 @@ public class PurchaseController extends BaseController implements Serializable {
         selectedPurchaseModel = new PurchaseModel();
         if (objSelectedPurchaseModel == null) {
             selectedPurchaseModel.setPurchaseItems(new ArrayList<>());
+            Object objSelectedContact = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("contactId");
+            if (objSelectedContact != null) {
+                selectedPurchaseModel.setPurchaseContact(contactService.findByPK(Integer.parseInt(objSelectedContact.toString())));
+            }
             selectedPurchaseModel.setPurchaseDueOn(30);
             Currency defaultCurrency = company.getCompanyCountryCode().getCurrencyCode();
             if (defaultCurrency != null) {
@@ -190,8 +194,16 @@ public class PurchaseController extends BaseController implements Serializable {
     }
 
     public List<Product> products(final String searchQuery) throws Exception {
-        if (productService.getProductList() != null) {
-            return productService.getProductList();
+        List<Product> productList = productService.getProductList();
+        if (productList != null) {
+            List<Product> parentProductList = new ArrayList<>();
+            for (Product product : productList) {
+                if (product.getParentProduct() != null) {
+                    parentProductList.add(product.getParentProduct());
+                }
+            }
+            productList.removeAll(parentProductList);
+            return productList;
         }
         return null;
     }
@@ -263,23 +275,23 @@ public class PurchaseController extends BaseController implements Serializable {
     private boolean validatePurchaseLineItems() { //---------------
         boolean validated = true;
         for (PurchaseItemModel lastItem : selectedPurchaseModel.getPurchaseItems()) {
-            StringBuilder validationMessage=new StringBuilder("Please Enter ");
+            StringBuilder validationMessage = new StringBuilder("Please Enter ");
             if (lastItem.getUnitPrice() == null) {
                 validationMessage.append("Unit Price ");
                 validated = false;
             }
-            if(validated && lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0){
-                validationMessage=new StringBuilder("Unit price should be greater than 0 ");
+            if (validated && lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0) {
+                validationMessage = new StringBuilder("Unit price should be greater than 0 ");
                 validated = false;
             }
-            if(lastItem.getQuatity() < 1 ){
-                if(!validated){
+            if (lastItem.getQuatity() < 1) {
+                if (!validated) {
                     validationMessage.append("and ");
                 }
                 validationMessage.append("Quantity should be greater than 0 ");
                 validated = false;
             }
-            if(!validated){
+            if (!validated) {
                 validationMessage.append("in Purchase items ");
                 FacesMessage message = new FacesMessage(validationMessage.toString());
                 message.setSeverity(FacesMessage.SEVERITY_ERROR);

@@ -120,7 +120,7 @@ public class InvoiceController extends BaseController implements Serializable {
     @Getter
     @Setter
     private RecurringUtility recurringUtility;
-    
+
     @Getter
     @Setter
     private List<Currency> currencies;
@@ -160,15 +160,14 @@ public class InvoiceController extends BaseController implements Serializable {
     @Getter
     BigDecimal totalInvoiceCalculation = new BigDecimal(0);
 
-    
     public InvoiceController() {
         super(ModuleName.INVOICE_MODULE);
     }
 
     @PostConstruct
     public void init() {
-        
-        recurringUtility=new RecurringUtility();
+
+        recurringUtility = new RecurringUtility();
         company = companyService.findByPK(userServiceNew.findByPK(FacesUtil.getLoggedInUser().getUserId()).getCompany().getCompanyId());
         Object objSelectedInvoice = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedInvoiceModelId");
         System.out.println("objSelectedInvoice :" + objSelectedInvoice);
@@ -182,6 +181,10 @@ public class InvoiceController extends BaseController implements Serializable {
             contactModel = new ContactModel();
             currencies = currencyService.getCurrencies();
             setDefaultCurrency();
+            Object objSelectedContact = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("contactId");
+            if (objSelectedContact != null) {
+                selectedInvoiceModel.setInvoiceContact(contactService.findByPK(Integer.parseInt(objSelectedContact.toString())));
+            }
             selectedInvoiceModel.setDiscount(new BigDecimal(0));
             selectedInvoiceModel.setInvoiceDate(new Date());
             selectedInvoiceModel.setInvoiceDueOn(30);
@@ -202,11 +205,11 @@ public class InvoiceController extends BaseController implements Serializable {
         populateVatCategory();
         calculateTotal();
     }
-    
-     public void updateContact() {
+
+    public void updateContact() {
         setDefaultCurrency();
-        if (selectedInvoiceModel.getProject()!= null) {
-           selectedInvoiceModel.setInvoiceContact(selectedInvoiceModel.getProject().getContact());
+        if (selectedInvoiceModel.getProject() != null) {
+            selectedInvoiceModel.setInvoiceContact(selectedInvoiceModel.getProject().getContact());
         }
     }
 
@@ -246,7 +249,7 @@ public class InvoiceController extends BaseController implements Serializable {
                 validated = false;
             }
             if (lastItem.getQuatity() < 1) {
-                if(!validated){
+                if (!validated) {
                     validationMessage.append("and ");
                 }
                 validationMessage.append("Quantity should be greater than 0 ");
@@ -324,9 +327,16 @@ public class InvoiceController extends BaseController implements Serializable {
         if (invoiceItemModel != null) {
             invoiceItemModel.setProductService(null);
         }
-
-        if (productService.getProductList() != null) {
-            return productService.getProductList();
+        List<Product> productList = productService.getProductList();
+        if (productList != null) {
+            List<Product> parentProductList = new ArrayList<>();
+            for (Product product : productList) {
+                if (product.getParentProduct() != null) {
+                    parentProductList.add(product.getParentProduct());
+                }
+            }
+            productList.removeAll(parentProductList);
+            return productList;
         }
         return null;
     }
@@ -560,7 +570,7 @@ public class InvoiceController extends BaseController implements Serializable {
         selectedInvoiceModel.setInvoiceContact(contact);
         RequestContext.getCurrentInstance().execute("PF('add_contact_popup').hide();");
         initCreateContact();
-       
+
     }
 
     private void populateVatCategory() {

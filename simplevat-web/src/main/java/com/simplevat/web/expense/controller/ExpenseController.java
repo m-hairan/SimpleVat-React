@@ -146,6 +146,10 @@ public class ExpenseController extends BaseController implements Serializable {
         Object objSelectedExpenseModel = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedExpenseModelId");
         if (objSelectedExpenseModel == null) {
             selectedExpenseModel = new ExpenseModel();
+            Object objSelectedContact = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("contactId");
+            if (objSelectedContact != null) {
+                selectedExpenseModel.setExpenseContact(contactService.findByPK(Integer.parseInt(objSelectedContact.toString())));
+            }
 //            selectedExpenseModel.setAttachmentFile(new DefaultUploadedFile());
             selectedExpenseModel.setExpenseItem(new ArrayList<>());
             Currency defaultCurrency = company.getCompanyCountryCode().getCurrencyCode();

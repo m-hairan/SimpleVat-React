@@ -62,6 +62,49 @@
                                             <label>#{messages.vat}</label>
                                             <p:message for="vat" />
                                         </h:panelGroup>
+                                        <p:outputLabel for="warehouse"/>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:autoComplete id="warehouse" 
+                                                            converter="#{productWarehouseConverter}"
+                                                            dropdown="true" styleClass="warehouse"
+                                                            forceSelection="true"
+                                                            effect="fold"
+                                                            scrollHeight="250"
+                                                            completeMethod="#{productController.completeProductWarehouse()}" 
+                                                            value="#{productController.productModel.productWarehouse}"
+                                                            var="productWarehouse"
+                                                            itemValue="#{productWarehouse}"
+                                                            itemLabel="#{productWarehouse.warehouseName}"
+                                                            >
+                                            </p:autoComplete>
+                                            <label>#{messages.Product_warehouse}</label>
+                                            <p:message for="warehouse" />
+                                        </h:panelGroup>
+                                        <p:outputLabel value="OR  "/>
+                                        <p:commandLink onsuccess="PF('add_new_warehouse').show();" 
+                                                       style="color: #009688" 
+                                                       value="Add New Warehouse" />
+                                                       
+                                        <p:outputLabel for="produstList"/>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:autoComplete id="produstList" 
+                                                            converter="#{productConverter}"
+                                                            dropdown="true" 
+                                                            forceSelection="true"
+                                                            effect="fold"
+                                                            scrollHeight="250"
+                                                            value="#{productController.productModel.parentProduct}"
+                                                            completeMethod="#{productController.completeProducts()}" 
+                                                            var="parentProduct"
+                                                            itemValue="#{parentProduct}"
+                                                            itemLabel="#{parentProduct.productName}"
+                                                            >
+                                            </p:autoComplete>
+                                            <label>#{messages.Parent}</label>
+                                            <p:message for="produstList" />
+                                        </h:panelGroup>
+
+
                                         <p:outputLabel for="productDescription" />
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputTextarea
@@ -73,6 +116,7 @@
                                             <h:outputText id="counterValue" />
                                             <label>#{messages.description}</label>
                                         </h:panelGroup>
+
                                     </p:panelGrid>
                                 </p:fieldset>
                                 <br />
@@ -119,6 +163,7 @@
             </div>
 
         </h:form>
+        <ui:include src="add-new-warehouse.xhtml"/>
     </ui:define>
 
 </ui:composition>

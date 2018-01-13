@@ -7,17 +7,23 @@ package com.simplevat.web.productservice.controller;
 
 import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.Product;
+import com.simplevat.entity.ProductWarehouse;
 import com.simplevat.entity.VatCategory;
 import com.simplevat.service.ProductService;
+import com.simplevat.service.ProductWarehouseService;
 import com.simplevat.service.VatCategoryService;
 import com.simplevat.web.common.controller.BaseController;
 import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.productservice.model.ProductModel;
 import com.simplevat.web.utils.FacesUtil;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
+import lombok.Getter;
+import lombok.Setter;
+import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -34,7 +40,14 @@ public class ProductController extends BaseController {
 
     @Autowired
     private ProductService productService;
+    @Autowired
+    private ProductWarehouseService productWarehouseService;
+    @Getter
+    @Setter
     private ProductModel productModel;
+    @Getter
+    @Setter
+    private ProductWarehouse productWarehouse;
     private ProductModelHelper productModelHelper;
 
     public ProductController() {
@@ -43,6 +56,7 @@ public class ProductController extends BaseController {
 
     @PostConstruct
     public void init() {
+        productWarehouse = new ProductWarehouse();
         productModel = new ProductModel();
         productModelHelper = new ProductModelHelper();
         Object objSelectedProductId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("productId");
@@ -53,19 +67,27 @@ public class ProductController extends BaseController {
 
     }
 
-    public ProductModel getProductModel() {
-        return productModel;
-    }
-
-    public void setProductModel(ProductModel productModel) {
-        this.productModel = productModel;
-    }
-
     public List<VatCategory> vatCategorys(final String searchQuery) throws Exception {
         if (vatCategoryService.getVatCategoryList() != null) {
             return vatCategoryService.getVatCategoryList();
         }
         return null;
+    }
+
+    public List<Product> completeProducts() {
+        List<Product> productList = productService.getProductList();
+        if (productList == null) {
+            productList = new ArrayList<>();
+        }
+        return productList;
+    }
+
+    public List<ProductWarehouse> completeProductWarehouse() {
+        List<ProductWarehouse> productWarehouseList = productWarehouseService.getProductWarehouseList();
+        if (productWarehouseList == null) {
+            productWarehouseList = new ArrayList<>();
+        }
+        return productWarehouseList;
     }
 
     public String save() {
@@ -112,4 +134,12 @@ public class ProductController extends BaseController {
         return "product?faces-redirect=true";
 
     }
+
+    public void createNewWarehouse() {
+        productWarehouseService.persist(productWarehouse);
+        productModel.setProductWarehouse(productWarehouse);
+        RequestContext.getCurrentInstance().execute("PF('add_new_warehouse').hide();");
+        productWarehouse = new ProductWarehouse();
+    }
+
 }

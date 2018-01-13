@@ -1,6 +1,7 @@
 package com.simplevat.web.bankaccount.controller;
 
 import com.github.javaplugs.jsf.SpringScopeView;
+import com.simplevat.entity.Company;
 import com.simplevat.entity.bankaccount.BankAccountType;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +18,15 @@ import com.simplevat.entity.User;
 import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.entity.bankaccount.BankAccountStatus;
 import com.simplevat.service.BankAccountTypeService;
+import com.simplevat.service.CompanyService;
 import com.simplevat.service.CountryService;
 import com.simplevat.service.CurrencyService;
+import com.simplevat.service.UserServiceNew;
 import com.simplevat.service.bankaccount.BankAccountService;
 import com.simplevat.service.bankaccount.BankAccountStatusService;
 import com.simplevat.web.utils.FacesUtil;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
-import javax.faces.model.SelectItem;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -48,6 +50,13 @@ public class BankAccountController extends BankAccountHelper implements Serializ
     @Autowired
     private BankAccountTypeService bankAccountTypeService;
 
+    @Autowired
+    private CompanyService companyService;
+    @Autowired
+    private UserServiceNew userServiceNew;
+    @Getter
+    private Company company;
+
     @Getter
     @Setter
     private BankAccount selectedBankAccount;
@@ -59,6 +68,7 @@ public class BankAccountController extends BankAccountHelper implements Serializ
      */
     @PostConstruct
     public void init() {
+        company = companyService.findByPK(userServiceNew.findByPK(FacesUtil.getLoggedInUser().getUserId()).getCompany().getCompanyId());
         Object objSelectedBankAccountId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("bankAccountId");
         System.out.println("selected :" + objSelectedBankAccountId);
 
@@ -73,14 +83,14 @@ public class BankAccountController extends BankAccountHelper implements Serializ
 
         } else {
             this.selectedBankAccount = new BankAccount();
-            Currency defaultCurrency = currencyService.getDefaultCurrency();
-            if (defaultCurrency != null) {
-                this.selectedBankAccount.setBankAccountCurrency(defaultCurrency);
-            }
 
-            Country defaultCountry = countryService.getDefaultCountry();
+            Country defaultCountry = company.getCompanyCountryCode();
             if (defaultCountry != null) {
                 this.selectedBankAccount.setBankCountry(defaultCountry);
+                Currency defaultCurrency = defaultCountry.getCurrencyCode();
+                if (defaultCurrency != null) {
+                    this.selectedBankAccount.setBankAccountCurrency(defaultCurrency);
+                }
             }
             BankAccountType defaultBankAccountType = bankAccountTypeService.getDefaultBankAccountType();
             if (defaultBankAccountType != null) {

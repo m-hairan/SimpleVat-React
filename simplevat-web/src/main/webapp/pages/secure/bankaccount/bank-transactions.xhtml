@@ -118,7 +118,7 @@
 
                             <p:rowToggler/>
                             <p:commandButton  icon="#{transaction.expandIcon ? 'ui-icon-expand-less' : 'ui-icon-expand-more'}" onclick="expandCollapse(event, #{index})" action="#{transactionListController.expandCollapse(transaction)}" styleClass="AquaButton parentExpandButton rowExpand#{index}" update="transactionsTable:@row(#{index}) @(.parentExpandButton)"/>
-                            <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" action="#{transactionListController.editTransection}" >
+                            <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" action="#{transactionListController.editTransection()}" >
                                 <f:setPropertyActionListener value="#{transaction}" target="#{transactionListController.selectedTransactionViewModel}" />
                             </p:commandButton>
 
