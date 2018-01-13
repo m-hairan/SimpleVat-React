@@ -2,7 +2,6 @@ package com.simplevat.entity;
 
 import com.simplevat.entity.converter.DateConverter;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -35,6 +34,13 @@ public class Product implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PRODUCT_VAT")
     private VatCategory vatCategory;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PARENT_PRODUCT")
+    private Product parentProduct;
+    @Basic
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PRODUCT_WAREHOUSE")
+    private ProductWarehouse productWarehouse;
     @Basic
     @Column(name = "PRODUCT_CODE")
     private String productCode;
@@ -60,4 +66,5 @@ public class Product implements Serializable {
     @ColumnDefault(value = "1")
     @Version
     private Integer versionNumber = 1;
+
 }

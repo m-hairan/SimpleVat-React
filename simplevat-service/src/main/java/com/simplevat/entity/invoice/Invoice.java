@@ -94,6 +94,10 @@ public class Invoice implements Serializable {
     @Basic(optional = false)
     private Boolean deleteFlag = Boolean.FALSE;
 
+//    @Column(name = "RECURRING_FLAG")
+//    @ColumnDefault(value = "0")
+//    private Boolean recurringFlag = Boolean.FALSE;
+    
     @Column(name = "VERSION_NUMBER")
     @ColumnDefault(value = "1")
     @Basic(optional = false)
@@ -128,6 +132,24 @@ public class Invoice implements Serializable {
 
     @Column(name = "PAYMENTMODE")
     private Integer paymentMode;
+    
+//    @Column(name = "RECURRING_INTERVAL")
+//    private Integer recurringInterval;
+//
+//    @Column(name = "RECURRING_WEEK_DAYS")
+//    private Integer recurringWeekDays;
+//    
+//    @Column (name = "RECURRING_MONTH")
+//    private Integer recurringMonth;
+//
+//    @Column(name = "RECURRING_DAYS")
+//    private Integer recurringDays;
+//
+//    @Column(name = "RECURRING_FIRST_TO_LAST")
+//    private Integer recurringFistToLast;
+//
+//    @Column(name = "RECURRING_BY_AFTER")
+//    private Integer recurringByAfter;
 
     @Nonnull
     public Collection<InvoiceLineItem> getInvoiceLineItems() {
