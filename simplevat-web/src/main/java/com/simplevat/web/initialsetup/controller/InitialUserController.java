@@ -40,11 +40,17 @@ import com.simplevat.service.CountryService;
 import com.simplevat.service.IndustryTypeService;
 import com.simplevat.web.company.controller.CompanyHelper;
 import com.simplevat.web.company.controller.CompanyModel;
+import com.simplevat.web.invoice.controller.InvoiceMailController;
+import com.simplevat.web.newactivation.NewActivationMailSender;
+import com.simplevat.web.utils.FileUtility;
 import com.simplevat.web.utils.MailUtility;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMultipart;
 
 /**
  *
@@ -58,6 +64,7 @@ public class InitialUserController implements Serializable {
     private static final long serialVersionUID = -7388960716549948523L;
     private static final String ADMIN_EMAIL = "no-reply@simplevat.com";
     private static final String ADMIN_USERNAME = "Simplevat Admin";
+    private static final String ACTIVATION_EMAIL_TEMPLATE_FILE = "/WEB-INF/emailtemplate/setup-confirmation.html";
 
     @Autowired
     private CompanyService companyService;
@@ -79,6 +86,7 @@ public class InitialUserController implements Serializable {
     @Getter
     @Setter
     private String password;
+    private String baseUrl;
     @Getter
     @Setter
     public CompanyModel companyModel;
@@ -107,11 +115,13 @@ public class InitialUserController implements Serializable {
                 java.util.logging.Logger.getLogger(InitialUserController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        baseUrl = context.getExternalContext().getRequestParameterMap().get("baseUrl");
         password = new String(decoder.decode(context.getExternalContext().getRequestParameterMap().get("password"))).replace(token, "");
         companyModel = new CompanyModel();
         companyModel.setCompanyName(context.getExternalContext().getRequestParameterMap().get("companyname"));
         companyHelper = new CompanyHelper();
         selectedUser = new UserDTO();
+        selectedUser.setFirstName(context.getExternalContext().getRequestParameterMap().get("userFirstName"));
         selectedUser.setUserEmail(context.getExternalContext().getRequestParameterMap().get("username"));
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(password);
@@ -141,7 +151,7 @@ public class InitialUserController implements Serializable {
             FacesContext context = FacesContext.getCurrentInstance();
             context.getExternalContext().getFlash().setKeepMessages(true);
             userService.persist(user);
-            sendNewUserMail(user);
+            sendActivationMail(user);
 
             return "/pages/public/login.xhtml?faces-redirect=true";
         } catch (IllegalArgumentException ex) {
@@ -174,33 +184,41 @@ public class InitialUserController implements Serializable {
         return industryTypeService.getIndustryTypes();
     }
 
-    private void sendNewUserMail(User user) {
-
-        MailEnum mailEnum = MailEnum.NEW_USER_CREATED;
-        String summary = "Hello " + user.getFirstName() + " " + user.getLastName()
-                + "<br>Your user account created successfully.<br> Your username is \""
-                + user.getUserEmail() + "\".<br>Please use the same password you used for signup on simplevat.com.";
+    public void sendActivationMail(User user) {
         try {
-            String[] email = {user.getUserEmail()};
-            sendMailToUser(mailEnum, summary, email);
-        } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(InitialUserController.class.getName()).log(Level.SEVERE, null, ex);
+            MailEnum mailEnum = MailEnum.NEW_USER_CREATED;
+            String recipientName = user.getFirstName();
+            String accountAddress = baseUrl;
+            String userLoginId = user.getUserEmail();
+            Object[] args = {recipientName, accountAddress, userLoginId};
+            String pathname = FacesContext.getCurrentInstance().getExternalContext().getRealPath(ACTIVATION_EMAIL_TEMPLATE_FILE);
+            MessageFormat msgFormat = new MessageFormat(FileUtility.readFile(pathname));
+            MimeMultipart mimeMultipart = FileUtility.getMessageBody(msgFormat.format(args));
+            String firstName = recipientName;
+            String[] email = {userLoginId};
+            sendActivationMail(mailEnum, mimeMultipart, firstName, email);
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(NewActivationMailSender.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MessagingException ex) {
+            java.util.logging.Logger.getLogger(NewActivationMailSender.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private void sendMailToUser(MailEnum mailEnum, String summary, String[] senderMailAddress) {
-        Thread t = new Thread(() -> {
-            try {
-                Mail mail = new Mail();
-                mail.setBody(summary);
-                mail.setFrom(ADMIN_EMAIL);
-                mail.setFromName(ADMIN_USERNAME);
-                mail.setTo(senderMailAddress);
-                mail.setSubject(mailEnum.getSubject());
-                mailIntegration.sendHtmlMail(mail, MailUtility.getJavaMailSender(configurationService.getConfigurationList()));
-            } catch (Exception ex) {
-                java.util.logging.Logger.getLogger(InitialUserController.class
-                        .getName()).log(Level.SEVERE, null, ex);
+    private void sendActivationMail(MailEnum mailEnum, MimeMultipart mimeMultipart, String firstName, String[] senderMailAddress) {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Mail mail = new Mail();
+                    mail.setFrom(ADMIN_EMAIL);
+                    mail.setFromName(ADMIN_USERNAME);
+                    mail.setTo(senderMailAddress);
+                    mail.setSubject(mailEnum.getSubject());
+                    mailIntegration.sendHtmlEmail(mimeMultipart, mail, MailUtility.getJavaMailSender(configurationService.getConfigurationList()));
+                } catch (Exception ex) {
+                    java.util.logging.Logger.getLogger(InvoiceMailController.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         t.start();
