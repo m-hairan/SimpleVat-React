@@ -23,7 +23,7 @@ import javax.mail.internet.MimeMultipart;
  */
 public class FileUtility {
 
-    private static final String LOGO_IMAGE_PATH = "/resources/ultima-layout/images/SimpleVatFinalFullLogo.png";
+    private static final String LOGO_IMAGE_PATH = "/resources/images/SimpleVatLogoFinalFinal.png";
     
     public static String readFile(String fileName) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(fileName));

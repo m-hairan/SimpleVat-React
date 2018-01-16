@@ -34,7 +34,7 @@ public class TransactionCategoryView extends BaseController implements Serializa
     @Getter
     public String CREATE_PAGE = "create-transactioncategory";
     @Getter
-    public String HOME_PAGE = "index?faces-redirect=true&tabIndex=2";
+    public String HOME_PAGE = "index?faces-redirect=true";
 
     @Autowired
     private TransactionCategoryServiceNew transactionCategoryService;

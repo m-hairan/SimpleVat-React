@@ -103,7 +103,9 @@ public class InvoiceUtil extends AbstractReportBean {
                 }
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
                 parameters.put("companyName", company.getCompanyName());
-                parameters.put("CompanyImage", new ByteArrayInputStream(company.getCompanyLogo()));
+                if (company.getCompanyLogo() != null) {
+                    parameters.put("CompanyImage", new ByteArrayInputStream(company.getCompanyLogo()));
+                }
                 parameters.put("companyAddress", getComapnyAddress(company));
                 parameters.put("invoiceHolderAddress", getInvoiceHolderAddress(invoiceModel.getInvoiceContact()));
                 parameters.put("invoiceNumber", "INVOICE " + invoiceModel.getInvoiceReferenceNumber());

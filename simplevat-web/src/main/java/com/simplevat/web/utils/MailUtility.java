@@ -40,37 +40,37 @@ public class MailUtility {
         if (configurationList != null && !configurationList.isEmpty()) {
             for (Configuration configuration : configurationList) {
                 if (configuration.getName().equals(ConfigurationConstants.MAIL_HOST)) {
-                    if (configuration.getValue() == null) {
+                    if (configuration.getValue() == null || configuration.getValue().isEmpty()) {
                         incompleteConfiguration = true;
                         break;
                     }
                 }
                 if (configuration.getName().equals(ConfigurationConstants.MAIL_PORT)) {
-                    if (configuration.getValue() == null) {
+                    if (configuration.getValue() == null || configuration.getValue().isEmpty()) {
                         incompleteConfiguration = true;
                         break;
                     }
                 }
                 if (configuration.getName().equals(ConfigurationConstants.MAIL_USERNAME)) {
-                    if (configuration.getValue() == null) {
+                    if (configuration.getValue() == null || configuration.getValue().isEmpty()) {
                         incompleteConfiguration = true;
                         break;
                     }
                 }
                 if (configuration.getName().equals(ConfigurationConstants.MAIL_PASSWORD)) {
-                    if (configuration.getValue() == null) {
+                    if (configuration.getValue() == null || configuration.getValue().isEmpty()) {
                         incompleteConfiguration = true;
                         break;
                     }
                 }
                 if (configuration.getName().equals(ConfigurationConstants.MAIL_SMTP_AUTH)) {
-                    if (configuration.getValue() == null) {
+                    if (configuration.getValue() == null || configuration.getValue().isEmpty()) {
                         incompleteConfiguration = true;
                         break;
                     }
                 }
                 if (configuration.getName().equals(ConfigurationConstants.MAIL_SMTP_STARTTLS_ENABLE)) {
-                    if (configuration.getValue() == null) {
+                    if (configuration.getValue() == null || configuration.getValue().isEmpty()) {
                         incompleteConfiguration = true;
                         break;
                     }

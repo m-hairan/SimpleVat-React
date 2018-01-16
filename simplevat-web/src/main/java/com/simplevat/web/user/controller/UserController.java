@@ -13,13 +13,14 @@ import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.RoleService;
 import com.simplevat.service.UserServiceNew;
 import com.simplevat.web.common.controller.StreamedContentSessionController;
-import com.simplevat.web.invoice.controller.InvoiceMailController;
-import com.simplevat.web.invoice.controller.InvoiceReminderController;
 import com.simplevat.web.user.model.UserDTO;
 import com.simplevat.web.utils.FacesUtil;
+import com.simplevat.web.utils.FileUtility;
 import com.simplevat.web.utils.MailUtility;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.Serializable;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +29,8 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMultipart;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.event.FileUploadEvent;
@@ -50,6 +53,7 @@ public class UserController implements Serializable {
     private static final long serialVersionUID = -7388960716549948523L;
     private static final String ADMIN_EMAIL = "no-reply@simplevat.com";
     private static final String ADMIN_USERNAME = "Simplevat Admin";
+    private static final String NEW_USER_EMAIL_TEMPLATE_FILE = "/WEB-INF/emailtemplate/new-user-created-template.html";
 
     @Autowired
     private ConfigurationService configurationService;
@@ -89,7 +93,7 @@ public class UserController implements Serializable {
 
     @Getter
     private boolean renderProfilePic;
-    
+
     String mailhost = System.getenv("SIMPLEVAT_MAIL_HOST");
     String mailport = System.getenv("SIMPLEVAT_MAIL_PORT");
     String mailusername = System.getenv("SIMPLEVAT_MAIL_USERNAME");
@@ -203,33 +207,40 @@ public class UserController implements Serializable {
         return "";
     }
 
-    private void sendNewUserMail(User user, String passwordToMail) {
-
-        MailEnum mailEnum = MailEnum.NEW_USER_CREATED;
-        String summary = "Hello " + user.getFirstName() + " " + user.getLastName()
-                + "<br>Your user account created successfully.<br> Your username is \""
-                + user.getUserEmail() + "\".<br> Your temparory password is \"" + passwordToMail + "\".";
+    public String sendNewUserMail(User user, String passwordToMail) throws Exception {
         try {
-            String[] email = {user.getUserEmail()};
-            sendMailToUser(mailEnum, summary, email);
-        } catch (Exception ex) {
-            Logger.getLogger(InvoiceReminderController.class.getName()).log(Level.SEVERE, null, ex);
+            MailEnum mailEnum = MailEnum.NEW_USER_CREATED;
+            String recipientName = user.getFirstName();
+            String userMail = user.getUserEmail();
+            Object[] args = {recipientName, userMail, passwordToMail};
+            String pathname = FacesContext.getCurrentInstance().getExternalContext().getRealPath(NEW_USER_EMAIL_TEMPLATE_FILE);
+            MessageFormat msgFormat = new MessageFormat(FileUtility.readFile(pathname));
+            MimeMultipart mimeMultipart = FileUtility.getMessageBody(msgFormat.format(args));
+            String[] email = {userMail};
+            sendActivationMail(mailEnum, mimeMultipart, email);
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MessagingException ex) {
+            java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 
-    private void sendMailToUser(MailEnum mailEnum, String summary, String[] senderMailAddress) {
-        Thread t = new Thread(() -> {
-            try {
-                Mail mail = new Mail();
-                mail.setBody(summary);
-                mail.setFrom(ADMIN_EMAIL);
-                mail.setFromName(ADMIN_USERNAME);
-                mail.setTo(senderMailAddress);
-                mail.setSubject(mailEnum.getSubject());
-                mailIntegration.sendHtmlMail(mail, MailUtility.getJavaMailSender(configurationService.getConfigurationList()));
-            } catch (Exception ex) {
-                Logger.getLogger(InvoiceMailController.class
-                        .getName()).log(Level.SEVERE, null, ex);
+    private void sendActivationMail(MailEnum mailEnum, MimeMultipart mimeMultipart, String[] senderMailAddress) {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Mail mail = new Mail();
+                    mail.setFrom(ADMIN_EMAIL);
+                    mail.setFromName(ADMIN_USERNAME);
+                    mail.setTo(senderMailAddress);
+                    mail.setSubject(mailEnum.getSubject());
+                    mailIntegration.sendHtmlEmail(mimeMultipart, mail, MailUtility.getJavaMailSender(configurationService.getConfigurationList()));
+                } catch (Exception ex) {
+                    java.util.logging.Logger.getLogger(UserController.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         t.start();

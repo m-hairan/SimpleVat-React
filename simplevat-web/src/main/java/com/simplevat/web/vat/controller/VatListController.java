@@ -10,7 +10,7 @@ import com.simplevat.entity.VatCategory;
 import com.simplevat.service.VatCategoryService;
 import com.simplevat.web.common.controller.BaseController;
 import com.simplevat.web.constant.ModuleName;
-import com.simplevat.web.vat.model.VatListModel;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -28,7 +28,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 @SpringScopeView
 
-public class VatListController extends BaseController {
+public class VatListController extends BaseController implements Serializable{
 
     @Getter
     @Setter

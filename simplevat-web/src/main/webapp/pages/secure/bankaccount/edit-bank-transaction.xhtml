@@ -280,25 +280,25 @@
                     <f:facet name="left">
                         <ui:fragment rendered="#{transactionController.selectedTransactionModel.transactionId == null}">
                             <p:commandButton value="#{messages.save}" icon="ui-icon-save"  update="createTransactionForm"
-                                             action="#{transactionController.saveTransaction}"/>
+                                             action="#{transactionController.saveTransaction}" rendered="#{transactionController.transactionViewList == null}"/>
                             <p:commandButton value="#{messages.save_and_add_more}"
                                              icon="ui-icon-forward"
-                                             action="#{transactionController.saveAndContinueTransaction}"
+                                             action="#{transactionController.saveAndContinueTransaction}" rendered="#{transactionController.transactionViewList == null}"
                                              update="createTransactionForm"/>
                         </ui:fragment>
                         <ui:fragment rendered="#{transactionController.selectedTransactionModel.transactionId != null}">
-                            <p:commandButton value="#{messages.update}" icon="ui-icon-save"  update="createTransactionForm"
+                            <p:commandButton value="#{messages.update}" icon="ui-icon-save"  update="createTransactionForm" rendered="#{transactionController.transactionViewList == null}"
                                              action="#{transactionController.saveTransaction()}"/>
                             <p:commandButton value="#{messages.update_and_add_more}"
-                                             icon="ui-icon-forward"
+                                             icon="ui-icon-forward" rendered="#{transactionController.transactionViewList == null}"
                                              action="#{transactionController.saveAndContinueTransaction}"
                                              update="createTransactionForm"/>
                         </ui:fragment>
-
-                        <span class="ui-separator" style="padding-right: 5px;"> <span
-                                class="fa fa-ellipsis-v SoftGray" />
-                        </span>
-
+                        <ui:fragment rendered="#{transactionController.transactionViewList == null}">
+                            <span class="ui-separator" style="padding-right: 5px;"> <span
+                                    class="fa fa-ellipsis-v SoftGray" />
+                            </span>
+                        </ui:fragment>
 
                         <si:cbutton type="cancel"/>
                     </f:facet>

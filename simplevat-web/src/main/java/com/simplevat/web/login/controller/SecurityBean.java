@@ -8,6 +8,7 @@ import com.simplevat.integration.MailIntegration;
 import com.simplevat.integration.MailPreparer;
 import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.UserServiceNew;
+import com.simplevat.web.utils.FileUtility;
 import com.simplevat.web.utils.MailUtility;
 import com.simplevat.web.utils.SessionIdentifierGenerator;
 import java.io.IOException;
@@ -32,9 +33,12 @@ import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import java.io.Serializable;
+import java.text.MessageFormat;
 import java.util.Optional;
 import java.util.logging.Level;
 import javax.annotation.PostConstruct;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMultipart;
 
 @Controller
 //@ManagedBean(name = "securityBean")
@@ -47,6 +51,7 @@ public class SecurityBean implements PhaseListener, Serializable {
     private static final long serialVersionUID = -7388960716549948523L;
     private static final String ADMIN_EMAIL = "no-reply@simplevat.com";
     private static final String ADMIN_USERNAME = "Simplevat Admin";
+    private static final String FORGOT_PASSWORD_EMAIL_TEMPLATE_FILE = "/WEB-INF/emailtemplate/forget-password.html";
 
     @Getter
     @Setter
@@ -83,8 +88,6 @@ public class SecurityBean implements PhaseListener, Serializable {
     @PostConstruct
     public void init() {
         versionNumber = System.getenv("SIMPLEVAT_RELEASE");
-//        String token = "12345";//FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("token");
-//        String envToken = System.getenv("SIMPLEVAT_TOKEN");
         if (userService.findAll().isEmpty()) {
             try {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("/pages/public/token-mismatched-error.xhtml");
@@ -141,20 +144,49 @@ public class SecurityBean implements PhaseListener, Serializable {
     }
 
     public String forgotPassword() throws Exception {
-        MailEnum mailEnum = MailEnum.FORGOT_PASSWORD;
-        String summary = "Password reset successfully. Please check your mail for further details";
-        Optional<User> user = userService.getUserByEmail(username);
-        if (user.isPresent()) {
-            User userObj = user.get();
-            String firstName = userObj.getFirstName();
-            String randomPassword = updatedUserPassword(userObj);
-            String[] email = {username};
-            sendPasswordNotificationMail(mailEnum, summary, randomPassword, firstName, email);
-            return "/pages/public/login.xhtml?faces-redirect=true";
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Email address provided."));
+        try {
+            MailEnum mailEnum = MailEnum.NEW_USER_CREATED;
+            Optional<User> userOptional = userService.getUserByEmail(username);
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                String recipientName = user.getFirstName();
+                String randomPassword = updatedUserPassword(user);
+                Object[] args = {recipientName, randomPassword};
+                String pathname = FacesContext.getCurrentInstance().getExternalContext().getRealPath(FORGOT_PASSWORD_EMAIL_TEMPLATE_FILE);
+                MessageFormat msgFormat = new MessageFormat(FileUtility.readFile(pathname));
+                MimeMultipart mimeMultipart = FileUtility.getMessageBody(msgFormat.format(args));
+                String[] email = {user.getUserEmail()};
+                sendActivationMail(mailEnum, mimeMultipart, email);
+                return "/pages/public/login.xhtml?faces-redirect=true";
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Email address provided."));
+            }
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(SecurityBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MessagingException ex) {
+            java.util.logging.Logger.getLogger(SecurityBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    private void sendActivationMail(MailEnum mailEnum, MimeMultipart mimeMultipart, String[] senderMailAddress) {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Mail mail = new Mail();
+                    mail.setFrom(ADMIN_EMAIL);
+                    mail.setFromName(ADMIN_USERNAME);
+                    mail.setTo(senderMailAddress);
+                    mail.setSubject(mailEnum.getSubject());
+                    mailIntegration.sendHtmlEmail(mimeMultipart, mail, MailUtility.getJavaMailSender(configurationService.getConfigurationList()));
+                } catch (Exception ex) {
+                    java.util.logging.Logger.getLogger(SecurityBean.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        t.start();
     }
 
     //TODO Use it for user creation

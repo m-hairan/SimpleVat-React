@@ -6,7 +6,6 @@
 package com.simplevat.web.invoice.controller;
 
 import com.github.javaplugs.jsf.SpringScopeView;
-import com.simplevat.entity.Configuration;
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Mail;
 import com.simplevat.entity.MailAttachment;
@@ -16,16 +15,12 @@ import com.simplevat.integration.MailIntegration;
 import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.ContactService;
 import com.simplevat.service.invoice.InvoiceService;
-import com.simplevat.web.constant.ConfigurationConstants;
-import com.simplevat.web.utils.MailDefaultConfigurationModel;
 import com.simplevat.web.utils.MailUtility;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
@@ -34,8 +29,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -77,7 +70,7 @@ public class InvoiceMailController implements Serializable {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         Integer invoiceId = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("invoiceId").toString());
         MailEnum mailEnum = MailEnum.INVOICE_PDF;
-        String summary = "Your Invoice Generated successfully. Please check your mail for further details";
+        String summary = "";
         Invoice invoice = invoiceService.findByPK(invoiceId);
         Optional<Contact> contact = contactService.getContactByEmail(invoice.getInvoiceContact().getEmail());
         if (contact.isPresent()) {

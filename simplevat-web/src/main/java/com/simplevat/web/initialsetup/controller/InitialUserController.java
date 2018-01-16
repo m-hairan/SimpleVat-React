@@ -40,7 +40,6 @@ import com.simplevat.service.CountryService;
 import com.simplevat.service.IndustryTypeService;
 import com.simplevat.web.company.controller.CompanyHelper;
 import com.simplevat.web.company.controller.CompanyModel;
-import com.simplevat.web.invoice.controller.InvoiceMailController;
 import com.simplevat.web.newactivation.NewActivationMailSender;
 import com.simplevat.web.utils.FileUtility;
 import com.simplevat.web.utils.MailUtility;
@@ -216,7 +215,7 @@ public class InitialUserController implements Serializable {
                     mail.setSubject(mailEnum.getSubject());
                     mailIntegration.sendHtmlEmail(mimeMultipart, mail, MailUtility.getJavaMailSender(configurationService.getConfigurationList()));
                 } catch (Exception ex) {
-                    java.util.logging.Logger.getLogger(InvoiceMailController.class
+                    java.util.logging.Logger.getLogger(InitialUserController.class
                             .getName()).log(Level.SEVERE, null, ex);
                 }
             }

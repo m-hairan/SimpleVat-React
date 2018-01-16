@@ -20,20 +20,23 @@
 
                         <p:outputLabel />
                         <h:panelGroup styleClass="md-inputfield">
-                            <p:inputText value="#{expenseController.contactModel.firstName}"/>
+                            <p:inputText id="firstname" value="#{expenseController.contactModel.firstName}" required="true" requiredMessage="Please Enter name"/>
                             <label>First Name</label>
+                            <p:message for="firstname"/>
                         </h:panelGroup>
 
                         <p:outputLabel />
                         <h:panelGroup styleClass="md-inputfield">
-                            <p:inputText value="#{expenseController.contactModel.lastName}"/>
+                            <p:inputText id="lastname" value="#{expenseController.contactModel.lastName}" required="true" requiredMessage="Enter Last name"/>
                             <label>Last Name</label>
+                            <p:message for="lastname"/>
                         </h:panelGroup>
 
                         <p:outputLabel />
                         <h:panelGroup styleClass="md-inputfield">
-                            <p:inputText value="#{expenseController.contactModel.organization}"/>
+                            <p:inputText id="organizationname" value="#{expenseController.contactModel.organization}" required="true" requiredMessage="Enter Organization"/>
                             <label>Organization Name</label>
+                            <p:message for="organizationname"/>
                         </h:panelGroup>
 
                         <p:outputLabel />

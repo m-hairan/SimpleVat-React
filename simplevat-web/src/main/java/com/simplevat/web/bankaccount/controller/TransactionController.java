@@ -24,6 +24,7 @@ import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionStatus;
 import com.simplevat.entity.bankaccount.TransactionType;
+import com.simplevat.entity.bankaccount.TransactionView;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.service.ProjectService;
 import com.simplevat.service.bankaccount.BankAccountService;
@@ -92,6 +93,10 @@ public class TransactionController extends TransactionControllerHelper implement
 
     @Getter
     @Setter
+    private List<TransactionView> transactionViewList;
+
+    @Getter
+    @Setter
     String fileName;
 
     @Getter
@@ -109,6 +114,7 @@ public class TransactionController extends TransactionControllerHelper implement
         Object objselectedTransactionModel = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedTransactionId");
 
         if (objselectedTransactionModel != null) {
+            transactionViewList = transactionService.getChildTransactionViewListByParentId(Integer.parseInt(objselectedTransactionModel.toString()));
             selectedTransactionModel = getTransactionModel(transactionService.findByPK(Integer.parseInt(objselectedTransactionModel.toString())));
             if (selectedTransactionModel.getExplainedTransactionAttachement() != null) {
                 InputStream stream = new ByteArrayInputStream(selectedTransactionModel.getExplainedTransactionAttachement());
