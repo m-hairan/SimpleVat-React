@@ -16,5 +16,7 @@ public abstract class TransactionCategoryServiceNew extends SimpleVatService<Int
 	public abstract  List<TransactionCategory> getCategoriesByComplexCriteria(TransactionCategoryCriteria criteria);
 	
 	public abstract  TransactionCategory getDefaultTransactionCategory();
+        
+        public abstract  TransactionCategory getDefaultTransactionCategoryByTransactionCategoryId(Integer transactionCategoryId);
 
 }

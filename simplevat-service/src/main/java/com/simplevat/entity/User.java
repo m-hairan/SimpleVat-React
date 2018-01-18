@@ -17,12 +17,12 @@ import org.hibernate.annotations.ColumnDefault;
             + "FROM User u where u.deleteFlag = FALSE and u.isActive = TRUE ")
 })
 @Entity
-@Table(name = "USER", schema = "simplevat", catalog = "")
+@Table(name = "USER")
 @Data
-public class User implements Serializable{
+public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @Column(name = "USER_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +33,7 @@ public class User implements Serializable{
     private String firstName;
 
     @Basic(optional = false)
-    @Column(name = "USER_EMAIL")
+    @Column(name = "USER_EMAIL", unique = true)
     private String userEmail;
 
     @Basic
@@ -72,7 +72,7 @@ public class User implements Serializable{
     @ColumnDefault(value = "0")
     @Column(name = "IS_ACTIVE")
     private Boolean isActive;
-    
+
     @Column(name = "DELETE_FLAG")
     @ColumnDefault(value = "0")
     @Basic(optional = false)

@@ -283,4 +283,9 @@ public class TransactionServiceImpl extends TransactionService {
         return transactionDao.getTotalAllTransactionCountByBankAccountId(bankAccountId);
     }
 
+    @Override
+    public List<TransactionView> getTransactionViewListByDateRang(Integer bankAccountId, Date startDate, Date endDate) {
+        return transactionDao.getTransactionViewListByDateRang(bankAccountId, startDate, endDate);
+    }
+
 }

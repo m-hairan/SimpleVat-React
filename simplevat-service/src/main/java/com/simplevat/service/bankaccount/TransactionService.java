@@ -52,12 +52,14 @@ public abstract class TransactionService extends SimpleVatService<Integer, Trans
     public abstract Integer getTotalTransactionCountByBankAccountIdForLazyModel(Integer bankAccountId, Integer transactionStatus);
 
     public abstract Integer getTotalExplainedTransactionCountByBankAccountId(Integer bankAccountId);
-    
+
     public abstract Integer getTotalUnexplainedTransactionCountByBankAccountId(Integer bankAccountId);
-    
+
     public abstract Integer getTotalPartiallyExplainedTransactionCountByBankAccountId(Integer bankAccountId);
-    
+
     public abstract Integer getTotalAllTransactionCountByBankAccountId(Integer bankAccountId);
+
+    public abstract List<TransactionView> getTransactionViewListByDateRang(Integer bankAccountId, Date startDate, Date endDate);
 
     public abstract Integer getTransactionCountByRangeAndBankAccountId(int pageSize, Integer bankAccountId, int rowCount);
 

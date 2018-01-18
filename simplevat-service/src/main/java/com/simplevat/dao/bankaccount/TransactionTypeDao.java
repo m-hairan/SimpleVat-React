@@ -14,5 +14,7 @@ public interface TransactionTypeDao extends Dao<Integer, TransactionType> {
 	public TransactionType getDefaultTransactionType();
 	
 	public List<TransactionType> findAll();
+        
+        public List<TransactionType> findAllChild();
 
 }

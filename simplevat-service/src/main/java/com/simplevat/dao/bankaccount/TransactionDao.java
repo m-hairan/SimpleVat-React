@@ -55,4 +55,6 @@ public interface TransactionDao extends Dao<Integer, Transaction> {
 
     public List<Transaction> getParentTransactionListByRangeAndBankAccountId(int pageSize, Integer bankAccountId, int rowCount, Integer transactionStatus);
 
+    public List<TransactionView> getTransactionViewListByDateRang(Integer bankAccountId, Date startDate, Date endDate);
+
 }

@@ -15,6 +15,9 @@ import org.hibernate.annotations.ColumnDefault;
  */
 @NamedQueries({
     @NamedQuery(name = "findAllTransactionType",
+            query = "SELECT t FROM TransactionType t where t.deleteFlag=false ORDER BY t.defaltFlag DESC , t.orderSequence ASC")
+    ,
+    @NamedQuery(name = "findAllChildTransactionType",
             query = "SELECT t FROM TransactionType t where t.deleteFlag=false and t.parentTransactionType != null ORDER BY t.defaltFlag DESC , t.orderSequence ASC")
     ,
     @NamedQuery(name = "findMoneyInTransactionType",

@@ -37,13 +37,21 @@ public class ProjectServiceImpl extends ProjectService {
 
     @Override
     public void updateProjectExpenseBudget(BigDecimal expenseAmount, Project project) {
-        project.setProjectExpenseBudget(project.getProjectExpenseBudget().add(expenseAmount));
+        if (project.getProjectExpenseBudget() != null) {
+            project.setProjectExpenseBudget(project.getProjectExpenseBudget().add(expenseAmount));
+        } else {
+            project.setProjectExpenseBudget(expenseAmount);
+        }
         update(project);
     }
 
     @Override
     public void updateProjectRevenueBudget(BigDecimal revenueAmount, Project project) {
-        project.setProjectRevenueBudget(project.getProjectRevenueBudget().add(revenueAmount));
+        if (project.getProjectRevenueBudget() != null) {
+            project.setProjectRevenueBudget(project.getProjectRevenueBudget().add(revenueAmount));
+        } else {
+            project.setProjectRevenueBudget(revenueAmount);
+        }
         update(project);
     }
 }

@@ -13,25 +13,30 @@ import com.simplevat.service.UserServiceNew;
 import java.io.Serializable;
 
 @Service("userServiceNew")
-public class UserServiceNewImpl extends UserServiceNew implements Serializable{
+public class UserServiceNewImpl extends UserServiceNew implements Serializable {
 
-	@Autowired
+    @Autowired
     @Qualifier(value = "userDao")
-	private UserNewDao dao;
-	
-	@Override
-	public UserNewDao getDao() {
-		return dao;
-	}
+    private UserNewDao dao;
 
-	@Override
-	public List<User> findAll() {
-		return this.executeNamedQuery("findAllUsers");
-	}
+    @Override
+    public UserNewDao getDao() {
+        return dao;
+    }
 
-	@Override
-	public Optional<User> getUserByEmail(String emailAddress) {
-		return getDao().getUserByEmail(emailAddress);
-	}
+    @Override
+    public List<User> findAll() {
+        return this.executeNamedQuery("findAllUsers");
+    }
+
+    @Override
+    public Optional<User> getUserByEmail(String emailAddress) {
+        return getDao().getUserByEmail(emailAddress);
+    }
+
+    @Override
+    public boolean authenticateUser(String usaerName, String password) {
+        return getDao().getUserByEmail(usaerName, password);
+    }
 
 }

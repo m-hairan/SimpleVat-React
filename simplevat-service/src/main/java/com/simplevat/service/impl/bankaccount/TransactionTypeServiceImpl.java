@@ -14,40 +14,44 @@ import com.simplevat.service.bankaccount.TransactionTypeService;
 @Service("transactionTypeService")
 public class TransactionTypeServiceImpl extends TransactionTypeService {
 
-	@Autowired
-	private TransactionTypeDao transactionTypeDao;
-	
-	@Override
-	public List<TransactionType> getTransactionTypesByCriteria(
-			TransactionTypeCriteria transactionTypeCriteria) throws Exception {
-		TransactionTypeFilter filter = new TransactionTypeFilter(transactionTypeCriteria);
-		return transactionTypeDao.filter(filter);
-	}
+    @Autowired
+    private TransactionTypeDao transactionTypeDao;
 
-	@Override
-	public TransactionType updateOrCreateTransaction(
-			TransactionType transactionType) {
-		return transactionTypeDao.updateOrCreateTransaction(transactionType);
-	}
+    @Override
+    public List<TransactionType> getTransactionTypesByCriteria(
+            TransactionTypeCriteria transactionTypeCriteria) throws Exception {
+        TransactionTypeFilter filter = new TransactionTypeFilter(transactionTypeCriteria);
+        return transactionTypeDao.filter(filter);
+    }
 
-	@Override
-	public TransactionType getTransactionType(Integer id) {
-		return transactionTypeDao.getTransactionType(id);
-	}
+    @Override
+    public TransactionType updateOrCreateTransaction(
+            TransactionType transactionType) {
+        return transactionTypeDao.updateOrCreateTransaction(transactionType);
+    }
 
+    @Override
+    public TransactionType getTransactionType(Integer id) {
+        return transactionTypeDao.getTransactionType(id);
+    }
 
-	@Override
-	public List<TransactionType> findAll() {
-		return transactionTypeDao.findAll();
-	}
+    @Override
+    public List<TransactionType> findAll() {
+        return transactionTypeDao.findAll();
+    }
 
-	@Override
-	public TransactionType getDefaultTransactionType() {
-		return transactionTypeDao.getDefaultTransactionType();
-	}
+    @Override
+    public TransactionType getDefaultTransactionType() {
+        return transactionTypeDao.getDefaultTransactionType();
+    }
 
-	@Override
-	public TransactionTypeDao getDao() {
-		return this.transactionTypeDao;
-	}
+    @Override
+    public TransactionTypeDao getDao() {
+        return this.transactionTypeDao;
+    }
+
+    @Override
+    public List<TransactionType> findAllChild() {
+        return transactionTypeDao.findAllChild();
+    }
 }

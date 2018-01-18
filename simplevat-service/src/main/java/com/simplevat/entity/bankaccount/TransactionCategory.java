@@ -1,5 +1,6 @@
 package com.simplevat.entity.bankaccount;
 
+import com.simplevat.entity.VatCategory;
 import com.simplevat.entity.converter.DateConverter;
 import java.io.Serializable;
 
@@ -52,6 +53,10 @@ public class TransactionCategory implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PARENT_TRANSACTION_CATEGORY_CODE")
     private TransactionCategory parentTransactionCategory;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "VAT_CATEGORY_CODE")
+    private VatCategory vatCategory;
 
     @Column(name = "DEFAULT_FLAG")
     @ColumnDefault(value = "'N'")

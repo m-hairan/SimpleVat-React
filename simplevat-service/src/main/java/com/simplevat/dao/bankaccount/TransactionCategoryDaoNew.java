@@ -17,4 +17,6 @@ public interface TransactionCategoryDaoNew extends Dao<Integer, TransactionCateg
 
     public List<TransactionCategory> findTransactionCategoryListByParentCategory(Integer parentCategoryId);
 
+    public TransactionCategory getDefaultTransactionCategoryByTransactionCategoryId(Integer transactionCategoryId);
+
 }
