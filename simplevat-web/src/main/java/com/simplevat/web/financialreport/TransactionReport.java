@@ -98,7 +98,7 @@ public class TransactionReport extends BaseController {
 
     @PostConstruct
     public void init() {
-        transactionTypeList = transactionTypeService.findAll();
+        transactionTypeList = transactionTypeService.findAllChild();
     }
 
     public void preProcessPDF(Object document) throws IOException, BadElementException, DocumentException {

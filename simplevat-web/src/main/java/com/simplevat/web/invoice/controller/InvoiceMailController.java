@@ -107,7 +107,7 @@ public class InvoiceMailController implements Serializable {
             }
         });
         t.start();
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(summary));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Your Invoice Generated successfully. Please check your mail for further details"));
     }
 
 }

@@ -1,10 +1,28 @@
-<div xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"       
-                xmlns:si="http://java.sun.com/jsf/composite/ccomponent">
-
+                xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
+                template="/WEB-INF/templates/template.xhtml">
+    <ui:define name="head">
+        <style type="text/css">
+            .ui-fileupload-content{
+                display:none !important;  
+            }
+            .ui-fluid .ui-button {
+                width: auto !important;
+            }
+            .ui-fluid .ui-button-icon-only {
+                width: 32px !important;
+            }
+            .ui-fluid .ui-autocomplete-dropdown {
+                width: 20px !important;
+            }
+        </style>
+    </ui:define>
+    <ui:define name="title">#{messages.Settings}</ui:define>
+    <ui:define name="content">
         <h:form id="form">
             <si:cdataPanel  newAction="#{vatListController.getVatcategoryPage()}">
                 <p:dataTable var="vatCategory"  id="vatCategory"
@@ -24,11 +42,11 @@
                     </p:column>
 
                     <p:column headerText="Action">
-                        <p:commandButton icon="ui-icon-edit" title="Edit VAT Category" styleClass="AquaButton" action="#{vatListController.editUser}">
+                        <p:commandButton icon="ui-icon-edit" title="Edit VAT Category" styleClass="AquaButton" action="#{vatListController.editVatcategory()}">
                             <f:setPropertyActionListener value="#{vatCategory}" target="#{vatListController.vatCategory}" />
                         </p:commandButton>
 
-                        <p:commandButton icon="ui-icon-delete" title="Delete VAT Category" styleClass="AquaButton" action="#{vatListController.deleteUser}" update="vatCategory">
+                        <p:commandButton icon="ui-icon-delete" title="Delete VAT Category" styleClass="AquaButton" action="#{vatListController.deleteVatcategory()}" update="vatCategory">
                             <f:setPropertyActionListener value="#{vatCategory}" target="#{vatListController.vatCategory}" />
                             <p:confirm header="#{messages.delete}" message="#{messages.are_you_sure_want_to_delete}" icon="ui-icon-alert" />
                         </p:commandButton>
@@ -37,4 +55,5 @@
                 </p:dataTable>
             </si:cdataPanel>
         </h:form>
-</div>
+    </ui:define>
+</ui:composition>

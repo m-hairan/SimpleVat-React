@@ -41,22 +41,51 @@
                                                 itemLabel="#{financialPeriod.name}"
                                                 required="true"
                                                 requiredMessage="Please select financial period">
+                                                <p:ajax update="Datestart DatestartPanel" event="itemSelect"/>
+                                                <p:ajax update="Datelast DatelastPanel" event="itemSelect"/>
                                             </p:autoComplete>
                                             <label>#{messages.FinancialPeriod}</label>
                                             <p:message for="year" />
                                         </h:panelGroup>
 
-                                        <p:outputLabel/>
-                                        <h:panelGroup styleClass="md-inputfield">
+                                        <h:panelGroup  id="Datestart">
+                                            <p:outputLabel for="startdate" rendered="#{invoiceReport.financialPeriod.id == 1}"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup  id="DatestartPanel">
+                                            <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceReport.financialPeriod.id == 1}">
+                                                <p:calendar
+                                                    id="startdate"
+                                                    required="true"
+                                                    requiredMessage="#{messages.EnterStartDate}"
+                                                    value="#{invoiceReport.financialPeriod.startDate}" 
+                                                    />
+                                                <label>#{messages.Start_Date}</label>
+                                                <p:message for="startdate" />
+                                            </h:panelGroup>
                                         </h:panelGroup>
 
-                                        <p:outputLabel/>
-                                        <h:panelGroup styleClass="md-inputfield">
+                                        <h:panelGroup id="Datelast">
+                                            <p:outputLabel for="enddate" rendered="#{invoiceReport.financialPeriod.id == 1}"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup id="DatelastPanel">
+                                            <h:panelGroup  styleClass="md-inputfield" rendered="#{invoiceReport.financialPeriod.id == 1}">
+                                                <p:calendar
+                                                    id="enddate"
+                                                    required="true"
+                                                    requiredMessage="#{messages.EnterEndDate}"
+                                                    value="#{invoiceReport.financialPeriod.lastDate}" 
+                                                    />
+                                                <label>#{messages.End_Date}</label>
+                                                <p:message for="enddate" />
+                                            </h:panelGroup>
                                         </h:panelGroup>
 
+
                                         <p:outputLabel/>
-                                        <p:commandButton value="#{messages.View}" update="@form"
-                                                         action="#{invoiceReport.view}" />
+                                        <f:facet name="footer">
+                                            <p:commandButton value="#{messages.View}" update="@form"
+                                                             action="#{invoiceReport.view}" />
+                                        </f:facet>
                                     </p:panelGrid>
                                 </p:fieldset>
                                 <h:panelGroup id="invoice">
@@ -88,7 +117,7 @@
                                                     </h:panelGroup>
                                                 </h:panelGroup>
                                             </p:column>
-                                            
+
                                             <p:column headerText="#{messages.refnumber}" sortBy="#{invoice.invoiceReferenceNumber}" filterMatchMode="contains" filterBy="#{invoice.invoiceReferenceNumber}">
                                                 <h:outputText value="#{invoice.invoiceReferenceNumber}" />
                                             </p:column>
@@ -121,23 +150,23 @@
                                                     <f:convertNumber type="currency" currencySymbol=""/>
                                                 </h:outputText>
                                             </p:column>
-                                            
+
                                             <p:columnGroup type="footer">  
                                                 <p:row>                                        
                                                     <p:column colspan="6" footerText="Total Amount" styleClass="amount"/>  
                                                     <p:column styleClass="amount">
                                                         <f:facet name="footer">
                                                             <p:outputPanel autoUpdate="true">
-                                                                 <h:outputText value="#{invoice.currencyCode.currencySymbol} " />
+                                                                <h:outputText value="#{invoice.currencyCode.currencySymbol} " />
                                                                 <h:outputText id="total" value="#{invoiceReport.totalInvoiceAmount}" >
                                                                     <f:convertNumber type="currency" currencySymbol=" " />
                                                                 </h:outputText>
                                                             </p:outputPanel>
                                                         </f:facet>
                                                     </p:column>  
-                                              </p:row>  
+                                                </p:row>  
                                             </p:columnGroup>
-                                            
+
                                         </p:dataTable>
                                     </p:fieldset>
                                 </h:panelGroup>

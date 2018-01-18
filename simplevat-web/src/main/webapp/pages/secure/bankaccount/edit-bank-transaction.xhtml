@@ -101,7 +101,7 @@
                                                            id="transactionAmount"
                                                            value="#{transactionController.selectedTransactionModel.transactionAmount}"
                                                            required="true" requiredMessage="Please select transaction amount.">
-                                                <p:ajax update="InvoiceList"  />
+                                                <p:ajax update="referancePanel"  />
                                             </p:inputNumber>
                                             <label>#{messages.total_amount}</label>
                                             <p:message for="transactionAmount"/>
@@ -149,7 +149,7 @@
                                                 itemValue="#{transactionCategory}"
                                                 itemLabel="#{transactionCategory.transactionCategoryName}"
                                                 >
-                                                <p:ajax update="InvoiceLabel InvoiceList" event="itemSelect" />
+                                                <p:ajax update="referancePanelLabel referancePanel" event="itemSelect" />
                                             </p:autoComplete>
                                             <label>#{messages.category}</label>
                                         </h:panelGroup>
@@ -173,11 +173,11 @@
                                             </p:autoComplete>
                                             <label>#{messages.category}</label>
                                         </h:panelGroup>
-
-                                        <h:panelGroup id="InvoiceLabel" >
+                                        <h:panelGroup id="referancePanelLabel">
                                             <p:outputLabel for="invoice1" rendered="#{transactionController.selectedTransactionModel.explainedTransactionCategory.transactionCategoryId == 1 and transactionController.selectedTransactionModel.childTransactionList.size() == 0}" />
+                                            <p:outputLabel for="purchase1" rendered="#{transactionController.selectedTransactionModel.explainedTransactionCategory.transactionCategoryId == 43 and transactionController.selectedTransactionModel.childTransactionList.size() == 0}"/>
                                         </h:panelGroup>
-                                        <h:panelGroup id="InvoiceList" >
+                                        <h:panelGroup id="referancePanel">
                                             <h:panelGroup styleClass="md-inputfield" rendered="#{transactionController.selectedTransactionModel.explainedTransactionCategory.transactionCategoryId == 1 and transactionController.selectedTransactionModel.childTransactionList.size() == 0}">
                                                 <p:autoComplete id="invoice1" converter="#{invoiceConverter}"
                                                                 dropdown="true"
@@ -192,6 +192,23 @@
                                                                 required="true" requiredMessage="Please select invoice reference.">
                                                 </p:autoComplete>
                                                 <label>Invoice Reference</label>
+                                            </h:panelGroup>
+                                            <h:panelGroup id="PurchaseList" styleClass="md-inputfield" rendered="#{transactionController.selectedTransactionModel.explainedTransactionCategory.parentTransactionCategory.transactionCategoryId == 43 and transactionController.selectedTransactionModel.childTransactionList.size() == 0}">
+                                                <p:autoComplete id="purchase1" converter="#{purchaseConverter}"
+                                                                dropdown="true"
+                                                                forceSelection="true"
+                                                                effect="fold" 
+                                                                scrollHeight="250"
+                                                                groupBy="#{(transactionController.selectedTransactionModel.transactionAmount.doubleValue() == purchase.purchaseDueAmount.doubleValue())?'Suggested':'Others'}"
+                                                                completeMethod="#{transactionController.completePurchase()}"
+                                                                value="#{transactionController.selectedTransactionModel.refObject}"
+                                                                var="purchase"
+                                                                itemValue="#{purchase}"
+                                                                itemLabel="#{purchase.receiptNumber} : #{purchase.purchaseDueAmount} (#{purchase.purchaseContact.firstName})"
+                                                                required="true" requiredMessage="Please select purchase reference.">
+                                                </p:autoComplete>
+                                                <p:message for="purchase1" />
+                                                <label>Purchase Reference</label>
                                             </h:panelGroup>
                                         </h:panelGroup>
                                     </p:panelGrid>

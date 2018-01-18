@@ -23,7 +23,7 @@
                                     <p:graphicImage name="images/user-avtar-icon1.png" library="ultima-layout" height="60px" width="60px"/>
 
                                 </ui:fragment>
-                                
+
                             </div>
                             <a id="profile-options" href="#"> <span class="profile-name">#{userProfileController.currentUser.firstName}
                                     #{userProfileController.currentUser.lastName}</span> <i
@@ -38,13 +38,34 @@
                                     <span>Account</span>
                                 </p:link>
                             </li>
-                           <li role="menuitem"><a href="#" class="ripplelink"> <i
+                            <li role="menuitem"><a href="#" class="ripplelink"> <i
                                         class="material-icons">&#xE32A;</i> <span>Privacy</span>
                                 </a></li>
-                            <li role="menuitem"><p:link outcome="/pages/secure/setting/index" styleClass="ripplelink">
+                            <li role="menuitem"><a id="setting-options" href="#" styleClass="ripplelink setting-expanded">
                                     <i class="material-icons">&#xE8B9;</i> 
                                     <span>Settings</span>
-                                </p:link>
+                                    <i class="material-icons">&#xE313;</i> 
+                                </a>
+                                <ul id="setting-menu" class="ultima-menu">
+                                    <li role="menuitem"><p:link
+                                            outcome="/pages/secure/setting/general" styleClass="ripplelink">
+                                            <i class="material-icons">&#xE869;</i>
+                                            <span>General</span>
+                                        </p:link>
+                                    </li>
+                                    <li role="menuitem"><p:link
+                                            outcome="/pages/secure/setting/vat-list" styleClass="ripplelink">
+                                            <i class="material-icons">&#xE8E7;</i>
+                                            <span>Vat Category</span>
+                                        </p:link>
+                                    </li>
+                                    <li role="menuitem"><p:link
+                                            outcome="/pages/secure/setting/transactioncategory-list" styleClass="ripplelink">
+                                            <i class="material-icons">&#xE922;</i>
+                                            <span>Transaction Category</span>
+                                        </p:link>
+                                    </li>
+                                </ul>
                             </li>
                             <li role="menuitem"><p:link outcome="/pages/secure/user/list" styleClass="ripplelink">
                                     <i class="material-icons">&#xE7FB;</i>
@@ -61,8 +82,8 @@
                     <pu:menu widgetVar="me" model="#{menuController.model}">
 
                     </pu:menu>
-                    
-                    
+
+
                 </div>
             </div>
         </div>

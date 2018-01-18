@@ -23,7 +23,7 @@
                             <ui:fragment rendered="#{vatController.category.id == null}">
                                 <h1>#{messages.NewVatCategory}</h1>
                             </ui:fragment>
-                            
+
                             <div class="card card-w-title">
                                 <p:fieldset legend="Vat Category Details"
                                             toggleable="false" toggleSpeed="500">
@@ -42,8 +42,10 @@
 
                                         <p:outputLabel for="vatPer"/>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputMask id="vatPer" mask="99" required="true" requiredMessage="please enter Vat Percentage."
-                                                value="#{vatController.category.vat}" />
+                                            <p:inputNumber id="vatPer" symbol="%" symbolPosition="s" validatorMessage="VAT Percentage should be in between 0% to 100%." required="true" requiredMessage="please enter Vat Percentage."
+                                                           value="#{vatController.category.vat}" >
+                                                <f:validateDoubleRange maximum="100"/>
+                                            </p:inputNumber>
                                             <label>#{messages.vatCategoryPercentage}</label>
                                             <p:message for="vatPer" />
                                         </h:panelGroup>

@@ -133,28 +133,30 @@ public class InitialUserController implements Serializable {
     }
 
     public String saveUpdate() {
-        try {
-            Company c = companyHelper.getCompanyFromCompanyModel(companyModel);
-            c.setCompanyExpenseBudget(BigDecimal.ZERO);
-            c.setCompanyRevenueBudget(BigDecimal.ZERO);
-            c.setCreatedBy(0);
-            c.setCreatedDate(LocalDateTime.now());
-            companyService.persist(c);
+        if (!userService.getUserByEmail(selectedUser.getUserEmail()).isPresent()) {
+            try {
+                Company c = companyHelper.getCompanyFromCompanyModel(companyModel);
+                c.setCompanyExpenseBudget(BigDecimal.ZERO);
+                c.setCompanyRevenueBudget(BigDecimal.ZERO);
+                c.setCreatedBy(0);
+                c.setCreatedDate(LocalDateTime.now());
+                companyService.persist(c);
 
-            User user = new User();
-            BeanUtils.copyProperties(selectedUser, user);
-            user.setCreatedBy(0);
-            user.setCreatedDate(LocalDateTime.now());
-            user.setIsActive(Boolean.TRUE);
-            user.setCompany(companyService.findByPK(c.getCompanyId()));
-            FacesContext context = FacesContext.getCurrentInstance();
-            context.getExternalContext().getFlash().setKeepMessages(true);
-            userService.persist(user);
-            sendActivationMail(user);
+                User user = new User();
+                BeanUtils.copyProperties(selectedUser, user);
+                user.setCreatedBy(0);
+                user.setCreatedDate(LocalDateTime.now());
+                user.setIsActive(Boolean.TRUE);
+                user.setCompany(companyService.findByPK(c.getCompanyId()));
+                FacesContext context = FacesContext.getCurrentInstance();
+                context.getExternalContext().getFlash().setKeepMessages(true);
+                userService.persist(user);
+                sendActivationMail(user);
 
-            return "/pages/public/login.xhtml?faces-redirect=true";
-        } catch (IllegalArgumentException ex) {
-            java.util.logging.Logger.getLogger(UserProfileController.class.getName()).log(Level.SEVERE, null, ex);
+                return "/pages/public/login.xhtml?faces-redirect=true";
+            } catch (IllegalArgumentException ex) {
+                java.util.logging.Logger.getLogger(UserProfileController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return "";
     }

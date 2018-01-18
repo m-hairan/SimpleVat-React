@@ -157,7 +157,7 @@ public class ExpenseController extends BaseController implements Serializable {
                 selectedExpenseModel.setCurrency(defaultCurrency);
             }
             updateCurrencyLabel();
-            transactionTypes = transactionTypeService.findAll();
+//            transactionTypes = transactionTypeService.findAll();
         } else {
             Expense expense = expenseService.findByPK(Integer.parseInt(objSelectedExpenseModel.toString()));
             selectedExpenseModel = controllerHelper.getExpenseModel(expense);
@@ -431,17 +431,17 @@ public class ExpenseController extends BaseController implements Serializable {
         calculateTotal();
     }
 
-    public List<TransactionType> getAllTransactionType(String str) {
-        if (str == null) {
-            return this.transactionTypes;
-        }
-        List<TransactionType> filterList = new ArrayList<>();
-        transactionTypes = transactionTypeService.executeNamedQuery("findMoneyOutTransactionType");
-        for (TransactionType type : transactionTypes) {
-            filterList.add(type);
-        }
-        return filterList;
-    }
+//    public List<TransactionType> getAllTransactionType(String str) {
+//        if (str == null) {
+//            return this.transactionTypes;
+//        }
+//        List<TransactionType> filterList = new ArrayList<>();
+//        transactionTypes = transactionTypeService.executeNamedQuery("findMoneyOutTransactionType");
+//        for (TransactionType type : transactionTypes) {
+//            filterList.add(type);
+//        }
+//        return filterList;
+//    }
 
     private void calculateTotal() {
         total = new BigDecimal(0);

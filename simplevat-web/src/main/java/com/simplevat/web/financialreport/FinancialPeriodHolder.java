@@ -28,6 +28,13 @@ public class FinancialPeriodHolder {
         int monthDecrement = 0;
         if (year >= INITIALYEAR) {
             financialPeriodList.clear();
+            FinancialPeriod financialCustomPeriod = new FinancialPeriod();
+            financialCustomPeriod.setId(id);
+            financialCustomPeriod.setLastDate(null);
+            financialCustomPeriod.setStartDate(null);
+            financialCustomPeriod.setName("Custom");
+            financialPeriodList.add(financialCustomPeriod);
+            id++;
             for (int i = 0; i <= year - INITIALYEAR; i++) {
                 String name = "";
                 FinancialPeriod financialPeriod = new FinancialPeriod();
@@ -84,9 +91,10 @@ public class FinancialPeriodHolder {
                 } else {
                     name = "Current Year";
                 }
-                //name = new SimpleDateFormat("MM/dd/yyyy").format(startDate) + " To " + new SimpleDateFormat("MM/dd/yyyy").format(endDate);
+                // name = new SimpleDateFormat("MM/dd/yyyy").format(startDate) + " To " + new SimpleDateFormat("MM/dd/yyyy").format(endDate);
                 financialPeriod.setName(name);
                 financialPeriodList.add(financialPeriod);
+
             }
         }
         return financialPeriodList;

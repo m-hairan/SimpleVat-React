@@ -53,17 +53,18 @@ public class VatListController extends BaseController implements Serializable{
     }
 
     public String getVatcategoryPage() {
+        System.out.println("FacesContext=================="+FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap());
         return "createVatcategory?faces-redirect=true";
     }
 
-    public String editUser() {
+    public String editVatcategory() {
         if (vatCategory.getId() != null) {
             return "createVatcategory?faces-redirect=true&vatCategoryId=" + vatCategory.getId();
         }
         return null;
     }
 
-    public void deleteUser() {
+    public void deleteVatcategory() {
 
         if (vatCategory.getId() != null) {
             vatCategory.setDeleteFlag(true);

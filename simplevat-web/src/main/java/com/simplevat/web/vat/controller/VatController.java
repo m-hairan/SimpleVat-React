@@ -63,7 +63,7 @@ public class VatController extends BaseController {
             category.setId(category.getId());
             vatCategoryService.update(category);
         }
-        return "index?faces-redirect=true";
+        return "vat-list?faces-redirect=true";
     }
 
 }

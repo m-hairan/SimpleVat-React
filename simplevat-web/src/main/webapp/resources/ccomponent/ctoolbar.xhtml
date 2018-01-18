@@ -11,7 +11,9 @@
         <cc:attribute name="importAction" method-signature="void import(java.lang.String)" />
         <cc:attribute name="exportAction" method-signature="void import(java.lang.String)" />
         <cc:attribute name="deleteAction" method-signature="void import(java.lang.String)" />
+        <cc:attribute name="hideOptions" default="false" type="java.lang.Boolean"/>
         <cc:facet name="left"/>
+        <cc:facet name="right"/>
     </cc:interface>
 
     <cc:implementation>
@@ -22,9 +24,10 @@
             </f:facet>
 
             <f:facet name="right">
-                <p:menuButton value="Options">
+                <p:menuButton value="Options" rendered="#{!cc.attrs.hideOptions}">
                     <p:menuitem value="#{messages.home_page}" outcome="/pages/secure/home" icon="ui-icon-home"/>
                 </p:menuButton>
+                <cc:renderFacet name="right"/>
             </f:facet>
         </p:toolbar>
     </cc:implementation>

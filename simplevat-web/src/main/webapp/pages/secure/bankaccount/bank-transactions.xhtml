@@ -41,15 +41,17 @@
 
         <h:form id="transactionListForm">
             <div class="ui-fluid tree">
-                <si:cdataPanel newAction= "#{transactionController.createTransaction()}" >
+                <si:cdataPanel newAction= "#{transactionController.createTransaction()}" hideOptions="true" >
                     <f:facet name="left">
                         <span class="ui-separator" style="padding-right: 5px;">
                             <span class="fa fa-ellipsis-v SoftGray" />
                         </span>
-                        <p:commandButton icon="ui-icon-file-download" styleClass="AquaButton" 
-                                         action="#{transactionController.importTransaction()}" >
-                            <f:setPropertyActionListener value="#{contact}" target="#{contactListController.contact}" />
-                        </p:commandButton>
+                        <p:tooltip for="importtransacn" value="#{messages.button_import}" position="top"/>
+                        <p:commandButton id="importtransacn" icon="ui-icon-file-upload" process="@this" styleClass="AquaButton" 
+                                         action="#{transactionController.importTransaction()}"/>
+                        <p:tooltip for="exporttransacn" value="#{messages.button_export}" position="top"/>
+                        <p:commandButton id="exporttransacn" icon="ui-icon-file-download" styleClass="AquaButton" 
+                                         action="#{transactionController.exportTransaction()}" />
                         <span class="ui-separator" style="padding-right: 5px;">
                             <span class="fa fa-ellipsis-v SoftGray" />
                         </span>
@@ -57,6 +59,13 @@
                         <p:commandButton icon="transtype-EXPLAINED" value="Explained (#{transactionListController.totalExplained})" styleClass="AquaButton" action="#{transactionListController.allExplainedTransactions()}" onstart="updatePaginator()" update="transactionListForm"/>
                         <p:commandButton icon="transtype-UNEXPLAINED" value="Unexplained (#{transactionListController.totalUnExplained})" styleClass="AquaButton" action="#{transactionListController.allUnExplainedTransactions()}" onstart="updatePaginator()" update="transactionListForm"/>
                         <p:commandButton icon="transtype-PARTIALLY-EXPLAINED" value="Partially Explained (#{transactionListController.totalPartiallyExplained})" styleClass="AquaButton" action="#{transactionListController.allPartiallyExplainedTransactions()}" onstart="updatePaginator()" update="transactionListForm"/>
+                    </f:facet>
+                    <f:facet name="right">
+                        <p:menuButton value="Options">
+                            <p:menuitem value="#{messages.home_page}" outcome="/pages/secure/home" icon="ui-icon-home"/>
+                            <p:menuitem value="#{messages.button_import}" action="#{transactionController.importTransaction()}" process="@this" icon="ui-icon-file-upload"/>
+                            <p:menuitem value="#{messages.button_export}" action="#{transactionController.exportTransaction()}" process="@this" icon="ui-icon-file-download"/>
+                        </p:menuButton>
                     </f:facet>
                     <p:dataTable var="transaction"
                                  value="#{transactionListController.transactionViewLazyModel}"
@@ -99,7 +108,7 @@
                             <h:panelGroup rendered="#{transaction.explanationStatusCode == 2}" >
                                 <p:outputLabel value="#{transaction.suggestedTransactionString}" style="font-size: x-small;color:#14ad3c" /> 
                                 <p:spacer width="10px"/>
-                                <p:commandLink value=" More" action="#{transactionListController.transactionViewLazyModel.expandToggler(transaction)}" update="transactionsTable" style="font-size: x-small; font-weight: bold;color:#14ad3c" />
+                                <p:commandLink value=" More" action="#{transactionListController.expandCollapse(transaction)}" onclick="expandCollapse(event, #{index})" update="transactionsTable:@row(#{index}) @(.parentExpandButton)" style="font-size: x-small; font-weight: bold;color:#14ad3c" />
                             </h:panelGroup>
                         </p:column>
 
@@ -148,6 +157,7 @@
             </div>
         </h:form>
         <ui:include src="import-transaction-popup.xhtml"/>
+        <ui:include src="export-transaction-popup.xhtml"/>
         <script type="text/javascript">
             function expandCollapse(event, rowIndex) {
                 $(".rowExpand" + rowIndex).parent().find('.ui-row-toggler').trigger('click');

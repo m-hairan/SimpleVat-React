@@ -5,6 +5,7 @@
  */
 package com.simplevat.web.transactioncategory.model;
 
+import com.simplevat.entity.VatCategory;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionType;
 import java.time.LocalDateTime;
@@ -25,6 +26,7 @@ public class TransactionCategoryModel {
     private String transactionCategoryCode;
     private TransactionType transactionType;
     private TransactionCategory parentTransactionCategory;
+    private VatCategory vatCategory;
     private Character defaltFlag;
     private Integer orderSequence;
     private Integer createdBy;

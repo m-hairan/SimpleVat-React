@@ -1,0 +1,77 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:h="http://java.sun.com/jsf/html"
+     xmlns:f="http://java.sun.com/jsf/core"
+     xmlns:ui="http://java.sun.com/jsf/facelets"
+     xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
+     xmlns:p="http://primefaces.org/ui" >
+
+
+    <h:form id="exportform">
+        <style>
+            .hasDatepicker{
+                padding: 0 !important;
+                font-size: 13px !important;
+            }
+        </style>
+        <p:dialog widgetVar="exportTransactionWidget" modal="true" width="30%" >
+            <div class="ui-g form-group" style="margin-bottom: 16px;">
+                <div class="ui-g-12">
+                    <p:panelGrid columns="4" id="exportpanel"
+                                 columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                                 layout="grid" 
+                                 styleClass="ui-panelgrid-blank form-group"
+                                 style="border:0px none; background-color:transparent;">
+
+
+                        <p:outputLabel for="startdate"/>
+                        <h:panelGroup styleClass="md-inputfield" >
+                            <p:calendar id="startdate" 
+                                        value="#{transactionExportController.startDate}" />
+                            <label>#{messages.Start_Date}</label>
+                            <p:message for="startdate" />
+                        </h:panelGroup>
+
+                        <p:outputLabel for="enddate"/>
+                        <h:panelGroup styleClass="md-inputfield" >
+                            <p:calendar id="enddate" 
+                                        value="#{transactionExportController.endDate}" />
+                            <label>#{messages.End_Date}</label>
+                            <p:message for="enddate" />
+                        </h:panelGroup>
+
+                    </p:panelGrid>
+                    <p:dataTable id="transactiondata" style="display: none !important" value="#{transactionExportController.transactionList}" var="transaction">
+                        <f:facet name="header">
+                            <h:commandLink value="demo" class="transactionExporter">
+                                <p:dataExporter type="csv" target="transactiondata" fileName="transaction" />
+                            </h:commandLink>
+                        </f:facet>
+                        <p:column headerText="TRANSACTION_DATE">
+                            <h:outputText value="#{transaction.transactionDate}" >
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="TRANSACTION_DESCRIPTION">
+                            <h:outputText value="#{transaction.transactionDescription}" />
+                        </p:column>
+                        <p:column headerText="DEBIT_TRANSACTION_AMOUNT">
+                            <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString().equals('D')}" />
+                        </p:column>
+                        <p:column headerText="CREDIT_TRANSACTION_AMOUNT">
+                            <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString().equals('C')}" />
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+            <f:facet name="footer">
+                <p:commandButton 
+                    value="Export"
+                    actionListener="#{transactionExportController.handleFileDownload()}"
+                    style="width:auto" 
+                    update="transactiondata" oncomplete="exportTransaction()"
+                    icon="ui-icon-file-download"/>
+            </f:facet>  
+            <p:remoteCommand name="exportTransaction" onsuccess="$('.transactionExporter').click();"/>
+        </p:dialog>
+    </h:form>
+</div>

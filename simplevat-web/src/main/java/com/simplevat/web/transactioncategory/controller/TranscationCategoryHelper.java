@@ -28,6 +28,7 @@ public class TranscationCategoryHelper {
         model.setTransactionCategoryDescription(category.getTransactionCategoryDescription());
         model.setTransactionCategoryName(category.getTransactionCategoryName());
         model.setTransactionType(category.getTransactionType());
+        model.setVatCategory(category.getVatCategory());
         model.setVersionNumber(category.getVersionNumber());
         return model;
     }
@@ -46,6 +47,7 @@ public class TranscationCategoryHelper {
         transactionCategory.setTransactionCategoryDescription(categoryModel.getTransactionCategoryDescription());
         transactionCategory.setTransactionCategoryName(categoryModel.getTransactionCategoryName());
         transactionCategory.setTransactionType(categoryModel.getTransactionType());
+        transactionCategory.setVatCategory(categoryModel.getVatCategory());
         transactionCategory.setVersionNumber(categoryModel.getVersionNumber());
         return transactionCategory;
     }

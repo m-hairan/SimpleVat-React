@@ -80,6 +80,7 @@
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:outputLabel for="parentCategoryCode"/>
                                             <p:autoComplete id="parentCategoryCode" 
+                                                            converter="#{transactionCategoryConverter}"
                                                             value="#{transactionCategoryView.transactionCategoryModel.parentTransactionCategory}"
                                                             forceSelection="true" 
                                                             dropdown="true"
@@ -88,9 +89,25 @@
                                                             completeMethod="#{transactionCategoryView.getAllCategories()}" 
                                                             var="transactionCategory" 
                                                             itemLabel="#{transactionCategory.transactionCategoryName}"  
-                                                            itemValue="#{transactionCategory}"
-                                                            converter="#{transactionCategoryConverter}" />
+                                                            itemValue="#{transactionCategory}" />
                                             <label>Parent Category Code</label>
+                                        </h:panelGroup>
+                                        
+                                        <p:outputLabel for="vatCategoryCode"/>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:outputLabel for="vatCategoryCode"/>
+                                            <p:autoComplete id="vatCategoryCode" 
+                                                            value="#{transactionCategoryView.transactionCategoryModel.vatCategory}"
+                                                            forceSelection="true" 
+                                                            dropdown="true"
+                                                            effect="fold"
+                                                            scrollHeight="250"
+                                                            completeMethod="#{transactionCategoryView.completeVatCategories()}" 
+                                                            var="vatCategory" 
+                                                            itemLabel="#{vatCategory.name}"  
+                                                            itemValue="#{vatCategory}"
+                                                            converter="#{vatCategoryConverter}" />
+                                            <label>VAT Category Code</label>
                                         </h:panelGroup>
 
                                         <p:outputLabel for="defaultFlag"/>
@@ -122,20 +139,20 @@
                         <ui:fragment rendered="#{transactionCategoryView.transactionCategoryModel.transactionCategoryId == null}">
 
                             <p:commandButton value="#{messages.save}" icon="ui-icon-save" update="createTransactionCategoryForm"
-                                             action="#{transactionCategoryView.save}" />
+                                             action="#{transactionCategoryView.saveTransactionCategory}" />
 
                             <p:commandButton value="#{messages.save_and_add_more}" update="createTransactionCategoryForm"
                                              icon="ui-icon-forward"
-                                             action="#{transactionCategoryView.saveAndContinue}" />
+                                             action="#{transactionCategoryView.saveAndContinueTransactionCategory}" />
                         </ui:fragment>
                         <ui:fragment rendered="#{transactionCategoryView.transactionCategoryModel.transactionCategoryId > 0}">
 
                             <p:commandButton value="#{messages.update}" icon="ui-icon-save" update="createTransactionCategoryForm"
-                                             action="#{transactionCategoryView.update}" />
+                                             action="#{transactionCategoryView.saveTransactionCategory}" />
 
                             <p:commandButton value="#{messages.update_and_add_more}"
                                              icon="ui-icon-forward" update="createTransactionCategoryForm"
-                                             action="#{transactionCategoryView.updateAndContinue}" />
+                                             action="#{transactionCategoryView.saveAndContinueTransactionCategory}" />
                         </ui:fragment>
                         <span class="ui-separator" style="padding-right: 5px;"> <span
                                 class="fa fa-ellipsis-v SoftGray" />

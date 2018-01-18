@@ -7,10 +7,13 @@ package com.simplevat.web.tax;
 
 import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.Currency;
+import com.simplevat.entity.Purchase;
+import com.simplevat.entity.PurchaseLineItem;
 import com.simplevat.entity.TaxTransaction;
 import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.entity.invoice.InvoiceLineItem;
+import com.simplevat.service.PurchaseService;
 import com.simplevat.service.TaxTransactionService;
 import com.simplevat.service.bankaccount.TransactionService;
 import com.simplevat.service.invoice.InvoiceService;
@@ -49,6 +52,9 @@ public class TaxTransactionController implements Serializable {
 
     @Autowired
     private TransactionService transactionService;
+
+    @Autowired
+    private PurchaseService purchaseService;
 
     @Autowired
     private InvoiceService invoiceService;
@@ -128,6 +134,15 @@ public class TaxTransactionController implements Serializable {
                 }
             }
         }
+        for (Transaction transaction : debitTransactionList) {
+            Date transactionDate = Date.from(transaction.getTransactionDate().atZone(ZoneId.systemDefault()).toInstant());
+            if (transactionDate.compareTo(startDate) >= 0 && transactionDate.compareTo(endDate) <= 0) {
+                if (transaction.getReferenceId() != null) {
+                    vatOut = vatOut.add(getVatFromTransaction(transaction));
+                }
+            }
+        }
+
         taxTransaction.setVatIn(vatIn);
         taxTransaction.setVatOut(vatOut);
         taxTransaction.setStatus(TaxTransactionStatusConstant.OPEN);
@@ -144,7 +159,17 @@ public class TaxTransactionController implements Serializable {
             for (InvoiceLineItem invoiceLineItem : invoice.getInvoiceLineItems()) {
                 BigDecimal totalAmount = invoiceLineItem.getInvoiceLineItemUnitPrice().multiply(new BigDecimal(invoiceLineItem.getInvoiceLineItemQuantity()));
                 if (invoiceLineItem.getInvoiceLineItemVat() != null) {
-                    vatPercent=invoiceLineItem.getInvoiceLineItemVat().getVat();
+                    vatPercent = invoiceLineItem.getInvoiceLineItemVat().getVat();
+                }
+                totalVat = (totalAmount.multiply(vatPercent)).divide(new BigDecimal(100));
+            }
+        }
+        if (transaction.getReferenceType() == TransactionRefrenceTypeConstant.PURCHASE) {
+            Purchase purchase = purchaseService.findByPK(refId);
+            for (PurchaseLineItem purchaseLineItem : purchase.getPurchaseLineItems()) {
+                BigDecimal totalAmount = purchaseLineItem.getPurchaseLineItemUnitPrice().multiply(new BigDecimal(purchaseLineItem.getPurchaseLineItemQuantity()));
+                if (purchaseLineItem.getPurchaseLineItemVat() != null) {
+                    vatPercent = purchaseLineItem.getPurchaseLineItemVat().getVat();
                 }
                 totalVat = (totalAmount.multiply(vatPercent)).divide(new BigDecimal(100));
             }

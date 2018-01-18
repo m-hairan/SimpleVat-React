@@ -2,9 +2,7 @@ package com.simplevat.web.bankaccount.controller;
 
 import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.criteria.ProjectCriteria;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -18,6 +16,7 @@ import org.springframework.stereotype.Controller;
 
 import com.simplevat.web.bankaccount.model.TransactionModel;
 import com.simplevat.entity.Project;
+import com.simplevat.entity.Purchase;
 import com.simplevat.entity.User;
 import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.entity.bankaccount.Transaction;
@@ -27,6 +26,7 @@ import com.simplevat.entity.bankaccount.TransactionType;
 import com.simplevat.entity.bankaccount.TransactionView;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.service.ProjectService;
+import com.simplevat.service.PurchaseService;
 import com.simplevat.service.bankaccount.BankAccountService;
 import com.simplevat.service.TransactionCategoryServiceNew;
 import com.simplevat.service.bankaccount.TransactionService;
@@ -35,6 +35,7 @@ import com.simplevat.service.bankaccount.TransactionTypeService;
 import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.web.bankaccount.model.BankAccountModel;
 import com.simplevat.web.constant.InvoicePurchaseStatusConstant;
+import com.simplevat.web.constant.TransactionCategoryConsatant;
 import com.simplevat.web.constant.TransactionCreditDebitConstant;
 import com.simplevat.web.constant.TransactionEntryTypeConstant;
 import com.simplevat.web.constant.TransactionRefrenceTypeConstant;
@@ -69,6 +70,9 @@ public class TransactionController extends TransactionControllerHelper implement
 
     @Autowired
     private BankAccountService bankAccountService;
+
+    @Autowired
+    private PurchaseService purchaseService;
 
     @Autowired
     private ProjectService projectService;
@@ -133,6 +137,10 @@ public class TransactionController extends TransactionControllerHelper implement
     public void importTransaction() {
         RequestContext.getCurrentInstance().execute("PF('importTransactionWidget').show(); PF('importTransactionWidget').content.scrollTop('0')");
     }
+    
+    public void exportTransaction() {
+        RequestContext.getCurrentInstance().execute("PF('exportTransactionWidget').show();");
+    }
 
     public String editTransection() {
         System.out.println("selectedM :" + selectedTransactionModel);
@@ -160,7 +168,10 @@ public class TransactionController extends TransactionControllerHelper implement
     private Object getRefObject() {
         Object refObject = null;
         if (selectedTransactionModel.getExplainedTransactionCategory() != null
-                && selectedTransactionModel.getExplainedTransactionCategory().getTransactionCategoryId() == TransactionRefrenceTypeConstant.INVOICE) {
+                && selectedTransactionModel.getExplainedTransactionCategory().getTransactionCategoryId() == TransactionCategoryConsatant.TRANSACTION_CATEGORY_INVOICE_PAYMENT) {
+            refObject = selectedTransactionModel.getRefObject();
+        }else if(selectedTransactionModel.getExplainedTransactionCategory() != null
+                && selectedTransactionModel.getExplainedTransactionCategory().getParentTransactionCategory().getTransactionCategoryId() == TransactionCategoryConsatant.TRANSACTION_CATEGORY_PURCHASE){
             refObject = selectedTransactionModel.getRefObject();
         }
         return refObject;
@@ -173,6 +184,10 @@ public class TransactionController extends TransactionControllerHelper implement
                 Invoice invoice = invoiceService.findByPK(transaction.getReferenceId());
                 invoice.setDueAmount(invoice.getDueAmount().add(transaction.getTransactionAmount()));
                 invoiceService.update(invoice);
+            } else if (transaction.getReferenceType() == TransactionRefrenceTypeConstant.PURCHASE) {
+                Purchase purchase = purchaseService.findByPK(transaction.getReferenceId());
+                purchase.setPurchaseDueAmount(purchase.getPurchaseDueAmount().add(transaction.getTransactionAmount()));
+                purchaseService.update(purchase);
             }
             transaction.setReferenceId(null);
             transaction.setReferenceType(null);
@@ -183,26 +198,54 @@ public class TransactionController extends TransactionControllerHelper implement
         updatePrevReference(transaction);
         if (object instanceof Invoice) {
             Invoice invoice = (Invoice) object;
-            BigDecimal invoiceDueAmount = invoice.getDueAmount();
-            if (transaction.getTransactionAmount().doubleValue() <= invoiceDueAmount.doubleValue()) {
-                invoice.setDueAmount(invoiceDueAmount.subtract(transaction.getTransactionAmount()));
-                invoice.setStatus(InvoicePurchaseStatusConstant.PAID);
-                if (invoiceDueAmount.doubleValue() > transaction.getTransactionAmount().doubleValue()) {
-                    invoice.setStatus(InvoicePurchaseStatusConstant.PARTIALPAID);
-                }
-                transaction.setReferenceId(invoice.getInvoiceId());
-                transaction.setReferenceType(TransactionRefrenceTypeConstant.INVOICE);
-                transaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED));
-            } else {
-                transaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.PARTIALLYEXPLIANED));
-                Transaction newChildTransaction = createNewChildTransaction(transaction, TransactionCreditDebitConstant.CREDIT, invoice.getDueAmount());
-                newChildTransaction.setReferenceId(invoice.getInvoiceId());
-                newChildTransaction.setReferenceType(TransactionRefrenceTypeConstant.INVOICE);
-                newChildTransaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED));
-                transaction.getChildTransactionList().add(newChildTransaction);
-                invoice.setDueAmount(new BigDecimal(0));
-                invoice.setStatus(InvoicePurchaseStatusConstant.PAID);
+            updateInvoice(transaction, invoice);
+        } else if (object instanceof Purchase) {
+            Purchase purchase = (Purchase) object;
+            updatePurchase(transaction, purchase);
+        }
+    }
+
+    private void updateInvoice(Transaction transaction, Invoice invoice) {
+        BigDecimal invoiceDueAmount = invoice.getDueAmount();
+        invoice.setStatus(InvoicePurchaseStatusConstant.PAID);
+        if (transaction.getTransactionAmount().doubleValue() <= invoiceDueAmount.doubleValue()) {
+            invoice.setDueAmount(invoiceDueAmount.subtract(transaction.getTransactionAmount()));
+            if (invoiceDueAmount.doubleValue() > transaction.getTransactionAmount().doubleValue()) {
+                invoice.setStatus(InvoicePurchaseStatusConstant.PARTIALPAID);
             }
+            transaction.setReferenceId(invoice.getInvoiceId());
+            transaction.setReferenceType(TransactionRefrenceTypeConstant.INVOICE);
+            transaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED));
+        } else {
+            transaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.PARTIALLYEXPLIANED));
+            Transaction newChildTransaction = createNewChildTransaction(transaction, TransactionCreditDebitConstant.CREDIT, invoice.getDueAmount());
+            newChildTransaction.setReferenceId(invoice.getInvoiceId());
+            newChildTransaction.setReferenceType(TransactionRefrenceTypeConstant.INVOICE);
+            newChildTransaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED));
+            transaction.getChildTransactionList().add(newChildTransaction);
+            invoice.setDueAmount(new BigDecimal(0));
+        }
+    }
+
+    private void updatePurchase(Transaction transaction, Purchase purchase) {
+        BigDecimal invoiceDueAmount = purchase.getPurchaseDueAmount();
+        purchase.setStatus(InvoicePurchaseStatusConstant.PAID);
+        if (transaction.getTransactionAmount().doubleValue() <= invoiceDueAmount.doubleValue()) {
+            purchase.setPurchaseDueAmount(invoiceDueAmount.subtract(transaction.getTransactionAmount()));
+            if (invoiceDueAmount.doubleValue() > transaction.getTransactionAmount().doubleValue()) {
+                purchase.setStatus(InvoicePurchaseStatusConstant.PARTIALPAID);
+            }
+            transaction.setReferenceId(purchase.getPurchaseId());
+            transaction.setReferenceType(TransactionRefrenceTypeConstant.PURCHASE);
+            transaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED));
+        } else {
+            transaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.PARTIALLYEXPLIANED));
+            Transaction newChildTransaction = createNewChildTransaction(transaction, TransactionCreditDebitConstant.DEBIT, purchase.getPurchaseDueAmount());
+            newChildTransaction.setReferenceId(purchase.getPurchaseId());
+            newChildTransaction.setReferenceType(TransactionRefrenceTypeConstant.PURCHASE);
+            newChildTransaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED));
+            transaction.getChildTransactionList().add(newChildTransaction);
+            purchase.setPurchaseDueAmount(new BigDecimal(0));
         }
     }
 
@@ -270,6 +313,8 @@ public class TransactionController extends TransactionControllerHelper implement
         if (getRefObject() != null) {
             if (getRefObject() instanceof Invoice) {
                 invoiceService.update((Invoice) getRefObject());
+            } else if (getRefObject() instanceof Purchase) {
+                purchaseService.update((Purchase) getRefObject());
             }
         }
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transaction saved successfully"));
@@ -365,7 +410,7 @@ public class TransactionController extends TransactionControllerHelper implement
     }
 
     public List<TransactionType> transactionTypes() throws Exception {
-        return transactionTypeService.findAll();
+        return transactionTypeService.findAllChild();
 
     }
 
@@ -375,6 +420,11 @@ public class TransactionController extends TransactionControllerHelper implement
             invoiceList.add(invoice);
         }
         return invoiceList;
+    }
+
+    public List<Purchase> completePurchase() {
+        List<Purchase> purchaseList = purchaseService.getPurchaseListByDueAmount();
+        return purchaseList;
     }
 
     public String autocompleteInvoiceLebal(Invoice invoice) {

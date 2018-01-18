@@ -12,7 +12,9 @@ PrimeFaces.widget.Ultima = PrimeFaces.widget.BaseWidget.extend({
         this.menulinks = this.menu.find('a');
         this.expandedMenuitems = this.expandedMenuitems || [];
         this.profileButton = $('#profile-options');
+        this.settingButton = $('#setting-options');
         this.profileMenu = $('#profile-menu');
+        this.settingMenu = $('#setting-menu');
         this.topbarItems = this.topbar.find('.topbar-items');
         this.topbarLinks = this.topbarItems.find('> li > a');
         this.menuButton = $('#menu-button');
@@ -175,6 +177,21 @@ PrimeFaces.widget.Ultima = PrimeFaces.widget.BaseWidget.extend({
             
             $this.profileMenu.slideToggle();
             $this.profileMenu.prev('.profile').toggleClass('profile-expanded');
+            $this.setInlineProfileState(!expanded);
+            
+            setTimeout(function() {
+                $(".nano").nanoScroller();
+            }, 500);
+            
+            e.preventDefault();
+        });
+        
+        this.settingButton.on('click', function(e) {
+            var setting = $this.settingMenu.prev('#profile-menu'),
+            expanded = setting.hasClass('setting-expanded');
+            
+            $this.settingMenu.slideToggle();
+            $this.settingMenu.prev('#profile-menu').toggleClass('setting-expanded');
             $this.setInlineProfileState(!expanded);
             
             setTimeout(function() {

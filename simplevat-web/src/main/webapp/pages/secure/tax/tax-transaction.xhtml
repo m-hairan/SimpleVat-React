@@ -69,7 +69,7 @@
             </p:column>
 
             <p:column headerText="Action" width="70">
-                <p:commandButton icon="ui-icon-edit" title="Pay" styleClass="AquaButton" onclick="PF('taxPayment').show()">
+                <p:commandButton icon="ui-icon-edit" title="Pay" styleClass="AquaButton" onclick="PF('taxPayment').show()" rendered="#{tax.vatIn.doubleValue() != tax.vatOut.doubleValue()}">
                     <f:setPropertyActionListener value="#{tax}" target="#{taxTransactionController.taxTransaction}" />
                 </p:commandButton>
             </p:column>
