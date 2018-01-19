@@ -24,7 +24,7 @@
                                 <ui:fragment rendered="#{bankAccountController.selectedBankAccount.bankAccountId != null}">
                                     <h1>Edit Bank Account</h1>
                                 </ui:fragment>
-                                <p:fieldset legend="#{messages.bank_account}" toggleable="false"
+                                <p:fieldset  legend="#{messages.bank_account}" toggleable="false"
                                             toggleSpeed="500">
                                     <p:panelGrid columns="6"
                                                  columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
@@ -187,7 +187,9 @@
                                                             completeMethod="#{countryController.completeCountry}" 
                                                             value="#{bankAccountController.selectedBankAccount.bankCountry}"
                                                             var="country" itemValue="#{country.countryCode}" 
-                                                            itemLabel="#{country.countryFullName}" />
+                                                            itemLabel="#{country.countryFullName}" >
+                                            <p:ajax event="itemSelect" listener="#{bankAccountController.countryOnSelectListner()}" process="@this" update="bankAccountcurrency"/>
+                                            </p:autoComplete>
                                             <label>#{messages.country}</label>
                                         </h:panelGroup>
 

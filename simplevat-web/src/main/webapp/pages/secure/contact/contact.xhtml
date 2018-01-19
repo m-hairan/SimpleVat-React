@@ -100,6 +100,7 @@
                                                         itemLabel="#{contactType.name}"
                                                         required="true"
                                                         requiredMessage="Please select Contact Type">
+                                            <p:ajax update="invoicedetails panelLanguage labuagesPanel organizationName" process="@this" event="itemSelect" listener="#{contactController.updateOrganization()}"/>
                                         </p:autoComplete>
                                         <label>Contact Type</label>
                                     </h:panelGroup>
@@ -107,7 +108,8 @@
                                     <p:outputLabel for="organizationName"/>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="organizationName"
-                                                     value="#{contactController.contactModel.organization}"/>
+                                                     value="#{contactController.contactModel.organization}"
+                                                     />
                                         <label>Organization Name</label>
                                     </h:panelGroup>
 
@@ -179,7 +181,9 @@
                                                         itemValue="#{country.countryCode}"
                                                         itemLabel="#{country.countryFullName}" 
                                                         required="true"
-                                                        requiredMessage="Please select Country"/>
+                                                        requiredMessage="Please select Country">
+                                            <p:ajax event="itemSelect" listener="#{contactController.countryOnSelectListner()}" process="@this" update="currency"/>
+                                        </p:autoComplete>
                                         <label>Country</label>
                                         <p:message for="country" />
                                     </h:panelGroup>
@@ -210,7 +214,7 @@
                                 </p:panelGrid>
                             </p:fieldset>
                             <br/>
-                            <p:fieldset legend="Invoicing Details" toggleable="true"
+                            <p:fieldset id="invoicedetails" legend="Invoicing Details" toggleable="true"
                                         toggleSpeed="500">
                                 <p:panelGrid columns="6"
                                              columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
@@ -243,27 +247,6 @@
                                         <label>Vat Registration Number</label>
                                     </h:panelGroup>
 
-                                    <p:outputLabel for="language"/>
-                                    <h:panelGroup styleClass="md-inputfield">
-
-                                        <p:autoComplete id="language" 
-                                                        dropdown="true" 
-                                                        forceSelection="true"
-                                                        effect="fold"
-                                                        required="true"
-                                                        scrollHeight="250"
-                                                        requiredMessage="Please select Invoice Language"
-                                                        converter="#{languageConverter}" 
-                                                        completeMethod="#{contactController.completeLanguage}"
-                                                        value="#{contactController.contactModel.language}"
-                                                        var="language"
-                                                        itemValue="#{language.languageCode}" 
-                                                        itemLabel="#{language.languageDescription}" />
-
-                                        <label>Invoice Language</label>
-                                        <p:message for="language" />
-                                    </h:panelGroup>
-
                                     <p:outputLabel for="currency"/>
                                     <h:panelGroup styleClass="md-inputfield">
 
@@ -284,9 +267,33 @@
                                         <p:message for="currency" />
                                     </h:panelGroup>
 
-                                    <p:outputLabel />
-                                    <h:panelGroup />
+                                    <h:panelGroup id="panelLanguage">
+                                        <p:outputLabel for="language" rendered="#{contactController.contactModel.contactType.id == 2}"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup  id="labuagesPanel">
+                                        <h:panelGroup styleClass="md-inputfield" rendered="#{contactController.contactModel.contactType.id == 2}">
+                                            <p:autoComplete id="language" 
+                                                            dropdown="true" 
+                                                            forceSelection="true"
+                                                            effect="fold"
+                                                            required="true"
+                                                            scrollHeight="250"
+                                                            requiredMessage="Please select Invoice Language"
+                                                            converter="#{languageConverter}" 
+                                                            completeMethod="#{contactController.completeLanguage}"
+                                                            value="#{contactController.contactModel.language}"
+                                                            var="language"
+                                                            itemValue="#{language.languageCode}" 
+                                                            itemLabel="#{language.languageDescription}"
+                                                            />
 
+                                            <label>Invoice Language</label>
+                                            <p:message for="language" />
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                    <h:panelGroup/>
+                                    <h:panelGroup/>
+                                    
                                 </p:panelGrid>
                             </p:fieldset>
                         </div>

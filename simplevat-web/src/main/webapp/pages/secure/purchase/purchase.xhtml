@@ -167,7 +167,7 @@
                                                             forceSelection="true"
                                                             effect="fold"
                                                             scrollHeight="250"
-                                                            required="true" disabled="#{purchaseController.selectedPurchaseModel.project != null}"
+                                                            required="true"
                                                             requiredMessage="Please select Contact"
                                                             completeMethod="#{purchaseController.contacts}" 
                                                             value="#{purchaseController.selectedPurchaseModel.purchaseContact}" 
@@ -183,10 +183,10 @@
                                             <p:message for="conatcts" />
                                         </h:panelGroup>
                                         <p:outputLabel />
-                                        <p:outputLabel value="OR  ">
+                                        <p:outputLabel value="OR  " id="contactpopup">
                                             <p:commandLink onsuccess="PF('add_contact_popup').show();" 
                                                            actionListener="#{purchaseController.initCreateContact()}"
-                                                           style="color: #009688" 
+                                                           style="color: #009688"
                                                            value="Add New Contact" />
                                         </p:outputLabel>
                                         <p:outputLabel for="purchaseDescription" />
@@ -254,109 +254,76 @@
                                             </p:commandButton>
                                         </p:column>
                                         <p:column headerText="Product/Service" style="width: 200px">
-                                            <p:cellEditor>
-                                                <f:facet name="output">
-                                                    <h:outputText value="#{purchaseItem.productService.productName}" />
-                                                </f:facet>
-                                                <f:facet name="input">
-                                                    <p:autoComplete id="product" 
-                                                                    converter="#{productConverter}"
-                                                                    dropdown="true" 
-                                                                    forceSelection="true"
-                                                                    scrollHeight="250"
-                                                                    effect="fold"
-                                                                    groupBy="#{product.parentProduct == null ? 'Other' :product.parentProduct.productName}"
-                                                                    value="#{purchaseItem.productService}"
-                                                                    completeMethod="#{purchaseController.products}" 
-                                                                    var="product"
-                                                                    itemValue="#{product}"
-                                                                    itemLabel="#{product.productName}">
-                                                        <p:ajax update="vatIdLabel vatId subTotal" event="itemSelect" listener="#{purchaseController.updateVatPercentage(purchaseItem)}" />
-                                                    </p:autoComplete>
-                                                </f:facet>
-                                            </p:cellEditor>
+
+                                            <p:autoComplete id="product" 
+                                                            converter="#{productConverter}"
+                                                            dropdown="true" 
+                                                            forceSelection="true"
+                                                            scrollHeight="250"
+                                                            effect="fold"
+                                                            groupBy="#{product.parentProduct == null ? 'Other' :product.parentProduct.productName}"
+                                                            value="#{purchaseItem.productService}"
+                                                            completeMethod="#{purchaseController.products}" 
+                                                            var="product"
+                                                            itemValue="#{product}"
+                                                            itemLabel="#{product.productName}">
+                                                <p:ajax update="vatId subTotal" event="itemSelect" listener="#{purchaseController.updateVatPercentage(purchaseItem)}" />
+                                            </p:autoComplete>
+
                                         </p:column>
                                         <p:column headerText="Description" styleClass="amount" style="width: 320px">
-                                            <p:cellEditor>
-                                                <f:facet name="output">
-                                                    <h:outputText value="#{purchaseItem.description}" />
-                                                </f:facet>
-                                                <f:facet name="input">
-                                                    <p:inputText id="description" 
-                                                                 value="#{purchaseItem.description}" 
-                                                                 style="width:100%">
-                                                        <p:ajax event="change" />
-                                                    </p:inputText>
-                                                </f:facet>
-                                            </p:cellEditor>
+                                            <p:inputText id="description" 
+                                                         value="#{purchaseItem.description}" 
+                                                         style="width:100%">
+                                                <p:ajax event="change" />
+                                            </p:inputText>
                                         </p:column>
                                         <p:column headerText="Quantity" styleClass="amount">
-                                            <p:cellEditor>
-                                                <f:facet name="output">
-                                                    <h:outputText  value="#{purchaseItem.quatity}" />
-                                                </f:facet>
+                                            <p:inputText id="quantity" 
+                                                         validator="positiveNumberValidator"
+                                                         validatorMessage="Please enter Quantity more then 0"
+                                                         value="#{purchaseItem.quatity}" 
+                                                         style="width:100%">
 
-                                                <f:facet name="input">
-
-                                                    <p:inputText id="quantity" 
-                                                                 validator="positiveNumberValidator"
-                                                                 validatorMessage="Please enter Quantity more then 0"
-                                                                 value="#{purchaseItem.quatity}" 
-                                                                 style="width:100%">
-
-                                                        <p:ajax event="change" 
-                                                                listener="#{purchaseController.updateSubTotal(purchaseItem)}" 
-                                                                update="subTotal" />
-                                                    </p:inputText>
-                                                </f:facet>
-                                            </p:cellEditor>
+                                                <p:ajax event="change" 
+                                                        listener="#{purchaseController.updateSubTotal(purchaseItem)}" 
+                                                        update="subTotal" />
+                                            </p:inputText>
                                         </p:column>
                                         <p:column headerText="Unit Price (#{purchaseController.selectedPurchaseModel.currency.currencyIsoCode})" styleClass="amount">
-                                            <p:cellEditor>
-                                                <f:facet name="output" >
-                                                    <h:outputText  value="#{purchaseItem.unitPrice}" >
-                                                        <f:convertNumber type="currency" currencySymbol="#{purchaseController.selectedPurchaseModel.currency.currencySymbol} " />
-                                                    </h:outputText>
-                                                </f:facet>
-                                                <f:facet name="input">
-                                                    <p:inputNumber id="unitPrice" 
-                                                                   value="#{purchaseItem.unitPrice}"
-                                                                   symbol="#{purchaseController.selectedPurchaseModel.currency.currencySymbol} " symbolPosition="p"
-                                                                   validator="positiveNumberValidator"
-                                                                   validatorMessage="Please enter Price more then 0"
-                                                                   style="width:100%">
-                                                        <p:ajax event="change" 
-                                                                listener="#{purchaseController.updateSubTotal(purchaseItem)}" 
-                                                                update="subTotal @form:exchangeCurrency" />
-                                                    </p:inputNumber>
-                                                </f:facet>
-                                            </p:cellEditor>
+
+                                            <p:inputNumber id="unitPrice" 
+                                                           value="#{purchaseItem.unitPrice}"
+                                                           symbol="#{purchaseController.selectedPurchaseModel.currency.currencySymbol} " symbolPosition="p"
+                                                           validator="positiveNumberValidator"
+                                                           validatorMessage="Please enter Price more then 0"
+                                                           style="width:100%">
+                                                <p:ajax event="change" 
+                                                        listener="#{purchaseController.updateSubTotal(purchaseItem)}" 
+                                                        update="subTotal @form:exchangeCurrency" />
+                                            </p:inputNumber>
+
                                         </p:column>
                                         <p:column headerText="VAT (%)" styleClass="amount" id="vatcategory">
-                                            <p:cellEditor>
-                                                <f:facet name="output">
-                                                    <h:outputText value="#{purchaseItem.vatId.name}" id="vatIdLabel" />
-                                                </f:facet>
-                                                <f:facet name="input">
-                                                    <p:autoComplete id="vatId" 
-                                                                    converter="#{vatCategoryConverter}"
-                                                                    dropdown="true" 
-                                                                    forceSelection="true"
-                                                                    scrollHeight="250"
-                                                                    effect="fold"
-                                                                    value="#{purchaseItem.vatId}"
-                                                                    completeMethod="#{purchaseController.vatCategorys}" 
-                                                                    var="vat"
-                                                                    itemValue="#{vat}"
-                                                                    itemLabel="#{vat.name}"
-                                                                    >
-                                                        <p:ajax update="subTotal" event="itemSelect" listener="#{purchaseController.updateSubTotal(purchaseItem)}" />
-                                                        <p:ajax event="change" 
-                                                                listener="#{purchaseController.updateSubTotal(purchaseItem)}" 
-                                                                update="subTotal" />
-                                                    </p:autoComplete>
-                                                </f:facet>
-                                            </p:cellEditor>
+
+                                            <p:autoComplete id="vatId" 
+                                                            converter="#{vatCategoryConverter}"
+                                                            dropdown="true" 
+                                                            forceSelection="true"
+                                                            scrollHeight="250"
+                                                            effect="fold"
+                                                            value="#{purchaseItem.vatId}"
+                                                            completeMethod="#{purchaseController.vatCategorys}" 
+                                                            var="vat"
+                                                            itemValue="#{vat}"
+                                                            itemLabel="#{vat.name}"
+                                                            >
+                                                <p:ajax update="subTotal" event="itemSelect" listener="#{purchaseController.updateSubTotal(purchaseItem)}" />
+                                                <p:ajax event="change" 
+                                                        listener="#{purchaseController.updateSubTotal(purchaseItem)}" 
+                                                        update="subTotal" />
+                                            </p:autoComplete>
+
                                         </p:column>
                                         <p:column headerText="Subtotal (#{purchaseController.selectedPurchaseModel.currency.currencyIsoCode})" styleClass="amount">
                                             <h:outputText id="subTotal"  value="#{purchaseItem.subTotal}" >

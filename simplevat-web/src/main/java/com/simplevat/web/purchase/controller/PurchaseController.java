@@ -227,6 +227,11 @@ public class PurchaseController extends BaseController implements Serializable {
         updateSubTotal(purchaseItemModel);
     }
 
+    public void updateContact(){
+        if(selectedPurchaseModel.getProject()!=null){
+            selectedPurchaseModel.setPurchaseContact(selectedPurchaseModel.getProject().getContact());
+        }
+    }
     // TODO compare companycurrency and selected Currency
     public String exchangeRate(Currency currency) {
         String exchangeRateString = "";

@@ -47,6 +47,7 @@ import com.simplevat.service.VatCategoryService;
 import com.simplevat.web.common.controller.BaseController;
 import com.simplevat.web.constant.ConfigurationConstants;
 import com.simplevat.web.constant.ContactTypeConstant;
+import com.simplevat.web.constant.DiscountTypeConstant;
 import com.simplevat.web.constant.InvoicePaymentModeConstant;
 import com.simplevat.web.constant.InvoicePurchaseStatusConstant;
 import com.simplevat.web.constant.ModuleName;
@@ -152,6 +153,10 @@ public class InvoiceController extends BaseController implements Serializable {
 
     @Getter
     @Setter
+    private boolean defaultContactByproject = false;
+
+    @Getter
+    @Setter
     List<SelectItem> vatCategorySelectItemList = new ArrayList<>();
 
     @Getter
@@ -208,8 +213,10 @@ public class InvoiceController extends BaseController implements Serializable {
 
     public void updateContact() {
         setDefaultCurrency();
-        if (selectedInvoiceModel.getProject() != null) {
+        if (selectedInvoiceModel.getProject() != null && selectedInvoiceModel.getProject().getContact().getContactType() == ContactTypeConstant.CUSTOMER) {
             selectedInvoiceModel.setInvoiceContact(selectedInvoiceModel.getProject().getContact());
+            selectedInvoiceModel.setCurrencyCode(selectedInvoiceModel.getProject().getContact().getCurrency());
+            defaultContactByproject = true;
         }
     }
 
@@ -303,10 +310,24 @@ public class InvoiceController extends BaseController implements Serializable {
                     }
                 }
             }
-            discountAmount = (totalInvoiceCalculation.multiply(selectedInvoiceModel.getDiscount())).divide(new BigDecimal(100));
-            total = totalInvoiceCalculation.subtract(discountAmount);
+            total = totalInvoiceCalculation.subtract(getDiscountValue(totalInvoiceCalculation));
+            System.out.println("total=========3===========" + total);
         }
 
+    }
+
+    private BigDecimal getDiscountValue(BigDecimal totalInvoiceCalculation) {
+        if (selectedInvoiceModel.getDiscountType() != null) {
+            if (selectedInvoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.ABSOLUTEDISCOUNT) {
+                System.out.println("selectedInvoiceModel.getDiscount()=========1===========" + selectedInvoiceModel.getDiscount());
+                discountAmount = selectedInvoiceModel.getDiscount();
+            } else if (selectedInvoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.PERCENTAGEDISCOUNT) {
+                System.out.println("selectedInvoiceModel.getDiscount()=========1===========" + selectedInvoiceModel.getDiscount());
+                discountAmount = totalInvoiceCalculation.multiply(selectedInvoiceModel.getDiscount().divide(new BigDecimal(100)));
+            }
+        }
+        System.out.println("total=========1===========" + discountAmount);
+        return discountAmount;
     }
 
     private boolean validateAtLeastOneItem() {

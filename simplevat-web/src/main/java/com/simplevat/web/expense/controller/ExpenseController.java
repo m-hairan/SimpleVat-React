@@ -187,6 +187,12 @@ public class ExpenseController extends BaseController implements Serializable {
         }
     }
 
+    public void updateContact() {
+        if (selectedExpenseModel.getProject() != null) {
+            selectedExpenseModel.setExpenseContact(selectedExpenseModel.getProject().getContact());
+        }
+    }
+
     private void setDefaultCurrency() {
         Currency defaultCurrency = company.getCompanyCountryCode().getCurrencyCode();
         if (defaultCurrency != null) {
@@ -464,5 +470,4 @@ public class ExpenseController extends BaseController implements Serializable {
             }
         }
     }
-
 }

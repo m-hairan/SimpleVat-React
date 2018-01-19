@@ -121,7 +121,7 @@
                                                             converter="#{contactConverter}"
                                                             dropdown="true" 
                                                             forceSelection="true"
-                                                            effect="fold" disabled="#{expenseController.selectedExpenseModel.project != null}"
+                                                            effect="fold"
                                                             required="true"
                                                             scrollHeight="250"
                                                             requiredMessage="Please select Contact"
@@ -140,7 +140,7 @@
                                             <p:message for="conatcts" />
                                         </h:panelGroup>
                                         <p:outputLabel />
-                                        <p:outputLabel value="OR  ">
+                                        <p:outputLabel value="OR  " id="contactpopup">
                                             <p:commandLink onsuccess="PF('add_contact_popup').show();" 
                                                            actionListener="#{expenseController.initCreateContact()}"
                                                            style="color: #009688" 
@@ -178,10 +178,10 @@
                                         <h:panelGroup styleClass="md-inputfield"/>
                                         <h:panelGroup styleClass="md-inputfield"/>
                                         <h:panelGroup rendered="false">
-                                        <p:outputLabel for="makeRecurring"/>
-                                        <p:selectBooleanButton id="makeRecurring" onLabel="Remove Recurring" offLabel="Make Recurring" value="#{expenseController.selectedExpenseModel.recurringFlag}">
-                                            <p:ajax event="change" update="recurringDetails"/>
-                                        </p:selectBooleanButton>
+                                            <p:outputLabel for="makeRecurring"/>
+                                            <p:selectBooleanButton id="makeRecurring" onLabel="Remove Recurring" offLabel="Make Recurring" value="#{expenseController.selectedExpenseModel.recurringFlag}">
+                                                <p:ajax event="change" update="recurringDetails"/>
+                                            </p:selectBooleanButton>
                                         </h:panelGroup>
                                     </p:panelGrid>
                                 </p:fieldset>
@@ -446,91 +446,59 @@
                                                              icon="ui-icon-delete">
                                             </p:commandButton>
                                         </p:column>
-
                                         <p:column headerText="Description" styleClass="amount" style="width: 320px">
-                                            <p:cellEditor>
-                                                <f:facet name="output">
-                                                    <h:outputText value="#{expenseItem.description}" />
-                                                </f:facet>
-                                                <f:facet name="input">
-                                                    <p:inputText id="description" 
-                                                                 value="#{expenseItem.description}" 
-                                                                 style="width:100%">
-                                                        <p:ajax event="change" />
-                                                    </p:inputText>
-                                                </f:facet>
-                                            </p:cellEditor>
+                                            <p:inputText id="description" 
+                                                         value="#{expenseItem.description}" 
+                                                         style="width:100%">
+                                                <p:ajax event="change" />
+                                            </p:inputText>
                                         </p:column>
 
                                         <p:column headerText="Quantity" styleClass="amount" >
-                                            <p:cellEditor>
-                                                <f:facet name="output">
-                                                    <h:outputText value="#{expenseItem.quatity}" />
-                                                </f:facet>
-                                                <f:facet name="input">
-
-                                                    <p:inputText id="quantity" 
-                                                                 validator="positiveNumberValidator"
-                                                                 validatorMessage="Please enter Quantity more then 0"
-                                                                 value="#{expenseItem.quatity}" 
-                                                                 style="width:100%">
-                                                        <p:ajax event="change" 
-                                                                listener="#{expenseController.updateSubTotal(expenseItem)}" 
-                                                                update="subTotal" />
-                                                    </p:inputText>
-
-                                                </f:facet>
-                                            </p:cellEditor>
+                                            <p:inputText id="quantity" 
+                                                         validator="positiveNumberValidator"
+                                                         validatorMessage="Please enter Quantity more then 0"
+                                                         value="#{expenseItem.quatity}" 
+                                                         style="width:100%">
+                                                <p:ajax event="change" 
+                                                        listener="#{expenseController.updateSubTotal(expenseItem)}" 
+                                                        update="subTotal" />
+                                            </p:inputText>
                                         </p:column>
 
                                         <p:column headerText="Unit Price (#{expenseController.selectedExpenseModel.currency.currencyIsoCode})" styleClass="amount">
-                                            <p:cellEditor>
-                                                <f:facet name="output">
-                                                    <h:outputText value="#{expenseItem.unitPrice}" >
-                                                        <f:convertNumber type="currency" currencySymbol="#{expenseController.selectedExpenseModel.currency.currencySymbol} " />
-                                                    </h:outputText>
-                                                </f:facet>
-                                                <f:facet name="input">
-                                                    <p:inputNumber id="unitPrice" 
-                                                                   symbol="#{expenseController.selectedExpenseModel.currency.currencySymbol} " symbolPosition="p"
-                                                                   validator="positiveNumberValidator"
-                                                                   validatorMessage="Please enter Price more then 0"
-                                                                   value="#{expenseItem.unitPrice}" 
-                                                                   style="width:100%">
-                                                        <p:ajax event="change" 
-                                                                listener="#{expenseController.updateSubTotal(expenseItem)}" 
-                                                                update="subTotal @form:exchangeCurrency" />
-                                                    </p:inputNumber>
-                                                </f:facet>
-                                            </p:cellEditor>
+
+                                            <p:inputNumber id="unitPrice" 
+                                                           symbol="#{expenseController.selectedExpenseModel.currency.currencySymbol} " symbolPosition="p"
+                                                           validator="positiveNumberValidator"
+                                                           validatorMessage="Please enter Price more then 0"
+                                                           value="#{expenseItem.unitPrice}" 
+                                                           style="width:100%">
+                                                <p:ajax event="change" 
+                                                        listener="#{expenseController.updateSubTotal(expenseItem)}" 
+                                                        update="subTotal @form:exchangeCurrency" />
+                                            </p:inputNumber>
                                         </p:column>
 
                                         <p:column headerText="VAT (%)" styleClass="amount">
-                                            <p:cellEditor>
-                                                <f:facet name="output">
-                                                    <h:outputText value="#{expenseItem.vatId.name}" />
-                                                </f:facet>
-                                                <f:facet name="input">
-                                                    <p:autoComplete id="vatId" 
-                                                                    converter="#{vatCategoryConverter}"
-                                                                    dropdown="true" 
-                                                                    forceSelection="true"
-                                                                    effect="fold"
-                                                                    scrollHeight="250"
-                                                                    value="#{expenseItem.vatId}"
-                                                                    completeMethod="#{expenseController.vatCategorys}" 
-                                                                    var="vat"
-                                                                    itemValue="#{vat}"
-                                                                    itemLabel="#{vat.name}"
-                                                                    >
-                                                        <p:ajax update="subTotal @form:exchangeCurrency" event="itemSelect" listener="#{expenseController.updateSubTotal(expenseItem)}" />
-                                                        <p:ajax event="change" 
-                                                                listener="#{expenseController.updateSubTotal(expenseItem)}" 
-                                                                update="subTotal @form:exchangeCurrency" />
-                                                    </p:autoComplete>
+                                            <p:autoComplete id="vatId" 
+                                                            converter="#{vatCategoryConverter}"
+                                                            dropdown="true" 
+                                                            forceSelection="true"
+                                                            effect="fold"
+                                                            scrollHeight="250"
+                                                            value="#{expenseItem.vatId}"
+                                                            completeMethod="#{expenseController.vatCategorys}" 
+                                                            var="vat"
+                                                            itemValue="#{vat}"
+                                                            itemLabel="#{vat.name}"
+                                                            >
+                                                <p:ajax update="subTotal @form:exchangeCurrency" event="itemSelect" listener="#{expenseController.updateSubTotal(expenseItem)}" />
+                                                <p:ajax event="change" 
+                                                        listener="#{expenseController.updateSubTotal(expenseItem)}" 
+                                                        update="subTotal @form:exchangeCurrency" />
+                                            </p:autoComplete>
 
-                                                </f:facet>
-                                            </p:cellEditor>
                                         </p:column>
                                         <p:column headerText="Subtotal (#{expenseController.selectedExpenseModel.currency.currencyIsoCode})" styleClass="amount">
                                             <h:outputText id="subTotal" value="#{expenseItem.subTotal}" >

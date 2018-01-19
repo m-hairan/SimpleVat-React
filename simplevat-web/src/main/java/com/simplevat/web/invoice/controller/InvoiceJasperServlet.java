@@ -22,7 +22,7 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
  *
  * @author admin
  */
-@WebServlet("/invoiceJaper.pdf")
+@WebServlet("/invoiceJasper.pdf")
 public class InvoiceJasperServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;

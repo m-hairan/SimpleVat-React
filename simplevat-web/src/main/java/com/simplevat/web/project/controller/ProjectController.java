@@ -88,6 +88,7 @@ public class ProjectController extends BaseController implements Serializable {
                     this.selectedProject.setCurrency(defaultCurrency);
                 }
                 contactModel = new ContactModel();
+                setDefaultLanguage();
             }
             this.languages = languageService.getLanguages();
             this.currencies = currencyService.getCurrencies();
@@ -98,7 +99,7 @@ public class ProjectController extends BaseController implements Serializable {
     }
 
     public List<Contact> contacts(final String searchQuery) {
-        return contactService.getContacts(searchQuery,ContactTypeConstant.CUSTOMER);
+        return contactService.getContacts(searchQuery, ContactTypeConstant.CUSTOMER);
     }
 
     private List<Project> getProjectFromCriteria() throws Exception {
@@ -228,5 +229,10 @@ public class ProjectController extends BaseController implements Serializable {
         selectedProject.setContact(contact);
 
     }
-
+private void setDefaultLanguage() {
+        Language defaultLanguage = languageService.getDefaultLanguage();
+        if (defaultLanguage != null) {
+            selectedProject.setInvoiceLanguageCode(defaultLanguage);
+        }
+    }
 }

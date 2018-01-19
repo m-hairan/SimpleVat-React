@@ -137,7 +137,7 @@ public class TransactionController extends TransactionControllerHelper implement
     public void importTransaction() {
         RequestContext.getCurrentInstance().execute("PF('importTransactionWidget').show(); PF('importTransactionWidget').content.scrollTop('0')");
     }
-    
+
     public void exportTransaction() {
         RequestContext.getCurrentInstance().execute("PF('exportTransactionWidget').show();");
     }
@@ -170,8 +170,8 @@ public class TransactionController extends TransactionControllerHelper implement
         if (selectedTransactionModel.getExplainedTransactionCategory() != null
                 && selectedTransactionModel.getExplainedTransactionCategory().getTransactionCategoryId() == TransactionCategoryConsatant.TRANSACTION_CATEGORY_INVOICE_PAYMENT) {
             refObject = selectedTransactionModel.getRefObject();
-        }else if(selectedTransactionModel.getExplainedTransactionCategory() != null
-                && selectedTransactionModel.getExplainedTransactionCategory().getParentTransactionCategory().getTransactionCategoryId() == TransactionCategoryConsatant.TRANSACTION_CATEGORY_PURCHASE){
+        } else if (selectedTransactionModel.getExplainedTransactionCategory() != null && selectedTransactionModel.getExplainedTransactionCategory().getParentTransactionCategory() != null
+                && selectedTransactionModel.getExplainedTransactionCategory().getParentTransactionCategory().getTransactionCategoryId() == TransactionCategoryConsatant.TRANSACTION_CATEGORY_PURCHASE) {
             refObject = selectedTransactionModel.getRefObject();
         }
         return refObject;

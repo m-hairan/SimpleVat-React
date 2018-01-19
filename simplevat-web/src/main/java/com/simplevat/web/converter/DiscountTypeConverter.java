@@ -1,26 +1,32 @@
 package com.simplevat.web.converter;
 
 import com.simplevat.entity.invoice.DiscountType;
+import com.simplevat.service.DiscountTypeService;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author hiren
  */
-@FacesConverter(forClass = DiscountType.class, value = "discountTypeConverter")
+@Service
 public class DiscountTypeConverter implements Converter {
+
+    @Autowired
+    private DiscountTypeService discountTypeService;
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
         if (string != null && !string.isEmpty()) {
             try {
-                DiscountType discountType = new DiscountType();
-                discountType.setDiscountTypeCode(Integer.parseInt(string));
+                DiscountType discountType = discountTypeService.findByPK(Integer.parseInt(string));
                 return discountType;
-            }catch(Exception e){}
+            } catch (Exception e) {
+            }
         }
         return null;
     }

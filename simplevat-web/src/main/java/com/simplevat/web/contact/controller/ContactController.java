@@ -75,6 +75,16 @@ public class ContactController extends BaseController implements Serializable {
     @Setter
     private Contact selectedContact;
 
+    @Autowired
+    private CompanyService companyService;
+
+    @Getter
+    @Setter
+    private Company company;
+
+    @Autowired
+    private UserServiceNew userServiceNew;
+
     @Getter
     @Setter
     private ContactHelper contactHelper;
@@ -85,6 +95,7 @@ public class ContactController extends BaseController implements Serializable {
 
     @PostConstruct
     public void init() {
+        company = companyService.findByPK(userServiceNew.findByPK(FacesUtil.getLoggedInUser().getUserId()).getCompany().getCompanyId());
         selectedContact = new Contact();
         contactModel = new ContactModel();
         contactHelper = new ContactHelper();
@@ -115,24 +126,24 @@ public class ContactController extends BaseController implements Serializable {
     }
 
     private void setDefaultCurrency() {
-        Currency defaultCurrency = currencyService.getDefaultCurrency();
+        Currency defaultCurrency = company.getCompanyCountryCode().getCurrencyCode();
         if (defaultCurrency != null) {
             contactModel.setCurrency(defaultCurrency);
         }
     }
 
     private void setDefaultCountry() {
-        Country defaultCountry = countryService.getDefaultCountry();
+        Country defaultCountry = company.getCompanyCountryCode();
         if (defaultCountry != null) {
             contactModel.setCountry(defaultCountry);
         }
     }
 
     private void setDefaultLanguage() {
-//        Language defaultLanguage = languageService.getDefaultLanguage();
-//        if (defaultLanguage != null) {
-//            contactModel.setLanguage(defaultLanguage);
-//        }
+        Language defaultLanguage = languageService.getDefaultLanguage();
+        if (defaultLanguage != null) {
+            contactModel.setLanguage(defaultLanguage);
+        }
     }
 
     public String redirectToCreateContact() {
@@ -142,6 +153,12 @@ public class ContactController extends BaseController implements Serializable {
         setDefaultCurrency();
         LOGGER.debug("Redirecting to create new contact page");
         return "contact?faces-redirect=true";
+    }
+
+    public void updateOrganization() {
+        if (contactModel.getContactType().getId() == ContactTypeConstant.EMPLOYEE) {
+            contactModel.setOrganization(company.getCompanyName());
+        }
     }
 
     public String createOrUpdateContact() throws IOException {
@@ -161,20 +178,16 @@ public class ContactController extends BaseController implements Serializable {
 
     public void createOrUpdateAndAddMore() {
         User loggedInUser = FacesUtil.getLoggedInUser();
-        Contact contact = contactHelper.getContact(contactModel);
-        if (selectedContact.getContactId() > 0) {
-            this.contactService.update(contact);
+        selectedContact = contactHelper.getContact(contactModel);
+        if (selectedContact.getContactId() != null && selectedContact.getContactId() > 0) {
+            this.contactService.update(selectedContact);
         } else {
-            contact.setCreatedBy(loggedInUser.getUserId());
-            this.contactService.persist(contact);
+            selectedContact.setCreatedBy(loggedInUser.getUserId());
+            this.contactService.persist(selectedContact);
         }
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        if (contactModel.getContactId() != null) {
-            context.addMessage(null, new FacesMessage("Contact Updated SuccessFully"));
-        } else {
-            context.addMessage(null, new FacesMessage("Contact Created SuccessFully"));
-        }
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Contact saved successfully"));
         init();
     }
 
@@ -304,5 +317,9 @@ public class ContactController extends BaseController implements Serializable {
 
     public void updateBillingEmail() {
         contactModel.setBillingEmail(contactModel.getEmail());
+    }
+
+    public void countryOnSelectListner() {
+        contactModel.setCurrency(contactModel.getCountry().getCurrencyCode());
     }
 }

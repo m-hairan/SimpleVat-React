@@ -215,4 +215,7 @@ public class BankAccountController extends BankAccountHelper implements Serializ
         return bankAccountStatusService.getBankAccountStatuses();
     }
 
+    public void countryOnSelectListner() {
+        selectedBankAccount.setBankAccountCurrency(selectedBankAccount.getBankCountry().getCurrencyCode());
+    }
 }
