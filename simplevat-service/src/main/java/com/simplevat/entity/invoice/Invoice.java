@@ -93,6 +93,11 @@ public class Invoice implements Serializable {
     @ColumnDefault(value = "0")
     @Basic(optional = false)
     private Boolean deleteFlag = Boolean.FALSE;
+    
+    @Column(name = "FREEZE")
+    @ColumnDefault(value = "0")
+    @Basic(optional = false)
+    private Boolean freeze = Boolean.FALSE;
 
 //    @Column(name = "RECURRING_FLAG")
 //    @ColumnDefault(value = "0")

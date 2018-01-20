@@ -15,19 +15,18 @@
  */
 package com.simplevat.entity;
 
-import java.io.File;
-import java.io.OutputStream;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.activation.FileTypeMap;
 
 @Data
 public class Mail implements Serializable {
     public String from;
     public String fromName;
     public String[] to;
+    public String[] bcc;
+    public String[] cc;
     public String subject;
     public String body;
     public Date date;

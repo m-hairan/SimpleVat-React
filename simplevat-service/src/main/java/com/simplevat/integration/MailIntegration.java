@@ -2,10 +2,6 @@ package com.simplevat.integration;
 
 import com.simplevat.entity.Mail;
 import com.simplevat.entity.MailAttachment;
-import java.io.FileOutputStream; 
-import java.io.OutputStream;
-import javax.activation.FileTypeMap;
-import javax.activation.MimetypesFileTypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -14,8 +10,6 @@ import org.springframework.stereotype.Component;
 
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMultipart;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.InputStreamSource;
 
 /**
@@ -28,7 +22,7 @@ public class MailIntegration {
 
     private final JavaMailSender mailSender;
 
-    @Autowired 
+    @Autowired
     public MailIntegration(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
@@ -44,13 +38,17 @@ public class MailIntegration {
 //        };
 //        mailSender.send(preparator);
 //    }
-    
     private void sendEmail(final Mail mail, MailAttachment mailAttachment, JavaMailSender javaMailSender, boolean html) throws Exception {
-
         MimeMessagePreparator preparator = mimeMessage -> {
             MimeMessageHelper mimeMessagePreparator = new MimeMessageHelper(mimeMessage, true, UTF_8);
             mimeMessagePreparator.setTo(mail.getTo());
             mimeMessagePreparator.setFrom(new InternetAddress(mail.getFrom(), mail.getFromName()));
+            if (mail.getBcc() != null) {
+                mimeMessagePreparator.setBcc(mail.getBcc());
+            }
+            if (mail.getCc() != null) {
+                mimeMessagePreparator.setCc(mail.getCc());
+            }
             mimeMessagePreparator.setText(mail.getBody(), html);
             mimeMessagePreparator.setSubject(mail.getSubject());
             if (mailAttachment != null) {
@@ -73,8 +71,8 @@ public class MailIntegration {
         };
         javaMailSender.send(preparator);
     }
-    
-    public void sendHtmlEmail(final MimeMultipart mimeMultipart,final Mail mail, JavaMailSender javaMailSender) throws Exception {
+
+    public void sendHtmlEmail(final MimeMultipart mimeMultipart, final Mail mail, JavaMailSender javaMailSender) throws Exception {
 
         MimeMessagePreparator preparator = mimeMessage -> {
             MimeMessageHelper mimeMessagePreparator = new MimeMessageHelper(mimeMessage, true, UTF_8);
@@ -86,15 +84,14 @@ public class MailIntegration {
         };
         javaMailSender.send(preparator);
     }
-    
+
 //    public void sendHtmlMail(final Mail mail) throws Exception {
 //        sendEmail(mail, true);
 //    }
-    
     public void sendHtmlMail(final Mail mail, MailAttachment mailAttachment, JavaMailSender javaMailSender) throws Exception {
         sendEmail(mail, mailAttachment, javaMailSender, true);
     }
-    
+
     public void sendHtmlMail(final Mail mail, JavaMailSender javaMailSender) throws Exception {
         sendEmail(mail, javaMailSender, true);
     }
