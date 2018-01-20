@@ -81,10 +81,16 @@
                     </p:column>
 
                     <p:column headerText="#{messages.action}">
-                        <p:commandButton title="#{messages.edit_invoice}" icon="ui-icon-edit" styleClass="AquaButton" action="#{invoiceListController.redirectToCreateInvoice}">
+                        <p:tooltip for="edit" value="#{messages.edit}" position="top" rendered="#{!invoice.freeze}"/>
+                        <p:commandButton id="edit" title="#{messages.edit_invoice}" style="margin-right: 7px" rendered="#{!invoice.freeze}" icon="ui-icon-edit" styleClass="AquaButton" action="#{invoiceListController.redirectToCreateInvoice}">
                             <f:setPropertyActionListener value="#{invoice}" target="#{invoiceListController.selectedInvoiceModel}" />
                         </p:commandButton>
-                        <p:commandButton style="margin-left: 7px" 
+                        <p:tooltip for="view" value="#{messages.view}" position="top"/>
+                        <p:commandButton id="view" style="margin-right: 7px" title="#{messages.view_invoice}" icon="ui-icon-view-carousel" styleClass="AquaButton" action="#{invoiceListController.redirectToViewInvoice}">
+                            <f:setPropertyActionListener value="#{invoice}" target="#{invoiceListController.selectedInvoiceModel}" />
+                        </p:commandButton>
+                        <p:tooltip for="delete" value="#{messages.delete}" position="top"/>
+                        <p:commandButton id="delete"
                                          title="Delete Invoice" 
                                          actionListener="#{invoiceListController.deleteInvoice(invoice)}"
                                          update="invoiceTable"

@@ -15,7 +15,9 @@ import com.simplevat.integration.MailIntegration;
 import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.ContactService;
 import com.simplevat.service.invoice.InvoiceService;
+import com.simplevat.web.utils.MailDefaultConfigurationModel;
 import com.simplevat.web.utils.MailUtility;
+import static com.simplevat.web.utils.MailUtility.verifyMailConfigurationList;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import lombok.Getter;
@@ -63,44 +66,81 @@ public class InvoiceMailController implements Serializable {
     @Setter
     private ArrayList<String> moreEmails;
 
-    public void sendInvoiceMail() throws Exception {
-        if (moreEmails == null) {
-            moreEmails = new ArrayList();
-        }
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    @Getter
+    @Setter
+    private ArrayList<String> bccList;
+
+    @Getter
+    @Setter
+    private ArrayList<String> ccList;
+
+    @Getter
+    @Setter
+    private Invoice invoice;
+
+    @Getter
+    @Setter
+    private String subject;
+
+    @Getter
+    @Setter
+    private String messageBody;
+
+    @PostConstruct
+    public void init() {
+        moreEmails = new ArrayList();
+        bccList = new ArrayList();
+        ccList = new ArrayList();
         Integer invoiceId = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("invoiceId").toString());
-        MailEnum mailEnum = MailEnum.INVOICE_PDF;
-        String summary = "";
-        Invoice invoice = invoiceService.findByPK(invoiceId);
-        Optional<Contact> contact = contactService.getContactByEmail(invoice.getInvoiceContact().getEmail());
-        if (contact.isPresent()) {
-            Contact contactObj = contact.get();
-            String firstName = contactObj.getFirstName();
-            byte[] byteArray = invoiceUtil.prepareMailReport(outputStream, invoiceId).toByteArray();
-            moreEmails.add(invoice.getInvoiceContact().getEmail());
-            String[] emailsArray = Arrays.copyOf(moreEmails.toArray(), moreEmails.toArray().length, String[].class);
-            sendInvoiceMail(mailEnum, summary, firstName, emailsArray, byteArray);
+        invoice = invoiceService.findByPK(invoiceId);
+        moreEmails.add(invoice.getInvoiceContact().getEmail());
+    }
+
+    public void sendInvoiceMail() throws Exception {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte[] byteArray = invoiceUtil.prepareMailReport(outputStream, invoice.getInvoiceId()).toByteArray();
+        MailDefaultConfigurationModel mailDefaultConfigurationModel = MailUtility.verifyMailConfigurationList(configurationService.getConfigurationList());
+        Mail mail = getMail(messageBody, subject, mailDefaultConfigurationModel.getMailusername());
+        if (mail != null) {
+            sendInvoiceMail(mail, byteArray);
             moreEmails.clear();
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Email address provided."));
         }
     }
 
-    private void sendInvoiceMail(MailEnum mailEnum, String summary, String firstName, String[] senderMailAddress, byte[] byteArray) throws Exception {
+    private Mail getMail(String body, String subject, String fromEmail) {
+        if (moreEmails != null && !moreEmails.isEmpty()) {
+            Mail mail = new Mail();
+            mail.setBody(body == null ? "" : body);
+            mail.setFrom(fromEmail);
+            mail.setFromName(ADMIN_USERNAME);
+            mail.setTo(Arrays.copyOf(moreEmails.toArray(), moreEmails.toArray().length, String[].class));
+            mail.setSubject(subject == null ? "" : subject);
+            if (bccList != null && !bccList.isEmpty()) {
+                String[] bccArray = Arrays.copyOf(bccList.toArray(), bccList.toArray().length, String[].class);
+                mail.setBcc(bccArray);
+                bccList.clear();
+            }
+            if (ccList != null && !ccList.isEmpty()) {
+                String[] ccArray = Arrays.copyOf(ccList.toArray(), ccList.toArray().length, String[].class);
+                mail.setCc(ccArray);
+                ccList.clear();
+            }
+            return mail;
+        }
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Email Tried To Send"));
+        return null;
+    }
+
+    private void sendInvoiceMail(Mail mail, byte[] byteArray) throws Exception {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Mail mail = new Mail();
-                    mail.setBody(summary);
-                    mail.setFrom(ADMIN_EMAIL);
-                    mail.setFromName(ADMIN_USERNAME);
-                    mail.setTo(senderMailAddress);
-                    mail.setSubject(mailEnum.getSubject());
                     MailAttachment attachment = new MailAttachment();
                     attachment.setAttachmentName("Invoice");
                     attachment.setAttachmentObject(new ByteArrayResource(byteArray));
                     mailIntegration.sendHtmlMail(mail, attachment, MailUtility.getJavaMailSender(configurationService.getConfigurationList()));
+                    updateInvoice();
                 } catch (Exception ex) {
                     Logger.getLogger(InvoiceMailController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -108,6 +148,13 @@ public class InvoiceMailController implements Serializable {
         });
         t.start();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Your Invoice Generated successfully. Please check your mail for further details"));
+    }
+
+    private void updateInvoice() {
+        if (!invoice.getFreeze()) {
+            invoice.setFreeze(Boolean.TRUE);
+            invoiceService.update(invoice);
+        }
     }
 
 }

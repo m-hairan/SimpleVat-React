@@ -26,6 +26,7 @@ import com.simplevat.web.common.controller.BaseController;
 import com.simplevat.web.constant.InvoicePurchaseStatusConstant;
 import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.invoice.model.InvoiceModel;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -136,6 +137,12 @@ public class InvoiceListController extends BaseController implements Serializabl
             selectedInvoiceId = "&selectedInvoiceModelId=" + selectedInvoiceModel.getInvoiceId();
         }
         return "invoice.xhtml?faces-redirect=true" + selectedInvoiceId;
+    }
+
+    public String redirectToViewInvoice() {
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+        session.setAttribute("invoiceId", selectedInvoiceModel.getInvoiceId());
+        return "invoiceView.xhtml?faces-redirect=true";
     }
 
     public void deleteInvoice(final InvoiceModel invoiceModel) {

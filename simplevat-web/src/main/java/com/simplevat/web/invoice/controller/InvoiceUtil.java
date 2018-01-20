@@ -17,10 +17,13 @@ import com.simplevat.web.invoice.model.InvoiceItemModel;
 import com.simplevat.web.invoice.model.InvoiceModel;
 import com.simplevat.web.reports.AbstractReportBean;
 import com.simplevat.web.reports.ReportConfigUtil;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,7 +34,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.inject.Named;
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRDataSource;
@@ -39,15 +42,17 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.j2ee.servlets.BaseHttpServlet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author uday
  */
-@Named
+@Component
 public class InvoiceUtil extends AbstractReportBean {
 
     private final String COMPILE_FILE_NAME = "Invoice";
@@ -265,6 +270,20 @@ public class InvoiceUtil extends AbstractReportBean {
         JasperPrint jasperPrint = JasperFillManager.fillReport(reportFile.getPath(), getReportParameters(), new JRBeanCollectionDataSource(dataList));
         request.getSession().setAttribute(BaseHttpServlet.DEFAULT_JASPER_PRINT_SESSION_ATTRIBUTE, jasperPrint);
         JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
+    }
+
+    public void prepareHtmlReport(HttpServletRequest request, HttpServletResponse response, int invoiceId) throws JRException, IOException {
+        response.reset();
+        response.setHeader("Content-Type", "application/html");
+        response.setHeader("Content-Disposition", "inline; filename=\"fileName.html\"");
+        this.invoiceId = invoiceId;
+        Collection<InvoiceDataSourceModel> dataList = getDataBeanList();
+        JRDataSource beanColDataSource = new JRBeanCollectionDataSource(dataList);
+        String jasperFilePath = ReportConfigUtil.compileReport(getCompileDir(), getCompileFileName());
+        File reportFile = new File(jasperFilePath);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(reportFile.getPath(), getReportParameters(), new JRBeanCollectionDataSource(dataList));
+        BufferedImage image = (BufferedImage) JasperPrintManager.printPageToImage(jasperPrint, 0, 2f);
+        ImageIO.write(image, "PNG", response.getOutputStream());
     }
 
     public ByteArrayOutputStream prepareMailReport(ByteArrayOutputStream outputStream, int invoiceId) throws JRException, IOException {

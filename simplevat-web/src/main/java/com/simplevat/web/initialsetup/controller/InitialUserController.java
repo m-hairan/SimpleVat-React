@@ -42,6 +42,7 @@ import com.simplevat.web.company.controller.CompanyHelper;
 import com.simplevat.web.company.controller.CompanyModel;
 import com.simplevat.web.newactivation.NewActivationMailSender;
 import com.simplevat.web.utils.FileUtility;
+import com.simplevat.web.utils.MailDefaultConfigurationModel;
 import com.simplevat.web.utils.MailUtility;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -195,9 +196,9 @@ public class InitialUserController implements Serializable {
             String pathname = FacesContext.getCurrentInstance().getExternalContext().getRealPath(ACTIVATION_EMAIL_TEMPLATE_FILE);
             MessageFormat msgFormat = new MessageFormat(FileUtility.readFile(pathname));
             MimeMultipart mimeMultipart = FileUtility.getMessageBody(msgFormat.format(args));
-            String firstName = recipientName;
             String[] email = {userLoginId};
-            sendActivationMail(mailEnum, mimeMultipart, firstName, email);
+            MailDefaultConfigurationModel mailDefaultConfigurationModel = MailUtility.verifyMailConfigurationList(configurationService.getConfigurationList());
+            sendActivationMail(mailEnum, mimeMultipart, mailDefaultConfigurationModel.getMailusername(), email);
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(NewActivationMailSender.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MessagingException ex) {
@@ -205,13 +206,13 @@ public class InitialUserController implements Serializable {
         }
     }
 
-    private void sendActivationMail(MailEnum mailEnum, MimeMultipart mimeMultipart, String firstName, String[] senderMailAddress) {
+    private void sendActivationMail(MailEnum mailEnum, MimeMultipart mimeMultipart, String userName, String[] senderMailAddress) {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     Mail mail = new Mail();
-                    mail.setFrom(ADMIN_EMAIL);
+                    mail.setFrom(userName);
                     mail.setFromName(ADMIN_USERNAME);
                     mail.setTo(senderMailAddress);
                     mail.setSubject(mailEnum.getSubject());

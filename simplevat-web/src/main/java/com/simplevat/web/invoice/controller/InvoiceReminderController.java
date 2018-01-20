@@ -90,10 +90,10 @@ public class InvoiceReminderController implements Serializable {
         if (contact.isPresent()) {
             try {
                 Contact contactObj = contact.get();
-                String firstName = contactObj.getFirstName();
                 byte[] byteArray = invoiceUtil.prepareMailReport(outputStream, invoice.getInvoiceId()).toByteArray();
                 String[] email = {invoice.getInvoiceContact().getEmail()};
-                sendInvoiceMail(mailEnum, summary, firstName, email, byteArray);
+                MailDefaultConfigurationModel mailDefaultConfigurationModel = MailUtility.verifyMailConfigurationList(configurationService.getConfigurationList());
+                sendInvoiceMail(mailEnum, summary, mailDefaultConfigurationModel.getMailusername(), email, byteArray);
             } catch (Exception ex) {
                 Logger.getLogger(InvoiceReminderController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -102,14 +102,14 @@ public class InvoiceReminderController implements Serializable {
         }
     }
 
-    private void sendInvoiceMail(MailEnum mailEnum, String summary, String firstName, String[] senderMailAddress, byte[] byteArray) {
+    private void sendInvoiceMail(MailEnum mailEnum, String summary, String userName, String[] senderMailAddress, byte[] byteArray) {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     Mail mail = new Mail();
                     mail.setBody(summary);
-                    mail.setFrom(ADMIN_EMAIL);
+                    mail.setFrom(userName);
                     mail.setFromName(ADMIN_USERNAME);
                     mail.setTo(senderMailAddress);
                     mail.setSubject(mailEnum.getSubject());

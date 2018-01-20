@@ -613,31 +613,7 @@
                                     padding: 0 !important;
                                 }
                             </style>
-                            <p:dialog widgetVar="invoiceMailWidget" modal="true" resizable="false" 
-                                      draggable="false" style="padding: 0;"
-                                      responsive="true" header="Send Invoice"
-                                      hideEffect="scale">
-                                <p:panelGrid columns="1" 
-                                             columnClasses="ui-grid-col-0,ui-grid-col-12" 
-                                             layout="grid" 
-                                             styleClass="ui-panelgrid-blank form-group"
-                                             style="border:0px none; background-color:transparent;">
-                                    <h:panelGroup styleClass="md-inputwrapper-filled">
-                                        <label>Default E-Mail: </label>
-                                        <h:outputText id="defaultMail"
-                                                      value="#{invoiceController.selectedInvoiceModel.invoiceContact.billingEmail}" />
-                                    </h:panelGroup>
 
-                                    <label>Enter More Mail Addresses : </label>
-                                    <h:panelGroup styleClass="md-inputwrapper-filled">
-                                        <p:chips id="addMoreMail" value="#{invoiceMailController.moreEmails}" />
-                                    </h:panelGroup>
-                                </p:panelGrid>
-                                <f:facet name="footer" >
-                                    <p:commandButton value="Send" action="#{invoiceMailController.sendInvoiceMail()}" process="invoice" onclick="PF('invoiceMailWidget').hide();" />
-                                    <p:commandButton value="Cancel" onclick="PF('invoiceMailWidget').hide();" />
-                                </f:facet>
-                            </p:dialog>
                         </div>
                     </div>
                 </div>
@@ -667,19 +643,21 @@
                                              validateClient="true"
                                              icon="ui-icon-forward" />
                         </ui:fragment>
-                        <p:commandButton action="#{invoiceController.saveInvoice()}" rendered="#{invoiceController.selectedInvoiceModel.status != 3}"
+                        <p:commandButton action="#{invoiceController.saveAndSendInvoice()}" 
+                                         value="#{messages.saveAndSend}"
+                                         validateClient="true"
+                                         update="@form"
+                                         icon="ui-icon-mail" >
+                        </p:commandButton>
+                        <p:commandButton action="#{invoiceController.saveInvoice()}" 
                                          value="#{messages.CashPayment}"
                                          validateClient="true"
                                          update="@form"
                                          icon="ui-icon-attach-money" >
                             <f:setPropertyActionListener target="#{invoiceController.selectedInvoiceModel.paymentMode}" value="1" />
                         </p:commandButton>
-                        <p:commandButton action="#{invoiceController.printInvoice()}" rendered="#{invoiceController.renderPrintInvoice}"
-                                         value="#{messages.print_invoice}" update="PDF" 
-                                         icon="ui-icon-print" />
-                        <p:commandButton onclick="PF('invoiceMailWidget').show();" rendered="#{invoiceController.renderPrintInvoice}"
-                                         value="#{messages.Send_By_Mail}"
-                                         icon="ui-icon-mail" />
+
+
                         <span class="ui-separator" style="padding-right: 5px;">
                             <span class="fa fa-ellipsis-v SoftGray" />
                         </span>
@@ -693,11 +671,7 @@
             </div>
 
         </h:form>
-        <h:panelGroup id="PDF">
-            <h:panelGroup  rendered="#{invoiceController.renderPDF}">
-                <ui:include src="invoicePDF.xhtml" />
-            </h:panelGroup>
-        </h:panelGroup>
+
         <ui:include src="add-contact-popup.xhtml" />
     </ui:define>
 </ui:composition>

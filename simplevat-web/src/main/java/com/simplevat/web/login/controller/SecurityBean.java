@@ -9,6 +9,7 @@ import com.simplevat.integration.MailPreparer;
 import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.UserServiceNew;
 import com.simplevat.web.utils.FileUtility;
+import com.simplevat.web.utils.MailDefaultConfigurationModel;
 import com.simplevat.web.utils.MailUtility;
 import com.simplevat.web.utils.SessionIdentifierGenerator;
 import java.io.IOException;
@@ -156,7 +157,8 @@ public class SecurityBean implements PhaseListener, Serializable {
                 MessageFormat msgFormat = new MessageFormat(FileUtility.readFile(pathname));
                 MimeMultipart mimeMultipart = FileUtility.getMessageBody(msgFormat.format(args));
                 String[] email = {user.getUserEmail()};
-                sendActivationMail(mailEnum, mimeMultipart, email);
+                MailDefaultConfigurationModel mailDefaultConfigurationModel = MailUtility.verifyMailConfigurationList(configurationService.getConfigurationList());
+                sendActivationMail(mailEnum, mimeMultipart, mailDefaultConfigurationModel.getMailusername(), email);
                 return "/pages/public/login.xhtml?faces-redirect=true";
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Email address provided."));
@@ -169,13 +171,13 @@ public class SecurityBean implements PhaseListener, Serializable {
         return null;
     }
 
-    private void sendActivationMail(MailEnum mailEnum, MimeMultipart mimeMultipart, String[] senderMailAddress) {
+    private void sendActivationMail(MailEnum mailEnum, MimeMultipart mimeMultipart, String userName, String[] senderMailAddress) {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     Mail mail = new Mail();
-                    mail.setFrom(ADMIN_EMAIL);
+                    mail.setFrom(userName);
                     mail.setFromName(ADMIN_USERNAME);
                     mail.setTo(senderMailAddress);
                     mail.setSubject(mailEnum.getSubject());

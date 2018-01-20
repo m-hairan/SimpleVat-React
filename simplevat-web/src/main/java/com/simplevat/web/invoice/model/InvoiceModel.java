@@ -61,6 +61,8 @@ public class InvoiceModel {
     private String statusName;
 
     private Boolean recurringFlag;
+    
+    private Boolean freeze = Boolean.FALSE;
 
     private Integer paymentMode;
     

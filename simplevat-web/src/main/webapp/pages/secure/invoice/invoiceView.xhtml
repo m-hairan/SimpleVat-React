@@ -1,28 +1,119 @@
-<div xmlns="http://www.w3.org/1999/xhtml"
-     xmlns:h="http://java.sun.com/jsf/html"
-     xmlns:f="http://java.sun.com/jsf/core"
-     xmlns:ui="http://java.sun.com/jsf/facelets"
-     xmlns:p="http://primefaces.org/ui"
-     xmlns:si="http://java.sun.com/jsf/composite/ccomponent">
-    <p:dialog widgetVar="invoicePDFWidget" modal="true" width="50%" height="80%" >
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
+                template="/WEB-INF/templates/template.xhtml">
+    <ui:define name="content">
         <style>
-            .ui-dialog{
-                top: 0px !important;
-            }
-            .ui-dialog-content{ 
-                max-width: 950px !important; 
-                max-height: 730px !important;
-                margin-bottom: 5px !important;
+            .mailDialog{
+                right: 0px !important;
+                bottom: 0px !important;
+                top: auto !important;
+                left: auto !important;
             }
         </style>
-        <h:form id="invoicePDF">
-            <div class="ui-fluid">
-                <div class="ui-g">
-                    <div class="ui-g-12">
-                            <p:media value="/invoiceJasper.pdf" width="100%" height="1040"/>
+        <h:form id="invoiceView">
+            <div class="card card-w-title">
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:commandButton action="#{invoiceViewController.redirectToEditInvoice()}" 
+                                         value="#{messages.edit}" rendered="#{!invoiceViewController.invoice.freeze}"
+                                         icon="ui-icon-edit" />
+                        <p:commandButton action="#{invoiceViewController.printInvoice()}" 
+                                         value="#{messages.print_invoice}" update="PDF" 
+                                         icon="ui-icon-print" />
+                        <p:commandButton onclick="PF('invoiceMailWidget').show();" 
+                                         value="#{messages.Send_By_Mail}"
+                                         icon="ui-icon-mail" />
+                        <span class="ui-separator" style="padding-right: 5px;">
+                            <span class="fa fa-ellipsis-v SoftGray" />
+                        </span>
+                        <si:cbutton type="cancel"/>
+                    </f:facet>
+                    <f:facet name="right">
+                        <si:cbutton type="home"/>
+                    </f:facet>
+                </p:toolbar>
+                <div class="ui-fluid">
+                    <div class="ui-g">
+                        <div class="ui-g-12" align="center">
+                            <p:graphicImage value="/invoiceViewServlet" width="70%" height="100%" style="border: 0 !important"/>
+                            <style>
+                                .ui-dialog .ui-dialog-content {
+                                    padding: 0 !important;
+                                }
+                                .ui-panelgrid-cell{
+                                    padding: 0px 0px 10px 0px !important;
+                                }
+                                .ui-inputtextarea{
+                                    height: 250px !important;
+                                }
+                            </style>
+                            <p:dialog widgetVar="invoiceMailWidget" modal="true" resizable="false" width="26.5%" height="50%"
+                                      draggable="false" styleClass="mailDialog"
+                                      responsive="true" header="Send Invoice"
+                                      hideEffect="scale">
+                                <div align="left">
+                                    <p:panelGrid columns="1" 
+                                                 columnClasses="ui-grid-col-12" 
+                                                 layout="grid" 
+                                                 styleClass="ui-panelgrid-blank form-group"
+                                                 style="border:0px none; background-color:transparent;">
+                                        <h:panelGroup styleClass="md-inputwrapper-filled">
+                                            <p:chips id="addMoreMail" value="#{invoiceMailController.moreEmails}" placeholder="Enter More Mail Addresses"/>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup styleClass="md-inputwrapper-focus">
+                                            <p:inputText id="subjectMail" value="#{invoiceMailController.subject}" placeholder="Add Subject"/>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup styleClass="md-inputwrapper-focus">
+                                            <p:chips id="bccMail" value="#{invoiceMailController.bccList}" placeholder="Add Bcc"/>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup styleClass="md-inputwrapper-focus">
+                                            <p:chips id="ccMail" value="#{invoiceMailController.ccList}" placeholder="Add cc"/>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup styleClass="md-inputwrapper-focus">
+                                            <p:inputTextarea id="messageMail" value="#{invoiceMailController.messageBody}" placeholder="Add Message" />
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                    <p:commandButton value="Send" style="margin:0 0 5px 5px !important" action="#{invoiceMailController.sendInvoiceMail()}" process="invoiceView" update="invoiceView" onclick="PF('invoiceMailWidget').hide();" />
+                                    <p:commandButton value="Cancel" style="margin:0 5px 5px 0 !important;float: right !important" onclick="PF('invoiceMailWidget').hide();" />
+                                </div>
+                            </p:dialog>
+                        </div>
                     </div>
                 </div>
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:commandButton action="#{invoiceViewController.redirectToEditInvoice()}" 
+                                         value="#{messages.edit}" rendered="#{!invoiceViewController.invoice.freeze}"
+                                         icon="ui-icon-edit" />
+                        <p:commandButton action="#{invoiceViewController.printInvoice()}" 
+                                         value="#{messages.print_invoice}" update="PDF" 
+                                         icon="ui-icon-print" />
+                        <p:commandButton onclick="PF('invoiceMailWidget').show();" 
+                                         value="#{messages.Send_By_Mail}"
+                                         icon="ui-icon-mail" />
+                        <span class="ui-separator" style="padding-right: 5px;">
+                            <span class="fa fa-ellipsis-v SoftGray" />
+                        </span>
+                        <si:cbutton type="cancel"/>
+                    </f:facet>
+                    <f:facet name="right">
+                        <si:cbutton type="home"/>
+                    </f:facet>
+                </p:toolbar>
             </div>
         </h:form>
-    </p:dialog>
-</div>
+        <h:panelGroup id="PDF">
+            <h:panelGroup  rendered="#{invoiceViewController.renderPDF}">
+                <ui:include src="invoicePDF.xhtml" />
+            </h:panelGroup>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>

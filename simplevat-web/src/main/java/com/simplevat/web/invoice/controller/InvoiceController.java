@@ -145,9 +145,6 @@ public class InvoiceController extends BaseController implements Serializable {
     private boolean renderPrintInvoice = false;
 
     @Getter
-    private boolean renderPDF = false;
-
-    @Getter
     @Setter
     InvoiceItemModel invoiceItemModel;
 
@@ -431,16 +428,7 @@ public class InvoiceController extends BaseController implements Serializable {
         return types;
     }
 
-    public void printInvoice() {
-        renderPDF = true;
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
-        session.setAttribute("invoiceId", selectedInvoice.getInvoiceId());
-        RequestContext.getCurrentInstance().execute("PF('invoicePDFWidget').show(); PF('invoicePDFWidget').content.scrollTop('0')");
-    }
-
     public String saveInvoice() throws IOException {
-
         if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
             return "";
         }
@@ -449,6 +437,21 @@ public class InvoiceController extends BaseController implements Serializable {
         context.getExternalContext().getFlash().setKeepMessages(true);
         context.addMessage(null, new FacesMessage("Invoice Saved SuccessFully"));
         return "list?faces-redirect=true";
+
+    }
+
+    public String saveAndSendInvoice() throws IOException {
+
+        if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
+            return "";
+        }
+        Integer invoiceId = save();
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        context.addMessage(null, new FacesMessage("Invoice Saved SuccessFully"));
+        HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+        session.setAttribute("invoiceId", invoiceId);
+        return "invoiceView?faces-redirect=true";
 
     }
 
@@ -463,7 +466,7 @@ public class InvoiceController extends BaseController implements Serializable {
         init();
     }
 
-    private void save() {
+    private Integer save() {
         selectedInvoiceModel.setInvoiceDueDate(getDueDate(selectedInvoiceModel));
         selectedInvoiceModel.setInvoiceAmount(total);
         selectedInvoice = invoiceModelHelper.getInvoiceEntity(selectedInvoiceModel);
@@ -478,12 +481,14 @@ public class InvoiceController extends BaseController implements Serializable {
             } else if (selectedInvoice.getPaymentMode() == InvoicePaymentModeConstant.CASH) {
                 selectedInvoice.setDueAmount(new BigDecimal(0));
                 selectedInvoice.setStatus(InvoicePurchaseStatusConstant.PAID);
+                selectedInvoice.setFreeze(Boolean.TRUE);
             }
             if (selectedInvoice.getInvoiceProject() != null) {
                 projectService.updateProjectRevenueBudget(defferenceAmount, selectedInvoice.getInvoiceProject());
             }
             companyService.updateCompanyRevenueBudget(defferenceAmount, company);
             invoiceService.update(selectedInvoice);
+            return selectedInvoice.getInvoiceId();
         } else {
             configuration.setValue(selectedInvoice.getInvoiceReferenceNumber());
             if (configuration.getId() != null) {
@@ -498,12 +503,14 @@ public class InvoiceController extends BaseController implements Serializable {
             } else if (selectedInvoice.getPaymentMode() == InvoicePaymentModeConstant.CASH) {
                 selectedInvoice.setDueAmount(new BigDecimal(0));
                 selectedInvoice.setStatus(InvoicePurchaseStatusConstant.PAID);
+                selectedInvoice.setFreeze(Boolean.TRUE);
             }
             if (selectedInvoice.getInvoiceProject() != null) {
                 projectService.updateProjectRevenueBudget(selectedInvoice.getInvoiceAmount(), selectedInvoice.getInvoiceProject());
             }
             companyService.updateCompanyRevenueBudget(selectedInvoice.getInvoiceAmount(), company);
             invoiceService.persist(selectedInvoice);
+            return selectedInvoice.getInvoiceId();
         }
     }
 
@@ -513,6 +520,7 @@ public class InvoiceController extends BaseController implements Serializable {
         } else if (selectedInvoice.getDueAmount().doubleValue() < selectedInvoice.getInvoiceAmount().doubleValue()) {
             if (selectedInvoice.getDueAmount().doubleValue() == 0) {
                 selectedInvoice.setStatus(InvoicePurchaseStatusConstant.PAID);
+                selectedInvoice.setFreeze(Boolean.TRUE);
             } else {
                 selectedInvoice.setStatus(InvoicePurchaseStatusConstant.PARTIALPAID);
             }

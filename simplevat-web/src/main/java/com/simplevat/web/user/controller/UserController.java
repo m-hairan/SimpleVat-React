@@ -16,6 +16,7 @@ import com.simplevat.web.common.controller.StreamedContentSessionController;
 import com.simplevat.web.user.model.UserDTO;
 import com.simplevat.web.utils.FacesUtil;
 import com.simplevat.web.utils.FileUtility;
+import com.simplevat.web.utils.MailDefaultConfigurationModel;
 import com.simplevat.web.utils.MailUtility;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -217,7 +218,8 @@ public class UserController implements Serializable {
             MessageFormat msgFormat = new MessageFormat(FileUtility.readFile(pathname));
             MimeMultipart mimeMultipart = FileUtility.getMessageBody(msgFormat.format(args));
             String[] email = {userMail};
-            sendActivationMail(mailEnum, mimeMultipart, email);
+            MailDefaultConfigurationModel mailDefaultConfigurationModel = MailUtility.verifyMailConfigurationList(configurationService.getConfigurationList());
+            sendActivationMail(mailEnum, mimeMultipart, mailDefaultConfigurationModel.getMailusername(), email);
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MessagingException ex) {
@@ -226,13 +228,13 @@ public class UserController implements Serializable {
         return null;
     }
 
-    private void sendActivationMail(MailEnum mailEnum, MimeMultipart mimeMultipart, String[] senderMailAddress) {
+    private void sendActivationMail(MailEnum mailEnum, MimeMultipart mimeMultipart, String userName, String[] senderMailAddress) {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     Mail mail = new Mail();
-                    mail.setFrom(ADMIN_EMAIL);
+                    mail.setFrom(userName);
                     mail.setFromName(ADMIN_USERNAME);
                     mail.setTo(senderMailAddress);
                     mail.setSubject(mailEnum.getSubject());

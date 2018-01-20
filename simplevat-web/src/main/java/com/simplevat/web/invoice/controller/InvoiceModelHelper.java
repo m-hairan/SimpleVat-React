@@ -32,21 +32,21 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class InvoiceModelHelper {
-    
+
     @Autowired
     private InvoiceService invoiceService;
-    
+
     public Invoice getInvoiceEntity(InvoiceModel invoiceModel) {
         final LocalDateTime invoiceDate = LocalDateTime.ofInstant(invoiceModel.getInvoiceDate().toInstant(), ZoneId.systemDefault());
         final LocalDateTime invoiceDueDate = LocalDateTime.ofInstant(invoiceModel.getInvoiceDueDate().toInstant(), ZoneId.systemDefault());
         Invoice invoice;
-        
+
         if (invoiceModel.getInvoiceId() != null && invoiceModel.getInvoiceId() > 0) {
             invoice = invoiceService.findByPK(invoiceModel.getInvoiceId());
         } else {
             invoice = new Invoice();
         }
-        
+
         invoice.setContractPoNumber(invoiceModel.getContractPoNumber());
         invoice.setCurrency(invoiceModel.getCurrencyCode());
         invoice.setInvoiceProject(invoiceModel.getProject());
@@ -63,18 +63,19 @@ public class InvoiceModelHelper {
                 .stream()
                 .map((item) -> convertToLineItem(item, invoice))
                 .collect(Collectors.toList());
-        
+
         invoice.setInvoiceLineItems(items);
         invoice.setCreatedBy(invoiceModel.getCreatedBy());
         invoice.setLastUpdateBy(invoiceModel.getLastUpdatedBy());
         invoice.setInvoiceAmount(invoiceModel.getInvoiceAmount());
         invoice.setDueAmount(invoiceModel.getDueAmount());
         invoice.setStatus(invoiceModel.getStatus());
+        invoice.setFreeze(invoiceModel.getFreeze());
         invoice.setPaymentMode(invoiceModel.getPaymentMode());
 //        invoice.setRecurringFlag(invoiceModel.getRecurringFlag());
         return invoice;
     }
-    
+
     @Nonnull
     InvoiceLineItem convertToLineItem(@Nonnull final InvoiceItemModel model,
             @Nonnull final Invoice invoice) {
@@ -83,7 +84,7 @@ public class InvoiceModelHelper {
             item.setInvoiceLineItemId(model.getId());
         }
         item.setCreatedDate(Calendar.getInstance().getTime());
-        
+
         item.setInvoiceLineItemDescription(model.getDescription());
         item.setInvoiceLineItemQuantity(model.getQuatity());
         item.setInvoiceLineItemUnitPrice(model.getUnitPrice());
@@ -95,14 +96,14 @@ public class InvoiceModelHelper {
             item.setInvoiceLineItemProductService(model.getProductService());
         }
         item.setInvoice(invoice);
-        
+
         return item;
     }
-    
+
     public InvoiceModel getInvoiceModel(Invoice invoice) {
-        
+
         InvoiceModel invoiceModel = new InvoiceModel();
-        
+
         invoiceModel.setContractPoNumber(invoice.getContractPoNumber());
         invoiceModel.setCurrencyCode(invoice.getCurrency());
         invoiceModel.setInvoiceId(invoice.getInvoiceId());
@@ -115,13 +116,14 @@ public class InvoiceModelHelper {
         invoiceModel.setInvoiceDueOn(invoice.getInvoiceDueOn());
         invoiceModel.setInvoiceReferenceNumber(invoice.getInvoiceReferenceNumber());
         invoiceModel.setInvoiceNotes(invoice.getInvoiceNotes());
-        
+        invoiceModel.setFreeze(invoice.getFreeze());
+
         final List<InvoiceItemModel> items = invoice
                 .getInvoiceLineItems()
                 .stream()
                 .map((lineItem) -> convertToItemModel(lineItem))
                 .collect(Collectors.toList());
-        
+
         invoiceModel.setInvoiceLineItems(items);
         invoiceModel.setCreatedBy(invoice.getCreatedBy());
         invoiceModel.setLastUpdatedBy(invoice.getLastUpdateBy());
@@ -139,12 +141,12 @@ public class InvoiceModelHelper {
 //        invoiceModel.setRecurringFlag(invoice.getRecurringFlag());
         return invoiceModel;
     }
-    
+
     @Nonnull
     public InvoiceItemModel convertToItemModel(@Nonnull final InvoiceLineItem invoiceLineItem) {
-        
+
         final InvoiceItemModel model = new InvoiceItemModel();
-        
+
         model.setId(invoiceLineItem.getInvoiceLineItemId());
         model.setDescription(invoiceLineItem.getInvoiceLineItemDescription());
         model.setQuatity(invoiceLineItem.getInvoiceLineItemQuantity());
@@ -159,7 +161,7 @@ public class InvoiceModelHelper {
         this.updateSubTotal(model);
         return model;
     }
-    
+
     private void updateSubTotal(@Nonnull final InvoiceItemModel invoiceItemModel) {
         BigDecimal vatPer = new BigDecimal(BigInteger.ZERO);
         final int quantity = invoiceItemModel.getQuatity();
@@ -170,7 +172,7 @@ public class InvoiceModelHelper {
         if (null != unitPrice) {
             final BigDecimal amountWithoutTax = unitPrice.multiply(new BigDecimal(quantity));
             invoiceItemModel.setSubTotal(amountWithoutTax);
-            
+
             if (vatPer != null && vatPer.compareTo(BigDecimal.ZERO) >= 1) {
                 final BigDecimal amountWithTax = amountWithoutTax
                         .add(amountWithoutTax.multiply(vatPer).multiply(new BigDecimal(0.01)));
@@ -178,7 +180,7 @@ public class InvoiceModelHelper {
             }
         }
     }
-    
+
     public String getNextInvoiceRefNumber(String invoicingReferencePattern) {
         Pattern p = Pattern.compile("[a-z]+|\\d+");
         Matcher m = p.matcher(invoicingReferencePattern);
@@ -198,7 +200,7 @@ public class InvoiceModelHelper {
         String nextInvoiceNumber = replaceLast(invoicingReferencePattern, invoiceReplacementString, invoiceRefNumber);
         return nextInvoiceNumber;
     }
-    
+
     public static String replaceLast(String text, String regex, String replacement) {
         return text.replaceFirst("(?s)(.*)" + regex, "$1" + replacement);
     }
