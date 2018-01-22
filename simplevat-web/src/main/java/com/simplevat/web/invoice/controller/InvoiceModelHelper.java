@@ -51,6 +51,7 @@ public class InvoiceModelHelper {
         invoice.setCurrency(invoiceModel.getCurrencyCode());
         invoice.setInvoiceProject(invoiceModel.getProject());
         invoice.setInvoiceContact(invoiceModel.getInvoiceContact());
+        invoice.setShippingContact(invoiceModel.getShippingContact());
         invoice.setInvoiceDate(invoiceDate);
         invoice.setInvoiceDiscount(invoiceModel.getDiscount());
         invoice.setDiscountType(invoiceModel.getDiscountType());
@@ -108,6 +109,7 @@ public class InvoiceModelHelper {
         invoiceModel.setCurrencyCode(invoice.getCurrency());
         invoiceModel.setInvoiceId(invoice.getInvoiceId());
         invoiceModel.setInvoiceContact(invoice.getInvoiceContact());
+        invoiceModel.setShippingContact(invoice.getShippingContact());
         invoiceModel.setProject(invoice.getInvoiceProject());
         invoiceModel.setInvoiceDueDate(null != invoice.getInvoiceDueDate() ? Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant()) : null);
         invoiceModel.setInvoiceDate(null != invoice.getInvoiceDate() ? Date.from(invoice.getInvoiceDate().atZone(ZoneId.systemDefault()).toInstant()) : null);

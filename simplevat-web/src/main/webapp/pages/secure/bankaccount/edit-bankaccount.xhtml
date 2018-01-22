@@ -25,25 +25,23 @@
                                     <h1>Edit Bank Account</h1>
                                 </ui:fragment>
                                 <p:fieldset  legend="#{messages.bank_account}" toggleable="false"
-                                            toggleSpeed="500">
-                                    <p:panelGrid columns="6"
-                                                 columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+                                             toggleSpeed="500">
+                                    <p:panelGrid columns="3"
+                                                 columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
                                                  layout="grid" styleClass="ui-panelgrid-blank form-group"
                                                  style="border:0px none; background-color:transparent;">
 
 
-                                        <p:outputLabel for="bankAccountName" />
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText
                                                 id="bankAccountName"
                                                 value="#{bankAccountController.selectedBankAccount.bankAccountName}"
                                                 required="true" requiredMessage="Please enter bank account name"/>
-                                            <label>#{messages.account_name}</label>
+                                            <p:outputLabel for="bankAccountName" value="#{messages.account_name}"/>
                                             <p:message for="bankAccountName" />
                                         </h:panelGroup>
 
 
-                                        <p:outputLabel for="bankAccountcurrency" />
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete id="bankAccountcurrency" 
                                                             dropdown="true"
@@ -59,11 +57,10 @@
                                                             required="true" requiredMessage="Please select bank account currency">
                                                 <p:ajax event="itemSelect" process="bankAccountcurrency" update="bankOpeningBalance" />
                                             </p:autoComplete>
-                                            <label>#{messages.currency}</label>
+                                            <p:outputLabel for="bankAccountcurrency" value="#{messages.currency}"/>
                                             <p:message for="bankAccountcurrency" />
                                         </h:panelGroup>
 
-                                        <p:outputLabel for="bankAccountStatus" rendered="#{bankAccountController.selectedBankAccount.bankAccountId > 0}"/>
                                         <h:panelGroup styleClass="md-inputfield" rendered="#{bankAccountController.selectedBankAccount.bankAccountId > 0}">
                                             <p:autoComplete
                                                 id="bankAccountStatus"
@@ -79,11 +76,10 @@
                                                 itemLabel="#{bankAccountStatus.bankAccountStatusName}"
                                                 required="true" requiredMessage="Please select bank account status">
                                             </p:autoComplete>
-                                            <label>#{messages.status}</label>
+                                            <p:outputLabel for="bankAccountStatus" value="#{messages.status}"/>
                                             <p:message for="bankAccountStatus" />
                                         </h:panelGroup>
 
-                                        <p:outputLabel for="bankOpeningBalance"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputNumber
                                                 id="bankOpeningBalance"
@@ -91,13 +87,13 @@
                                                 value="#{bankAccountController.selectedBankAccount.openingBalance}"
                                                 disabled="#{bankAccountController.selectedBankAccount.bankAccountId > 0}"
                                                 required="true" requiredMessage="Please enter account opening balance"/>
-                                            <label>#{messages.opening_balance}</label>
+                                            <p:outputLabel for="bankOpeningBalance" value="#{messages.opening_balance}"/>
                                             <p:message for="bankOpeningBalance" />
                                         </h:panelGroup>
 
-                                        <p:outputLabel for="isPrimaryAccount" />
+
                                         <h:panelGroup>
-                                            <label>#{messages.is_this_your_primary_account}</label>
+                                            <p:outputLabel for="isPrimaryAccount" value="#{messages.is_this_your_primary_account}"/>
                                             <p:selectOneRadio value="#{bankAccountController.selectedBankAccount.isprimaryAccountFlag}" required="true" requiredMessage="Please select primary account Yes/No" id="isPrimaryAccount">
                                                 <f:selectItem itemLabel="Yes" itemValue="true" />
                                                 <f:selectItem itemLabel="No" itemValue="false" />
@@ -105,9 +101,8 @@
                                             <p:message for="isPrimaryAccount" />
                                         </h:panelGroup>
 
-                                        <p:outputLabel for="isPersonalAccount" />
                                         <h:panelGroup>
-                                            <label>#{messages.is_this_your_personal_account}</label>
+                                            <p:outputLabel for="isPersonalAccount" value="#{messages.is_this_your_personal_account}"/>
                                             <p:selectOneRadio value="#{bankAccountController.selectedBankAccount.personalCorporateAccountInd}" required="true" requiredMessage="Please select personal account Yes/No" id="isPersonalAccount">
                                                 <f:selectItem itemLabel="Yes" itemValue="C" />
                                                 <f:selectItem itemLabel="No" itemValue="P" />
@@ -115,7 +110,6 @@
                                             <p:message for="isPersonalAccount" />
                                         </h:panelGroup>
 
-                                        <p:outputLabel for="bank_account_type"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete
                                                 id="bank_account_type"
@@ -130,7 +124,7 @@
                                                 itemValue="#{bankAccountType}"
                                                 itemLabel="#{bankAccountType.name}"
                                                 required="true" requiredMessage="Please select account type"/>
-                                            <label>#{messages.account_type}</label>
+                                            <p:outputLabel for="bank_account_type" value="#{messages.account_type}"/>
                                             <p:message for="bank_account_type" />
                                         </h:panelGroup>
 
@@ -138,44 +132,40 @@
                                 </p:fieldset>
                                 <br />
                                 <p:fieldset legend="Optional Details" toggleable="true" toggleSpeed="500">
-                                    <p:panelGrid columns="6"
-                                                 columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+                                    <p:panelGrid columns="3"
+                                                 columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
                                                  layout="grid" styleClass="ui-panelgrid-blank form-group"
                                                  style="border:0px none; background-color:transparent;">
 
-                                        <p:outputLabel for="bankName"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText
                                                 id="bankName"
                                                 value="#{bankAccountController.selectedBankAccount.bankName}" />
-                                            <label>#{messages.bank_name}</label>
+                                            <p:outputLabel for="bankName" value="#{messages.bank_name}"/>
+                                            <label></label>
                                         </h:panelGroup>
 
-                                        <p:outputLabel for="bankAccountNumber"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText
                                                 id="bankAccountNumber"
                                                 value="#{bankAccountController.selectedBankAccount.accountNumber}" />
-                                            <label>#{messages.account_number}</label>
+                                            <p:outputLabel for="bankAccountNumber" value="#{messages.account_number}"/>
                                         </h:panelGroup>
 
-                                        <p:outputLabel for="swiftCode"/>
+
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText id="swiftCode"
                                                          value="#{bankAccountController.selectedBankAccount.swiftCode}" />
-                                            <label>#{messages.swift_code}</label>
+                                            <p:outputLabel for="swiftCode" value="#{messages.swift_code}"/>
                                         </h:panelGroup>
 
-                                        <p:outputLabel for="ibanNumber"/>
+
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText id="ibanNumber"
                                                          value="#{bankAccountController.selectedBankAccount.ibanNumber}" />
-                                            <label>#{messages.iban_number}</label>
+                                            <p:outputLabel for="ibanNumber" value="#{messages.iban_number}"/>
                                         </h:panelGroup>
 
-
-
-                                        <p:outputLabel for="bankCountry"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:outputLabel for="bankCountry"/>
                                             <p:autoComplete id="bankCountry" 
@@ -188,9 +178,9 @@
                                                             value="#{bankAccountController.selectedBankAccount.bankCountry}"
                                                             var="country" itemValue="#{country.countryCode}" 
                                                             itemLabel="#{country.countryFullName}" >
-                                            <p:ajax event="itemSelect" listener="#{bankAccountController.countryOnSelectListner()}" process="@this" update="bankAccountcurrency"/>
+                                                <p:ajax event="itemSelect" listener="#{bankAccountController.countryOnSelectListner()}" process="@this" update="bankAccountcurrency"/>
                                             </p:autoComplete>
-                                            <label>#{messages.country}</label>
+                                            <p:outputLabel for="bankCountry" value="#{messages.country}"/>
                                         </h:panelGroup>
 
                                         <p:outputLabel />

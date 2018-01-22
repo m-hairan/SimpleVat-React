@@ -61,31 +61,29 @@
                                     </div>             
 
                                 </h:panelGroup>
-                                <p:panelGrid columns="6" 
-                                             columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                                <p:panelGrid columns="3" 
+                                             columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" 
                                              layout="grid" 
                                              styleClass="ui-panelgrid-blank form-group"
                                              style="border:0px none; background-color:transparent;">
-                                    <p:outputLabel for="firstName" />
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="firstName"
                                                      required="true"
                                                      requiredMessage="Please enter First Name"
                                                      value="#{userController.selectedUser.firstName}"/>
-                                        <label>#{messages.firstName}</label>
+                                        <p:outputLabel for="firstName" value="#{messages.firstName}"/>
                                         <p:message for="firstName" />
                                     </h:panelGroup>
 
-                                    <p:outputLabel for="lastName" />
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="lastName"
                                                      required="true"
                                                      requiredMessage="Please enter Last Name"
                                                      value="#{userController.selectedUser.lastName}"/>
-                                        <label>#{messages.lastName}</label>
+                                        <p:outputLabel for="lastName" value="#{messages.lastName}"/>
                                         <p:message for="lastName" />
                                     </h:panelGroup>
-                                    <p:outputLabel for="emailId" rendered="#{userController.selectedUser.createdBy != 0}" />
+
                                     <h:panelGroup styleClass="md-inputfield" rendered="#{userController.selectedUser.createdBy != 0}">
                                         <p:inputText id="emailId"
                                                      required="true"
@@ -95,11 +93,10 @@
                                             <f:validateRegex
                                                 pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                         </p:inputText>
-                                        <label>#{messages.emailId}</label>
+                                        <p:outputLabel for="emailId" value="#{messages.emailId}" />
                                         <p:message for="emailId" />
                                     </h:panelGroup>
 
-                                    <p:outputLabel for="emailId1" rendered="#{userController.selectedUser.createdBy == 0}" />
                                     <h:panelGroup styleClass="md-inputfield" rendered="#{userController.selectedUser.createdBy == 0}">
                                         <p:inputText id="emailId1"
                                                      required="true"
@@ -110,11 +107,10 @@
                                             <f:validateRegex
                                                 pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                         </p:inputText>
-                                        <label>#{messages.emailId}</label>
+                                        <p:outputLabel for="emailId1" value="#{messages.emailId}" />
                                         <p:message for="emailId1" />
                                     </h:panelGroup>
 
-                                    <p:outputLabel for="dob" />
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:calendar id="dob"
                                                     pattern="dd/MM/yyyy"
@@ -122,11 +118,10 @@
                                                     requiredMessage="Please enter Date of Birth"
                                                     value="#{userController.selectedUser.displayDOB}">
                                         </p:calendar>
-                                        <label>Date of Birth</label>
+                                        <p:outputLabel for="dob" value="Date of Birth"/>
                                         <p:message for="dob" />
                                     </h:panelGroup>
 
-                                    <p:outputLabel for="role" rendered="#{userController.selectedUser.createdBy != 0}" />
                                     <h:panelGroup styleClass="md-inputfield" rendered="#{userController.selectedUser.createdBy != 0}">
                                         <p:autoComplete
                                             id="role"
@@ -139,11 +134,11 @@
                                             value="#{userController.selectedUser.role}"
                                             var="role" itemLabel="#{role.roleName}" itemValue="#{role}"
                                             required="true" requiredMessage="Please select Role."/>
-                                        <label>Role</label>
+                                        <label></label>
+                                        <p:outputLabel for="role" value="Role" />
                                         <p:message for="role" />
                                     </h:panelGroup>
 
-                                    <p:outputLabel for="role1" rendered="#{userController.selectedUser.createdBy == 0}" />
                                     <h:panelGroup styleClass="md-inputfield" rendered="#{userController.selectedUser.createdBy == 0}">
                                         <p:autoComplete
                                             id="role1"
@@ -157,13 +152,13 @@
                                             value="#{userController.selectedUser.role}"
                                             var="role" itemLabel="#{role.roleName}" itemValue="#{role}"
                                             required="true" requiredMessage="Please select Role."/>
-                                        <label>Role</label>
+                                        <p:outputLabel for="role1" value="Role"/>
                                         <p:message for="role1" />
                                     </h:panelGroup>
 
-                                    <p:outputLabel for="active" rendered="#{userController.selectedUser.createdBy != 0}" />
                                     <h:panelGroup rendered="#{userController.selectedUser.createdBy != 0}">
-                                        <label>Status</label>
+                                        <p:outputLabel for="active" value="Status" />
+                                        <label></label>
                                         <p:selectOneRadio value="#{userController.selectedUser.isActive}" id="active" required="true"
                                                           requiredMessage="Please select Status">
                                             <f:selectItem itemLabel="Active" itemValue="true"/>
@@ -172,9 +167,8 @@
                                         <p:message for="active" />
                                     </h:panelGroup>
 
-                                    <p:outputLabel for="active1" rendered="#{userController.selectedUser.createdBy == 0}" />
                                     <h:panelGroup rendered="#{userController.selectedUser.createdBy == 0}">
-                                        <label>Status</label>
+                                        <p:outputLabel for="active1" value="Status"/>
                                         <p:selectOneRadio value="#{userController.selectedUser.isActive}" disabled="true" id="active1" required="true"
                                                           requiredMessage="Please select Status">
                                             <f:selectItem itemLabel="Active" itemValue="true"/>
@@ -186,27 +180,27 @@
                             </p:fieldset>
 
                             <p:fieldset legend="Password" toggleable="false" rendered="#{userController.selectedUser.userId == null}">
-                                <p:panelGrid columns="6" 
-                                             columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                                <p:panelGrid columns="3" 
+                                             columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" 
                                              layout="grid" 
                                              styleClass="ui-panelgrid-blank form-group"
                                              style="border:0px none; background-color:transparent;">
 
-                                    <p:outputLabel for="password"/>
+
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:password id="password" autocomplete="false"
                                                     value="#{userController.password}"
                                                     required="true" 
                                                     requiredMessage="Please enter Password"/>
-                                        <label>Password</label>
+                                        <p:outputLabel for="password" value="Password"/>
                                         <p:message for="password" />
                                     </h:panelGroup>
-                                    <p:outputLabel for="cpassword"/>
+
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:password id="cpassword" autocomplete="false"
                                                     required="true"
                                                     requiredMessage="Please enter Confirm Password"/>
-                                        <label>Confirm Password</label>
+                                        <p:outputLabel for="cpassword" value="Confirm Password"/>
                                         <h:panelGroup>
                                             <p:message for="cpassword" />
                                             <o:validateEqual components="password cpassword"
@@ -217,23 +211,22 @@
                             </p:fieldset>
 
                             <p:fieldset legend="Password" toggleable="false" rendered="#{userController.selectedUser.userId != null}">
-                                <p:panelGrid columns="6" 
-                                             columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                                <p:panelGrid columns="3" 
+                                             columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" 
                                              layout="grid" 
                                              styleClass="ui-panelgrid-blank form-group"
                                              style="border:0px none; background-color:transparent;">
-                                    <p:outputLabel for="epassword"/>
+
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="epassword"
                                                      value="#{userController.password}"/>
-                                        <label>Password</label>
+                                        <p:outputLabel for="epassword" value="Password"/>
                                         <p:message for="epassword" />
                                     </h:panelGroup>
-                                    <p:outputLabel for="ecpassword"/>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="ecpassword"/>
-                                        <label>Confirm Password</label>
-                                        <h:panelGroup>
+                                        <p:outputLabel for="ecpassword" value="Confirm Password"/>
+                                       <h:panelGroup>
                                             <p:message for="ecpassword" />
                                             <o:validateEqual id="equal" components="epassword ecpassword"
                                                              message="Passwords are not equal" showMessageFor="epassword" />

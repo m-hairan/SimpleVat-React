@@ -26,35 +26,32 @@
                     </div>
                 </div>
             </h:panelGroup>
-            <p:panelGrid columns="6" 
-                         columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+            <p:panelGrid columns="3" 
+                         columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" 
                          layout="grid" 
                          styleClass="ui-panelgrid-blank form-group"
                          style="border:0px none; background-color:transparent;">
 
-                <p:outputLabel for="firstName" />
                 <h:panelGroup styleClass="md-inputfield">
                     <p:inputText id="firstName"
                                  maxlength="25"
                                  required="true"
                                  requiredMessage="Please enter First Name"
                                  value="#{userProfileController.currentUser.firstName}"/>
-                    <label>#{messages.firstName}</label>
+                    <p:outputLabel for="firstName" value="#{messages.firstName}" />
                     <p:message for="firstName" />
                 </h:panelGroup>
 
-                <p:outputLabel for="lastName" />
                 <h:panelGroup styleClass="md-inputfield">
                     <p:inputText id="lastName"
                                  required="true"
                                  requiredMessage="Please enter Last Name"
                                  maxlength="25"
                                  value="#{userProfileController.currentUser.lastName}"/>
-                    <label>#{messages.lastName}</label>
+                    <p:outputLabel for="lastName" value="#{messages.lastName}" />
                     <p:message for="lastName" />
                 </h:panelGroup>
 
-                <p:outputLabel for="emailId" rendered="#{userProfileController.currentUser.createdBy != 0}"/>
                 <h:panelGroup styleClass="md-inputfield" rendered="#{userProfileController.currentUser.createdBy != 0}">
                     <p:inputText id="emailId"
                                  required="true"
@@ -65,11 +62,10 @@
                         <f:validateRegex
                             pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                     </p:inputText>
-                    <label>#{messages.emailId}</label>
+                    <p:outputLabel for="emailId" value="#{messages.emailId}"/>
                     <p:message for="emailId" />
                 </h:panelGroup>
-                
-                <p:outputLabel for="emailId1" rendered="#{userProfileController.currentUser.createdBy == 0}" />
+
                 <h:panelGroup styleClass="md-inputfield" rendered="#{userProfileController.currentUser.createdBy == 0}">
                     <p:inputText id="emailId1"
                                  required="true"
@@ -81,18 +77,18 @@
                         <f:validateRegex
                             pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                     </p:inputText>
-                    <label>#{messages.emailId}</label>
+                    <p:outputLabel for="emailId1" value="#{messages.emailId}"/>
                     <p:message for="emailId1" />
                 </h:panelGroup>
-                
-                <p:outputLabel for="dob" />
+
                 <h:panelGroup styleClass="md-inputfield">
                     <p:calendar id="dob"
                                 pattern="MM/dd/yyyy"
                                 maxdate="#{userProfileController.currentUser.today}"
                                 value="#{userProfileController.currentUser.dateOfBirth}"
                                 readonlyInput="#{userProfileController.currentUser.dateOfBirth != null}" />
-                    <label>#{messages.dateOfBirth}</label>
+                    <label></label>
+                    <p:outputLabel for="dob" value="#{messages.dateOfBirth}"/>
                 </h:panelGroup>
 
                 <p:outputLabel />
@@ -105,21 +101,19 @@
 
 
         <p:fieldset legend="Password" toggleable="false"  rendered="#{userProfileController.editMode}">
-            <p:panelGrid columns="6" 
-                         columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+            <p:panelGrid columns="3" 
+                         columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" 
                          layout="grid" 
                          styleClass="ui-panelgrid-blank form-group"
                          style="border:0px none; background-color:transparent;">
-                <p:outputLabel for="epassword"/>
                 <h:panelGroup styleClass="md-inputfield">
                     <p:password id="epassword" value="#{userProfileController.password}" autocomplete="false"/>
-                    <label>Password</label>
+                    <p:outputLabel for="epassword" value="Password"/>
                     <p:message for="epassword" />
                 </h:panelGroup>
-                <p:outputLabel for="ecpassword"/>
                 <h:panelGroup styleClass="md-inputfield">
                     <p:password id="ecpassword"/>
-                    <label>Confirm Password</label>
+                    <p:outputLabel for="ecpassword" value="Confirm Password"/>
                     <h:panelGroup>
                         <p:message for="ecpassword" />
                         <o:validateEqual id="equal" components="epassword ecpassword"

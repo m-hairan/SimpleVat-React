@@ -25,6 +25,8 @@ public class InvoiceModel {
     private Integer invoiceId;
 
     private Contact invoiceContact;
+    
+    private Contact shippingContact;
 
     private Project project;
 
@@ -65,7 +67,7 @@ public class InvoiceModel {
     private Boolean freeze = Boolean.FALSE;
 
     private Integer paymentMode;
-    
+
     private RecurringNameValueMapping recurringInterval;
 
     private RecurringNameValueMapping recurringWeekDays;

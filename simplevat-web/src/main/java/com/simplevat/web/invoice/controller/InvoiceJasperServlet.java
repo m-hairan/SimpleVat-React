@@ -28,21 +28,20 @@ public class InvoiceJasperServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     @Autowired
     private InvoiceUtil invoiceUtil;
-    
+
     @Override
-     public void init(ServletConfig config) throws ServletException {
+    public void init(ServletConfig config) throws ServletException {
         super.init(config);
-         SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
-          config.getServletContext());
-      }
-     
-     
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+                config.getServletContext());
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            invoiceUtil.prepareReport(request, response,Integer.parseInt(request.getSession().getAttribute("invoiceId").toString()));
-        } catch (JRException ex) {
+            invoiceUtil.prepareReport(request, response, Integer.parseInt(request.getSession().getAttribute("invoiceId").toString()));
+        } catch (Exception ex) {
             Logger.getLogger(InvoiceJasperServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

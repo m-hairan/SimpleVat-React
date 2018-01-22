@@ -6,7 +6,7 @@
                 xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
                 template="/WEB-INF/templates/template.xhtml">
     <ui:define name="content">
-       
+
         <h:form id="TransactionReport"
                 enctype="multipart/form-data">
             <div class="card card-w-title">
@@ -19,12 +19,11 @@
                             <div class="card card-w-title">
                                 <p:fieldset legend="View Report"
                                             toggleable="false" toggleSpeed="500">
-                                    <p:panelGrid columns="6"
-                                                 columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+                                    <p:panelGrid columns="3"
+                                                 columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
                                                  layout="grid" styleClass="ui-panelgrid-blank form-group"
                                                  style="border:0px none; background-color:transparent;">
 
-                                        <p:outputLabel for="year"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete
                                                 id="year"
@@ -40,13 +39,13 @@
                                                 itemLabel="#{financialPeriod.name}"
                                                 required="true"
                                                 requiredMessage="Please select financial period">
-                                                <p:ajax update="Datestart DatestartPanel" event="itemSelect"/>
-                                                <p:ajax update="Datelast DatelastPanel" event="itemSelect"/>
+                                                <p:ajax update=" DatestartPanel" event="itemSelect"/>
+                                                <p:ajax update=" DatelastPanel" event="itemSelect"/>
                                             </p:autoComplete>
-                                            <label>#{messages.FinancialPeriod}</label>
+                                            <p:outputLabel for="year" value="#{messages.FinancialPeriod}"/>
                                             <p:message for="year" />
                                         </h:panelGroup>
-                                        <p:outputLabel for="purchaseTransactionType"/>
+
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete
                                                 id="purchaseTransactionType"
@@ -62,14 +61,12 @@
                                                 itemLabel="#{transactionType.transactionTypeName}" 
                                                 effect="fold"
                                                 >
-                                                <p:ajax update="transactionCategoryLabel transactionCategoryAuto" event="itemSelect" />
-                                                <p:ajax update="transactionCategoryLabel transactionCategoryAuto" event="change" />
+                                                <p:ajax update=" transactionCategoryAuto" event="itemSelect" />
+                                                <p:ajax update=" transactionCategoryAuto" event="change" />
                                             </p:autoComplete>
-                                            <label>#{messages.type}</label>
+                                            <p:outputLabel for="purchaseTransactionType" value="#{messages.type}"/>
                                         </h:panelGroup>
-                                        <h:panelGroup id="transactionCategoryLabel">
-                                            <p:outputLabel for="transactionCategory" rendered="#{transactionReport.transactionType != null}"/>
-                                        </h:panelGroup>
+
                                         <h:panelGroup id="transactionCategoryAuto">
                                             <h:panelGroup styleClass="md-inputfield" rendered="#{transactionReport.transactionType != null}">
                                                 <p:autoComplete
@@ -87,28 +84,22 @@
                                                     itemLabel="#{transactionCategory.transactionCategoryName}"
                                                     >
                                                 </p:autoComplete>
-                                                <label>#{messages.category}</label>
+                                                <p:outputLabel for="transactionCategory" value="#{messages.category}"/>
                                             </h:panelGroup>
-                                        </h:panelGroup>
-                                        <h:panelGroup  id="Datestart">
-                                            <p:outputLabel for="startdate" rendered="#{transactionReport.financialPeriod.id == 1}"/>
                                         </h:panelGroup>
                                         <h:panelGroup  id="DatestartPanel">
                                             <h:panelGroup styleClass="md-inputfield" rendered="#{transactionReport.financialPeriod.id == 1}">
                                                 <p:calendar
                                                     id="startdate"
-                                                   required="true"
+                                                    required="true"
                                                     requiredMessage="#{messages.EnterStartDate}"
                                                     value="#{transactionReport.financialPeriod.startDate}" 
                                                     />
-                                                <label>#{messages.Start_Date}</label>
+                                                <p:outputLabel for="startdate" value="#{messages.Start_Date}"/>
                                                 <p:message for="startdate" />
                                             </h:panelGroup>
                                         </h:panelGroup>
 
-                                        <h:panelGroup id="Datelast">
-                                            <p:outputLabel for="enddate" rendered="#{transactionReport.financialPeriod.id == 1}"/>
-                                        </h:panelGroup>
                                         <h:panelGroup id="DatelastPanel">
                                             <h:panelGroup  styleClass="md-inputfield" rendered="#{transactionReport.financialPeriod.id == 1}">
                                                 <p:calendar
@@ -117,14 +108,14 @@
                                                     requiredMessage="#{messages.EnterEndDate}"
                                                     value="#{transactionReport.financialPeriod.lastDate}" 
                                                     />
-                                                <label>#{messages.End_Date}</label>
+                                                <p:outputLabel for="enddate" value="#{messages.End_Date}"/>
                                                 <p:message for="enddate" />
                                             </h:panelGroup>
                                         </h:panelGroup>
 
                                         <p:outputLabel/>
                                         <p:outputLabel/>
-                                        
+
                                         <p:outputLabel/>
                                         <f:facet name="footer">
                                             <p:commandButton value="#{messages.View}" update="@form"

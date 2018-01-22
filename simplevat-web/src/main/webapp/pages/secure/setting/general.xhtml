@@ -30,15 +30,14 @@
                     <div class="ui-g">
                         <div class="ui-g-12">
                             <p:fieldset legend="#{messages.GeneralDetail}" toggleable="false">
-                                <p:panelGrid columns="6" 
-                                             columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                                <p:panelGrid columns="3" 
+                                             columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" 
                                              layout="grid" 
                                              styleClass="ui-panelgrid-blank form-group"
                                              style="border:0px none; background-color:transparent;">
-                                    <p:outputLabel for="invoicingReferencePattern" />
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="invoicingReferencePattern" value="#{generalController.configurationInvoiceRefPtrn.value}"/>
-                                        <label>#{messages.InvoicingReferencePattern}</label>
+                                        <p:outputLabel for="invoicingReferencePattern" value="#{messages.InvoicingReferencePattern}"/>
                                         <p:message for="invoicingReferencePattern" />
                                     </h:panelGroup>
 
@@ -51,42 +50,36 @@
                                 </p:panelGrid>
                             </p:fieldset>
                             <p:fieldset legend="#{messages.MailConfigurationDetail}" toggleable="false">
-                                <p:panelGrid columns="6" 
-                                             columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                                <p:panelGrid columns="3" 
+                                             columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" 
                                              layout="grid" 
                                              styleClass="ui-panelgrid-blank form-group"
                                              style="border:0px none; background-color:transparent;">
-                                    <p:outputLabel for="mailHost" />
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="mailHost" value="#{generalController.configurationMailHost.value}"/>
-                                        <label>#{messages.MailHost}</label>
+                                        <p:outputLabel for="mailHost" value="#{messages.MailHost}" />
                                         <p:message for="mailHost" />
                                     </h:panelGroup>
-
-                                    <p:outputLabel for="mailPort" />
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputNumber id="mailPort" value="#{generalController.configurationMailPort.value}" decimalPlaces="0"/>
-                                        <label>#{messages.MailPort}</label>
+                                        <p:outputLabel for="mailPort" value="#{messages.MailPort}" />
                                         <p:message for="mailPort" />
                                     </h:panelGroup>
 
-                                    <p:outputLabel for="mailUserName" />
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="mailUserName" value="#{generalController.configurationMailUserName.value}"/>
-                                        <label>#{messages.MailUsername}</label>
+                                        <p:outputLabel for="mailUserName" value="#{messages.MailUsername}"/>
                                         <p:message for="mailUserName" />
                                     </h:panelGroup>
 
-                                    <p:outputLabel for="mailPassword" />
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="mailPassword" value="#{generalController.configurationMailPassword.value}"/>
-                                        <label>#{messages.MailPassword}</label>
+                                        <p:outputLabel for="mailPassword" value="#{messages.MailPassword}"/>
                                         <p:message for="mailPassword" />
                                     </h:panelGroup>
 
-                                    <p:outputLabel for="mailSmtpAuth" />
                                     <h:panelGroup styleClass="md-inputwrapper-focus">
-                                        <label>#{messages.MailSmtpAuth}</label>
+                                        <p:outputLabel for="mailSmtpAuth" value="#{messages.MailSmtpAuth}"/>
                                         <p:selectOneRadio id="mailSmtpAuth" value="#{generalController.configurationMailSmtpAuth.value}">
                                             <f:selectItem itemLabel="True" itemValue="true" />
                                             <f:selectItem itemLabel="False" itemValue="false" />
@@ -94,9 +87,8 @@
                                         <p:message for="mailSmtpAuth" />
                                     </h:panelGroup>
 
-                                    <p:outputLabel for="mailSmtpStartTlsEnable" />
                                     <h:panelGroup styleClass="md-inputwrapper-focus">
-                                        <label>#{messages.MailSmtpStarttlsEnable}</label>
+                                        <p:outputLabel for="mailSmtpStartTlsEnable" value="#{messages.MailSmtpStarttlsEnable}"/>
                                         <p:selectOneRadio id="mailSmtpStartTlsEnable" value="#{generalController.configurationMailSmtpStartTlsEnable.value}">
                                             <f:selectItem itemLabel="True" itemValue="true" />
                                             <f:selectItem itemLabel="False" itemValue="false" />

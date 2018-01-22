@@ -33,11 +33,10 @@
 
                                 <p:fieldset legend="Purchase Details" toggleable="false"
                                             toggleSpeed="500">
-                                    <p:panelGrid columns="6"
-                                                 columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+                                    <p:panelGrid columns="3"
+                                                 columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
                                                  layout="grid" styleClass="ui-panelgrid-blank form-group"
                                                  style="border:0px none; background-color:transparent;">
-                                        <p:outputLabel for="purchaseClaimantId"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete
                                                 id="purchaseClaimantId"
@@ -55,10 +54,10 @@
                                                 required="true"
                                                 requiredMessage="Please select Claimant">
                                             </p:autoComplete>
-                                            <label>#{messages.claimant}</label>
+                                            <p:outputLabel for="purchaseClaimantId" value="#{messages.claimant}"/>
                                             <p:message for="purchaseClaimantId" />
                                         </h:panelGroup>
-                                        <p:outputLabel for="purchaseTransactionType" rendered="false"/>
+
                                         <h:panelGroup styleClass="md-inputfield" rendered="false">
                                             <p:autoComplete
                                                 id="purchaseTransactionType"
@@ -77,10 +76,9 @@
                                                 <p:ajax event="itemSelect"
                                                         update="purchaseTransactionCategory"  />
                                             </p:autoComplete>
-                                            <label>#{messages.type}</label>
+                                            <p:outputLabel for="purchaseTransactionType" value="#{messages.type}" rendered="false"/>
                                             <p:message for="purchaseTransactionType" />
                                         </h:panelGroup>
-                                        <p:outputLabel for="purchaseTransactionCategory"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete
                                                 id="purchaseTransactionCategory"
@@ -96,9 +94,9 @@
                                                 itemLabel="#{transactionCategory.transactionCategoryName}"
                                                 >
                                             </p:autoComplete>
-                                            <label>#{messages.category}</label>
+                                            <p:outputLabel for="purchaseTransactionCategory" value="#{messages.category}"/>
                                         </h:panelGroup>
-                                        <p:outputLabel for="purchaseDate"/>
+
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:calendar
                                                 id="purchaseDate"
@@ -106,10 +104,10 @@
 
                                                 required="true"
                                                 requiredMessage="Please select purchase date"/>
-                                            <label>#{messages.purchase_date}</label>
+                                            <p:outputLabel for="purchaseDate" value="#{messages.purchase_date}"/>
                                             <p:message for="purchaseDate" />
                                         </h:panelGroup>
-                                        <p:outputLabel for="purchaseCurrency" />
+
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete id="purchaseCurrency" 
                                                             dropdown="true"
@@ -126,10 +124,10 @@
                                                             requiredMessage="Please select currency">
                                                 <p:ajax event="itemSelect" update="purchaseItemTable exchangeCurrency" />
                                             </p:autoComplete>
-                                            <label>#{messages.currency}</label>
+                                            <p:outputLabel for="purchaseCurrency" value="#{messages.currency}"/>
                                             <p:message for="purchaseCurrency" />
                                         </h:panelGroup>
-                                        <p:outputLabel for="purchaseProject"/>
+
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete
                                                 id="purchaseProject"
@@ -145,9 +143,9 @@
                                                 itemLabel="#{project.projectName}"
                                                 >
                                             </p:autoComplete>
-                                            <label>#{messages.project}</label>
+                                            <p:outputLabel for="purchaseProject" value="#{messages.project}"/>
                                         </h:panelGroup>
-                                        <p:outputLabel for="purchaseDueOn" />
+
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText 
                                                 value="#{purchaseController.selectedPurchaseModel.purchaseDueOn}"
@@ -156,10 +154,10 @@
                                                 converterMessage="Please enter numbers only." 
                                                 id="purchaseDueOn" >
                                             </p:inputText>
-                                            <label>#{messages.purchase_due_on}</label>
+                                            <p:outputLabel for="purchaseDueOn" value="#{messages.purchase_due_on}"/>
                                             <p:message for="purchaseDueOn" />
                                         </h:panelGroup>
-                                        <p:outputLabel for="conatcts"/>
+
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete id="conatcts" 
                                                             converter="#{contactConverter}"
@@ -179,17 +177,17 @@
                                                         listener="#{purchaseController.updateCurrency}" 
                                                         update="purchaseCurrency purchaseItemTable exchangeCurrency" />
                                             </p:autoComplete>
-                                            <label>#{messages.contact}</label>
+                                            <p:outputLabel for="conatcts" value="#{messages.contact}"/>
                                             <p:message for="conatcts" />
                                         </h:panelGroup>
-                                        <p:outputLabel />
+
                                         <p:outputLabel value="OR  " id="contactpopup">
                                             <p:commandLink onsuccess="PF('add_contact_popup').show();" 
                                                            actionListener="#{purchaseController.initCreateContact()}"
                                                            style="color: #009688"
                                                            value="Add New Contact" />
                                         </p:outputLabel>
-                                        <p:outputLabel for="purchaseDescription" />
+
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputTextarea
                                                 id="purchaseDescription"
@@ -198,7 +196,7 @@
                                                 counterTemplate="{0} characters remaining."
                                                 autoResize="false" />
                                             <h:outputText id="counterValue" />
-                                            <label>#{messages.description}</label>
+                                            <p:outputLabel for="purchaseDescription" value="#{messages.description}"/>
                                         </h:panelGroup>
                                     </p:panelGrid>
                                 </p:fieldset>

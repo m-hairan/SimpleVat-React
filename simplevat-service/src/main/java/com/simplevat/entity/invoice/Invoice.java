@@ -112,6 +112,10 @@ public class Invoice implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CONTACT_ID")
     private Contact invoiceContact;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SHIPPING_CONTACT")
+    private Contact shippingContact;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PROJECT_ID")

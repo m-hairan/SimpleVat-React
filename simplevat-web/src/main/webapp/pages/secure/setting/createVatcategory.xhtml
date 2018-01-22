@@ -27,26 +27,25 @@
                             <div class="card card-w-title">
                                 <p:fieldset legend="Vat Category Details"
                                             toggleable="false" toggleSpeed="500">
-                                    <p:panelGrid columns="4"
-                                                 columnClasses="ui-grid-col-0,ui-grid-col-5,ui-grid-col-0,ui-grid-col-5"
+                                    <p:panelGrid columns="3"
+                                                 columnClasses="ui-grid-col-5,ui-grid-col-5"
                                                  layout="grid" styleClass="ui-panelgrid-blank form-group"
                                                  style="border:0px none; background-color:transparent;">
 
-                                        <p:outputLabel for="vatName"/>
+
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText id="vatName" required="true" requiredMessage="please enter Vat Name."
                                                          value="#{vatController.category.name}" />
-                                            <label>#{messages.vatCategoryName}</label>
+                                            <p:outputLabel for="vatName" value="#{messages.vatCategoryName}"/>
                                             <p:message for="vatName" />
                                         </h:panelGroup>
 
-                                        <p:outputLabel for="vatPer"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputNumber id="vatPer" symbol="%" symbolPosition="s" validatorMessage="VAT Percentage should be in between 0% to 100%." required="true" requiredMessage="please enter Vat Percentage."
                                                            value="#{vatController.category.vat}" >
                                                 <f:validateDoubleRange maximum="100"/>
                                             </p:inputNumber>
-                                            <label>#{messages.vatCategoryPercentage}</label>
+                                            <p:outputLabel for="vatPer" value="#{messages.vatCategoryPercentage}"/>
                                             <p:message for="vatPer" />
                                         </h:panelGroup>
                                         <h:panelGroup />

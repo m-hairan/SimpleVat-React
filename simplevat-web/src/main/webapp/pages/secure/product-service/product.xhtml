@@ -25,26 +25,23 @@
                             <div class="card card-w-title">
                                 <p:fieldset legend="Product And Service Details"
                                             toggleable="false" toggleSpeed="500">
-                                    <p:panelGrid columns="6"
-                                                 columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+                                    <p:panelGrid columns="3"
+                                                 columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
                                                  layout="grid" styleClass="ui-panelgrid-blank form-group"
                                                  style="border:0px none; background-color:transparent;">
 
-                                        <p:outputLabel for="name"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText id="name"  required="true" value="#{productController.productModel.productName}" requiredMessage="please enter name."/>
-                                            <label>#{messages.name}</label>
+                                            <p:outputLabel for="name" value="#{messages.name}"/>
                                             <p:message for="name" />
                                         </h:panelGroup>
 
-                                        <p:outputLabel for="purchase_code"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText id="purchase_code" value="#{productController.productModel.productCode}"/>
-                                            <label>#{messages.product_code}</label>
+                                            <p:outputLabel for="purchase_code" value="#{messages.product_code}"/>
                                             <p:message for="purchase_code" />
                                         </h:panelGroup>
 
-                                        <p:outputLabel for="vat"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete id="vat" 
                                                             converter="#{vatCategoryConverter}"
@@ -59,10 +56,10 @@
                                                             itemLabel="#{vat.name}"
                                                             >
                                             </p:autoComplete>
-                                            <label>#{messages.vat}</label>
+                                            <p:outputLabel for="vat" value="#{messages.vat}"/>
                                             <p:message for="vat" />
                                         </h:panelGroup>
-                                        <p:outputLabel for="warehouse"/>
+
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete id="warehouse" 
                                                             converter="#{productWarehouseConverter}"
@@ -77,15 +74,16 @@
                                                             itemLabel="#{productWarehouse.warehouseName}"
                                                             >
                                             </p:autoComplete>
-                                            <label>#{messages.Product_warehouse}</label>
+                                            <p:outputLabel for="warehouse" value="#{messages.Product_warehouse}"/>
                                             <p:message for="warehouse" />
                                         </h:panelGroup>
-                                        <p:outputLabel value="OR  "/>
+                                        <p:outputLabel value="OR  ">
                                         <p:commandLink onsuccess="PF('add_new_warehouse').show();" 
                                                        style="color: #009688" 
                                                        value="Add New Warehouse" />
-                                                       
-                                        <p:outputLabel for="produstList"/>
+                                        </p:outputLabel>
+
+
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete id="produstList" 
                                                             converter="#{productConverter}"
@@ -100,12 +98,10 @@
                                                             itemLabel="#{parentProduct.productName}"
                                                             >
                                             </p:autoComplete>
-                                            <label>#{messages.Parent}</label>
+                                            <p:outputLabel for="produstList" value="#{messages.Parent}"/>
                                             <p:message for="produstList" />
                                         </h:panelGroup>
 
-
-                                        <p:outputLabel for="productDescription" />
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputTextarea
                                                 id="productDescription"
@@ -114,7 +110,7 @@
                                                 counterTemplate="{0} characters remaining."
                                                 autoResize="false" />
                                             <h:outputText id="counterValue" />
-                                            <label>#{messages.description}</label>
+                                            <p:outputLabel for="productDescription" value="#{messages.description}" />
                                         </h:panelGroup>
 
                                     </p:panelGrid>

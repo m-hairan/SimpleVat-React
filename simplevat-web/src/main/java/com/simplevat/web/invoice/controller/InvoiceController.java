@@ -36,11 +36,13 @@ import java.util.List;
 
 import com.simplevat.entity.Company;
 import com.simplevat.entity.Configuration;
+import com.simplevat.entity.Country;
 import com.simplevat.entity.CurrencyConversion;
 import com.simplevat.entity.Product;
 import com.simplevat.entity.VatCategory;
 import com.simplevat.service.CompanyService;
 import com.simplevat.service.ConfigurationService;
+import com.simplevat.service.CountryService;
 import com.simplevat.service.ProductService;
 import com.simplevat.service.UserServiceNew;
 import com.simplevat.service.VatCategoryService;
@@ -59,6 +61,8 @@ import java.util.Calendar;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Hiren
@@ -68,9 +72,13 @@ import org.primefaces.context.RequestContext;
 public class InvoiceController extends BaseController implements Serializable {
 
     private static final long serialVersionUID = 6299117288316809011L;
+    private final static Logger LOGGER = LoggerFactory.getLogger(InvoiceController.class);
 
     @Autowired
     private ContactService contactService;
+
+    @Autowired
+    private CountryService countryService;
 
     @Autowired
     private ConfigurationService configurationService;
@@ -146,7 +154,14 @@ public class InvoiceController extends BaseController implements Serializable {
 
     @Getter
     @Setter
+    private boolean copyInvoiceAddress = false;
+
+    @Getter
+    @Setter
     InvoiceItemModel invoiceItemModel;
+
+    @Getter
+    private List<Country> countries = new ArrayList<>();
 
     @Getter
     @Setter
@@ -192,6 +207,7 @@ public class InvoiceController extends BaseController implements Serializable {
             selectedInvoiceModel.setInvoiceDueOn(30);
             selectedInvoiceModel.setInvoiceLineItems(new ArrayList());
             selectedInvoiceModel.setInvoiceReferenceNumber("1");
+            selectedInvoiceModel.setInvoiceDueDate(getDueDate(selectedInvoiceModel));
             configurationList = configurationService.getConfigurationList();
             if (configurationList != null) {
                 configuration = configurationList.stream().filter(conf -> conf.getName().equals(ConfigurationConstants.INVOICING_REFERENCE_PATTERN)).findFirst().get();
@@ -204,16 +220,25 @@ public class InvoiceController extends BaseController implements Serializable {
                 configuration.setName(ConfigurationConstants.INVOICING_REFERENCE_PATTERN);
             }
         }
+        countries = countryService.getCountries();
         populateVatCategory();
         calculateTotal();
     }
 
     public void updateContact() {
         setDefaultCurrency();
-        if (selectedInvoiceModel.getProject() != null && selectedInvoiceModel.getProject().getContact().getContactType() == ContactTypeConstant.CUSTOMER) {
+        if (selectedInvoiceModel.getProject() != null) {
             selectedInvoiceModel.setInvoiceContact(selectedInvoiceModel.getProject().getContact());
             selectedInvoiceModel.setCurrencyCode(selectedInvoiceModel.getProject().getContact().getCurrency());
             defaultContactByproject = true;
+        }
+    }
+
+    public void sameAsInvoicingAddress() {
+        if (copyInvoiceAddress) {
+            selectedInvoiceModel.setShippingContact(selectedInvoiceModel.getInvoiceContact());
+        } else {
+            selectedInvoiceModel.setShippingContact(null);
         }
     }
 
@@ -338,6 +363,11 @@ public class InvoiceController extends BaseController implements Serializable {
     }
 
     public List<Contact> contacts(final String searchQuery) {
+        if (selectedInvoiceModel.getProject() != null) {
+            List<Contact> contactList = new ArrayList<>();
+            contactList.add(selectedInvoiceModel.getProject().getContact());
+            return contactList;
+        }
         return contactService.getContacts(searchQuery, ContactTypeConstant.CUSTOMER);
     }
 
@@ -428,6 +458,26 @@ public class InvoiceController extends BaseController implements Serializable {
         return types;
     }
 
+    public List<Country> completeCountry(String countryStr) {
+        List<Country> countrySuggestion = new ArrayList<>();
+        Iterator<Country> countryIterator = this.countries.iterator();
+        LOGGER.debug(" Size :" + countries.size());
+        while (countryIterator.hasNext()) {
+            Country country = countryIterator.next();
+            if (country.getCountryName() != null
+                    && !country.getCountryName().isEmpty()
+                    && country.getCountryName().toUpperCase().contains(countryStr.toUpperCase())) {
+                countrySuggestion.add(country);
+            } else if (country.getIsoAlpha3Code() != null
+                    && !country.getIsoAlpha3Code().isEmpty()
+                    && country.getIsoAlpha3Code().toUpperCase().contains(countryStr.toUpperCase())) {
+                countrySuggestion.add(country);
+            }
+        }
+        LOGGER.debug(" Size :" + countrySuggestion.size());
+        return countrySuggestion;
+    }
+
     public String saveInvoice() throws IOException {
         if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
             return "";
@@ -467,7 +517,6 @@ public class InvoiceController extends BaseController implements Serializable {
     }
 
     private Integer save() {
-        selectedInvoiceModel.setInvoiceDueDate(getDueDate(selectedInvoiceModel));
         selectedInvoiceModel.setInvoiceAmount(total);
         selectedInvoice = invoiceModelHelper.getInvoiceEntity(selectedInvoiceModel);
 
@@ -610,6 +659,10 @@ public class InvoiceController extends BaseController implements Serializable {
                 vatCategorySelectItemList.add(item);
             }
         }
+    }
+
+    public void dueDateListener() {
+        selectedInvoiceModel.setInvoiceDueDate(getDueDate(selectedInvoiceModel));
     }
 
     private Date getDueDate(InvoiceModel invoiceModel) {

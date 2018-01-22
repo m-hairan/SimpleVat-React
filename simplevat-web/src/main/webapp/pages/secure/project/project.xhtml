@@ -21,24 +21,23 @@
                                 <h1>Edit Project</h1>
                             </ui:fragment>
                             <p:fieldset legend="Project Details" toggleable="false">
-                                <p:panelGrid columns="6"
-                                             columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+                                <p:panelGrid columns="3"
+                                             columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
                                              layout="grid"
                                              styleClass="ui-panelgrid-blank form-group"
                                              style="border:0px none; background-color:transparent;">
 
-                                    <p:outputLabel for="projectName"/>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="projectName"
                                                      maxlength="12"
                                                      value="#{projectController.selectedProject.projectName}"
                                                      required="true"
                                                      requiredMessage="Please enter Project Name"/>
-                                        <label>Project Name</label>
+                                        <p:outputLabel for="projectName" value="Project Name"/>
                                         <p:message for="projectName"/>
                                     </h:panelGroup>
 
-                                    <p:outputLabel for="conatcts"/>
+
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="conatcts"
                                                         converter="#{contactConverter}"
@@ -54,7 +53,7 @@
                                                         itemValue="#{contact}"
                                                         itemLabel="#{contact.firstName} #{contact.lastName}">
                                         </p:autoComplete>
-                                        <label>Contact</label>
+                                        <p:outputLabel for="conatcts" value="Contact"/>
                                         <p:message for="conatcts"/>
                                     </h:panelGroup>
 
@@ -70,30 +69,29 @@
                             </p:fieldset>
 
                             <p:fieldset legend="Project Details" toggleSpeed="300">
-                                <p:panelGrid columns="6"
-                                             columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+                                <p:panelGrid columns="3"
+                                             columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
                                              layout="grid"
                                              styleClass="ui-panelgrid-blank form-group"
                                              style="border:0px none; background-color:transparent;">
 
-                                    <p:outputLabel for="contractPoNumber"/>
+
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="contractPoNumber"
                                                      value="#{projectController.selectedProject.contractPoNumber}">
                                         </p:inputText>
-                                        <label>Contract PO Number</label>
+                                        <p:outputLabel for="contractPoNumber" value="Contract PO Number"/>
                                     </h:panelGroup>
 
-                                    <p:outputLabel for="vatRegistrationNumber"/>
+
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="vatRegistrationNumber"
                                                      value="#{projectController.selectedProject.vatRegistrationNumber}">
                                         </p:inputText>
-                                        <label>VAT Registration number</label>
+                                        <p:outputLabel for="vatRegistrationNumber" value="VAT Registration number"/>
                                     </h:panelGroup>
 
 
-                                    <p:outputLabel for="currency"/>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="currency"
                                                         dropdown="true"
@@ -107,27 +105,24 @@
                                                         itemLabel="#{currency.currencyDescription} #{currency.currencySymbol}"
                                                         required="true"
                                                         requiredMessage="Please select currency"/>
-                                        <label>Currency</label>
+                                        <p:outputLabel for="currency" value="Currency"/>
                                         <p:message for="currency"/>
                                     </h:panelGroup>
 
-                                    <p:outputLabel for="projectExpenseBudget"/>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="projectExpenseBudget"
                                                      value="#{projectController.selectedProject.projectExpenseBudget}"
-                                        />
-                                        <label>Project Budget </label>
+                                                     />
+                                        <p:outputLabel for="projectExpenseBudget" value="Project Budget"/>
                                     </h:panelGroup>
-                                    
-                                    <p:outputLabel for="projectRevenueBudget"/>
+
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="projectRevenueBudget"
                                                      value="#{projectController.selectedProject.projectRevenueBudget}"
-                                        />
-                                        <label>Project Budget </label>
+                                                     />
+                                        <p:outputLabel for="projectRevenueBudget" value="Project Budget"/>
                                     </h:panelGroup>
 
-                                    <p:outputLabel for="language"/>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="language" dropdown="true" forceSelection="true"
                                                         effect="fold" converter="#{languageConverter}"
@@ -139,7 +134,7 @@
                                                         value="#{projectController.selectedProject.invoiceLanguageCode}"
                                                         var="language" itemValue="#{language.languageCode}"
                                                         itemLabel="#{language.languageDescription}"/>
-                                        <label>Invoice Language</label>
+                                        <p:outputLabel for="language" value="Invoice Language"/>
                                         <p:message for="language"/>
                                     </h:panelGroup>
                                     <p:outputLabel/>

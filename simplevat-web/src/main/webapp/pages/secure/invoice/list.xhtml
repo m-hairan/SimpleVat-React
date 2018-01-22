@@ -70,8 +70,6 @@
                               sortBy="#{invoice.invoiceLineItems.size()}" styleClass="amount">
                         <h:outputText value="#{invoice.invoiceLineItems.size()}" />
                     </p:column>
-                    <c:set value="#{invoiceListController.totalAmount(invoice)}"
-                           var="total" />
                     <p:column headerText="#{messages.total_cost}" filterMatchMode="contains" filterBy="#{total}"
                               sortBy="#{invoice.invoiceAmount}" styleClass="amount">
                         <h:outputText value="#{invoice.currencyCode.currencySymbol} " />

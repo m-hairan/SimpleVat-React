@@ -35,12 +35,11 @@
                                 </ui:fragment>
                                 <p:fieldset legend="Expense Details" toggleable="false"
                                             toggleSpeed="500">
-                                    <p:panelGrid columns="6"
-                                                 columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+                                    <p:panelGrid columns="3"
+                                                 columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
                                                  layout="grid" styleClass="ui-panelgrid-blank form-group"
                                                  style="border:0px none; background-color:transparent;">
 
-                                        <p:outputLabel for="expenseClaimantId"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete
                                                 id="expenseClaimantId"
@@ -57,11 +56,10 @@
                                                 scrollHeight="250"
                                                 requiredMessage="Please select Claimant">
                                             </p:autoComplete>
-                                            <label>#{messages.claimant}</label>
+                                            <p:outputLabel for="expenseClaimantId" value="#{messages.claimant}"/>
                                             <p:message for="expenseClaimantId" />
                                         </h:panelGroup>
 
-                                        <p:outputLabel for="expenseTransactionCategory"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete
                                                 id="expenseTransactionCategory"
@@ -80,21 +78,20 @@
                                                 requiredMessage="Please Select Transaction Category"
                                                 >
                                             </p:autoComplete>
-                                            <label>#{messages.category}</label>
+                                            <p:outputLabel for="expenseTransactionCategory" value="#{messages.category}"/>
                                             <p:message for="expenseTransactionCategory"/>
                                         </h:panelGroup>
 
-                                        <p:outputLabel for="expenseDate"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:calendar
                                                 id="expenseDate"
                                                 value="#{expenseController.selectedExpenseModel.expenseDate}" 
                                                 required="true"
                                                 requiredMessage="Please select expense date"/>
-                                            <label>#{messages.expense_date}</label>
+                                            <p:outputLabel for="expenseDate" value="#{messages.expense_date}"/>
                                             <p:message for="expenseDate" />
                                         </h:panelGroup>
-                                        <p:outputLabel for="expenseCurrency" />
+
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete id="expenseCurrency" 
                                                             dropdown="true"
@@ -112,10 +109,10 @@
                                                 <p:ajax event="itemSelect" 
                                                         update="expenseItemTable,exchangeCurrency" />
                                             </p:autoComplete>
-                                            <label>#{messages.currency}</label>
+                                            <p:outputLabel for="expenseCurrency" value="#{messages.currency}"/>
                                             <p:message for="expenseCurrency" />
                                         </h:panelGroup>
-                                        <p:outputLabel for="conatcts"/>
+
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete id="conatcts" 
                                                             converter="#{contactConverter}"
@@ -136,17 +133,17 @@
                                                         listener="#{expenseController.updateCurrency}" 
                                                         update="expenseCurrency expenseItemTable exchangeCurrency" />
                                             </p:autoComplete>
-                                            <label>#{messages.contact}</label>
+                                            <p:outputLabel for="conatcts" value="#{messages.contact}"/>
                                             <p:message for="conatcts" />
                                         </h:panelGroup>
-                                        <p:outputLabel />
+
                                         <p:outputLabel value="OR  " id="contactpopup">
                                             <p:commandLink onsuccess="PF('add_contact_popup').show();" 
                                                            actionListener="#{expenseController.initCreateContact()}"
                                                            style="color: #009688" 
                                                            value="Add New Contact" />
                                         </p:outputLabel>
-                                        <p:outputLabel for="expenseProject"/>
+
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete
                                                 id="expenseProject"
@@ -162,9 +159,9 @@
                                                 itemLabel="#{project.projectName}"
                                                 >
                                             </p:autoComplete>
-                                            <label>#{messages.project}</label>
+                                            <p:outputLabel for="expenseProject" value="#{messages.project}"/>
                                         </h:panelGroup>
-                                        <p:outputLabel for="expenseDescription" />
+
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputTextarea
                                                 id="expenseDescription"
@@ -173,7 +170,7 @@
                                                 counterTemplate="{0} characters remaining."
                                                 autoResize="false" />
                                             <h:outputText id="counterValue" />
-                                            <label>#{messages.description}</label>
+                                            <p:outputLabel for="expenseDescription" value="#{messages.description}"/>
                                         </h:panelGroup>
                                         <h:panelGroup styleClass="md-inputfield"/>
                                         <h:panelGroup styleClass="md-inputfield"/>
