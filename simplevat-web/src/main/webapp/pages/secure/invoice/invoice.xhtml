@@ -714,7 +714,18 @@
                                                 </f:facet>
                                             </p:column>  
                                         </p:row>  
-
+                                        <p:row >  
+                                            <p:column colspan="6" footerText="Total VAT" styleClass="amount"/>  
+                                            <p:column styleClass="amount">
+                                                <f:facet name="footer">
+                                                    <p:outputPanel autoUpdate="true">
+                                                        <h:outputText id="totalVat" value="#{invoiceController.totalVat}" >
+                                                            <f:convertNumber type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} " />
+                                                        </h:outputText>
+                                                    </p:outputPanel>
+                                                </f:facet>
+                                            </p:column>  
+                                        </p:row>  
                                         <p:row >  
                                             <p:column colspan="6" footerText="Discount Type" styleClass="amount"/>  
                                             <p:column styleClass="amount">

@@ -8,10 +8,16 @@
     <ui:define name="content">
         <style>
             .mailDialog{
-                right: 0px !important;
-                bottom: 0px !important;
+                right: 28% !important;
+                bottom: 18% !important;
                 top: auto !important;
                 left: auto !important;
+            }
+            .ui-chips{
+                width: 100% !important;
+            }
+            .ui-chips-container{
+                width: auto !important;
             }
         </style>
         <h:form id="invoiceView">
@@ -51,7 +57,7 @@
                                     height: 250px !important;
                                 }
                             </style>
-                            <p:dialog widgetVar="invoiceMailWidget" modal="true" resizable="false" width="26.5%" height="50%"
+                            <p:dialog widgetVar="invoiceMailWidget" modal="true" resizable="false" width="40%" height="50%"
                                       draggable="false" styleClass="mailDialog"
                                       responsive="true" header="Send Invoice"
                                       hideEffect="scale">

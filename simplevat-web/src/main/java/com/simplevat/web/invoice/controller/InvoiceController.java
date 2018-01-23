@@ -177,6 +177,9 @@ public class InvoiceController extends BaseController implements Serializable {
     @Getter
     BigDecimal totalInvoiceCalculation = new BigDecimal(0);
 
+    @Getter
+    BigDecimal totalVat = new BigDecimal(0);
+
     public InvoiceController() {
         super(ModuleName.INVOICE_MODULE);
     }
@@ -257,14 +260,6 @@ public class InvoiceController extends BaseController implements Serializable {
         }
     }
 
-    public void deleteLineItem(InvoiceItemModel itemModel) {
-        selectedInvoiceModel.getInvoiceLineItems().remove(itemModel);
-        if (itemModel.getSubTotal() != null && discountAmount != null) {
-            total = total.subtract(itemModel.getSubTotal()).add(discountAmount);
-            updateSubTotalOnDiscountAdded();
-        }
-    }
-
     private boolean validateInvoiceLineItems() { //---------------
         boolean validated = true;
         for (InvoiceItemModel lastItem : selectedInvoiceModel.getInvoiceLineItems()) {
@@ -303,53 +298,6 @@ public class InvoiceController extends BaseController implements Serializable {
             exchangeRateString = "1 " + currency.getCurrencyIsoCode() + " = " + new BigDecimal(BigInteger.ONE).divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP) + " " + company.getCompanyCountryCode().getCurrencyCode().getCurrencyIsoCode();
         }
         return exchangeRateString;
-    }
-
-    public BigDecimal totalAmountInHomeCurrency(Currency currency) {
-        if (total != null && currencyConversion != null) {
-            if (currencyConversion != null) {
-                return total.divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP);
-            }
-        }
-        return new BigDecimal(0);
-    }
-
-    public void updateSubTotalOnDiscountAdded() {
-        if (selectedInvoiceModel.getDiscount() == null) {
-            calculateTotal();
-        }
-        calculateDiscount();
-    }
-
-    public void calculateDiscount() {
-        if (selectedInvoiceModel.getDiscount() != null && total != null) {
-            totalInvoiceCalculation = new BigDecimal(0);
-            List<InvoiceItemModel> invoiceItem = selectedInvoiceModel.getInvoiceLineItems();
-            if (invoiceItem != null) {
-                for (InvoiceItemModel invoice : invoiceItem) {
-                    if (invoice.getSubTotal() != null) {
-                        totalInvoiceCalculation = totalInvoiceCalculation.add(invoice.getSubTotal());
-                    }
-                }
-            }
-            total = totalInvoiceCalculation.subtract(getDiscountValue(totalInvoiceCalculation));
-            System.out.println("total=========3===========" + total);
-        }
-
-    }
-
-    private BigDecimal getDiscountValue(BigDecimal totalInvoiceCalculation) {
-        if (selectedInvoiceModel.getDiscountType() != null) {
-            if (selectedInvoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.ABSOLUTEDISCOUNT) {
-                System.out.println("selectedInvoiceModel.getDiscount()=========1===========" + selectedInvoiceModel.getDiscount());
-                discountAmount = selectedInvoiceModel.getDiscount();
-            } else if (selectedInvoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.PERCENTAGEDISCOUNT) {
-                System.out.println("selectedInvoiceModel.getDiscount()=========1===========" + selectedInvoiceModel.getDiscount());
-                discountAmount = totalInvoiceCalculation.multiply(selectedInvoiceModel.getDiscount().divide(new BigDecimal(100)));
-            }
-        }
-        System.out.println("total=========1===========" + discountAmount);
-        return discountAmount;
     }
 
     private boolean validateAtLeastOneItem() {
@@ -586,37 +534,90 @@ public class InvoiceController extends BaseController implements Serializable {
     }
 
     public void updateSubTotal(final InvoiceItemModel invoiceItemModel) {
-        BigDecimal vatPer = new BigDecimal(BigInteger.ZERO);
         final int quantity = invoiceItemModel.getQuatity();
         final BigDecimal unitPrice = invoiceItemModel.getUnitPrice();
-        if (invoiceItemModel.getVatId() != null) {
-            vatPer = invoiceItemModel.getVatId().getVat();
-        }
         if (null != unitPrice) {
             final BigDecimal amountWithoutTax = unitPrice.multiply(new BigDecimal(quantity));
             invoiceItemModel.setSubTotal(amountWithoutTax);
-            if (vatPer != null && vatPer.compareTo(BigDecimal.ZERO) >= 1) {
-                final BigDecimal amountWithTax = amountWithoutTax
-                        .add(amountWithoutTax.multiply(vatPer).multiply(new BigDecimal(0.01)));
-                invoiceItemModel.setSubTotal(amountWithTax);
-            }
+
         }
         calculateTotal();
     }
 
     private void calculateTotal() {
         total = new BigDecimal(0);
+        totalVat = new BigDecimal(0);
         List<InvoiceItemModel> invoiceItem = selectedInvoiceModel.getInvoiceLineItems();
         if (invoiceItem != null) {
             for (InvoiceItemModel invoice : invoiceItem) {
                 if (invoice.getSubTotal() != null) {
                     total = total.add(invoice.getSubTotal());
+                    if (invoice.getVatId() != null) {
+                        totalVat = totalVat.add((invoice.getSubTotal().multiply(invoice.getVatId().getVat())).multiply(new BigDecimal(0.01)));
+                        System.out.println("totalVat=========1===========" + totalVat);
+                    }
                 }
+                System.out.println("totalVat=========2===========" + totalVat);
             }
         }
+        System.out.println("totalVat=========3===========" + totalVat);
         if (selectedInvoiceModel.getDiscount() != null) {
             updateSubTotalOnDiscountAdded();
 
+        }
+    }
+
+    public BigDecimal totalAmountInHomeCurrency(Currency currency) {
+        if (total != null && currencyConversion != null) {
+            if (currencyConversion != null) {
+                return total.divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP);
+            }
+        }
+        return new BigDecimal(0);
+    }
+
+    public void updateSubTotalOnDiscountAdded() {
+        if (selectedInvoiceModel.getDiscount() == null) {
+            calculateTotal();
+        }
+        calculateDiscount();
+    }
+
+    public void calculateDiscount() {
+        if (selectedInvoiceModel.getDiscount() != null && total != null) {
+            totalInvoiceCalculation = new BigDecimal(0);
+            List<InvoiceItemModel> invoiceItem = selectedInvoiceModel.getInvoiceLineItems();
+            if (invoiceItem != null) {
+                for (InvoiceItemModel invoice : invoiceItem) {
+                    if (invoice.getSubTotal() != null) {
+                        totalInvoiceCalculation = totalInvoiceCalculation.add(invoice.getSubTotal());
+                    }
+                }
+            }
+            total = totalVat.add(totalInvoiceCalculation.subtract(getDiscountValue(totalInvoiceCalculation)));
+            System.out.println("total=========3===========" + total);
+        }
+    }
+
+    private BigDecimal getDiscountValue(BigDecimal totalInvoiceCalculation) {
+        if (selectedInvoiceModel.getDiscountType() != null) {
+            if (selectedInvoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.ABSOLUTEDISCOUNT) {
+                System.out.println("selectedInvoiceModel.getDiscount()=========1===========" + selectedInvoiceModel.getDiscount());
+                discountAmount = selectedInvoiceModel.getDiscount();
+            } else if (selectedInvoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.PERCENTAGEDISCOUNT) {
+                System.out.println("selectedInvoiceModel.getDiscount()=========1===========" + selectedInvoiceModel.getDiscount());
+                discountAmount = totalInvoiceCalculation.multiply(selectedInvoiceModel.getDiscount().divide(new BigDecimal(100)));
+            }
+        }
+        System.out.println("total=========1===========" + discountAmount);
+        return discountAmount;
+    }
+
+    public void deleteLineItem(InvoiceItemModel itemModel) {
+        selectedInvoiceModel.getInvoiceLineItems().remove(itemModel);
+        if (itemModel.getSubTotal() != null && discountAmount != null) {
+            total = total.subtract(itemModel.getSubTotal()).add(discountAmount);
+            updateSubTotalOnDiscountAdded();
         }
     }
 

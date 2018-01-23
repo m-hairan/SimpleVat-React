@@ -9,28 +9,28 @@
 
         <p:fieldset legend="#{messages.CompanyDetail}" toggleable="false">
             <p:panelGrid columns="4" 
-                         columnClasses="ui-grid-col-0,ui-grid-col-6,ui-grid-col-0,ui-grid-col-6" 
+                         columnClasses="ui-grid-col-6,ui-grid-col-6" 
                          layout="grid" 
                          styleClass="ui-panelgrid-blank form-group"
                          style="border:0px none; background-color:transparent;">
-                <p:outputLabel for="CompanyName" />
+
 
                 <h:panelGroup>
                     <h:panelGroup styleClass="md-inputfield">
                         <p:inputText id="CompanyName" disabled="true" value="#{companyProfileController.companyModel.companyName}" />
-                        <label>#{messages.CompanyName}</label>
+                        <p:outputLabel for="CompanyName" value="#{messages.CompanyName}"/>
                         <p:message for="CompanyName" />
                     </h:panelGroup>
                     <p:spacer height="10"/>
                     <h:panelGroup styleClass="md-inputfield">
                         <p:inputText id="CompanyRegistrationNumber" value="#{companyProfileController.companyModel.companyRegistrationNumber}"/>
-                        <label>#{messages.CompanyRegistrationNumber}</label>
+                        <p:outputLabel for="CompanyRegistrationNumber" value="#{messages.CompanyRegistrationNumber}"/>
                         <p:message for="CompanyRegistrationNumber" />
                     </h:panelGroup>
                     <p:spacer height="10"/>
                     <h:panelGroup styleClass="md-inputfield">
                         <p:inputText id="VatRegistrationNumber" value="#{companyProfileController.companyModel.vatRegistrationNumber}"/>
-                        <label>#{messages.VatRegistrationNumber}</label>
+                        <p:outputLabel for="VatRegistrationNumber" value="#{messages.VatRegistrationNumber}"/>
                         <p:message for="VatRegistrationNumber" />
                     </h:panelGroup>
                     <p:spacer height="10"/>
@@ -48,12 +48,11 @@
                                         required="true"
                                         scrollHeight="250"
                                         requiredMessage="Please select company type"/>
-                        <label>#{messages.CompanyTypeCode}</label>
+                        <p:outputLabel for="CompanyTypeCode" value="#{messages.CompanyTypeCode}"/>
                         <p:message for="CompanyTypeCode" />
                     </h:panelGroup>
                 </h:panelGroup>
 
-                <p:outputLabel  />
                 <h:panelGroup styleClass="md-inputfield"  id="logo">
 
                     <div style="margin-left: 44%; margin-bottom: 15px;">
