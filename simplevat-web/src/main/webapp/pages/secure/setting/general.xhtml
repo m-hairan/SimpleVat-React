@@ -98,6 +98,40 @@
 
                                 </p:panelGrid>
                             </p:fieldset>
+
+                            <p:fieldset legend="Invoice Mail Configuration" toggleable="false">
+                                <p:panelGrid columns="2" 
+                                             columnClasses="ui-grid-col-8,ui-grid-col-4" 
+                                             layout="grid" 
+                                             styleClass="ui-panelgrid-blank form-group"
+                                             style="border:0px none; background-color:transparent;">
+                                    <p:panelGrid columns="1" 
+                                                 columnClasses="ui-grid-col-12" 
+                                                 layout="grid" 
+                                                 styleClass="ui-panelgrid-blank form-group"
+                                                 style="border:0px none; background-color:transparent;">
+
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputTextarea id="subject" value="#{generalController.configurationInvoiceMailTamplateSubject.value}"/>
+                                            <p:outputLabel for="subject" value="#{messages.mail_Subject}"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputTextarea id="message" rows="6" value="#{generalController.configurationInvoiceMailTamplateBody.value}"/>
+                                            <p:outputLabel for="message" value="#{messages.mail_message}"/>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:dataList value="#{generalController.invoiceVariableList}" var="vari" type="definition">
+                                            <f:facet name="header">
+                                                Variables
+                                            </f:facet>
+                                            <h:outputText value="#{vari}"/>
+                                        </p:dataList>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+
+                            </p:fieldset>
+
                             <br/>
                             <p:toolbar>
                                 <f:facet name="left">

@@ -15,13 +15,18 @@ import com.simplevat.integration.MailIntegration;
 import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.ContactService;
 import com.simplevat.service.invoice.InvoiceService;
+import com.simplevat.web.constant.ConfigurationConstants;
 import com.simplevat.web.utils.MailDefaultConfigurationModel;
 import com.simplevat.web.utils.MailUtility;
 import static com.simplevat.web.utils.MailUtility.verifyMailConfigurationList;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -91,9 +96,13 @@ public class InvoiceMailController implements Serializable {
         moreEmails = new ArrayList();
         bccList = new ArrayList();
         ccList = new ArrayList();
+        subject = configurationService.getConfigurationByName(ConfigurationConstants.INVOICE_MAIL_TAMPLATE_SUBJECT).getValue();
+        messageBody = configurationService.getConfigurationByName(ConfigurationConstants.INVOICE_MAIL_TAMPLATE_BODY).getValue();
         Integer invoiceId = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("invoiceId").toString());
         invoice = invoiceService.findByPK(invoiceId);
         moreEmails.add(invoice.getInvoiceContact().getEmail());
+        generateSubject();
+        generateMessageBody();
     }
 
     public void sendInvoiceMail() throws Exception {
@@ -154,6 +163,73 @@ public class InvoiceMailController implements Serializable {
         if (!invoice.getFreeze()) {
             invoice.setFreeze(Boolean.TRUE);
             invoiceService.update(invoice);
+        }
+    }
+
+    public void generateSubject() {
+        if (subject.contains("{invoiceReferenceNumber}")) {
+            subject = subject.replace("{invoiceReferenceNumber}", invoice.getInvoiceReferenceNumber());
+        }
+        if (subject.contains("{invoiceDate}")) {
+            subject = subject.replace("{invoiceDate}", new SimpleDateFormat("MM/dd/YYYY").format(Date.from(invoice.getInvoiceDate().atZone(ZoneId.systemDefault()).toInstant())));
+        }
+        if (subject.contains("{invoiceDueDate}")) {
+            subject = subject.replace("{invoiceDueDate}", new SimpleDateFormat("MM/dd/YYYY").format(Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant())));
+        }
+        if (subject.contains("{invoiceDiscount}")) {
+            subject = subject.replace("{invoiceDiscount}", invoice.getInvoiceDiscount() != null ? invoice.getInvoiceDiscount().toString() : "");
+        }
+        if (subject.contains("{contactName}")) {
+            subject = subject.replace("{contactName}", invoice.getInvoiceContact() != null ? invoice.getInvoiceContact().getFirstName() : "");
+        }
+        if (subject.contains("{paymentMode}")) {
+            subject = subject.replace("{projectName}", invoice.getInvoiceProject() != null ? invoice.getInvoiceProject().toString() : "");
+        }
+        if (subject.contains("{paymentMode}")) {
+            subject = subject.replace("{paymentMode}", invoice.getPaymentMode() != null ? invoice.getPaymentMode().toString() : "");
+        }
+        if (subject.contains("{invoiceAmount}")) {
+            subject = subject.replace("{invoiceAmount}", invoice.getInvoiceAmount() != null ? invoice.getInvoiceAmount().toString() : "");
+        }
+        if (subject.contains("{dueAmount}")) {
+            subject = subject.replace("{dueAmount}", invoice.getDueAmount() != null ? invoice.getDueAmount().toString() : "");
+        }
+        if (subject.contains("{contractPoNumber}")) {
+            subject = subject.replace("{contractPoNumber}", invoice.getContractPoNumber() != null ? invoice.getContractPoNumber().toString() : "");
+        }
+    }
+
+    public void generateMessageBody() {
+        if (messageBody.contains("{invoiceReferenceNumber}")) {
+            messageBody = messageBody.replace("{invoiceReferenceNumber}", invoice.getInvoiceReferenceNumber());
+        }
+        if (messageBody.contains("{invoiceDate}")) {
+            messageBody = messageBody.replace("{invoiceDate}", new SimpleDateFormat("MM/dd/YYYY").format(Date.from(invoice.getInvoiceDate().atZone(ZoneId.systemDefault()).toInstant())));
+        }
+        if (messageBody.contains("{invoiceDueDate}")) {
+            messageBody = messageBody.replace("{invoiceDueDate}", new SimpleDateFormat("MM/dd/YYYY").format(Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant())));
+        }
+        if (messageBody.contains("{invoiceDiscount}")) {
+            messageBody = messageBody.replace("{invoiceDiscount}", invoice.getInvoiceDiscount() != null ? invoice.getInvoiceDiscount().toString() : "");
+        }
+        if (messageBody.contains("{contactName}")) {
+            messageBody = messageBody.replace("{contactName}", invoice.getInvoiceContact() != null ? invoice.getInvoiceContact().getFirstName() : "");
+        }
+        if (messageBody.contains("{paymentMode}")) {
+            messageBody = messageBody.replace("{projectName}", invoice.getInvoiceProject() != null ? invoice.getInvoiceProject().toString() : "");
+        }
+        if (messageBody.contains("{paymentMode}")) {
+            messageBody = messageBody.replace("{paymentMode}", invoice.getPaymentMode() != null ? invoice.getPaymentMode().toString() : "");
+        }
+         if (messageBody.contains("{contractPoNumber}")) {
+            messageBody = messageBody.replace("{contractPoNumber}", invoice.getContractPoNumber() != null ? invoice.getContractPoNumber().toString() : "");
+        }
+        
+        if (messageBody.contains("{invoiceAmount}")) {
+            messageBody = messageBody.replace("{invoiceAmount}", invoice.getInvoiceAmount() != null ? invoice.getInvoiceAmount().toString() : "");
+        }
+        if (messageBody.contains("{dueAmount}")) {
+            messageBody = messageBody.replace("{dueAmount}", invoice.getDueAmount() != null ? invoice.getDueAmount().toString() : "");
         }
     }
 

@@ -7,6 +7,7 @@ package com.simplevat.web.setting.controller;
 
 import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.Configuration;
+import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.service.ConfigurationService;
 import com.simplevat.web.common.controller.BaseController;
 import com.simplevat.web.constant.ConfigurationConstants;
@@ -65,12 +66,25 @@ public class GeneralController extends BaseController implements Serializable {
     @Setter
     private Configuration configurationMailSmtpStartTlsEnable;
 
+    @Getter
+    @Setter
+    private Configuration configurationInvoiceMailTamplateSubject;
+
+    @Getter
+    @Setter
+    private Configuration configurationInvoiceMailTamplateBody;
+
+    @Getter
+    @Setter
+    private List<String> invoiceVariableList;
+
     public GeneralController() {
         super(ModuleName.SETTING_MODULE);
     }
 
     @PostConstruct
     public void init() {
+        invoiceVariables();
         configurationList = configurationService.getConfigurationList();
         if (configurationList != null && !configurationList.isEmpty()) {
             if (configurationList != null && configurationList.stream().filter(configuration -> configuration.getName().equals(ConfigurationConstants.INVOICING_REFERENCE_PATTERN)).findAny().isPresent()) {
@@ -121,6 +135,20 @@ public class GeneralController extends BaseController implements Serializable {
                 configurationMailSmtpStartTlsEnable = new Configuration();
                 configurationMailSmtpStartTlsEnable.setName(ConfigurationConstants.MAIL_SMTP_STARTTLS_ENABLE);
             }
+
+            if (configurationList != null && configurationList.stream().filter(configuration -> configuration.getName().equals(ConfigurationConstants.INVOICE_MAIL_TAMPLATE_BODY)).findAny().isPresent()) {
+                configurationInvoiceMailTamplateBody = configurationList.stream().filter(configuration -> configuration.getName().equals(ConfigurationConstants.INVOICE_MAIL_TAMPLATE_BODY)).findFirst().get();
+            } else {
+                configurationInvoiceMailTamplateBody = new Configuration();
+                configurationInvoiceMailTamplateBody.setName(ConfigurationConstants.INVOICE_MAIL_TAMPLATE_BODY);
+            }
+
+            if (configurationList != null && configurationList.stream().filter(configuration -> configuration.getName().equals(ConfigurationConstants.INVOICE_MAIL_TAMPLATE_SUBJECT)).findAny().isPresent()) {
+                configurationInvoiceMailTamplateSubject = configurationList.stream().filter(configuration -> configuration.getName().equals(ConfigurationConstants.INVOICE_MAIL_TAMPLATE_SUBJECT)).findFirst().get();
+            } else {
+                configurationInvoiceMailTamplateSubject = new Configuration();
+                configurationInvoiceMailTamplateSubject.setName(ConfigurationConstants.INVOICE_MAIL_TAMPLATE_SUBJECT);
+            }
         } else {
             configurationList = new ArrayList<>();
 
@@ -144,6 +172,12 @@ public class GeneralController extends BaseController implements Serializable {
 
             configurationMailSmtpStartTlsEnable = new Configuration();
             configurationMailSmtpStartTlsEnable.setName(ConfigurationConstants.MAIL_SMTP_STARTTLS_ENABLE);
+
+            configurationInvoiceMailTamplateBody = new Configuration();
+            configurationInvoiceMailTamplateBody.setName(ConfigurationConstants.INVOICE_MAIL_TAMPLATE_BODY);
+
+            configurationInvoiceMailTamplateSubject = new Configuration();
+            configurationInvoiceMailTamplateSubject.setName(ConfigurationConstants.INVOICE_MAIL_TAMPLATE_SUBJECT);
         }
     }
 
@@ -185,10 +219,34 @@ public class GeneralController extends BaseController implements Serializable {
                 configurationMailUserName.setLastUpdateDate(Calendar.getInstance().getTime());
                 configurationList.add(configurationMailUserName);
             }
+            if (configurationInvoiceMailTamplateBody != null) {
+                configurationInvoiceMailTamplateBody.setLastUpdateBy(FacesUtil.getLoggedInUser().getUserId());
+                configurationInvoiceMailTamplateBody.setLastUpdateDate(Calendar.getInstance().getTime());
+                configurationList.add(configurationInvoiceMailTamplateBody);
+            }
+            if (configurationInvoiceMailTamplateSubject != null) {
+                configurationInvoiceMailTamplateSubject.setLastUpdateBy(FacesUtil.getLoggedInUser().getUserId());
+                configurationInvoiceMailTamplateSubject.setLastUpdateDate(Calendar.getInstance().getTime());
+                configurationList.add(configurationInvoiceMailTamplateSubject);
+            }
             configurationService.updateConfigurationList(configurationList);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Configuration saved successfully."));
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void invoiceVariables() {
+        invoiceVariableList = new ArrayList<>();
+        invoiceVariableList.add("{invoiceReferenceNumber}");
+        invoiceVariableList.add("{invoiceDate}");
+        invoiceVariableList.add("{invoiceDueDate}");
+        invoiceVariableList.add("{invoiceDiscount}");
+        invoiceVariableList.add("{contractPoNumber}");
+        invoiceVariableList.add("{contactName}");
+        invoiceVariableList.add("{paymentMode}");
+        invoiceVariableList.add("{projectName}");
+        invoiceVariableList.add("{invoiceAmount}");
+        invoiceVariableList.add("{dueAmount}");
     }
 }
