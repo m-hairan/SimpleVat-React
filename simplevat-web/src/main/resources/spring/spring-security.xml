@@ -14,6 +14,7 @@
     <http pattern="/pages/public/forget-password.xhtml" security="none"/>
     <http pattern="/healthz/index.html" security="none"/>
     <http pattern="/pages/public/initial-setup.xhtml" security="none"/>
+    <http pattern="/pages/public/setupConfirmation.xhtml" security="none"/>
     <http pattern="/appStatusServlet" security="none"/>
     
     

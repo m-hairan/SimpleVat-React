@@ -1,0 +1,59 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes"/>
+        </f:facet>
+        <title>#{messages.application_name}</title>
+        <h:outputScript name="js/ripple.js" library="ultima-layout"/>
+        <h:outputScript name="js/layout.js" library="ultima-layout"/>
+        <style type="text/css">
+            .login-panel{
+                width: 900px !important;
+            }
+            .setupDetailsbox{
+                background-color: #ebfafa;
+                width: 700px;
+                border: 1px solid #009688;
+                padding-bottom: 20px;
+                margin: 20px;
+            }
+        </style>
+    </h:head>
+
+    <h:body styleClass="login-body">
+        <h:form id="loginFormId" prependId="false">
+            <div class="card login-panel ui-fluid">
+                <div class="ui-g" align="center">
+                    <div class="ui-g-12" style="padding-top: 0px !important;padding-bottom: 60px !important;">
+                        <p:graphicImage name="images/logo-ultima.png" library="ultima-layout"/>
+                    </div>
+                    <div align="center" style="width: 900px">
+                        <span style="font-size:larger;font-weight: bold">Congratulations, You are all set and ready to manage you business accounts here. </span><br/>
+                        <span>Please feel free to contact <a href="mailto:support@simplevat.com" target="_blank" >support@simplevat.com</a> for any queries or suggestions. </span><br/>
+                        <div class="setupDetailsbox">
+                            <h2 style="font-weight: bold">Your account details:</h2>
+                            Account URL: <a href="#{setupConfirmationController.baseUrl}" target="_blank" >#{setupConfirmationController.baseUrl}</a><br/>
+                            Admin User: <a href="mailto:#{setupConfirmationController.userLoginId}" target="_blank" >#{setupConfirmationController.userLoginId}</a><br/>
+                            Please use the same password you used for signup on simplevat.com
+                        </div>
+
+                        <div class="ui-g-2" style="float: none !important">
+                            <p:commandButton id="btnLogin" value="Finish" action="#{setupConfirmationController.finish()}"/>
+                        </div>
+                    </div>
+                    <p:growl showDetail="true"/>
+                </div>
+            </div>
+        </h:form>
+        <h:outputStylesheet name="css/ripple.css" library="ultima-layout"/>
+        <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="ultima-layout"/>
+    </h:body>
+
+</html>

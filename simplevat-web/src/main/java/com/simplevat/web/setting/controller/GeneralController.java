@@ -244,7 +244,6 @@ public class GeneralController extends BaseController implements Serializable {
         invoiceVariableList.add("{invoiceDiscount}");
         invoiceVariableList.add("{contractPoNumber}");
         invoiceVariableList.add("{contactName}");
-        invoiceVariableList.add("{paymentMode}");
         invoiceVariableList.add("{projectName}");
         invoiceVariableList.add("{invoiceAmount}");
         invoiceVariableList.add("{dueAmount}");

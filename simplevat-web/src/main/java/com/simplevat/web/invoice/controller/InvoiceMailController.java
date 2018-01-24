@@ -89,13 +89,19 @@ public class InvoiceMailController implements Serializable {
 
     @Getter
     @Setter
-    private String messageBody;
+    private String from;
 
+    @Getter
+    @Setter
+    private String messageBody;
+   
     @PostConstruct
     public void init() {
         moreEmails = new ArrayList();
         bccList = new ArrayList();
         ccList = new ArrayList();
+        MailDefaultConfigurationModel mailDefaultConfigurationModel = MailUtility.verifyMailConfigurationList(configurationService.getConfigurationList());
+        from = mailDefaultConfigurationModel.getMailusername();
         subject = configurationService.getConfigurationByName(ConfigurationConstants.INVOICE_MAIL_TAMPLATE_SUBJECT).getValue();
         messageBody = configurationService.getConfigurationByName(ConfigurationConstants.INVOICE_MAIL_TAMPLATE_BODY).getValue();
         Integer invoiceId = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("invoiceId").toString());
@@ -108,8 +114,7 @@ public class InvoiceMailController implements Serializable {
     public void sendInvoiceMail() throws Exception {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         byte[] byteArray = invoiceUtil.prepareMailReport(outputStream, invoice.getInvoiceId()).toByteArray();
-        MailDefaultConfigurationModel mailDefaultConfigurationModel = MailUtility.verifyMailConfigurationList(configurationService.getConfigurationList());
-        Mail mail = getMail(messageBody, subject, mailDefaultConfigurationModel.getMailusername());
+        Mail mail = getMail(messageBody, subject, from);
         if (mail != null) {
             sendInvoiceMail(mail, byteArray);
             moreEmails.clear();
@@ -182,11 +187,8 @@ public class InvoiceMailController implements Serializable {
         if (subject.contains("{contactName}")) {
             subject = subject.replace("{contactName}", invoice.getInvoiceContact() != null ? invoice.getInvoiceContact().getFirstName() : "");
         }
-        if (subject.contains("{paymentMode}")) {
-            subject = subject.replace("{projectName}", invoice.getInvoiceProject() != null ? invoice.getInvoiceProject().toString() : "");
-        }
-        if (subject.contains("{paymentMode}")) {
-            subject = subject.replace("{paymentMode}", invoice.getPaymentMode() != null ? invoice.getPaymentMode().toString() : "");
+        if (subject.contains("{projectName}")) {
+            subject = subject.replace("{projectName}", invoice.getInvoiceProject() != null ? invoice.getInvoiceProject().getProjectName() : "");
         }
         if (subject.contains("{invoiceAmount}")) {
             subject = subject.replace("{invoiceAmount}", invoice.getInvoiceAmount() != null ? invoice.getInvoiceAmount().toString() : "");
@@ -195,7 +197,7 @@ public class InvoiceMailController implements Serializable {
             subject = subject.replace("{dueAmount}", invoice.getDueAmount() != null ? invoice.getDueAmount().toString() : "");
         }
         if (subject.contains("{contractPoNumber}")) {
-            subject = subject.replace("{contractPoNumber}", invoice.getContractPoNumber() != null ? invoice.getContractPoNumber().toString() : "");
+            subject = subject.replace("{contractPoNumber}", invoice.getContractPoNumber() != null ? invoice.getContractPoNumber() : "");
         }
     }
 
@@ -215,16 +217,13 @@ public class InvoiceMailController implements Serializable {
         if (messageBody.contains("{contactName}")) {
             messageBody = messageBody.replace("{contactName}", invoice.getInvoiceContact() != null ? invoice.getInvoiceContact().getFirstName() : "");
         }
-        if (messageBody.contains("{paymentMode}")) {
-            messageBody = messageBody.replace("{projectName}", invoice.getInvoiceProject() != null ? invoice.getInvoiceProject().toString() : "");
+        if (messageBody.contains("{projectName}")) {
+            messageBody = messageBody.replace("{projectName}", invoice.getInvoiceProject() != null ? invoice.getInvoiceProject().getProjectName() : "");
         }
-        if (messageBody.contains("{paymentMode}")) {
-            messageBody = messageBody.replace("{paymentMode}", invoice.getPaymentMode() != null ? invoice.getPaymentMode().toString() : "");
+        if (messageBody.contains("{contractPoNumber}")) {
+            messageBody = messageBody.replace("{contractPoNumber}", invoice.getContractPoNumber() != null ? invoice.getContractPoNumber() : "");
         }
-         if (messageBody.contains("{contractPoNumber}")) {
-            messageBody = messageBody.replace("{contractPoNumber}", invoice.getContractPoNumber() != null ? invoice.getContractPoNumber().toString() : "");
-        }
-        
+
         if (messageBody.contains("{invoiceAmount}")) {
             messageBody = messageBody.replace("{invoiceAmount}", invoice.getInvoiceAmount() != null ? invoice.getInvoiceAmount().toString() : "");
         }

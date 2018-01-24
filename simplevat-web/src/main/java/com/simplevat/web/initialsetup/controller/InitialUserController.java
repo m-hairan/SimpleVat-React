@@ -60,7 +60,7 @@ import javax.mail.internet.MimeMultipart;
 @SpringScopeView
 public class InitialUserController implements Serializable {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(InitialCompanyProfileController.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(InitialUserController.class);
     private static final long serialVersionUID = -7388960716549948523L;
     private static final String ADMIN_EMAIL = "no-reply@simplevat.com";
     private static final String ADMIN_USERNAME = "Simplevat Admin";
@@ -154,7 +154,7 @@ public class InitialUserController implements Serializable {
                 userService.persist(user);
                 sendActivationMail(user);
 
-                return "/pages/public/login.xhtml?faces-redirect=true";
+                return "/pages/public/setupConfirmation.xhtml?faces-redirect=true&baseUrl=" + baseUrl + "&userLoginId=" + user.getUserEmail();
             } catch (IllegalArgumentException ex) {
                 java.util.logging.Logger.getLogger(UserProfileController.class.getName()).log(Level.SEVERE, null, ex);
             }

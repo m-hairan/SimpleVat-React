@@ -57,7 +57,6 @@ import org.springframework.stereotype.Component;
 public class InvoiceUtil extends AbstractReportBean {
 
     private final String COMPILE_FILE_NAME = "Invoice";
-    private int invoiceId;
 
     @Autowired
     private InvoiceService invoiceService;
@@ -70,6 +69,9 @@ public class InvoiceUtil extends AbstractReportBean {
 
     @Autowired
     private UserServiceNew userServiceNew;
+    
+    
+    private Invoice invoice;
 
     @Override
     protected String getCompileFileName() {
@@ -85,11 +87,8 @@ public class InvoiceUtil extends AbstractReportBean {
     @Override
     protected Map<String, Object> getReportParameters() {
         HashMap<String, Object> parameters = new HashMap<String, Object>();
-        InvoiceModel invoiceModel = null;
-        if (invoiceId > 0) {
-            Invoice invoice = invoiceService.findByPK(invoiceId);
             Currency currency = currencyService.findByPK(invoice.getCurrency().getCurrencyCode());
-            invoiceModel = new InvoiceModelHelper().getInvoiceModel(invoice);
+            InvoiceModel invoiceModel = new InvoiceModelHelper().getInvoiceModel(invoice);
             Company company = companyService.findByPK(userServiceNew.findByPK(invoice.getCreatedBy()).getCompany().getCompanyId());
             try {
                 BigDecimal totalVat = new BigDecimal(0);
@@ -154,7 +153,6 @@ public class InvoiceUtil extends AbstractReportBean {
             } catch (Exception ex) {
                 Logger.getLogger(InvoiceUtil.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
         return parameters;
     }
 
@@ -251,12 +249,7 @@ public class InvoiceUtil extends AbstractReportBean {
 
         ArrayList<InvoiceDataSourceModel> dataBeanList = new ArrayList<InvoiceDataSourceModel>();
 
-        InvoiceModel invoiceModel = null;
-
-        if (invoiceId > 0) {
-
-            Invoice invoice = invoiceService.findByPK(invoiceId);
-            invoiceModel = new InvoiceModelHelper().getInvoiceModel(invoice);
+        InvoiceModel invoiceModel = new InvoiceModelHelper().getInvoiceModel(invoice);
             try {
                 int quantity = 0;
                 BigDecimal unitprice = new BigDecimal(0);
@@ -285,19 +278,17 @@ public class InvoiceUtil extends AbstractReportBean {
             } catch (Exception ex) {
                 Logger.getLogger(InvoiceUtil.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-
         return dataBeanList;
     }
 
     public void prepareReport(HttpServletRequest request, HttpServletResponse response, int invoiceId) throws JRException, IOException {
-
+        invoice = invoiceService.findByPK(invoiceId);
+        String fileName = "Invoice-" + invoice.getInvoiceReferenceNumber();
         response.reset();
         response.setHeader("Content-Type", "application/pdf");
-        response.setHeader("Content-Disposition", "inline; filename=\"fileName.pdf\"");
-        this.invoiceId = invoiceId;
+        response.setHeader("Content-Disposition", "inline; filename=\"" + fileName + ".pdf\"");
         Collection<InvoiceDataSourceModel> dataList = getDataBeanList();
-        JRDataSource beanColDataSource = new JRBeanCollectionDataSource(dataList);
+//        JRDataSource beanColDataSource = new JRBeanCollectionDataSource(dataList);
         String jasperFilePath = ReportConfigUtil.compileReport(getCompileDir(), getCompileFileName());
         File reportFile = new File(jasperFilePath);
         JasperPrint jasperPrint = JasperFillManager.fillReport(reportFile.getPath(), getReportParameters(), new JRBeanCollectionDataSource(dataList));
@@ -306,12 +297,13 @@ public class InvoiceUtil extends AbstractReportBean {
     }
 
     public void prepareHtmlReport(HttpServletRequest request, HttpServletResponse response, int invoiceId) throws JRException, IOException {
+        invoice = invoiceService.findByPK(invoiceId);
+        String fileName = "Invoice-" + invoice.getInvoiceReferenceNumber();
         response.reset();
         response.setHeader("Content-Type", "application/html");
-        response.setHeader("Content-Disposition", "inline; filename=\"fileName.html\"");
-        this.invoiceId = invoiceId;
+        response.setHeader("Content-Disposition", "inline; filename=\"" + fileName + ".html\"");
         Collection<InvoiceDataSourceModel> dataList = getDataBeanList();
-        JRDataSource beanColDataSource = new JRBeanCollectionDataSource(dataList);
+//        JRDataSource beanColDataSource = new JRBeanCollectionDataSource(dataList);
         String jasperFilePath = ReportConfigUtil.compileReport(getCompileDir(), getCompileFileName());
         File reportFile = new File(jasperFilePath);
         JasperPrint jasperPrint = JasperFillManager.fillReport(reportFile.getPath(), getReportParameters(), new JRBeanCollectionDataSource(dataList));
@@ -320,7 +312,7 @@ public class InvoiceUtil extends AbstractReportBean {
     }
 
     public ByteArrayOutputStream prepareMailReport(ByteArrayOutputStream outputStream, int invoiceId) throws JRException, IOException {
-        this.invoiceId = invoiceId;
+        invoice = invoiceService.findByPK(invoiceId);
         Collection<InvoiceDataSourceModel> dataList = getDataBeanList();
         JRDataSource beanColDataSource = new JRBeanCollectionDataSource(dataList);
         String jasperFilePath = ReportConfigUtil.compileReport(getCompileDir(), getCompileFileName());
