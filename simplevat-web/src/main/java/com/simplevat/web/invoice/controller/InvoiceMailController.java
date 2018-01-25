@@ -16,6 +16,7 @@ import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.ContactService;
 import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.web.constant.ConfigurationConstants;
+import com.simplevat.web.constant.EmailConstant;
 import com.simplevat.web.utils.MailDefaultConfigurationModel;
 import com.simplevat.web.utils.MailUtility;
 import static com.simplevat.web.utils.MailUtility.verifyMailConfigurationList;
@@ -49,8 +50,6 @@ public class InvoiceMailController implements Serializable {
 
 //    private final static Logger LOGGER = (Logger) LoggerFactory.getLogger(InvoiceMailController.class);
     private static final long serialVersionUID = -7388960716549948523L;
-    private static final String ADMIN_EMAIL = "no-reply@simplevat.com";
-    private static final String ADMIN_USERNAME = "Simplevat Admin";
 
     @Autowired
     private MailIntegration mailIntegration;
@@ -126,7 +125,7 @@ public class InvoiceMailController implements Serializable {
             Mail mail = new Mail();
             mail.setBody(body == null ? "" : body);
             mail.setFrom(fromEmail);
-            mail.setFromName(ADMIN_USERNAME);
+            mail.setFromName(EmailConstant.ADMIN_EMAIL_SENDER_NAME);
             mail.setTo(Arrays.copyOf(moreEmails.toArray(), moreEmails.toArray().length, String[].class));
             mail.setSubject(subject == null ? "" : subject);
             if (bccList != null && !bccList.isEmpty()) {

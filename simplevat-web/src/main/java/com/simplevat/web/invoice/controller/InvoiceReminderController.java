@@ -17,6 +17,7 @@ import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.ContactService;
 import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.web.constant.ConfigurationConstants;
+import com.simplevat.web.constant.EmailConstant;
 import com.simplevat.web.utils.MailDefaultConfigurationModel;
 import com.simplevat.web.utils.MailUtility;
 import java.io.ByteArrayOutputStream;
@@ -47,8 +48,6 @@ public class InvoiceReminderController implements Serializable {
 
 //    private final static Logger LOGGER = (Logger) LoggerFactory.getLogger(InvoiceMailController.class);
     private static final long serialVersionUID = -7388960716549948523L;
-    private static final String ADMIN_EMAIL = "no-reply@simplevat.com";
-    private static final String ADMIN_USERNAME = "Simplevat Admin";
 
     @Autowired
     private MailIntegration mailIntegration;
@@ -64,13 +63,6 @@ public class InvoiceReminderController implements Serializable {
 
     @Autowired
     private ContactService contactService;
-
-    String mailhost = System.getenv("SIMPLEVAT_MAIL_HOST");
-    String mailport = System.getenv("SIMPLEVAT_MAIL_PORT");
-    String mailusername = System.getenv("SIMPLEVAT_MAIL_USERNAME");
-    String mailpassword = System.getenv("SIMPLEVAT_MAIL_PASSWORD");
-    String mailsmtpAuth = System.getenv("SIMPLEVAT_MAIL_SMTP_AUTH");
-    String mailstmpStartTLSEnable = System.getenv("SIMPLEVAT_MAIL_SMTP_STARTTLS_ENABLE");
 
     @PostConstruct
     public void init() {
@@ -110,7 +102,7 @@ public class InvoiceReminderController implements Serializable {
                     Mail mail = new Mail();
                     mail.setBody(summary);
                     mail.setFrom(userName);
-                    mail.setFromName(ADMIN_USERNAME);
+                    mail.setFromName(EmailConstant.ADMIN_EMAIL_SENDER_NAME);
                     mail.setTo(senderMailAddress);
                     mail.setSubject(mailEnum.getSubject());
                     MailAttachment attachment = new MailAttachment();

@@ -46,12 +46,23 @@ public class InvoiceModelHelper {
         } else {
             invoice = new Invoice();
         }
-
         invoice.setContractPoNumber(invoiceModel.getContractPoNumber());
         invoice.setCurrency(invoiceModel.getCurrencyCode());
         invoice.setInvoiceProject(invoiceModel.getProject());
-        invoice.setInvoiceContact(invoiceModel.getInvoiceContact());
-        invoice.setShippingContact(invoiceModel.getShippingContact());
+        if (invoiceModel.getInvoiceContact() != null 
+                && invoiceModel.getInvoiceContact().getContactId() != null
+                && invoiceModel.getInvoiceContact().getContactId() > 0) {
+            invoice.setInvoiceContact(invoiceModel.getInvoiceContact());
+        } else {
+            invoice.setInvoiceContact(null);
+        }
+        if (invoiceModel.getShippingContact() != null 
+                && invoiceModel.getShippingContact().getContactId() != null
+                && invoiceModel.getShippingContact().getContactId() > 0) {
+            invoice.setShippingContact(invoiceModel.getShippingContact());
+        } else {
+            invoice.setShippingContact(null);
+        }
         invoice.setInvoiceDate(invoiceDate);
         invoice.setInvoiceDiscount(invoiceModel.getDiscount());
         invoice.setDiscountType(invoiceModel.getDiscountType());

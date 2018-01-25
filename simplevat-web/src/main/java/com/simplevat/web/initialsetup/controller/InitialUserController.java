@@ -40,6 +40,7 @@ import com.simplevat.service.CountryService;
 import com.simplevat.service.IndustryTypeService;
 import com.simplevat.web.company.controller.CompanyHelper;
 import com.simplevat.web.company.controller.CompanyModel;
+import com.simplevat.web.constant.EmailConstant;
 import com.simplevat.web.newactivation.NewActivationMailSender;
 import com.simplevat.web.utils.FileUtility;
 import com.simplevat.web.utils.MailDefaultConfigurationModel;
@@ -62,8 +63,6 @@ public class InitialUserController implements Serializable {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(InitialUserController.class);
     private static final long serialVersionUID = -7388960716549948523L;
-    private static final String ADMIN_EMAIL = "no-reply@simplevat.com";
-    private static final String ADMIN_USERNAME = "Simplevat Admin";
     private static final String ACTIVATION_EMAIL_TEMPLATE_FILE = "/WEB-INF/emailtemplate/setup-confirmation.html";
 
     @Autowired
@@ -213,7 +212,7 @@ public class InitialUserController implements Serializable {
                 try {
                     Mail mail = new Mail();
                     mail.setFrom(userName);
-                    mail.setFromName(ADMIN_USERNAME);
+                    mail.setFromName(EmailConstant.ADMIN_EMAIL_SENDER_NAME);
                     mail.setTo(senderMailAddress);
                     mail.setSubject(mailEnum.getSubject());
                     mailIntegration.sendHtmlEmail(mimeMultipart, mail, MailUtility.getJavaMailSender(configurationService.getConfigurationList()));

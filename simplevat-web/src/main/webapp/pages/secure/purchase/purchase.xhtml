@@ -50,7 +50,6 @@
                                                 var="user"
                                                 itemValue="#{user}"
                                                 itemLabel="#{user.firstName}"
-
                                                 required="true"
                                                 requiredMessage="Please select Claimant">
                                             </p:autoComplete>
@@ -202,18 +201,17 @@
                                 </p:fieldset>
                                 <br />
                                 <p:fieldset legend="Receipt" toggleable="true" toggleSpeed="500">
-                                    <p:panelGrid columns="6"
-                                                 columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+                                    <p:panelGrid columns="3"
+                                                 columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
                                                  layout="grid" styleClass="ui-panelgrid-blank form-group"
                                                  style="border:0px none; background-color:transparent;">
-                                        <p:outputLabel for="purchaseReceiptNumber"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText
                                                 id="purchaseReceiptNumber"
                                                 value="#{purchaseController.selectedPurchaseModel.receiptNumber}" />
-                                            <label>#{messages.receiptnumber}</label>
+                                            <p:outputLabel for="purchaseReceiptNumber" value="#{messages.receiptnumber}"/>
                                         </h:panelGroup>
-                                        <h:panelGroup />
+
                                         <h:panelGroup styleClass="md-inputfield">
                                             <div style="text-align: center">
                                                 <p:fileUpload auto="true" 
@@ -222,12 +220,12 @@
                                                 <h:outputText value="#{purchaseController.fileName}" id="fileName"/>
                                             </div>
                                         </h:panelGroup>
-                                        <p:outputLabel for="purchaseAttachmentDescription"/>
+
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText
                                                 id="purchaseAttachmentDescription"
                                                 value="#{purchaseController.selectedPurchaseModel.receiptAttachmentDescription}" />
-                                            <label>#{messages.attachment_description}</label>
+                                            <p:outputLabel for="purchaseAttachmentDescription" value="#{messages.attachment_description}"/>
                                         </h:panelGroup>
                                     </p:panelGrid>
                                 </p:fieldset>

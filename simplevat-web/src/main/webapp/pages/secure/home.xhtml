@@ -104,7 +104,6 @@
                                 <p:chart type="line" model="#{homeController.cashFlowLineChartModel}" rendered="#{homeController.renderCashFlowLineChartModel}"
                                          style="height:280px;margin-top: 20px;" responsive="true" />
                                 <p:graphicImage value="/resources/images/placeholder/cashflow_placeholder.png" width="360" height="300" style="display:none" rendered="#{!homeController.renderCashFlowLineChartModel}"/>
-                                <!--<p:commandButton value="Start Your First Cash Flow" style="position: absolute; top:130px;left:85px" rendered="#{!homeController.renderCashFlowLineChartModel}"/>-->
                             </h:panelGroup>
                         </h:panelGroup>
                     </p:panel>
@@ -114,11 +113,11 @@
                                 <ui:include src="../content-loading-placeholder.xhtml"/>
                             </h:panelGroup>
                             <h:panelGroup styleClass="invoiceAndExpansePanel" id="invoiceAndExpansePanel">
-                                <p:chart type="line" model="#{homeController.animatedModel1}" rendered="#{not empty homeController.animatedModel1.series}"
+                                <p:chart type="line" model="#{homeController.animatedModel1}" rendered="#{homeController.renderInvoiceExpanseChart}"
                                          style="height:280px;margin-top: 20px;" responsive="true"/>
-                                <p:graphicImage styleClass="cashFlowChartPanel" value="/resources/images/placeholder/invoice_expanse_placeholder.png" width="360" height="300" style="display:none;" rendered="#{empty homeController.animatedModel1.series}"/>
-                                <p:commandButton styleClass="cashFlowChartPanel" value="Create Your First Invoice" action="#{homeController.redirectToCreateInvoice}" style="display:none;position: absolute; top:115px;left:80px;padding-left: 17px;padding-right: 20px;" rendered="#{empty homeController.animatedModel1.series}"/>
-                                <p:commandButton styleClass="cashFlowChartPanel" value="Create Your First Expanse" action="#{homeController.redirectToCreateExpense}" style="display:none;position: absolute; top:155px;left:80px" rendered="#{empty homeController.animatedModel1.series}"/>
+                                <p:graphicImage styleClass="cashFlowChartPanel" value="/resources/images/placeholder/invoice_expanse_placeholder.png" width="360" height="300" style="display:none;" rendered="#{!homeController.renderInvoiceExpanseChart}"/>
+                                <p:commandButton styleClass="cashFlowChartPanel" value="Create Your First Invoice" action="#{homeController.redirectToCreateInvoice}" style="display:none;position: absolute; top:115px;left:80px;padding-left: 17px;padding-right: 20px;" rendered="#{!homeController.renderInvoiceExpanseChart}"/>
+                                <p:commandButton styleClass="cashFlowChartPanel" value="Create Your First Expanse" action="#{homeController.redirectToCreateExpense}" style="display:none;position: absolute; top:155px;left:80px" rendered="#{!homeController.renderInvoiceExpanseChart}"/>
                             </h:panelGroup>
                         </h:panelGroup>
                     </p:panel>

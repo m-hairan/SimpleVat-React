@@ -8,6 +8,7 @@ import com.simplevat.integration.MailIntegration;
 import com.simplevat.integration.MailPreparer;
 import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.UserServiceNew;
+import com.simplevat.web.constant.EmailConstant;
 import com.simplevat.web.utils.FileUtility;
 import com.simplevat.web.utils.MailDefaultConfigurationModel;
 import com.simplevat.web.utils.MailUtility;
@@ -50,8 +51,6 @@ public class SecurityBean implements PhaseListener, Serializable {
     private final static Logger LOGGER = LoggerFactory.getLogger(SecurityBean.class);
 
     private static final long serialVersionUID = -7388960716549948523L;
-    private static final String ADMIN_EMAIL = "no-reply@simplevat.com";
-    private static final String ADMIN_USERNAME = "Simplevat Admin";
     private static final String FORGOT_PASSWORD_EMAIL_TEMPLATE_FILE = "/WEB-INF/emailtemplate/forget-password.html";
 
     @Getter
@@ -78,13 +77,6 @@ public class SecurityBean implements PhaseListener, Serializable {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-
-    String mailhost = System.getenv("SIMPLEVAT_MAIL_HOST");
-    String mailport = System.getenv("SIMPLEVAT_MAIL_PORT");
-    String mailusername = System.getenv("SIMPLEVAT_MAIL_USERNAME");
-    String mailpassword = System.getenv("SIMPLEVAT_MAIL_PASSWORD");
-    String mailsmtpAuth = System.getenv("SIMPLEVAT_MAIL_SMTP_AUTH");
-    String mailstmpStartTLSEnable = System.getenv("SIMPLEVAT_MAIL_SMTP_STARTTLS_ENABLE");
 
     @PostConstruct
     public void init() {
@@ -177,8 +169,8 @@ public class SecurityBean implements PhaseListener, Serializable {
             public void run() {
                 try {
                     Mail mail = new Mail();
-                    mail.setFrom(userName);
-                    mail.setFromName(ADMIN_USERNAME);
+                    mail.setFrom(userName);                    
+                    mail.setFromName(EmailConstant.ADMIN_EMAIL_SENDER_NAME);
                     mail.setTo(senderMailAddress);
                     mail.setSubject(mailEnum.getSubject());
                     mailIntegration.sendHtmlEmail(mimeMultipart, mail, MailUtility.getJavaMailSender(configurationService.getConfigurationList()));
@@ -203,8 +195,8 @@ public class SecurityBean implements PhaseListener, Serializable {
 
     private void sendPasswordNotificationMail(MailEnum mailEnum, String summary, String randomPassword, String firstName, String[] senderMailAddress) throws Exception {
         Mail mail = MailPreparer.generateForgotPasswordMail(
-                ADMIN_EMAIL,
-                ADMIN_USERNAME,
+                EmailConstant.ADMIN_SUPPORT_EMAIL,
+                EmailConstant.ADMIN_EMAIL_SENDER_NAME,
                 senderMailAddress,
                 firstName,
                 randomPassword,

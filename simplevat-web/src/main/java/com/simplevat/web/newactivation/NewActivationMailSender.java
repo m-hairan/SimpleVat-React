@@ -11,6 +11,7 @@ import com.simplevat.entity.Mail;
 import com.simplevat.entity.MailEnum;
 import com.simplevat.integration.MailIntegration;
 import com.simplevat.service.ConfigurationService;
+import com.simplevat.web.constant.EmailConstant;
 import com.simplevat.web.invoice.controller.InvoiceMailController;
 import com.simplevat.web.utils.FileUtility;
 import java.io.IOException;
@@ -39,8 +40,6 @@ import org.springframework.stereotype.Controller;
 public class NewActivationMailSender implements Serializable {
 
     private static final long serialVersionUID = -7388960716549948523L;
-    private static final String ADMIN_EMAIL = "no-reply@simplevat.com";
-    private static final String ADMIN_USERNAME = "Simplevat Admin";
     private static final String ACTIVATION_TOKEN = "ACTIVATION_TOKEN";
     private static final String ACTIVATION_EMAIL_TEMPLATE_FILE = "/WEB-INF/emailtemplate/activation-email-template.html";
 
@@ -88,8 +87,8 @@ public class NewActivationMailSender implements Serializable {
             public void run() {
                 try {
                     Mail mail = new Mail();
-                    mail.setFrom(ADMIN_EMAIL);
-                    mail.setFromName(ADMIN_USERNAME);
+                    mail.setFrom(EmailConstant.ADMIN_SUPPORT_EMAIL);
+                    mail.setFromName(EmailConstant.ADMIN_EMAIL_SENDER_NAME);
                     mail.setTo(senderMailAddress);
                     mail.setSubject(mailEnum.getSubject());
                     mailIntegration.sendHtmlEmail(mimeMultipart, mail, getJavaMailSender());

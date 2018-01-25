@@ -98,6 +98,10 @@ public class HomeController implements Serializable {
     @Getter
     @Setter
     private boolean renderVatInVatOutChart;
+    
+    @Getter
+    @Setter
+    private boolean renderInvoiceExpanseChart = false;
 
     @PostConstruct
     public void init() {
@@ -331,13 +335,16 @@ public class HomeController implements Serializable {
             invoices.setData(invoiceData);
             invoices.setLabel("Invoices");
             model.addSeries(invoices);
+            renderInvoiceExpanseChart = true;
         }
         if (expenseData != null && !expenseData.isEmpty()) {
             LineChartSeries expenses = new LineChartSeries();
             expenses.setLabel("Expenses");
             expenses.setData(expenseData);
             model.addSeries(expenses);
+            renderInvoiceExpanseChart = true;
         }
+        
 
         return model;
     }
