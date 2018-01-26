@@ -111,6 +111,7 @@ public class InvoiceController extends BaseController implements Serializable {
     private ProductService productService;
 
     @Getter
+    @Setter
     private InvoiceModel selectedInvoiceModel;
 
     @Getter
@@ -137,9 +138,6 @@ public class InvoiceController extends BaseController implements Serializable {
     @Getter
     @Setter
     private List<Configuration> configurationList;
-
-    @Getter
-    private BigDecimal total;
 
     @Getter
     @Setter
@@ -171,15 +169,7 @@ public class InvoiceController extends BaseController implements Serializable {
     @Setter
     List<SelectItem> vatCategorySelectItemList = new ArrayList<>();
 
-    @Getter
-    BigDecimal discountAmount = new BigDecimal(0);
-
-    @Getter
-    BigDecimal totalInvoiceCalculation = new BigDecimal(0);
-
-    @Getter
-    BigDecimal totalVat = new BigDecimal(0);
-
+    
     public InvoiceController() {
         super(ModuleName.INVOICE_MODULE);
     }
@@ -211,6 +201,7 @@ public class InvoiceController extends BaseController implements Serializable {
             selectedInvoiceModel.setInvoiceLineItems(new ArrayList());
             selectedInvoiceModel.setInvoiceReferenceNumber("1");
             selectedInvoiceModel.setInvoiceDueDate(getDueDate(selectedInvoiceModel));
+            selectedInvoiceModel.setInvoiceContact(new Contact());
             configurationList = configurationService.getConfigurationList();
             if (configurationList != null) {
                 configuration = configurationList.stream().filter(conf -> conf.getName().equals(ConfigurationConstants.INVOICING_REFERENCE_PATTERN)).findFirst().get();
@@ -225,7 +216,13 @@ public class InvoiceController extends BaseController implements Serializable {
         }
         countries = countryService.getCountries();
         populateVatCategory();
-        calculateTotal();
+        updateSubTotalOnDiscountAdded();
+        if (selectedInvoiceModel.getShippingContact() == null) {
+            selectedInvoiceModel.setShippingContact(new Contact());
+        }
+        if(selectedInvoiceModel.getShippingContact() == null){
+            selectedInvoiceModel.setShippingContact(new Contact());
+        }
     }
 
     public void updateContact() {
@@ -241,7 +238,7 @@ public class InvoiceController extends BaseController implements Serializable {
         if (copyInvoiceAddress) {
             selectedInvoiceModel.setShippingContact(selectedInvoiceModel.getInvoiceContact());
         } else {
-            selectedInvoiceModel.setShippingContact(null);
+            selectedInvoiceModel.setShippingContact(new Contact());
         }
     }
 
@@ -256,7 +253,12 @@ public class InvoiceController extends BaseController implements Serializable {
         boolean validated = validateInvoiceLineItems();
 
         if (validated) {
-            selectedInvoiceModel.addInvoiceItem(new InvoiceItemModel());
+            InvoiceItemModel invoiceItemModel = new InvoiceItemModel();
+            VatCategory vatCategory = vatCategoryService.getDefaultVatCategory();
+            if (vatCategory != null) {
+                invoiceItemModel.setVatId(vatCategoryService.getDefaultVatCategory());
+            }
+            selectedInvoiceModel.addInvoiceItem(invoiceItemModel);
         }
     }
 
@@ -357,7 +359,11 @@ public class InvoiceController extends BaseController implements Serializable {
                 invoiceItemModel.setVatId(null);
             }
         }
-        updateSubTotal(invoiceItemModel);
+//        updateSubTotal(invoiceItemModel);
+    }
+    
+    public void updateSubTotal(InvoiceItemModel invoiceItem){
+     invoiceModelHelper.processAmountCalculation(selectedInvoiceModel);
     }
 
     public List<Project> projects(final String searchQuery) throws Exception {
@@ -465,7 +471,9 @@ public class InvoiceController extends BaseController implements Serializable {
     }
 
     private Integer save() {
-        selectedInvoiceModel.setInvoiceAmount(total);
+        if (selectedInvoiceModel.getShippingContact().getContactId() == null) {
+            selectedInvoiceModel.setShippingContact(null);
+        }
         selectedInvoice = invoiceModelHelper.getInvoiceEntity(selectedInvoiceModel);
 
         if (selectedInvoice.getInvoiceId() != null && selectedInvoice.getInvoiceId() > 0) {
@@ -533,92 +541,100 @@ public class InvoiceController extends BaseController implements Serializable {
         }
     }
 
-    public void updateSubTotal(final InvoiceItemModel invoiceItemModel) {
-        final int quantity = invoiceItemModel.getQuatity();
-        final BigDecimal unitPrice = invoiceItemModel.getUnitPrice();
-        if (null != unitPrice) {
-            final BigDecimal amountWithoutTax = unitPrice.multiply(new BigDecimal(quantity));
-            invoiceItemModel.setSubTotal(amountWithoutTax);
+//    public void updateSubTotal(final InvoiceItemModel invoiceItemModel) {
+//        final int quantity = invoiceItemModel.getQuatity();
+//        final BigDecimal unitPrice = invoiceItemModel.getUnitPrice();
+//        if (null != unitPrice) {
+//            final BigDecimal amountWithoutTax = unitPrice.multiply(new BigDecimal(quantity));
+//            invoiceItemModel.setSubTotal(amountWithoutTax);
+//        }
+//        calculateNetTotal();
+//    }
 
-        }
-        calculateTotal();
-    }
+//    public void calculateNetTotal() {
+//        total = new BigDecimal(0);
+//        totalVat = new BigDecimal(0);
+//        totalInvoiceCalculation = new BigDecimal(0);
+//        discountAmount = new BigDecimal(BigInteger.ZERO);
+//        List<InvoiceItemModel> invoiceItem = selectedInvoiceModel.getInvoiceLineItems();
+//        if (invoiceItem != null) {
+//            for (InvoiceItemModel itemModel : invoiceItem) {
+//                if (itemModel.getSubTotal() != null) {
+//                    BigDecimal vatAmount = new BigDecimal(BigInteger.ZERO);
+//                    BigDecimal itemAmount = new BigDecimal(BigInteger.ZERO);
+//                    if (itemModel.getVatId() != null) {
+//                        vatAmount = (itemModel.getSubTotal().multiply(itemModel.getVatId().getVat())).multiply(new BigDecimal(0.01));
+//                    }
+//                    if (selectedInvoiceModel.getDiscountType() != null) {
+//                        itemAmount = itemModel.getSubTotal().subtract(getDiscountValue(itemModel.getSubTotal()));
+//                    } else {
+//                        itemAmount = itemModel.getSubTotal();
+//                    }
+//                    totalInvoiceCalculation = totalInvoiceCalculation.add(itemAmount);
+//                    totalVat = totalVat.add(vatAmount);
+//                    total = total.add(itemAmount.add(vatAmount));
+//                }
+//            }
+//        }
+//    }
 
-    private void calculateTotal() {
-        total = new BigDecimal(0);
-        totalVat = new BigDecimal(0);
-        List<InvoiceItemModel> invoiceItem = selectedInvoiceModel.getInvoiceLineItems();
-        if (invoiceItem != null) {
-            for (InvoiceItemModel invoice : invoiceItem) {
-                if (invoice.getSubTotal() != null) {
-                    total = total.add(invoice.getSubTotal());
-                    if (invoice.getVatId() != null) {
-                        totalVat = totalVat.add((invoice.getSubTotal().multiply(invoice.getVatId().getVat())).multiply(new BigDecimal(0.01)));
-                        System.out.println("totalVat=========1===========" + totalVat);
-                    }
-                }
-                System.out.println("totalVat=========2===========" + totalVat);
-            }
-        }
-        System.out.println("totalVat=========3===========" + totalVat);
-        if (selectedInvoiceModel.getDiscount() != null) {
-            updateSubTotalOnDiscountAdded();
-
-        }
-    }
-
-    public BigDecimal totalAmountInHomeCurrency(Currency currency) {
-        if (total != null && currencyConversion != null) {
-            if (currencyConversion != null) {
-                return total.divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP);
-            }
-        }
-        return new BigDecimal(0);
-    }
+//    public BigDecimal totalAmountInHomeCurrency(Currency currency) {
+//        if (total != null && currencyConversion != null) {
+//            if (currencyConversion != null) {
+//                return total.divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP);
+//            }
+//        }
+//        return new BigDecimal(0);
+//    }
 
     public void updateSubTotalOnDiscountAdded() {
-        if (selectedInvoiceModel.getDiscount() == null) {
-            calculateTotal();
-        }
-        calculateDiscount();
+        invoiceModelHelper.processAmountCalculation(selectedInvoiceModel);
     }
+    
 
-    public void calculateDiscount() {
-        if (selectedInvoiceModel.getDiscount() != null && total != null) {
-            totalInvoiceCalculation = new BigDecimal(0);
-            List<InvoiceItemModel> invoiceItem = selectedInvoiceModel.getInvoiceLineItems();
-            if (invoiceItem != null) {
-                for (InvoiceItemModel invoice : invoiceItem) {
-                    if (invoice.getSubTotal() != null) {
-                        totalInvoiceCalculation = totalInvoiceCalculation.add(invoice.getSubTotal());
-                    }
-                }
-            }
-            total = totalVat.add(totalInvoiceCalculation.subtract(getDiscountValue(totalInvoiceCalculation)));
-            System.out.println("total=========3===========" + total);
-        }
-    }
-
-    private BigDecimal getDiscountValue(BigDecimal totalInvoiceCalculation) {
-        if (selectedInvoiceModel.getDiscountType() != null) {
-            if (selectedInvoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.ABSOLUTEDISCOUNT) {
-                System.out.println("selectedInvoiceModel.getDiscount()=========1===========" + selectedInvoiceModel.getDiscount());
-                discountAmount = selectedInvoiceModel.getDiscount();
-            } else if (selectedInvoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.PERCENTAGEDISCOUNT) {
-                System.out.println("selectedInvoiceModel.getDiscount()=========1===========" + selectedInvoiceModel.getDiscount());
-                discountAmount = totalInvoiceCalculation.multiply(selectedInvoiceModel.getDiscount().divide(new BigDecimal(100)));
-            }
-        }
-        System.out.println("total=========1===========" + discountAmount);
-        return discountAmount;
-    }
+//    public void calculateTotalWithDiscount() {
+//        total = new BigDecimal(0);
+//        totalVat = new BigDecimal(0);
+//        totalInvoiceCalculation = new BigDecimal(0);
+//        if (selectedInvoiceModel.getDiscount() != null && total != null) {
+//            totalInvoiceCalculation = new BigDecimal(0);
+//            List<InvoiceItemModel> invoiceItem = selectedInvoiceModel.getInvoiceLineItems();
+//            if (invoiceItem != null) {
+//                for (InvoiceItemModel itemModel : invoiceItem) {
+//                    if (itemModel.getSubTotal() != null) {
+//                        BigDecimal itemAmount = itemModel.getSubTotal().subtract(getDiscountValue(itemModel.getSubTotal()));
+//                        BigDecimal vatAmount = (itemModel.getSubTotal().multiply(itemModel.getVatId().getVat())).multiply(new BigDecimal(0.01));
+//                        totalInvoiceCalculation = totalInvoiceCalculation.add(itemAmount);
+//                        totalVat = totalVat.add(vatAmount);
+//                        total = totalInvoiceCalculation.add(vatAmount);
+//                    }
+//                }
+//            }
+//            totalInvoiceCalculation = totalInvoiceCalculation.subtract(getDiscountValue(totalInvoiceCalculation));
+//            total = totalInvoiceCalculation;
+//            System.out.println("total=========3===========" + total);
+//        }
+//    }
+//    private BigDecimal getDiscountValue(BigDecimal totalInvoiceCalculation) {
+//        BigDecimal discount = BigDecimal.ZERO;
+//        if (selectedInvoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.ABSOLUTEDISCOUNT) {
+//            discount = selectedInvoiceModel.getDiscount();
+//        } else if (selectedInvoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.PERCENTAGEDISCOUNT) {
+//            discount = discount.add(totalInvoiceCalculation.multiply(selectedInvoiceModel.getDiscount()).divide(new BigDecimal(100)));
+//        }
+//        discountAmount = discountAmount.add(discount);
+//        System.out.println("discount :"+discount);
+//        System.out.println("discountAmount :"+discountAmount);
+//        return discount;
+//    }
 
     public void deleteLineItem(InvoiceItemModel itemModel) {
         selectedInvoiceModel.getInvoiceLineItems().remove(itemModel);
-        if (itemModel.getSubTotal() != null && discountAmount != null) {
-            total = total.subtract(itemModel.getSubTotal()).add(discountAmount);
-            updateSubTotalOnDiscountAdded();
-        }
+        updateSubTotalOnDiscountAdded();
+//        if (itemModel.getSubTotal() != null && discountAmount != null) {
+//            total = total.subtract(itemModel.getSubTotal()).add(getDiscountValue(itemModel.getSubTotal()));
+//            updateSubTotalOnDiscountAdded();
+//        }
     }
 
     public void initCreateContact() {

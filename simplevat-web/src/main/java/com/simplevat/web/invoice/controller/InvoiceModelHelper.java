@@ -3,6 +3,7 @@ package com.simplevat.web.invoice.controller;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.entity.invoice.InvoiceLineItem;
 import com.simplevat.service.invoice.InvoiceService;
+import com.simplevat.web.constant.DiscountTypeConstant;
 import com.simplevat.web.constant.InvoicePurchaseStatusConstant;
 import com.simplevat.web.invoice.model.InvoiceItemModel;
 import com.simplevat.web.invoice.model.InvoiceModel;
@@ -49,14 +50,14 @@ public class InvoiceModelHelper {
         invoice.setContractPoNumber(invoiceModel.getContractPoNumber());
         invoice.setCurrency(invoiceModel.getCurrencyCode());
         invoice.setInvoiceProject(invoiceModel.getProject());
-        if (invoiceModel.getInvoiceContact() != null 
+        if (invoiceModel.getInvoiceContact() != null
                 && invoiceModel.getInvoiceContact().getContactId() != null
                 && invoiceModel.getInvoiceContact().getContactId() > 0) {
             invoice.setInvoiceContact(invoiceModel.getInvoiceContact());
         } else {
             invoice.setInvoiceContact(null);
         }
-        if (invoiceModel.getShippingContact() != null 
+        if (invoiceModel.getShippingContact() != null
                 && invoiceModel.getShippingContact().getContactId() != null
                 && invoiceModel.getShippingContact().getContactId() > 0) {
             invoice.setShippingContact(invoiceModel.getShippingContact());
@@ -152,6 +153,7 @@ public class InvoiceModelHelper {
         }
         invoiceModel.setPaymentMode(invoice.getPaymentMode());
 //        invoiceModel.setRecurringFlag(invoice.getRecurringFlag());
+        processAmountCalculation(invoiceModel);
         return invoiceModel;
     }
 
@@ -173,6 +175,45 @@ public class InvoiceModelHelper {
         }
         this.updateSubTotal(model);
         return model;
+    }
+
+    public void processAmountCalculation(InvoiceModel invoiceModel) {
+
+        BigDecimal invoiceAmount = BigDecimal.ZERO;
+        BigDecimal invoiceVATAmount = BigDecimal.ZERO;
+        BigDecimal invoiceSubtotal = BigDecimal.ZERO;
+        invoiceModel.setCalculatedDiscountAmount(BigDecimal.ZERO);
+        for (InvoiceItemModel itemModel : invoiceModel.getInvoiceLineItems()) {
+            if (itemModel.getSubTotal() != null) {
+                BigDecimal vatAmount = new BigDecimal(BigInteger.ZERO);
+                BigDecimal itemAmount = new BigDecimal(BigInteger.ZERO);
+                if (invoiceModel.getDiscountType() != null) {
+                    BigDecimal discountAmount = getDiscountAmount(itemModel.getSubTotal(), invoiceModel);
+                    itemAmount = itemModel.getSubTotal().subtract(discountAmount);
+                    invoiceModel.setCalculatedDiscountAmount(invoiceModel.getCalculatedDiscountAmount().add(discountAmount));
+                } else {
+                    itemAmount = itemModel.getSubTotal();
+                }
+                if (itemModel.getVatId() != null) {
+                    vatAmount = (itemAmount.multiply(itemModel.getVatId().getVat())).divide(new BigDecimal(100));
+                }
+
+                invoiceSubtotal = invoiceSubtotal.add(itemAmount);
+                invoiceVATAmount = invoiceVATAmount.add(vatAmount);
+                invoiceAmount = invoiceAmount.add(itemAmount.add(vatAmount));
+            }
+        }
+        invoiceModel.setInvoiceAmount(invoiceAmount);
+        invoiceModel.setInvoiceVATAmount(invoiceVATAmount);
+        invoiceModel.setInvoiceSubtotal(invoiceSubtotal);
+    }
+
+    private BigDecimal getDiscountAmount(BigDecimal itemValue, InvoiceModel invoiceModel) {
+        BigDecimal discountAmount = invoiceModel.getDiscount();
+        if (invoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.PERCENTAGEDISCOUNT) {
+            discountAmount = (itemValue.multiply(discountAmount)).divide(new BigDecimal(100));
+        }
+        return discountAmount;
     }
 
     private void updateSubTotal(@Nonnull final InvoiceItemModel invoiceItemModel) {

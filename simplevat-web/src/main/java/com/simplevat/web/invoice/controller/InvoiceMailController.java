@@ -6,6 +6,7 @@
 package com.simplevat.web.invoice.controller;
 
 import com.github.javaplugs.jsf.SpringScopeView;
+import com.simplevat.entity.Configuration;
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Mail;
 import com.simplevat.entity.MailAttachment;
@@ -66,6 +67,9 @@ public class InvoiceMailController implements Serializable {
     @Autowired
     private ContactService contactService;
 
+    @Autowired
+    private InvoicePDFGenerator pDFGenerator;
+
     @Getter
     @Setter
     private ArrayList<String> moreEmails;
@@ -93,7 +97,7 @@ public class InvoiceMailController implements Serializable {
     @Getter
     @Setter
     private String messageBody;
-   
+
     @PostConstruct
     public void init() {
         moreEmails = new ArrayList();
@@ -101,8 +105,7 @@ public class InvoiceMailController implements Serializable {
         ccList = new ArrayList();
         MailDefaultConfigurationModel mailDefaultConfigurationModel = MailUtility.verifyMailConfigurationList(configurationService.getConfigurationList());
         from = mailDefaultConfigurationModel.getMailusername();
-        subject = configurationService.getConfigurationByName(ConfigurationConstants.INVOICE_MAIL_TAMPLATE_SUBJECT).getValue();
-        messageBody = configurationService.getConfigurationByName(ConfigurationConstants.INVOICE_MAIL_TAMPLATE_BODY).getValue();
+        updateSubjectAndMessageBody();
         Integer invoiceId = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("invoiceId").toString());
         invoice = invoiceService.findByPK(invoiceId);
         moreEmails.add(invoice.getInvoiceContact().getEmail());
@@ -110,9 +113,22 @@ public class InvoiceMailController implements Serializable {
         generateMessageBody();
     }
 
+    public void updateSubjectAndMessageBody() {
+        Configuration subjectConfiguration = configurationService.getConfigurationByName(ConfigurationConstants.INVOICE_MAIL_TAMPLATE_SUBJECT);
+        if (subjectConfiguration != null) {
+            subject = subjectConfiguration.getValue();
+        }
+        Configuration messageBodyConfiguration = configurationService.getConfigurationByName(ConfigurationConstants.INVOICE_MAIL_TAMPLATE_SUBJECT);
+        if (messageBodyConfiguration != null) {
+            messageBody = messageBodyConfiguration.getValue();
+        }
+    }
+
     public void sendInvoiceMail() throws Exception {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        byte[] byteArray = invoiceUtil.prepareMailReport(outputStream, invoice.getInvoiceId()).toByteArray();
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("invoiceId", invoice.getInvoiceId());
+        pDFGenerator.init();
+        byte[] byteArray = pDFGenerator.getInvoicepdfOutputStream().toByteArray();
         Mail mail = getMail(messageBody, subject, from);
         if (mail != null) {
             sendInvoiceMail(mail, byteArray);
@@ -171,63 +187,67 @@ public class InvoiceMailController implements Serializable {
     }
 
     public void generateSubject() {
-        if (subject.contains("{invoiceReferenceNumber}")) {
-            subject = subject.replace("{invoiceReferenceNumber}", invoice.getInvoiceReferenceNumber());
-        }
-        if (subject.contains("{invoiceDate}")) {
-            subject = subject.replace("{invoiceDate}", new SimpleDateFormat("MM/dd/YYYY").format(Date.from(invoice.getInvoiceDate().atZone(ZoneId.systemDefault()).toInstant())));
-        }
-        if (subject.contains("{invoiceDueDate}")) {
-            subject = subject.replace("{invoiceDueDate}", new SimpleDateFormat("MM/dd/YYYY").format(Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant())));
-        }
-        if (subject.contains("{invoiceDiscount}")) {
-            subject = subject.replace("{invoiceDiscount}", invoice.getInvoiceDiscount() != null ? invoice.getInvoiceDiscount().toString() : "");
-        }
-        if (subject.contains("{contactName}")) {
-            subject = subject.replace("{contactName}", invoice.getInvoiceContact() != null ? invoice.getInvoiceContact().getFirstName() : "");
-        }
-        if (subject.contains("{projectName}")) {
-            subject = subject.replace("{projectName}", invoice.getInvoiceProject() != null ? invoice.getInvoiceProject().getProjectName() : "");
-        }
-        if (subject.contains("{invoiceAmount}")) {
-            subject = subject.replace("{invoiceAmount}", invoice.getInvoiceAmount() != null ? invoice.getInvoiceAmount().toString() : "");
-        }
-        if (subject.contains("{dueAmount}")) {
-            subject = subject.replace("{dueAmount}", invoice.getDueAmount() != null ? invoice.getDueAmount().toString() : "");
-        }
-        if (subject.contains("{contractPoNumber}")) {
-            subject = subject.replace("{contractPoNumber}", invoice.getContractPoNumber() != null ? invoice.getContractPoNumber() : "");
+        if (subject != null) {
+            if (subject.contains("{invoiceReferenceNumber}")) {
+                subject = subject.replace("{invoiceReferenceNumber}", invoice.getInvoiceReferenceNumber());
+            }
+            if (subject.contains("{invoiceDate}")) {
+                subject = subject.replace("{invoiceDate}", new SimpleDateFormat("MM/dd/YYYY").format(Date.from(invoice.getInvoiceDate().atZone(ZoneId.systemDefault()).toInstant())));
+            }
+            if (subject.contains("{invoiceDueDate}")) {
+                subject = subject.replace("{invoiceDueDate}", new SimpleDateFormat("MM/dd/YYYY").format(Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant())));
+            }
+            if (subject.contains("{invoiceDiscount}")) {
+                subject = subject.replace("{invoiceDiscount}", invoice.getInvoiceDiscount() != null ? invoice.getInvoiceDiscount().toString() : "");
+            }
+            if (subject.contains("{contactName}")) {
+                subject = subject.replace("{contactName}", invoice.getInvoiceContact() != null ? invoice.getInvoiceContact().getFirstName() : "");
+            }
+            if (subject.contains("{projectName}")) {
+                subject = subject.replace("{projectName}", invoice.getInvoiceProject() != null ? invoice.getInvoiceProject().getProjectName() : "");
+            }
+            if (subject.contains("{invoiceAmount}")) {
+                subject = subject.replace("{invoiceAmount}", invoice.getInvoiceAmount() != null ? invoice.getInvoiceAmount().toString() : "");
+            }
+            if (subject.contains("{dueAmount}")) {
+                subject = subject.replace("{dueAmount}", invoice.getDueAmount() != null ? invoice.getDueAmount().toString() : "");
+            }
+            if (subject.contains("{contractPoNumber}")) {
+                subject = subject.replace("{contractPoNumber}", invoice.getContractPoNumber() != null ? invoice.getContractPoNumber() : "");
+            }
         }
     }
 
     public void generateMessageBody() {
-        if (messageBody.contains("{invoiceReferenceNumber}")) {
-            messageBody = messageBody.replace("{invoiceReferenceNumber}", invoice.getInvoiceReferenceNumber());
-        }
-        if (messageBody.contains("{invoiceDate}")) {
-            messageBody = messageBody.replace("{invoiceDate}", new SimpleDateFormat("MM/dd/YYYY").format(Date.from(invoice.getInvoiceDate().atZone(ZoneId.systemDefault()).toInstant())));
-        }
-        if (messageBody.contains("{invoiceDueDate}")) {
-            messageBody = messageBody.replace("{invoiceDueDate}", new SimpleDateFormat("MM/dd/YYYY").format(Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant())));
-        }
-        if (messageBody.contains("{invoiceDiscount}")) {
-            messageBody = messageBody.replace("{invoiceDiscount}", invoice.getInvoiceDiscount() != null ? invoice.getInvoiceDiscount().toString() : "");
-        }
-        if (messageBody.contains("{contactName}")) {
-            messageBody = messageBody.replace("{contactName}", invoice.getInvoiceContact() != null ? invoice.getInvoiceContact().getFirstName() : "");
-        }
-        if (messageBody.contains("{projectName}")) {
-            messageBody = messageBody.replace("{projectName}", invoice.getInvoiceProject() != null ? invoice.getInvoiceProject().getProjectName() : "");
-        }
-        if (messageBody.contains("{contractPoNumber}")) {
-            messageBody = messageBody.replace("{contractPoNumber}", invoice.getContractPoNumber() != null ? invoice.getContractPoNumber() : "");
-        }
+        if (messageBody != null) {
+            if (messageBody.contains("{invoiceReferenceNumber}")) {
+                messageBody = messageBody.replace("{invoiceReferenceNumber}", invoice.getInvoiceReferenceNumber());
+            }
+            if (messageBody.contains("{invoiceDate}")) {
+                messageBody = messageBody.replace("{invoiceDate}", new SimpleDateFormat("MM/dd/YYYY").format(Date.from(invoice.getInvoiceDate().atZone(ZoneId.systemDefault()).toInstant())));
+            }
+            if (messageBody.contains("{invoiceDueDate}")) {
+                messageBody = messageBody.replace("{invoiceDueDate}", new SimpleDateFormat("MM/dd/YYYY").format(Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant())));
+            }
+            if (messageBody.contains("{invoiceDiscount}")) {
+                messageBody = messageBody.replace("{invoiceDiscount}", invoice.getInvoiceDiscount() != null ? invoice.getInvoiceDiscount().toString() : "");
+            }
+            if (messageBody.contains("{contactName}")) {
+                messageBody = messageBody.replace("{contactName}", invoice.getInvoiceContact() != null ? invoice.getInvoiceContact().getFirstName() : "");
+            }
+            if (messageBody.contains("{projectName}")) {
+                messageBody = messageBody.replace("{projectName}", invoice.getInvoiceProject() != null ? invoice.getInvoiceProject().getProjectName() : "");
+            }
+            if (messageBody.contains("{contractPoNumber}")) {
+                messageBody = messageBody.replace("{contractPoNumber}", invoice.getContractPoNumber() != null ? invoice.getContractPoNumber() : "");
+            }
 
-        if (messageBody.contains("{invoiceAmount}")) {
-            messageBody = messageBody.replace("{invoiceAmount}", invoice.getInvoiceAmount() != null ? invoice.getInvoiceAmount().toString() : "");
-        }
-        if (messageBody.contains("{dueAmount}")) {
-            messageBody = messageBody.replace("{dueAmount}", invoice.getDueAmount() != null ? invoice.getDueAmount().toString() : "");
+            if (messageBody.contains("{invoiceAmount}")) {
+                messageBody = messageBody.replace("{invoiceAmount}", invoice.getInvoiceAmount() != null ? invoice.getInvoiceAmount().toString() : "");
+            }
+            if (messageBody.contains("{dueAmount}")) {
+                messageBody = messageBody.replace("{dueAmount}", invoice.getDueAmount() != null ? invoice.getDueAmount().toString() : "");
+            }
         }
     }
 

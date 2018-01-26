@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class InvoiceItemModel {
-    
+
     private int id;
 
     private int quatity;
@@ -23,5 +23,11 @@ public class InvoiceItemModel {
     private BigDecimal subTotal;
     private Integer versionNumber;
     private Product productService;
-    
+
+    public BigDecimal getSubTotal() {
+        if (null != unitPrice) {
+            subTotal = unitPrice.multiply(new BigDecimal(quatity));
+        }
+        return subTotal;
+    }
 }

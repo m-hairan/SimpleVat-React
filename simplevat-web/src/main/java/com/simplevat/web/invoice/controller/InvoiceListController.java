@@ -140,8 +140,8 @@ public class InvoiceListController extends BaseController implements Serializabl
     }
 
     public String redirectToViewInvoice() {
-        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-        session.setAttribute("invoiceId", selectedInvoiceModel.getInvoiceId());
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("invoiceId", selectedInvoiceModel.getInvoiceId());
+
         return "invoiceView.xhtml?faces-redirect=true";
     }
 

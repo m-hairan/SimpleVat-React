@@ -3,8 +3,9 @@
      xmlns:f="http://java.sun.com/jsf/core"
      xmlns:ui="http://java.sun.com/jsf/facelets"
      xmlns:p="http://primefaces.org/ui"
-     xmlns:si="http://java.sun.com/jsf/composite/ccomponent">
-    <p:dialog widgetVar="invoicePDFWidget" modal="true" width="50%" height="80%" >
+     xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
+     xmlns:pe="http://primefaces.org/ui/extensions">
+    <p:dialog widgetVar="invoicePDFWidget" modal="true" visible="false" width="50%" height="80%" >
         <style>
             .ui-dialog{
                 top: 0px !important;
@@ -15,11 +16,14 @@
                 margin-bottom: 5px !important;
             }
         </style>
+        <f:viewAction action="#{invoicePDFGenerator.init}"/>
         <h:form id="invoicePDF">
+            
             <div class="ui-fluid">
                 <div class="ui-g">
                     <div class="ui-g-12">
-                            <p:media value="/invoiceJasper.pdf" width="100%" height="1040"/>
+                        <pe:documentViewer height="700" value="#{invoicePDFGenerator.invoicepdf}" download="extensions-rocks.pdf" cache="false"/>
+                        <!--<p:media value="#{invoicePDFGenerator.invoicepdf}" width="100%" height="1040" player="pdf"/>-->
                     </div>
                 </div>
             </div>

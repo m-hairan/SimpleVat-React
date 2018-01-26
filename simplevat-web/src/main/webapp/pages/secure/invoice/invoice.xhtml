@@ -727,8 +727,8 @@
                                                         <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.discountType.discountTypeCode == 2}">
                                                             <p:inputNumber id="absolutediscountValue" symbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} " symbolPosition="p"
                                                                            value="#{invoiceController.selectedInvoiceModel.discount}" style="text-align: right !important"
-                                                                           validatorMessage="Discount should in between 0 to #{invoiceController.total}.">
-                                                                <f:validateDoubleRange maximum="#{invoiceController.total}"/>
+                                                                           validatorMessage="Discount should in between 0 to #{invoiceController.selectedInvoiceModel.invoiceAmount}.">
+                                                                <f:validateDoubleRange maximum="#{invoiceController.selectedInvoiceModel.invoiceAmount}"/>
                                                                 <p:ajax event="keyup" 
                                                                         listener="#{invoiceController.updateSubTotalOnDiscountAdded()}" 
                                                                         update=":#{p:component('subTotal')} totalDiscount" />
@@ -756,7 +756,7 @@
                                             <p:column colspan="2" styleClass="amount">
                                                 <f:facet name="footer">
                                                     <p:outputPanel autoUpdate="true">
-                                                        <h:outputText id="totalDiscount" value="#{invoiceController.selectedInvoiceModel.discount}" >
+                                                        <h:outputText id="totalDiscount" value="#{invoiceController.selectedInvoiceModel.calculatedDiscountAmount}" >
                                                             <f:convertNumber type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} " />
                                                         </h:outputText>
                                                     </p:outputPanel>
@@ -765,11 +765,11 @@
                                         </p:row>  
 
                                         <p:row >  
-                                            <p:column colspan="5" footerText="Net Total" styleClass="amount"/>
+                                            <p:column colspan="5" footerText="Total Net" styleClass="amount"/>
                                             <p:column colspan="2" styleClass="amount">
                                                 <f:facet name="footer">
                                                     <p:outputPanel autoUpdate="true">
-                                                        <h:outputText id="netTotal" value="#{invoiceController.total}" >
+                                                        <h:outputText id="netTotal" value="#{invoiceController.selectedInvoiceModel.invoiceSubtotal}" >
                                                             <f:convertNumber type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} " />
                                                         </h:outputText>
                                                     </p:outputPanel>
@@ -782,7 +782,7 @@
                                             <p:column colspan="2" styleClass="amount">
                                                 <f:facet name="footer">
                                                     <p:outputPanel autoUpdate="true">
-                                                        <h:outputText id="totalVat" value="#{invoiceController.totalVat}" >
+                                                        <h:outputText id="totalVat" value="#{invoiceController.selectedInvoiceModel.invoiceVATAmount}" >
                                                             <f:convertNumber type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} " />
                                                         </h:outputText>
                                                     </p:outputPanel>
@@ -790,11 +790,11 @@
                                             </p:column>  
                                         </p:row>  
                                         <p:row >  
-                                            <p:column colspan="5" footerText="Total" styleClass="amount"/>  
+                                            <p:column colspan="5" footerText="Total Due" styleClass="amount"/>  
                                             <p:column colspan="2" styleClass="amount">
                                                 <f:facet name="footer">
                                                     <p:outputPanel autoUpdate="true">
-                                                        <h:outputText id="total" value="#{invoiceController.totalInvoiceCalculation}" >
+                                                        <h:outputText id="total" value="#{invoiceController.selectedInvoiceModel.invoiceAmount}" >
                                                             <f:convertNumber type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} " />
                                                         </h:outputText>
                                                     </p:outputPanel>

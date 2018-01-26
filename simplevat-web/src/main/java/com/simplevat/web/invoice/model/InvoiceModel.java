@@ -5,8 +5,10 @@ import com.simplevat.entity.Currency;
 import com.simplevat.entity.Project;
 import com.simplevat.entity.User;
 import com.simplevat.entity.invoice.DiscountType;
+import com.simplevat.web.constant.DiscountTypeConstant;
 import com.simplevat.web.constant.RecurringNameValueMapping;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,7 +27,7 @@ public class InvoiceModel {
     private Integer invoiceId;
 
     private Contact invoiceContact;
-    
+
     private Contact shippingContact;
 
     private Project project;
@@ -55,6 +57,12 @@ public class InvoiceModel {
     private String contractPoNumber;
 
     private BigDecimal invoiceAmount;
+    
+    private BigDecimal invoiceSubtotal;
+
+    private BigDecimal invoiceVATAmount;    
+    
+    private BigDecimal calculatedDiscountAmount;
 
     private BigDecimal dueAmount;
 
@@ -63,7 +71,7 @@ public class InvoiceModel {
     private String statusName;
 
     private Boolean recurringFlag;
-    
+
     private Boolean freeze = Boolean.FALSE;
 
     private Integer paymentMode;
@@ -85,6 +93,5 @@ public class InvoiceModel {
             invoiceLineItems = new ArrayList<>();
         }
         invoiceLineItems.add(invoiceItemModel);
-    }
-
+    }    
 }

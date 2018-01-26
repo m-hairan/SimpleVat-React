@@ -4,6 +4,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
+                xmlns:pe="http://primefaces.org/ui/extensions"
                 template="/WEB-INF/templates/template.xhtml">
     <ui:define name="content">
         <style>
@@ -20,6 +21,9 @@
                 width: auto !important;
             }
         </style>
+        <f:metadata>
+            <f:viewAction action="#{invoicePDFGenerator.init}" />
+        </f:metadata>
         <h:form id="invoiceView">
             <div class="card card-w-title">
                 <p:toolbar>
@@ -27,9 +31,6 @@
                         <p:commandButton action="#{invoiceViewController.redirectToEditInvoice()}" 
                                          value="#{messages.edit}" rendered="#{!invoiceViewController.invoice.freeze}"
                                          icon="ui-icon-edit" />
-                        <p:commandButton action="#{invoiceViewController.printInvoice()}" 
-                                         value="#{messages.print_invoice}" update="PDF" 
-                                         icon="ui-icon-print" />
                         <p:commandButton onclick="PF('invoiceMailWidget').show();" 
                                          value="#{messages.Send_By_Mail}"
                                          icon="ui-icon-mail" />
@@ -45,7 +46,7 @@
                 <div class="ui-fluid">
                     <div class="ui-g">
                         <div class="ui-g-12" align="center">
-                            <p:graphicImage value="/invoiceViewServlet" width="70%" height="100%" style="border: 0 !important"/>
+                            <pe:documentViewer height="700" value="#{invoicePDFGenerator.invoicepdf}" download="extensions-rocks.pdf" cache="false"/>
                             <style>
                                 .ui-dialog .ui-dialog-content {
                                     padding: 10px !important;
@@ -120,9 +121,6 @@
                         <p:commandButton action="#{invoiceViewController.redirectToEditInvoice()}" 
                                          value="#{messages.edit}" rendered="#{!invoiceViewController.invoice.freeze}"
                                          icon="ui-icon-edit" />
-                        <p:commandButton action="#{invoiceViewController.printInvoice()}" 
-                                         value="#{messages.print_invoice}" update="PDF" 
-                                         icon="ui-icon-print" />
                         <p:commandButton onclick="PF('invoiceMailWidget').show();" 
                                          value="#{messages.Send_By_Mail}"
                                          icon="ui-icon-mail" />
@@ -137,10 +135,5 @@
                 </p:toolbar>
             </div>
         </h:form>
-        <h:panelGroup id="PDF">
-            <h:panelGroup  rendered="#{invoiceViewController.renderPDF}">
-                <ui:include src="invoicePDF.xhtml" />
-            </h:panelGroup>
-        </h:panelGroup>
     </ui:define>
 </ui:composition>
