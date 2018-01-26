@@ -47,6 +47,11 @@ public class VatCategoryServiceImpl   extends VatCategoryService {
       return vatCategoryDao;
     }
 
+    @Override
+    public VatCategory getDefaultVatCategory() {
+        return vatCategoryDao.getDefaultVatCategory();
+    }
+
     
     
 

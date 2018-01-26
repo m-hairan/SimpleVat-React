@@ -10,5 +10,6 @@ public abstract class VatCategoryService extends SimpleVatService<Integer, VatCa
 
 	public abstract List<VatCategory> getVatCategoryList();
 
+        public abstract VatCategory getDefaultVatCategory();
 
 }

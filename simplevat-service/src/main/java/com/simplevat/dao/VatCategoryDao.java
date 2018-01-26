@@ -15,4 +15,6 @@ import java.util.List;
 public interface VatCategoryDao extends Dao<Integer, VatCategory> {
      public List<VatCategory> getVatCategoryList();
 
+    public VatCategory getDefaultVatCategory();
+
 }
