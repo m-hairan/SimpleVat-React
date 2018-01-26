@@ -403,12 +403,12 @@ public class InvoiceController extends BaseController implements Serializable {
 
     public List<DiscountType> discountTypes(final String searchString) {
         final List<DiscountType> types = discountTypeService.getDiscountTypes();
-        for (DiscountType type : types) {
-            if (null != searchString
-                    && !type.toString().toLowerCase().contains(searchString.toLowerCase())) {
-                types.remove(type);
-            }
-        }
+//        for (DiscountType type : types) {
+//            if (null != searchString
+//                    && !type.toString().toLowerCase().contains(searchString.toLowerCase())) {
+//                types.remove(type);
+//            }
+//        }
         return types;
     }
 
