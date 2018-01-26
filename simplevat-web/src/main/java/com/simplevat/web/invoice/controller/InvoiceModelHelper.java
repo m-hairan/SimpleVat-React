@@ -210,7 +210,12 @@ public class InvoiceModelHelper {
 
     private BigDecimal getDiscountAmount(BigDecimal itemValue, InvoiceModel invoiceModel) {
         BigDecimal discountAmount = invoiceModel.getDiscount();
-        if (invoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.PERCENTAGEDISCOUNT) {
+        if (invoiceModel.getDiscountType() != null 
+                && itemValue != null
+                && discountAmount != null
+                && invoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.PERCENTAGEDISCOUNT
+                ) {
+
             discountAmount = (itemValue.multiply(discountAmount)).divide(new BigDecimal(100));
         }
         return discountAmount;

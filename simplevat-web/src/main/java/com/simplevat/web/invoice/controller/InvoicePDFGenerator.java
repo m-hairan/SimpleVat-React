@@ -71,7 +71,7 @@ public class InvoicePDFGenerator implements Serializable {
 
     public void init() {
         Integer invoiceId = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("invoiceId").toString());
-        System.out.println("invoiceId in pdf generator :"+invoiceId);
+        System.out.println("invoiceId in pdf generator :" + invoiceId);
         invoice = invoiceService.findByPK(invoiceId);
         invoiceModel = invoiceModelHelper.getInvoiceModel(invoice);
         user = FacesUtil.getLoggedInUser();
@@ -120,7 +120,10 @@ public class InvoicePDFGenerator implements Serializable {
         } catch (Exception ex) {
             Logger.getLogger(InvoicePDFGenerator.class.getName()).log(Level.SEVERE, null, ex);
         }
-        PdfPCell cell = new PdfPCell(img);
+        PdfPCell cell = new PdfPCell(new Phrase(""));
+        if (img != null) {
+            cell = new PdfPCell(img);
+        }
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         cell.setBorder(0);
         cell.setPaddingTop(4);
@@ -303,8 +306,11 @@ public class InvoicePDFGenerator implements Serializable {
         table.addCell(getTableFooterValueCell(currency.getCurrencySymbol() + getDecimalValue(invoiceModel.getDueAmount())));
         return table;
     }
-    
-    private BigDecimal getDecimalValue(BigDecimal value){
+
+    private BigDecimal getDecimalValue(BigDecimal value) {
+        if(value == null){
+            value = BigDecimal.ZERO;
+        }
         return value.setScale(2, BigDecimal.ROUND_HALF_EVEN);
     }
 
