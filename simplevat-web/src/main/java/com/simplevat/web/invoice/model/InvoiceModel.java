@@ -2,6 +2,7 @@ package com.simplevat.web.invoice.model;
 
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Currency;
+import com.simplevat.entity.Product;
 import com.simplevat.entity.Project;
 import com.simplevat.entity.User;
 import com.simplevat.entity.invoice.DiscountType;
@@ -31,6 +32,8 @@ public class InvoiceModel {
     private Contact shippingContact;
 
     private Project project;
+    
+    private Product invoiceProduct;
 
     private String invoiceReferenceNumber;
 
@@ -57,11 +60,11 @@ public class InvoiceModel {
     private String contractPoNumber;
 
     private BigDecimal invoiceAmount;
-    
+
     private BigDecimal invoiceSubtotal;
 
-    private BigDecimal invoiceVATAmount;    
-    
+    private BigDecimal invoiceVATAmount;
+
     private BigDecimal calculatedDiscountAmount;
 
     private BigDecimal dueAmount;
@@ -93,5 +96,5 @@ public class InvoiceModel {
             invoiceLineItems = new ArrayList<>();
         }
         invoiceLineItems.add(invoiceItemModel);
-    }    
+    }
 }

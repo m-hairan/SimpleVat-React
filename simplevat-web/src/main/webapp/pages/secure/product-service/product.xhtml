@@ -43,6 +43,38 @@
                                         </h:panelGroup>
 
                                         <h:panelGroup styleClass="md-inputfield">
+                                            <p:autoComplete id="produstList" 
+                                                            converter="#{productConverter}"
+                                                            dropdown="true" 
+                                                            forceSelection="true"
+                                                            effect="fold"
+                                                            scrollHeight="250"
+                                                            value="#{productController.productModel.parentProduct}"
+                                                            completeMethod="#{productController.completeProducts()}" 
+                                                            var="parentProduct"
+                                                            itemValue="#{parentProduct}"
+                                                            itemLabel="#{parentProduct.productName}"
+                                                            >
+                                            </p:autoComplete>
+                                            <p:outputLabel for="produstList" value="#{messages.Parent}"/>
+                                            <p:message for="produstList" />
+                                        </h:panelGroup>
+
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText id="ProductPrice"
+                                                         value="#{productController.productModel.unitPrice}"
+                                                         />
+                                            <p:outputLabel for="ProductPrice" value="Product Price"/>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup styleClass="md-inputwrapper-focus" >
+                                            <p:selectBooleanCheckbox id="vatApply" value="#{productController.productModel.vatCheckFlag}" >
+                                            </p:selectBooleanCheckbox>
+                                            <p:outputLabel for="vatApply" value="Vat Include"/>
+                                        </h:panelGroup>
+
+
+                                        <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete id="vat" 
                                                             converter="#{vatCategoryConverter}"
                                                             dropdown="true" 
@@ -78,30 +110,11 @@
                                             <p:message for="warehouse" />
                                         </h:panelGroup>
                                         <p:outputLabel value="OR  ">
-                                        <p:commandLink onsuccess="PF('add_new_warehouse').show();" 
-                                                       style="color: #009688" 
-                                                       value="Add New Warehouse" />
+                                            <p:commandLink onsuccess="PF('add_new_warehouse').show();" 
+                                                           style="color: #009688" 
+                                                           value="Add New Warehouse" />
                                         </p:outputLabel>
-
-
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:autoComplete id="produstList" 
-                                                            converter="#{productConverter}"
-                                                            dropdown="true" 
-                                                            forceSelection="true"
-                                                            effect="fold"
-                                                            scrollHeight="250"
-                                                            value="#{productController.productModel.parentProduct}"
-                                                            completeMethod="#{productController.completeProducts()}" 
-                                                            var="parentProduct"
-                                                            itemValue="#{parentProduct}"
-                                                            itemLabel="#{parentProduct.productName}"
-                                                            >
-                                            </p:autoComplete>
-                                            <p:outputLabel for="produstList" value="#{messages.Parent}"/>
-                                            <p:message for="produstList" />
-                                        </h:panelGroup>
-
+                                        
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputTextarea
                                                 id="productDescription"

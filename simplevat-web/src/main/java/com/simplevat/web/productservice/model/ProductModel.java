@@ -3,11 +3,11 @@ package com.simplevat.web.productservice.model;
 import com.simplevat.entity.Product;
 import com.simplevat.entity.VatCategory;
 import com.simplevat.entity.ProductWarehouse;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
 
 @Getter
 @Setter
@@ -27,5 +27,7 @@ public class ProductModel {
     private Integer versionNumber;
     private Product parentProduct;
     private ProductWarehouse productWarehouse;
-      
+    private Boolean vatCheckFlag = Boolean.FALSE;
+    private BigDecimal unitPrice;
+
 }

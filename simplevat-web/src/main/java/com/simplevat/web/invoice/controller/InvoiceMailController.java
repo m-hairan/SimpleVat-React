@@ -84,6 +84,10 @@ public class InvoiceMailController implements Serializable {
 
     @Getter
     @Setter
+    private Boolean sendCopyToSender = Boolean.FALSE;
+
+    @Getter
+    @Setter
     private Invoice invoice;
 
     @Getter
@@ -118,7 +122,7 @@ public class InvoiceMailController implements Serializable {
         if (subjectConfiguration != null) {
             subject = subjectConfiguration.getValue();
         }
-        Configuration messageBodyConfiguration = configurationService.getConfigurationByName(ConfigurationConstants.INVOICE_MAIL_TAMPLATE_SUBJECT);
+        Configuration messageBodyConfiguration = configurationService.getConfigurationByName(ConfigurationConstants.INVOICE_MAIL_TAMPLATE_BODY);
         if (messageBodyConfiguration != null) {
             messageBody = messageBodyConfiguration.getValue();
         }
@@ -142,6 +146,9 @@ public class InvoiceMailController implements Serializable {
             mail.setBody(body == null ? "" : body);
             mail.setFrom(fromEmail);
             mail.setFromName(EmailConstant.ADMIN_EMAIL_SENDER_NAME);
+            if (sendCopyToSender) {
+                moreEmails.add(fromEmail);
+            }
             mail.setTo(Arrays.copyOf(moreEmails.toArray(), moreEmails.toArray().length, String[].class));
             mail.setSubject(subject == null ? "" : subject);
             if (bccList != null && !bccList.isEmpty()) {

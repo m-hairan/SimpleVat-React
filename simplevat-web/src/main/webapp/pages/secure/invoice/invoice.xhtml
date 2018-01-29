@@ -27,6 +27,12 @@
                 color: #000;
                 border-color: #000;
             }
+            .ui-grid-col-11{
+                padding: 0 !important;
+            }
+            .ui-grid-col-1{
+                padding: 3px !important;
+            }
 
         </style>
     </ui:define>
@@ -62,35 +68,6 @@
                                         <p:outputLabel for="invoiceId" value="#{messages.invoice_ref_no}"/>
                                         <p:message for="invoiceId" />
                                     </h:panelGroup>
-
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:autoComplete id="conatcts" 
-                                                        converter="#{contactConverter}"
-                                                        dropdown="true" 
-                                                        forceSelection="true"
-                                                        effect="fold"
-                                                        required="true"
-                                                        scrollHeight="250"
-                                                        requiredMessage="Please select Contact"
-                                                        completeMethod="#{invoiceController.contacts}" 
-                                                        value="#{invoiceController.selectedInvoiceModel.invoiceContact}" 
-                                                        var="contact"
-                                                        itemValue="#{contact.contactId}"
-                                                        itemLabel="#{contact.firstName} #{contact.lastName}">
-                                            <p:ajax event="itemSelect"
-                                                    listener="#{invoiceController.updateCurrency}" 
-                                                    update="currency invoiceField invoiceItemTable exchangeCurrency" />
-                                        </p:autoComplete>
-                                        <p:outputLabel for="conatcts" value="#{messages.contact}"/>
-                                        <p:message for="conatcts" />
-                                    </h:panelGroup>
-
-                                    <p:outputLabel value="OR  ">
-                                        <p:commandLink onsuccess="PF('add_contact_popup').show();" 
-                                                       actionListener="#{invoiceController.initCreateContact()}"
-                                                       style="color: #009688" 
-                                                       value="Add New Contact" />
-                                    </p:outputLabel>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="project" 
                                                         converter="#{projectConverter}"
@@ -108,6 +85,40 @@
                                         <p:outputLabel for="project" value="#{messages.project}"/>
                                         <p:message for="project" />
                                     </h:panelGroup>
+                                    <h:panelGroup/>
+
+                                    <p:panelGrid columns="2" 
+                                                 columnClasses="ui-grid-col-11,ui-grid-col-1"
+                                                 layout="grid" 
+                                                 styleClass="ui-panelgrid-blank form-group"
+                                                 style="border:0px none; background-color:transparent;">
+                                        <h:panelGroup styleClass="md-inputfield" style="padding: 0 !important;">
+                                            <p:autoComplete id="conatcts" 
+                                                            converter="#{contactConverter}"
+                                                            dropdown="true" 
+                                                            forceSelection="true"
+                                                            effect="fold"
+                                                            required="true"
+                                                            scrollHeight="250"
+                                                            requiredMessage="Please select Contact"
+                                                            completeMethod="#{invoiceController.contacts}" 
+                                                            value="#{invoiceController.selectedInvoiceModel.invoiceContact}" 
+                                                            var="contact"
+                                                            itemValue="#{contact.contactId}"
+                                                            itemLabel="#{contact.firstName} #{contact.lastName}">
+                                                <p:ajax event="itemSelect"
+                                                        listener="#{invoiceController.updateCurrency}" 
+                                                        update="currency invoiceField invoiceItemTable exchangeCurrency" />
+                                            </p:autoComplete>
+                                            <p:outputLabel for="conatcts" value="#{messages.contact}"/>
+                                            <p:message for="conatcts" />
+                                        </h:panelGroup >
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:tooltip for="addbtn" position="top" value="Add new contact" />
+                                            <p:commandButton id="addbtn" icon="ui-icon-plus" onsuccess="PF('add_contact_popup').show();" actionListener="#{invoiceController.initCreateContact()}"/>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+
 
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="organizationName"
@@ -133,6 +144,7 @@
                                                      requiredMessage="Please Enter address">
                                         </p:inputText>
                                         <p:outputLabel  for="Address1" value="#{messages.addressLine1}" />
+                                        <p:message for="Address1" />
                                     </h:panelGroup>
 
 
@@ -143,6 +155,7 @@
                                                      requiredMessage="Please Enter address">
                                         </p:inputText>
                                         <p:outputLabel  for="Address2" value="#{messages.addressLine2}" />
+                                        <p:message for="Address2" />
                                     </h:panelGroup>
 
 
@@ -180,6 +193,7 @@
                                                      requiredMessage="Please Enter state">
                                         </p:inputText>
                                         <p:outputLabel  for="state" value="#{messages.CompanyStateRegion}" />
+                                        <p:message for="state" />
                                     </h:panelGroup>
 
                                     <h:panelGroup styleClass="md-inputfield">
@@ -189,6 +203,7 @@
                                                      requiredMessage="Please Enter city">
                                         </p:inputText>
                                         <p:outputLabel  for="city" value="#{messages.CompanyCity}"/>
+                                        <p:message for="city"/>
                                     </h:panelGroup>
                                 </p:panelGrid>
                             </p:fieldset>
@@ -369,7 +384,7 @@
                                                         var="currency" itemValue="#{currency.currencyCode}"
                                                         itemLabel="#{currency.currencyIsoCode}  #{currency.currencySymbol}" >
                                             <p:ajax event="itemSelect" 
-                                                    update="invoiceItemTable,exchangeCurrency" />
+                                                    update="invoiceItemTable:lineItemFooterColumnGroup,invoiceItemTable,exchangeCurrency" />
                                         </p:autoComplete>
                                         <p:outputLabel for="currency" value="#{messages.currency}"/>
                                         <p:message for="currency" />
@@ -380,19 +395,6 @@
                                                      value="#{invoiceController.selectedInvoiceModel.contractPoNumber}">
                                         </p:inputText>
                                         <p:outputLabel  for="contractPoNumber" value="#{messages.contract_po_number}"/>
-                                    </h:panelGroup>
-
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputTextarea rows="5" 
-                                                         id="notes"
-                                                         cols="30"
-                                                         value="#{invoiceController.selectedInvoiceModel.invoiceNotes}"
-                                                         maxlength="255"
-                                                         counter="counterValue"
-                                                         counterTemplate="{0} characters remaining."
-                                                         autoResize="false" />
-                                        <h:outputText id="counterValue" />
-                                        <p:outputLabel for="notes" value="#{messages.invoice_notes}" />
                                     </h:panelGroup>
 
                                     <h:panelGroup />
@@ -608,12 +610,12 @@
                                 </p:fieldset>
                             </h:panelGroup>
 
-                            <p:fieldset legend="Invoice Item Details" toggleable="true" 
+                            <p:fieldset legend="Invoice Item Details" toggleable="true" id="lineItems"
                                         toggleSpeed="300">
                                 <p:messages autoUpdate="true" id="validationId" closable="true" for="validationId" />
                                 <p:dataTable value="#{invoiceController.selectedInvoiceModel.invoiceLineItems}"
                                              var="invoiceItem" 
-                                             editMode="cell"
+                                             editMode="cell" style="padding-bottom: 20px !important"
                                              editable="true"
                                              id="invoiceItemTable"
                                              reflow="true" >
@@ -625,40 +627,52 @@
                                                          icon="ui-icon-delete">
                                         </p:commandButton>
                                     </p:column>
+
                                     <p:column headerText="Product/Service"  style="width: 200px">
-                                        <p:autoComplete id="product_service" 
-                                                        converter="#{productConverter}"
-                                                        dropdown="true" 
-                                                        forceSelection="true"
-                                                        effect="fold"
-                                                        groupBy="#{product.parentProduct == null ? 'Other' : product.parentProduct.productName}"
-                                                        value="#{invoiceItem.productService}"
-                                                        completeMethod="#{invoiceController.products}" 
-                                                        var="product"
-                                                        scrollHeight="250"
-                                                        itemValue="#{product}"
-                                                        itemLabel="#{product.productName}">
-                                            <!--<p:ajax update="product_service product_service_label" listener="#{invoiceController.refreshProductService(invoiceItem)}" event="change"/>-->
-                                            <p:ajax update="vatId subTotal" event="itemSelect" listener="#{invoiceController.updateVatPercentage(invoiceItem)}" />
-                                        </p:autoComplete>
+                                        <p:panelGrid columns="2" 
+                                                     columnClasses="ui-grid-col-11,ui-grid-col-1" 
+                                                     layout="grid" 
+                                                     styleClass="ui-panelgrid-blank form-group" >
+                                            <p:autoComplete id="product_service" 
+                                                            converter="#{productConverter}"
+                                                            dropdown="true" 
+                                                            forceSelection="true"
+                                                            effect="fold"
+                                                            groupBy="#{product.parentProduct == null ? 'Other' : product.parentProduct.productName}"
+                                                            value="#{invoiceItem.productService}"
+                                                            completeMethod="#{invoiceController.products}" 
+                                                            var="product"
+                                                            scrollHeight="250"
+                                                            itemValue="#{product}"
+                                                            itemLabel="#{product.productName}">
+                                                <!--<p:ajax update="product_service product_service_label" listener="#{invoiceController.refreshProductService(invoiceItem)}" event="change"/>-->
+                                                <p:ajax update="vatId subTotal" event="itemSelect" listener="#{invoiceController.updateVatPercentage(invoiceItem)}" />
+                                                <p:ajax event="itemSelect" listener="#{invoiceController.addInvoiceItem()}" update="invoiceItemTable"/>
+                                            </p:autoComplete>
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:tooltip for="addproductbtn" position="top" value="Add new product" />
+                                                <p:commandButton id="addproductbtn" icon="ui-icon-plus" onsuccess="PF('add_product_popup').show();"  update=":addProductForm" actionListener="#{invoiceController.initCreateProduct()}"/>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
                                     </p:column>
                                     <p:column headerText="Description"  style="width: 320px">
                                         <p:inputText id="description" 
                                                      value="#{invoiceItem.description}" 
                                                      style="width:100%">
-                                            <p:ajax event="change" />
+                                            <p:ajax event="change"/>
                                         </p:inputText>
                                     </p:column>
                                     <p:column headerText="Quantity" styleClass="amount">
-                                        <p:inputNumber id="quantity" 
-                                                       validator="positiveNumberValidator"
-                                                       validatorMessage="Please enter Quantity more then 0"
-                                                       value="#{invoiceItem.quatity}" 
-                                                       style="width:100%">
+                                        <p:inputText id="quantity" 
+                                                     validator="positiveNumberValidator"
+                                                     validatorMessage="Please enter Quantity more then 0"
+                                                     value="#{invoiceItem.quatity}" 
+                                                     style="width:100%">
                                             <p:ajax event="change" 
                                                     listener="#{invoiceController.updateSubTotal(invoiceItem)}" 
                                                     update="subTotal" />
-                                        </p:inputNumber>
+                                            <p:ajax event="blur" listener="#{invoiceController.addInvoiceItem()}" update="invoiceItemTable"/>
+                                        </p:inputText>
                                     </p:column>
                                     <p:column headerText="Unit Price (#{invoiceController.selectedInvoiceModel.currencyCode.currencyIsoCode})" styleClass="amount">
                                         <p:inputNumber id="unitPrice" 
@@ -670,6 +684,7 @@
                                             <p:ajax event="change" 
                                                     listener="#{invoiceController.updateSubTotal(invoiceItem)}" 
                                                     update="subTotal,@form:exchangeCurrency" />
+                                            <p:ajax event="blur" listener="#{invoiceController.addInvoiceItem()}" update="invoiceItemTable"/>
                                         </p:inputNumber>
                                     </p:column>
                                     <p:column headerText="VAT (%)" styleClass="amount">
@@ -683,7 +698,7 @@
                                                         var="vat"
                                                         scrollHeight="250"
                                                         itemValue="#{vat}"
-                                                        itemLabel="#{vat.name}"
+                                                        itemLabel="#{vat.name}(#{vat.vat})"
                                                         >
                                             <p:ajax update="subTotal @form:exchangeCurrency" event="itemSelect" listener="#{invoiceController.updateSubTotal(invoiceItem)}" />
                                             <p:ajax event="change" 
@@ -693,15 +708,15 @@
                                     </p:column>
                                     <p:column width="170" headerText="Subtotal (#{invoiceController.selectedInvoiceModel.currencyCode.currencyIsoCode})" styleClass="amount">
                                         <h:outputText id="subTotal" value="#{invoiceItem.subTotal}" >
-                                            <f:convertNumber type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} " />
+                                            <f:convertNumber type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol}"/>
                                         </h:outputText>
                                     </p:column>
 
-                                    <p:columnGroup type="footer" rendered="#{invoiceController.selectedInvoiceModel.invoiceLineItems.size() > 0}">  
+                                    <p:columnGroup id="lineItemFooterColumnGroup" type="footer" rendered="#{invoiceController.selectedInvoiceModel.invoiceLineItems.size() > 0}">  
 
                                         <p:row >  
-                                            <p:column colspan="5" footerText="Discount" styleClass="amount"/>  
-                                            <p:column  styleClass="amount">
+
+                                            <p:column colspan="6" styleClass="amount">
 
                                                 <f:facet name="footer">
                                                     <h:panelGroup styleClass="md-inputfield">
@@ -726,7 +741,7 @@
                                                         <p:outputLabel for="absolutediscountValue"  rendered="#{invoiceController.selectedInvoiceModel.discountType.discountTypeCode == 2}" />
                                                         <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.discountType.discountTypeCode == 2}">
                                                             <p:inputNumber id="absolutediscountValue" symbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} " symbolPosition="p"
-                                                                           value="#{invoiceController.selectedInvoiceModel.discount}" style="text-align: right !important"
+                                                                           value="#{invoiceController.selectedInvoiceModel.discount}" style="text-align-last: end! important"
                                                                            validatorMessage="Discount should in between 0 to #{invoiceController.selectedInvoiceModel.invoiceAmount}.">
                                                                 <f:validateDoubleRange maximum="#{invoiceController.selectedInvoiceModel.invoiceAmount}"/>
                                                                 <p:ajax event="keyup" 
@@ -738,7 +753,7 @@
                                                         <p:outputLabel for="percentagediscountValue" rendered="#{invoiceController.selectedInvoiceModel.discountType.discountTypeCode == 1}" />
                                                         <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.discountType.discountTypeCode == 1}">
                                                             <p:inputNumber id="percentagediscountValue" symbol="%" symbolPosition="s"
-                                                                           value="#{invoiceController.selectedInvoiceModel.discount}" style="text-align: right !important"
+                                                                           value="#{invoiceController.selectedInvoiceModel.discount}" style="text-align-last: end! important"
                                                                            validatorMessage="Discount should in between 0% to 100%.">
                                                                 <f:validateDoubleRange maximum="100"/>
                                                                 <p:ajax event="keyup" 
@@ -752,12 +767,12 @@
                                         </p:row>
 
                                         <p:row >  
-                                            <p:column colspan="5" footerText="Total Discount" styleClass="amount"/>
-                                            <p:column colspan="2" styleClass="amount">
+                                            <p:column colspan="6" footerText="Total Discount" styleClass="amount"/>
+                                            <p:column colspan="1" styleClass="amount">
                                                 <f:facet name="footer">
                                                     <p:outputPanel autoUpdate="true">
-                                                        <h:outputText id="totalDiscount" value="#{invoiceController.selectedInvoiceModel.calculatedDiscountAmount}" >
-                                                            <f:convertNumber type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} " />
+                                                        <h:outputText id="totalDiscount" value="#{invoiceController.selectedInvoiceModel.calculatedDiscountAmount}"  >
+                                                            <f:convertNumber id="totalDis" type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol}"/>
                                                         </h:outputText>
                                                     </p:outputPanel>
                                                 </f:facet>
@@ -765,8 +780,8 @@
                                         </p:row>  
 
                                         <p:row >  
-                                            <p:column colspan="5" footerText="Total Net" styleClass="amount"/>
-                                            <p:column colspan="2" styleClass="amount">
+                                            <p:column colspan="6" footerText="Total Net" styleClass="amount"/>
+                                            <p:column colspan="1" styleClass="amount">
                                                 <f:facet name="footer">
                                                     <p:outputPanel autoUpdate="true">
                                                         <h:outputText id="netTotal" value="#{invoiceController.selectedInvoiceModel.invoiceSubtotal}" >
@@ -778,8 +793,8 @@
                                         </p:row>  
 
                                         <p:row >  
-                                            <p:column colspan="5" footerText="Total VAT" styleClass="amount"/>  
-                                            <p:column colspan="2" styleClass="amount">
+                                            <p:column colspan="6" footerText="Total VAT" styleClass="amount"/>  
+                                            <p:column colspan="1" styleClass="amount">
                                                 <f:facet name="footer">
                                                     <p:outputPanel autoUpdate="true">
                                                         <h:outputText id="totalVat" value="#{invoiceController.selectedInvoiceModel.invoiceVATAmount}" >
@@ -790,8 +805,8 @@
                                             </p:column>  
                                         </p:row>  
                                         <p:row >  
-                                            <p:column colspan="5" footerText="Total Due" styleClass="amount"/>  
-                                            <p:column colspan="2" styleClass="amount">
+                                            <p:column colspan="6" footerText="Total Due" styleClass="amount"/>  
+                                            <p:column colspan="1" styleClass="amount">
                                                 <f:facet name="footer">
                                                     <p:outputPanel autoUpdate="true">
                                                         <h:outputText id="total" value="#{invoiceController.selectedInvoiceModel.invoiceAmount}" >
@@ -805,12 +820,25 @@
 
                                     </p:columnGroup>
                                 </p:dataTable>
-                                <p:commandButton actionListener="#{invoiceController.addInvoiceItem()}"
-                                                 style="width: 10%; margin-top: 3px" 
-                                                 update="invoiceItemTable"
-                                                 value="Add"
-                                                 process="@this"
-                                                 icon="ui-icon-plus" />
+
+                                <p:panelGrid columns="3" layout="grid" 
+                                             styleClass="ui-panelgrid-blank form-group"
+                                             columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4"
+                                             style="border:0px none; background-color:transparent;">
+                                    <h:panelGroup styleClass="md-inputfield" >
+                                        <p:inputTextarea rows="5" 
+                                                         id="notes"
+                                                         cols="30"
+                                                         value="#{invoiceController.selectedInvoiceModel.invoiceNotes}"
+                                                         maxlength="255"
+                                                         counter="counterValue"
+                                                         counterTemplate="{0} characters remaining."
+                                                         autoResize="false" />
+                                        <h:outputText id="counterValue" />
+                                        <p:outputLabel for="notes" value="#{messages.invoice_notes}" />
+                                    </h:panelGroup>
+                                </p:panelGrid>
+
                             </p:fieldset>
                             <h:panelGroup id="exchangeCurrency"  >
                                 <p:fieldset legend="Currency Exchange Details"
@@ -907,5 +935,6 @@
         </h:form>
 
         <ui:include src="add-contact-popup.xhtml" />
+        <ui:include src="add-product-popup.xhtml"/>
     </ui:define>
 </ui:composition>

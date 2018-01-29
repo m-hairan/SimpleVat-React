@@ -87,8 +87,8 @@
                         <p:commandButton id="view" style="margin-right: 7px" title="#{messages.view_invoice}" icon="ui-icon-view-carousel" styleClass="AquaButton" action="#{invoiceListController.redirectToViewInvoice}">
                             <f:setPropertyActionListener value="#{invoice}" target="#{invoiceListController.selectedInvoiceModel}" />
                         </p:commandButton>
-                        <p:tooltip for="delete" value="#{messages.delete}" position="top"/>
-                        <p:commandButton id="delete"
+                        <p:tooltip for="delete" value="#{messages.delete}" rendered="#{!invoice.freeze}" position="top"/>
+                        <p:commandButton id="delete" rendered="#{!invoice.freeze}"
                                          title="Delete Invoice" 
                                          actionListener="#{invoiceListController.deleteInvoice(invoice)}"
                                          update="invoiceTable"

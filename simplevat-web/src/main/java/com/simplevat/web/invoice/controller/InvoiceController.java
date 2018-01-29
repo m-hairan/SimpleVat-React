@@ -53,6 +53,7 @@ import com.simplevat.web.constant.DiscountTypeConstant;
 import com.simplevat.web.constant.InvoicePaymentModeConstant;
 import com.simplevat.web.constant.InvoicePurchaseStatusConstant;
 import com.simplevat.web.constant.ModuleName;
+import com.simplevat.web.productservice.model.ProductModel;
 import com.simplevat.web.utils.FacesUtil;
 import com.simplevat.web.utils.RecurringUtility;
 import java.math.BigInteger;
@@ -129,6 +130,10 @@ public class InvoiceController extends BaseController implements Serializable {
 
     @Getter
     @Setter
+    private ProductModel productModel;
+
+    @Getter
+    @Setter
     private RecurringUtility recurringUtility;
 
     @Getter
@@ -169,7 +174,6 @@ public class InvoiceController extends BaseController implements Serializable {
     @Setter
     List<SelectItem> vatCategorySelectItemList = new ArrayList<>();
 
-    
     public InvoiceController() {
         super(ModuleName.INVOICE_MODULE);
     }
@@ -215,12 +219,13 @@ public class InvoiceController extends BaseController implements Serializable {
             }
         }
         countries = countryService.getCountries();
+        addInvoiceItem();
         populateVatCategory();
         updateSubTotalOnDiscountAdded();
         if (selectedInvoiceModel.getShippingContact() == null) {
             selectedInvoiceModel.setShippingContact(new Contact());
         }
-        if(selectedInvoiceModel.getShippingContact() == null){
+        if (selectedInvoiceModel.getShippingContact() == null) {
             selectedInvoiceModel.setShippingContact(new Contact());
         }
     }
@@ -361,9 +366,9 @@ public class InvoiceController extends BaseController implements Serializable {
         }
 //        updateSubTotal(invoiceItemModel);
     }
-    
-    public void updateSubTotal(InvoiceItemModel invoiceItem){
-     invoiceModelHelper.processAmountCalculation(selectedInvoiceModel);
+
+    public void updateSubTotal(InvoiceItemModel invoiceItem) {
+        invoiceModelHelper.processAmountCalculation(selectedInvoiceModel);
     }
 
     public List<Project> projects(final String searchQuery) throws Exception {
@@ -550,7 +555,6 @@ public class InvoiceController extends BaseController implements Serializable {
 //        }
 //        calculateNetTotal();
 //    }
-
 //    public void calculateNetTotal() {
 //        total = new BigDecimal(0);
 //        totalVat = new BigDecimal(0);
@@ -577,7 +581,6 @@ public class InvoiceController extends BaseController implements Serializable {
 //            }
 //        }
 //    }
-
 //    public BigDecimal totalAmountInHomeCurrency(Currency currency) {
 //        if (total != null && currencyConversion != null) {
 //            if (currencyConversion != null) {
@@ -586,11 +589,9 @@ public class InvoiceController extends BaseController implements Serializable {
 //        }
 //        return new BigDecimal(0);
 //    }
-
     public void updateSubTotalOnDiscountAdded() {
         invoiceModelHelper.processAmountCalculation(selectedInvoiceModel);
     }
-    
 
 //    public void calculateTotalWithDiscount() {
 //        total = new BigDecimal(0);
@@ -627,7 +628,6 @@ public class InvoiceController extends BaseController implements Serializable {
 //        System.out.println("discountAmount :"+discountAmount);
 //        return discount;
 //    }
-
     public void deleteLineItem(InvoiceItemModel itemModel) {
         selectedInvoiceModel.getInvoiceLineItems().remove(itemModel);
         updateSubTotalOnDiscountAdded();
@@ -639,6 +639,10 @@ public class InvoiceController extends BaseController implements Serializable {
 
     public void initCreateContact() {
         contactModel = new ContactModel();
+    }
+
+    public void initCreateProduct() {
+        productModel = new ProductModel();
     }
 
     public void createContact() {
@@ -665,6 +669,26 @@ public class InvoiceController extends BaseController implements Serializable {
         selectedInvoiceModel.setInvoiceContact(contact);
         RequestContext.getCurrentInstance().execute("PF('add_contact_popup').hide();");
         initCreateContact();
+
+    }
+
+    public void createProduct() {
+        final Product product = new Product();
+        product.setProductID(productModel.getProductID());
+        product.setProductName(productModel.getProductName());
+        product.setProductDescription(productModel.getProductDescription());
+        product.setProductCode(productModel.getProductCode());
+        product.setDeleteFlag(Boolean.FALSE);
+        product.setParentProduct(productModel.getParentProduct());
+        product.setVatCategory(productModel.getVatCategory());
+        if (product.getProductID() != null) {
+            productService.update(product);
+        } else {
+            productService.persist(product);
+        }
+        selectedInvoiceModel.setInvoiceProduct(product);
+        RequestContext.getCurrentInstance().execute("PF('add_product_popup').hide();");
+        initCreateProduct();
 
     }
 

@@ -20,6 +20,9 @@ public class ProductModelHelper {
         product.setProductDescription(productModel.getProductDescription());
         product.setParentProduct(productModel.getParentProduct());
         product.setProductWarehouse(productModel.getProductWarehouse());
+        product.setVatCheckFlag(productModel.getVatCheckFlag());
+        product.setUnitPrice(productModel.getUnitPrice());
+
         return product;
     }
 
@@ -38,6 +41,8 @@ public class ProductModelHelper {
         productModel.setProductDescription(product.getProductDescription());
         productModel.setParentProduct(product.getParentProduct());
         productModel.setProductWarehouse(product.getProductWarehouse());
+        productModel.setVatCheckFlag(product.getVatCheckFlag());
+        productModel.setUnitPrice(product.getUnitPrice());
         return productModel;
     }
 }

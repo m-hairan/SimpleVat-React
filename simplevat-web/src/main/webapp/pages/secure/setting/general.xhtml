@@ -112,12 +112,11 @@
                                                  style="border:0px none; background-color:transparent;">
 
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputTextarea id="subject" value="#{generalController.configurationInvoiceMailTamplateSubject.value}"/>
+                                            <p:inputText id="subject" value="#{generalController.configurationInvoiceMailTamplateSubject.value}"/>
                                             <p:outputLabel for="subject" value="#{messages.mail_Subject}"/>
                                         </h:panelGroup>
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputTextarea id="message" rows="6" value="#{generalController.configurationInvoiceMailTamplateBody.value}"/>
-                                            <p:outputLabel for="message" value="#{messages.mail_message}"/>
+                                            <p:textEditor id="message" value="#{generalController.configurationInvoiceMailTamplateBody.value}" height="300" style="margin-bottom:10px"/>
                                         </h:panelGroup>
                                     </p:panelGrid>
                                     <h:panelGroup styleClass="md-inputfield">
