@@ -2,6 +2,7 @@ package com.simplevat.entity;
 
 import com.simplevat.entity.converter.DateConverter;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -44,6 +45,14 @@ public class Product implements Serializable {
     @Basic
     @Column(name = "PRODUCT_CODE")
     private String productCode;
+    
+    @Basic
+    @Column(name = "UNIT_PRICE")
+    private BigDecimal unitPrice;
+    @Column(name = "VAT_CHECK_FLAG")
+    @ColumnDefault(value = "0")
+    private Boolean vatCheckFlag = Boolean.FALSE;
+
     @Column(name = "CREATED_BY")
     @Basic(optional = false)
     private Integer createdBy;
