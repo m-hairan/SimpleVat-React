@@ -2,6 +2,7 @@ package com.simplevat.integration;
 
 import com.simplevat.entity.Mail;
 import com.simplevat.entity.MailAttachment;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -38,7 +39,7 @@ public class MailIntegration {
 //        };
 //        mailSender.send(preparator);
 //    }
-    private void sendEmail(final Mail mail, MailAttachment mailAttachment, JavaMailSender javaMailSender, boolean html) throws Exception {
+    private void sendEmail(final Mail mail, List<MailAttachment> mailAttachmentList, JavaMailSender javaMailSender, boolean html) throws Exception {
         MimeMessagePreparator preparator = mimeMessage -> {
             MimeMessageHelper mimeMessagePreparator = new MimeMessageHelper(mimeMessage, true, UTF_8);
             mimeMessagePreparator.setTo(mail.getTo());
@@ -51,9 +52,11 @@ public class MailIntegration {
             }
             mimeMessagePreparator.setText(mail.getBody(), html);
             mimeMessagePreparator.setSubject(mail.getSubject());
-            if (mailAttachment != null) {
-                if (mailAttachment.getAttachmentObject() instanceof InputStreamSource) {
-                    mimeMessagePreparator.addAttachment(mailAttachment.getAttachmentName() + ".pdf", (InputStreamSource) mailAttachment.getAttachmentObject());
+            if (mailAttachmentList != null && !mailAttachmentList.isEmpty()) {
+                for (MailAttachment mailAttachment : mailAttachmentList) {
+                    if (mailAttachment.getAttachmentObject() instanceof InputStreamSource) {
+                        mimeMessagePreparator.addAttachment(mailAttachment.getAttachmentName(), (InputStreamSource) mailAttachment.getAttachmentObject());
+                    }
                 }
             }
         };
@@ -88,8 +91,8 @@ public class MailIntegration {
 //    public void sendHtmlMail(final Mail mail) throws Exception {
 //        sendEmail(mail, true);
 //    }
-    public void sendHtmlMail(final Mail mail, MailAttachment mailAttachment, JavaMailSender javaMailSender) throws Exception {
-        sendEmail(mail, mailAttachment, javaMailSender, true);
+    public void sendHtmlMail(final Mail mail, List<MailAttachment> mailAttachmentList, JavaMailSender javaMailSender) throws Exception {
+        sendEmail(mail, mailAttachmentList, javaMailSender, true);
     }
 
     public void sendHtmlMail(final Mail mail, JavaMailSender javaMailSender) throws Exception {
