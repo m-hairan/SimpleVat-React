@@ -29,6 +29,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,6 +38,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Controller;
@@ -88,6 +91,14 @@ public class InvoiceMailController implements Serializable {
 
     @Getter
     @Setter
+    private List<MailAttachment> mailAttachmentList;
+
+    @Getter
+    @Setter
+    private List<String> mailAttachmentNameList;
+
+    @Getter
+    @Setter
     private Invoice invoice;
 
     @Getter
@@ -107,14 +118,29 @@ public class InvoiceMailController implements Serializable {
         moreEmails = new ArrayList();
         bccList = new ArrayList();
         ccList = new ArrayList();
+        mailAttachmentList = new ArrayList();
+        mailAttachmentNameList = new ArrayList();
         MailDefaultConfigurationModel mailDefaultConfigurationModel = MailUtility.verifyMailConfigurationList(configurationService.getConfigurationList());
         from = mailDefaultConfigurationModel.getMailusername();
         updateSubjectAndMessageBody();
         Integer invoiceId = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("invoiceId").toString());
         invoice = invoiceService.findByPK(invoiceId);
+        mailAttachmentNameList.add("Invoice-" + invoice.getInvoiceReferenceNumber() + ".pdf");
         moreEmails.add(invoice.getInvoiceContact().getEmail());
+        addFirstAttachment();
         generateSubject();
         generateMessageBody();
+    }
+
+    private void addFirstAttachment() {
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("invoiceId", invoice.getInvoiceId());
+        pDFGenerator.init();
+        byte[] byteArray = pDFGenerator.getInvoicepdfOutputStream().toByteArray();
+        MailAttachment attachment = new MailAttachment();
+        attachment.setAttachmentName("Invoice" + invoice.getInvoiceReferenceNumber() + ".pdf");
+        attachment.setAttachmentObject(new ByteArrayResource(byteArray));
+        mailAttachmentList.add(attachment);
+
     }
 
     public void updateSubjectAndMessageBody() {
@@ -129,13 +155,10 @@ public class InvoiceMailController implements Serializable {
     }
 
     public void sendInvoiceMail() throws Exception {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("invoiceId", invoice.getInvoiceId());
-        pDFGenerator.init();
-        byte[] byteArray = pDFGenerator.getInvoicepdfOutputStream().toByteArray();
+//        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         Mail mail = getMail(messageBody, subject, from);
         if (mail != null) {
-            sendInvoiceMail(mail, byteArray);
+            sendInvoiceMail(mail);
             moreEmails.clear();
         }
     }
@@ -167,15 +190,12 @@ public class InvoiceMailController implements Serializable {
         return null;
     }
 
-    private void sendInvoiceMail(Mail mail, byte[] byteArray) throws Exception {
+    private void sendInvoiceMail(Mail mail) throws Exception {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    MailAttachment attachment = new MailAttachment();
-                    attachment.setAttachmentName("Invoice");
-                    attachment.setAttachmentObject(new ByteArrayResource(byteArray));
-                    mailIntegration.sendHtmlMail(mail, attachment, MailUtility.getJavaMailSender(configurationService.getConfigurationList()));
+                    mailIntegration.sendHtmlMail(mail, mailAttachmentList, MailUtility.getJavaMailSender(configurationService.getConfigurationList()));
                     updateInvoice();
                 } catch (Exception ex) {
                     Logger.getLogger(InvoiceMailController.class.getName()).log(Level.SEVERE, null, ex);
@@ -184,6 +204,20 @@ public class InvoiceMailController implements Serializable {
         });
         t.start();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Your Invoice Generated successfully. Please check your mail for further details"));
+    }
+
+    public void handleAttachmentFiles(FileUploadEvent event) {
+        UploadedFile uploadedFile = event.getFile();
+        MailAttachment attachment = new MailAttachment();
+        attachment.setAttachmentName(uploadedFile.getFileName());
+        attachment.setAttachmentObject(new ByteArrayResource(uploadedFile.getContents()));
+        mailAttachmentList.add(attachment);
+        mailAttachmentNameList.add(uploadedFile.getFileName());
+    }
+
+    public void removeAttachment(int index) {
+        mailAttachmentList.remove(index);
+        mailAttachmentNameList.remove(index);
     }
 
     private void updateInvoice() {

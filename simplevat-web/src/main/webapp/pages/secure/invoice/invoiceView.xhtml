@@ -9,10 +9,10 @@
     <ui:define name="content">
         <style>
             .mailDialog{
-                right: 20% !important;
-                bottom: 10% !important;
-                top: auto !important;
-                left: auto !important;
+                /*                right: 20% !important;
+                                bottom: 10% !important;*/
+                top: 7% !important;
+                /*left: auto !important;*/
             }
             .ui-chips{
                 width: 100% !important;
@@ -20,7 +20,44 @@
             .ui-chips-container{
                 width: auto !important;
             }
+            .ui-dialog .ui-dialog-content {
+                padding: 10px !important;
+            }
+            .ui-panelgrid-cell{
+                padding: 0px 0px 10px 0px !important;
+            }
+            .ui-inputtextarea{
+                height: 250px !important;
+            }
+            .ui-chips-container{
+                height: 22px !important;
+            }
+            .ui-fileupload-buttonbar{
+                padding: 0 !important;
+                background-color: #ffffff !important; 
+                border-color: #ffffff !important; 
+            }
+            .ui-datalist-data{
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .ui-datalist-content{
+                border: 0 !important;
+            }
+            .ui-grid-col-2{
+                width: 10.66666% !important;
+            }
         </style>
+        <script type="text/javascript">
+            function renderCCMail() {
+                $('.ccMail').css('display', 'block');
+                $('.disableccMail').css('display', 'none');
+            }
+            function renderBCCMail() {
+                $('.bccMail').css('display', 'block');
+                $('.disablebccMail').css('display', 'none');
+            }
+        </script>
         <f:metadata>
             <f:viewAction action="#{invoicePDFGenerator.init}" />
         </f:metadata>
@@ -47,24 +84,10 @@
                     <div class="ui-g">
                         <div class="ui-g-12" align="center">
                             <pe:documentViewer height="700" value="#{invoicePDFGenerator.invoicepdf}" download="extensions-rocks.pdf" cache="false"/>
-                            <style>
-                                .ui-dialog .ui-dialog-content {
-                                    padding: 10px !important;
-                                }
-                                .ui-panelgrid-cell{
-                                    padding: 0px 0px 10px 0px !important;
-                                }
-                                .ui-inputtextarea{
-                                    height: 250px !important;
-                                }
-                                .ui-chips-container{
-                                    height: 22px !important;
-                                }
-                            </style>
                             <p:dialog widgetVar="invoiceMailWidget" modal="true" resizable="false" width="60%" height="50%"
                                       draggable="false" styleClass="mailDialog"
                                       responsive="true" header="Send Invoice"
-                                      hideEffect="scale">
+                                      hideEffect="scale" positionType="absolute" position="center">
                                 <div align="left">
                                     <p:panelGrid columns="2" 
                                                  columnClasses="ui-grid-col-0,ui-grid-col-12" 
@@ -84,17 +107,21 @@
                                         </h:panelGroup>
 
                                         <p:outputLabel for="addMoreMail" value="To:" style="margin-right: 3px !important"/>
-                                        <h:panelGroup styleClass="md-inputwrapper-filled">
+                                        <h:panelGroup layout="block" styleClass="md-inputwrapper-filled" style="position:relative">
                                             <p:chips id="addMoreMail" value="#{invoiceMailController.moreEmails}"/>
+                                            <h:panelGroup layout="block" style="position:absolute;right:0px;top:0px">
+                                                <p:commandLink value="cc " onclick="renderCCMail()" styleClass="disableccMail"/>
+                                                <p:commandLink value="bcc" onclick="renderBCCMail()" styleClass="disablebccMail"/>
+                                            </h:panelGroup>
                                         </h:panelGroup>
 
-                                        <p:outputLabel for="ccMail" value="cc:" style="margin-right: 3px !important"/>
-                                        <h:panelGroup styleClass="md-inputwrapper-focus">
+                                        <p:outputLabel for="ccMail" value="cc:" style="margin-right: 3px !important;display: none" styleClass="ccMail"/>
+                                        <h:panelGroup styleClass="md-inputwrapper-focus ccMail" style="display: none">
                                             <p:chips id="ccMail" value="#{invoiceMailController.ccList}" />
                                         </h:panelGroup>
 
-                                        <p:outputLabel for="bccMail" value="bcc:" style="margin-right: 3px !important"/>
-                                        <h:panelGroup styleClass="md-inputwrapper-focus">
+                                        <p:outputLabel for="bccMail" value="bcc:" style="margin-right: 3px !important;display: none" styleClass="bccMail"/>
+                                        <h:panelGroup styleClass="md-inputwrapper-focus bccMail" style="display: none">
                                             <p:chips id="bccMail" value="#{invoiceMailController.bccList}" />
                                         </h:panelGroup>
 
@@ -110,8 +137,23 @@
                                         </h:panelGroup>
                                     </p:panelGrid>
                                     <div style="margin-bottom: 5px !important;">
-                                        Attachment :<h:outputText style="font-weight: bold" value=" Invoice-#{invoiceViewController.invoice.invoiceReferenceNumber}.pdf"/>
-                                    </div>
+                                        <p:panelGrid columns="2" 
+                                                     columnClasses="ui-grid-col-2,ui-grid-col-10" 
+                                                     layout="grid" 
+                                                     styleClass="ui-panelgrid-blank form-group"
+                                                     style="border:0px none; background-color:transparent;">
+                                            <h:outputText value="Attachments :"/>
+                                            <p:dataList id="attachments" value="#{invoiceMailController.mailAttachmentNameList}" var="name" type="unordered" itemType="none" rowIndexVar="index" styleClass="paginated" style="margin-bottom: 10px;">
+                                                <h:outputText style="font-weight: bold" value="#{name}"/>
+                                                <p:commandLink update="attachments" action="#{invoiceMailController.removeAttachment(invoiceMailController.mailAttachmentNameList.indexOf(name))}" rendered="#{invoiceMailController.mailAttachmentNameList.indexOf(name) != 0}">
+                                                    <i class="material-icons" style="font-size: 15px !important;color: #00695C !important;margin-top: 5px !important">&#xE14C;</i>
+                                                </p:commandLink>
+                                            </p:dataList>
+                                        </p:panelGrid>
+                                        <p:fileUpload fileUploadListener="#{invoiceMailController.handleAttachmentFiles}" mode="advanced" id="addAttachment" label="Add Attachment" 
+                                                      auto="true" sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|txt)$/" update="attachments"/>
+                                    </div>   
+                                    <hr/>
                                     <p:panelGrid columns="2" 
                                                  columnClasses="ui-grid-col-0,ui-grid-col-12"
                                                  layout="grid" 
@@ -130,7 +172,7 @@
                         <p:commandButton action="#{invoiceViewController.redirectToEditInvoice()}" 
                                          value="#{messages.edit}" rendered="#{!invoiceViewController.invoice.freeze}"
                                          icon="ui-icon-edit" />
-                        <p:commandButton onclick="PF('invoiceMailWidget').show();" 
+                        <p:commandButton onclick="PF('invoiceMailWidget').show();"
                                          value="#{messages.Send_By_Mail}"
                                          icon="ui-icon-mail" />
                         <span class="ui-separator" style="padding-right: 5px;">

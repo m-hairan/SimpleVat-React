@@ -15,7 +15,6 @@ import java.math.BigDecimal;
 public class InvoiceItemModel {
 
     private int id;
-
     private int quatity;
     private BigDecimal unitPrice;
     private VatCategory vatId;

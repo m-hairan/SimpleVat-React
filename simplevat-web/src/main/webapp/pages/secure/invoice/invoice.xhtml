@@ -35,6 +35,8 @@
             }
 
         </style>
+
+
     </ui:define>
 
     <ui:define name="title">Invoices</ui:define>
@@ -128,7 +130,6 @@
                                         <p:outputLabel  for="organizationName" value="#{messages.OrganizationName}" />
                                     </h:panelGroup>
 
-
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="PostBoxNum"
                                                      value="#{invoiceController.selectedInvoiceModel.invoiceContact.poBoxNumber}">
@@ -157,7 +158,6 @@
                                         <p:outputLabel  for="Address2" value="#{messages.addressLine2}" />
                                         <p:message for="Address2" />
                                     </h:panelGroup>
-
 
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="Address3"
@@ -384,7 +384,7 @@
                                                         var="currency" itemValue="#{currency.currencyCode}"
                                                         itemLabel="#{currency.currencyIsoCode}  #{currency.currencySymbol}" >
                                             <p:ajax event="itemSelect" 
-                                                    update="invoiceItemTable:lineItemFooterColumnGroup,invoiceItemTable,exchangeCurrency" />
+                                                    update="invoiceItemTable:lineItemFooterColumnGroup invoiceItemTable exchangeCurrency" />
                                         </p:autoComplete>
                                         <p:outputLabel for="currency" value="#{messages.currency}"/>
                                         <p:message for="currency" />
@@ -628,7 +628,7 @@
                                         </p:commandButton>
                                     </p:column>
 
-                                    <p:column headerText="Product/Service"  style="width: 200px">
+                                    <p:column headerText="Product/Service"  style="width: 295px">
                                         <p:panelGrid columns="2" 
                                                      columnClasses="ui-grid-col-11,ui-grid-col-1" 
                                                      layout="grid" 
@@ -645,17 +645,15 @@
                                                             scrollHeight="250"
                                                             itemValue="#{product}"
                                                             itemLabel="#{product.productName}">
-                                                <!--<p:ajax update="product_service product_service_label" listener="#{invoiceController.refreshProductService(invoiceItem)}" event="change"/>-->
-                                                <p:ajax update="vatId subTotal" event="itemSelect" listener="#{invoiceController.updateVatPercentage(invoiceItem)}" />
-                                                <p:ajax event="itemSelect" listener="#{invoiceController.addInvoiceItem()}" update="invoiceItemTable"/>
+                                                <p:ajax update="invoiceItemTable" event="itemSelect" listener="#{invoiceController.updateVatPercentage(invoiceItem,invoiceController.selectedInvoiceModel.invoiceLineItems.size())}" />
                                             </p:autoComplete>
                                             <h:panelGroup styleClass="md-inputfield">
                                                 <p:tooltip for="addproductbtn" position="top" value="Add new product" />
-                                                <p:commandButton id="addproductbtn" icon="ui-icon-plus" onsuccess="PF('add_product_popup').show();"  update=":addProductForm" actionListener="#{invoiceController.initCreateProduct()}"/>
+                                                <p:commandButton id="addproductbtn" icon="ui-icon-plus" onsuccess="PF('add_product_popup').show();" actionListener="#{invoiceController.initCreateProduct()}" />
                                             </h:panelGroup>
                                         </p:panelGrid>
                                     </p:column>
-                                    <p:column headerText="Description"  style="width: 320px">
+                                    <p:column headerText="Description"  style="width: 280px">
                                         <p:inputText id="description" 
                                                      value="#{invoiceItem.description}" 
                                                      style="width:100%">
@@ -665,13 +663,16 @@
                                     <p:column headerText="Quantity" styleClass="amount">
                                         <p:inputText id="quantity" 
                                                      validator="positiveNumberValidator"
+
                                                      validatorMessage="Please enter Quantity more then 0"
                                                      value="#{invoiceItem.quatity}" 
                                                      style="width:100%">
+                                            <f:convertNumber maxFractionDigits="2" minFractionDigits="0"/>
                                             <p:ajax event="change" 
                                                     listener="#{invoiceController.updateSubTotal(invoiceItem)}" 
                                                     update="subTotal" />
-                                            <p:ajax event="blur" listener="#{invoiceController.addInvoiceItem()}" update="invoiceItemTable"/>
+                                            <p:ajax event="click" listener="#{invoiceController.updateQuantity(invoiceItem)}" update="quantity"/>
+
                                         </p:inputText>
                                     </p:column>
                                     <p:column headerText="Unit Price (#{invoiceController.selectedInvoiceModel.currencyCode.currencyIsoCode})" styleClass="amount">
@@ -684,7 +685,7 @@
                                             <p:ajax event="change" 
                                                     listener="#{invoiceController.updateSubTotal(invoiceItem)}" 
                                                     update="subTotal,@form:exchangeCurrency" />
-                                            <p:ajax event="blur" listener="#{invoiceController.addInvoiceItem()}" update="invoiceItemTable"/>
+
                                         </p:inputNumber>
                                     </p:column>
                                     <p:column headerText="VAT (%)" styleClass="amount">
@@ -706,118 +707,117 @@
                                                     update="subTotal @form:exchangeCurrency" />
                                         </p:autoComplete>
                                     </p:column>
-                                    <p:column width="170" headerText="Subtotal (#{invoiceController.selectedInvoiceModel.currencyCode.currencyIsoCode})" styleClass="amount">
-                                        <h:outputText id="subTotal" value="#{invoiceItem.subTotal}" >
+                                    <p:column  width="170" headerText="Subtotal (#{invoiceController.selectedInvoiceModel.currencyCode.currencyIsoCode})" styleClass="amount">
+                                        <h:outputText  id="subTotal" value="#{invoiceItem.subTotal}" >
                                             <f:convertNumber type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol}"/>
                                         </h:outputText>
                                     </p:column>
 
-                                    <p:columnGroup id="lineItemFooterColumnGroup" type="footer" rendered="#{invoiceController.selectedInvoiceModel.invoiceLineItems.size() > 0}">  
+                                    <p:columnGroup id="lineItemFooterColumnGroup"  type="footer" rendered="#{invoiceController.selectedInvoiceModel.invoiceLineItems.size() > 0}">  
+                                       
+                                            <p:row >  
 
-                                        <p:row >  
+                                                <p:column colspan="6" styleClass="amount">
 
-                                            <p:column colspan="6" styleClass="amount">
-
-                                                <f:facet name="footer">
-                                                    <h:panelGroup styleClass="md-inputfield">
-                                                        <p:autoComplete id="discountType"
-                                                                        dropdown="true" 
-                                                                        forceSelection="true"
-                                                                        effect="fold" 
-                                                                        scrollHeight="250"
-                                                                        converter="#{discountTypeConverter}"
-                                                                        completeMethod="#{invoiceController.discountTypes}" 
-                                                                        value="#{invoiceController.selectedInvoiceModel.discountType}"
-                                                                        var="type" itemValue="#{type}"
-                                                                        itemLabel="#{type.discountTypeName}" >
-                                                            <p:ajax event="itemSelect" update="discount" process="discountType" />
-                                                        </p:autoComplete>
-                                                    </h:panelGroup>
-                                                </f:facet>
-                                            </p:column>
-                                            <p:column colspan="1" styleClass="amount">
-                                                <f:facet name="footer">
-                                                    <h:panelGroup id="discount" style="text-align: right !important">
-                                                        <p:outputLabel for="absolutediscountValue"  rendered="#{invoiceController.selectedInvoiceModel.discountType.discountTypeCode == 2}" />
-                                                        <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.discountType.discountTypeCode == 2}">
-                                                            <p:inputNumber id="absolutediscountValue" symbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} " symbolPosition="p"
-                                                                           value="#{invoiceController.selectedInvoiceModel.discount}" style="text-align-last: end! important"
-                                                                           validatorMessage="Discount should in between 0 to #{invoiceController.selectedInvoiceModel.invoiceAmount}.">
-                                                                <f:validateDoubleRange maximum="#{invoiceController.selectedInvoiceModel.invoiceAmount}"/>
-                                                                <p:ajax event="keyup" 
-                                                                        listener="#{invoiceController.updateSubTotalOnDiscountAdded()}" 
-                                                                        update=":#{p:component('subTotal')} totalDiscount" />
-                                                            </p:inputNumber>
-
+                                                    <f:facet name="footer">
+                                                        <h:panelGroup styleClass="md-inputfield">
+                                                            <p:autoComplete id="discountType"
+                                                                            dropdown="true" 
+                                                                            forceSelection="true"
+                                                                            effect="fold" 
+                                                                            scrollHeight="250"
+                                                                            converter="#{discountTypeConverter}"
+                                                                            completeMethod="#{invoiceController.discountTypes}" 
+                                                                            value="#{invoiceController.selectedInvoiceModel.discountType}"
+                                                                            var="type" itemValue="#{type}"
+                                                                            itemLabel="#{type.discountTypeName}" >
+                                                                <p:ajax event="itemSelect" update="discount" process="discountType" />
+                                                            </p:autoComplete>
                                                         </h:panelGroup>
-                                                        <p:outputLabel for="percentagediscountValue" rendered="#{invoiceController.selectedInvoiceModel.discountType.discountTypeCode == 1}" />
-                                                        <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.discountType.discountTypeCode == 1}">
-                                                            <p:inputNumber id="percentagediscountValue" symbol="%" symbolPosition="s"
-                                                                           value="#{invoiceController.selectedInvoiceModel.discount}" style="text-align-last: end! important"
-                                                                           validatorMessage="Discount should in between 0% to 100%.">
-                                                                <f:validateDoubleRange maximum="100"/>
-                                                                <p:ajax event="keyup" 
-                                                                        listener="#{invoiceController.updateSubTotalOnDiscountAdded()}" 
-                                                                        update=":#{p:component('subTotal')} totalDiscount" />
-                                                            </p:inputNumber >
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column colspan="1" styleClass="amount">
+                                                    <f:facet name="footer">
+                                                        <h:panelGroup id="discount" style="text-align: right !important">
+                                                            <p:outputLabel for="absolutediscountValue"  rendered="#{invoiceController.selectedInvoiceModel.discountType.discountTypeCode == 2}" />
+                                                            <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.discountType.discountTypeCode == 2}">
+                                                                <p:inputNumber id="absolutediscountValue" symbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} " symbolPosition="p"
+                                                                               value="#{invoiceController.selectedInvoiceModel.discount}" style="text-align-last: end! important"
+                                                                               validatorMessage="Discount should in between 0 to #{invoiceController.selectedInvoiceModel.invoiceAmount}.">
+                                                                    <f:validateDoubleRange maximum="#{invoiceController.selectedInvoiceModel.invoiceAmount}"/>
+                                                                    <p:ajax event="keyup" 
+                                                                            listener="#{invoiceController.updateSubTotalOnDiscountAdded()}" 
+                                                                            update=":#{p:component('subTotal')} totalDiscount" />
+                                                                </p:inputNumber>
+
+                                                            </h:panelGroup>
+                                                            <p:outputLabel for="percentagediscountValue" rendered="#{invoiceController.selectedInvoiceModel.discountType.discountTypeCode == 1}" />
+                                                            <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.discountType.discountTypeCode == 1}">
+                                                                <p:inputNumber id="percentagediscountValue" symbol="%" symbolPosition="s"
+                                                                               value="#{invoiceController.selectedInvoiceModel.discount}" style="text-align-last: end! important"
+                                                                               validatorMessage="Discount should in between 0% to 100%.">
+                                                                    <f:validateDoubleRange maximum="100"/>
+                                                                    <p:ajax event="keyup" 
+                                                                            listener="#{invoiceController.updateSubTotalOnDiscountAdded()}" 
+                                                                            update=":#{p:component('subTotal')} totalDiscount" />
+                                                                </p:inputNumber >
+                                                            </h:panelGroup>
                                                         </h:panelGroup>
-                                                    </h:panelGroup>
-                                                </f:facet>
-                                            </p:column>
-                                        </p:row>
+                                                    </f:facet>
+                                                </p:column>
+                                            </p:row>
 
-                                        <p:row >  
-                                            <p:column colspan="6" footerText="Total Discount" styleClass="amount"/>
-                                            <p:column colspan="1" styleClass="amount">
-                                                <f:facet name="footer">
-                                                    <p:outputPanel autoUpdate="true">
-                                                        <h:outputText id="totalDiscount" value="#{invoiceController.selectedInvoiceModel.calculatedDiscountAmount}"  >
-                                                            <f:convertNumber id="totalDis" type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol}"/>
-                                                        </h:outputText>
-                                                    </p:outputPanel>
-                                                </f:facet>
-                                            </p:column>  
-                                        </p:row>  
+                                            <p:row >  
+                                                <p:column colspan="6" footerText="Total Discount" styleClass="amount"/>
+                                                <p:column colspan="1" styleClass="amount">
+                                                    <f:facet name="footer">
+                                                        <p:outputPanel autoUpdate="true">
+                                                            <h:outputText id="totalDiscount" value="#{invoiceController.selectedInvoiceModel.calculatedDiscountAmount}"  >
+                                                                <f:convertNumber id="totalDis" type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol}"/>
+                                                            </h:outputText>
+                                                        </p:outputPanel>
+                                                    </f:facet>
+                                                </p:column>  
+                                            </p:row>  
 
-                                        <p:row >  
-                                            <p:column colspan="6" footerText="Total Net" styleClass="amount"/>
-                                            <p:column colspan="1" styleClass="amount">
-                                                <f:facet name="footer">
-                                                    <p:outputPanel autoUpdate="true">
-                                                        <h:outputText id="netTotal" value="#{invoiceController.selectedInvoiceModel.invoiceSubtotal}" >
-                                                            <f:convertNumber type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} " />
-                                                        </h:outputText>
-                                                    </p:outputPanel>
-                                                </f:facet>
-                                            </p:column>  
-                                        </p:row>  
+                                            <p:row >  
+                                                <p:column colspan="6" footerText="Total Net" styleClass="amount"/>
+                                                <p:column colspan="1" styleClass="amount">
+                                                    <f:facet name="footer">
+                                                        <p:outputPanel autoUpdate="true">
+                                                            <h:outputText id="netTotal" value="#{invoiceController.selectedInvoiceModel.invoiceSubtotal}" >
+                                                                <f:convertNumber type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} " />
+                                                            </h:outputText>
+                                                        </p:outputPanel>
+                                                    </f:facet>
+                                                </p:column>  
+                                            </p:row>  
 
-                                        <p:row >  
-                                            <p:column colspan="6" footerText="Total VAT" styleClass="amount"/>  
-                                            <p:column colspan="1" styleClass="amount">
-                                                <f:facet name="footer">
-                                                    <p:outputPanel autoUpdate="true">
-                                                        <h:outputText id="totalVat" value="#{invoiceController.selectedInvoiceModel.invoiceVATAmount}" >
-                                                            <f:convertNumber type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} " />
-                                                        </h:outputText>
-                                                    </p:outputPanel>
-                                                </f:facet>
-                                            </p:column>  
-                                        </p:row>  
-                                        <p:row >  
-                                            <p:column colspan="6" footerText="Total Due" styleClass="amount"/>  
-                                            <p:column colspan="1" styleClass="amount">
-                                                <f:facet name="footer">
-                                                    <p:outputPanel autoUpdate="true">
-                                                        <h:outputText id="total" value="#{invoiceController.selectedInvoiceModel.invoiceAmount}" >
-                                                            <f:convertNumber type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} " />
-                                                        </h:outputText>
-                                                    </p:outputPanel>
-                                                </f:facet>
-                                            </p:column>  
-                                        </p:row>  
-
-
+                                            <p:row >  
+                                                <p:column colspan="6" footerText="Total VAT" styleClass="amount"/>  
+                                                <p:column colspan="1" styleClass="amount">
+                                                    <f:facet name="footer">
+                                                        <p:outputPanel autoUpdate="true">
+                                                            <h:outputText id="totalVat" value="#{invoiceController.selectedInvoiceModel.invoiceVATAmount}" >
+                                                                <f:convertNumber type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} " />
+                                                            </h:outputText>
+                                                        </p:outputPanel>
+                                                    </f:facet>
+                                                </p:column>  
+                                            </p:row>  
+                                            <p:row >  
+                                                <p:column colspan="6" footerText="Total Due" styleClass="amount"/>  
+                                                <p:column colspan="1" styleClass="amount">
+                                                    <f:facet name="footer">
+                                                        <p:outputPanel autoUpdate="true">
+                                                            <h:outputText id="total" value="#{invoiceController.selectedInvoiceModel.invoiceAmount}" >
+                                                                <f:convertNumber type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} " />
+                                                            </h:outputText>
+                                                        </p:outputPanel>
+                                                    </f:facet>
+                                                </p:column>  
+                                            </p:row>  
+                                       
                                     </p:columnGroup>
                                 </p:dataTable>
 
@@ -838,13 +838,11 @@
                                         <p:outputLabel for="notes" value="#{messages.invoice_notes}" />
                                     </h:panelGroup>
                                 </p:panelGrid>
-
                             </p:fieldset>
-                            <h:panelGroup id="exchangeCurrency"  >
+                            <h:panelGroup id="exchangeCurrency">
                                 <p:fieldset legend="Currency Exchange Details"
                                             rendered="#{invoiceController.selectedInvoiceModel.currencyCode.currencyCode != invoiceController.company.companyCountryCode.currencyCode.currencyCode 
                                                         and invoiceController.currencyConversion != null}">
-
                                     <p:panelGrid columns="6" 
                                                  columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
                                                  layout="grid" 
@@ -933,8 +931,8 @@
             </div>
 
         </h:form>
-
-        <ui:include src="add-contact-popup.xhtml" />
         <ui:include src="add-product-popup.xhtml"/>
+        <ui:include src="add-contact-popup.xhtml" />
+
     </ui:define>
 </ui:composition>

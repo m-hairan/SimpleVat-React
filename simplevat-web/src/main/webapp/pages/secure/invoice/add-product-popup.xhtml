@@ -1,0 +1,92 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <h:form id="addProductForm">
+        <p:dialog header="New Product" widgetVar="add_product_popup" 
+                  resizable="false" 
+                  draggable="false" 
+                  modal="true"
+                  responsive="true" 
+                  hideEffect="scale">
+            <div class="ui-g form-group" style="margin-bottom: 16px;">
+                <div class="ui-g-12">
+                    <p:panelGrid columns="2" id="productPanel"
+                                 columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                                 layout="grid" 
+                                 styleClass="ui-panelgrid-blank form-group"
+                                 style="border:0px none; background-color:transparent;">
+
+                        <h:panelGroup styleClass="md-inputfield">
+                            <p:inputText id="name"  required="true" value="#{invoiceController.productModel.productName}" requiredMessage="please enter product name."/>
+                            <p:outputLabel for="name" value="#{messages.name}"/>
+                            <p:message for="name" />
+                        </h:panelGroup>
+
+                        <h:panelGroup styleClass="md-inputfield">
+                            <p:inputText id="purchase_code" value="#{invoiceController.productModel.productCode}"/>
+                            <p:outputLabel for="purchase_code" value="#{messages.product_code}"/>
+                            <p:message for="purchase_code" />
+                        </h:panelGroup>
+
+                        <h:panelGroup styleClass="md-inputfield">
+                            <p:inputText id="ProductPrice"
+                                         value="#{invoiceController.productModel.unitPrice}"
+                                         />
+                            <p:outputLabel for="ProductPrice" value="Product Price"/>
+                        </h:panelGroup>
+                        <h:panelGroup styleClass="md-inputfield">
+                            <p:autoComplete id="vat" 
+                                            converter="#{vatCategoryConverter}"
+                                            dropdown="true" 
+                                            forceSelection="true"
+                                            effect="fold"
+                                            scrollHeight="250"
+                                            value="#{invoiceController.productModel.vatCategory}"
+                                            completeMethod="#{invoiceController.vatCategorys}" 
+                                            var="vat"
+                                            itemValue="#{vat}"
+                                            itemLabel="#{vat.name}"
+                                            >
+                            </p:autoComplete>
+                            <p:outputLabel for="vat" value="#{messages.vat}"/>
+                            <p:message for="vat" />
+                        </h:panelGroup>
+
+                        <h:panelGroup styleClass="md-inputfield">
+                            <p:autoComplete id="produstList" 
+                                            converter="#{productConverter}"
+                                            dropdown="true" 
+                                            forceSelection="true"
+                                            effect="fold"
+                                            scrollHeight="250"
+                                            value="#{invoiceController.productModel.parentProduct}"
+                                            completeMethod="#{invoiceController.completeProducts()}" 
+                                            var="parentProduct"
+                                            itemValue="#{parentProduct}"
+                                            itemLabel="#{parentProduct.productName}"
+                                            >
+                            </p:autoComplete>
+                            <p:outputLabel for="produstList" value="#{messages.Parent}"/>
+                            <p:message for="produstList" />
+                        </h:panelGroup>
+                        <h:panelGroup styleClass="md-inputwrapper-focus" >
+                            <p:selectBooleanCheckbox id="vatApply" value="#{invoiceController.productModel.vatCheckFlag}" >
+                            </p:selectBooleanCheckbox>
+                            <p:outputLabel for="vatApply" value="Vat Include"/>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                </div>
+            </div>
+            <f:facet name="footer">
+                <p:commandButton 
+                    actionListener="#{invoiceController.createProduct()}"
+                    value="Save"
+                    update="productPanel"
+                    style="width:auto" 
+                    icon="ui-icon-save"/>
+            </f:facet>  
+        </p:dialog>
+    </h:form>
+</ui:composition>

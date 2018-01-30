@@ -24,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -32,6 +33,8 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -64,8 +67,13 @@ public class InvoiceReminderController implements Serializable {
     @Autowired
     private ContactService contactService;
 
+    @Getter
+    @Setter
+    private List<MailAttachment> mailAttachmentList;
+
     @PostConstruct
     public void init() {
+        mailAttachmentList = new ArrayList<>();
         List<Invoice> invoices = invoiceService.getInvoiceListByDueDate();
         if (invoices != null && !invoices.isEmpty()) {
             for (Invoice invoice : invoices) {
@@ -108,7 +116,8 @@ public class InvoiceReminderController implements Serializable {
                     MailAttachment attachment = new MailAttachment();
                     attachment.setAttachmentName("Invoice");
                     attachment.setAttachmentObject(new ByteArrayResource(byteArray));
-                    mailIntegration.sendHtmlMail(mail, attachment, MailUtility.getJavaMailSender(configurationService.getConfigurationList()));
+                    mailAttachmentList.add(attachment);
+                    mailIntegration.sendHtmlMail(mail, mailAttachmentList, MailUtility.getJavaMailSender(configurationService.getConfigurationList()));
 
                 } catch (Exception ex) {
                     Logger.getLogger(InvoiceMailController.class
