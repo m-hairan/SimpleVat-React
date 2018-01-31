@@ -175,6 +175,8 @@ public class InvoiceController extends BaseController implements Serializable {
     @Setter
     List<SelectItem> vatCategorySelectItemList = new ArrayList<>();
 
+    InvoiceItemModel invoiceItemModelForProductUpdateOnProductAdd;
+
     public InvoiceController() {
         super(ModuleName.INVOICE_MODULE);
     }
@@ -412,6 +414,11 @@ public class InvoiceController extends BaseController implements Serializable {
 
     public void updateQuantity(InvoiceItemModel invoiceItem) {
         invoiceItem.setQuatity(0);
+    }
+
+    public void reserveProductOnAdd(InvoiceItemModel invoiceItem) {
+        System.out.println("invoiceItemModelForProductUpdateOnProductAdd" + invoiceItem);
+        invoiceItemModelForProductUpdateOnProductAdd = invoiceItem;
     }
 
     public List<Project> projects(final String searchQuery) throws Exception {
@@ -741,8 +748,9 @@ public class InvoiceController extends BaseController implements Serializable {
         } else {
             productService.persist(product);
         }
-        selectedInvoiceModel.setInvoiceProduct(product);
-        RequestContext.getCurrentInstance().execute("PF('add_product_popup').hide();");
+        
+       invoiceItemModelForProductUpdateOnProductAdd.setProductService(product);
+       RequestContext.getCurrentInstance().execute("PF('add_product_popup').hide();");
         initCreateProduct();
 
     }
