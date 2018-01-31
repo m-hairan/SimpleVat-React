@@ -15,6 +15,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,8 +47,10 @@ public class PatchExecutionServlet extends HttpServlet {
             connection = DriverManager.getConnection("jdbc:mysql://" + dbHost + "/" + dbName, dbUserName, dbPass);
             String query = "SELECT * FROM PATCH WHERE PATCH_NO = ?";
             File file = new File(patchPath.toString());
-            List<String> patchNoList = new ArrayList<>();
-            for (String folderName : file.list()) {
+            List<String> patchNoList = Arrays.asList(file.list());
+            Collections.sort(patchNoList);
+            System.out.println("=========================="+patchNoList);
+            for (String folderName : patchNoList) {
                 PreparedStatement ps = connection.prepareStatement(query.toUpperCase());
                 ps.setString(1, folderName);
                 ResultSet rs = ps.executeQuery();
@@ -61,7 +65,6 @@ public class PatchExecutionServlet extends HttpServlet {
                             sr.runScript(reader);
                         }
                     } 
-                    patchNoList.add(folderName);
                 }
             }
         } catch (Exception ex) {
