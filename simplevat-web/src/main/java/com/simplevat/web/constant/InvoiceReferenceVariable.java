@@ -22,7 +22,10 @@ public enum InvoiceReferenceVariable {
     CONTRACT_NAME("Contact Name", "{contactName}"),
     PROJECT_NAME("Project Name", "{projectName}"),
     INVOICE_AMOUNT("Invoice Amount", "{invoiceAmount}"),
-    DUE_DATE("Due Amount", "{dueAmount}");
+    DUE_DATE("Due Amount", "{dueAmount}"),
+    SENDER_NAME("Sender Name", "{senderName}"),
+    COMPANY_NAME("Company Name", "{companyName}"),
+    INVOICE_CURRENCY_SYMBOL("Invoice Currency Symbol", "{invoiceCurrencySymbol}");
 
     private String name;
     private String value;

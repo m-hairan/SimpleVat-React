@@ -122,8 +122,8 @@
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:dataTable var="invoiceReference"  id="invoiceReference"
                                                      value="#{generalController.invoiceVariableList}"
-                                                     paginator="true" rows="10"
-                                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+                                                     paginator="true" 
+                                                    >
                                             <p:column headerText="Value" width="50%">
                                                 <h:outputText  value="#{invoiceReference.value}">
                                                 </h:outputText>

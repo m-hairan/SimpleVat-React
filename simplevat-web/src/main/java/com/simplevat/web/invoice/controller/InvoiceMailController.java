@@ -234,6 +234,10 @@ public class InvoiceMailController implements Serializable {
 
     public void generateSubject() {
         if (subject != null) {
+
+            if (subject.contains("{invoiceCurrencySymbol}")) {
+                subject = subject.replace("{invoiceCurrencySymbol}", invoice.getCurrency() != null ? invoice.getCurrency().getCurrencySymbol() : "");
+            }
             if (subject.contains("{invoiceReferenceNumber}")) {
                 subject = subject.replace("{invoiceReferenceNumber}", invoice.getInvoiceReferenceNumber());
             }
@@ -306,6 +310,22 @@ public class InvoiceMailController implements Serializable {
             }
             if (messageBody.contains("{dueAmount}")) {
                 messageBody = messageBody.replace("{dueAmount}", invoice.getDueAmount() != null ? invoice.getDueAmount().toString() : "");
+            }
+            if (messageBody.contains("{invoiceCurrencySymbol}")) {
+                messageBody = messageBody.replace("{invoiceCurrencySymbol}", invoice.getCurrency() != null ? invoice.getCurrency().getCurrencySymbol() : "");
+            }
+            if (messageBody.contains("{senderName}")) {
+                String senderName = "";
+                if (user.getFirstName() != null) {
+                    senderName = user.getFirstName();
+                }
+                if (user.getLastName() != null) {
+                    senderName = senderName + " " + user.getLastName();
+                }
+                messageBody = messageBody.replace("{senderName}", senderName);
+            }
+            if (messageBody.contains("{companyName}")) {
+                messageBody = messageBody.replace("{companyName}", user.getCompany().getCompanyName() != null ? user.getCompany().getCompanyName() : "");
             }
         }
     }
