@@ -50,6 +50,7 @@ public class ContactHelper {
         contactModel.setLastUpdateDate(contact.getLastUpdateDate());
         contactModel.setLastUpdatedBy(contact.getLastUpdatedBy());
         contactModel.setDeleteFlag(contact.getDeleteFlag());
+        contactModel.setContactCode(contact.getContactId());
         for (ContactType contactType : ContactUtil.contactTypeList()) {
             if (contactType.getId() == contact.getContactType()) {
                 contactModel.setContactType(contactType);

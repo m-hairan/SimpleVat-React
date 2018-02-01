@@ -16,10 +16,10 @@ public class InvoiceItemModel {
 
     private int id;
     private int quatity;
-    private BigDecimal unitPrice;
+    private BigDecimal unitPrice=BigDecimal.ZERO;
     private VatCategory vatId;
     private String description;
-    private BigDecimal subTotal;
+    private BigDecimal subTotal=BigDecimal.ZERO;
     private Integer versionNumber;
     private Product productService;
 

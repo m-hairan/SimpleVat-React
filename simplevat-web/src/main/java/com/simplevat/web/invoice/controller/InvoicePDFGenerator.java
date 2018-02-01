@@ -119,21 +119,22 @@ public class InvoicePDFGenerator implements Serializable {
 
     private PdfPTable createFormHeaderBlock() {
         PdfPTable table = new PdfPTable(2);
+        PdfPCell cell = null;
         Image img = null;
-        try {
-            img = Image.getInstance(user.getCompany().getCompanyLogo());
-            img.scaleAbsolute(120f, 60f);
-        } catch (Exception ex) {
-            Logger.getLogger(InvoicePDFGenerator.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        PdfPCell cell = new PdfPCell(new Phrase(""));
-        if (img != null) {
+        if (user.getCompany().getCompanyLogo() != null) {
+            try {
+                img = Image.getInstance(user.getCompany().getCompanyLogo());
+                img.scaleAbsolute(120f, 60f);
+            } catch (Exception ex) {
+                Logger.getLogger(InvoicePDFGenerator.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            cell = new PdfPCell(new Phrase(""));
             cell = new PdfPCell(img);
+            cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cell.setBorder(0);
+            cell.setPaddingTop(4);
+            table.addCell(cell);
         }
-        cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-        cell.setBorder(0);
-        cell.setPaddingTop(4);
-        table.addCell(cell);
         PdfPTable innerTable = new PdfPTable(1);
         cell = new PdfPCell(new Paragraph("TAX INVOICE", new Font(baseFont, 20, Font.BOLD, new BaseColor(139, 195, 74))));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -337,18 +338,18 @@ public class InvoicePDFGenerator implements Serializable {
         PdfPCell cell = new PdfPCell(new Paragraph(cellValue, new Font(baseFont, 9, Font.NORMAL, new BaseColor(122, 120, 120))));
         cell.setUseVariableBorders(true);
         cell.setBackgroundColor(new BaseColor(232, 243, 219));
-        cell.setBorderColorBottom(new BaseColor(255, 255, 255));
-        cell.setBorderColorTop(new BaseColor(255, 255, 255));
-        if (cellPosition == 1) {
-            cell.setBorderColorLeft(new BaseColor(255, 255, 255));
-            cell.setBorderColorRight(new BaseColor(232, 243, 219));
-        } else if (cellPosition == 6) {
-            cell.setBorderColorLeft(new BaseColor(232, 243, 219));
-            cell.setBorderColorRight(new BaseColor(232, 243, 219));
-        } else {
-            cell.setBorderColorLeft(new BaseColor(232, 243, 219));
-            cell.setBorderColorRight(new BaseColor(232, 243, 219));
-        }
+        cell.setBorderColor(new BaseColor(255, 255, 255));
+//        cell.setBorderColorTop(new BaseColor(255, 255, 255));
+//        if (cellPosition == 1) {
+//            cell.setBorderColorLeft(new BaseColor(255, 255, 255));
+//            cell.setBorderColorRight(new BaseColor(232, 243, 219));
+//        } else if (cellPosition == 6) {
+//            cell.setBorderColorLeft(new BaseColor(232, 243, 219));
+//            cell.setBorderColorRight(new BaseColor(232, 243, 219));
+//        } else {
+//            cell.setBorderColorLeft(new BaseColor(232, 243, 219));
+//            cell.setBorderColorRight(new BaseColor(232, 243, 219));
+//        }
         cell.setHorizontalAlignment(alignValue);
         cell.setPaddingRight(alignValue == Element.ALIGN_RIGHT ? paddingValue : 0);
         cell.setPaddingLeft(alignValue == Element.ALIGN_LEFT ? paddingValue : 0);
@@ -373,10 +374,10 @@ public class InvoicePDFGenerator implements Serializable {
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         cell.setUseVariableBorders(true);
         cell.setBackgroundColor(new BaseColor(232, 243, 219));
-        cell.setBorderColor(new BaseColor(232, 243, 219));
-        if (rowindex == 1) {
-            cell.setBorderColorTop(new BaseColor(255, 255, 255));
-        }
+        cell.setBorderColor(new BaseColor(255, 255, 255));
+//        if (rowindex == 1) {
+//            cell.setBorderColorTop(new BaseColor(255, 255, 255));
+//        }
         cell.setPaddingBottom(5);
         cell.setPaddingTop(3);
         return cell;
@@ -387,10 +388,10 @@ public class InvoicePDFGenerator implements Serializable {
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         cell.setUseVariableBorders(true);
         cell.setBackgroundColor(new BaseColor(232, 243, 219));
-        cell.setBorderColor(new BaseColor(232, 243, 219));
-        if (rowindex == 1) {
-            cell.setBorderColorTop(new BaseColor(255, 255, 255));
-        }
+        cell.setBorderColor(new BaseColor(255, 255, 255));
+//        if (rowindex == 1) {
+//            cell.setBorderColorTop(new BaseColor(255, 255, 255));
+//        }
         cell.setPaddingRight(10);
 //        cell.setPaddingTop(5);
         return cell;

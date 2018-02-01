@@ -11,6 +11,7 @@ import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.service.ConfigurationService;
 import com.simplevat.web.common.controller.BaseController;
 import com.simplevat.web.constant.ConfigurationConstants;
+import com.simplevat.web.constant.InvoiceReferenceVariable;
 import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.utils.FacesUtil;
 import java.io.Serializable;
@@ -76,7 +77,7 @@ public class GeneralController extends BaseController implements Serializable {
 
     @Getter
     @Setter
-    private List<String> invoiceVariableList;
+    private List<InvoiceReferenceVariable> invoiceVariableList;
 
     public GeneralController() {
         super(ModuleName.SETTING_MODULE);
@@ -237,15 +238,6 @@ public class GeneralController extends BaseController implements Serializable {
     }
 
     public void invoiceVariables() {
-        invoiceVariableList = new ArrayList<>();
-        invoiceVariableList.add("{invoiceReferenceNumber}");
-        invoiceVariableList.add("{invoiceDate}");
-        invoiceVariableList.add("{invoiceDueDate}");
-        invoiceVariableList.add("{invoiceDiscount}");
-        invoiceVariableList.add("{contractPoNumber}");
-        invoiceVariableList.add("{contactName}");
-        invoiceVariableList.add("{projectName}");
-        invoiceVariableList.add("{invoiceAmount}");
-        invoiceVariableList.add("{dueAmount}");
+        invoiceVariableList = InvoiceReferenceVariable.getInvoiceReferenceVariables();
     }
 }

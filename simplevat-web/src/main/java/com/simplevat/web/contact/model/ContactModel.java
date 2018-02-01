@@ -84,6 +84,8 @@ public class ContactModel implements Serializable {
     private BigDecimal dueAmount;
 
     private Boolean selected = Boolean.FALSE;
+    
+    private Integer contactCode;
 
     public String getFullName() {
         StringBuilder sb = new StringBuilder();

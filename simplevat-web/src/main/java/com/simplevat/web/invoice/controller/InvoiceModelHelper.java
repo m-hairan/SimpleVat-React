@@ -183,12 +183,25 @@ public class InvoiceModelHelper {
         BigDecimal invoiceVATAmount = BigDecimal.ZERO;
         BigDecimal invoiceSubtotal = BigDecimal.ZERO;
         invoiceModel.setCalculatedDiscountAmount(BigDecimal.ZERO);
+        BigDecimal discountPercentage = BigDecimal.ZERO;
+        if (invoiceModel.getDiscountType() != null) {
+            if (invoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.ABSOLUTEDISCOUNT) {
+                BigDecimal invoiceSubTotal = BigDecimal.ZERO;
+                for (InvoiceItemModel itemModel : invoiceModel.getInvoiceLineItems()) {
+                    invoiceSubTotal = invoiceSubTotal.add(itemModel.getSubTotal());
+                }
+                discountPercentage = invoiceSubTotal.divide(invoiceModel.getDiscount());
+            } else if (invoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.PERCENTAGEDISCOUNT) {
+                discountPercentage = invoiceModel.getDiscount();
+            }
+        }
+
         for (InvoiceItemModel itemModel : invoiceModel.getInvoiceLineItems()) {
             if (itemModel.getSubTotal() != null) {
                 BigDecimal vatAmount = new BigDecimal(BigInteger.ZERO);
                 BigDecimal itemAmount = new BigDecimal(BigInteger.ZERO);
                 if (invoiceModel.getDiscountType() != null) {
-                    BigDecimal discountAmount = getDiscountAmount(itemModel.getSubTotal(), invoiceModel);
+                    BigDecimal discountAmount = getDiscountAmount(itemModel.getSubTotal(), invoiceModel, discountPercentage);
                     itemAmount = itemModel.getSubTotal().subtract(discountAmount);
                     invoiceModel.setCalculatedDiscountAmount(invoiceModel.getCalculatedDiscountAmount().add(discountAmount));
                 } else {
@@ -208,14 +221,11 @@ public class InvoiceModelHelper {
         invoiceModel.setInvoiceSubtotal(invoiceSubtotal);
     }
 
-    private BigDecimal getDiscountAmount(BigDecimal itemValue, InvoiceModel invoiceModel) {
-        BigDecimal discountAmount = invoiceModel.getDiscount();
-        if (invoiceModel.getDiscountType() != null 
+    private BigDecimal getDiscountAmount(BigDecimal itemValue, InvoiceModel invoiceModel, BigDecimal discountAmount) {
+        if (invoiceModel.getDiscountType() != null
                 && itemValue != null
                 && discountAmount != null
-                && invoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.PERCENTAGEDISCOUNT
-                ) {
-
+                && invoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.PERCENTAGEDISCOUNT) {
             discountAmount = (itemValue.multiply(discountAmount)).divide(new BigDecimal(100));
         }
         return discountAmount;

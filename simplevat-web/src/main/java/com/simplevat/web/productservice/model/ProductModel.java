@@ -27,7 +27,7 @@ public class ProductModel {
     private Integer versionNumber;
     private Product parentProduct;
     private ProductWarehouse productWarehouse;
-    private Boolean vatCheckFlag = Boolean.FALSE;
+    private Boolean vatIncluded = Boolean.FALSE;
     private BigDecimal unitPrice;
 
 }

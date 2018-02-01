@@ -120,12 +120,20 @@
                                         </h:panelGroup>
                                     </p:panelGrid>
                                     <h:panelGroup styleClass="md-inputfield">
-                                        <p:dataList value="#{generalController.invoiceVariableList}" var="vari" type="definition">
-                                            <f:facet name="header">
-                                                Variables
-                                            </f:facet>
-                                            <h:outputText value="#{vari}"/>
-                                        </p:dataList>
+                                        <p:dataTable var="invoiceReference"  id="invoiceReference"
+                                                     value="#{generalController.invoiceVariableList}"
+                                                     paginator="true" rows="10"
+                                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+                                            <p:column headerText="Value" width="50%">
+                                                <h:outputText  value="#{invoiceReference.value}">
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="Description">
+                                                <h:outputText value="#{invoiceReference.name}"/>
+                                            </p:column>
+                                           
+                                        </p:dataTable>
+
                                     </h:panelGroup>
                                 </p:panelGrid>
 

@@ -11,6 +11,7 @@ import com.simplevat.entity.Contact;
 import com.simplevat.entity.Mail;
 import com.simplevat.entity.MailAttachment;
 import com.simplevat.entity.MailEnum;
+import com.simplevat.entity.User;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.integration.MailIntegration;
 import com.simplevat.service.ConfigurationService;
@@ -18,6 +19,7 @@ import com.simplevat.service.ContactService;
 import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.web.constant.ConfigurationConstants;
 import com.simplevat.web.constant.EmailConstant;
+import com.simplevat.web.utils.FacesUtil;
 import com.simplevat.web.utils.MailDefaultConfigurationModel;
 import com.simplevat.web.utils.MailUtility;
 import static com.simplevat.web.utils.MailUtility.verifyMailConfigurationList;
@@ -113,6 +115,8 @@ public class InvoiceMailController implements Serializable {
     @Setter
     private String messageBody;
 
+    private User user;
+
     @PostConstruct
     public void init() {
         moreEmails = new ArrayList();
@@ -120,6 +124,7 @@ public class InvoiceMailController implements Serializable {
         ccList = new ArrayList();
         mailAttachmentList = new ArrayList();
         mailAttachmentNameList = new ArrayList();
+        user = FacesUtil.getLoggedInUser();
         MailDefaultConfigurationModel mailDefaultConfigurationModel = MailUtility.verifyMailConfigurationList(configurationService.getConfigurationList());
         from = mailDefaultConfigurationModel.getMailusername();
         updateSubjectAndMessageBody();
@@ -255,6 +260,19 @@ public class InvoiceMailController implements Serializable {
             }
             if (subject.contains("{contractPoNumber}")) {
                 subject = subject.replace("{contractPoNumber}", invoice.getContractPoNumber() != null ? invoice.getContractPoNumber() : "");
+            }
+            if (subject.contains("{senderName}")) {
+                String senderName = "";
+                if (user.getFirstName() != null) {
+                    senderName = user.getFirstName();
+                }
+                if (user.getLastName() != null) {
+                    senderName = senderName + " " + user.getLastName();
+                }
+                subject = subject.replace("{senderName}", senderName);
+            }
+            if (subject.contains("{companyName}")) {
+                subject = subject.replace("{companyName}", user.getCompany().getCompanyName() != null ? user.getCompany().getCompanyName() : "");
             }
         }
     }

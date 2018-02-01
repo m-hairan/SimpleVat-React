@@ -99,16 +99,20 @@ public class ContactController extends BaseController implements Serializable {
         selectedContact = new Contact();
         contactModel = new ContactModel();
         contactHelper = new ContactHelper();
-
         Object objContactId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedContactId");
         System.out.println("selected : :" + objContactId);
         if (objContactId != null) {
             Contact contact = contactService.findByPK(Integer.parseInt(objContactId.toString()));
             contactModel = contactHelper.getContactModel(contact);
-
             titles = titleService.getTitles();
         } else {
             contactModel = new ContactModel();
+            //contactService.
+            if (contactService.getLastContact() != null) {
+                contactModel.setContactCode((contactService.getLastContact().getContactId() + 1));
+            } else {
+                contactModel.setContactCode(1001);
+            }
             setDefaultCurrency();
             setDefaultCountry();
             setDefaultLanguage();

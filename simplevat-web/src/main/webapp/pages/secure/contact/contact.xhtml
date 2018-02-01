@@ -24,7 +24,16 @@
                             <p:fieldset legend="Contact Name" toggleable="false" toggleSpeed="500">
                                 <p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
 
-
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="invoiceId"
+                                                     maxlength="12"
+                                                     required="true"
+                                                     disabled="true"
+                                                     requiredMessage="Please enter Invoice Ref. No."
+                                                     value="#{contactController.contactModel.contactCode}"/>
+                                        <p:outputLabel for="invoiceId" value="#{messages.ref_code}"/>
+                                        <p:message for="invoiceId" />
+                                    </h:panelGroup>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="contactTitle" converter="#{titleConverter}"
                                                         dropdown="true" 
@@ -41,7 +50,7 @@
                                         <p:outputLabel for="contactTitle" value="Title"/>
                                         <p:message for="contactTitle" />
                                     </h:panelGroup>
-                                    <h:panelGroup />
+
                                     <h:panelGroup />
 
                                     <h:panelGroup styleClass="md-inputfield">
@@ -79,6 +88,8 @@
                             <br/>
                             <p:fieldset legend="Contact Details" toggleable="true" toggleSpeed="500">
                                 <p:panelGrid columns="3" columnClasses=",ui-grid-col-4,ui-grid-col-4,,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+
+
 
 
                                     <h:panelGroup styleClass="md-inputfield">

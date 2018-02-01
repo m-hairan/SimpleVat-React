@@ -353,12 +353,12 @@
                                         <p:inputText 
                                             value="#{invoiceController.selectedInvoiceModel.invoiceDueOn}"
                                             required="true"
-                                            requiredMessage="Please enter Invoice Due On"
+                                            requiredMessage="Please enter Invoice Due In"
                                             converterMessage="Please enter numbers only." 
                                             id="invoiceDueOn" >
                                             <p:ajax event="change" process="invoiceDate invoiceDueOn" update="invoiceDueDate" listener="#{invoiceController.dueDateListener()}"/> 
                                         </p:inputText>
-                                        <p:outputLabel for="invoiceDueOn" value="#{messages.invoice_due_on}"/>
+                                        <p:outputLabel for="invoiceDueOn" value="#{messages.invoice_due_in}"/>
                                         <p:message for="invoiceDueOn" />
                                     </h:panelGroup>
 
@@ -665,16 +665,15 @@
                                     </p:column>
                                     <p:column headerText="Quantity" styleClass="amount" style="width: 80px">
                                         <p:inputNumber id="quantity" 
-                                                       validator="positiveNumberValidator"
                                                        decimalPlaces="0"
-                                                       validatorMessage="Please enter Quantity more then 0"
+                                                       validator="positiveNumberValidator"
                                                        value="#{invoiceItem.quatity}" 
+                                                       onfocus="clearTextField(event, this)"
                                                        style="width:100%">
-                                            <f:convertNumber maxFractionDigits="2" minFractionDigits="0"/>
+
                                             <p:ajax event="change" 
                                                     listener="#{invoiceController.updateSubTotal(invoiceItem)}" 
                                                     update="subTotal" />
-                                            <p:ajax event="click" listener="#{invoiceController.updateQuantity(invoiceItem)}" update="quantity"/>
 
                                         </p:inputNumber>
                                     </p:column>
@@ -702,7 +701,7 @@
                                                         var="vat"
                                                         scrollHeight="250"
                                                         itemValue="#{vat}"
-                                                        itemLabel="#{vat.name}(#{vat.vat})"
+                                                        itemLabel="#{vat.vatLabel}"
                                                         >
                                             <p:ajax update="subTotal @form:exchangeCurrency" event="itemSelect" listener="#{invoiceController.updateSubTotal(invoiceItem)}" />
                                             <p:ajax event="change" 
@@ -720,15 +719,15 @@
                                         <p:row >  
                                             <p:column rowspan="5" colspan="5" style="border-bottom: 0 !important; border-left: 0 !important">
                                                 <f:facet name="footer">
-                                                    <h:panelGroup styleClass="md-inputfield" style="margin-top: 10px;float: left;">
-                                                        <p:inputTextarea rows="5" style="width: 97%"
+                                                    <h:panelGroup styleClass="md-inputfield" style="margin-top: 20px;">
+                                                        <p:inputTextarea rows="5" 
                                                                          id="notes"
                                                                          cols="30"
                                                                          value="#{invoiceController.selectedInvoiceModel.invoiceNotes}"
                                                                          maxlength="255"
                                                                          counter="counterValue"
                                                                          counterTemplate="{0} characters remaining."
-                                                                         autoResize="false" />
+                                                                         autoResize="true" />
                                                         <h:outputText id="counterValue" />
                                                         <p:outputLabel for="notes" value="#{messages.invoice_notes}" />
                                                     </h:panelGroup>
@@ -749,6 +748,7 @@
                                                                         itemLabel="#{type.discountTypeName}" >
                                                             <p:ajax event="itemSelect" update="discount" process="discountType" />
                                                         </p:autoComplete>
+                                                        <p:outputLabel for="discountType" value="#{messages.discount_type}"/>
                                                     </h:panelGroup>
                                                 </f:facet>
                                             </p:column>
@@ -917,6 +917,14 @@
                 </p:toolbar>
             </div>
 
+            <script type="text/javascript">
+                //   <![CDATA[
+                function clearTextField(event, element) {
+                    if ($(element).val() == 0)
+                        $(element).val("");
+                }
+                //   ]]>
+            </script>
         </h:form>
         <ui:include src="add-product-popup.xhtml"/>
         <ui:include src="add-contact-popup.xhtml" />

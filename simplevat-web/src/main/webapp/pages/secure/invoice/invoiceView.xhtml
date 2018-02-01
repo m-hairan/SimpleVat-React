@@ -44,8 +44,8 @@
             .ui-datalist-content{
                 border: 0 !important;
             }
-            .ui-grid-col-2{
-                width: 10.66666% !important;
+            .ui-grid-col-2,.ui-grid-col-3{
+                width: auto !important;
             }
         </style>
         <script type="text/javascript">
@@ -150,8 +150,15 @@
                                                 </p:commandLink>
                                             </p:dataList>
                                         </p:panelGrid>
-                                        <p:fileUpload fileUploadListener="#{invoiceMailController.handleAttachmentFiles}" mode="advanced" id="addAttachment" label="Add Attachment" 
-                                                      auto="true" sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf|txt)$/" update="attachments"/>
+                                        <p:panelGrid columns="2" 
+                                                     columnClasses="ui-grid-col-3,ui-grid-col-9" 
+                                                     layout="grid" 
+                                                     styleClass="ui-panelgrid-blank form-group"
+                                                     style="border:0px none; background-color:transparent;">
+                                            <p:fileUpload fileUploadListener="#{invoiceMailController.handleAttachmentFiles}" mode="advanced" id="addAttachment" label="Add Attachment" 
+                                                          auto="true" sizeLimit="1000000" allowTypes="/(\.|\/)(jpe?g|png|pdf|txt|xlsx|csv|docx|ppt)$/" update="attachments"/>
+                                            <h:outputText value="(jpeg, jpg, png, pdf, txt, xlsx, csv, docx, ppt)" />
+                                        </p:panelGrid>
                                     </div>   
                                     <hr/>
                                     <p:panelGrid columns="2" 
