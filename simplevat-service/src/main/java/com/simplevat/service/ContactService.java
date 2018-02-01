@@ -22,4 +22,6 @@ public abstract class ContactService extends SimpleVatService<Integer, Contact> 
 
     public abstract Optional<Contact> getContactByEmail(String Email);
 
+    public abstract Contact getLastContact();
+
 }

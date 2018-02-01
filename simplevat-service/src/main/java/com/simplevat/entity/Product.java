@@ -19,11 +19,12 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @Table(name = "PRODUCT")
 @Data
+@TableGenerator(name="INCREMENT_INITIAL_VALUE", initialValue = 1000)
 public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator ="INCREMENT_INITIAL_VALUE")
     @Column(name = "PRODUCT_ID")
     private Integer productID;
     @Basic
@@ -51,7 +52,7 @@ public class Product implements Serializable {
     private BigDecimal unitPrice;
     @Column(name = "VAT_CHECK_FLAG")
     @ColumnDefault(value = "0")
-    private Boolean vatCheckFlag = Boolean.FALSE;
+    private Boolean vatIncluded = Boolean.FALSE;
 
     @Column(name = "CREATED_BY")
     @Basic(optional = false)

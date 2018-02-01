@@ -20,13 +20,14 @@ import org.hibernate.annotations.ColumnDefault;
 @Table(name = "TRANSACTON")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @Data
+@TableGenerator(name="INCREMENT_INITIAL_VALUE", initialValue = 1000)
 public class Transaction implements Serializable {
 
     private static final long serialVersionUID = 848122185643690684L;
 
     @Id
     @Column(name = "TRANSACTION_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator ="INCREMENT_INITIAL_VALUE")
     private Integer transactionId;
 
     @Basic

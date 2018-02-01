@@ -66,4 +66,14 @@ public class ContactDaoImpl extends AbstractDao<Integer, Contact> implements Con
         return null;
     }
 
+    @Override
+    public Contact getLastContact() {
+        TypedQuery<Contact> query = getEntityManager().createQuery("SELECT c FROM Contact c ORDER BY c.contactId DESC", Contact.class);
+        List<Contact> contacts = query.getResultList();
+        if (contacts != null && !contacts.isEmpty()) {
+            return contacts.get(0);
+        }
+        return null;
+    }
+
 }

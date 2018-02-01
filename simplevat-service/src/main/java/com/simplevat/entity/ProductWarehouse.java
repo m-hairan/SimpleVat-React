@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.persistence.Version;
 import lombok.Data;
 import org.hibernate.annotations.ColumnDefault;
@@ -31,13 +32,14 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @Table(name = "PRODUCT_WAREHOUSE")
 @Data
+@TableGenerator(name="INCREMENT_INITIAL_VALUE", initialValue = 1000)
 public class ProductWarehouse implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name = "WAREHOUSE_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator ="INCREMENT_INITIAL_VALUE")
     private Integer warehouseId;
     
     @Basic(optional = false)

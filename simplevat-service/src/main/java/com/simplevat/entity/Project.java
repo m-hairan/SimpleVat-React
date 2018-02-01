@@ -17,11 +17,12 @@ import org.hibernate.annotations.ColumnDefault;
 @Table(name = "PROJECT")
 @Data
 @NoArgsConstructor
+@TableGenerator(name="INCREMENT_INITIAL_VALUE", initialValue = 1000)
 public class Project implements Serializable {
 
     @Id
     @Column(name = "PROJECT_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator ="INCREMENT_INITIAL_VALUE")
     private Integer projectId;
 
     @Column(name = "PROJECT_NAME")

@@ -27,13 +27,14 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @Table(name = "PURCHASE")
 @Data
+@TableGenerator(name="INCREMENT_INITIAL_VALUE", initialValue = 1000)
 public class Purchase implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "PURCHASE_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "PURCHASE_ID" )
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator ="INCREMENT_INITIAL_VALUE")
     private Integer purchaseId;
 
     @Basic

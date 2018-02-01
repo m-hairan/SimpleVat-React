@@ -19,6 +19,8 @@ public interface ContactDao extends Dao<Integer, Contact> {
 
     List<Contact> getContacts(final String searchQuery, int contactType);
 
+    public Contact getLastContact();
+
     /*   Contact createContact(Contact contact);
 
     Contact getContact(int id);

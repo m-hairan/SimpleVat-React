@@ -24,4 +24,5 @@ public class ProductServiceImpl extends ProductService {
     public List<Product> getProductList() {
         return productDao.getProductList();
     }
+
 }

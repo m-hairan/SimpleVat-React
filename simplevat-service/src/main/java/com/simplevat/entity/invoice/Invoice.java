@@ -24,6 +24,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Data
 @Entity
 @Table(name = "INVOICE")
+@TableGenerator(name="INCREMENT_INITIAL_VALUE", initialValue = 1000)
 @NamedQueries({
     @NamedQuery(name = "Invoice.searchInvoices",
             query = "from Invoice i where i.deleteFlag = false order by i.lastUpdateDate desc")
@@ -35,7 +36,7 @@ public class Invoice implements Serializable {
     @Id
     @Setter(AccessLevel.NONE)
     @Column(name = "INVOICE_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator ="INCREMENT_INITIAL_VALUE")
     private Integer invoiceId;
 
     @Column(name = "INVOICE_REFERENCE_NUMBER")

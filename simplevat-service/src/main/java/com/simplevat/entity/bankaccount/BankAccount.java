@@ -30,11 +30,12 @@ import static org.hibernate.type.TypeFactory.serializable;
 @Table(name = "BANK_ACCOUNT")
 @Data
 @Transactional
+@TableGenerator(name="INCREMENT_INITIAL_VALUE", initialValue = 1000)
 public class BankAccount implements Serializable{
 
     @Id
     @Column(name = "BANK_ACCOUNT_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY,generator ="INCREMENT_INITIAL_VALUE")
     private Integer bankAccountId;
 
     @Basic

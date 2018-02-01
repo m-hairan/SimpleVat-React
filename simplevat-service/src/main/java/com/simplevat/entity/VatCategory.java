@@ -17,7 +17,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @Table(name = "VAT_CATEGORY")
 @Data
-public class VatCategory implements Serializable{
+public class VatCategory implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -57,5 +57,7 @@ public class VatCategory implements Serializable{
     @ColumnDefault(value = "1")
     @Version
     private Integer versionNumber;
+    @Transient
+    private String vatLabel;
 
 }

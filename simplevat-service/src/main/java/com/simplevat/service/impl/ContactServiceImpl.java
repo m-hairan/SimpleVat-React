@@ -31,8 +31,8 @@ public class ContactServiceImpl extends ContactService {
     }
 
     @Override
-    public List<Contact> getContacts(final String searchQuery,int contactType) {
-        return contactDao.getContacts(searchQuery,contactType);
+    public List<Contact> getContacts(final String searchQuery, int contactType) {
+        return contactDao.getContacts(searchQuery, contactType);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ContactServiceImpl extends ContactService {
 
     @Override
     public Optional<Contact> getContactByEmail(String Email) {
-         return contactDao.getContactByEmail(Email);
+        return contactDao.getContactByEmail(Email);
     }
 
     @Override
@@ -55,4 +55,7 @@ public class ContactServiceImpl extends ContactService {
         return contactDao.getContactViewList();
     }
 
+    public Contact getLastContact() {
+        return contactDao.getLastContact();
+    }
 }
