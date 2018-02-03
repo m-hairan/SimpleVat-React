@@ -21,13 +21,6 @@ public class MailIntegration {
 
     private static final String UTF_8 = "UTF-8";
 
-    private final JavaMailSender mailSender;
-
-    @Autowired
-    public MailIntegration(JavaMailSender mailSender) {
-        this.mailSender = mailSender;
-    }
-
 //    private void sendEmail(final Mail mail, boolean html) throws Exception {
 //
 //        MimeMessagePreparator preparator = mimeMessage -> {
@@ -75,7 +68,7 @@ public class MailIntegration {
         javaMailSender.send(preparator);
     }
 
-    public void sendHtmlEmail(final MimeMultipart mimeMultipart, final Mail mail, JavaMailSender javaMailSender) throws Exception {
+    public static void sendHtmlEmail(final MimeMultipart mimeMultipart, final Mail mail, JavaMailSender javaMailSender) throws Exception {
 
         MimeMessagePreparator preparator = mimeMessage -> {
             MimeMessageHelper mimeMessagePreparator = new MimeMessageHelper(mimeMessage, true, UTF_8);

@@ -60,4 +60,8 @@ public class VatCategory implements Serializable {
     @Transient
     private String vatLabel;
 
+    public String getVatLabel() {
+        return name + "(" + vat.toString() + ")";
+    }
+
 }

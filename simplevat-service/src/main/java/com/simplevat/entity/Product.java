@@ -50,7 +50,7 @@ public class Product implements Serializable {
     @Basic
     @Column(name = "UNIT_PRICE")
     private BigDecimal unitPrice;
-    @Column(name = "VAT_CHECK_FLAG")
+    @Column(name = "VAT_INCLUDED")
     @ColumnDefault(value = "0")
     private Boolean vatIncluded = Boolean.FALSE;
 
