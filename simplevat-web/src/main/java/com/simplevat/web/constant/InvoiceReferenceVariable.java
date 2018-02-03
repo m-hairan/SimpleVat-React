@@ -24,8 +24,7 @@ public enum InvoiceReferenceVariable {
     INVOICE_AMOUNT("Invoice Amount", "{invoiceAmount}"),
     DUE_DATE("Due Amount", "{dueAmount}"),
     SENDER_NAME("Sender Name", "{senderName}"),
-    COMPANY_NAME("Company Name", "{companyName}"),
-    INVOICE_CURRENCY_SYMBOL("Invoice Currency Symbol", "{invoiceCurrencySymbol}");
+    COMPANY_NAME("Company Name", "{companyName}");
 
     private String name;
     private String value;
@@ -43,15 +42,6 @@ public enum InvoiceReferenceVariable {
         return referenceVariables;
     }
 
-//      invoiceVariableList.add("{invoiceReferenceNumber}");
-//        invoiceVariableList.add("{invoiceDate}");
-//        invoiceVariableList.add("{invoiceDueDate}");
-//        invoiceVariableList.add("{invoiceDiscount}");
-//        invoiceVariableList.add("{contractPoNumber}");
-//        invoiceVariableList.add("{contactName}");
-//        invoiceVariableList.add("{projectName}");
-//        invoiceVariableList.add("{invoiceAmount}");
-//        invoiceVariableList.add("{dueAmount}");
     public String getName() {
         return name;
     }

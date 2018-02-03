@@ -10,7 +10,7 @@ import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.UserServiceNew;
 import com.simplevat.web.constant.EmailConstant;
 import com.simplevat.web.utils.FileUtility;
-import com.simplevat.web.utils.MailDefaultConfigurationModel;
+import com.simplevat.web.utils.MailConfigurationModel;
 import com.simplevat.web.utils.MailUtility;
 import com.simplevat.web.utils.SessionIdentifierGenerator;
 import java.io.IOException;
@@ -149,7 +149,7 @@ public class SecurityBean implements PhaseListener, Serializable {
                 MessageFormat msgFormat = new MessageFormat(FileUtility.readFile(pathname));
                 MimeMultipart mimeMultipart = FileUtility.getMessageBody(msgFormat.format(args));
                 String[] email = {user.getUserEmail()};
-                MailDefaultConfigurationModel mailDefaultConfigurationModel = MailUtility.verifyMailConfigurationList(configurationService.getConfigurationList());
+                MailConfigurationModel mailDefaultConfigurationModel = MailUtility.getEMailConfigurationList(configurationService.getConfigurationList());
                 sendActivationMail(mailEnum, mimeMultipart, mailDefaultConfigurationModel.getMailusername(), email);
                 return "/pages/public/login.xhtml?faces-redirect=true";
             } else {

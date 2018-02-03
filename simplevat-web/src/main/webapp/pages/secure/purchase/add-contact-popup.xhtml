@@ -12,34 +12,57 @@
                   hideEffect="scale">
             <div class="ui-g form-group" style="margin-bottom: 16px;">
                 <div class="ui-g-12">
-                    <p:panelGrid columns="4" id="contactPanel"
-                                 columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                    <p:panelGrid columns="3" id="contactPanel"
+                                 columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" 
                                  layout="grid" 
                                  styleClass="ui-panelgrid-blank form-group"
                                  style="border:0px none; background-color:transparent;">
-                        
-                        <p:outputLabel />
+
+
                         <h:panelGroup styleClass="md-inputfield">
-                            <p:inputText id="firstname" value="#{purchaseController.contactModel.firstName}" required="true" requiredMessage="Enter first name"/>
+                            <p:autoComplete id="contactTitle" converter="#{titleConverter}"
+                                            dropdown="true" 
+                                            forceSelection="true"
+                                            effect="fold"
+                                            required="true"
+                                            scrollHeight="250"
+                                            requiredMessage="Please select Title"
+                                            completeMethod="#{purchaseController.completeTitle}"
+                                            value="#{purchaseController.contactModel.title}" 
+                                            var="title" 
+                                            itemValue="#{title.titleCode}" 
+                                            itemLabel="#{title.titleDescription}"/>
+                            <p:outputLabel for="contactTitle" value="Title"/>
+                            <p:message for="contactTitle" />
+                        </h:panelGroup>
+
+                        <p:outputLabel/>
+
+                        <p:outputLabel/>
+
+
+
+                        <h:panelGroup styleClass="md-inputfield">
+                            <p:inputText id="firstname" value="#{purchaseController.contactModel.firstName}" required="true" requiredMessage="Please Enter name"/>
                             <label>First Name</label>
                             <p:message for="firstname"/>
                         </h:panelGroup>
-                        
-                        <p:outputLabel />
+
+
                         <h:panelGroup styleClass="md-inputfield">
+                            <p:inputText id="middleName" 
+                                         value="#{purchaseController.contactModel.middleName}"/>
+                            <label>Middle Name</label>
+                        </h:panelGroup>
+
+
+                        <h:panelGroup styleClass="md-inputfield" >
                             <p:inputText id="lastname" value="#{purchaseController.contactModel.lastName}" required="true" requiredMessage="Enter Last name"/>
                             <label>Last Name</label>
                             <p:message for="lastname"/>
                         </h:panelGroup>
-                        
-                        <p:outputLabel />
-                        <h:panelGroup styleClass="md-inputfield">
-                            <p:inputText id="organization" value="#{purchaseController.contactModel.organization}" required="true" requiredMessage="Enter Organization"/>
-                            <label>Organization Name</label>
-                            <p:message for="organization"/>
-                        </h:panelGroup>
-                        
-                        <p:outputLabel />
+                    
+
                         <h:panelGroup styleClass="md-inputfield">
                             <p:inputText id="emailid" value="#{purchaseController.contactModel.email}" required="true" validatorMessage="Invalid email format" requiredMessage="Enter EmailId">
                                 <f:validateRegex
@@ -48,7 +71,92 @@
                             <label>Email</label>
                             <p:message for="emailid"/>
                         </h:panelGroup>
-                        
+
+                        <h:panelGroup styleClass="md-inputfield">
+                            <p:inputText id="addressLine1"
+                                         required="true"
+                                         requiredMessage="Please enter address"
+                                         value="#{purchaseController.contactModel.invoicingAddressLine1}"/>
+                            <p:outputLabel for="addressLine1" value="Address Line1" styleClass="notRequiedSpace" /> 
+                            <p:message for="addressLine1" />
+                        </h:panelGroup>
+
+                        <h:panelGroup styleClass="md-inputfield">
+                            <p:inputText id="addressLine2"
+                                         required="true"
+                                         requiredMessage="Please enter address"
+                                         value="#{purchaseController.contactModel.invoicingAddressLine2}"/>
+                            <p:outputLabel for="addressLine2" value="Address Line2" styleClass="notRequiedSpace"/>
+                            <p:message for="addressLine2" />
+                        </h:panelGroup>
+                        <h:panelGroup styleClass="md-inputfield">
+                            <p:inputText id="stateRegion"
+                                         required="true"
+                                         requiredMessage="Please enter State"
+                                         value="#{purchaseController.contactModel.stateRegion}"  />
+                            <p:outputLabel for="stateRegion" value="State Region"/>
+                            <p:message for="stateRegion" />
+                        </h:panelGroup>
+
+                        <h:panelGroup styleClass="md-inputfield">
+                            <p:inputText id="city" 
+                                         value="#{purchaseController.contactModel.city}"
+                                         required="true"
+                                         requiredMessage="Please enter City"/>
+                            <p:outputLabel for="city" value="City"/>
+                            <p:message for="city" />
+                        </h:panelGroup>
+
+                        <h:panelGroup styleClass="md-inputfield">
+                            <p:autoComplete id="country"
+                                            converter="#{countryConverter}" 
+                                            dropdown="true" 
+                                            forceSelection="true" 
+                                            effect="fold"
+                                            scrollHeight="250"
+                                            completeMethod="#{purchaseController.completeCountry}"
+                                            value="#{purchaseController.contactModel.country}"
+                                            var="country"
+                                            itemValue="#{country.countryCode}"
+                                            itemLabel="#{country.countryFullName}" 
+                                            required="true"
+                                            requiredMessage="Please select Country">
+
+                            </p:autoComplete>
+                            <p:outputLabel for="country" value="Country"/>
+                            <p:message for="country" />
+                        </h:panelGroup>
+
+                        <h:panelGroup styleClass="md-inputfield">
+
+                            <p:autoComplete id="currency" dropdown="true" 
+                                            forceSelection="true"
+                                            effect="fold" 
+                                            required="true"
+                                            scrollHeight="250"
+                                            requiredMessage="Please select Currency"
+                                            converter="#{currencyConverter}"
+                                            completeMethod="#{purchaseController.completeCurrency}"
+                                            value="#{purchaseController.contactModel.currency}"
+                                            var="currency" 
+                                            itemValue="#{currency.currencyCode}"
+                                            itemLabel="#{currency.currencyDescription} - #{currency.currencySymbol}" />
+                            <p:outputLabel for="currency" value="Currency Code"/>
+                            <p:message for="currency" />
+                        </h:panelGroup>
+                        <h:panelGroup styleClass="md-inputfield">
+                            <p:inputText id="billingEmail"
+                                         required="true"
+                                         requiredMessage="Please enter Billing Email"
+                                         value="#{purchaseController.contactModel.billingEmail}"
+                                         validatorMessage="Invalid email format" >
+                                <f:validateRegex
+                                    pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                            </p:inputText>
+                            <p:outputLabel for="billingEmail" value="Billing Email"/>
+                            <p:message for="billingEmail" />
+                        </h:panelGroup>
+
                     </p:panelGrid>
                 </div>
 
@@ -60,7 +168,7 @@
                     value="Save"
                     update="createPurchaseForm:conatcts contactPanel" style="width:auto" 
                     icon="ui-icon-save"/>
-            </f:facet>  
+            </f:facet>   
         </p:dialog>
     </h:form>
 </ui:composition>

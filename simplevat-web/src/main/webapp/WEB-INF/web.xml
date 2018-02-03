@@ -21,7 +21,7 @@
     </listener>
     <!-- Project Stage Level -->
     <welcome-file-list>
-        <welcome-file>pages/secure/user/home.xhtml</welcome-file>
+        <welcome-file>pages/secure/home.xhtml</welcome-file>
     </welcome-file-list>
     <context-param>
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>

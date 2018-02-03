@@ -74,6 +74,8 @@ public class InvoiceListController extends BaseController implements Serializabl
     @Getter
     @Setter
     private Invoice selectedInvoice;
+    
+    
 
     public InvoiceListController() {
         super(ModuleName.INVOICE_MODULE);

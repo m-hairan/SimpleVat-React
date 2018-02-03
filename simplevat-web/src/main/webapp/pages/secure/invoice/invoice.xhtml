@@ -114,10 +114,13 @@
                                                 <p:ajax event="itemSelect"
                                                         listener="#{invoiceController.updateCurrency}" 
                                                         update="currency invoiceField invoiceItemTable exchangeCurrency" />
+                                                <p:ajax update="@(.shippingContact)" process="@this" event="itemSelect" listener="#{invoiceController.sameAsInvoicingAddress()}"/>
+                                            
                                             </p:autoComplete>
                                             <p:outputLabel for="conatcts" value="#{messages.contact}"/>
                                             <p:message for="conatcts" />
                                         </h:panelGroup >
+                                       
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:tooltip for="addbtn" position="top" value="Add new contact" />
                                             <p:commandButton id="addbtn" icon="ui-icon-plus" onsuccess="PF('add_contact_popup').show();" actionListener="#{invoiceController.initCreateContact()}"/>
@@ -710,8 +713,8 @@
                                         </p:autoComplete>
                                     </p:column>
                                     <p:column  width="170" headerText="Subtotal (#{invoiceController.selectedInvoiceModel.currencyCode.currencyIsoCode})" styleClass="amount">
-                                        <h:outputText  id="subTotal" value="#{invoiceItem.subTotal}" >
-                                            <f:convertNumber type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol}"/>
+                                        <h:outputText  id="subTotal" value="#{ invoiceItem.subTotal}" >
+                                            <f:convertNumber type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} " />
                                         </h:outputText>
                                     </p:column>
 
@@ -786,7 +789,7 @@
                                                 <f:facet name="footer">
                                                     <p:outputPanel autoUpdate="true">
                                                         <h:outputText id="totalDiscount" value="#{invoiceController.selectedInvoiceModel.calculatedDiscountAmount}"  >
-                                                            <f:convertNumber id="totalDis" type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol}"/>
+                                                            <f:convertNumber id="totalDis" type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} "/>
                                                         </h:outputText>
                                                     </p:outputPanel>
                                                 </f:facet>

@@ -80,7 +80,7 @@
 
                     <p:column headerText="#{messages.action}">
                         <p:tooltip for="edit" value="#{messages.edit}" position="top" rendered="#{!invoice.freeze}"/>
-                        <p:commandButton id="edit" title="#{messages.edit_invoice}" style="margin-right: 7px" rendered="#{!invoice.freeze}" icon="ui-icon-edit" styleClass="AquaButton" action="#{invoiceListController.redirectToCreateInvoice}">
+                        <p:commandButton id="edit" title="#{messages.edit_invoice}" style="margin-right: 7px"  icon="ui-icon-edit" styleClass="AquaButton" action="#{invoiceListController.redirectToCreateInvoice}" rendered="#{!invoice.freeze}">
                             <f:setPropertyActionListener value="#{invoice}" target="#{invoiceListController.selectedInvoiceModel}" />
                         </p:commandButton>
                         <p:tooltip for="view" value="#{messages.view}" position="top"/>

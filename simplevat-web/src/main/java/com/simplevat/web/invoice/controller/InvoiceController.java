@@ -39,28 +39,33 @@ import com.simplevat.entity.Configuration;
 import com.simplevat.entity.Country;
 import com.simplevat.entity.CurrencyConversion;
 import com.simplevat.entity.Product;
+import com.simplevat.entity.Title;
+import com.simplevat.entity.User;
 import com.simplevat.entity.VatCategory;
 import com.simplevat.service.CompanyService;
 import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.CountryService;
 import com.simplevat.service.ProductService;
+import com.simplevat.service.TitleService;
 import com.simplevat.service.UserServiceNew;
 import com.simplevat.service.VatCategoryService;
 import com.simplevat.web.common.controller.BaseController;
 import com.simplevat.web.constant.ConfigurationConstants;
 import com.simplevat.web.constant.ContactTypeConstant;
-import com.simplevat.web.constant.DiscountTypeConstant;
 import com.simplevat.web.constant.InvoicePaymentModeConstant;
 import com.simplevat.web.constant.InvoicePurchaseStatusConstant;
 import com.simplevat.web.constant.ModuleName;
+import com.simplevat.web.contact.controller.ContactHelper;
+import com.simplevat.web.contact.controller.ContactUtil;
+import com.simplevat.web.contact.model.ContactType;
 import com.simplevat.web.productservice.model.ProductModel;
 import com.simplevat.web.utils.FacesUtil;
 import com.simplevat.web.utils.RecurringUtility;
-import com.sun.java.swing.plaf.windows.resources.windows;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.Optional;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
@@ -73,115 +78,121 @@ import org.slf4j.LoggerFactory;
 @Controller
 @SpringScopeView
 public class InvoiceController extends BaseController implements Serializable {
-    
+
     private static final long serialVersionUID = 6299117288316809011L;
     private final static Logger LOGGER = LoggerFactory.getLogger(InvoiceController.class);
-    
+
     @Autowired
     private ContactService contactService;
-    
+
     @Autowired
     private CountryService countryService;
-    
+
     @Autowired
     private ConfigurationService configurationService;
-    
+
     @Autowired
     private UserServiceNew userServiceNew;
-    
+
     @Autowired
     private InvoiceModelHelper invoiceModelHelper;
-    
+
     @Autowired
     private CurrencyService currencyService;
-    
+
     @Autowired
     private CompanyService companyService;
-    
+
     @Autowired
     private InvoiceService invoiceService;
-    
+
     @Autowired
     private DiscountTypeService discountTypeService;
-    
+
     @Autowired
     private ProjectService projectService;
-    
+
     @Autowired
     private VatCategoryService vatCategoryService;
-    
+
     @Autowired
     private ProductService productService;
-    
+
+    @Autowired
+    private TitleService titleService;
+
     @Getter
     @Setter
     private InvoiceModel selectedInvoiceModel;
-    
+
     @Getter
     private Company company;
-    
+
     @Getter
     private Invoice selectedInvoice;
-    
+
     @Getter
     private Configuration configuration;
-    
+
     @Getter
     @Setter
     private ContactModel contactModel;
-    
+
     @Getter
     @Setter
     private ProductModel productModel;
-    
+
     @Getter
     @Setter
     private RecurringUtility recurringUtility;
-    
+
     @Getter
     @Setter
     private List<Currency> currencies;
-    
+
     @Getter
     @Setter
     private List<Configuration> configurationList;
-    
+
     @Getter
     @Setter
     private CurrencyConversion currencyConversion;
-    
+
     @Getter
     @Setter
     private List<VatCategory> vatCategoryList = new ArrayList<>();
-    
+
     @Getter
     private boolean renderPrintInvoice = false;
-    
+
     @Getter
     @Setter
-    private boolean copyInvoiceAddress = false;
-    
+    private boolean copyInvoiceAddress = true;
+
     @Getter
     @Setter
     InvoiceItemModel invoiceItemModel;
-    
+
     @Getter
     private List<Country> countries = new ArrayList<>();
-    
+
     @Getter
     @Setter
     private boolean defaultContactByproject = false;
-    
+
     @Getter
     @Setter
     List<SelectItem> vatCategorySelectItemList = new ArrayList<>();
-    
+
     InvoiceItemModel invoiceItemModelForProductUpdateOnProductAdd;
-    
+
+    @Getter
+    private List<Title> titles = new ArrayList<>();
+
     public InvoiceController() {
         super(ModuleName.INVOICE_MODULE);
     }
-    
+
     @PostConstruct
     public void init() {
         contactModel = new ContactModel();
@@ -193,11 +204,11 @@ public class InvoiceController extends BaseController implements Serializable {
         if (objSelectedInvoice != null) {
             renderPrintInvoice = true;
             selectedInvoice = invoiceService.findByPK(Integer.parseInt(objSelectedInvoice.toString()));
-            selectedInvoiceModel = invoiceModelHelper.getInvoiceModel(selectedInvoice);
+            selectedInvoiceModel = invoiceModelHelper.getInvoiceModel(selectedInvoice, true);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("invoiceId", selectedInvoice.getInvoiceId());
         } else {
             selectedInvoiceModel = new InvoiceModel();
-            
+
             currencies = currencyService.getCurrencies();
             setDefaultCurrency();
             Object objSelectedContact = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("contactId");
@@ -211,30 +222,86 @@ public class InvoiceController extends BaseController implements Serializable {
             selectedInvoiceModel.setInvoiceReferenceNumber("1");
             selectedInvoiceModel.setInvoiceDueDate(getDueDate(selectedInvoiceModel));
             selectedInvoiceModel.setInvoiceContact(new Contact());
-            configurationList = configurationService.getConfigurationList();
-            if (configurationList != null) {
-                configuration = configurationList.stream().filter(conf -> conf.getName().equals(ConfigurationConstants.INVOICING_REFERENCE_PATTERN)).findFirst().get();
+            configuration = configurationService.getConfigurationByName(ConfigurationConstants.INVOICING_REFERENCE_PATTERN);
+            if (configuration != null) {
                 if (configuration.getValue() != null) {
-                    selectedInvoiceModel.setInvoiceReferenceNumber(invoiceModelHelper.getNextInvoiceRefNumber(configuration.getValue()));
+                    generateInvoiceRefNumber();
                 }
-            }
-            if (configuration == null) {
+            } else {
                 configuration = new Configuration();
+                configuration.setValue("1");
                 configuration.setName(ConfigurationConstants.INVOICING_REFERENCE_PATTERN);
             }
         }
+
+        titles = titleService.getTitles();
         countries = countryService.getCountries();
-        selectedInvoiceModel.addInvoiceItem(new InvoiceItemModel());
+        currencies = currencyService.getCurrencies();
+
+        setDefaultCountry();
+
+        setDefaultContactCurrency();
+        countries = countryService.getCountries();
+
+        addLineItem();
+
         populateVatCategory();
+
         updateSubTotalOnDiscountAdded();
-        if (selectedInvoiceModel.getShippingContact() == null) {
+
+        if (selectedInvoiceModel.getShippingContact()
+                == null) {
             selectedInvoiceModel.setShippingContact(new Contact());
         }
-        if (selectedInvoiceModel.getShippingContact() == null) {
+
+        if (selectedInvoiceModel.getShippingContact()
+                == null) {
             selectedInvoiceModel.setShippingContact(new Contact());
+        }
+        if (copyInvoiceAddress) {
+            sameAsInvoicingAddress();
         }
     }
-    
+
+    private void generateInvoiceRefNumber() {
+        selectedInvoiceModel.setInvoiceReferenceNumber(invoiceModelHelper.getNextInvoiceRefNumber(configuration.getValue(), selectedInvoiceModel));
+    }
+
+    public List<Title> completeTitle(String titleStr) {
+        List<Title> titleSuggestion = new ArrayList<>();
+
+        Iterator<Title> titleIterator = this.titles.iterator();
+
+        while (titleIterator.hasNext()) {
+            Title title = titleIterator.next();
+            if (title.getTitleDescription() != null
+                    && !title.getTitleDescription().isEmpty()
+                    && title.getTitleDescription().toUpperCase().contains(titleStr.toUpperCase())) {
+                titleSuggestion.add(title);
+            }
+        }
+
+        return titleSuggestion;
+    }
+
+    public List<ContactType> completeContactType() {
+        return ContactUtil.contactTypeList();
+    }
+
+    private void setDefaultCountry() {
+        Country defaultCountry = company.getCompanyCountryCode();
+        if (defaultCountry != null) {
+            contactModel.setCountry(defaultCountry);
+        }
+    }
+
+    private void setDefaultContactCurrency() {
+        Currency defaultCurrency = company.getCompanyCountryCode().getCurrencyCode();
+        if (defaultCurrency != null) {
+            contactModel.setCurrency(defaultCurrency);
+        }
+    }
+
     public void updateContact() {
         setDefaultCurrency();
         if (selectedInvoiceModel.getProject() != null) {
@@ -242,8 +309,9 @@ public class InvoiceController extends BaseController implements Serializable {
             selectedInvoiceModel.setCurrencyCode(selectedInvoiceModel.getProject().getContact().getCurrency());
             defaultContactByproject = true;
         }
+        generateInvoiceRefNumber();
     }
-    
+
     public void sameAsInvoicingAddress() {
         if (copyInvoiceAddress) {
             selectedInvoiceModel.setShippingContact(selectedInvoiceModel.getInvoiceContact());
@@ -251,7 +319,7 @@ public class InvoiceController extends BaseController implements Serializable {
             selectedInvoiceModel.setShippingContact(new Contact());
         }
     }
-    
+
     private void setDefaultCurrency() {
         Currency defaultCurrency = company.getCompanyCountryCode().getCurrencyCode();
         if (defaultCurrency != null) {
@@ -279,7 +347,7 @@ public class InvoiceController extends BaseController implements Serializable {
         }
         return exchangeRateString;
     }
-    
+
     private boolean validateAtLeastOneItem() {
         if (selectedInvoiceModel.getInvoiceLineItems().size() < 1) {
             FacesMessage message = new FacesMessage("Please add atleast one item to create Invoice.");
@@ -289,7 +357,7 @@ public class InvoiceController extends BaseController implements Serializable {
         }
         return true;
     }
-    
+
     public List<Contact> contacts(final String searchQuery) {
         if (selectedInvoiceModel.getProject() != null) {
             List<Contact> contactList = new ArrayList<>();
@@ -298,7 +366,7 @@ public class InvoiceController extends BaseController implements Serializable {
         }
         return contactService.getContacts(searchQuery, ContactTypeConstant.CUSTOMER);
     }
-    
+
     public List<Product> products(final String searchQuery) throws Exception {
         if (invoiceItemModel != null) {
             invoiceItemModel.setProductService(null);
@@ -316,30 +384,29 @@ public class InvoiceController extends BaseController implements Serializable {
         }
         return null;
     }
-    
+
     public void refreshProductService(InvoiceItemModel itemModel) {
         itemModel.setProductService(null);
     }
-    
+
     public List<VatCategory> vatCategorys(final String searchQuery) throws Exception {
         List<VatCategory> vatCategorys = new ArrayList<>();
         if (vatCategoryService.getVatCategoryList() != null) {
             for (VatCategory vatCategory : vatCategoryService.getVatCategoryList()) {
-                vatCategory.setVatLabel(vatCategory.getName() + "(" + vatCategory.getVat().toString() + ")");
                 vatCategorys.add(vatCategory);
             }
             return vatCategorys;
         }
         return null;
     }
-    
+
     public void addInvoiceItemOnProductSelect(Integer listSize) {
         if (validateInvoiceItem()) {
-            selectedInvoiceModel.addInvoiceItem(new InvoiceItemModel());
+            addLineItem();
         }
-        
+
     }
-    
+
     private boolean validateInvoiceItem() { //---------------
         boolean validated = true;
         for (int i = 0; i < selectedInvoiceModel.getInvoiceLineItems().size() - 1; i++) {
@@ -369,7 +436,7 @@ public class InvoiceController extends BaseController implements Serializable {
         }
         return validated;
     }
-    
+
     private boolean validateInvoiceLineItems() { //---------------
         boolean validated = true;
         for (InvoiceItemModel lastItem : selectedInvoiceModel.getInvoiceLineItems()) {
@@ -395,43 +462,41 @@ public class InvoiceController extends BaseController implements Serializable {
                 message.setSeverity(FacesMessage.SEVERITY_ERROR);
                 FacesContext.getCurrentInstance().addMessage("validationId", message);
             }
-            
+
         }
         return validated;
     }
-    
+
     public void updateVatPercentage(InvoiceItemModel invoiceItemModel, Integer listSize) {
         if (invoiceItemModel.getProductService() != null) {
             if (invoiceItemModel.getProductService().getVatCategory() != null) {
                 VatCategory vatCategory = vatCategoryService.findByPK(invoiceItemModel.getProductService().getVatCategory().getId());
                 invoiceItemModel.setVatId(vatCategory);
-                if (invoiceItemModel.getVatId() != null) {
-                    invoiceItemModel.getVatId().setVatLabel(invoiceItemModel.getProductService().getVatCategory().getName() + "(" + invoiceItemModel.getProductService().getVatCategory().getVat().toString() + ")");
-                }
+
             } else {
-                invoiceItemModel.setVatId(null);
+                invoiceItemModel.setVatId(vatCategoryService.getDefaultVatCategory());
             }
             invoiceItemModel.setUnitPrice(invoiceItemModel.getProductService().getUnitPrice());
             invoiceItemModel.setDescription(invoiceItemModel.getProductService().getProductDescription());
         }
-        
+
         addInvoiceItemOnProductSelect(listSize);
     }
-    
+
     public void updateSubTotal(InvoiceItemModel invoiceItem) {
         invoiceModelHelper.processAmountCalculation(selectedInvoiceModel);
-        
+
     }
-    
+
     public void updateQuantity(InvoiceItemModel invoiceItem) {
         invoiceItem.setQuatity(0);
     }
-    
+
     public void reserveProductOnAdd(InvoiceItemModel invoiceItem) {
         System.out.println("invoiceItemModelForProductUpdateOnProductAdd" + invoiceItem);
         invoiceItemModelForProductUpdateOnProductAdd = invoiceItem;
     }
-    
+
     public List<Project> projects(final String searchQuery) throws Exception {
         ProjectCriteria criteria = new ProjectCriteria();
         criteria.setActive(Boolean.TRUE);
@@ -440,14 +505,14 @@ public class InvoiceController extends BaseController implements Serializable {
         }
         return projectService.getProjectsByCriteria(criteria);
     }
-    
+
     public List<Currency> completeCurrency(String currencyStr) {
         if (this.currencies == null) {
             this.currencies = currencyService.getCurrencies();
         }
         List<Currency> currencySuggestion = new ArrayList<>();
         Iterator<Currency> currencyIterator = this.currencies.iterator();
-        
+
         while (currencyIterator.hasNext()) {
             Currency currency = currencyIterator.next();
             if (currency.getCurrencyName() != null
@@ -466,7 +531,7 @@ public class InvoiceController extends BaseController implements Serializable {
         }
         return currencySuggestion;
     }
-    
+
     public List<DiscountType> discountTypes(final String searchString) {
         final List<DiscountType> types = discountTypeService.getDiscountTypes();
 //        for (DiscountType type : types) {
@@ -477,7 +542,7 @@ public class InvoiceController extends BaseController implements Serializable {
 //        }
         return types;
     }
-    
+
     public List<Country> completeCountry(String countryStr) {
         List<Country> countrySuggestion = new ArrayList<>();
         Iterator<Country> countryIterator = this.countries.iterator();
@@ -497,7 +562,7 @@ public class InvoiceController extends BaseController implements Serializable {
         LOGGER.debug(" Size :" + countrySuggestion.size());
         return countrySuggestion;
     }
-    
+
     public String saveInvoice() throws IOException {
         removeEmptyRow();
         if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
@@ -508,9 +573,9 @@ public class InvoiceController extends BaseController implements Serializable {
         context.getExternalContext().getFlash().setKeepMessages(true);
         context.addMessage(null, new FacesMessage("Invoice Saved SuccessFully"));
         return "list?faces-redirect=true";
-        
+
     }
-    
+
     public String saveAndSendInvoice() throws IOException {
         removeEmptyRow();
         if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
@@ -523,9 +588,9 @@ public class InvoiceController extends BaseController implements Serializable {
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
         session.setAttribute("invoiceId", invoiceId);
         return "invoiceView?faces-redirect=true";
-        
+
     }
-    
+
     public void saveAndAddMoreInvoice() {
         removeEmptyRow();
         if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
@@ -537,13 +602,13 @@ public class InvoiceController extends BaseController implements Serializable {
         context.addMessage(null, new FacesMessage("Invoice Saved SuccessFully"));
         init();
     }
-    
+
     private Integer save() {
         if (selectedInvoiceModel.getShippingContact().getContactId() == null) {
             selectedInvoiceModel.setShippingContact(null);
         }
         selectedInvoice = invoiceModelHelper.getInvoiceEntity(selectedInvoiceModel);
-        
+
         if (selectedInvoice.getInvoiceId() != null && selectedInvoice.getInvoiceId() > 0) {
             selectedInvoice.setLastUpdateBy(FacesUtil.getLoggedInUser().getUserId());
             Invoice prevInvoice = invoiceService.findByPK(selectedInvoice.getInvoiceId());
@@ -563,7 +628,14 @@ public class InvoiceController extends BaseController implements Serializable {
             invoiceService.update(selectedInvoice);
             return selectedInvoice.getInvoiceId();
         } else {
-            configuration.setValue(selectedInvoice.getInvoiceReferenceNumber());
+            configuration = configurationService.getConfigurationByName(ConfigurationConstants.INVOICING_REFERENCE_PATTERN);
+            if (configuration == null) {
+                configuration = new Configuration();
+                configuration.setValue("1");
+                configuration.setName(ConfigurationConstants.INVOICING_REFERENCE_PATTERN);
+            }
+            configuration.setValue(invoiceModelHelper.getNextInvoiceRefPattern(configuration.getValue(), selectedInvoiceModel));
+            selectedInvoice.setInvoiceReferenceNumber(invoiceModelHelper.getNextInvoiceRefNumber(configuration.getValue(), selectedInvoiceModel));
             if (configuration.getId() != null) {
                 configurationService.update(configuration);
             } else {
@@ -586,7 +658,7 @@ public class InvoiceController extends BaseController implements Serializable {
             return selectedInvoice.getInvoiceId();
         }
     }
-    
+
     public void updateDueAmountAndStatus() {
         if (selectedInvoice.getDueAmount().doubleValue() == selectedInvoice.getInvoiceAmount().doubleValue()) {
             selectedInvoice.setStatus(InvoicePurchaseStatusConstant.UNPAID);
@@ -599,7 +671,7 @@ public class InvoiceController extends BaseController implements Serializable {
             }
         }
     }
-    
+
     public void updateCurrency() {
         setDefaultCurrency();
         if (null != selectedInvoiceModel.getInvoiceContact()) {
@@ -607,6 +679,7 @@ public class InvoiceController extends BaseController implements Serializable {
                     .getContact(selectedInvoiceModel.getInvoiceContact().getContactId());
             selectedInvoiceModel.setCurrencyCode(contact.getCurrency());
         }
+        generateInvoiceRefNumber();
     }
 
 //    public void updateSubTotal(final InvoiceItemModel invoiceItemModel) {
@@ -699,15 +772,15 @@ public class InvoiceController extends BaseController implements Serializable {
 //            updateSubTotalOnDiscountAdded();
 //        }
     }
-    
+
     public void initCreateContact() {
         contactModel = new ContactModel();
     }
-    
+
     public void initCreateProduct() {
         productModel = new ProductModel();
     }
-    
+
     public List<Product> completeProducts() {
         List<Product> productList = productService.getProductList();
         if (productList == null) {
@@ -715,34 +788,28 @@ public class InvoiceController extends BaseController implements Serializable {
         }
         return productList;
     }
-    
+
     public void createContact() {
-        Currency defaultCurrency = currencyService.getDefaultCurrency();
-        final Contact contact = new Contact();
-        contact.setBillingEmail(contactModel.getEmail());
+
+        Contact contact = new Contact();
+        ContactHelper contactHelper = new ContactHelper();
+        User loggedInUser = FacesUtil.getLoggedInUser();
+        contact = contactHelper.getContact(contactModel);
+        contact.setCreatedBy(loggedInUser.getUserId());
+        contact.setCreatedDate(LocalDateTime.now());
         contact.setDeleteFlag(Boolean.FALSE);
-        contact.setEmail(contactModel.getEmail());
-        contact.setFirstName(contactModel.getFirstName());
-        contact.setLastName(contactModel.getLastName());
-        contact.setOrganization(contactModel.getOrganization());
-        contact.setCreatedBy(FacesUtil.getLoggedInUser().getUserId());
-        contact.setCurrency(defaultCurrency);
         contact.setContactType(ContactTypeConstant.CUSTOMER);
-        if (defaultCurrency != null) {
-            contactModel.setCurrency(defaultCurrency);
-        }
-        
         if (contact.getContactId() != null) {
             contactService.update(contact);
         } else {
-            contactService.persist(contact);
+            this.contactService.persist(contact);
         }
         selectedInvoiceModel.setInvoiceContact(contact);
         RequestContext.getCurrentInstance().execute("PF('add_contact_popup').hide();");
         initCreateContact();
-        
+
     }
-    
+
     public void createProduct() {
         final Product product = new Product();
         product.setProductID(productModel.getProductID());
@@ -763,16 +830,27 @@ public class InvoiceController extends BaseController implements Serializable {
         }
         invoiceItemModelForProductUpdateOnProductAdd.setProductService(product);
         invoiceItemModelForProductUpdateOnProductAdd.setUnitPrice(product.getUnitPrice());
-        invoiceItemModelForProductUpdateOnProductAdd.setVatId(product.getVatCategory());
-        invoiceItemModelForProductUpdateOnProductAdd.setDescription(product.getProductDescription());
         if (product.getVatCategory() != null) {
-            invoiceItemModelForProductUpdateOnProductAdd.getVatId().setVatLabel(product.getVatCategory().getName() + "(" + product.getVatCategory().getVat().toString() + ")");
+            invoiceItemModelForProductUpdateOnProductAdd.setVatId(product.getVatCategory());
+        } else {
+            invoiceItemModelForProductUpdateOnProductAdd.setVatId(vatCategoryService.getDefaultVatCategory());
         }
+        invoiceItemModelForProductUpdateOnProductAdd.setDescription(product.getProductDescription());
+
+        addLineItem();
+
         RequestContext.getCurrentInstance().execute("PF('add_product_popup').hide();");
         initCreateProduct();
-        
+
     }
-    
+
+    public void addLineItem() {
+        InvoiceItemModel invoiceItemModel = new InvoiceItemModel();
+        VatCategory vatCategory = vatCategoryService.getDefaultVatCategory();
+        invoiceItemModel.setVatId(vatCategory);
+        selectedInvoiceModel.addInvoiceItem(invoiceItemModel);
+    }
+
     private void populateVatCategory() {
         vatCategoryList = vatCategoryService.getVatCategoryList();
         if (vatCategoryList != null) {
@@ -782,26 +860,27 @@ public class InvoiceController extends BaseController implements Serializable {
             }
         }
     }
-    
+
     public void dueDateListener() {
         selectedInvoiceModel.setInvoiceDueDate(getDueDate(selectedInvoiceModel));
     }
-    
+
     private Date getDueDate(InvoiceModel invoiceModel) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(invoiceModel.getInvoiceDate());
         calendar.add(Calendar.DAY_OF_YEAR, invoiceModel.getInvoiceDueOn());
         return calendar.getTime();
     }
-    
+
     private void removeEmptyRow() {
         List<InvoiceItemModel> invoiceLineItemList = new ArrayList<>();
         for (InvoiceItemModel invoiceLineItem : selectedInvoiceModel.getInvoiceLineItems()) {
+            System.out.println("invoiceLineItem==" + invoiceLineItem.getProductService());
             if (invoiceLineItem.getProductService() == null) {
                 invoiceLineItemList.add(invoiceLineItem);
             }
         }
         selectedInvoiceModel.getInvoiceLineItems().removeAll(invoiceLineItemList);
     }
-    
+
 }

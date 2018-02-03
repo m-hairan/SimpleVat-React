@@ -14,6 +14,7 @@ import com.simplevat.web.constant.ConfigurationConstants;
 import com.simplevat.web.constant.InvoiceReferenceVariable;
 import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.utils.FacesUtil;
+import com.simplevat.web.utils.GeneralSettingUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,7 +54,15 @@ public class GeneralController extends BaseController implements Serializable {
 
     @Getter
     @Setter
+    private Configuration configurationInvoiceTemplate;
+
+    @Getter
+    @Setter
     private Configuration configurationMailUserName;
+
+    @Getter
+    @Setter
+    private InvoiceTemplateModel invoiceTemplateModel;
 
     @Getter
     @Setter
@@ -86,6 +95,7 @@ public class GeneralController extends BaseController implements Serializable {
     @PostConstruct
     public void init() {
         invoiceVariables();
+        invoiceTemplateModel();
         configurationList = configurationService.getConfigurationList();
         if (configurationList != null && !configurationList.isEmpty()) {
             if (configurationList != null && configurationList.stream().filter(configuration -> configuration.getName().equals(ConfigurationConstants.INVOICING_REFERENCE_PATTERN)).findAny().isPresent()) {
@@ -150,6 +160,14 @@ public class GeneralController extends BaseController implements Serializable {
                 configurationInvoiceMailTamplateSubject = new Configuration();
                 configurationInvoiceMailTamplateSubject.setName(ConfigurationConstants.INVOICE_MAIL_TAMPLATE_SUBJECT);
             }
+
+            if (configurationList != null && configurationList.stream().filter(configuration -> configuration.getName().equals(ConfigurationConstants.INVOICING_TEMPLATE)).findAny().isPresent()) {
+                configurationInvoiceTemplate = configurationList.stream().filter(configuration -> configuration.getName().equals(ConfigurationConstants.INVOICING_TEMPLATE)).findFirst().get();
+                getInvoiceTemplateByValue(configurationInvoiceTemplate.getValue());
+            } else {
+                configurationInvoiceTemplate = new Configuration();
+                configurationInvoiceTemplate.setName(ConfigurationConstants.INVOICING_TEMPLATE);
+            }
         } else {
             configurationList = new ArrayList<>();
 
@@ -179,6 +197,9 @@ public class GeneralController extends BaseController implements Serializable {
 
             configurationInvoiceMailTamplateSubject = new Configuration();
             configurationInvoiceMailTamplateSubject.setName(ConfigurationConstants.INVOICE_MAIL_TAMPLATE_SUBJECT);
+
+            configurationInvoiceTemplate = new Configuration();
+            configurationInvoiceTemplate.setName(ConfigurationConstants.INVOICING_TEMPLATE);
         }
     }
 
@@ -230,6 +251,12 @@ public class GeneralController extends BaseController implements Serializable {
                 configurationInvoiceMailTamplateSubject.setLastUpdateDate(Calendar.getInstance().getTime());
                 configurationList.add(configurationInvoiceMailTamplateSubject);
             }
+            if (invoiceTemplateModel != null) {
+                configurationInvoiceTemplate.setValue(invoiceTemplateModel.getValue());
+                configurationInvoiceTemplate.setLastUpdateBy(FacesUtil.getLoggedInUser().getUserId());
+                configurationInvoiceTemplate.setLastUpdateDate(Calendar.getInstance().getTime());
+                configurationList.add(configurationInvoiceTemplate);
+            }
             configurationService.updateConfigurationList(configurationList);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Configuration saved successfully."));
         } catch (Exception e) {
@@ -237,7 +264,23 @@ public class GeneralController extends BaseController implements Serializable {
         }
     }
 
+    private void getInvoiceTemplateByValue(String value) {
+        for (InvoiceTemplateModel invoiceTemplateModel : GeneralSettingUtil.invoiceTemplateList()) {
+            if (invoiceTemplateModel.getValue().equals(value)) {
+                this.invoiceTemplateModel = invoiceTemplateModel;
+            }
+        }
+    }
+
     public void invoiceVariables() {
         invoiceVariableList = InvoiceReferenceVariable.getInvoiceReferenceVariables();
+    }
+
+    public void invoiceTemplateModel() {
+        invoiceTemplateModel = new InvoiceTemplateModel();
+    }
+
+    public List<InvoiceTemplateModel> completeInvoiceTemplate() {
+        return GeneralSettingUtil.invoiceTemplateList();
     }
 }

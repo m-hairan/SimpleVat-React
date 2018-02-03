@@ -17,7 +17,7 @@ import com.simplevat.web.constant.EmailConstant;
 import com.simplevat.web.user.model.UserDTO;
 import com.simplevat.web.utils.FacesUtil;
 import com.simplevat.web.utils.FileUtility;
-import com.simplevat.web.utils.MailDefaultConfigurationModel;
+import com.simplevat.web.utils.MailConfigurationModel;
 import com.simplevat.web.utils.MailUtility;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -210,7 +210,7 @@ public class UserController implements Serializable {
             MessageFormat msgFormat = new MessageFormat(FileUtility.readFile(pathname));
             MimeMultipart mimeMultipart = FileUtility.getMessageBody(msgFormat.format(args));
             String[] email = {userMail};
-            MailDefaultConfigurationModel mailDefaultConfigurationModel = MailUtility.verifyMailConfigurationList(configurationService.getConfigurationList());
+            MailConfigurationModel mailDefaultConfigurationModel = MailUtility.getEMailConfigurationList(configurationService.getConfigurationList());
             sendActivationMail(mailEnum, mimeMultipart, mailDefaultConfigurationModel.getMailusername(), email);
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);

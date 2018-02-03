@@ -4,14 +4,17 @@ import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.entity.invoice.InvoiceLineItem;
 import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.web.constant.DiscountTypeConstant;
+import com.simplevat.web.constant.InvoiceNumberReferenceEnum;
 import com.simplevat.web.constant.InvoicePurchaseStatusConstant;
 import com.simplevat.web.invoice.model.InvoiceItemModel;
 import com.simplevat.web.invoice.model.InvoiceModel;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -114,6 +117,10 @@ public class InvoiceModelHelper {
     }
 
     public InvoiceModel getInvoiceModel(Invoice invoice) {
+        return getInvoiceModel(invoice, false);
+    }
+
+    public InvoiceModel getInvoiceModel(Invoice invoice, boolean process) {
 
         InvoiceModel invoiceModel = new InvoiceModel();
 
@@ -153,7 +160,9 @@ public class InvoiceModelHelper {
         }
         invoiceModel.setPaymentMode(invoice.getPaymentMode());
 //        invoiceModel.setRecurringFlag(invoice.getRecurringFlag());
-        processAmountCalculation(invoiceModel);
+        if (process) {
+            processAmountCalculation(invoiceModel);
+        }
         return invoiceModel;
     }
 
@@ -190,7 +199,7 @@ public class InvoiceModelHelper {
                 for (InvoiceItemModel itemModel : invoiceModel.getInvoiceLineItems()) {
                     invoiceSubTotal = invoiceSubTotal.add(itemModel.getSubTotal());
                 }
-                discountPercentage = invoiceSubTotal.divide(invoiceModel.getDiscount());
+                discountPercentage = invoiceSubTotal.divide(invoiceModel.getDiscount(), 5, RoundingMode.HALF_UP);
             } else if (invoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.PERCENTAGEDISCOUNT) {
                 discountPercentage = invoiceModel.getDiscount();
             }
@@ -250,7 +259,40 @@ public class InvoiceModelHelper {
         }
     }
 
-    public String getNextInvoiceRefNumber(String invoicingReferencePattern) {
+    public String getNextInvoiceRefNumber(String invoicingReferencePattern, InvoiceModel invoice) {
+        if (invoicingReferencePattern != null) {
+            if (invoicingReferencePattern.contains(InvoiceNumberReferenceEnum.DDMMYY.getValue())) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
+                LocalDateTime dateTime = LocalDateTime.now();
+                String currentDateString = dateTime.format(formatter);
+                System.out.println("=currentDateString="+currentDateString);
+                invoicingReferencePattern = invoicingReferencePattern.replace(InvoiceNumberReferenceEnum.DDMMYY.getValue(), currentDateString);
+            }
+            if (invoicingReferencePattern.contains(InvoiceNumberReferenceEnum.CONTACT_CODE.getValue())) {
+                invoicingReferencePattern = invoicingReferencePattern.replace(InvoiceNumberReferenceEnum.CONTACT_CODE.getValue(), invoice.getInvoiceContact().getContactId() + "");
+            }
+        }
+
+        Pattern p = Pattern.compile("[a-z]+|\\d+");
+        Matcher m = p.matcher(invoicingReferencePattern);
+        int invoceNumber = 0;
+        String invoiceReplacementString = "";
+        String invoiceRefNumber = "";
+        while (m.find()) {
+            if (StringUtils.isNumeric(m.group())) {
+                invoiceReplacementString = m.group();
+                invoceNumber = Integer.parseInt(m.group());
+                invoiceRefNumber = ++invoceNumber + "";
+                while (invoiceRefNumber.length() < invoiceReplacementString.length()) {
+                    invoiceRefNumber = "0" + invoiceRefNumber;
+                }
+            }
+        }
+        String nextInvoiceNumber = replaceLast(invoicingReferencePattern, invoiceReplacementString, invoiceRefNumber);
+        return nextInvoiceNumber;
+    }
+    
+    public String getNextInvoiceRefPattern(String invoicingReferencePattern, InvoiceModel invoice) {
         Pattern p = Pattern.compile("[a-z]+|\\d+");
         Matcher m = p.matcher(invoicingReferencePattern);
         int invoceNumber = 0;

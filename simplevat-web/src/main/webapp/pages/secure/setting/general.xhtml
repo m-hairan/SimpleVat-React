@@ -41,10 +41,21 @@
                                         <p:message for="invoicingReferencePattern" />
                                     </h:panelGroup>
 
-                                    <p:outputLabel />
-                                    <h:panelGroup />
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="invoicingTemplate" 
+                                                        forceSelection="true" 
+                                                        dropdown="true"
+                                                        effect="fold"
+                                                        scrollHeight="250"
+                                                        completeMethod="#{generalController.completeInvoiceTemplate()}"
+                                                        var="invoiceTemplate" itemLabel="#{invoiceTemplate.name}"  
+                                                        itemValue="#{invoiceTemplate}"
+                                                        converter="#{invoiceTemplateConverter}"
+                                                        value="#{generalController.invoiceTemplateModel}"/>
+                                        <p:outputLabel for="invoicingTemplate" value="#{messages.InvoicingTemplate}"/>
+                                        <p:message for="invoicingTemplate" />
+                                    </h:panelGroup>
 
-                                    <p:outputLabel />
                                     <h:panelGroup />
 
                                 </p:panelGrid>
@@ -123,7 +134,7 @@
                                         <p:dataTable var="invoiceReference"  id="invoiceReference"
                                                      value="#{generalController.invoiceVariableList}"
                                                      paginator="true" 
-                                                    >
+                                                     >
                                             <p:column headerText="Value" width="50%">
                                                 <h:outputText  value="#{invoiceReference.value}">
                                                 </h:outputText>
@@ -131,7 +142,7 @@
                                             <p:column headerText="Description">
                                                 <h:outputText value="#{invoiceReference.name}"/>
                                             </p:column>
-                                           
+
                                         </p:dataTable>
 
                                     </h:panelGroup>

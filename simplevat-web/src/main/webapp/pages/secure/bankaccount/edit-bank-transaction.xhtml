@@ -96,12 +96,13 @@
 
                                         <p:outputLabel for="transactionAmount" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() == 0}"/>
                                         <h:panelGroup styleClass="md-inputfield" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() == 0}">
-                                            <p:inputNumber symbol="#{transactionController.selectedTransactionModel.bankAccount.bankAccountCurrency.currencySymbol }"
+                                            <p:inputNumber symbol="#{transactionController.selectedTransactionModel.bankAccount.bankAccountCurrency.currencySymbol}"
                                                            symbolPosition="p"
                                                            id="transactionAmount"
                                                            value="#{transactionController.selectedTransactionModel.transactionAmount}"
                                                            required="true" requiredMessage="Please select transaction amount.">
                                                 <p:ajax update="referancePanel"  />
+                                                
                                             </p:inputNumber>
                                             <label>#{messages.total_amount}</label>
                                             <p:message for="transactionAmount"/>
@@ -130,8 +131,13 @@
                                         <h:panelGroup />
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText
-                                                value="#{transactionController.selectedTransactionModel.transactionDescription}" />
+                                                id="description"
+                                                value="#{transactionController.selectedTransactionModel.transactionDescription}"
+                                                required="true"
+                                                requiredMessage="Please Enter Description"
+                                                />
                                             <label>#{messages.description}</label>
+                                            <p:message for="description"/>
                                         </h:panelGroup>
 
                                         <p:outputLabel for="transactionCategory" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() == 0}"/>

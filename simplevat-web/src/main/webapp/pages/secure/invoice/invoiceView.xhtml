@@ -83,7 +83,7 @@
                 <div class="ui-fluid">
                     <div class="ui-g">
                         <div class="ui-g-12" align="center">
-                            <pe:documentViewer height="700" value="#{invoicePDFGenerator.invoicepdf}" download="extensions-rocks.pdf" cache="false"/>
+                            <pe:documentViewer height="700" value="#{invoicePDFGenerator.invoicepdf}" download="Invoice-#{invoiceMailController.invoice.invoiceReferenceNumber}.pdf" cache="false"/>
                             <p:dialog widgetVar="invoiceMailWidget" modal="true" resizable="false" width="60%" height="50%"
                                       draggable="false" styleClass="mailDialog"
                                       responsive="true" header="Send Invoice"

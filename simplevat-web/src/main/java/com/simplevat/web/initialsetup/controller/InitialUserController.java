@@ -43,7 +43,8 @@ import com.simplevat.web.company.controller.CompanyModel;
 import com.simplevat.web.constant.EmailConstant;
 import com.simplevat.web.newactivation.NewActivationMailSender;
 import com.simplevat.web.utils.FileUtility;
-import com.simplevat.web.utils.MailDefaultConfigurationModel;
+import com.simplevat.web.utils.LoggerUtil;
+import com.simplevat.web.utils.MailConfigurationModel;
 import com.simplevat.web.utils.MailUtility;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -196,12 +197,10 @@ public class InitialUserController implements Serializable {
             MessageFormat msgFormat = new MessageFormat(FileUtility.readFile(pathname));
             MimeMultipart mimeMultipart = FileUtility.getMessageBody(msgFormat.format(args));
             String[] email = {userLoginId};
-            MailDefaultConfigurationModel mailDefaultConfigurationModel = MailUtility.verifyMailConfigurationList(configurationService.getConfigurationList());
+            MailConfigurationModel mailDefaultConfigurationModel = MailUtility.getEMailConfigurationList(configurationService.getConfigurationList());
             sendActivationMail(mailEnum, mimeMultipart, mailDefaultConfigurationModel.getMailusername(), email);
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(NewActivationMailSender.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MessagingException ex) {
-            java.util.logging.Logger.getLogger(NewActivationMailSender.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException | MessagingException ex) {
+            LoggerUtil.logAndSendErrorMsg(ex);
         }
     }
 

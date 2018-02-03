@@ -12,7 +12,6 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
@@ -24,17 +23,20 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.simplevat.entity.Company;
+import com.simplevat.entity.Configuration;
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.User;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.entity.invoice.InvoiceLineItem;
+import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.invoice.InvoiceService;
+import com.simplevat.web.constant.ConfigurationConstants;
+import com.simplevat.web.constant.InvoiceTemplateTypeConstant;
 import com.simplevat.web.invoice.model.InvoiceModel;
 import com.simplevat.web.utils.FacesUtil;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -43,11 +45,9 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -61,15 +61,21 @@ public class InvoicePDFGenerator implements Serializable {
 
     @Autowired
     private InvoiceService invoiceService;
+    @Autowired
+    private ConfigurationService configurationService;
 //    @Autowired
 //    private InvoiceController invoiceController;
 //    private StreamedContent invoicepdf;
     private ByteArrayOutputStream invoicepdfOutputStream;
     private Invoice invoice;
+    private Configuration configuration;
     private InvoiceModel invoiceModel;
     private User user;
     private Currency currency;
     private BaseFont baseFont;
+    private BaseColor primaryBaseColor;
+    private BaseColor secondaryBaseColor;
+    private BaseColor lineItemBaseColor;
     @Autowired
     private InvoiceModelHelper invoiceModelHelper;
 
@@ -77,9 +83,10 @@ public class InvoicePDFGenerator implements Serializable {
         Integer invoiceId = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("invoiceId").toString());
         System.out.println("invoiceId in pdf generator :" + invoiceId);
         invoice = invoiceService.findByPK(invoiceId);
-        invoiceModel = invoiceModelHelper.getInvoiceModel(invoice);
+        invoiceModel = invoiceModelHelper.getInvoiceModel(invoice, true);
         user = FacesUtil.getLoggedInUser();
         currency = invoice.getCurrency();
+        setTemplate();
         try {
             ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
             baseFont = BaseFont.createFont(servletContext.getRealPath("/resources/ultima-layout/fonts/Roboto-Regular.ttf"), BaseFont.WINANSI, BaseFont.EMBEDDED);
@@ -89,6 +96,23 @@ public class InvoicePDFGenerator implements Serializable {
         } catch (DocumentException ex) {
             Logger.getLogger(InvoicePDFGenerator.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public ByteArrayOutputStream generatePDF(Invoice invoice) {
+        invoiceModel = invoiceModelHelper.getInvoiceModel(invoice, true);
+        user = FacesUtil.getLoggedInUser();
+        currency = invoice.getCurrency();
+        try {
+            ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+            baseFont = BaseFont.createFont(servletContext.getRealPath("/resources/ultima-layout/fonts/Roboto-Regular.ttf"), BaseFont.WINANSI, BaseFont.EMBEDDED);
+            generatePDF();
+            return invoicepdfOutputStream;
+        } catch (IOException ex) {
+            Logger.getLogger(InvoicePDFGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DocumentException ex) {
+            Logger.getLogger(InvoicePDFGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     public DefaultStreamedContent getInvoicepdf() {
@@ -103,7 +127,7 @@ public class InvoicePDFGenerator implements Serializable {
         PdfWriter writer = PdfWriter.getInstance(document, byteArrayOutputStream);
         document.open();
         PdfContentByte canvas = writer.getDirectContent();
-        canvas.setRGBColorStroke(139, 195, 74);
+        canvas.setRGBColorStroke(primaryBaseColor.getRed(), primaryBaseColor.getGreen(), primaryBaseColor.getBlue());
         canvas.moveTo(0, 0);
         canvas.lineTo(0, 842);
         canvas.setLineWidth(60);
@@ -136,11 +160,11 @@ public class InvoicePDFGenerator implements Serializable {
             table.addCell(cell);
         }
         PdfPTable innerTable = new PdfPTable(1);
-        cell = new PdfPCell(new Paragraph("TAX INVOICE", new Font(baseFont, 20, Font.BOLD, new BaseColor(139, 195, 74))));
+        cell = new PdfPCell(new Paragraph("TAX INVOICE", new Font(baseFont, 20, Font.BOLD, primaryBaseColor)));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         cell.setBorder(0);
         innerTable.addCell(cell);
-        cell = new PdfPCell(new Paragraph("INVOICE " + invoiceModel.getInvoiceReferenceNumber(), new Font(baseFont, 15, Font.BOLD, new BaseColor(139, 195, 74))));
+        cell = new PdfPCell(new Paragraph("INVOICE " + invoiceModel.getInvoiceReferenceNumber(), new Font(baseFont, 15, Font.BOLD, primaryBaseColor)));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         cell.setBorder(0);
         innerTable.addCell(cell);
@@ -171,22 +195,22 @@ public class InvoicePDFGenerator implements Serializable {
     private PdfPTable createCompanySubTitle() {
         PdfPTable table = new PdfPTable(1);
         PdfPCell cell = new PdfPCell(new Paragraph(user.getCompany().getCompanyName(),
-                new Font(baseFont, 15, Font.BOLD, new BaseColor(139, 195, 74))));
+                new Font(baseFont, 15, Font.BOLD, primaryBaseColor)));
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         cell.setBorder(0);
         cell.setPaddingTop(4);
         table.addCell(cell);
         cell = new PdfPCell(new Paragraph("",
-                new Font(baseFont, 12, Font.BOLD, new BaseColor(139, 195, 74))));
+                new Font(baseFont, 12, Font.BOLD, primaryBaseColor)));
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         cell.setBorder(0);
         cell.setPaddingTop(0);
         table.addCell(cell);
         cell = new PdfPCell(new Paragraph(getComapnyAddress(user.getCompany()),
-                new Font(baseFont, 10, Font.NORMAL, new BaseColor(122, 120, 120))));
+                new Font(baseFont, 10, Font.NORMAL, lineItemBaseColor)));
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         cell.setBorder(Rectangle.BOTTOM);
-        cell.setBorderColor(new BaseColor(139, 195, 74));
+        cell.setBorderColor(primaryBaseColor);
         cell.setPaddingTop(4);
         cell.setPaddingBottom(10);
         table.addCell(cell);
@@ -203,7 +227,7 @@ public class InvoicePDFGenerator implements Serializable {
         PdfPCell cell = new PdfPCell(innerTable);
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         cell.setBorder(Rectangle.BOTTOM);
-        cell.setBorderColor(new BaseColor(139, 195, 74));
+        cell.setBorderColor(primaryBaseColor);
         cell.setPaddingBottom(10);
         table.addCell(cell);
         return table;
@@ -211,9 +235,9 @@ public class InvoicePDFGenerator implements Serializable {
 
     public PdfPCell createLabel(String label, String value) {
         Paragraph paragraph = new Paragraph();
-        paragraph.add(new Phrase(label, new Font(baseFont, 9, Font.BOLD, new BaseColor(122, 120, 120))));
+        paragraph.add(new Phrase(label, new Font(baseFont, 9, Font.BOLD, lineItemBaseColor)));
         paragraph.add(" ");
-        paragraph.add(new Chunk(value, new Font(baseFont, 9, Font.NORMAL, new BaseColor(122, 120, 120))));
+        paragraph.add(new Chunk(value, new Font(baseFont, 9, Font.NORMAL, lineItemBaseColor)));
         PdfPCell cell = new PdfPCell(paragraph);
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 //        cell.setBackgroundColor(BaseColor.WHITE);
@@ -247,15 +271,15 @@ public class InvoicePDFGenerator implements Serializable {
 
     private PdfPTable createInvoiceToAddress(Contact invoiceToContact) {
         PdfPTable innerTable = new PdfPTable(1);
-        PdfPCell cell = new PdfPCell(new Paragraph("INVOICE TO:", new Font(baseFont, 15, Font.BOLD, new BaseColor(139, 195, 74))));
+        PdfPCell cell = new PdfPCell(new Paragraph("INVOICE TO:", new Font(baseFont, 15, Font.BOLD, primaryBaseColor)));
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         cell.setBorder(0);
         innerTable.addCell(cell);
-        cell = new PdfPCell(new Paragraph(getContactFullName(invoiceToContact), new Font(baseFont, 12, Font.NORMAL, new BaseColor(139, 195, 74))));
+        cell = new PdfPCell(new Paragraph(getContactFullName(invoiceToContact), new Font(baseFont, 12, Font.NORMAL, primaryBaseColor)));
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         cell.setBorder(0);
         innerTable.addCell(cell);
-        cell = new PdfPCell(new Paragraph(getInvoiceHolderAddress(invoiceToContact), new Font(baseFont, 9, Font.NORMAL, new BaseColor(122, 120, 120))));
+        cell = new PdfPCell(new Paragraph(getInvoiceHolderAddress(invoiceToContact), new Font(baseFont, 9, Font.NORMAL, lineItemBaseColor)));
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         cell.setBorder(0);
         innerTable.addCell(cell);
@@ -264,15 +288,15 @@ public class InvoicePDFGenerator implements Serializable {
 
     private PdfPTable createShipToAddress(Contact shipToContact) {
         PdfPTable innerTable = new PdfPTable(1);
-        PdfPCell cell = new PdfPCell(new Paragraph("SHIP TO:", new Font(baseFont, 15, Font.BOLD, new BaseColor(139, 195, 74))));
+        PdfPCell cell = new PdfPCell(new Paragraph("SHIP TO:", new Font(baseFont, 15, Font.BOLD, primaryBaseColor)));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         cell.setBorder(0);
         innerTable.addCell(cell);
-        cell = new PdfPCell(new Paragraph(getContactFullName(shipToContact), new Font(baseFont, 12, Font.NORMAL, new BaseColor(139, 195, 74))));
+        cell = new PdfPCell(new Paragraph(getContactFullName(shipToContact), new Font(baseFont, 12, Font.NORMAL, primaryBaseColor)));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         cell.setBorder(0);
         innerTable.addCell(cell);
-        cell = new PdfPCell(new Paragraph(getInvoiceHolderAddress(shipToContact), new Font(baseFont, 9, Font.NORMAL, new BaseColor(122, 120, 120))));
+        cell = new PdfPCell(new Paragraph(getInvoiceHolderAddress(shipToContact), new Font(baseFont, 9, Font.NORMAL, lineItemBaseColor)));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         cell.setBorder(0);
         innerTable.addCell(cell);
@@ -311,7 +335,13 @@ public class InvoicePDFGenerator implements Serializable {
         table.addCell(getTableFooterLabelCell("Total VAT:", 4));
         table.addCell(getTableFooterValueCell(currency.getCurrencySymbol() + getDecimalValue(invoiceModel.getInvoiceVATAmount()), 4));
         table.addCell(getTableFooterBlankCell());
-        table.addCell(getTableFooterLabelCell("Total Due:", 5));
+        table.addCell(getTableFooterLabelCell("Total Amount:", 4));
+        table.addCell(getTableFooterValueCell(currency.getCurrencySymbol() + getDecimalValue(invoiceModel.getInvoiceAmount()), 4));
+        table.addCell(getTableFooterBlankCell());
+//        table.addCell(getTableFooterLabelCell(":", 4));
+//        table.addCell(getTableFooterValueCell(currency.getCurrencySymbol() + getDecimalValue(invoiceModel.getInvoiceVATAmount()), 4));
+//        table.addCell(getTableFooterBlankCell());
+        table.addCell(getTableFooterLabelCell("Due Amount:", 5));
         table.addCell(getTableFooterValueCell(currency.getCurrencySymbol() + getDecimalValue(invoiceModel.getDueAmount()), 5));
         return table;
     }
@@ -327,7 +357,7 @@ public class InvoicePDFGenerator implements Serializable {
         PdfPCell cell = new PdfPCell(new Paragraph(cellValue, new Font(baseFont, 9, Font.BOLD, new BaseColor(255, 255, 255))));
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setUseVariableBorders(true);
-        cell.setBackgroundColor(new BaseColor(139, 195, 74));
+        cell.setBackgroundColor(primaryBaseColor);
         cell.setBorderColor(new BaseColor(255, 255, 255));
         cell.setPaddingBottom(5);
         cell.setPaddingTop(3);
@@ -335,20 +365,20 @@ public class InvoicePDFGenerator implements Serializable {
     }
 
     private PdfPCell getTableContent(String cellValue, int cellPosition, int alignValue, int paddingValue) {
-        PdfPCell cell = new PdfPCell(new Paragraph(cellValue, new Font(baseFont, 9, Font.NORMAL, new BaseColor(122, 120, 120))));
+        PdfPCell cell = new PdfPCell(new Paragraph(cellValue, new Font(baseFont, 9, Font.NORMAL, lineItemBaseColor)));
         cell.setUseVariableBorders(true);
-        cell.setBackgroundColor(new BaseColor(232, 243, 219));
+        cell.setBackgroundColor(secondaryBaseColor);
         cell.setBorderColor(new BaseColor(255, 255, 255));
 //        cell.setBorderColorTop(new BaseColor(255, 255, 255));
 //        if (cellPosition == 1) {
 //            cell.setBorderColorLeft(new BaseColor(255, 255, 255));
-//            cell.setBorderColorRight(new BaseColor(232, 243, 219));
+//            cell.setBorderColorRight(secondaryBaseColor);
 //        } else if (cellPosition == 6) {
-//            cell.setBorderColorLeft(new BaseColor(232, 243, 219));
-//            cell.setBorderColorRight(new BaseColor(232, 243, 219));
+//            cell.setBorderColorLeft(secondaryBaseColor);
+//            cell.setBorderColorRight(secondaryBaseColor);
 //        } else {
-//            cell.setBorderColorLeft(new BaseColor(232, 243, 219));
-//            cell.setBorderColorRight(new BaseColor(232, 243, 219));
+//            cell.setBorderColorLeft(secondaryBaseColor);
+//            cell.setBorderColorRight(secondaryBaseColor);
 //        }
         cell.setHorizontalAlignment(alignValue);
         cell.setPaddingRight(alignValue == Element.ALIGN_RIGHT ? paddingValue : 0);
@@ -369,11 +399,11 @@ public class InvoicePDFGenerator implements Serializable {
     }
 
     private PdfPCell getTableFooterLabelCell(String cellValue, int rowindex) {
-        PdfPCell cell = new PdfPCell(new Paragraph(cellValue, new Font(baseFont, 9, Font.NORMAL, new BaseColor(122, 120, 120))));
+        PdfPCell cell = new PdfPCell(new Paragraph(cellValue, new Font(baseFont, 9, Font.NORMAL, lineItemBaseColor)));
         cell.setColspan(2);
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         cell.setUseVariableBorders(true);
-        cell.setBackgroundColor(new BaseColor(232, 243, 219));
+        cell.setBackgroundColor(secondaryBaseColor);
         cell.setBorderColor(new BaseColor(255, 255, 255));
 //        if (rowindex == 1) {
 //            cell.setBorderColorTop(new BaseColor(255, 255, 255));
@@ -384,10 +414,10 @@ public class InvoicePDFGenerator implements Serializable {
     }
 
     private PdfPCell getTableFooterValueCell(String cellValue, int rowindex) {
-        PdfPCell cell = new PdfPCell(new Paragraph(cellValue, new Font(baseFont, 9, Font.NORMAL, new BaseColor(122, 120, 120))));
+        PdfPCell cell = new PdfPCell(new Paragraph(cellValue, new Font(baseFont, 9, Font.NORMAL, lineItemBaseColor)));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         cell.setUseVariableBorders(true);
-        cell.setBackgroundColor(new BaseColor(232, 243, 219));
+        cell.setBackgroundColor(secondaryBaseColor);
         cell.setBorderColor(new BaseColor(255, 255, 255));
 //        if (rowindex == 1) {
 //            cell.setBorderColorTop(new BaseColor(255, 255, 255));
@@ -399,28 +429,28 @@ public class InvoicePDFGenerator implements Serializable {
 
     private PdfPTable createFooterText() {
         PdfPTable table = new PdfPTable(1);
-        PdfPCell cell = new PdfPCell(new Paragraph("Thank You!", new Font(baseFont, 15, Font.BOLD, new BaseColor(139, 195, 74))));
+        PdfPCell cell = new PdfPCell(new Paragraph("Thank You!", new Font(baseFont, 15, Font.BOLD, primaryBaseColor)));
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         cell.setBorder(0);
         cell.setPaddingBottom(30);
         cell.setPaddingTop(20);
         table.addCell(cell);
         if (invoice.getInvoiceNotes() != null && !invoice.getInvoiceNotes().isEmpty()) {
-            cell = new PdfPCell(new Paragraph("COMMENTS OR SPECIAL INSTRUCTIONS:", new Font(baseFont, 12, Font.BOLD, new BaseColor(122, 120, 120))));
+            cell = new PdfPCell(new Paragraph("COMMENTS OR SPECIAL INSTRUCTIONS:", new Font(baseFont, 12, Font.BOLD, lineItemBaseColor)));
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             cell.setBorder(0);
             cell.setPaddingBottom(2);
             table.addCell(cell);
-            cell = new PdfPCell(new Paragraph(invoice.getInvoiceNotes(), new Font(baseFont, 10, Font.NORMAL, new BaseColor(122, 120, 120))));
+            cell = new PdfPCell(new Paragraph(invoice.getInvoiceNotes(), new Font(baseFont, 10, Font.NORMAL, lineItemBaseColor)));
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             cell.setBorder(0);
             cell.setPaddingBottom(10);
             table.addCell(cell);
         }
-        cell = new PdfPCell(new Paragraph("Invoice was created on a computer and is valid without the signature and seal.", new Font(baseFont, 10, Font.NORMAL, new BaseColor(122, 120, 120))));
+        cell = new PdfPCell(new Paragraph("Invoice was created on a computer and is valid without the signature and seal.", new Font(baseFont, 10, Font.NORMAL, lineItemBaseColor)));
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setBorder(Rectangle.TOP);
-        cell.setBorderColor(new BaseColor(139, 195, 74));
+        cell.setBorderColor(primaryBaseColor);
         cell.setPaddingBottom(10);
         table.addCell(cell);
         return table;
@@ -503,6 +533,35 @@ public class InvoicePDFGenerator implements Serializable {
 
     public void setInvoicepdfOutputStream(ByteArrayOutputStream invoicepdfOutputStream) {
         this.invoicepdfOutputStream = invoicepdfOutputStream;
+    }
+
+    public void setTemplate() {
+        configuration = configurationService.getConfigurationByName(ConfigurationConstants.INVOICING_TEMPLATE);
+        if (configuration != null) {
+            if (configuration.getValue().equals(InvoiceTemplateTypeConstant.GREY)) {
+                primaryBaseColor = new BaseColor(102, 102, 102);
+                secondaryBaseColor = new BaseColor(242, 242, 242);
+            } else if (configuration.getValue().equals(InvoiceTemplateTypeConstant.ORANGE)) {
+                primaryBaseColor = new BaseColor(204, 102, 0);
+                secondaryBaseColor = new BaseColor(255, 217, 179);
+            } else if (configuration.getValue().equals(InvoiceTemplateTypeConstant.CYAN)) {
+                primaryBaseColor = new BaseColor(0, 180, 230);
+                secondaryBaseColor = new BaseColor(179, 238, 255);
+            } else if (configuration.getValue().equals(InvoiceTemplateTypeConstant.GREEN)) {
+                primaryBaseColor = new BaseColor(139, 195, 74);
+                secondaryBaseColor = new BaseColor(232, 243, 219);
+            } else if (configuration.getValue().equals(InvoiceTemplateTypeConstant.BLUE)) {
+                primaryBaseColor = new BaseColor(0, 128, 255);
+                secondaryBaseColor = new BaseColor(179, 217, 255);
+            } else if (configuration.getValue().equals(InvoiceTemplateTypeConstant.RED)) {
+                primaryBaseColor = new BaseColor(128, 0, 0);
+                secondaryBaseColor = new BaseColor(242, 242, 242);
+            }
+        } else {
+            primaryBaseColor = new BaseColor(139, 195, 74);
+            secondaryBaseColor = new BaseColor(232, 243, 219);
+        }
+        lineItemBaseColor = new BaseColor(90, 88, 88);
     }
 
 }

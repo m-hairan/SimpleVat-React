@@ -100,14 +100,14 @@ public class UserProfileController implements Serializable {
 
     @Nonnull
     private User convertToEntity(@Nonnull final UserModel userModel) {
-        final LocalDateTime dob = LocalDateTime
-                .ofInstant(userModel.getDateOfBirth().toInstant(), ZoneId.systemDefault());
-        //  User user = userService.getUserByEmail(userModel.getUserEmailId()).get();
-
         User user = new User();
+        if (userModel.getDateOfBirth() != null) {
+            final LocalDateTime dob = userModel.getDateOfBirth() != null?LocalDateTime.ofInstant(userModel.getDateOfBirth().toInstant(), ZoneId.systemDefault()) : null;
+            user.setDateOfBirth(dob);
+        }
+        //  User user = userService.getUserByEmail(userModel.getUserEmailId()).get();
         user.setUserId(userModel.getUserId());
         user.setCompany(userModel.getCompany());
-        user.setDateOfBirth(dob);
         user.setDeleteFlag(userModel.getDeleteFlag());
         user.setUserEmail(userModel.getUserEmailId());
         user.setFirstName(userModel.getFirstName());

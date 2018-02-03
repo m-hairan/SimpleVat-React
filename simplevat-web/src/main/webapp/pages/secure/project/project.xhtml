@@ -29,7 +29,6 @@
 
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="projectName"
-                                                     maxlength="12"
                                                      value="#{projectController.selectedProject.projectName}"
                                                      required="true"
                                                      requiredMessage="Please enter Project Name"/>
@@ -58,12 +57,12 @@
                                     </h:panelGroup>
 
 
-                                    <p:outputLabel value="OR  ">
-                                        <p:commandLink onsuccess="PF('add_contact_popup').show();" 
-                                                       actionListener="#{projectController.initCreateContact()}"
-                                                       style="color: #009688" 
-                                                       value="Add New Contact" />
-                                    </p:outputLabel>
+                                     <p:outputLabel value="OR  " id="contactpopup">
+                                            <p:commandLink onsuccess="PF('add_contact_popup').show();" 
+                                                           actionListener="#{projectController.initCreateContact()}"
+                                                           style="color: #009688" 
+                                                           value="Add New Contact" />
+                                        </p:outputLabel>
 
                                 </p:panelGrid>
                             </p:fieldset>

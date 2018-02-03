@@ -89,7 +89,9 @@ public class ContactHelper {
         contact.setLastUpdateDate(contactModel.getLastUpdateDate());
         contact.setLastUpdatedBy(contactModel.getLastUpdatedBy());
         contact.setDeleteFlag(contactModel.getDeleteFlag());
+        if(contactModel.getContactType()!=null){
         contact.setContactType(contactModel.getContactType().getId());
+        }
         return contact;
     }
 

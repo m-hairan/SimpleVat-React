@@ -126,6 +126,8 @@ public class TransactionController extends TransactionControllerHelper implement
             }
         } else if (selectedTransactionModel == null) {
             selectedTransactionModel = new TransactionModel();
+            selectedBankAccount = getBankAccount(selectedBankAccountModel);
+            selectedTransactionModel.setBankAccount(selectedBankAccount);
         }
 
     }
@@ -183,6 +185,7 @@ public class TransactionController extends TransactionControllerHelper implement
             if (transaction.getReferenceType() == TransactionRefrenceTypeConstant.INVOICE) {
                 Invoice invoice = invoiceService.findByPK(transaction.getReferenceId());
                 invoice.setDueAmount(invoice.getDueAmount().add(transaction.getTransactionAmount()));
+                invoice.setFreeze(true);
                 invoiceService.update(invoice);
             } else if (transaction.getReferenceType() == TransactionRefrenceTypeConstant.PURCHASE) {
                 Purchase purchase = purchaseService.findByPK(transaction.getReferenceId());

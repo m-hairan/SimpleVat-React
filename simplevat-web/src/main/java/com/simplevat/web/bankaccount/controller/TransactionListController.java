@@ -308,6 +308,7 @@ public class TransactionListController extends TransactionControllerHelper imple
         updateTransactionByRefrenceObject(parentTransaction, childTransaction, transactionAmount, invoiceDueAmount, referenceObjectClass);
         invoice.setDueAmount(referenceObjectClass.getDueAmount());
         invoice.setStatus(referenceObjectClass.getStatus());
+        invoice.setFreeze(true);
     }
 
     private void updatePurchaseReference(Transaction parentTransaction, Transaction childTransaction, BigDecimal transactionAmount, Purchase purchase) {

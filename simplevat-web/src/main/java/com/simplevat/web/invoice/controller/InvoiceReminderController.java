@@ -18,7 +18,7 @@ import com.simplevat.service.ContactService;
 import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.web.constant.ConfigurationConstants;
 import com.simplevat.web.constant.EmailConstant;
-import com.simplevat.web.utils.MailDefaultConfigurationModel;
+import com.simplevat.web.utils.MailConfigurationModel;
 import com.simplevat.web.utils.MailUtility;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
@@ -92,7 +92,7 @@ public class InvoiceReminderController implements Serializable {
                 Contact contactObj = contact.get();
                 byte[] byteArray = invoiceUtil.prepareMailReport(outputStream, invoice.getInvoiceId()).toByteArray();
                 String[] email = {invoice.getInvoiceContact().getEmail()};
-                MailDefaultConfigurationModel mailDefaultConfigurationModel = MailUtility.verifyMailConfigurationList(configurationService.getConfigurationList());
+                MailConfigurationModel mailDefaultConfigurationModel = MailUtility.getEMailConfigurationList(configurationService.getConfigurationList());
                 sendInvoiceMail(mailEnum, summary, mailDefaultConfigurationModel.getMailusername(), email, byteArray);
             } catch (Exception ex) {
                 Logger.getLogger(InvoiceReminderController.class.getName()).log(Level.SEVERE, null, ex);

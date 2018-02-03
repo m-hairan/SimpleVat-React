@@ -3,6 +3,7 @@ package com.simplevat.web.purchase.controller;
 import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.Company;
 import com.simplevat.entity.Contact;
+import com.simplevat.entity.Country;
 import java.io.Serializable;
 
 import javax.faces.application.FacesMessage;
@@ -18,16 +19,19 @@ import com.simplevat.entity.Currency;
 import com.simplevat.entity.CurrencyConversion;
 import com.simplevat.entity.Product;
 import com.simplevat.entity.Purchase;
+import com.simplevat.entity.Title;
 import com.simplevat.entity.User;
 import com.simplevat.entity.VatCategory;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionType;
 import com.simplevat.service.CompanyService;
 import com.simplevat.service.ContactService;
+import com.simplevat.service.CountryService;
 import com.simplevat.service.CurrencyService;
 import com.simplevat.service.ProductService;
 import com.simplevat.service.ProjectService;
 import com.simplevat.service.PurchaseService;
+import com.simplevat.service.TitleService;
 import com.simplevat.service.TransactionCategoryServiceNew;
 import com.simplevat.service.UserServiceNew;
 import com.simplevat.service.VatCategoryService;
@@ -38,7 +42,10 @@ import com.simplevat.web.constant.InvoicePaymentModeConstant;
 import com.simplevat.web.constant.InvoicePurchaseStatusConstant;
 import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.constant.TransactionCategoryConsatant;
+import com.simplevat.web.contact.controller.ContactHelper;
+import com.simplevat.web.contact.controller.ContactUtil;
 import com.simplevat.web.contact.model.ContactModel;
+import com.simplevat.web.contact.model.ContactType;
 import com.simplevat.web.purchase.model.PurchaseItemModel;
 import com.simplevat.web.purchase.model.PurchaseModel;
 import com.simplevat.web.utils.FacesUtil;
@@ -51,9 +58,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.model.SelectItem;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 
@@ -80,12 +89,19 @@ public class PurchaseController extends BaseController implements Serializable {
 
     @Autowired
     private CurrencyService currencyService;
+    @Autowired
+    private ContactService contactService;
+    @Autowired
+    private CountryService countryService;
 
     @Autowired
     private ProjectService projectService;
 
     @Autowired
     private UserServiceNew userServiceNew;
+
+    @Autowired
+    private TitleService titleService;
 
     @Getter
     @Setter
@@ -128,8 +144,13 @@ public class PurchaseController extends BaseController implements Serializable {
     @Setter
     private CurrencyConversion currencyConversion;
 
-    @Autowired
-    private ContactService contactService;
+    @Getter
+    private List<Title> titles = new ArrayList<>();
+
+    @Getter
+    private List<Country> countries = new ArrayList<>();
+    @Getter
+    private List<Currency> currencies = new ArrayList<>();
 
     public PurchaseController() {
         super(ModuleName.PURCHASE_MODULE);
@@ -162,8 +183,98 @@ public class PurchaseController extends BaseController implements Serializable {
                 selectedPurchaseModel.setAttachmentFileContent(new DefaultStreamedContent(stream));
             }
         }
+
+        titles = titleService.getTitles();
+        countries = countryService.getCountries();
+        currencies = currencyService.getCurrencies();
+        setDefaultCountry();
+        setDefaultContactCurrency();
+
         populateVatCategory();
         calculateTotal();
+    }
+
+    public List<Title> completeTitle(String titleStr) {
+        List<Title> titleSuggestion = new ArrayList<>();
+
+        Iterator<Title> titleIterator = this.titles.iterator();
+
+        while (titleIterator.hasNext()) {
+            Title title = titleIterator.next();
+            if (title.getTitleDescription() != null
+                    && !title.getTitleDescription().isEmpty()
+                    && title.getTitleDescription().toUpperCase().contains(titleStr.toUpperCase())) {
+                titleSuggestion.add(title);
+            }
+        }
+
+        return titleSuggestion;
+    }
+
+    public List<ContactType> completeContactType() {
+        return ContactUtil.contactTypeList();
+    }
+
+    public List<Country> completeCountry(String countryStr) {
+        List<Country> countrySuggestion = new ArrayList<>();
+
+        Iterator<Country> countryIterator = this.countries.iterator();
+
+        while (countryIterator.hasNext()) {
+            Country country = countryIterator.next();
+            if (country.getCountryName() != null
+                    && !country.getCountryName().isEmpty()
+                    && country.getCountryName().toUpperCase().contains(countryStr.toUpperCase())) {
+                countrySuggestion.add(country);
+            } else if (country.getIsoAlpha3Code() != null
+                    && !country.getIsoAlpha3Code().isEmpty()
+                    && country.getIsoAlpha3Code().toUpperCase().contains(countryStr.toUpperCase())) {
+                countrySuggestion.add(country);
+            }
+        }
+
+        return countrySuggestion;
+    }
+
+    public List<Currency> completeCurrency(String currencyStr) {
+        List<Currency> currencySuggestion = new ArrayList<>();
+        Iterator<Currency> currencyIterator = this.currencies.iterator();
+
+        while (currencyIterator.hasNext()) {
+            Currency currency = currencyIterator.next();
+            if (currency.getCurrencyName() != null
+                    && !currency.getCurrencyName().isEmpty()
+                    && currency.getCurrencyName().toUpperCase().contains(currencyStr.toUpperCase())) {
+
+                currencySuggestion.add(currency);
+            } else if (currency.getCurrencyDescription() != null
+                    && !currency.getCurrencyDescription().isEmpty()
+                    && currency.getCurrencyDescription().toUpperCase().contains(currencyStr.toUpperCase())) {
+                currencySuggestion.add(currency);
+
+            } else if (currency.getCurrencyIsoCode() != null
+                    && !currency.getCurrencyIsoCode().isEmpty()
+                    && currency.getCurrencyIsoCode().toUpperCase().contains(currencyStr.toUpperCase())) {
+                currencySuggestion.add(currency);
+
+            }
+        }
+
+        return currencySuggestion;
+    }
+
+    private void setDefaultCountry() {
+        Country defaultCountry = company.getCompanyCountryCode();
+        if (defaultCountry != null) {
+            contactModel.setCountry(defaultCountry);
+        }
+    }
+
+    private void setDefaultContactCurrency() {
+        Currency defaultCurrency = company.getCompanyCountryCode().getCurrencyCode();
+        if (defaultCurrency != null) {
+            contactModel.setCurrency(defaultCurrency);
+        }
     }
 
     public List<User> users(final String searchQuery) throws Exception {
@@ -227,11 +338,12 @@ public class PurchaseController extends BaseController implements Serializable {
         updateSubTotal(purchaseItemModel);
     }
 
-    public void updateContact(){
-        if(selectedPurchaseModel.getProject()!=null){
+    public void updateContact() {
+        if (selectedPurchaseModel.getProject() != null) {
             selectedPurchaseModel.setPurchaseContact(selectedPurchaseModel.getProject().getContact());
         }
     }
+
     // TODO compare companycurrency and selected Currency
     public String exchangeRate(Currency currency) {
         String exchangeRateString = "";
@@ -350,26 +462,23 @@ public class PurchaseController extends BaseController implements Serializable {
     }
 
     public void createContact() {
-        Currency defaultCurrency = currencyService.getDefaultCurrency();
-        final Contact contact = new Contact();
-        contact.setBillingEmail(contactModel.getEmail());
+        Contact contact = new Contact();
+        ContactHelper contactHelper = new ContactHelper();
+        User loggedInUser = FacesUtil.getLoggedInUser();
+        contact = contactHelper.getContact(contactModel);
+        contact.setCreatedBy(loggedInUser.getUserId());
+        contact.setCreatedDate(LocalDateTime.now());
         contact.setDeleteFlag(Boolean.FALSE);
-        contact.setEmail(contactModel.getEmail());
-        contact.setFirstName(contactModel.getFirstName());
-        contact.setLastName(contactModel.getLastName());
-        contact.setOrganization(contactModel.getOrganization());
-        contact.setCreatedBy(FacesUtil.getLoggedInUser().getUserId());
-        contact.setCurrency(defaultCurrency);
         contact.setContactType(ContactTypeConstant.VENDOR);
-        if (defaultCurrency != null) {
-            contactModel.setCurrency(defaultCurrency);
-        }
-        if (contact.getContactId() != null) {
-            contactService.update(contact);
+        if (contact.getContactId() != null && contact.getContactId() > 0) {
+            this.contactService.update(contact);
         } else {
-            contactService.persist(contact);
+
+            this.contactService.persist(contact);
         }
         selectedPurchaseModel.setPurchaseContact(contact);
+        RequestContext.getCurrentInstance().execute("PF('add_contact_popup').hide();");
+        initCreateContact();
 
     }
 

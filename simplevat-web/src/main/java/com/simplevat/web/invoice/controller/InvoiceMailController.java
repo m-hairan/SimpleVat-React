@@ -7,10 +7,8 @@ package com.simplevat.web.invoice.controller;
 
 import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.Configuration;
-import com.simplevat.entity.Contact;
 import com.simplevat.entity.Mail;
 import com.simplevat.entity.MailAttachment;
-import com.simplevat.entity.MailEnum;
 import com.simplevat.entity.User;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.integration.MailIntegration;
@@ -20,19 +18,15 @@ import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.web.constant.ConfigurationConstants;
 import com.simplevat.web.constant.EmailConstant;
 import com.simplevat.web.utils.FacesUtil;
-import com.simplevat.web.utils.MailDefaultConfigurationModel;
+import com.simplevat.web.utils.MailConfigurationModel;
 import com.simplevat.web.utils.MailUtility;
-import static com.simplevat.web.utils.MailUtility.verifyMailConfigurationList;
-import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -125,7 +119,7 @@ public class InvoiceMailController implements Serializable {
         mailAttachmentList = new ArrayList();
         mailAttachmentNameList = new ArrayList();
         user = FacesUtil.getLoggedInUser();
-        MailDefaultConfigurationModel mailDefaultConfigurationModel = MailUtility.verifyMailConfigurationList(configurationService.getConfigurationList());
+        MailConfigurationModel mailDefaultConfigurationModel = MailUtility.getEMailConfigurationList(configurationService.getConfigurationList());
         from = mailDefaultConfigurationModel.getMailusername();
         updateSubjectAndMessageBody();
         Integer invoiceId = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("invoiceId").toString());
@@ -233,11 +227,9 @@ public class InvoiceMailController implements Serializable {
     }
 
     public void generateSubject() {
-        if (subject != null) {
+        String currencySymbol = invoice.getCurrency() != null ? invoice.getCurrency().getCurrencySymbol() : "";
 
-            if (subject.contains("{invoiceCurrencySymbol}")) {
-                subject = subject.replace("{invoiceCurrencySymbol}", invoice.getCurrency() != null ? invoice.getCurrency().getCurrencySymbol() : "");
-            }
+        if (subject != null) {
             if (subject.contains("{invoiceReferenceNumber}")) {
                 subject = subject.replace("{invoiceReferenceNumber}", invoice.getInvoiceReferenceNumber());
             }
@@ -257,10 +249,10 @@ public class InvoiceMailController implements Serializable {
                 subject = subject.replace("{projectName}", invoice.getInvoiceProject() != null ? invoice.getInvoiceProject().getProjectName() : "");
             }
             if (subject.contains("{invoiceAmount}")) {
-                subject = subject.replace("{invoiceAmount}", invoice.getInvoiceAmount() != null ? invoice.getInvoiceAmount().toString() : "");
+                subject = subject.replace("{invoiceAmount}", invoice.getInvoiceAmount() != null ? currencySymbol + invoice.getInvoiceAmount().toString() : "");
             }
             if (subject.contains("{dueAmount}")) {
-                subject = subject.replace("{dueAmount}", invoice.getDueAmount() != null ? invoice.getDueAmount().toString() : "");
+                subject = subject.replace("{dueAmount}", invoice.getDueAmount() != null ? currencySymbol + invoice.getDueAmount().toString() : "");
             }
             if (subject.contains("{contractPoNumber}")) {
                 subject = subject.replace("{contractPoNumber}", invoice.getContractPoNumber() != null ? invoice.getContractPoNumber() : "");
@@ -282,6 +274,8 @@ public class InvoiceMailController implements Serializable {
     }
 
     public void generateMessageBody() {
+        String currencySymbol = invoice.getCurrency() != null ? invoice.getCurrency().getCurrencySymbol() : "";
+
         if (messageBody != null) {
             if (messageBody.contains("{invoiceReferenceNumber}")) {
                 messageBody = messageBody.replace("{invoiceReferenceNumber}", invoice.getInvoiceReferenceNumber());
@@ -306,13 +300,10 @@ public class InvoiceMailController implements Serializable {
             }
 
             if (messageBody.contains("{invoiceAmount}")) {
-                messageBody = messageBody.replace("{invoiceAmount}", invoice.getInvoiceAmount() != null ? invoice.getInvoiceAmount().toString() : "");
+                messageBody = messageBody.replace("{invoiceAmount}", invoice.getInvoiceAmount() != null ? currencySymbol + invoice.getInvoiceAmount().toString() : "");
             }
             if (messageBody.contains("{dueAmount}")) {
-                messageBody = messageBody.replace("{dueAmount}", invoice.getDueAmount() != null ? invoice.getDueAmount().toString() : "");
-            }
-            if (messageBody.contains("{invoiceCurrencySymbol}")) {
-                messageBody = messageBody.replace("{invoiceCurrencySymbol}", invoice.getCurrency() != null ? invoice.getCurrency().getCurrencySymbol() : "");
+                messageBody = messageBody.replace("{dueAmount}", invoice.getDueAmount() != null ? currencySymbol + invoice.getDueAmount().toString() : "");
             }
             if (messageBody.contains("{senderName}")) {
                 String senderName = "";
