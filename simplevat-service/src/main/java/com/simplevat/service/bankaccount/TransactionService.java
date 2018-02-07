@@ -39,6 +39,8 @@ public abstract class TransactionService extends SimpleVatService<Integer, Trans
 
     public abstract void persistChildTransaction(Transaction transaction);
 
+    public abstract List<Transaction> getAllTransactionsByRefId(int transactionRefType, int transactionRefId);
+
     public abstract List<Transaction> getAllParentTransactions(BankAccount bankAccount);
 
     public abstract List<TransactionView> getAllTransactionViewList(Integer bankAccountId);

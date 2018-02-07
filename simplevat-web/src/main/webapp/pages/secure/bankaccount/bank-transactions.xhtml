@@ -10,7 +10,7 @@
 
     <ui:define name="content">
         <style>
-            
+
             .label{
                 font-size: 75%;
             }
@@ -111,18 +111,22 @@
                         </p:column>
 
                         <p:column headerText="#{messages.credit}" sortBy="#{transaction.transactionAmount}" width="110" styleClass="amount" filterMatchMode="contains" filterBy="#{transaction.transactionAmount}">
-                            <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString() eq 'C'}" >
+                            <h:outputText value="#{transaction.currencySymbol} " rendered="#{transaction.debitCreditFlag.toString() eq 'C'}" />
+                            <h:outputText 
+                                value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString() eq 'C'}" >
                                 <f:convertNumber type="currency" currencySymbol=""/>
                             </h:outputText>
                         </p:column>
 
                         <p:column headerText="#{messages.debit}" sortBy="#{transaction.transactionAmount}" width="110" styleClass="amount" filterMatchMode="contains" filterBy="#{transaction.transactionAmount}">
+                            <h:outputText value="#{transaction.currencySymbol} " rendered="#{transaction.debitCreditFlag.toString() eq 'D'}"/>
                             <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString() eq 'D'}" >
                                 <f:convertNumber type="currency" currencySymbol=""/>
                             </h:outputText>
                         </p:column>
 
                         <p:column headerText="#{messages.current_balance}" styleClass="amount" width="110" filterMatchMode="contains" filterBy="#{transaction.currentBalance}">
+                            <h:outputText value="#{transaction.currencySymbol} " />
                             <h:outputText value="#{transaction.currentBalance}" >
                                 <f:convertNumber type="currency" currencySymbol=""/>
                             </h:outputText>

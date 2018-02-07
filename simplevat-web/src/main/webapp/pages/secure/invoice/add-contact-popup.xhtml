@@ -5,14 +5,14 @@
                 xmlns:p="http://primefaces.org/ui">
     <h:form id="add_contact">
         <p:dialog header="New Contact" widgetVar="add_contact_popup" 
-                  resizable="false" dynamic="true"
+                  resizable="false" 
                   draggable="false" 
                   modal="true"
                   responsive="true" 
                   hideEffect="scale">
             <div class="ui-g form-group" style="margin-bottom: 16px;">
                 <div class="ui-g-12">
-                      <p:panelGrid columns="3" id="contactPanel"
+                    <p:panelGrid columns="3" id="contactPanel"
                                  columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" 
                                  layout="grid" 
                                  styleClass="ui-panelgrid-blank form-group"
@@ -35,10 +35,10 @@
                             <p:outputLabel for="contactTitle" value="Title"/>
                             <p:message for="contactTitle" />
                         </h:panelGroup>
-
+                        <p:outputLabel/>
                         <p:outputLabel/>
 
-                        <p:outputLabel/>
+
 
                         <h:panelGroup styleClass="md-inputfield">
                             <p:inputText id="firstname" value="#{invoiceController.contactModel.firstName}" required="true" requiredMessage="Please Enter name"/>
@@ -61,6 +61,7 @@
                         </h:panelGroup>
 
 
+                       
 
                         <h:panelGroup styleClass="md-inputfield">
                             <p:inputText id="emailid" value="#{invoiceController.contactModel.email}" required="true" validatorMessage="Invalid email format" requiredMessage="Enter EmailId">
@@ -139,7 +140,7 @@
                                             value="#{invoiceController.contactModel.currency}"
                                             var="currency" 
                                             itemValue="#{currency.currencyCode}"
-                                            itemLabel="#{currency.currencyDescription} - #{currency.currencySymbol}" />
+                                            itemLabel="#{currency.currencyDescription} #{currency.currencySymbol}" />
                             <p:outputLabel for="currency" value="Currency Code"/>
                             <p:message for="currency" />
                         </h:panelGroup>
@@ -165,10 +166,10 @@
                 <p:commandButton 
                     actionListener="#{invoiceController.createContact()}"
                     value="Save"
-                    style="width:auto" 
                     update="invoice:conatcts contactPanel"
+                    style="width:auto" 
                     icon="ui-icon-save"/>
-
+               
             </f:facet>  
         </p:dialog>
     </h:form>

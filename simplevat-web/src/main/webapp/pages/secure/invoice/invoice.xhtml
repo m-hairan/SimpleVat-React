@@ -58,6 +58,7 @@
                             </ui:fragment>
                             <p:fieldset legend="Contact and Project Details" toggleable="false" id="invoiceField">
                                 <p:panelGrid columns="3" 
+                                             id="contact_detail"
                                              columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" 
                                              layout="grid" 
                                              styleClass="ui-panelgrid-blank form-group"
@@ -86,6 +87,7 @@
                                                         itemValue="#{project.projectId}"
                                                         itemLabel="#{project.projectName}">
                                             <p:ajax event="itemSelect" listener="#{invoiceController.updateContact()}" process="project" update="conatcts currency invoiceField"/>
+
                                         </p:autoComplete>
                                         <p:outputLabel for="project" value="#{messages.project}"/>
                                         <p:message for="project" />
@@ -114,19 +116,16 @@
                                                 <p:ajax event="itemSelect"
                                                         listener="#{invoiceController.updateCurrency}" 
                                                         update="currency invoiceField invoiceItemTable exchangeCurrency" />
-                                                <p:ajax update="@(.shippingContact)" process="@this" event="itemSelect" listener="#{invoiceController.sameAsInvoicingAddress()}"/>
-                                            
                                             </p:autoComplete>
                                             <p:outputLabel for="conatcts" value="#{messages.contact}"/>
                                             <p:message for="conatcts" />
                                         </h:panelGroup >
-                                       
+
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:tooltip for="addbtn" position="top" value="Add new contact" />
                                             <p:commandButton id="addbtn" icon="ui-icon-plus" onsuccess="PF('add_contact_popup').show();" actionListener="#{invoiceController.initCreateContact()}"/>
                                         </h:panelGroup>
                                     </p:panelGrid>
-
 
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="organizationName"
@@ -343,6 +342,7 @@
                                         <p:calendar id="invoiceDate"
                                                     required="true"
                                                     requiredMessage="Please enter Invoice Date"
+                                                    navigator="true" 
                                                     pattern="MM/dd/yyyy"
                                                     value="#{invoiceController.selectedInvoiceModel.invoiceDate}"
                                                     >
@@ -368,6 +368,7 @@
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:calendar id="invoiceDueDate"
                                                     pattern="MM/dd/yyyy" disabled="true"
+                                                    navigator="true"
                                                     value="#{invoiceController.selectedInvoiceModel.invoiceDueDate}"
                                                     >
 
@@ -423,7 +424,7 @@
                                         <p:outputLabel for="intervals"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete id="intervals"
-                                                            converter="#{recurringIntervalConverter}"
+                                                            converter="#{recurringIntervalcurrency}"
                                                             dropdown="true"
                                                             forceSelection="true"
                                                             effect="fold"
@@ -563,6 +564,7 @@
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:calendar id="startDate" 
                                                         required="true"
+                                                        navigator="true"
                                                         requiredMessage="Select Start Date"/>
                                             <label>#{messages.Start_Date}</label>
                                             <p:message for="startDate"/>
@@ -596,6 +598,7 @@
                                         <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.recurringByAfter.value == 2}">
                                             <p:calendar id="endDate" 
                                                         required="true"
+                                                        navigator="true"
                                                         requiredMessage="Enter End date"/>
                                             <label>#{messages.End_Date}</label>
                                             <p:message for="endDate"/>

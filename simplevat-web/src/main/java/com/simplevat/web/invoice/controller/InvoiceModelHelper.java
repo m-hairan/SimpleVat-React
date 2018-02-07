@@ -123,7 +123,6 @@ public class InvoiceModelHelper {
     public InvoiceModel getInvoiceModel(Invoice invoice, boolean process) {
 
         InvoiceModel invoiceModel = new InvoiceModel();
-
         invoiceModel.setContractPoNumber(invoice.getContractPoNumber());
         invoiceModel.setCurrencyCode(invoice.getCurrency());
         invoiceModel.setInvoiceId(invoice.getInvoiceId());
@@ -199,7 +198,9 @@ public class InvoiceModelHelper {
                 for (InvoiceItemModel itemModel : invoiceModel.getInvoiceLineItems()) {
                     invoiceSubTotal = invoiceSubTotal.add(itemModel.getSubTotal());
                 }
+                if(invoiceModel.getDiscount()!=null){
                 discountPercentage = invoiceSubTotal.divide(invoiceModel.getDiscount(), 5, RoundingMode.HALF_UP);
+                }
             } else if (invoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.PERCENTAGEDISCOUNT) {
                 discountPercentage = invoiceModel.getDiscount();
             }

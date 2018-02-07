@@ -167,7 +167,7 @@ public class InvoiceController extends BaseController implements Serializable {
 
     @Getter
     @Setter
-    private boolean copyInvoiceAddress = true;
+    private boolean copyInvoiceAddress = false;
 
     @Getter
     @Setter
@@ -258,9 +258,7 @@ public class InvoiceController extends BaseController implements Serializable {
                 == null) {
             selectedInvoiceModel.setShippingContact(new Contact());
         }
-        if (copyInvoiceAddress) {
-            sameAsInvoicingAddress();
-        }
+
     }
 
     private void generateInvoiceRefNumber() {
@@ -775,6 +773,8 @@ public class InvoiceController extends BaseController implements Serializable {
 
     public void initCreateContact() {
         contactModel = new ContactModel();
+        setDefaultCountry();
+        setDefaultContactCurrency();
     }
 
     public void initCreateProduct() {
@@ -790,7 +790,6 @@ public class InvoiceController extends BaseController implements Serializable {
     }
 
     public void createContact() {
-
         Contact contact = new Contact();
         ContactHelper contactHelper = new ContactHelper();
         User loggedInUser = FacesUtil.getLoggedInUser();
@@ -799,12 +798,14 @@ public class InvoiceController extends BaseController implements Serializable {
         contact.setCreatedDate(LocalDateTime.now());
         contact.setDeleteFlag(Boolean.FALSE);
         contact.setContactType(ContactTypeConstant.CUSTOMER);
-        if (contact.getContactId() != null) {
-            contactService.update(contact);
+        if (contact.getContactId() != null && contact.getContactId() > 0) {
+            this.contactService.update(contact);
         } else {
+
             this.contactService.persist(contact);
         }
         selectedInvoiceModel.setInvoiceContact(contact);
+        System.out.println("selectedInvoiceModel"+selectedInvoiceModel.getInvoiceContact());
         RequestContext.getCurrentInstance().execute("PF('add_contact_popup').hide();");
         initCreateContact();
 

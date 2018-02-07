@@ -11,8 +11,8 @@ package com.simplevat.web.constant;
  */
 public interface InvoiceTemplateTypeConstant {
 
-    String GREY = "1";
-    String ORANGE = "2";
+    String GRAY = "1";
+    String BROWN = "2";
     String GREEN = "3";
     String BLUE = "4";
     String CYAN = "5";

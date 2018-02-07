@@ -20,6 +20,36 @@
             .ui-fluid .ui-autocomplete-dropdown {
                 width: 20px !important;
             }
+            .autoCompletePanel table, .autoCompletePanel tr, .autoCompletePanel td {
+                border:0px solid !important;
+            }
+            .recbox{
+                width:10px;
+                height:2px;
+                padding-left:20px;
+            }
+            .box-Red{
+                
+                background-color:rgb(128, 0, 0);
+            }
+            .box-Gray{
+                background-color: rgb(102, 102, 102);
+            }
+            .box-Cyan{
+                background-color:rgb(0, 180, 230);
+                
+            }
+            .box-Blue{
+                
+                background-color:rgb(0, 128, 255);
+            }
+            .box-Green{
+                
+                background-color:rgb(139, 195, 74);
+            }
+            .box-Brown{
+                background-color: rgb(204, 102, 0);
+            }
         </style>
     </ui:define>
     <ui:define name="title">#{messages.Settings}</ui:define>
@@ -51,12 +81,22 @@
                                                         var="invoiceTemplate" itemLabel="#{invoiceTemplate.name}"  
                                                         itemValue="#{invoiceTemplate}"
                                                         converter="#{invoiceTemplateConverter}"
-                                                        value="#{generalController.invoiceTemplateModel}"/>
+                                                        value="#{generalController.invoiceTemplateModel}"
+                                                        panelStyleClass="autoCompletePanel">
+                                            <p:column style="width:10px" width="10">
+                                                <h:outputText styleClass="recbox box-#{invoiceTemplate.name}"  />
+                                            </p:column>
+                                            <p:column>
+                                                <h:outputText value="#{invoiceTemplate.name}" />
+                                            </p:column>
+
+                                            <p:ajax event="itemSelect" process="@this" listener="#{generalController.invoiceTemplateValue()}"></p:ajax>
+                                        </p:autoComplete>
                                         <p:outputLabel for="invoicingTemplate" value="#{messages.InvoicingTemplate}"/>
                                         <p:message for="invoicingTemplate" />
                                     </h:panelGroup>
+                                    <p:commandButton value="Preview" icon="ui-icon-circle-zoomout"  update="template_popup_id"  oncomplete="PF('template_popup').show();"/>
 
-                                    <h:panelGroup />
 
                                 </p:panelGrid>
                             </p:fieldset>
@@ -172,6 +212,8 @@
                     </div>
                 </div>
             </div>
+            <ui:include src="template-popup.xhtml"/>
         </h:form>
+
     </ui:define>
 </ui:composition>

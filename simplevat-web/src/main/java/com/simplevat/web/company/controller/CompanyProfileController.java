@@ -10,6 +10,7 @@ import com.simplevat.entity.Company;
 import com.simplevat.entity.CompanyType;
 import com.simplevat.entity.Country;
 import com.simplevat.entity.IndustryType;
+import com.simplevat.entity.User;
 import com.simplevat.service.CompanyService;
 import com.simplevat.service.CompanyTypeService;
 import com.simplevat.service.CountryService;
@@ -120,6 +121,9 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
             if (c.getCompanyId() != null && c.getCompanyId() > 0) {
                 companyService.update(c);
             }
+            User user = FacesUtil.getLoggedInUser();
+            user.setCompany(c);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().replace("loggedInUser", user);
             init();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Company Profile updated successfully"));
         } catch (IllegalArgumentException ex) {

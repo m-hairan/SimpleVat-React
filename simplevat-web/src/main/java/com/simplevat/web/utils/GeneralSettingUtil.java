@@ -16,11 +16,10 @@ import java.util.List;
  * @author h
  */
 public class GeneralSettingUtil {
-
     public static List<InvoiceTemplateModel> invoiceTemplateList() {
         List<InvoiceTemplateModel> configurationList = new ArrayList<>();
-        configurationList.add(new InvoiceTemplateModel("Grey", InvoiceTemplateTypeConstant.GREY));
-        configurationList.add(new InvoiceTemplateModel("Orange", InvoiceTemplateTypeConstant.ORANGE));
+        configurationList.add(new InvoiceTemplateModel("Gray", InvoiceTemplateTypeConstant.GRAY));
+        configurationList.add(new InvoiceTemplateModel("Brown", InvoiceTemplateTypeConstant.BROWN));
         configurationList.add(new InvoiceTemplateModel("Green", InvoiceTemplateTypeConstant.GREEN));
         configurationList.add(new InvoiceTemplateModel("Blue", InvoiceTemplateTypeConstant.BLUE));
         configurationList.add(new InvoiceTemplateModel("Cyan", InvoiceTemplateTypeConstant.CYAN));

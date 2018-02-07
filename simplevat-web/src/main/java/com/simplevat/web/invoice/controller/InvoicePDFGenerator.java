@@ -27,26 +27,35 @@ import com.simplevat.entity.Configuration;
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.User;
+import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.entity.invoice.InvoiceLineItem;
 import com.simplevat.service.ConfigurationService;
+import com.simplevat.service.bankaccount.TransactionService;
 import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.web.constant.ConfigurationConstants;
 import com.simplevat.web.constant.InvoiceTemplateTypeConstant;
+import com.simplevat.web.constant.TransactionRefrenceTypeConstant;
 import com.simplevat.web.invoice.model.InvoiceModel;
+import com.simplevat.web.setting.controller.InvoiceTemplateModel;
+import com.simplevat.web.transactioncategory.controller.TranscationCategoryHelper;
 import com.simplevat.web.utils.FacesUtil;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
+import org.apache.commons.io.IOUtils;
 import org.primefaces.model.DefaultStreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -79,13 +88,22 @@ public class InvoicePDFGenerator implements Serializable {
     @Autowired
     private InvoiceModelHelper invoiceModelHelper;
 
+    @Autowired
+    private TransactionService transactionService;
+    private List<Transaction> transactionList;
+    private DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+
     public void init() {
         Integer invoiceId = Integer.parseInt(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("invoiceId").toString());
         System.out.println("invoiceId in pdf generator :" + invoiceId);
         invoice = invoiceService.findByPK(invoiceId);
         invoiceModel = invoiceModelHelper.getInvoiceModel(invoice, true);
+        if (invoice.getInvoiceId() != null && invoice.getInvoiceId() > 0) {
+       //     transactionList = transactionService.getAllTransactionsByRefId(TransactionRefrenceTypeConstant.INVOICE, invoice.getInvoiceId());
+        }
         user = FacesUtil.getLoggedInUser();
         currency = invoice.getCurrency();
+        configuration = configurationService.getConfigurationByName(ConfigurationConstants.INVOICING_TEMPLATE);
         setTemplate();
         try {
             ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
@@ -98,10 +116,14 @@ public class InvoicePDFGenerator implements Serializable {
         }
     }
 
-    public ByteArrayOutputStream generatePDF(Invoice invoice) {
+    public  ByteArrayOutputStream generatePDF(Invoice invoice,InvoiceTemplateModel invoiceTemplateModel) {
+        this.invoice=invoice;
         invoiceModel = invoiceModelHelper.getInvoiceModel(invoice, true);
         user = FacesUtil.getLoggedInUser();
         currency = invoice.getCurrency();
+        configuration=new Configuration();
+        configuration.setValue(invoiceTemplateModel.getValue());
+        setTemplate();
         try {
             ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
             baseFont = BaseFont.createFont(servletContext.getRealPath("/resources/ultima-layout/fonts/Roboto-Regular.ttf"), BaseFont.WINANSI, BaseFont.EMBEDDED);
@@ -220,10 +242,10 @@ public class InvoicePDFGenerator implements Serializable {
     private PdfPTable createCompanyAddressAndInvoiceDetails() {
         PdfPTable table = new PdfPTable(1);
         PdfPTable innerTable = new PdfPTable(1);
-        innerTable.addCell(createLabel("Invoice Date:", new SimpleDateFormat("MM/dd/yyyy").format(Date.from(invoice.getInvoiceDate().atZone(ZoneId.systemDefault()).toInstant()))));
+        innerTable.addCell(createLabel("Invoice Date:", dateFormat.format(Date.from(invoice.getInvoiceDate().atZone(ZoneId.systemDefault()).toInstant()))));
         innerTable.addCell(createLabel("Customer ID:", invoiceModel.getInvoiceContact().getContactId().toString()));
         innerTable.addCell(createLabel("Total Due Amount:", currency.getCurrencySymbol() + invoiceModel.getDueAmount().toString()));
-        innerTable.addCell(createLabel("Payment Due By:", new SimpleDateFormat("MM/dd/yyyy").format(Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant()))));
+        innerTable.addCell(createLabel("Payment Due By:", dateFormat.format(Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant()))));
         PdfPCell cell = new PdfPCell(innerTable);
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         cell.setBorder(Rectangle.BOTTOM);
@@ -249,23 +271,25 @@ public class InvoicePDFGenerator implements Serializable {
     private PdfPTable createInvoiceToAndShipToAddress() {
         Contact invoiceToContact = invoiceModel.getInvoiceContact();
         Contact shipToContact = invoiceModel.getShippingContact();
-        if (shipToContact == null) {
-            shipToContact = invoiceToContact;
+        PdfPTable table = new PdfPTable(1);
+        if (shipToContact != null) {
+            table = new PdfPTable(2);
         }
-        PdfPTable table = new PdfPTable(2);
-
         PdfPCell cell = new PdfPCell(createInvoiceToAddress(invoiceToContact));
         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
         cell.setBorder(0);
         cell.setPaddingLeft(0);
-        table.addCell(cell);
-
-        cell = new PdfPCell(createShipToAddress(shipToContact));
-        cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-        cell.setBorder(0);
-        cell.setPaddingLeft(0);
         cell.setPaddingBottom(20);
         table.addCell(cell);
+
+        if (shipToContact != null) {
+            cell = new PdfPCell(createShipToAddress(shipToContact));
+            cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            cell.setBorder(0);
+            cell.setPaddingLeft(0);
+            cell.setPaddingBottom(20);
+            table.addCell(cell);
+        }
         return table;
     }
 
@@ -322,27 +346,55 @@ public class InvoicePDFGenerator implements Serializable {
             table.addCell(getTableContent(invoiceLineItem.getInvoiceLineItemVat() != null ? invoiceLineItem.getInvoiceLineItemVat().getVat().toString() : "0" + "%", 5, Element.ALIGN_RIGHT, 10));
             table.addCell(getTableContent(currency.getCurrencySymbol() + (invoiceLineItem.getInvoiceLineItemUnitPrice().multiply(new BigDecimal(invoiceLineItem.getInvoiceLineItemQuantity()))).toString(), 6, Element.ALIGN_RIGHT, 10));
         }
-        table.addCell(getTableFooterBlankCell());
-        table.addCell(getTableFooterLabelCell("Discount Percent:", 1));
-        table.addCell(getTableFooterValueCell(getDecimalValue(invoiceModel.getDiscount()) + "%", 1));
-        table.addCell(getTableFooterBlankCell());
-        table.addCell(getTableFooterLabelCell("Total Discount:", 2));
-        table.addCell(getTableFooterValueCell(currency.getCurrencySymbol() + getDecimalValue(invoiceModel.getCalculatedDiscountAmount()), 2));
-        table.addCell(getTableFooterBlankCell());
-        table.addCell(getTableFooterLabelCell("Total Net:", 3));
-        table.addCell(getTableFooterValueCell(currency.getCurrencySymbol() + getDecimalValue(invoiceModel.getInvoiceSubtotal()), 3));
-        table.addCell(getTableFooterBlankCell());
-        table.addCell(getTableFooterLabelCell("Total VAT:", 4));
-        table.addCell(getTableFooterValueCell(currency.getCurrencySymbol() + getDecimalValue(invoiceModel.getInvoiceVATAmount()), 4));
-        table.addCell(getTableFooterBlankCell());
-        table.addCell(getTableFooterLabelCell("Total Amount:", 4));
-        table.addCell(getTableFooterValueCell(currency.getCurrencySymbol() + getDecimalValue(invoiceModel.getInvoiceAmount()), 4));
-        table.addCell(getTableFooterBlankCell());
-//        table.addCell(getTableFooterLabelCell(":", 4));
-//        table.addCell(getTableFooterValueCell(currency.getCurrencySymbol() + getDecimalValue(invoiceModel.getInvoiceVATAmount()), 4));
+        try {
+            InputStream iStream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/resources/images/paid-stamp.png");
+            Image img = Image.getInstance(IOUtils.toByteArray(iStream));
+            img.scaleAbsolute(160f, 88f);
+            PdfPCell cell = new PdfPCell(img);
+            if (invoiceModel.getDueAmount().doubleValue() > 0) {
+                cell = new PdfPCell(new Paragraph(""));
+            }
+            cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+            cell.setBorder(0);
+            cell.setColspan(3);
+            if (transactionList != null) {
+                cell.setRowspan(transactionList.size() + 6);
+            } else {
+                cell.setRowspan(6);
+            }
+            cell.setPaddingTop(8);
+            cell.setPaddingLeft(144);
+            table.addCell(cell);
+        } catch (Exception ex) {
+            Logger.getLogger(InvoicePDFGenerator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
 //        table.addCell(getTableFooterBlankCell());
-        table.addCell(getTableFooterLabelCell("Due Amount:", 5));
-        table.addCell(getTableFooterValueCell(currency.getCurrencySymbol() + getDecimalValue(invoiceModel.getDueAmount()), 5));
+        table.addCell(getTableFooterLabelCell("Discount Percent:"));
+        table.addCell(getTableFooterValueCell(getDecimalValue(invoiceModel.getDiscount()) + "%"));
+//        table.addCell(getTableFooterBlankCell());
+        table.addCell(getTableFooterLabelCell("Total Discount:"));
+        table.addCell(getTableFooterValueCell(currency.getCurrencySymbol() + getDecimalValue(invoiceModel.getCalculatedDiscountAmount())));
+//        table.addCell(getTableFooterBlankCell());
+        table.addCell(getTableFooterLabelCell("Total Net:"));
+        table.addCell(getTableFooterValueCell(currency.getCurrencySymbol() + getDecimalValue(invoiceModel.getInvoiceSubtotal())));
+//        table.addCell(getTableFooterBlankCell());
+        table.addCell(getTableFooterLabelCell("Total VAT:"));
+        table.addCell(getTableFooterValueCell(currency.getCurrencySymbol() + getDecimalValue(invoiceModel.getInvoiceVATAmount())));
+//        table.addCell(getTableFooterBlankCell());
+        table.addCell(getTableFooterLabelCell("Total Amount:"));
+        table.addCell(getTableFooterValueCell(currency.getCurrencySymbol() + getDecimalValue(invoiceModel.getInvoiceAmount())));
+//        table.addCell(getTableFooterBlankCell());
+        if (transactionList != null) {
+            for (Transaction transaction : transactionList) {
+                System.out.println("transaction.getTransactionDate() :" + transaction.getTransactionDate());
+                table.addCell(getTableFooterLabelCell("Payment: " + dateFormat.format(Date.from(transaction.getTransactionDate().atZone(ZoneId.systemDefault()).toInstant()))));
+                table.addCell(getTableFooterValueCell(currency.getCurrencySymbol() + getDecimalValue(transaction.getTransactionAmount())));
+//                table.addCell(getTableFooterBlankCell());
+            }
+        }
+        table.addCell(getTableFooterLabelCell("Due Amount:"));
+        table.addCell(getTableFooterValueCell(currency.getCurrencySymbol() + getDecimalValue(invoiceModel.getDueAmount())));
         return table;
     }
 
@@ -398,7 +450,7 @@ public class InvoicePDFGenerator implements Serializable {
         return cell;
     }
 
-    private PdfPCell getTableFooterLabelCell(String cellValue, int rowindex) {
+    private PdfPCell getTableFooterLabelCell(String cellValue) {
         PdfPCell cell = new PdfPCell(new Paragraph(cellValue, new Font(baseFont, 9, Font.NORMAL, lineItemBaseColor)));
         cell.setColspan(2);
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -413,7 +465,7 @@ public class InvoicePDFGenerator implements Serializable {
         return cell;
     }
 
-    private PdfPCell getTableFooterValueCell(String cellValue, int rowindex) {
+    private PdfPCell getTableFooterValueCell(String cellValue) {
         PdfPCell cell = new PdfPCell(new Paragraph(cellValue, new Font(baseFont, 9, Font.NORMAL, lineItemBaseColor)));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
         cell.setUseVariableBorders(true);
@@ -535,13 +587,14 @@ public class InvoicePDFGenerator implements Serializable {
         this.invoicepdfOutputStream = invoicepdfOutputStream;
     }
 
+
     public void setTemplate() {
-        configuration = configurationService.getConfigurationByName(ConfigurationConstants.INVOICING_TEMPLATE);
         if (configuration != null) {
-            if (configuration.getValue().equals(InvoiceTemplateTypeConstant.GREY)) {
+            if (configuration.getValue().equals(InvoiceTemplateTypeConstant.GRAY)) {
                 primaryBaseColor = new BaseColor(102, 102, 102);
                 secondaryBaseColor = new BaseColor(242, 242, 242);
-            } else if (configuration.getValue().equals(InvoiceTemplateTypeConstant.ORANGE)) {
+            } else if (configuration.getValue().equals(InvoiceTemplateTypeConstant.BROWN)) {
+                System.out.println("=configuration=="+configuration.getValue());
                 primaryBaseColor = new BaseColor(204, 102, 0);
                 secondaryBaseColor = new BaseColor(255, 217, 179);
             } else if (configuration.getValue().equals(InvoiceTemplateTypeConstant.CYAN)) {

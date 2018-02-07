@@ -36,7 +36,9 @@ public interface TransactionDao extends Dao<Integer, Transaction> {
     public List<Transaction> getAllTransactions();
 
     public List<TransactionView> getAllTransactionViewList(Integer bankAccountId);
-
+    
+    public List<Transaction> getAllTransactionsByRefId(int transactionRefType, int transactionRefId);
+    
     public List<TransactionView> getChildTransactionViewListByParentId(Integer parentTransaction);
 
     public List<TransactionView> getTransactionViewList(int pageSize, Integer bankAccountId, int rowCount, Integer transactionStatus);

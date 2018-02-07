@@ -87,6 +87,7 @@
                                                 id="expenseDate"
                                                 value="#{expenseController.selectedExpenseModel.expenseDate}" 
                                                 required="true"
+                                                navigator="true"
                                                 requiredMessage="Please select expense date"/>
                                             <p:outputLabel for="expenseDate" value="#{messages.expense_date}"/>
                                             <p:message for="expenseDate" />
@@ -333,6 +334,7 @@
                                             <h:panelGroup styleClass="md-inputfield">
                                                 <p:calendar id="startDate" 
                                                             required="true"
+                                                            navigator="true"
                                                             requiredMessage="Select recurring Start date"/>
                                                 <label>#{messages.Start_Date}</label>
                                                 <p:message for="startDate"/>
@@ -366,6 +368,7 @@
                                             <h:panelGroup styleClass="md-inputfield" rendered="#{expenseController.selectedExpenseModel.recurringByAfter.value == 2}">
                                                 <p:calendar id="endDate"
                                                             required="true"
+                                                            navigator="true"
                                                             requiredMessage="Select End date"/>
                                                 <label>#{messages.End_Date}</label>
                                                 <p:message for="endDate"/>

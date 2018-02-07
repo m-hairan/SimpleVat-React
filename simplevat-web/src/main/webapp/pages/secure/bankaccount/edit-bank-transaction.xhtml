@@ -89,6 +89,7 @@
                                             <p:calendar
                                                 id="transactionDate"
                                                 value="#{transactionController.selectedTransactionModel.transactionDate}"
+                                                navigator="true"
                                                 required="true" requiredMessage="Please select transaction date."/>
                                             <label>#{messages.date}</label>
                                             <p:message for="transactionDate"/>
@@ -102,7 +103,7 @@
                                                            value="#{transactionController.selectedTransactionModel.transactionAmount}"
                                                            required="true" requiredMessage="Please select transaction amount.">
                                                 <p:ajax update="referancePanel"  />
-                                                
+
                                             </p:inputNumber>
                                             <label>#{messages.total_amount}</label>
                                             <p:message for="transactionAmount"/>
@@ -119,6 +120,9 @@
                                             <p:message for="transactionAmount1"/>
                                         </h:panelGroup>
 
+
+
+
                                     </p:panelGrid>
                                 </p:fieldset>
                                 <br />
@@ -128,17 +132,19 @@
                                                  layout="grid" styleClass="ui-panelgrid-blank form-group"
                                                  style="border:0px none; background-color:transparent;">
 
-                                        <h:panelGroup />
+                                        <p:outputLabel for="description"/>
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText
                                                 id="description"
                                                 value="#{transactionController.selectedTransactionModel.transactionDescription}"
                                                 required="true"
-                                                requiredMessage="Please Enter Description"
+                                                requiredMessage="Please Enter Description."
                                                 />
                                             <label>#{messages.description}</label>
                                             <p:message for="description"/>
                                         </h:panelGroup>
+
+
 
                                         <p:outputLabel for="transactionCategory" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() == 0}"/>
                                         <h:panelGroup styleClass="md-inputfield" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() == 0}">

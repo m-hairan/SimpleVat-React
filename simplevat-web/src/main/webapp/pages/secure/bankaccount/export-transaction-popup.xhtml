@@ -26,6 +26,7 @@
                         <p:outputLabel for="startdate"/>
                         <h:panelGroup styleClass="md-inputfield" >
                             <p:calendar id="startdate" 
+                                        navigator="true"
                                         value="#{transactionExportController.startDate}" />
                             <label>#{messages.Start_Date}</label>
                             <p:message for="startdate" />
@@ -34,6 +35,7 @@
                         <p:outputLabel for="enddate"/>
                         <h:panelGroup styleClass="md-inputfield" >
                             <p:calendar id="enddate" 
+                                        navigator="true"
                                         value="#{transactionExportController.endDate}" />
                             <label>#{messages.End_Date}</label>
                             <p:message for="enddate" />

@@ -71,6 +71,10 @@
                         <p:commandButton onclick="PF('invoiceMailWidget').show();" 
                                          value="#{messages.Send_By_Mail}"
                                          icon="ui-icon-mail" />
+                        <p:commandButton 
+                            value="#{messages.De_Freeze}"
+                            action="#{invoiceViewController.deFreeze()}"/>
+
                         <span class="ui-separator" style="padding-right: 5px;">
                             <span class="fa fa-ellipsis-v SoftGray" />
                         </span>

@@ -51,4 +51,10 @@ public class InvoiceViewController implements Serializable {
         return "invoice.xhtml?faces-redirect=true&selectedInvoiceModelId=" + invoice.getInvoiceId();
     }
 
+    public String deFreeze() {
+        invoice.setFreeze(Boolean.FALSE);
+        invoiceService.update(invoice);
+        return "list.xhtml?faces-redirect=true";
+    }
+
 }

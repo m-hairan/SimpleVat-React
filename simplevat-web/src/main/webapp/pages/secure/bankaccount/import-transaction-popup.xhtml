@@ -25,6 +25,13 @@
                                 <p:fileUpload fileUploadListener="#{transactionImportController.handleFileUpload}" mode="advanced" uploadLabel="Select File"
                                               update="transactionTable, footerToolBar" auto="true" sizeLimit="100000" allowTypes="/(\.|\/)(csv)$/" />
                             </f:facet>
+
+                            <f:facet name="right">
+                                <p:commandButton value="Downlaod Sample File" 
+                                                 icon="ui-icon-arrowthick-1-s" ajax="false">
+                                    <p:fileDownload value="#{transactionImportController.file}" />
+                                </p:commandButton>
+                            </f:facet>
                         </p:toolbar>
                         <br/>
                         <p:dataTable var="transaction" id="transactionTable"

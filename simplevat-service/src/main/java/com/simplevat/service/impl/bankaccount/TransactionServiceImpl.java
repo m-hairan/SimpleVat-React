@@ -218,6 +218,11 @@ public class TransactionServiceImpl extends TransactionService {
         }
     }
 
+     @Override
+    public List<Transaction> getAllTransactionsByRefId(int transactionRefType,  int transactionRefId) {
+        return transactionDao.getAllTransactionsByRefId(transactionRefType, transactionRefId);
+    }
+    
     @Override
     public List<Transaction> getAllParentTransactions(BankAccount bankAccount) {
         return transactionDao.getAllParentTransactions(bankAccount);

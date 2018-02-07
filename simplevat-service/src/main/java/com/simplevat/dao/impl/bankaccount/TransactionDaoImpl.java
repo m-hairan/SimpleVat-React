@@ -150,6 +150,18 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
     }
 
     @Override
+    public List<Transaction> getAllTransactionsByRefId(int transactionRefType, int transactionRefId) {
+        TypedQuery<Transaction> query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.deleteFlag = false and t.referenceType = :referenceType and t.referenceId = :referenceId ORDER BY t.transactionDate ASC", Transaction.class);
+        query.setParameter("referenceType", transactionRefType);
+        query.setParameter("referenceId", transactionRefId);
+        List<Transaction> transactionList = query.getResultList();
+        if (transactionList != null && !transactionList.isEmpty()) {
+            return transactionList;
+        }
+        return null;
+    }
+
+    @Override
     public List<Transaction> getAllParentTransactions(BankAccount bankAccount) {
         TypedQuery<Transaction> query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.deleteFlag = false and t.parentTransaction = null and t.bankAccount.bankAccountId = :bankAccountId ORDER BY t.transactionDate DESC", Transaction.class);
         query.setParameter("bankAccountId", bankAccount.getBankAccountId());

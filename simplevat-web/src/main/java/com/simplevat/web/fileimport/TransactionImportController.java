@@ -20,6 +20,7 @@ import com.simplevat.web.constant.TransactionEntryTypeConstant;
 import com.simplevat.web.utils.FacesUtil;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -41,6 +42,8 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -69,6 +72,12 @@ public class TransactionImportController implements Serializable {
     private List<Transaction> creditTransaction = new ArrayList<>();
     @Getter
     private BankAccount bankAccount;
+    @Getter
+    @Setter
+    private StreamedContent file;
+    @Getter
+    @Setter
+    private InputStream stream;
 
     @PostConstruct
     public void init() {
@@ -76,6 +85,8 @@ public class TransactionImportController implements Serializable {
         if (bankAccountId != null) {
             bankAccount = bankAccountService.findByPK(bankAccountId);
         }
+        stream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/resources/excel-file/SampleTransaction.csv");
+        file = new DefaultStreamedContent(stream, "application/vnd.ms-excel", "SampleTransaction.csv");
     }
 
     public void handleFileUpload(FileUploadEvent event) {
@@ -120,6 +131,10 @@ public class TransactionImportController implements Serializable {
         }
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transaction saved successfully"));
         return "bank-transactions?faces-redirect=true";
+    }
+
+    public void downloadXLFile() {
+
     }
 
     private void save(Transaction transaction) {

@@ -13,8 +13,11 @@ import com.simplevat.web.common.controller.BaseController;
 import com.simplevat.web.constant.ConfigurationConstants;
 import com.simplevat.web.constant.InvoiceReferenceVariable;
 import com.simplevat.web.constant.ModuleName;
+import com.simplevat.web.invoice.controller.InvoicePDFGenerator;
 import com.simplevat.web.utils.FacesUtil;
 import com.simplevat.web.utils.GeneralSettingUtil;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,6 +27,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.model.DefaultStreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -88,6 +92,13 @@ public class GeneralController extends BaseController implements Serializable {
     @Setter
     private List<InvoiceReferenceVariable> invoiceVariableList;
 
+    @Getter
+    @Setter
+    private InvoicePreviewTemplate invoicePreviewTemplate;
+
+    @Autowired
+    private InvoicePDFGenerator invoicePDFGenerator;
+
     public GeneralController() {
         super(ModuleName.SETTING_MODULE);
     }
@@ -95,8 +106,8 @@ public class GeneralController extends BaseController implements Serializable {
     @PostConstruct
     public void init() {
         invoiceVariables();
-        invoiceTemplateModel();
         configurationList = configurationService.getConfigurationList();
+        invoicePreviewTemplate = new InvoicePreviewTemplate();
         if (configurationList != null && !configurationList.isEmpty()) {
             if (configurationList != null && configurationList.stream().filter(configuration -> configuration.getName().equals(ConfigurationConstants.INVOICING_REFERENCE_PATTERN)).findAny().isPresent()) {
                 configurationInvoiceRefPtrn = configurationList.stream().filter(configuration -> configuration.getName().equals(ConfigurationConstants.INVOICING_REFERENCE_PATTERN)).findFirst().get();
@@ -201,6 +212,8 @@ public class GeneralController extends BaseController implements Serializable {
             configurationInvoiceTemplate = new Configuration();
             configurationInvoiceTemplate.setName(ConfigurationConstants.INVOICING_TEMPLATE);
         }
+        ByteArrayOutputStream invoicepdfOutputStream = invoicePDFGenerator.generatePDF(InvoicePreviewTemplate.getInvoiceObject(), GeneralSettingUtil.invoiceTemplateList().get(0));
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(DefaultStreamContentInvoicePdf.STREAMED_CONTENT_PDF, invoicepdfOutputStream);
     }
 
     public void saveUpdate() {
@@ -264,6 +277,15 @@ public class GeneralController extends BaseController implements Serializable {
         }
     }
 
+//     public DefaultStreamedContent getInvoicepdf() {
+//        return new DefaultStreamedContent(new ByteArrayInputStream(.toByteArray()), "application/pdf");
+//    }
+    public void invoiceTemplateValue() {
+        System.out.println("===invoiceTemplateModel======" + invoiceTemplateModel);
+        ByteArrayOutputStream invoicepdfOutputStream = invoicePDFGenerator.generatePDF(InvoicePreviewTemplate.getInvoiceObject(), invoiceTemplateModel);
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().replace(DefaultStreamContentInvoicePdf.STREAMED_CONTENT_PDF, invoicepdfOutputStream);
+    }
+
     private void getInvoiceTemplateByValue(String value) {
         for (InvoiceTemplateModel invoiceTemplateModel : GeneralSettingUtil.invoiceTemplateList()) {
             if (invoiceTemplateModel.getValue().equals(value)) {
@@ -274,10 +296,6 @@ public class GeneralController extends BaseController implements Serializable {
 
     public void invoiceVariables() {
         invoiceVariableList = InvoiceReferenceVariable.getInvoiceReferenceVariables();
-    }
-
-    public void invoiceTemplateModel() {
-        invoiceTemplateModel = new InvoiceTemplateModel();
     }
 
     public List<InvoiceTemplateModel> completeInvoiceTemplate() {

@@ -24,13 +24,13 @@
                 </div>
                 <div class="ui-g-12">
                     <h:panelGroup styleClass="md-inputfield">
-                        <p:inputText id="j_username" value="#{securityBean.username}" autocomplete="off" required="true" requiredMessage="Username is mandatory"/>
+                        <p:inputText id="j_username" value="#{securityBean.username}" maxlength="50" autocomplete="off" required="true" requiredMessage="Username is mandatory"/>
                         <label>Email Address</label>
                     </h:panelGroup>
                 </div>
                 <div class="ui-g-12">
                     <h:panelGroup styleClass="md-inputfield">
-                        <p:password id="j_password" value="#{securityBean.password}" autocomplete="off" required="true" requiredMessage="Password is mandatory"/>
+                        <p:password id="j_password" value="#{securityBean.password}" maxlength="50" autocomplete="off" required="true" requiredMessage="Password is mandatory"/>
                         <label>Password</label>
                     </h:panelGroup>
                 </div>
@@ -44,7 +44,6 @@
             </div>
         </div>
     </h:form>
-
     <div class="login-footer">
         <div><p:outputLabel value="Version: #{securityBean.versionNumber}"/></div>
     </div>
