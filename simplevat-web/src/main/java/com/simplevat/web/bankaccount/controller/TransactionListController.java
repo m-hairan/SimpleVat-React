@@ -396,7 +396,8 @@ public class TransactionListController extends TransactionControllerHelper imple
             childTransaction.setParentTransaction(transaction.getParentTransaction());
         }
         childTransaction.setTransactionDate(childTransaction.getParentTransaction().getTransactionDate());
-        childTransaction.setBankAccount(transaction.getParentTransaction().getBankAccount());
+
+        childTransaction.setBankAccount(childTransaction.getParentTransaction().getBankAccount());
         childTransaction.setEntryType(TransactionEntryTypeConstant.SYSTEM);
         childTransaction.setTransactionType(transaction.getTransactionType());
         childTransaction.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.EXPLIANED));

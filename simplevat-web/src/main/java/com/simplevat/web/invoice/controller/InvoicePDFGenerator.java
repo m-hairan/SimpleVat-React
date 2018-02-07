@@ -99,7 +99,7 @@ public class InvoicePDFGenerator implements Serializable {
         invoice = invoiceService.findByPK(invoiceId);
         invoiceModel = invoiceModelHelper.getInvoiceModel(invoice, true);
         if (invoice.getInvoiceId() != null && invoice.getInvoiceId() > 0) {
-       //     transactionList = transactionService.getAllTransactionsByRefId(TransactionRefrenceTypeConstant.INVOICE, invoice.getInvoiceId());
+            transactionList = transactionService.getAllTransactionsByRefId(TransactionRefrenceTypeConstant.INVOICE, invoice.getInvoiceId());
         }
         user = FacesUtil.getLoggedInUser();
         currency = invoice.getCurrency();
@@ -116,12 +116,12 @@ public class InvoicePDFGenerator implements Serializable {
         }
     }
 
-    public  ByteArrayOutputStream generatePDF(Invoice invoice,InvoiceTemplateModel invoiceTemplateModel) {
-        this.invoice=invoice;
+    public ByteArrayOutputStream generatePDF(Invoice invoice, InvoiceTemplateModel invoiceTemplateModel) {
+        this.invoice = invoice;
         invoiceModel = invoiceModelHelper.getInvoiceModel(invoice, true);
         user = FacesUtil.getLoggedInUser();
         currency = invoice.getCurrency();
-        configuration=new Configuration();
+        configuration = new Configuration();
         configuration.setValue(invoiceTemplateModel.getValue());
         setTemplate();
         try {
@@ -174,13 +174,16 @@ public class InvoicePDFGenerator implements Serializable {
             } catch (Exception ex) {
                 Logger.getLogger(InvoicePDFGenerator.class.getName()).log(Level.SEVERE, null, ex);
             }
-            cell = new PdfPCell(new Phrase(""));
             cell = new PdfPCell(img);
             cell.setHorizontalAlignment(Element.ALIGN_LEFT);
             cell.setBorder(0);
-            cell.setPaddingTop(4);
-            table.addCell(cell);
+
+        } else {
+            cell = new PdfPCell(new Paragraph(""));
         }
+        cell.setPaddingTop(4);
+        table.addCell(cell);
+
         PdfPTable innerTable = new PdfPTable(1);
         cell = new PdfPCell(new Paragraph("TAX INVOICE", new Font(baseFont, 20, Font.BOLD, primaryBaseColor)));
         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -340,7 +343,7 @@ public class InvoicePDFGenerator implements Serializable {
         }
         for (InvoiceLineItem invoiceLineItem : invoice.getInvoiceLineItems()) {
             table.addCell(getTableContent(invoiceLineItem.getInvoiceLineItemProductService().getProductName(), 1, Element.ALIGN_LEFT, 10));
-            table.addCell(getTableContent(invoiceLineItem.getInvoiceLineItemProductService().getProductDescription(), 2, Element.ALIGN_LEFT, 10));
+            table.addCell(getTableContent(invoiceLineItem.getInvoiceLineItemDescription(), 2, Element.ALIGN_LEFT, 10));
             table.addCell(getTableContent(invoiceLineItem.getInvoiceLineItemQuantity().toString(), 3, Element.ALIGN_CENTER, 0));
             table.addCell(getTableContent(currency.getCurrencySymbol() + invoiceLineItem.getInvoiceLineItemUnitPrice().toString(), 4, Element.ALIGN_RIGHT, 10));
             table.addCell(getTableContent(invoiceLineItem.getInvoiceLineItemVat() != null ? invoiceLineItem.getInvoiceLineItemVat().getVat().toString() : "0" + "%", 5, Element.ALIGN_RIGHT, 10));
@@ -587,14 +590,13 @@ public class InvoicePDFGenerator implements Serializable {
         this.invoicepdfOutputStream = invoicepdfOutputStream;
     }
 
-
     public void setTemplate() {
         if (configuration != null) {
             if (configuration.getValue().equals(InvoiceTemplateTypeConstant.GRAY)) {
                 primaryBaseColor = new BaseColor(102, 102, 102);
                 secondaryBaseColor = new BaseColor(242, 242, 242);
             } else if (configuration.getValue().equals(InvoiceTemplateTypeConstant.BROWN)) {
-                System.out.println("=configuration=="+configuration.getValue());
+                System.out.println("=configuration==" + configuration.getValue());
                 primaryBaseColor = new BaseColor(204, 102, 0);
                 secondaryBaseColor = new BaseColor(255, 217, 179);
             } else if (configuration.getValue().equals(InvoiceTemplateTypeConstant.CYAN)) {
