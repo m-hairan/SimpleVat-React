@@ -40,19 +40,20 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.context.RequestContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Controller
 @SpringScopeView
 public class TransactionListController extends TransactionControllerHelper implements Serializable {
 
+    Logger logger = LoggerFactory.getLogger(TransactionListController.class);  
     @Autowired
     private TransactionService transactionService;
     @Autowired
@@ -143,28 +144,28 @@ public class TransactionListController extends TransactionControllerHelper imple
     public void init() {
         Date initStartTime = new Date();
         try {
-            System.err.print("TransactionListController ======Inside INIT Method=========");
+            logger.error("TransactionListController ======Inside INIT Method=========");            
             bankAccountId = FacesUtil.getSelectedBankAccountId();
-            System.err.print("getTotalUnexplainedTransactionCountByBankAccountId Started....");
+            logger.error("getTotalUnexplainedTransactionCountByBankAccountId Started....");
             Date startTime = new Date();
             totalUnExplained = transactionService.getTotalUnexplainedTransactionCountByBankAccountId(bankAccountId);
-            System.err.print("getTotalUnexplainedTransactionCountByBankAccountId Complted :: Time :" + (startTime.getTime() - new Date().getTime()));
-            System.err.print("getTotalExplainedTransactionCountByBankAccountId Started....");
+            logger.error("getTotalUnexplainedTransactionCountByBankAccountId Complted :: Time :" + (startTime.getTime() - new Date().getTime()));
+            logger.error("getTotalExplainedTransactionCountByBankAccountId Started....");
             startTime = new Date();
             totalExplained = transactionService.getTotalExplainedTransactionCountByBankAccountId(bankAccountId);
-            System.err.print("getTotalExplainedTransactionCountByBankAccountId Complted :: Time :" + (startTime.getTime() - new Date().getTime()));
-            System.err.print("getTotalPartiallyExplainedTransactionCountByBankAccountId Started....");
+            logger.error("getTotalExplainedTransactionCountByBankAccountId Complted :: Time :" + (startTime.getTime() - new Date().getTime()));
+            logger.error("getTotalPartiallyExplainedTransactionCountByBankAccountId Started....");
             startTime = new Date();
             totalPartiallyExplained = transactionService.getTotalPartiallyExplainedTransactionCountByBankAccountId(bankAccountId);
-            System.err.print("getTotalPartiallyExplainedTransactionCountByBankAccountId Complted :: Time :" + (startTime.getTime() - new Date().getTime()));
-            System.err.print("getTotalAllTransactionCountByBankAccountId Started....");
+            logger.error("getTotalPartiallyExplainedTransactionCountByBankAccountId Complted :: Time :" + (startTime.getTime() - new Date().getTime()));
+            logger.error("getTotalAllTransactionCountByBankAccountId Started....");
             startTime = new Date();
             totalTransactions = transactionService.getTotalAllTransactionCountByBankAccountId(bankAccountId);
-            System.err.print("getTotalAllTransactionCountByBankAccountId Complted :: Time :" + (startTime.getTime() - new Date().getTime()));
-            System.err.print("findAllTransactionStatues Started....");
+            logger.error("getTotalAllTransactionCountByBankAccountId Complted :: Time :" + (startTime.getTime() - new Date().getTime()));
+            logger.error("findAllTransactionStatues Started....");
             startTime = new Date();
             transactionStatuseList = transactionStatusService.findAllTransactionStatues();
-            System.err.print("findAllTransactionStatues Complted :: Time :" + (startTime.getTime() - new Date().getTime()));
+            logger.error("findAllTransactionStatues Complted :: Time :" + (startTime.getTime() - new Date().getTime()));
             transactionViewLazyModel.setTransactionStatusList(transactionStatuseList);
             transactionViewLazyModel.setBankAccountId(bankAccountId);
             transactionViewModelList = new ArrayList<TransactionViewModel>();
@@ -175,10 +176,10 @@ public class TransactionListController extends TransactionControllerHelper imple
                 transactionViewLazyModel.setInvoiceList(invoiceList);
             }
         } catch (Exception ex) {
-            Logger.getLogger(TransactionListController.class.getName()).log(Level.SEVERE, null, ex);
+//            Logger.getLogger(TransactionListController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        System.err.print("Total Execution :: Time :" + (initStartTime.getTime() - new Date().getTime()));
+        logger.error("Total Execution :: Time :" + (initStartTime.getTime() - new Date().getTime()));
     }
 
     public void acceptSuggestion(TransactionModel transactionModel) {
