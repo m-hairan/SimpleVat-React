@@ -221,7 +221,7 @@ public class InvoiceController extends BaseController implements Serializable {
             selectedInvoiceModel.setInvoiceLineItems(new ArrayList());
             selectedInvoiceModel.setInvoiceReferenceNumber("1");
             selectedInvoiceModel.setInvoiceDueDate(getDueDate(selectedInvoiceModel));
-            selectedInvoiceModel.setInvoiceContact(new Contact());
+//            selectedInvoiceModel.setInvoiceContact(new Contact());
             configuration = configurationService.getConfigurationByName(ConfigurationConstants.INVOICING_REFERENCE_PATTERN);
             if (configuration != null) {
                 if (configuration.getValue() != null) {
@@ -237,27 +237,12 @@ public class InvoiceController extends BaseController implements Serializable {
         titles = titleService.getTitles();
         countries = countryService.getCountries();
         currencies = currencyService.getCurrencies();
-
         setDefaultCountry();
-
         setDefaultContactCurrency();
         countries = countryService.getCountries();
-
         addLineItem();
-
         populateVatCategory();
-
         updateSubTotalOnDiscountAdded();
-
-        if (selectedInvoiceModel.getShippingContact()
-                == null) {
-            selectedInvoiceModel.setShippingContact(new Contact());
-        }
-
-        if (selectedInvoiceModel.getShippingContact()
-                == null) {
-            selectedInvoiceModel.setShippingContact(new Contact());
-        }
 
     }
 
@@ -308,13 +293,16 @@ public class InvoiceController extends BaseController implements Serializable {
             defaultContactByproject = true;
         }
         generateInvoiceRefNumber();
+        if (copyInvoiceAddress) {
+            sameAsInvoicingAddress();
+        }
     }
 
     public void sameAsInvoicingAddress() {
         if (copyInvoiceAddress) {
             selectedInvoiceModel.setShippingContact(selectedInvoiceModel.getInvoiceContact());
         } else {
-            selectedInvoiceModel.setShippingContact(new Contact());
+            selectedInvoiceModel.setShippingContact(null);
         }
     }
 
@@ -402,7 +390,6 @@ public class InvoiceController extends BaseController implements Serializable {
         if (validateInvoiceItem()) {
             addLineItem();
         }
-
     }
 
     private boolean validateInvoiceItem() { //---------------
@@ -569,7 +556,7 @@ public class InvoiceController extends BaseController implements Serializable {
         save();
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("Invoice Saved SuccessFully"));
+        context.addMessage(null, new FacesMessage("Successful", "Invoice Saved Successfully"));
         return "list?faces-redirect=true";
 
     }
@@ -582,7 +569,7 @@ public class InvoiceController extends BaseController implements Serializable {
         Integer invoiceId = save();
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("Invoice Saved SuccessFully"));
+        context.addMessage(null, new FacesMessage("Successful", "Invoice Saved Successfully"));
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
         session.setAttribute("invoiceId", invoiceId);
         return "invoiceView?faces-redirect=true";
@@ -597,12 +584,12 @@ public class InvoiceController extends BaseController implements Serializable {
         save();
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("Invoice Saved SuccessFully"));
+        context.addMessage(null, new FacesMessage("Successful", "Invoice Saved Successfully"));
         init();
     }
 
     private Integer save() {
-        if (selectedInvoiceModel.getShippingContact().getContactId() == null) {
+        if (selectedInvoiceModel.getShippingContact() == null) {
             selectedInvoiceModel.setShippingContact(null);
         }
         selectedInvoice = invoiceModelHelper.getInvoiceEntity(selectedInvoiceModel);
@@ -632,8 +619,10 @@ public class InvoiceController extends BaseController implements Serializable {
                 configuration.setValue("1");
                 configuration.setName(ConfigurationConstants.INVOICING_REFERENCE_PATTERN);
             }
-            configuration.setValue(invoiceModelHelper.getNextInvoiceRefPattern(configuration.getValue(), selectedInvoiceModel));
-            selectedInvoice.setInvoiceReferenceNumber(invoiceModelHelper.getNextInvoiceRefNumber(configuration.getValue(), selectedInvoiceModel));
+            String newInvoicePattern = invoiceModelHelper.getNextInvoiceRefNumber(configuration.getValue(), selectedInvoiceModel);
+            configuration.setValue(newInvoicePattern);
+            selectedInvoice.setInvoiceReferenceNumber(newInvoicePattern);
+            System.out.println("newInvoicePattern===" + newInvoicePattern + "===id:==" + configuration.getId());
             if (configuration.getId() != null) {
                 configurationService.update(configuration);
             } else {
@@ -678,6 +667,9 @@ public class InvoiceController extends BaseController implements Serializable {
             selectedInvoiceModel.setCurrencyCode(contact.getCurrency());
         }
         generateInvoiceRefNumber();
+        if (copyInvoiceAddress) {
+            sameAsInvoicingAddress();
+        }
     }
 
 //    public void updateSubTotal(final InvoiceItemModel invoiceItemModel) {
@@ -805,7 +797,7 @@ public class InvoiceController extends BaseController implements Serializable {
             this.contactService.persist(contact);
         }
         selectedInvoiceModel.setInvoiceContact(contact);
-        System.out.println("selectedInvoiceModel"+selectedInvoiceModel.getInvoiceContact());
+        System.out.println("selectedInvoiceModel" + selectedInvoiceModel.getInvoiceContact());
         RequestContext.getCurrentInstance().execute("PF('add_contact_popup').hide();");
         initCreateContact();
 

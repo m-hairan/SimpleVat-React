@@ -202,7 +202,7 @@ public class InvoiceMailController implements Serializable {
             }
         });
         t.start();
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Your Invoice Generated successfully. Please check your mail for further details"));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Successful", "Your Invoice Generated successfully. Please check your email for further details"));
     }
 
     public void handleAttachmentFiles(FileUploadEvent event) {

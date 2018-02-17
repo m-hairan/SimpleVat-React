@@ -433,7 +433,9 @@ public class ExpenseController extends BaseController implements Serializable {
             return "";
         }
         save();
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense saved successfully"));
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        context.addMessage(null, new FacesMessage("Successful", "Expense saved successfully"));
         return "/pages/secure/expense/list.xhtml?faces-redirect=true";
     }
 
@@ -442,7 +444,9 @@ public class ExpenseController extends BaseController implements Serializable {
             return "";
         }
         save();
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense saved successfully"));
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        context.addMessage(null, new FacesMessage("Successful", "Expense saved successfully"));
         return "/pages/secure/expense/expense.xhtml?faces-redirect=true";
     }
 
@@ -492,19 +496,17 @@ public class ExpenseController extends BaseController implements Serializable {
 
     public void addExpenseItem() {     //---------------
         boolean validated = validateExpenceLineItems();
-
         if (validated) {
             updateCurrencyLabel();
             selectedExpenseModel.addExpenseItem(new ExpenseItemModel());
         }
-
     }
 
     private boolean validateExpenceLineItems() { //---------------
         boolean validated = true;
         for (ExpenseItemModel lastItem : selectedExpenseModel.getExpenseItem()) {
             if (lastItem.getUnitPrice() == null || lastItem.getQuatity() < 1 || lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0) {
-                FacesMessage message = new FacesMessage("Please enter proper detail for all expence items.");
+                FacesMessage message = new FacesMessage("Please enter proper detail for all expense items.");
                 message.setSeverity(FacesMessage.SEVERITY_ERROR);
                 FacesContext.getCurrentInstance().addMessage("validationId", message);
                 validated = false;

@@ -48,6 +48,8 @@ public class TransactionCategoryView extends BaseController implements Serializa
     @Autowired
     VatCategoryService vatCategoryService;
 
+    @Getter
+    @Setter
     private List<TransactionCategory> transactionCategories;
 
     @Getter
@@ -92,15 +94,24 @@ public class TransactionCategoryView extends BaseController implements Serializa
 //                transactionCategoryModel.setParentTransactionCategory(transactionCategory);
 //            }
         }
+        transactionCategories = transactionCategoryService.findAllTransactionCategory();
 
     }
+//
+//    public List<TransactionCategory> getAllCategories() {
+//        List<TransactionCategory> transactionCategorys = transactionCategoryService.findAllTransactionCategory();
+//        for (TransactionCategory transactionCategory : transactionCategorys) {
+//            totalRowCount++;
+//        }
+//        return transactionCategorys;
+//    }
 
-    public List<TransactionCategory> getTransactionCategories() {
-        return transactionCategories;
-    }
-
-    public List<TransactionCategory> getAllCategories() {
-        return transactionCategoryService.findAllTransactionCategory();
+    public List<TransactionCategory> completeCategoriesByTransaction(String transcationTxt) {
+        System.out.println("===sout==" + transcationTxt);
+        if (transactionCategoryModel.getTransactionType() != null) {
+            return transactionCategoryService.findAllTransactionCategoryByTransactionType(transactionCategoryModel.getTransactionType().getTransactionTypeCode());
+        }
+        return new ArrayList<>();
     }
 
     public List<VatCategory> completeVatCategories() {
@@ -108,7 +119,6 @@ public class TransactionCategoryView extends BaseController implements Serializa
     }
 
     /*
-    
     public List<TransactionCategory> getParentTransactionCategories(String q) {
         if (q == null) {
             return this.transactionCategories;
@@ -150,7 +160,6 @@ public class TransactionCategoryView extends BaseController implements Serializa
         if (selectedTransactionCategory.getDefaltFlag() == DefualtTypeConstant.YES) {
             System.out.println("insideif=========1=========" + selectedTransactionCategory.getDefaltFlag());
             TransactionCategory transactionCategory = transactionCategoryService.getDefaultTransactionCategoryByTransactionCategoryId(selectedTransactionCategory.getTransactionCategoryId());
-            System.out.println("insideif===========2=======" + transactionCategory.getDefaltFlag());
             if (transactionCategory != null) {
                 System.out.println("insideif=========3=========" + transactionCategory.getDefaltFlag());
                 transactionCategory.setDefaltFlag(DefualtTypeConstant.NO);
@@ -174,27 +183,25 @@ public class TransactionCategoryView extends BaseController implements Serializa
         //return "create-transactioncategory?faces-redirect=true&selectedCategoryId="+transactionCategoryModel.getTransactionCategoryCode() ;
         System.out.println("transactionCategoryModel.getTransactionCategoryId()======================" + selectedTransactionCategory.getTransactionCategoryId());
         return CREATE_PAGE + "?faces-redirect=true&selectedCategoryId=" + selectedTransactionCategory.getTransactionCategoryId();
-
     }
 
     public List<TransactionType> getAllTransactionType(String str) {
         if (str == null) {
             return this.transactionTypes;
         }
-
         List<TransactionType> filterList = new ArrayList<>();
-        transactionTypes = transactionTypeService.findAll();
+        transactionTypes = transactionTypeService.findByText(str);
+        System.out.println("=transactionTypes===" + transactionTypes);
         for (TransactionType type : transactionTypes) {
             filterList.add(type);
         }
-
         return filterList;
     }
 
     public String deleteTransactionCategory() {
         selectedTransactionCategory.setDeleteFlag(Boolean.TRUE);
         transactionCategoryService.update(selectedTransactionCategory);
-        this.transactionCategories = transactionCategoryService.executeNamedQuery("findAllTransactionCategory");
+        transactionCategories = transactionCategoryService.findAllTransactionCategory();
         return HOME_PAGE;
 
     }

@@ -9,11 +9,14 @@
                      value="#{taxTransactionController.taxTransactionList}"
                      rowIndexVar="index" 
                      paginator="true" rows="10"
-                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader} {TableFooter}"
                      id="taxHistoryTable">
 
             <f:facet name="{TableHeader}">
                 <p:outputLabel styleClass="tableCustomHeader" value="Tax Transaction" />
+            </f:facet>
+            <f:facet name="{TableFooter}">
+                <p:outputLabel styleClass="tableCustomFooter" value="Total Record: #{taxTransactionController.taxTransactionList.size()}" />
             </f:facet>
 
             <p:column headerText="Start Date" width="80" sortBy="#{tax.startDate}" filterMatchMode="contains" filterBy="#{tax.startDate}">

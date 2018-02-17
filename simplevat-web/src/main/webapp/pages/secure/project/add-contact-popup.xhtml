@@ -4,6 +4,20 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui">
     <h:form id="add_contact">
+        <style type="text/css">
+            .ui-dialog{
+                width: 58% !important;
+            }
+            .ui-autocomplete{
+                width: 100% !important;
+            }
+            .ui-autocomplete-input.ui-autocomplete-dd-input{
+                padding-right: 0 !important;
+            }
+            .ui-inputfield{
+                width: 100% !important;
+            }
+        </style>
         <p:dialog header="New Contact" widgetVar="add_contact_popup" 
                   resizable="false" 
                   draggable="false" 
@@ -42,7 +56,7 @@
 
                         <h:panelGroup styleClass="md-inputfield">
                             <p:inputText id="firstname" value="#{projectController.contactModel.firstName}" required="true" requiredMessage="Please Enter name"/>
-                            <label>First Name</label>
+                            <p:outputLabel for="firstname" value="First Name"/>
                             <p:message for="firstname"/>
                         </h:panelGroup>
 
@@ -50,13 +64,13 @@
                         <h:panelGroup styleClass="md-inputfield">
                             <p:inputText id="middleName" 
                                          value="#{projectController.contactModel.middleName}"/>
-                            <label>Middle Name</label>
+                            <p:outputLabel for="middleName" value="Middle Name"/>
                         </h:panelGroup>
 
 
                         <h:panelGroup styleClass="md-inputfield" >
                             <p:inputText id="lastname" value="#{projectController.contactModel.lastName}" required="true" requiredMessage="Enter Last name"/>
-                            <label>Last Name</label>
+                            <p:outputLabel for="lastname" value="Last Name"/>
                             <p:message for="lastname"/>
                         </h:panelGroup>
 
@@ -67,7 +81,7 @@
                                 <f:validateRegex
                                     pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                             </p:inputText>
-                            <label>Email</label>
+                            <p:outputLabel for="lastname" value="Email"/>
                             <p:message for="emailid"/>
                         </h:panelGroup>
 

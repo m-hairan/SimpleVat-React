@@ -15,10 +15,14 @@
                 <p:dataTable var="user" id="userTable" 
                              value="#{manageUserController.userDTOList}"
                              paginator="true" rows="10" reflow="true"
-                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}">
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader} {TableFooter} ">
 
                     <f:facet name="{TableHeader}">
                         <p:outputLabel styleClass="tableCustomHeader" value="#{messages.users}" />
+                    </f:facet>
+                    
+                    <f:facet name="{TableFooter}">
+                        <p:outputLabel styleClass="tableCustomFooter" value="Total Record: #{manageUserController.userDTOList.size()}" />
                     </f:facet>
 
                     <p:column headerText="Name" sortBy="#{user.name}"  filterMatchMode="contains" filterBy="#{user.name}">

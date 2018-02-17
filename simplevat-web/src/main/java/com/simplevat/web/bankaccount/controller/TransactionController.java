@@ -136,8 +136,9 @@ public class TransactionController extends TransactionControllerHelper implement
         return "/pages/secure/bankaccount/edit-bank-transaction.xhtml?faces-redirect=true";
     }
 
-    public void importTransaction() {
-        RequestContext.getCurrentInstance().execute("PF('importTransactionWidget').show(); PF('importTransactionWidget').content.scrollTop('0')");
+    public String importTransaction() {
+        // RequestContext.getCurrentInstance().execute("PF('importTransactionWidget').show(); PF('importTransactionWidget').content.scrollTop('0')");
+        return "/pages/secure/bankaccount/import-transaction.xhtml?faces-redirect=true";
     }
 
     public void exportTransaction() {
@@ -320,7 +321,9 @@ public class TransactionController extends TransactionControllerHelper implement
                 purchaseService.update((Purchase) getRefObject());
             }
         }
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transaction saved successfully"));
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        context.addMessage(null, new FacesMessage("Successful", "Transaction saved successfully"));
         return "bank-transactions?faces-redirect=true";
 
     }
@@ -378,7 +381,9 @@ public class TransactionController extends TransactionControllerHelper implement
                 invoiceService.update((Invoice) getRefObject());
             }
         }
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transaction saved successfully"));
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        context.addMessage(null, new FacesMessage("Successful", "Transaction saved successfully"));
         return "/pages/secure/bankaccount/edit-bank-transaction.xhtml?faces-redirect=true";
 
     }
@@ -407,8 +412,9 @@ public class TransactionController extends TransactionControllerHelper implement
         } else {
             transactionService.deleteTransaction(transaction);
         }
-
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transaction deleted successfully"));
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        context.addMessage(null, new FacesMessage("Successful", "Transaction deleted successfully"));
         return "bank-transactions?faces-redirect=true";
     }
 

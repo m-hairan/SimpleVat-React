@@ -198,8 +198,8 @@ public class InvoiceModelHelper {
                 for (InvoiceItemModel itemModel : invoiceModel.getInvoiceLineItems()) {
                     invoiceSubTotal = invoiceSubTotal.add(itemModel.getSubTotal());
                 }
-                if(invoiceModel.getDiscount()!=null){
-                discountPercentage = invoiceSubTotal.divide(invoiceModel.getDiscount(), 5, RoundingMode.HALF_UP);
+                if (invoiceModel.getDiscount() != null) {
+                    discountPercentage = invoiceSubTotal.divide(invoiceModel.getDiscount(), 5, RoundingMode.HALF_UP);
                 }
             } else if (invoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.PERCENTAGEDISCOUNT) {
                 discountPercentage = invoiceModel.getDiscount();
@@ -266,11 +266,13 @@ public class InvoiceModelHelper {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
                 LocalDateTime dateTime = LocalDateTime.now();
                 String currentDateString = dateTime.format(formatter);
-                System.out.println("=currentDateString="+currentDateString);
+                System.out.println("=currentDateString=" + currentDateString);
                 invoicingReferencePattern = invoicingReferencePattern.replace(InvoiceNumberReferenceEnum.DDMMYY.getValue(), currentDateString);
             }
             if (invoicingReferencePattern.contains(InvoiceNumberReferenceEnum.CONTACT_CODE.getValue())) {
-                invoicingReferencePattern = invoicingReferencePattern.replace(InvoiceNumberReferenceEnum.CONTACT_CODE.getValue(), invoice.getInvoiceContact().getContactId() + "");
+                if (invoice.getInvoiceContact() != null) {
+                    invoicingReferencePattern = invoicingReferencePattern.replace(InvoiceNumberReferenceEnum.CONTACT_CODE.getValue(), invoice.getInvoiceContact().getContactId() + "");
+                }
             }
         }
 
@@ -292,7 +294,7 @@ public class InvoiceModelHelper {
         String nextInvoiceNumber = replaceLast(invoicingReferencePattern, invoiceReplacementString, invoiceRefNumber);
         return nextInvoiceNumber;
     }
-    
+
     public String getNextInvoiceRefPattern(String invoicingReferencePattern, InvoiceModel invoice) {
         Pattern p = Pattern.compile("[a-z]+|\\d+");
         Matcher m = p.matcher(invoicingReferencePattern);

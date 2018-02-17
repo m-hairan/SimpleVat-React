@@ -122,6 +122,10 @@ public class InitialUserController implements Serializable {
         companyHelper = new CompanyHelper();
         selectedUser = new UserDTO();
         selectedUser.setFirstName(context.getExternalContext().getRequestParameterMap().get("userFirstName"));
+        String userLastName = context.getExternalContext().getRequestParameterMap().get("userLastName");
+        if (userLastName != null) {
+            selectedUser.setLastName(userLastName);
+        }
         selectedUser.setUserEmail(context.getExternalContext().getRequestParameterMap().get("username"));
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(password);

@@ -27,7 +27,7 @@
                             <div class="card card-w-title">
                                 <p:fieldset legend="Transaction Category Details"
                                             toggleable="false" toggleSpeed="500">
-                                    <p:panelGrid columns="3"
+                                    <p:panelGrid columns="3" id="transactionCategoryPanel"
                                                  columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
                                                  layout="grid" styleClass="ui-panelgrid-blank form-group"
                                                  style="border:0px none; background-color:transparent;">
@@ -35,7 +35,7 @@
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText id="categoryName"
                                                          value="#{transactionCategoryView.transactionCategoryModel.transactionCategoryName}" 
-                                                         required="true" requiredMessage="Please enter Category Name."/>
+                                                         required="true" requiredMessage="Please enter Category Name"/>
                                             <p:outputLabel for="categoryName" value="#{messages.transactionCategoryName}"/> 
                                             <p:message for="categoryName"/>
                                         </h:panelGroup>
@@ -43,47 +43,27 @@
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText id="categoryCode"
                                                          value="#{transactionCategoryView.transactionCategoryModel.transactionCategoryCode}" 
-                                                         required="true" requiredMessage="Please enter Category Name."/>
+                                                         required="true" requiredMessage="Please enter Category Code"/>
                                             <p:outputLabel for="categoryCode" value="#{messages.transactionCategoryCode}"/>
                                             <p:message for="categoryCode"/>
+                                        </h:panelGroup>
+
+
+                                        <h:panelGroup>
+                                            <p:outputLabel for="defaultFlag" value="#{messages.defaltFlag}"/>
+                                            <p:selectOneRadio id="defaultFlag"
+                                                              value="#{transactionCategoryView.transactionCategoryModel.defaltFlag}" 
+                                                              required="true" requiredMessage="Please enter Default flag" >
+                                                <f:selectItem itemLabel="Yes" itemValue="Y" />
+                                                <f:selectItem itemLabel="No" itemValue="N" />
+                                            </p:selectOneRadio>
+                                            <p:message for="defaultFlag" />
                                         </h:panelGroup>
 
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText id="CategoryDescription"
                                                          value="#{transactionCategoryView.transactionCategoryModel.transactionCategoryDescription}" />
                                             <p:outputLabel for="CategoryDescription" value="#{messages.transactionCategoryDescription}"/>
-                                        </h:panelGroup>
-
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:autoComplete id="TypeCode" 
-                                                            value="#{transactionCategoryView.transactionCategoryModel.transactionType}"
-                                                            forceSelection="true" 
-                                                            dropdown="true"
-                                                            effect="fold"
-                                                            scrollHeight="250"
-                                                            completeMethod="#{transactionCategoryView.getAllTransactionType}" 
-                                                            required="true" requiredMessage="Please enter Type name."
-                                                            var="transactionType" itemLabel="#{transactionType.transactionTypeName}"  
-                                                            itemValue="#{transactionType}"
-                                                            converter="#{transactionTypeConverter}"/>
-                                            <p:outputLabel for="TypeCode" value="Transaction Type"/>
-                                            <p:message for="TypeCode"/>
-                                        </h:panelGroup>
-
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:outputLabel for="parentCategoryCode"/>
-                                            <p:autoComplete id="parentCategoryCode" 
-                                                            converter="#{transactionCategoryConverter}"
-                                                            value="#{transactionCategoryView.transactionCategoryModel.parentTransactionCategory}"
-                                                            forceSelection="true" 
-                                                            dropdown="true"
-                                                            effect="fold"
-                                                            scrollHeight="250"
-                                                            completeMethod="#{transactionCategoryView.getAllCategories()}" 
-                                                            var="transactionCategory" 
-                                                            itemLabel="#{transactionCategory.transactionCategoryName}"  
-                                                            itemValue="#{transactionCategory}" />
-                                            <p:outputLabel for="parentCategoryCode" value="Parent Category Code"/>
                                         </h:panelGroup>
 
                                         <h:panelGroup styleClass="md-inputfield">
@@ -102,15 +82,39 @@
                                             <p:outputLabel for="vatCategoryCode" value="VAT Category Code"/>
                                         </h:panelGroup>
 
-                                        <h:panelGroup>
-                                            <p:outputLabel for="defaultFlag" value="#{messages.defaltFlag}"/>
-                                            <p:selectOneRadio id="defaultFlag"
-                                                              value="#{transactionCategoryView.transactionCategoryModel.defaltFlag}" 
-                                                              required="true" requiredMessage="Please enter Default flag." >
-                                                <f:selectItem itemLabel="Yes" itemValue="Y" />
-                                                <f:selectItem itemLabel="No" itemValue="N" />
-                                            </p:selectOneRadio>
-                                            <p:message for="defaultFlag" />
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:autoComplete id="TypeCode" 
+                                                            value="#{transactionCategoryView.transactionCategoryModel.transactionType}"
+                                                            forceSelection="true" 
+                                                            dropdown="true"
+                                                            effect="fold"
+                                                            scrollHeight="250"
+                                                            completeMethod="#{transactionCategoryView.getAllTransactionType}" 
+                                                            required="true" requiredMessage="Please enter Transaction Type"
+                                                            var="transactionType" itemLabel="#{transactionType.transactionTypeName}"  
+                                                            itemValue="#{transactionType}"
+                                                            converter="#{transactionTypeConverter}">
+                                                <p:ajax event="itemSelect" update="parentTransactionCategoryGroup" process="TypeCode" />
+                                            </p:autoComplete>
+                                            <p:outputLabel for="TypeCode" value="Transaction Type"/>
+                                            <p:message for="TypeCode"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup id="parentTransactionCategoryGroup">
+                                            <h:panelGroup styleClass="md-inputfield" rendered="#{transactionCategoryView.transactionCategoryModel.transactionType != null}">
+                                                <p:outputLabel for="parentCategoryCode"/>
+                                                <p:autoComplete id="parentCategoryCode" 
+                                                                converter="#{transactionCategoryConverter}"
+                                                                value="#{transactionCategoryView.transactionCategoryModel.parentTransactionCategory}"
+                                                                forceSelection="true" 
+                                                                dropdown="true"
+                                                                effect="fold"
+                                                                scrollHeight="250"
+                                                                completeMethod="#{transactionCategoryView.completeCategoriesByTransaction}" 
+                                                                var="transactionCategory" 
+                                                                itemLabel="#{transactionCategory.transactionCategoryName}"  
+                                                                itemValue="#{transactionCategory}" />
+                                                <p:outputLabel for="parentCategoryCode" value="Parent Category Code"/>
+                                            </h:panelGroup>
                                         </h:panelGroup>
 
                                         <h:panelGroup />

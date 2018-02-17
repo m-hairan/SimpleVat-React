@@ -10,6 +10,12 @@
     <ui:define name="title">Project</ui:define>
     <ui:define name="content">
         <h:form id="project">
+
+            <!--            <style type="text/css">
+                        .ui-outputlabel{
+                            margin-left:10% !important;
+                        }
+                    </style>-->
             <div class="card card-w-title">
                 <div class="ui-fluid">
                     <div class="ui-g">
@@ -57,12 +63,12 @@
                                     </h:panelGroup>
 
 
-                                     <p:outputLabel value="OR  " id="contactpopup">
-                                            <p:commandLink onsuccess="PF('add_contact_popup').show();" 
-                                                           actionListener="#{projectController.initCreateContact()}"
-                                                           style="color: #009688" 
-                                                           value="Add New Contact" />
-                                        </p:outputLabel>
+                                    <p:outputLabel value="OR  " id="contactpopup" style="margin-left: 10% !important">
+                                        <p:commandLink onsuccess="PF('add_contact_popup').show();" 
+                                                       actionListener="#{projectController.initCreateContact()}"
+                                                       style="color: #009688" 
+                                                       value="Add New Contact" />
+                                    </p:outputLabel>
 
                                 </p:panelGrid>
                             </p:fieldset>
@@ -112,14 +118,14 @@
                                         <p:inputText id="projectExpenseBudget"
                                                      value="#{projectController.selectedProject.projectExpenseBudget}"
                                                      />
-                                        <p:outputLabel for="projectExpenseBudget" value="Project Budget"/>
+                                        <p:outputLabel for="projectExpenseBudget" value="Expense Budget"/>
                                     </h:panelGroup>
 
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="projectRevenueBudget"
                                                      value="#{projectController.selectedProject.projectRevenueBudget}"
                                                      />
-                                        <p:outputLabel for="projectRevenueBudget" value="Project Budget"/>
+                                        <p:outputLabel for="projectRevenueBudget" value="Revenue Budget"/>
                                     </h:panelGroup>
 
                                     <h:panelGroup styleClass="md-inputfield">

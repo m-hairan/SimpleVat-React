@@ -8,94 +8,95 @@
     <h:form id="profile" enctype="multipart/form-data">
         <p:fieldset legend="#{messages.basicDetail}" toggleable="false">
 
-
-            <h:panelGroup id="profilepic" layout="block" styleClass="profile" style="margin-left: 44%; margin-bottom: 15px;">
-                <div>
-                    <ui:fragment rendered="#{userProfileController.renderProfilePic}">
-                        <p:graphicImage height="140px" width="140px" cache="false"
-                                        value="#{streamedContentSessionController.streamedProfilePic}" />
-                    </ui:fragment>
-                    <ui:fragment rendered="#{!userProfileController.renderProfilePic}">
-                        <p:graphicImage name="images/user-avtar-icon1.png" library="ultima-layout" height="140px" width="140px"/>
-                    </ui:fragment>
-                    <div style="width:140px">
-                        <p:fileUpload fileUploadListener="#{userProfileController.handleFileUpload}" mode="advanced" update="profilepic"
-                                      label="Upload Profile"  auto="true" sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
-                        <h:outputText value="#{userProfileController.fileName}" />
-
-                    </div>
-                </div>
-            </h:panelGroup>
-            <p:panelGrid columns="3" 
-                         columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" 
+            <p:panelGrid columns="2" 
+                         columnClasses="ui-grid-col-8,ui-grid-col-4" 
                          layout="grid" 
                          styleClass="ui-panelgrid-blank form-group"
                          style="border:0px none; background-color:transparent;">
 
-                <h:panelGroup styleClass="md-inputfield">
-                    <p:inputText id="firstName"
-                                 maxlength="25"
-                                 required="true"
-                                 requiredMessage="Please enter First Name"
-                                 value="#{userProfileController.currentUser.firstName}"/>
-                    <p:outputLabel for="firstName" value="#{messages.firstName}" />
-                    <p:message for="firstName" />
+                <p:panelGrid columns="2" 
+                             columnClasses="ui-grid-col-6,ui-grid-col-6" 
+                             layout="grid" 
+                             styleClass="ui-panelgrid-blank form-group"
+                             style="border:0px none; background-color:transparent;">
+
+                    <h:panelGroup styleClass="md-inputfield">
+                        <p:inputText id="firstName"
+                                     maxlength="25"
+                                     required="true"
+                                     requiredMessage="Please enter First Name"
+                                     value="#{userProfileController.currentUser.firstName}"/>
+                        <p:outputLabel for="firstName" value="#{messages.firstName}" />
+                        <p:message for="firstName" />
+                    </h:panelGroup>
+
+                    <h:panelGroup styleClass="md-inputfield">
+                        <p:inputText id="lastName"
+                                     required="true"
+                                     requiredMessage="Please enter Last Name"
+                                     maxlength="25"
+                                     value="#{userProfileController.currentUser.lastName}"/>
+                        <p:outputLabel for="lastName" value="#{messages.lastName}" />
+                        <p:message for="lastName" />
+                    </h:panelGroup>
+
+                    <h:panelGroup styleClass="md-inputfield" rendered="#{userProfileController.currentUser.createdBy != 0}">
+                        <p:inputText id="emailId"
+                                     required="true"
+                                     maxlength="25"
+                                     requiredMessage="Please enter email address"
+                                     validatorMessage="Invalid email format"
+                                     value="#{userProfileController.currentUser.userEmailId}">
+                            <f:validateRegex
+                                pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                        </p:inputText>
+                        <p:outputLabel for="emailId" value="#{messages.emailId}"/>
+                        <p:message for="emailId" />
+                    </h:panelGroup>
+
+                    <h:panelGroup styleClass="md-inputfield" rendered="#{userProfileController.currentUser.createdBy == 0}">
+                        <p:inputText id="emailId1"
+                                     required="true"
+                                     disabled="true"
+                                     maxlength="25"
+                                     requiredMessage="Please enter email address"
+                                     validatorMessage="Invalid email format"
+                                     value="#{userProfileController.currentUser.userEmailId}">
+                            <f:validateRegex
+                                pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                        </p:inputText>
+                        <p:outputLabel for="emailId1" value="#{messages.emailId}"/>
+                        <p:message for="emailId1" />
+                    </h:panelGroup>
+
+                    <h:panelGroup styleClass="md-inputfield">
+                        <p:calendar id="dob"
+                                    pattern="MM/dd/yyyy"
+                                    maxdate="#{userProfileController.currentUser.today}"
+                                    value="#{userProfileController.currentUser.dateOfBirth}"
+                                    readonlyInput="#{userProfileController.currentUser.dateOfBirth != null}" />
+                        <label></label>
+                        <p:outputLabel for="dob" value="#{messages.dateOfBirth}"/>
+                    </h:panelGroup>
+                </p:panelGrid>
+
+                <h:panelGroup id="profilepic" layout="block" styleClass="profile" style="margin-left: 44%; margin-bottom: 15px;">
+                    <div>
+                        <ui:fragment rendered="#{userProfileController.renderProfilePic}">
+                            <p:graphicImage height="140px" width="140px" cache="false"
+                                            value="#{streamedContentSessionController.streamedProfilePic}" />
+                        </ui:fragment>
+                        <ui:fragment rendered="#{!userProfileController.renderProfilePic}">
+                            <p:graphicImage name="images/user-avtar-icon1.png" library="ultima-layout" height="140px" width="140px"/>
+                        </ui:fragment>
+                        <div style="width:140px" align="center">
+                            <p:fileUpload fileUploadListener="#{userProfileController.handleFileUpload}" mode="advanced" update="profilepic"
+                                          label="Upload Profile"  auto="true" sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+                            <h:outputText value="#{userProfileController.fileName}" />
+
+                        </div>
+                    </div>
                 </h:panelGroup>
-
-                <h:panelGroup styleClass="md-inputfield">
-                    <p:inputText id="lastName"
-                                 required="true"
-                                 requiredMessage="Please enter Last Name"
-                                 maxlength="25"
-                                 value="#{userProfileController.currentUser.lastName}"/>
-                    <p:outputLabel for="lastName" value="#{messages.lastName}" />
-                    <p:message for="lastName" />
-                </h:panelGroup>
-
-                <h:panelGroup styleClass="md-inputfield" rendered="#{userProfileController.currentUser.createdBy != 0}">
-                    <p:inputText id="emailId"
-                                 required="true"
-                                 maxlength="25"
-                                 requiredMessage="Please enter email address"
-                                 validatorMessage="Invalid email format"
-                                 value="#{userProfileController.currentUser.userEmailId}">
-                        <f:validateRegex
-                            pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-                    </p:inputText>
-                    <p:outputLabel for="emailId" value="#{messages.emailId}"/>
-                    <p:message for="emailId" />
-                </h:panelGroup>
-
-                <h:panelGroup styleClass="md-inputfield" rendered="#{userProfileController.currentUser.createdBy == 0}">
-                    <p:inputText id="emailId1"
-                                 required="true"
-                                 disabled="true"
-                                 maxlength="25"
-                                 requiredMessage="Please enter email address"
-                                 validatorMessage="Invalid email format"
-                                 value="#{userProfileController.currentUser.userEmailId}">
-                        <f:validateRegex
-                            pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-                    </p:inputText>
-                    <p:outputLabel for="emailId1" value="#{messages.emailId}"/>
-                    <p:message for="emailId1" />
-                </h:panelGroup>
-
-                <h:panelGroup styleClass="md-inputfield">
-                    <p:calendar id="dob"
-                                pattern="MM/dd/yyyy"
-                                maxdate="#{userProfileController.currentUser.today}"
-                                value="#{userProfileController.currentUser.dateOfBirth}"
-                                readonlyInput="#{userProfileController.currentUser.dateOfBirth != null}" />
-                    <label></label>
-                    <p:outputLabel for="dob" value="#{messages.dateOfBirth}"/>
-                </h:panelGroup>
-
-                <p:outputLabel />
-                <h:panelGroup />
-
-                <p:outputLabel />
-                <h:panelGroup />
             </p:panelGrid>
         </p:fieldset>
 
@@ -126,7 +127,7 @@
         <p:toolbar>
             <f:facet name="left">
 
-                <p:commandButton actionListener="#{userProfileController.update()}"
+                <p:commandButton action="#{userProfileController.update()}"
                                  value="Save"
                                  update="@form"
                                  icon="ui-icon-save" />

@@ -40,141 +40,148 @@
 
                             <p:fieldset legend="#{messages.basicDetail}" toggleable="false">
 
-                                <h:panelGroup id="profilepic" layout="block" styleClass="profile" style="margin-left: 44%; margin-bottom: 15px;">
-                                    <div>
-                                        <ui:fragment rendered="#{userController.renderProfilePic}">
-                                            <p:graphicImage height="140px" width="140px" cache="false"
-                                                            value="#{streamedContentSessionController.streamedUserPic}" />
-                                        </ui:fragment>
-                                        <ui:fragment rendered="#{!userController.renderProfilePic}">
-                                            <p:graphicImage name="images/user-avtar-icon1.png" library="ultima-layout" height="140px" width="140px"/>
-
-                                        </ui:fragment>
-
-                                        <div style="width:140px">
-                                            <p:fileUpload fileUploadListener="#{userController.handleFileUpload}" mode="advanced"
-                                                          label="Upload Profile" update="profilepic" auto="true" sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
-                                            <h:outputText value="#{userController.fileName}" />
-
-
-                                        </div>
-                                    </div>             
-
-                                </h:panelGroup>
-                                <p:panelGrid columns="3" 
-                                             columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" 
+                                <p:panelGrid columns="2" 
+                                             columnClasses="ui-grid-col-8,ui-grid-col-4" 
                                              layout="grid" 
                                              styleClass="ui-panelgrid-blank form-group"
                                              style="border:0px none; background-color:transparent;">
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText id="firstName"
-                                                     required="true"
-                                                     requiredMessage="Please enter First Name"
-                                                     value="#{userController.selectedUser.firstName}"/>
-                                        <p:outputLabel for="firstName" value="#{messages.firstName}"/>
-                                        <p:message for="firstName" />
-                                    </h:panelGroup>
 
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText id="lastName"
-                                                     required="true"
-                                                     requiredMessage="Please enter Last Name"
-                                                     value="#{userController.selectedUser.lastName}"/>
-                                        <p:outputLabel for="lastName" value="#{messages.lastName}"/>
-                                        <p:message for="lastName" />
-                                    </h:panelGroup>
+                                    <p:panelGrid columns="2" 
+                                                 columnClasses="ui-grid-col-6,ui-grid-col-6" 
+                                                 layout="grid" 
+                                                 styleClass="ui-panelgrid-blank form-group"
+                                                 style="border:0px none; background-color:transparent;">
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText id="firstName"
+                                                         required="true"
+                                                         requiredMessage="Please enter First Name"
+                                                         value="#{userController.selectedUser.firstName}"/>
+                                            <p:outputLabel for="firstName" value="#{messages.firstName}"/>
+                                            <p:message for="firstName" />
+                                        </h:panelGroup>
 
-                                    <h:panelGroup styleClass="md-inputfield" rendered="#{userController.selectedUser.createdBy != 0}">
-                                        <p:inputText id="emailId"
-                                                     required="true"
-                                                     requiredMessage="Please enter email address"
-                                                     validatorMessage="Invalid email format"
-                                                     value="#{userController.selectedUser.userEmail}">
-                                            <f:validateRegex
-                                                pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-                                        </p:inputText>
-                                        <p:outputLabel for="emailId" value="#{messages.emailId}" />
-                                        <p:message for="emailId" />
-                                    </h:panelGroup>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:inputText id="lastName"
+                                                         required="true"
+                                                         requiredMessage="Please enter Last Name"
+                                                         value="#{userController.selectedUser.lastName}"/>
+                                            <p:outputLabel for="lastName" value="#{messages.lastName}"/>
+                                            <p:message for="lastName" />
+                                        </h:panelGroup>
 
-                                    <h:panelGroup styleClass="md-inputfield" rendered="#{userController.selectedUser.createdBy == 0}">
-                                        <p:inputText id="emailId1"
-                                                     required="true"
-                                                     disabled="true"
-                                                     requiredMessage="Please enter email address"
-                                                     validatorMessage="Invalid email format"
-                                                     value="#{userController.selectedUser.userEmail}">
-                                            <f:validateRegex
-                                                pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-                                        </p:inputText>
-                                        <p:outputLabel for="emailId1" value="#{messages.emailId}" />
-                                        <p:message for="emailId1" />
-                                    </h:panelGroup>
+                                        <h:panelGroup styleClass="md-inputfield" rendered="#{userController.selectedUser.createdBy != 0}">
+                                            <p:inputText id="emailId"
+                                                         required="true"
+                                                         requiredMessage="Please enter email address"
+                                                         validatorMessage="Invalid email format"
+                                                         value="#{userController.selectedUser.userEmail}">
+                                                <f:validateRegex
+                                                    pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                            </p:inputText>
+                                            <p:outputLabel for="emailId" value="#{messages.emailId}" />
+                                            <p:message for="emailId" />
+                                        </h:panelGroup>
 
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:calendar id="dob"
-                                                    pattern="dd/MM/yyyy"
-                                                    required="true"
-                                                    requiredMessage="Please enter Date of Birth"
-                                                    value="#{userController.selectedUser.displayDOB}">
-                                        </p:calendar>
-                                        <p:outputLabel for="dob" value="Date of Birth"/>
-                                        <p:message for="dob" />
-                                    </h:panelGroup>
+                                        <h:panelGroup styleClass="md-inputfield" rendered="#{userController.selectedUser.createdBy == 0}">
+                                            <p:inputText id="emailId1"
+                                                         required="true"
+                                                         disabled="true"
+                                                         requiredMessage="Please enter email address"
+                                                         validatorMessage="Invalid email format"
+                                                         value="#{userController.selectedUser.userEmail}">
+                                                <f:validateRegex
+                                                    pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                            </p:inputText>
+                                            <p:outputLabel for="emailId1" value="#{messages.emailId}" />
+                                            <p:message for="emailId1" />
+                                        </h:panelGroup>
 
-                                    <h:panelGroup styleClass="md-inputfield" rendered="#{userController.selectedUser.createdBy != 0}">
-                                        <p:autoComplete
-                                            id="role"
-                                            converter="#{userRoleConverter}"
-                                            dropdown="true"
-                                            forceSelection="true"
-                                            effect="fold"
-                                            scrollHeight="250"
-                                            completeMethod="#{userController.comoleteRole()}"
-                                            value="#{userController.selectedUser.role}"
-                                            var="role" itemLabel="#{role.roleName}" itemValue="#{role}"
-                                            required="true" requiredMessage="Please select Role."/>
-                                        <label></label>
-                                        <p:outputLabel for="role" value="Role" />
-                                        <p:message for="role" />
-                                    </h:panelGroup>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:calendar id="dob"
+                                                        pattern="dd/MM/yyyy"
+                                                        required="true"
+                                                        requiredMessage="Please enter Date of Birth"
+                                                        value="#{userController.selectedUser.displayDOB}">
+                                            </p:calendar>
+                                            <p:outputLabel for="dob" value="Date of Birth"/>
+                                            <p:message for="dob" />
+                                        </h:panelGroup>
 
-                                    <h:panelGroup styleClass="md-inputfield" rendered="#{userController.selectedUser.createdBy == 0}">
-                                        <p:autoComplete
-                                            id="role1"
-                                            converter="#{userRoleConverter}"
-                                            disabled="true"
-                                            dropdown="true"
-                                            forceSelection="true"
-                                            effect="fold"
-                                            scrollHeight="250"
-                                            completeMethod="#{userController.comoleteRole()}"
-                                            value="#{userController.selectedUser.role}"
-                                            var="role" itemLabel="#{role.roleName}" itemValue="#{role}"
-                                            required="true" requiredMessage="Please select Role."/>
-                                        <p:outputLabel for="role1" value="Role"/>
-                                        <p:message for="role1" />
-                                    </h:panelGroup>
+                                        <h:panelGroup styleClass="md-inputfield" rendered="#{userController.selectedUser.createdBy != 0}">
+                                            <p:autoComplete
+                                                id="role"
+                                                converter="#{userRoleConverter}"
+                                                dropdown="true"
+                                                forceSelection="true"
+                                                effect="fold"
+                                                scrollHeight="250"
+                                                completeMethod="#{userController.comoleteRole()}"
+                                                value="#{userController.selectedUser.role}"
+                                                var="role" itemLabel="#{role.roleName}" itemValue="#{role}"
+                                                required="true" requiredMessage="Please select Role."/>
+                                            <label></label>
+                                            <p:outputLabel for="role" value="Role" />
+                                            <p:message for="role" />
+                                        </h:panelGroup>
 
-                                    <h:panelGroup rendered="#{userController.selectedUser.createdBy != 0}">
-                                        <p:outputLabel for="active" value="Status" />
-                                        <label></label>
-                                        <p:selectOneRadio value="#{userController.selectedUser.isActive}" id="active" required="true"
-                                                          requiredMessage="Please select Status">
-                                            <f:selectItem itemLabel="Active" itemValue="true"/>
-                                            <f:selectItem itemLabel="InActive" itemValue="false"/>
-                                        </p:selectOneRadio>
-                                        <p:message for="active" />
-                                    </h:panelGroup>
+                                        <h:panelGroup styleClass="md-inputfield" rendered="#{userController.selectedUser.createdBy == 0}">
+                                            <p:autoComplete
+                                                id="role1"
+                                                converter="#{userRoleConverter}"
+                                                disabled="true"
+                                                dropdown="true"
+                                                forceSelection="true"
+                                                effect="fold"
+                                                scrollHeight="250"
+                                                completeMethod="#{userController.comoleteRole()}"
+                                                value="#{userController.selectedUser.role}"
+                                                var="role" itemLabel="#{role.roleName}" itemValue="#{role}"
+                                                required="true" requiredMessage="Please select Role."/>
+                                            <p:outputLabel for="role1" value="Role"/>
+                                            <p:message for="role1" />
+                                        </h:panelGroup>
 
-                                    <h:panelGroup rendered="#{userController.selectedUser.createdBy == 0}">
-                                        <p:outputLabel for="active1" value="Status"/>
-                                        <p:selectOneRadio value="#{userController.selectedUser.isActive}" disabled="true" id="active1" required="true"
-                                                          requiredMessage="Please select Status">
-                                            <f:selectItem itemLabel="Active" itemValue="true"/>
-                                            <f:selectItem itemLabel="InActive" itemValue="false"/>
-                                        </p:selectOneRadio>
-                                        <p:message for="active1" />
+                                        <h:panelGroup rendered="#{userController.selectedUser.createdBy != 0}">
+                                            <p:outputLabel for="active" value="Status" />
+                                            <label></label>
+                                            <p:selectOneRadio value="#{userController.selectedUser.isActive}" id="active" required="true"
+                                                              requiredMessage="Please select Status">
+                                                <f:selectItem itemLabel="Active" itemValue="true"/>
+                                                <f:selectItem itemLabel="InActive" itemValue="false"/>
+                                            </p:selectOneRadio>
+                                            <p:message for="active" />
+                                        </h:panelGroup>
+
+                                        <h:panelGroup rendered="#{userController.selectedUser.createdBy == 0}">
+                                            <p:outputLabel for="active1" value="Status"/>
+                                            <p:selectOneRadio value="#{userController.selectedUser.isActive}" disabled="true" id="active1" required="true"
+                                                              requiredMessage="Please select Status">
+                                                <f:selectItem itemLabel="Active" itemValue="true"/>
+                                                <f:selectItem itemLabel="InActive" itemValue="false"/>
+                                            </p:selectOneRadio>
+                                            <p:message for="active1" />
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+
+                                    <h:panelGroup id="profilepic" layout="block" styleClass="profile" style="margin-left: 44%; margin-bottom: 15px;">
+                                        <div>
+                                            <ui:fragment rendered="#{userController.renderProfilePic}">
+                                                <p:graphicImage height="140px" width="140px" cache="false"
+                                                                value="#{streamedContentSessionController.streamedUserPic}" />
+                                            </ui:fragment>
+                                            <ui:fragment rendered="#{!userController.renderProfilePic}">
+                                                <p:graphicImage name="images/user-avtar-icon1.png" library="ultima-layout" height="140px" width="140px"/>
+                                            </ui:fragment>
+
+                                            <div style="width:140px">
+                                                <p:fileUpload fileUploadListener="#{userController.handleFileUpload}" mode="advanced"
+                                                              label="Upload Profile" update="profilepic" auto="true" sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+                                                <h:outputText value="#{userController.fileName}" />
+
+
+                                            </div>
+                                        </div>             
+
                                     </h:panelGroup>
                                 </p:panelGrid>
                             </p:fieldset>
@@ -226,7 +233,7 @@
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="ecpassword"/>
                                         <p:outputLabel for="ecpassword" value="Confirm Password"/>
-                                       <h:panelGroup>
+                                        <h:panelGroup>
                                             <p:message for="ecpassword" />
                                             <o:validateEqual id="equal" components="epassword ecpassword"
                                                              message="Passwords are not equal" showMessageFor="epassword" />

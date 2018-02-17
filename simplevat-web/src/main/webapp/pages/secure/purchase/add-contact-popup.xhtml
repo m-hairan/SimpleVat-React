@@ -44,7 +44,7 @@
 
                         <h:panelGroup styleClass="md-inputfield">
                             <p:inputText id="firstname" value="#{purchaseController.contactModel.firstName}" required="true" requiredMessage="Please Enter name"/>
-                            <label>First Name</label>
+                            <p:outputLabel for="firstname" value="First Name" styleClass="notRequiedSpace" />
                             <p:message for="firstname"/>
                         </h:panelGroup>
 
@@ -52,23 +52,25 @@
                         <h:panelGroup styleClass="md-inputfield">
                             <p:inputText id="middleName" 
                                          value="#{purchaseController.contactModel.middleName}"/>
-                            <label>Middle Name</label>
+                            <p:outputLabel for="middleName" value="Middle Name" />
                         </h:panelGroup>
 
 
                         <h:panelGroup styleClass="md-inputfield" >
                             <p:inputText id="lastname" value="#{purchaseController.contactModel.lastName}" required="true" requiredMessage="Enter Last name"/>
-                            <label>Last Name</label>
+                            <p:outputLabel for="lastname" value="Last Name" styleClass="notRequiedSpace" />
                             <p:message for="lastname"/>
                         </h:panelGroup>
-                    
+
+
+
 
                         <h:panelGroup styleClass="md-inputfield">
                             <p:inputText id="emailid" value="#{purchaseController.contactModel.email}" required="true" validatorMessage="Invalid email format" requiredMessage="Enter EmailId">
                                 <f:validateRegex
                                     pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                             </p:inputText>
-                            <label>Email</label>
+                            <p:outputLabel for="emailid" value="Email" styleClass="notRequiedSpace" />
                             <p:message for="emailid"/>
                         </h:panelGroup>
 

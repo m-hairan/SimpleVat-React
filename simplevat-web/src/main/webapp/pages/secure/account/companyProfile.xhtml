@@ -47,7 +47,7 @@
                                         itemLabel="#{companyType.companyTypeName}" 
                                         required="true"
                                         scrollHeight="250"
-                                        requiredMessage="Please select company type"/>
+                                        requiredMessage="Please select Company Type Code"/>
                         <p:outputLabel for="CompanyTypeCode" value="#{messages.CompanyTypeCode}"/>
                         <p:message for="CompanyTypeCode" />
                     </h:panelGroup>
@@ -68,7 +68,6 @@
                         <div style="width:140px">
                             <p:fileUpload fileUploadListener="#{companyProfileController.handleFileUpload}" mode="advanced" update="logo" id="CompanyLogo" 
                                           label="Upload Profile"  auto="true" sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
-                            <h:outputText value="#{companyProfileController.fileName}" />
                         </div>
 
                     </div>
@@ -211,7 +210,7 @@
                                     itemLabel="#{country.countryFullName}" 
                                     required="true"
                                     scrollHeight="250"
-                                    requiredMessage="Please select Country"/>
+                                    requiredMessage="Please select Country Code"/>
                     <p:outputLabel for="InvoicingCountryCode" value="#{messages.InvoicingCountryCode}"/>
                     <p:message for="InvoicingCountryCode" />
                 </h:panelGroup>
@@ -319,7 +318,7 @@
                                     itemLabel="#{country.countryFullName}" 
                                     required="true"
                                     scrollHeight="250"
-                                    requiredMessage="Please select Country"/>
+                                    requiredMessage="Please select Country Code"/>
                     <p:outputLabel for="CompanyCountryCode" value="#{messages.CompanyCountryCode}"/>
                     <p:message for="CompanyCountryCode" />
                 </h:panelGroup>

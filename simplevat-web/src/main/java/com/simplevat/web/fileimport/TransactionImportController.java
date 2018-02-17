@@ -8,7 +8,6 @@ package com.simplevat.web.fileimport;
 import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.User;
 import com.simplevat.entity.bankaccount.BankAccount;
-import com.simplevat.entity.bankaccount.TransactionType;
 import com.simplevat.service.bankaccount.BankAccountService;
 import com.simplevat.service.bankaccount.TransactionService;
 import com.simplevat.service.bankaccount.TransactionStatusService;
@@ -24,12 +23,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -66,6 +68,8 @@ public class TransactionImportController implements Serializable {
     @Getter
     private List<Transaction> transactionList = new ArrayList<>();
     @Getter
+    private List<Transaction> invalidTransactionList = new ArrayList<>();
+    @Getter
     @Setter
     private List<Transaction> selectedTransaction;
     private List<Transaction> debitTransaction = new ArrayList<>();
@@ -78,6 +82,20 @@ public class TransactionImportController implements Serializable {
     @Getter
     @Setter
     private InputStream stream;
+    @Getter
+    @Setter
+    private Integer totalErrorRows = 0;
+    @Getter
+    @Setter
+    private String dateFormat;
+    @Getter
+    @Setter
+    private List<String> dateFormatList;
+    List<CSVRecord> listParser = new ArrayList<>();
+    @Getter
+    @Setter
+    private Integer headerCount;
+    private List<String> invalidHeaderTransactionList = new ArrayList<>();
 
     @PostConstruct
     public void init() {
@@ -85,42 +103,128 @@ public class TransactionImportController implements Serializable {
         if (bankAccountId != null) {
             bankAccount = bankAccountService.findByPK(bankAccountId);
         }
-        stream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/resources/excel-file/SampleTransaction.csv");
-        file = new DefaultStreamedContent(stream, "application/vnd.ms-excel", "SampleTransaction.csv");
+        try {
+            stream = FacesContext.getCurrentInstance().getExternalContext().getResourceAsStream("/resources/excel-file/SampleTransaction.csv");
+            file = new DefaultStreamedContent(stream, "application/vnd.ms-excel", "SampleTransaction.csv");
+        } catch (Exception e) {
+        }
+        dateFormat = TransactionStatusConstant.DEFAULT_DATE_FORMAT;
+        dateFormatList = DateFormatUtil.dateFormatList();
+        headerCount = TransactionStatusConstant.HEADER_COUNT;
     }
 
     public void handleFileUpload(FileUploadEvent event) {
+        listParser.clear();
+        try {
+            InputStream inputStream = event.getFile().getInputstream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+            CSVParser parser = new CSVParser(br, CSVFormat.EXCEL);
+            listParser = parser.getRecords();
+        } catch (IOException e) {
+        }
+        populateTranscationOnFileUpload();
+    }
+
+    public void onDateFormatChange() {
+        populateTranscationOnFileUpload();
+    }
+
+    public void onIgnoreRowChange() {
+        populateTranscationOnFileUpload();
+    }
+
+    public void populateTranscationOnFileUpload() {
         transactionList.clear();
         debitTransaction.clear();
         creditTransaction.clear();
+        invalidHeaderTransactionList.clear();
+        totalErrorRows = 0;
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(event.getFile().getInputstream()));
-            CSVParser parser = new CSVParser(br, CSVFormat.EXCEL);
-            List<CSVRecord> list = parser.getRecords();
-            int recordNo = 0;
-            int headerCount = 1;
-            int headerIndex = 0;
-            for (CSVRecord cSVRecord : list) {
-                if (headerIndex <= headerCount) {
-                    headerIndex++;
-                } else {
-                    Transaction transaction = new Transaction();
-                    transaction.setId(++recordNo);
-                    int i = 0;
-                    transaction.setTransactionDate(cSVRecord.get(i++));
-                    transaction.setDescription(cSVRecord.get(i++));
-                    transaction.setDrAmount(cSVRecord.get(i++));
-                    transaction.setCrAmount(cSVRecord.get(i++));
-                    transactionList.add(transaction);
-                    if (transaction.getDrAmount() != null && !transaction.getDrAmount().trim().isEmpty()) {
-                        debitTransaction.add(transaction);
-                    }
-                    if (transaction.getCrAmount() != null && !transaction.getCrAmount().trim().isEmpty()) {
-                        creditTransaction.add(transaction);
+            if (listParser != null) {
+                int recordNo = 0;
+                int headerIndex = 0;
+                for (CSVRecord cSVRecord : listParser) {
+                    if (headerIndex <= headerCount) {
+                        if (headerIndex == headerCount) {
+                            int i = 0;
+                            String dateHeading = cSVRecord.get(i++);
+                            String descriptionHeading = cSVRecord.get(i++);
+                            String drAmountHeading = cSVRecord.get(i++);
+                            String crAmountHeading = cSVRecord.get(i++);
+                            if (!dateHeading.equals(TransactionStatusConstant.TRANSACTION_DATE)) {
+                                invalidHeaderTransactionList.add(dateHeading);
+                            }
+                            if (!descriptionHeading.equals(TransactionStatusConstant.DESCRIPTION)) {
+                                invalidHeaderTransactionList.add(descriptionHeading);
+                            }
+                            if (!drAmountHeading.equals(TransactionStatusConstant.DEBIT_AMOUNT)) {
+                                invalidHeaderTransactionList.add(drAmountHeading);
+                            }
+                            if (!crAmountHeading.equals(TransactionStatusConstant.CREDIT_AMOUNT)) {
+                                invalidHeaderTransactionList.add(crAmountHeading);
+                            }
+                            if (!invalidHeaderTransactionList.isEmpty()) {
+                                break;
+                            }
+                        }
+                        headerIndex++;
+                    } else {
+                        Transaction transaction = new Transaction();
+                        transaction.setId(++recordNo);
+                        int i = 0;
+                        String date = cSVRecord.get(i++);
+                        String description = cSVRecord.get(i++);
+                        String drAmount = cSVRecord.get(i++);
+                        String crAmount = cSVRecord.get(i++);
+
+                        try {
+                            transaction.setInvalidFormat("date");
+                            Date dateTranscation = new SimpleDateFormat(dateFormat).parse(date);
+                            LocalDateTime transactionDate = Instant.ofEpochMilli(dateTranscation.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
+                            if (!drAmount.isEmpty()) {
+                                transaction.setInvalidFormat("debit");
+                                new BigDecimal(Float.valueOf(drAmount));
+                            }
+                            if (!crAmount.isEmpty()) {
+                                transaction.setInvalidFormat("credit");
+                                new BigDecimal(Float.valueOf(crAmount));
+                            }
+                            transaction.setInvalidFormat("no");
+                            transaction.setTransactionDate(date);
+                            transaction.setDescription(description);
+                            transaction.setDrAmount(drAmount);
+                            transaction.setCrAmount(crAmount);
+                            transaction.setValidData(Boolean.TRUE);
+                            transactionList.add(transaction);
+                        } catch (Exception e) {
+                            totalErrorRows = totalErrorRows + 1;
+                            transaction.setTransactionDate(date);
+                            transaction.setDescription(description);
+                            transaction.setDrAmount(drAmount);
+                            transaction.setCrAmount(crAmount);
+                            transaction.setValidData(Boolean.FALSE);
+                            transactionList.add(transaction);
+                        }
+                        if (transaction.getDrAmount() != null && !transaction.getDrAmount().trim().isEmpty()) {
+                            debitTransaction.add(transaction);
+                        }
+                        if (transaction.getCrAmount() != null && !transaction.getCrAmount().trim().isEmpty()) {
+                            creditTransaction.add(transaction);
+                        }
                     }
                 }
+                if (!invalidHeaderTransactionList.isEmpty()) {
+                    StringBuilder validationMessage = new StringBuilder("Heading mismatch ");
+                    for (String invalidHeading : invalidHeaderTransactionList) {
+                        validationMessage.append(invalidHeading + " ");
+                    }
+                    validationMessage.append(" heading should be (" + TransactionStatusConstant.TRANSACTION_DATE + "," + TransactionStatusConstant.DESCRIPTION + "," + TransactionStatusConstant.DEBIT_AMOUNT + "," + TransactionStatusConstant.CREDIT_AMOUNT + ")");
+                    FacesMessage message = new FacesMessage(validationMessage.toString());
+                    message.setSeverity(FacesMessage.SEVERITY_ERROR);
+                    FacesContext.getCurrentInstance().addMessage("validationId", message);
+                }
             }
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(TransactionImportController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -133,8 +237,8 @@ public class TransactionImportController implements Serializable {
         return "bank-transactions?faces-redirect=true";
     }
 
-    public void downloadXLFile() {
-
+    public List<String> completeDateFormat() {
+        return dateFormatList;
     }
 
     private void save(Transaction transaction) {

@@ -5,8 +5,6 @@ package com.simplevat.web.user.controller;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
 import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.Company;
 import com.simplevat.entity.Contact;
@@ -40,7 +38,7 @@ public class ManageUserController {
     @Setter
     @Getter
     private UserDTO selectedUser;
-    
+
     @Getter
     @Setter
     private User user;
@@ -62,43 +60,44 @@ public class ManageUserController {
             userDTOList.add(userDTO);
         }
     }
-    public String openUserPage(){
-       return "user?faces-redirect=true"; 
+
+    public String openUserPage() {
+        return "user?faces-redirect=true";
     }
-    public String editUser(){
-        return "user?faces-redirect=true&user="+selectedUser.getUserId();
+
+    public String editUser() {
+        return "user?faces-redirect=true&user=" + selectedUser.getUserId();
     }
-    
-    
-    public String deleteUser(){        
-          
-        user=getUserFromUserDTO(selectedUser);
+
+    public String deleteUser() {
+
+        user = getUserFromUserDTO(selectedUser);
         user.setDeleteFlag(true);
         userService.update(user);
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
         context.addMessage(null, new FacesMessage("Contact deleted SuccessFully"));
-  
-        return "list?faces-redirect=true"; 
+
+        return "list?faces-redirect=true";
     }
 
     private User getUserFromUserDTO(UserDTO selectedUser) {
-    User user = new User();
-    user.setCompany(selectedUser.getCompany());
-    user.setCreatedBy(selectedUser.getCreatedBy());
-    user.setCreatedDate(selectedUser.getCreatedDate());
-    user.setDateOfBirth(selectedUser.getDateOfBirth());
-    user.setDeleteFlag(selectedUser.getDeleteFlag());
-    user.setFirstName(selectedUser.getFirstName());
-    user.setIsActive(selectedUser.getIsActive());
-    user.setLastName(selectedUser.getLastName());
-    user.setLastUpdateDate(selectedUser.getLastUpdateDate());
-    user.setLastUpdatedBy(selectedUser.getLastUpdatedBy());
-    user.setPassword(selectedUser.getPassword());
-    user.setRole(selectedUser.getRole());
-    user.setUserEmail(selectedUser.getUserEmail());
-    user.setUserId(selectedUser.getUserId());
-    user.setVersionNumber(selectedUser.getVersionNumber());
-    return user;
+        User user = new User();
+        user.setCompany(selectedUser.getCompany());
+        user.setCreatedBy(selectedUser.getCreatedBy());
+        user.setCreatedDate(selectedUser.getCreatedDate());
+        user.setDateOfBirth(selectedUser.getDateOfBirth());
+        user.setDeleteFlag(selectedUser.getDeleteFlag());
+        user.setFirstName(selectedUser.getFirstName());
+        user.setIsActive(selectedUser.getIsActive());
+        user.setLastName(selectedUser.getLastName());
+        user.setLastUpdateDate(selectedUser.getLastUpdateDate());
+        user.setLastUpdatedBy(selectedUser.getLastUpdatedBy());
+        user.setPassword(selectedUser.getPassword());
+        user.setRole(selectedUser.getRole());
+        user.setUserEmail(selectedUser.getUserEmail());
+        user.setUserId(selectedUser.getUserId());
+        user.setVersionNumber(selectedUser.getVersionNumber());
+        return user;
     }
 }

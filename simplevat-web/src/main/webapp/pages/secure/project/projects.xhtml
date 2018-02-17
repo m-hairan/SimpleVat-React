@@ -19,9 +19,12 @@
                              selection="#{projectListController.selectedProject}"
                              rowKey="#{project.projectId}"
                              paginator="true" rows="10"
-                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}">
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader} {TableFooter}">
                     <f:facet name="{TableHeader}">
                         <p:outputLabel styleClass="tableCustomHeader" value="#{messages.projects}" />
+                    </f:facet>
+                    <f:facet name="{TableFooter}">
+                        <p:outputLabel styleClass="tableCustomFooter" value="Total Record: #{projectListController.projects.size()}" />
                     </f:facet>
 <!--                    <p:column headerText="Project Id" sortBy="#{project.projectId}" filterMatchMode="contains" filterBy="#{project.projectId}">
                         <h:outputText value="#{project.projectId}"/>

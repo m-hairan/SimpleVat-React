@@ -161,7 +161,7 @@ public class UserController implements Serializable {
         fileName = event.getFile().getFileName();
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_USER_PIC", event.getFile().getContents());
         renderProfilePic = true;
-        FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
+        FacesMessage message = new FacesMessage("Upload successful", "Image Uploaded Successfully.");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
@@ -188,10 +188,10 @@ public class UserController implements Serializable {
             if (user.getUserId() == null) {
                 userService.persist(user);
                 sendNewUserMail(user, password);
-                context.addMessage(null, new FacesMessage("User Profile added successfully"));
+                context.addMessage(null, new FacesMessage("Successful","User Profile added successfully"));
             } else {
                 userService.update(user, user.getUserId());
-                context.addMessage(null, new FacesMessage("User Profile updated successfully"));
+                context.addMessage(null, new FacesMessage("Successful","User Profile updated successfully"));
             }
             return "list?faces-redirect=true";
         } catch (Exception ex) {

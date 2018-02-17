@@ -163,7 +163,7 @@ public class InitialCompanyProfileController implements Serializable {
         fileName = event.getFile().getFileName();
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_COMPANY_LOGO", event.getFile().getContents());
         renderProfilePic = true;
-        FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
+        FacesMessage message = new FacesMessage("Successful", "Image Uploaded Successfully.");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 

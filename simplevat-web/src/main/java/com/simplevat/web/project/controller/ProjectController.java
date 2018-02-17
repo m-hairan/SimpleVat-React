@@ -250,14 +250,17 @@ public class ProjectController extends BaseController implements Serializable {
         User loggedInUser = FacesUtil.getLoggedInUser();
         selectedProject.setCreatedBy(loggedInUser.getUserId());
         selectedProject.setCreatedDate(LocalDateTime.now());
-        // projectService.update(selectedProject);
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
         if (selectedProject.getProjectId() != null && selectedProject.getProjectId() > 0) {
             projectService.update(selectedProject);
+            context.addMessage(null, new FacesMessage("Project updated successfully"));
         } else {
             projectService.persist(selectedProject);
+            context.addMessage(null, new FacesMessage("Project saved successfully"));
         }
         init();
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Project saved successfully"));
+
         return "projects.xhtml?faces-redirect=true";
     }
 
@@ -292,7 +295,6 @@ public class ProjectController extends BaseController implements Serializable {
     }
 
     public void createContact() {
-        
 
         Contact contact = new Contact();
         ContactHelper contactHelper = new ContactHelper();
@@ -308,7 +310,7 @@ public class ProjectController extends BaseController implements Serializable {
 
             this.contactService.persist(contact);
         }
-     
+
         selectedProject.setContact(contact);
 
         RequestContext.getCurrentInstance().execute("PF('add_contact_popup').hide();");

@@ -16,11 +16,13 @@
                              id="bankAccountsTable"
                              value="#{bankAccountListController.bankAccounts}"
                              paginator="true" rows="10"
-                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}">
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader} {TableFooter}">
                     <f:facet name="{TableHeader}">
                         <p:outputLabel styleClass="tableCustomHeader" value="#{messages.bank_accounts}" />
                     </f:facet>
-
+                    <f:facet name="{TableFooter}">
+                        <p:outputLabel styleClass="tableCustomFooter" value="Total Record: #{bankAccountListController.bankAccounts.size()}" />
+                    </f:facet>
                     <p:column headerText="#{messages.account_name}" sortBy="#{bankAccount.bankAccountName}" filterMatchMode="contains" filterBy="#{bankAccount.bankAccountName}">
                         <p:commandLink value="#{bankAccount.bankAccountName}" style="color: #00695C" action="#{bankAccountController.redirectToTransaction}">
                             <f:setPropertyActionListener value="#{bankAccount}" target="#{bankAccountController.selectedBankAccount}" />
@@ -48,7 +50,7 @@
                             <f:setPropertyActionListener value="#{bankAccount}" target="#{bankAccountController.selectedBankAccount}" />
                         </p:commandButton>
 
-                        <p:commandButton icon="ui-icon-launch" styleClass="AquaButton" action="#{bankAccountController.redirectToTransaction}">
+                        <p:commandButton icon="ui-icon-launch" title="Transaction" styleClass="AquaButton" action="#{bankAccountController.redirectToTransaction}">
                             <f:setPropertyActionListener value="#{bankAccount}" target="#{bankAccountController.selectedBankAccount}" />
                         </p:commandButton>
 

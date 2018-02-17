@@ -19,12 +19,14 @@
                              selection="#{expenseListController.selectedExpenseModel}"
                              rowKey="#{expense.expenseId}" 
                              paginator="true" rows="10"
-                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}">
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader} {TableFooter}">
 
                     <f:facet name="{TableHeader}">
                         <p:outputLabel styleClass="tableCustomHeader" value="#{messages.expenses}" />
                     </f:facet>
-
+                    <f:facet name="{TableFooter}">
+                        <p:outputLabel styleClass="tableCustomFooter" value="Total Record: #{expenseListController.expenses.size()}" />
+                    </f:facet>
                     <p:column headerText="#{messages.receiptnumber}" sortBy="#{expense.receiptNumber}" filterMatchMode="contains" filterBy="#{expense.receiptNumber}">
                         <h:outputText value="#{expense.receiptNumber}" />
                     </p:column>

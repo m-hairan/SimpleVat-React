@@ -125,7 +125,7 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
             user.setCompany(c);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().replace("loggedInUser", user);
             init();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Company Profile updated successfully"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Successful", "Company Profile updated successfully"));
         } catch (IllegalArgumentException ex) {
             java.util.logging.Logger.getLogger(UserProfileController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -159,7 +159,7 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
         fileName = event.getFile().getFileName();
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_COMPANY_LOGO", event.getFile().getContents());
         renderProfilePic = true;
-        FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
+        FacesMessage message = new FacesMessage("Successful", "Image Uploaded Successfully");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 }

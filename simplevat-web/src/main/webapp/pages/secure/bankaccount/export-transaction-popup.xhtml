@@ -27,6 +27,7 @@
                         <h:panelGroup styleClass="md-inputfield" >
                             <p:calendar id="startdate" 
                                         navigator="true"
+                                        style="text-align:center"
                                         value="#{transactionExportController.startDate}" />
                             <label>#{messages.Start_Date}</label>
                             <p:message for="startdate" />
@@ -42,7 +43,7 @@
                         </h:panelGroup>
 
                     </p:panelGrid>
-                    <p:dataTable id="transactiondata" style="display: none !important" value="#{transactionExportController.transactionList}" var="transaction">
+                    <p:dataTable id="transactiondata" style="display: none" value="#{transactionExportController.transactionList}" var="transaction">
                         <f:facet name="header">
                             <h:commandLink value="demo" class="transactionExporter">
                                 <p:dataExporter type="csv" target="transactiondata" fileName="transaction" />
@@ -65,14 +66,12 @@
                     </p:dataTable>
                 </div>
             </div>
-            <f:facet name="footer">
-                <p:commandButton 
-                    value="Export"
-                    actionListener="#{transactionExportController.handleFileDownload()}"
-                    style="width:auto" 
-                    update="transactiondata" oncomplete="exportTransaction()"
-                    icon="ui-icon-file-download"/>
-            </f:facet>  
+            <p:commandButton 
+                value="Export"
+                actionListener="#{transactionExportController.handleFileDownload()}"
+                style="width:auto;float: right" 
+                update="transactiondata" oncomplete="exportTransaction()"
+                icon="ui-icon-file-download"/>
             <p:remoteCommand name="exportTransaction" onsuccess="$('.transactionExporter').click();"/>
         </p:dialog>
     </h:form>

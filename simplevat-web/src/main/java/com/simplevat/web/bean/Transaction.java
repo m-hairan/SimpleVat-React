@@ -5,6 +5,8 @@
  */
 package com.simplevat.web.bean;
 
+import com.simplevat.web.constant.TransactionStatusConstant;
+import com.simplevat.web.transactioncategory.controller.TranscationCategoryHelper;
 import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,4 +24,7 @@ public class Transaction {
     private String description;
     private String drAmount;
     private String crAmount;
+    private Boolean validData;
+    private String invalidFormat;
+    
 }

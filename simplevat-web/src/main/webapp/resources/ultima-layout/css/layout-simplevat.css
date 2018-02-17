@@ -916,7 +916,7 @@ body a {
     width: 250px;
     height: 145px;
     text-align: center;
-    background: url("#{resource['ultima-layout:images/profile-bg.png']}") top left no-repeat;
+    /*background: url("#{resource['ultima-layout:images/profile-bg.png']}") top left no-repeat;*/
     background-size: 250px 145px;
     -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16);
     -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16);
@@ -925,7 +925,7 @@ body a {
     width: 60px;
     height: 60px;
     margin: 0 auto 5px auto;
-    background: url("#{resource['ultima-layout:images/user-avtar-icon1.png']}") top left no-repeat;
+    /*background: url("#{resource['ultima-layout:images/user-avtar-icon1.png']}") top left no-repeat;*/
     background-size: 60px 60px; }
 .layout-wrapper .layout-menu .profile .profile-name {
     display: inline-block;

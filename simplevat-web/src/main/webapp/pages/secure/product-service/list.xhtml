@@ -16,11 +16,13 @@
                 <p:dataTable var="product"  id="product"
                              value="#{productListController.productModelList}"
                              paginator="true" rows="10"
-                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}">
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader} {TableFooter}">
                     <f:facet name="{TableHeader}">
                         <p:outputLabel styleClass="tableCustomHeader" value="#{messages.productservice}" />
                     </f:facet>
-                    
+                    <f:facet name="{TableFooter}">
+                        <p:outputLabel styleClass="tableCustomFooter" value="Total Record: #{productListController.productModelList.size()}" />
+                    </f:facet>
                     <p:column headerText="#{messages.name}">
                         <h:outputText value="#{product.productName}"/>
                     </p:column>

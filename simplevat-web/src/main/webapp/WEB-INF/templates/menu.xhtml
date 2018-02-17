@@ -14,13 +14,11 @@
                         <div class="profile">
                             <div class="profile-image">
                                 <ui:fragment rendered="#{userProfileController.renderProfilePic}">
-
-                                    <p:graphicImage height="60px" width="60px"
+                                    <p:graphicImage height="60px" width="60px" cache="false"
                                                     value="#{streamedContentSessionController.streamedProfilePic}" />
                                 </ui:fragment>
                                 <ui:fragment rendered="#{!userProfileController.renderProfilePic}">
-
-                                    <p:graphicImage name="images/user-avtar-icon1.png" library="ultima-layout" height="60px" width="60px"/>
+                                    <p:graphicImage name="images/user-avtar-icon1.png" library="ultima-layout" height="60px" width="60px" cache="false"/>
 
                                 </ui:fragment>
 

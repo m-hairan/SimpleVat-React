@@ -92,6 +92,7 @@ public class BankAccountController extends BankAccountHelper implements Serializ
                     this.selectedBankAccount.setBankAccountCurrency(defaultCurrency);
                 }
             }
+            selectedBankAccount.setPersonalCorporateAccountInd('P');
             BankAccountType defaultBankAccountType = bankAccountTypeService.getDefaultBankAccountType();
             if (defaultBankAccountType != null) {
                 selectedBankAccount.setBankAccountType(defaultBankAccountType);
@@ -168,7 +169,9 @@ public class BankAccountController extends BankAccountHelper implements Serializ
         } catch (Exception e) {
             e.printStackTrace();
         }
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("BankAccount saved successfully"));
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        context.addMessage(null, new FacesMessage("Successful", "BankAccount saved successfully"));
         return "/pages/secure/bankaccount/bankaccounts.xhtml?faces-redirect=true";
 
     }
@@ -196,13 +199,19 @@ public class BankAccountController extends BankAccountHelper implements Serializ
         }
 
         setSelectedBankAccount(new BankAccount());
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("BankAccount saved successfully"));
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        context.addMessage(null, new FacesMessage("Successful", "BankAccount saved successfully"));
+
     }
 
     public String deleteBankAccount() {
         selectedBankAccount.setDeleteFlag(true);
         bankAccountService.update(selectedBankAccount);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("BankAccount deleted successfully"));
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        context.addMessage(null, new FacesMessage("Successful", "BankAccount deleted successfully"));
+       
         return "/pages/secure/bankaccount/bankaccounts.xhtml?faces-redirect=true";
     }
 

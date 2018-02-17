@@ -1,10 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.simplevat.web.setting.controller;
-
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.Product;
@@ -18,13 +12,11 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-
 /**
  *
  * @author uday
  */
 public class InvoicePreviewTemplate implements Serializable {
-
     public static Invoice getInvoiceObject() {
         Invoice invoice = new Invoice();
         LocalDateTime dateTime = LocalDateTime.now();
@@ -64,10 +56,9 @@ public class InvoicePreviewTemplate implements Serializable {
         invoice.setDiscountType(discountType);
         invoice.setInvoiceDueOn(1);
         invoice.setInvoiceReferenceNumber("1234-1234-1234");
-        invoice.setInvoiceNotes("abcd");
+        invoice.setInvoiceNotes("Thank you");
         invoice.setFreeze(Boolean.FALSE);
         invoice.setStatus(0);
-
         return invoice;
     }
 }

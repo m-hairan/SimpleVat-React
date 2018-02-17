@@ -28,7 +28,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 @SpringScopeView
 
-public class VatListController extends BaseController implements Serializable{
+public class VatListController extends BaseController implements Serializable {
 
     @Getter
     @Setter
@@ -44,7 +44,8 @@ public class VatListController extends BaseController implements Serializable{
     public VatListController() {
         super(ModuleName.SETTING_MODULE);
     }
-   @PostConstruct
+
+    @PostConstruct
     public void init() {
 
         if (vatCategoryService.getVatCategoryList() != null) {
@@ -53,7 +54,6 @@ public class VatListController extends BaseController implements Serializable{
     }
 
     public String getVatcategoryPage() {
-        System.out.println("FacesContext=================="+FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap());
         return "createVatcategory?faces-redirect=true";
     }
 
@@ -65,13 +65,12 @@ public class VatListController extends BaseController implements Serializable{
     }
 
     public void deleteVatcategory() {
-
         if (vatCategory.getId() != null) {
             vatCategory.setDeleteFlag(true);
             vatCategoryService.update(vatCategory, vatCategory.getId());
             FacesContext context = FacesContext.getCurrentInstance();
             context.getExternalContext().getFlash().setKeepMessages(true);
-            context.addMessage(null, new FacesMessage("VatCategory deleted SuccessFully"));
+            context.addMessage(null, new FacesMessage("Successful", "Vat Category deleted SuccessFully"));
             init();
         }
     }

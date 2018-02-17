@@ -134,29 +134,29 @@
                                             <f:facet name="{TableHeader}"  >
                                                 <p:outputPanel style="float: left">
                                                     <h:commandButton value="Export" styleClass="ui-button">
-                                                        <p:dataExporter target="transactionTable" type="pdf" fileName="TransactionReportFrom#{transactionReport.financialPeriod.name}" 
-                                                                        preProcessor="#{transactionReport.preProcessPDF}"/>
+                                                        <p:dataExporter target="transactionTable" type="xls" fileName="TransactionReportFrom#{transactionReport.financialPeriod.name}" 
+                                                                        />
                                                     </h:commandButton>
                                                 </p:outputPanel>
                                                 <p:outputPanel style="clear: both"/>
                                             </f:facet>
-                                            <p:column headerText="Transaction Date" width="130" >
+                                            <p:column headerText="Transaction Date" width="130"  sortBy="#{transaction.transactionDate.time}">
                                                 <h:outputText value="#{transaction.transactionDate.time}" >
-                                                    <f:convertDateTime pattern="MM/dd/yyyy hh:mm"/>
+                                                    <f:convertDateTime pattern="MM/dd/yyyy"/>
                                                 </h:outputText>
                                             </p:column>
-                                            <p:column headerText="Transaction Description">
+                                            <p:column headerText="Transaction Description"  width="150">
                                                 <p:outputLabel value="#{transaction.transactionDescription}"/>
                                             </p:column>
-                                            <p:column headerText="Transaction Type" width="130">
+                                            <p:column headerText="Transaction Type" width="130" sortBy="#{transaction.transactionType.transactionTypeName}">
                                                 <p:outputLabel value="#{transaction.transactionType.transactionTypeName}"/>
                                             </p:column>
-                                            <p:column headerText="Transaction Category" width="130">
+                                            <p:column headerText="Transaction Category" width="130" sortBy="#{transaction.explainedTransactionCategory.transactionCategoryName}" >
                                                 <p:outputLabel value="#{transaction.explainedTransactionCategory.transactionCategoryName}"/>
                                             </p:column>
 
                                             <p:column headerText="Transaction Amount" styleClass="amount" width="180">
-                                                <p:outputLabel value="#{transactionReport.bankAccount.bankAccountCurrency.currencySymbol}" />
+                                                <p:outputLabel value="#{transaction.bankAccount.bankAccountCurrency.currencySymbol}" />
                                                 <p:outputLabel value="#{transaction.transactionAmount}" >
                                                     <f:convertNumber type="currency" currencySymbol=" " />
                                                 </p:outputLabel> 
@@ -168,8 +168,7 @@
                                                     <p:column styleClass="amount">
                                                         <f:facet name="footer">
                                                             <p:outputPanel autoUpdate="true">
-                                                                <p:outputLabel value="#{transactionReport.bankAccount.bankAccountCurrency.currencySymbol}" />
-                                                                <h:outputText id="total" value="#{transactionReport.totalTransactionAmount}" >
+                                                                <h:outputText id="total" value="#{transaction.bankAccount.bankAccountCurrency.currencySymbol} #{transactionReport.totalTransactionAmount}" >
                                                                     <f:convertNumber type="currency" currencySymbol=" " />
                                                                 </h:outputText>
                                                             </p:outputPanel>

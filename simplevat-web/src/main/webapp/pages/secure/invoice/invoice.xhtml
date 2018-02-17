@@ -86,7 +86,7 @@
                                                         var="project"
                                                         itemValue="#{project.projectId}"
                                                         itemLabel="#{project.projectName}">
-                                            <p:ajax event="itemSelect" listener="#{invoiceController.updateContact()}" process="project" update="conatcts currency invoiceField"/>
+                                            <p:ajax event="itemSelect" listener="#{invoiceController.updateContact()}" process="project" update="conatcts currency invoiceField @(.shippingContact)"/>
 
                                         </p:autoComplete>
                                         <p:outputLabel for="project" value="#{messages.project}"/>
@@ -99,7 +99,7 @@
                                                  layout="grid" 
                                                  styleClass="ui-panelgrid-blank form-group"
                                                  style="border:0px none; background-color:transparent;">
-                                        <h:panelGroup styleClass="md-inputfield" style="padding: 0 !important;">
+                                        <h:panelGroup styleClass="md-inputfield" style="padding: 0 !important;" >
                                             <p:autoComplete id="conatcts" 
                                                             converter="#{contactConverter}"
                                                             dropdown="true" 
@@ -111,11 +111,11 @@
                                                             completeMethod="#{invoiceController.contacts}" 
                                                             value="#{invoiceController.selectedInvoiceModel.invoiceContact}" 
                                                             var="contact"
-                                                            itemValue="#{contact.contactId}"
+                                                            itemValue="#{contact}"
                                                             itemLabel="#{contact.firstName} #{contact.lastName}">
                                                 <p:ajax event="itemSelect"
                                                         listener="#{invoiceController.updateCurrency}" 
-                                                        update="currency invoiceField invoiceItemTable exchangeCurrency" />
+                                                        update="currency invoiceField invoiceItemTable exchangeCurrency @(.shippingContact)" />
                                             </p:autoComplete>
                                             <p:outputLabel for="conatcts" value="#{messages.contact}"/>
                                             <p:message for="conatcts" />
@@ -126,8 +126,7 @@
                                             <p:commandButton id="addbtn" icon="ui-icon-plus" onsuccess="PF('add_contact_popup').show();" actionListener="#{invoiceController.initCreateContact()}"/>
                                         </h:panelGroup>
                                     </p:panelGrid>
-
-                                    <h:panelGroup styleClass="md-inputfield">
+                                    <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.invoiceContact !=null}">
                                         <p:inputText id="organizationName"
                                                      value="#{invoiceController.selectedInvoiceModel.invoiceContact.organization}">
 
@@ -135,7 +134,7 @@
                                         <p:outputLabel  for="organizationName" value="#{messages.OrganizationName}" />
                                     </h:panelGroup>
 
-                                    <h:panelGroup styleClass="md-inputfield">
+                                    <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.invoiceContact !=null}">
                                         <p:inputText id="PostBoxNum"
                                                      value="#{invoiceController.selectedInvoiceModel.invoiceContact.poBoxNumber}">
                                         </p:inputText>
@@ -143,7 +142,7 @@
                                     </h:panelGroup>
 
 
-                                    <h:panelGroup styleClass="md-inputfield">
+                                    <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.invoiceContact !=null}">
                                         <p:inputText id="Address1"
                                                      value="#{invoiceController.selectedInvoiceModel.invoiceContact.invoicingAddressLine1}"
                                                      required="true"
@@ -154,7 +153,7 @@
                                     </h:panelGroup>
 
 
-                                    <h:panelGroup styleClass="md-inputfield">
+                                    <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.invoiceContact !=null}">
                                         <p:inputText id="Address2"
                                                      value="#{invoiceController.selectedInvoiceModel.invoiceContact.invoicingAddressLine2}"
                                                      required="true"
@@ -164,14 +163,14 @@
                                         <p:message for="Address2" />
                                     </h:panelGroup>
 
-                                    <h:panelGroup styleClass="md-inputfield">
+                                    <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.invoiceContact !=null}">
                                         <p:inputText id="Address3"
                                                      value="#{invoiceController.selectedInvoiceModel.invoiceContact.invoicingAddressLine3}">
                                         </p:inputText>
                                         <p:outputLabel  for="Address3" value="#{messages.addressLine3}" />
                                     </h:panelGroup>
 
-                                    <h:panelGroup styleClass="md-inputfield">
+                                    <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.invoiceContact !=null}">
                                         <p:autoComplete id="CountryCode"
                                                         converter="#{countryConverter}" 
                                                         dropdown="true" 
@@ -191,7 +190,7 @@
 
 
 
-                                    <h:panelGroup styleClass="md-inputfield">
+                                    <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.invoiceContact !=null}">
                                         <p:inputText id="state"
                                                      value="#{invoiceController.selectedInvoiceModel.invoiceContact.stateRegion}"
                                                      required="true"
@@ -201,7 +200,7 @@
                                         <p:message for="state" />
                                     </h:panelGroup>
 
-                                    <h:panelGroup styleClass="md-inputfield">
+                                    <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.invoiceContact !=null}">
                                         <p:inputText id="city"
                                                      value="#{invoiceController.selectedInvoiceModel.invoiceContact.city}"
                                                      required="true"
@@ -248,15 +247,14 @@
                                                         completeMethod="#{invoiceController.contacts}" 
                                                         value="#{invoiceController.selectedInvoiceModel.shippingContact}" 
                                                         var="contact"
-                                                        itemValue="#{contact.contactId}"
+                                                        itemValue="#{contact}"
                                                         itemLabel="#{contact.firstName} #{contact.lastName}">
                                             <p:ajax update="shippingContact" process="@this" event="itemSelect"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="conatctslable" value="#{messages.contact}"/>
                                         <p:message for="conatctslable" />
                                     </h:panelGroup>
-
-                                    <h:panelGroup styleClass="md-inputfield">
+                                    <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.shippingContact != null}">
                                         <p:inputText id="organizationNamelable"
                                                      value="#{invoiceController.selectedInvoiceModel.shippingContact.organization}">
 
@@ -264,14 +262,14 @@
                                         <p:outputLabel  for="organizationNamelable"  value="#{messages.OrganizationName}"/>
                                     </h:panelGroup>
 
-                                    <h:panelGroup styleClass="md-inputfield">
+                                    <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.shippingContact != null}">
                                         <p:inputText id="PostBoxNumlable"
                                                      value="#{invoiceController.selectedInvoiceModel.shippingContact.poBoxNumber}">
                                         </p:inputText>
                                         <p:outputLabel  for="PostBoxNumlable" value="#{messages.postBoxNumber}"/>
                                     </h:panelGroup>
 
-                                    <h:panelGroup styleClass="md-inputfield">
+                                    <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.shippingContact != null}">
                                         <p:inputText id="Addresslable1"
                                                      value="#{invoiceController.selectedInvoiceModel.shippingContact.invoicingAddressLine1}"
                                                      >
@@ -279,7 +277,7 @@
                                         <p:outputLabel  for="Addresslable1" value="#{messages.addressLine1}" />
                                     </h:panelGroup>
 
-                                    <h:panelGroup styleClass="md-inputfield">
+                                    <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.shippingContact != null}">
                                         <p:inputText id="Addresslable2"
                                                      value="#{invoiceController.selectedInvoiceModel.shippingContact.invoicingAddressLine2}"
                                                      >
@@ -287,14 +285,14 @@
                                         <p:outputLabel  for="Addresslable2" value="#{messages.addressLine2}"/>
                                     </h:panelGroup>
 
-                                    <h:panelGroup styleClass="md-inputfield">
+                                    <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.shippingContact != null}">
                                         <p:inputText id="Addresslable3"
                                                      value="#{invoiceController.selectedInvoiceModel.shippingContact.invoicingAddressLine3}">
                                         </p:inputText>
                                         <p:outputLabel  for="Addresslable3" value="#{messages.addressLine3}" />
                                     </h:panelGroup>
 
-                                    <h:panelGroup styleClass="md-inputfield">
+                                    <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.shippingContact != null}">
                                         <p:autoComplete id="CountryCodelable"
                                                         converter="#{countryConverter}" 
                                                         dropdown="true" 
@@ -311,7 +309,7 @@
                                         <p:message for="CountryCodelable" />
                                     </h:panelGroup>
 
-                                    <h:panelGroup styleClass="md-inputfield">
+                                    <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.shippingContact != null}">
                                         <p:inputText id="statelable"
                                                      value="#{invoiceController.selectedInvoiceModel.shippingContact.stateRegion}"
                                                      >
@@ -320,7 +318,7 @@
                                     </h:panelGroup>
 
 
-                                    <h:panelGroup styleClass="md-inputfield">
+                                    <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.shippingContact != null}">
                                         <p:inputText id="citylable"
                                                      value="#{invoiceController.selectedInvoiceModel.shippingContact.city}"
                                                      >
@@ -391,7 +389,7 @@
                                                         var="currency" itemValue="#{currency.currencyCode}"
                                                         itemLabel="#{currency.currencyIsoCode}  #{currency.currencySymbol}" >
                                             <p:ajax event="itemSelect" 
-                                                    update="invoiceItemTable exchangeCurrency" oncomplete="updateLineItemFooterColumnGroup()" />
+                                                    update="invoiceItemTable @form:exchangeCurrency invoiceItemTable:totalHeader" oncomplete="updateLineItemFooterColumnGroup()" />
                                         </p:autoComplete>
                                         <p:outputLabel for="currency" value="#{messages.currency}"/>
                                         <p:message for="currency" />
@@ -619,7 +617,7 @@
                                 </p:fieldset>
                             </h:panelGroup>
 
-                            <p:fieldset legend="Invoice Item Details" toggleable="true" id="lineItems"
+                            <p:fieldset legend="Invoice Item Details" toggleable="true" id="lineItems" style="margin-top: 10px;"
                                         toggleSpeed="300">
                                 <p:messages autoUpdate="true" id="validationId" closable="true" for="validationId" />
                                 <p:dataTable value="#{invoiceController.selectedInvoiceModel.invoiceLineItems}"
@@ -629,7 +627,7 @@
                                              id="invoiceItemTable"
                                              reflow="true" >
                                     <p:column style="width: 30px">
-                                        <p:commandButton title="Delete Invoice Item" 
+                                        <p:commandButton title="Delete Invoice Item" rendered="#{invoiceController.selectedInvoiceModel.invoiceLineItems.indexOf(invoiceItem) != 0}"
                                                          update="invoiceItemTable"
                                                          process="@this"
                                                          actionListener="#{invoiceController.deleteLineItem(invoiceItem)}"
@@ -644,7 +642,7 @@
                                                      styleClass="ui-panelgrid-blank form-group" >
                                             <p:autoComplete id="product_service" 
                                                             converter="#{productConverter}"
-                                                            dropdown="true" 
+                                                            dropdown="true" style="margin-top: 11.5px !important;"
                                                             forceSelection="true"
                                                             effect="fold"
                                                             groupBy="#{product.parentProduct == null ? 'Other' : product.parentProduct.productName}"
@@ -716,9 +714,11 @@
                                         </p:autoComplete>
                                     </p:column>
                                     <p:column  width="170" headerText="Subtotal (#{invoiceController.selectedInvoiceModel.currencyCode.currencyIsoCode})" styleClass="amount">
-                                        <h:outputText  id="subTotal" value="#{ invoiceItem.subTotal}" >
-                                            <f:convertNumber type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} " />
-                                        </h:outputText>
+                                        <h:panelGroup id="totalHeader">
+                                            <h:outputText   id="subTotal" value="#{invoiceItem.subTotal}" >
+                                                <f:convertNumber id="subTotal1"  type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} "/>
+                                            </h:outputText>
+                                        </h:panelGroup>
                                     </p:column>
 
                                     <p:columnGroup id="lineItemFooterColumnGroup"  type="footer" rendered="#{invoiceController.selectedInvoiceModel.invoiceLineItems.size() > 0}">  

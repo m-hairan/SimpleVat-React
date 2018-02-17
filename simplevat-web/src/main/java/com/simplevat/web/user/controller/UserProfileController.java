@@ -7,6 +7,7 @@ import com.simplevat.security.ContextUtils;
 import com.simplevat.security.UserContext;
 import com.simplevat.service.UserServiceNew;
 import com.simplevat.user.model.UserModel;
+import com.simplevat.web.utils.FacesUtil;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,13 +63,7 @@ public class UserProfileController implements Serializable {
     @PostConstruct
     public void init() {
         editMode = false;
-        try {
-            final UserContext context = ContextUtils.getUserContext();
-            currentUserEntity = userService.findByPK(context.getUserId());
-        } catch (UnauthorizedException ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        currentUserEntity = userService.findByPK(FacesUtil.getLoggedInUser().getUserId());
         if (currentUserEntity != null) {
             currentUser = convertToModel(currentUserEntity);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_PROFILE_PIC", currentUser.getProfileImageBinary());
@@ -79,7 +74,7 @@ public class UserProfileController implements Serializable {
         }
     }
 
-    public void update() throws UnauthorizedException {
+    public String update() throws UnauthorizedException {
         try {
             if (password != null && !password.trim().isEmpty()) {
                 BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -91,18 +86,21 @@ public class UserProfileController implements Serializable {
             if (currentUser.getUserId() > 0) {
                 userService.update(currentUserEntity, currentUser.getUserId());
             }
-            init();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("User Profile updated successfully"));
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.getExternalContext().getFlash().setKeepMessages(true);
+            context.addMessage(null, new FacesMessage("Successful", "User Profile updated successfully"));
+            return "/pages/secure/account/index.xhtml?faces-redirect=true";
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(UserProfileController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return "";
     }
 
     @Nonnull
     private User convertToEntity(@Nonnull final UserModel userModel) {
         User user = new User();
         if (userModel.getDateOfBirth() != null) {
-            final LocalDateTime dob = userModel.getDateOfBirth() != null?LocalDateTime.ofInstant(userModel.getDateOfBirth().toInstant(), ZoneId.systemDefault()) : null;
+            final LocalDateTime dob = userModel.getDateOfBirth() != null ? LocalDateTime.ofInstant(userModel.getDateOfBirth().toInstant(), ZoneId.systemDefault()) : null;
             user.setDateOfBirth(dob);
         }
         //  User user = userService.getUserByEmail(userModel.getUserEmailId()).get();
@@ -150,7 +148,7 @@ public class UserProfileController implements Serializable {
         fileName = event.getFile().getFileName();
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_PROFILE_PIC", event.getFile().getContents());
         renderProfilePic = true;
-        FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
+        FacesMessage message = new FacesMessage("Successful", "Image Uploaded Successfully.");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 

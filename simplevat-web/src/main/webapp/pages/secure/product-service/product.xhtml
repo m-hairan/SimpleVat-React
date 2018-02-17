@@ -31,7 +31,7 @@
                                                  style="border:0px none; background-color:transparent;">
 
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText id="name"  required="true" value="#{productController.productModel.productName}" requiredMessage="please enter name."/>
+                                            <p:inputText id="name" required="true" value="#{productController.productModel.productName}" requiredMessage="please enter Name."/>
                                             <p:outputLabel for="name" value="#{messages.name}"/>
                                             <p:message for="name" />
                                         </h:panelGroup>
@@ -140,8 +140,8 @@
                         <ui:fragment rendered="#{productController.productModel.productID == null}">
 
                             <p:commandButton value="#{messages.save}" icon="ui-icon-save" update="createProductServiceForm"
-                                             action="#{productController.save}" />
-                            <p:commandButton action="#{productController.saveAndAddMoreInvoice()}"
+                                             action="#{productController.saveProduct}" />
+                            <p:commandButton action="#{productController.saveAndAddMoreProduct()}"
                                              value="#{messages.save_and_add_more}"
                                              update="@form"
                                              validateClient="true"
@@ -151,8 +151,8 @@
                         <ui:fragment rendered="#{productController.productModel.productID > 0}">
 
                             <p:commandButton value="#{messages.update}" icon="ui-icon-save" update="createProductServiceForm"
-                                             action="#{productController.save}" />
-                            <p:commandButton action="#{productController.saveAndAddMoreInvoice()}"
+                                             action="#{productController.saveProduct}" />
+                            <p:commandButton action="#{productController.saveAndAddMoreProduct()}"
                                              value="#{messages.update_and_add_more}"
                                              update="@form"
                                              validateClient="true"

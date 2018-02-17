@@ -33,10 +33,13 @@
                              selection="#{invoiceListController.selectedInvoiceModel}"
                              rowKey="#{invoice.invoiceId}" 
                              paginator="true" rows="10"
-                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader} {TableFooter}"
                              id="invoiceTable" >
                     <f:facet name="{TableHeader}">
                         <p:outputLabel styleClass="tableCustomHeader" value="#{messages.invoices}" />
+                    </f:facet>
+                    <f:facet name="{TableFooter}">
+                        <p:outputLabel styleClass="tableCustomFooter" value="Total Record: #{invoiceListController.invoiceList.size()}" />
                     </f:facet>
 
                     <p:column width="30" style="text-align: center">
@@ -77,7 +80,6 @@
                             <f:convertNumber type="currency" currencySymbol=""/>
                         </h:outputText>
                     </p:column>
-
                     <p:column headerText="#{messages.action}">
                         <p:tooltip for="edit" value="#{messages.edit}" position="top" rendered="#{!invoice.freeze}"/>
                         <p:commandButton id="edit" title="#{messages.edit_invoice}" style="margin-right: 7px"  icon="ui-icon-edit" styleClass="AquaButton" action="#{invoiceListController.redirectToCreateInvoice}" rendered="#{!invoice.freeze}">

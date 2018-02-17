@@ -14,6 +14,12 @@ and open the template in the editor.
 .ui-paginator-bottom .tableCustomHeader{
     display:none;
 }
+.tableCustomFooter{
+    float:left;
+}
+.ui-paginator-top .tableCustomFooter{
+    display:none;
+}
 .ui-paginator{
     text-align: right !important;
 }

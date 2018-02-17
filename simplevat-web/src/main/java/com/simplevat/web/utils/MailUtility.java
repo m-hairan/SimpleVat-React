@@ -35,7 +35,7 @@ public class MailUtility {
                     mail.setFromName(fromName);
                     mail.setTo(toMailAddress);
                     mail.setSubject(subject);
-                    MailIntegration.sendHtmlEmail(mimeMultipart, mail, javaMailSender);
+                 //  MailIntegration.sendHtmlEmail(mimeMultipart, mail, javaMailSender);
                 } catch (Exception ex) {
                     java.util.logging.Logger.getLogger(InitialUserController.class
                             .getName()).log(Level.SEVERE, null, ex);

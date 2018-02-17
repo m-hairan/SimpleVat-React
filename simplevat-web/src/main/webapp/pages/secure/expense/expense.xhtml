@@ -126,7 +126,7 @@
                                                             completeMethod="#{expenseController.contacts}" 
                                                             value="#{expenseController.selectedExpenseModel.expenseContact}" 
                                                             var="contact"
-                                                            itemValue="#{contact.contactId}"
+                                                            itemValue="#{contact}"
                                                             itemLabel="#{contact.firstName} #{contact.lastName}"
 
                                                             >
@@ -427,7 +427,7 @@
                                     </p:panelGrid>
                                 </p:fieldset>
 
-                                <p:fieldset legend="Expense Item Details" toggleable="true" 
+                                <p:fieldset legend="Expense Item Details" toggleable="true" style="margin-top: 2%"
                                             toggleSpeed="300">
                                     <p:messages autoUpdate="true" id="validationId" closable="true" for="validationId" />
                                     <p:dataTable value="#{expenseController.selectedExpenseModel.expenseItem}"

@@ -60,6 +60,10 @@ public class TransactionViewLazyModel extends LazyDataModel<TransactionViewModel
     @Setter
     private Integer bankAccountId;
 
+    @Getter
+    @Setter
+    int dataBaseRowCount;
+
     public TransactionViewLazyModel() {
 
     }
@@ -128,7 +132,7 @@ public class TransactionViewLazyModel extends LazyDataModel<TransactionViewModel
 //        }
         //rowCount
 
-        int dataBaseRowCount = transactionService.getTotalTransactionCountByBankAccountIdForLazyModel(bankAccountId, transactionStatus);// + transactionService.getTotalPartiallyExplainedTransactionCountByBankAccountId(bankAccountId);
+        dataBaseRowCount = transactionService.getTotalTransactionCountByBankAccountIdForLazyModel(bankAccountId, transactionStatus);// + transactionService.getTotalPartiallyExplainedTransactionCountByBankAccountId(bankAccountId);
         this.setRowCount(dataBaseRowCount);
         this.setPageSize(transactionViewList.size());
         //paginate

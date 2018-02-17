@@ -73,13 +73,16 @@
                                  rowStyleClass="hideTransaction-#{transaction.parent} child-#{transaction.parentTransaction}"
                                  rowKey="#{transaction.transactionId}" 
                                  paginator="true" rows="10"
-                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader}"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader} {TableFooter}"
                                  id="transactionsTable">
                         <p:ajax event="rowToggle" listener="#{transactionListController.transactionViewLazyModel.expandToggler(transaction)}" process="@this"/>
                         <f:facet name="{TableHeader}">
                             <p:outputLabel styleClass="tableCustomHeader" value="#{transactionListController.selectedBankAccountModel.bankAccountName}" />
                         </f:facet>
-
+                        <f:facet name="{TableFooter}">
+                            
+                            <p:outputLabel styleClass="tableCustomFooter" value="Total Record: #{transactionListController.transactionViewLazyModel.dataBaseRowCount}"/>
+                        </f:facet>
                         <p:column width="30" style="text-align: center">
                             <h:panelGroup layout="block">
                                 <h:panelGroup layout="block" style="display:block" styleClass="label transtype-#{transaction.explanationStatusName}#{transaction.parent ? '': '-child'}" >
@@ -158,7 +161,6 @@
                 </si:cdataPanel>
             </div>
         </h:form>
-        <ui:include src="import-transaction-popup.xhtml"/>
         <ui:include src="export-transaction-popup.xhtml"/>
         <script type="text/javascript">
             function expandCollapse(event, rowIndex) {

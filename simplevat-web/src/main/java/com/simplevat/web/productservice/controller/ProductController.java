@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
@@ -90,29 +91,18 @@ public class ProductController extends BaseController {
         return productWarehouseList;
     }
 
-    public String save() {
-        Product product = productModelHelper.convertToProduct(productModel);
-        if (productModel.getProductID() == null) {
-            product.setCreatedBy(FacesUtil.getLoggedInUser().getCreatedBy());
-            product.setCreatedDate(LocalDateTime.now());
-            product.setDeleteFlag(Boolean.FALSE);
-        } else {
-            product.setLastUpdateDate(LocalDateTime.now());
-            product.setLastUpdatedBy(FacesUtil.getLoggedInUser().getCreatedBy());
-        }
-        if (productModel.getVatCategory() != null) {
-            VatCategory vatCategory = vatCategoryService.findByPK(productModel.getVatCategory().getId());
-            product.setVatCategory(vatCategory);
-        }
-        if (productModel.getProductID() == null) {
-            productService.persist(product);
-        } else {
-            productService.update(product);
-        }
+    public String saveProduct() {
+        save();
         return "list?faces-redirect=true";
     }
 
-    public String saveAndAddMoreInvoice() {
+    public String saveAndAddMoreProduct() {
+        save();
+        return "product?faces-redirect=true";
+
+    }
+
+    public void save() {
         Product product = productModelHelper.convertToProduct(productModel);
         if (productModel.getProductID() == null) {
             product.setCreatedBy(FacesUtil.getLoggedInUser().getCreatedBy());
@@ -126,12 +116,15 @@ public class ProductController extends BaseController {
             VatCategory vatCategory = vatCategoryService.findByPK(productModel.getVatCategory().getId());
             product.setVatCategory(vatCategory);
         }
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
         if (productModel.getProductID() == null) {
             productService.persist(product);
+            context.addMessage(null, new FacesMessage("Successful", "Product and Service has been added"));
         } else {
             productService.update(product);
+            context.addMessage(null, new FacesMessage("Successful", "Product and Service has been updated"));
         }
-        return "product?faces-redirect=true";
 
     }
 

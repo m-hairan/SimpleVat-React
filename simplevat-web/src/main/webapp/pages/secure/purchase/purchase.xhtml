@@ -71,7 +71,7 @@
                                                 itemValue="#{transactionType}"
                                                 itemLabel="#{transactionType.transactionTypeName}"
                                                 required="true"
-                                                requiredMessage="Please select purchase Type">
+                                                requiredMessage="Please select Purchase Type">
                                                 <p:ajax event="itemSelect"
                                                         update="purchaseTransactionCategory"  />
                                             </p:autoComplete>
@@ -102,7 +102,7 @@
                                                 value="#{purchaseController.selectedPurchaseModel.purchaseDate}" 
                                                 navigator="true"
                                                 required="true"
-                                                requiredMessage="Please select purchase date"/>
+                                                requiredMessage="Please select Purchase Date"/>
                                             <p:outputLabel for="purchaseDate" value="#{messages.purchase_date}"/>
                                             <p:message for="purchaseDate" />
                                         </h:panelGroup>
@@ -120,7 +120,7 @@
                                                             itemValue="#{currency}"
                                                             itemLabel="#{currency.currencyIsoCode}  #{currency.currencySymbol} " 
                                                             required="true"
-                                                            requiredMessage="Please select currency">
+                                                            requiredMessage="Please select Currency">
                                                 <p:ajax event="itemSelect" update="purchaseItemTable exchangeCurrency" />
                                             </p:autoComplete>
                                             <p:outputLabel for="purchaseCurrency" value="#{messages.currency}"/>
@@ -169,7 +169,7 @@
                                                             completeMethod="#{purchaseController.contacts}" 
                                                             value="#{purchaseController.selectedPurchaseModel.purchaseContact}" 
                                                             var="contact"
-                                                            itemValue="#{contact.contactId}"
+                                                            itemValue="#{contact}"
                                                             itemLabel="#{contact.firstName} #{contact.lastName}"
                                                             >
                                                 <p:ajax event="itemSelect" process="@this"
