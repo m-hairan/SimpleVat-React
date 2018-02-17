@@ -56,9 +56,9 @@ public class TransactionCategoryNewDaoImpl extends AbstractDao<Integer, Transact
     public TransactionCategory getDefaultTransactionCategoryByTransactionCategoryId(Integer transactionCategoryId) {
         TypedQuery<TransactionCategory> query = getEntityManager().createQuery("SELECT t FROM TransactionCategory t where t.deleteFlag=FALSE AND t.defaltFlag = 'Y' AND t.transactionCategoryId !=:transactionCategoryId ORDER BY t.defaltFlag DESC , t.orderSequence ASC, t.transactionCategoryName ASC", TransactionCategory.class);
         query.setParameter("transactionCategoryId", transactionCategoryId);
-        TransactionCategory transactionCategory = query.getResultList().get(0);
-        if (transactionCategory != null) {
-            return transactionCategory;
+        List<TransactionCategory> transactionCategoryList = query.getResultList();
+        if (transactionCategoryList != null && !transactionCategoryList.isEmpty()) {
+            return transactionCategoryList.get(0);
         }
         return null;
     }

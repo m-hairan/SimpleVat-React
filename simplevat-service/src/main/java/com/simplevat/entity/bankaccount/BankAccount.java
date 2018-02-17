@@ -13,17 +13,14 @@ import javax.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
 import org.hibernate.annotations.ColumnDefault;
-import static org.hibernate.type.TypeFactory.serializable;
 
 /**
  * Created by mohsinh on 2/26/2017.
  */
 @NamedQueries({
     @NamedQuery(name = "allBankAccounts",
-            query = "SELECT b "
-            + "FROM BankAccount b where b.deleteFlag = FALSE")
+            query = "SELECT b FROM BankAccount b where b.deleteFlag = FALSE  ORDER BY b.bankAccountName ASC")
 })
 
 @Entity

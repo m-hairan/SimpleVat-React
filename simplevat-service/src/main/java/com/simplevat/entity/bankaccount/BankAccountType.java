@@ -10,7 +10,7 @@ import org.hibernate.annotations.ColumnDefault;
  */
 @NamedQueries({
     @NamedQuery(name = "allBankAccountType",
-            query = "SELECT v FROM BankAccountType v order by v.defaultFlag DESC, v.orderSequence ASC ")
+            query = "SELECT v FROM BankAccountType v order by v.defaultFlag DESC, v.orderSequence,v.name ASC ")
 })
 @Entity
 @Table(name = "BANK_ACCOUNT_TYPE")

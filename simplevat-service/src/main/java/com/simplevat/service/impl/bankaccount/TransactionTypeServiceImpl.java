@@ -41,6 +41,11 @@ public class TransactionTypeServiceImpl extends TransactionTypeService {
     }
 
     @Override
+    public List<TransactionType> findByText(String transactionTxt) {
+        return transactionTypeDao.findByText(transactionTxt);
+    }
+
+    @Override
     public TransactionType getDefaultTransactionType() {
         return transactionTypeDao.getDefaultTransactionType();
     }

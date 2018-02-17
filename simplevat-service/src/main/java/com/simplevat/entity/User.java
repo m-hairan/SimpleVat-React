@@ -14,7 +14,7 @@ import org.hibernate.annotations.ColumnDefault;
 @NamedQueries({
     @NamedQuery(name = "findAllUsers",
             query = "SELECT u "
-            + "FROM User u where u.deleteFlag = FALSE and u.isActive = TRUE ")
+            + "FROM User u where u.deleteFlag = FALSE and u.isActive = TRUE  ORDER BY u.firstName ASC")
 })
 @Entity
 @Table(name = "USER")

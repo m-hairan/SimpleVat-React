@@ -18,7 +18,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 @NamedQueries({
         @NamedQuery(name = "allCountries",
-                query = "SELECT c FROM Country c where c.deleteFlag=false ORDER BY c.defaltFlag DESC , c.orderSequence ASC")
+                query = "SELECT c FROM Country c where c.deleteFlag=false ORDER BY c.defaltFlag DESC , c.orderSequence,c.countryName ASC")
 })
 
 @Entity

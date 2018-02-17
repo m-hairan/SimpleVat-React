@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.simplevat.dao.bankaccount.TransactionTypeDao;
 import com.simplevat.entity.bankaccount.TransactionType;
 import com.simplevat.dao.AbstractDao;
+import javax.persistence.TypedQuery;
 
 @Repository
 public class TransactionTypeDaoImpl extends AbstractDao<Integer, TransactionType> implements TransactionTypeDao {
@@ -27,6 +28,13 @@ public class TransactionTypeDaoImpl extends AbstractDao<Integer, TransactionType
     public List<TransactionType> findAll() {
         List<TransactionType> result = this.executeNamedQuery("findAllTransactionType");
         return result;
+    }
+
+    @Override
+    public List<TransactionType> findByText(String transactionTxt) {
+        TypedQuery<TransactionType> query = getEntityManager().createQuery("SELECT t FROM TransactionType t WHERE t.deleteFlag=false AND t.transactionTypeName LIKE '%'||:searchToken||'%' ORDER BY t.defaltFlag DESC , t.orderSequence ASC", TransactionType.class);
+        query.setParameter("searchToken", transactionTxt);
+        return query.getResultList();
     }
 
     @Override

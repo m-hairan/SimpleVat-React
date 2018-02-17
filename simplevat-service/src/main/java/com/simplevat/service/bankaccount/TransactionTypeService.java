@@ -17,6 +17,8 @@ public abstract class TransactionTypeService extends SimpleVatService<Integer, T
     public abstract TransactionType getDefaultTransactionType();
 
     public abstract List<TransactionType> findAll();
+   
+    public abstract List<TransactionType> findByText(String transactionTxt);
 
     public abstract List<TransactionType> findAllChild();
 
