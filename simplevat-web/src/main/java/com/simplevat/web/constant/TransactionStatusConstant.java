@@ -17,7 +17,7 @@ public final class TransactionStatusConstant {
 
     //====================Constant used in import transcation============
     public static final String DEFAULT_DATE_FORMAT = "MM/dd/yyyy";
-    public static final int HEADER_COUNT = 1;
+    public static final int HEADER_COUNT = 0;
     public static final String TRANSACTION_DATE = "TRANSACTION DATE";
     public static final String DESCRIPTION = "DESCRIPTION";
     public static final String DEBIT_AMOUNT = "DEBIT AMOUNT";

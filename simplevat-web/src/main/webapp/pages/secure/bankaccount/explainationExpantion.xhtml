@@ -12,9 +12,9 @@
                       columnClasses="ui-grid-col-0, ui-grid-col-6, ui-grid-col-0, ui-grid-col-6"
                       layout="grid" styleClass="ui-panelgrid-blank form-group"
                       style="border:0px none; background-color:transparent; padding-top: 10px">
-            <p:outputLabel for="transactionType1" />
+            <p:outputLabel for="transactionType1"/>
             <h:panelGroup styleClass="md-inputfield">
-                <p:autoComplete
+                <p:autoComplete disabled="#{transactionController.selectedBankAccountModel.bankAccountStatus.bankAccountStatusCode.intValue() == 2}"
                     id="transactionType1"
                     converter="#{transactionTypeConverter}"
                     dropdown="true"
@@ -34,7 +34,7 @@
 
             <p:outputLabel for="transactionCategory1" />
             <h:panelGroup styleClass="md-inputfield">
-                <p:autoComplete
+                <p:autoComplete disabled="#{transactionController.selectedBankAccountModel.bankAccountStatus.bankAccountStatusCode.intValue() == 2}"
                     id="transactionCategory1"
                     converter="#{transactionCategoryConverter}"
                     dropdown="true"
@@ -54,7 +54,7 @@
 
             <p:outputLabel for="transactionDescription1" value=" "/>
             <h:panelGroup styleClass="md-inputfield">
-                <p:inputText id="transactionDescription1"
+                <p:inputText id="transactionDescription1" disabled="#{transactionController.selectedBankAccountModel.bankAccountStatus.bankAccountStatusCode.intValue() == 2}"
                              value="#{transactionViewLazyModel.expandedTransactionModel.transactionDescription}" />
                 <label>#{messages.description}</label>
             </h:panelGroup>
@@ -65,7 +65,7 @@
             <h:panelGroup id="referancePanel">
                 <h:panelGroup id="InvoiceList" styleClass="md-inputfield" rendered="#{transactionViewLazyModel.expandedTransactionModel.explainedTransactionCategory.transactionCategoryId == 1}">
                     <p:autoComplete id="invoice1" converter="#{invoiceConverter}"
-                                    dropdown="true"
+                                    dropdown="true" disabled="#{transactionController.selectedBankAccountModel.bankAccountStatus.bankAccountStatusCode.intValue() == 2}"
                                     forceSelection="true"
                                     effect="fold" 
                                     scrollHeight="250"
@@ -82,7 +82,7 @@
                 </h:panelGroup>
                 <h:panelGroup id="PurchaseList" styleClass="md-inputfield" rendered="#{transactionViewLazyModel.expandedTransactionModel.explainedTransactionCategory.parentTransactionCategory.transactionCategoryId == 43}">
                     <p:autoComplete id="purchase1" converter="#{purchaseConverter}"
-                                    dropdown="true"
+                                    dropdown="true" disabled="#{transactionController.selectedBankAccountModel.bankAccountStatus.bankAccountStatusCode.intValue() == 2}"
                                     forceSelection="true"
                                     effect="fold" 
                                     scrollHeight="250"
@@ -103,11 +103,11 @@
         <p:panelGrid  columns="3" 
                       columnClasses="ui-grid-col-1, ui-grid-col-1, ui-grid-col-1"
                       layout="grid" styleClass="ui-panelgrid-blank form-group">
-            <p:commandButton value="#{messages.explain}" icon="ui-icon-save"
+            <p:commandButton value="#{messages.explain}" icon="ui-icon-save" rendered="#{transactionController.selectedBankAccountModel.bankAccountStatus.bankAccountStatusCode.intValue() == 1}"
                              action="#{transactionListController.updateTransactionDropDown()}" update="@(.outerTable) @(.innerTable)">
                 <f:setPropertyActionListener target="#{transactionListController.transactionModel}" value="#{transactionViewLazyModel.expandedTransactionModel}" />
             </p:commandButton>
-            <p:commandButton value="#{messages.delete}" icon="ui-icon-delete"
+            <p:commandButton value="#{messages.delete}" icon="ui-icon-delete" rendered="#{transactionController.selectedBankAccountModel.bankAccountStatus.bankAccountStatusCode.intValue() == 1}"
                              action="#{transactionListController.deleteTransaction}">
                 <f:setPropertyActionListener target="#{transactionListController.selectedTransactionViewModel}" value="#{transaction}" />
             </p:commandButton>

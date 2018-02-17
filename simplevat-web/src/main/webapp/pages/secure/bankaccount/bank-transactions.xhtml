@@ -38,8 +38,9 @@
         </style>
 
         <h:form id="transactionListForm">
+            <p:remoteCommand autoRun="true" onstart="renderToolBar(#{transactionController.selectedBankAccountModel.bankAccountStatus.bankAccountStatusCode.intValue()});"/>
             <div class="ui-fluid tree">
-                <si:cdataPanel newAction= "#{transactionController.createTransaction()}" hideOptions="true" >
+                <si:cdataPanel newAction= "#{transactionController.createTransaction()}" hideOptions="true">
                     <f:facet name="left">
                         <span class="ui-separator" style="padding-right: 5px;">
                             <span class="fa fa-ellipsis-v SoftGray" />
@@ -91,9 +92,9 @@
                             </h:panelGroup>
                         </p:column>
 
-                        <p:column headerText="#{messages.date}" width="80" sortBy="#{transaction.transactionDate.time}" filterMatchMode="contains" filterBy="#{transaction.transactionDate.time}">
+                        <p:column headerText="#{messages.date}" width="115" sortBy="#{transaction.transactionDate.time}" filterMatchMode="contains" filterBy="#{transaction.transactionDate.time}">
                             <h:outputText value="#{transaction.transactionDate.time}" >
-                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                                <f:convertDateTime pattern="dd/MM/yyyy hh:mm" />
                             </h:outputText>
                         </p:column>
 
@@ -135,15 +136,15 @@
                             </h:outputText>
                         </p:column>
 
-                        <p:column headerText="Action" width="130">
+                        <p:column headerText="Action" width="130" >
 
                             <p:rowToggler/>
                             <p:commandButton  icon="#{transaction.expandIcon ? 'ui-icon-expand-less' : 'ui-icon-expand-more'}" onclick="expandCollapse(event, #{index})" action="#{transactionListController.expandCollapse(transaction)}" styleClass="AquaButton parentExpandButton rowExpand#{index}" update="transactionsTable:@row(#{index}) @(.parentExpandButton)"/>
-                            <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" action="#{transactionListController.editTransection()}" >
+                            <p:commandButton rendered="#{transactionController.selectedBankAccountModel.bankAccountStatus.bankAccountStatusCode.intValue() == 1}" icon="ui-icon-edit" styleClass="AquaButton" action="#{transactionListController.editTransection()}" >
                                 <f:setPropertyActionListener value="#{transaction}" target="#{transactionListController.selectedTransactionViewModel}" />
                             </p:commandButton>
 
-                            <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{transactionListController.deleteTransaction}" update="transactionsTable">
+                            <p:commandButton rendered="#{transactionController.selectedBankAccountModel.bankAccountStatus.bankAccountStatusCode.intValue() == 1}" icon="ui-icon-delete" styleClass="AquaButton" action="#{transactionListController.deleteTransaction}" update="transactionsTable">
                                 <f:setPropertyActionListener value="#{transaction}" target="#{transactionListController.selectedTransactionViewModel}" />
                                 <p:confirm header="#{messages.delete}" message="#{messages.are_you_sure_want_to_delete}" icon="ui-icon-alert" />
                             </p:commandButton>
@@ -175,6 +176,11 @@
                 var paginator = PF('transactiondt').paginator;
                 paginator.setPage(0);
                 paginator.updateUI();
+            }
+            function renderToolBar($bankAccountStatus) {
+                if ($bankAccountStatus === 2) {
+                    $('.ui-toolbar').css('display', 'none')
+                }
             }
         </script>
     </ui:define>

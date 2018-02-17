@@ -447,6 +447,7 @@
                                         <p:column headerText="Description" styleClass="amount" style="width: 320px">
                                             <p:inputText id="description" 
                                                          value="#{expenseItem.description}" 
+                                                         onkeypress="if (event.keyCode == 13) {return false;}"
                                                          style="width:100%">
                                                 <p:ajax event="change" />
                                             </p:inputText>
@@ -457,6 +458,7 @@
                                                          validator="positiveNumberValidator"
                                                          validatorMessage="Please enter Quantity more then 0"
                                                          value="#{expenseItem.quatity}" 
+                                                         onkeypress="if (event.keyCode == 13) {return false;}"
                                                          style="width:100%">
                                                 <p:ajax event="change" 
                                                         listener="#{expenseController.updateSubTotal(expenseItem)}" 
@@ -471,6 +473,7 @@
                                                            validator="positiveNumberValidator"
                                                            validatorMessage="Please enter Price more then 0"
                                                            value="#{expenseItem.unitPrice}" 
+                                                           onkeypress="if (event.keyCode == 13) {return false;}"
                                                            style="width:100%">
                                                 <p:ajax event="change" 
                                                         listener="#{expenseController.updateSubTotal(expenseItem)}" 
@@ -489,6 +492,7 @@
                                                             completeMethod="#{expenseController.vatCategorys}" 
                                                             var="vat"
                                                             itemValue="#{vat}"
+                                                            onkeypress="if (event.keyCode == 13) {return false;}"
                                                             itemLabel="#{vat.name}"
                                                             >
                                                 <p:ajax update="subTotal @form:exchangeCurrency" event="itemSelect" listener="#{expenseController.updateSubTotal(expenseItem)}" />

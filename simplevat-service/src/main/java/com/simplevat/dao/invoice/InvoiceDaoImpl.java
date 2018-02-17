@@ -148,7 +148,7 @@ public class InvoiceDaoImpl extends AbstractDao<Integer, Invoice> implements Inv
 
     @Override
     public List<Invoice> getInvoicesForReports(Date startDate, Date endDate) {
-        TypedQuery<Invoice> query = getEntityManager().createQuery("SELECT i FROM Invoice i WHERE i.deleteFlag = false AND i.invoiceDate BETWEEN :startDate AND :endDate ORDER BY i.invoiceDate ASC", Invoice.class);
+        TypedQuery<Invoice> query = getEntityManager().createQuery("SELECT i FROM Invoice i WHERE i.deleteFlag = false AND i.invoiceDate BETWEEN :startDate AND :endDate ORDER BY i.invoiceReferenceNumber ASC", Invoice.class);
         query.setParameter("startDate",Instant.ofEpochMilli(startDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
         query.setParameter("endDate", Instant.ofEpochMilli(endDate.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
         List<Invoice> invoiceList = query.getResultList();

@@ -262,7 +262,7 @@ public class TransactionViewLazyModel extends LazyDataModel<TransactionViewModel
                     System.out.println("time before" + new Date());
                     System.out.println("transactionModel======" + transactionModel.getTransactionId());
                     System.out.println("transactionViewModel======" + transactionViewModel.getTransactionId());
-                    expandedTransactionModel = transactionModel;
+                    expandedTransactionModel = transactionControllerHelper.getTransactionModel(transactionService.findByPK(transactionModel.getTransactionId()));
                     System.out.println("expandedTransactionModel======" + expandedTransactionModel.getTransactionId());
                     System.out.println("time after" + new Date());
                 }

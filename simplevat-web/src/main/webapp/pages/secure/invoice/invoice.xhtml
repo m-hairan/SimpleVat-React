@@ -112,7 +112,8 @@
                                                             value="#{invoiceController.selectedInvoiceModel.invoiceContact}" 
                                                             var="contact"
                                                             itemValue="#{contact}"
-                                                            itemLabel="#{contact.firstName} #{contact.lastName}">
+                                                            itemLabel="#{contact.firstName} #{contact.lastName}"
+                                                            onkeypress="if (event.keyCode == 13) {return false;}">
                                                 <p:ajax event="itemSelect"
                                                         listener="#{invoiceController.updateCurrency}" 
                                                         update="currency invoiceField invoiceItemTable exchangeCurrency @(.shippingContact)" />
@@ -651,7 +652,8 @@
                                                             var="product"
                                                             scrollHeight="250"
                                                             itemValue="#{product}"
-                                                            itemLabel="#{product.productName}">
+                                                            itemLabel="#{product.productName}"
+                                                            onkeypress="if (event.keyCode == 13) {return false;}">
                                                 <p:ajax update="invoiceItemTable" event="itemSelect" listener="#{invoiceController.updateVatPercentage(invoiceItem,invoiceController.selectedInvoiceModel.invoiceLineItems.size())}" />
                                             </p:autoComplete>
                                             <h:panelGroup styleClass="md-inputfield">
@@ -663,6 +665,7 @@
                                     <p:column headerText="Description"  style="width: 280px">
                                         <p:inputText id="description" 
                                                      value="#{invoiceItem.description}" 
+                                                     onkeypress="if (event.keyCode == 13) {return false;}"
                                                      style="width:100%">
                                             <p:ajax event="change"/>
                                         </p:inputText>
@@ -672,6 +675,7 @@
                                                        decimalPlaces="0"
                                                        validator="positiveNumberValidator"
                                                        value="#{invoiceItem.quatity}" 
+                                                       onkeypress="if (event.keyCode == 13) {return false;}"
                                                        onfocus="clearTextField(event, this)"
                                                        style="width:100%">
 
@@ -687,6 +691,7 @@
                                                        validator="positiveNumberValidator"
                                                        validatorMessage="Please enter Price more then 0"
                                                        value="#{invoiceItem.unitPrice}" 
+                                                       onkeypress="if (event.keyCode == 13) {return false;}"
                                                        style="width:100%">
                                             <p:ajax event="change" 
                                                     listener="#{invoiceController.updateSubTotal(invoiceItem)}" 
@@ -704,6 +709,7 @@
                                                         completeMethod="#{invoiceController.vatCategorys}" 
                                                         var="vat"
                                                         scrollHeight="250"
+                                                        onkeypress="if (event.keyCode == 13) {return false;}"
                                                         itemValue="#{vat}"
                                                         itemLabel="#{vat.vatLabel}"
                                                         >

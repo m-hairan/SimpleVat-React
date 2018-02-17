@@ -149,9 +149,9 @@
                                                 <div class="ui-g">
                                                     <div class="ui-g-6">
                                                         <div style="color: #757575; font-size: 17px;">
-                                                            <p:commandLink value="#{value.bankAccountName}" action="#{homeController.loadBankAccountTransaction}" style="color: #009688;">
+                                                            <p:commandLink value="#{value.bankAccountName} " action="#{homeController.loadBankAccountTransaction}" style="color: #009688;">
                                                                 <f:setPropertyActionListener value="#{value.bankAccountId}" target="#{homeController.selectedBankAccountId}"/>
-                                                            </p:commandLink>
+                                                            </p:commandLink> <h:outputText style="background-color: #{value.bankAccountStatus.bankAccountStatusCode.intValue() == 1?'#14ad3c':'#cacaca'};color: #FFFFFF; font-size: 12px;" value="(#{value.bankAccountStatus.bankAccountStatusName})"/>
                                                         </div>
 
                                                         <div style="color: #757575; font-size: 14px;">#{value.bankAccountType.name} Saving Account</div>
@@ -164,7 +164,6 @@
                                         </ui:repeat>
                                     </ul>
                                     <p:commandButton action="#{homeController.redirectToCreateBankAccount}"  value="Create Your Bank Account" style="position: absolute; top:180px;left:95px" rendered="#{homeController.bankAccountList.size() == 0}"/>
-
                                 </h:panelGroup>
                             </h:panelGroup>
                         </p:scrollPanel>
@@ -175,7 +174,7 @@
                                 <ui:include src="../content-loading-placeholder.xhtml"/>
                             </h:panelGroup>
                             <h:panelGroup layout="block" id="eventPanel" styleClass="eventPanel" style="visibility: hidden">
-                                <p:schedule value="#{homeController.eventModel}" rendered="#{not empty homeController.eventModel}" style="height:280px;" />
+                                <p:schedule timeFormat="HH:mm" value="#{homeController.eventModel}" rendered="#{not empty homeController.eventModel}" style="height:280px;" />
                             </h:panelGroup>
                         </h:panelGroup>
                     </p:panel>

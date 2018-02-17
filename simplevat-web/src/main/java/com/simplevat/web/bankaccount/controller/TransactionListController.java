@@ -561,7 +561,6 @@ public class TransactionListController extends TransactionControllerHelper imple
         } else {
             transactionService.deleteTransaction(transaction);
         }
-
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
         context.addMessage(null, new FacesMessage("Successful", "Transaction deleted successfully"));

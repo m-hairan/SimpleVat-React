@@ -38,9 +38,9 @@
             </h:panelGroup>
         </p:column>
 
-        <p:column width="80" >
+        <p:column width="115" >
             <h:outputText value="#{childTransaction.transactionDate.time}" >
-                <f:convertDateTime pattern="dd/MM/yyyy" />
+                <f:convertDateTime pattern="dd/MM/yyyy hh:mm" />
             </h:outputText>
         </p:column>
 
@@ -82,7 +82,7 @@
 
             <p:rowToggler/>
             <p:commandButton icon="#{childTransaction.expandIcon ? 'ui-icon-expand-less' : 'ui-icon-expand-more'}" onclick="childExpandCollapse(event, #{index})" action="#{transactionListController.expandCollapse(childTransaction)}" styleClass="AquaButton childExpandButton childRowExpand#{index}" update="childTransactionTable:@row(#{index}) @(.childExpandButton)"/>
-            <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{transactionListController.deleteTransaction}" update="childTransactionTable">
+            <p:commandButton rendered="#{transactionController.selectedBankAccountModel.bankAccountStatus.bankAccountStatusCode.intValue() == 1}" icon="ui-icon-delete" styleClass="AquaButton" action="#{transactionListController.deleteTransaction}" update="childTransactionTable">
                 <f:setPropertyActionListener value="#{childTransaction}" target="#{transactionListController.selectedTransactionViewModel}" />
                 <p:confirm header="#{messages.delete}" message="#{messages.are_you_sure_want_to_delete}" icon="ui-icon-alert" />
             </p:commandButton>

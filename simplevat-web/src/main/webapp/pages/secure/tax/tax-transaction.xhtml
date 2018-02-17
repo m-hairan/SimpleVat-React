@@ -19,7 +19,7 @@
                 <p:outputLabel styleClass="tableCustomFooter" value="Total Record: #{taxTransactionController.taxTransactionList.size()}" />
             </f:facet>
 
-            <p:column headerText="Start Date" width="80" sortBy="#{tax.startDate}" filterMatchMode="contains" filterBy="#{tax.startDate}">
+            <p:column headerText="Start Date" width="100" sortBy="#{tax.startDate}" filterMatchMode="contains" filterBy="#{tax.startDate}">
                 <h:outputText value="#{tax.startDate}" >
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>
@@ -31,13 +31,13 @@
                 </h:outputText>
             </p:column>
 
-            <p:column headerText="VAT IN" filterMatchMode="contains" styleClass="amount" filterBy="#{tax.vatIn}">
+            <p:column headerText="VAT IN" filterMatchMode="contains" width="80" styleClass="amount" filterBy="#{tax.vatIn}">
                 <h:outputText value="#{tax.vatIn}">
                     <f:convertNumber type="currency" maxFractionDigits="2" currencySymbol="#{taxTransactionController.currency.currencySymbol}" />
                 </h:outputText>
             </p:column>
 
-            <p:column headerText="VAT OUT" filterMatchMode="contains" styleClass="amount" filterBy="#{tax.vatOut}">
+            <p:column headerText="VAT OUT" filterMatchMode="contains" width="80" styleClass="amount" filterBy="#{tax.vatOut}">
                 <h:outputText value="#{tax.vatOut}">
                     <f:convertNumber type="currency" maxFractionDigits="2" currencySymbol="#{taxTransactionController.currency.currencySymbol}" />
                 </h:outputText>
@@ -49,7 +49,7 @@
                 </h:outputText>
             </p:column>
 
-            <p:column headerText="Payment Date" sortBy="#{tax.paymentDate}" width="80" filterMatchMode="contains" filterBy="#{tax.paymentDate}">
+            <p:column headerText="Payment Date" sortBy="#{tax.paymentDate}" width="130" filterMatchMode="contains" filterBy="#{tax.paymentDate}">
                 <h:outputText value="#{tax.paymentDate}" >
                     <f:convertDateTime pattern="dd/MM/yyyy" />
                 </h:outputText>

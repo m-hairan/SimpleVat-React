@@ -36,6 +36,10 @@
                     <p:column headerText="#{messages.swift_code}" sortBy="#{bankAccount.swiftCode}" filterMatchMode="contains" filterBy="#{bankAccount.swiftCode}">
                         <h:outputText value="#{bankAccount.swiftCode}" />
                     </p:column>
+                    
+                    <p:column headerText="#{messages.status}" sortBy="#{bankAccount.bankAccountStatus.bankAccountStatusName}" style="text-align: center" filterMatchMode="contains" filterBy="#{bankAccount.bankAccountStatus.bankAccountStatusName}">
+                        <h:outputText value="#{bankAccount.bankAccountStatus.bankAccountStatusName}" />
+                    </p:column>
 
                     <p:column headerText="#{messages.current_balance}" sortBy="#{bankAccount.currentBalance}" styleClass="amount" filterMatchMode="contains" filterBy="#{bankAccount.currentBalance}">
                         <h:outputText value="#{bankAccount.bankAccountCurrency.currencySymbol} " />

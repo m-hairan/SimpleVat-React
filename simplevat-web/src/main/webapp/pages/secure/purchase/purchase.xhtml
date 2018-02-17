@@ -262,6 +262,7 @@
                                                             completeMethod="#{purchaseController.products}" 
                                                             var="product"
                                                             itemValue="#{product}"
+                                                            onkeypress="if (event.keyCode == 13) {return false;}"
                                                             itemLabel="#{product.productName}">
                                                 <p:ajax update="vatId subTotal" event="itemSelect" listener="#{purchaseController.updateVatPercentage(purchaseItem)}" />
                                             </p:autoComplete>
@@ -270,6 +271,7 @@
                                         <p:column headerText="Description" styleClass="amount" style="width: 320px">
                                             <p:inputText id="description" 
                                                          value="#{purchaseItem.description}" 
+                                                         onkeypress="if (event.keyCode == 13) {return false;}"
                                                          style="width:100%">
                                                 <p:ajax event="change" />
                                             </p:inputText>
@@ -279,6 +281,7 @@
                                                          validator="positiveNumberValidator"
                                                          validatorMessage="Please enter Quantity more then 0"
                                                          value="#{purchaseItem.quatity}" 
+                                                         onkeypress="if (event.keyCode == 13) {return false;}"
                                                          style="width:100%">
 
                                                 <p:ajax event="change" 
@@ -293,6 +296,7 @@
                                                            symbol="#{purchaseController.selectedPurchaseModel.currency.currencySymbol} " symbolPosition="p"
                                                            validator="positiveNumberValidator"
                                                            validatorMessage="Please enter Price more then 0"
+                                                           onkeypress="if (event.keyCode == 13) {return false;}"
                                                            style="width:100%">
                                                 <p:ajax event="change" 
                                                         listener="#{purchaseController.updateSubTotal(purchaseItem)}" 
@@ -311,6 +315,7 @@
                                                             value="#{purchaseItem.vatId}"
                                                             completeMethod="#{purchaseController.vatCategorys}" 
                                                             var="vat"
+                                                            onkeypress="if (event.keyCode == 13) {return false;}"
                                                             itemValue="#{vat}"
                                                             itemLabel="#{vat.name}"
                                                             >
