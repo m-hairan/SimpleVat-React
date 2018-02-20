@@ -35,7 +35,7 @@
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText id="categoryName"
                                                          value="#{transactionCategoryView.transactionCategoryModel.transactionCategoryName}" 
-                                                         required="true" requiredMessage="Please enter Category Name"/>
+                                                         required="true" requiredMessage="Please Enter Category Name"/>
                                             <p:outputLabel for="categoryName" value="#{messages.transactionCategoryName}"/> 
                                             <p:message for="categoryName"/>
                                         </h:panelGroup>
@@ -43,7 +43,7 @@
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText id="categoryCode"
                                                          value="#{transactionCategoryView.transactionCategoryModel.transactionCategoryCode}" 
-                                                         required="true" requiredMessage="Please enter Category Code"/>
+                                                         required="true" requiredMessage="Please Enter Category Code"/>
                                             <p:outputLabel for="categoryCode" value="#{messages.transactionCategoryCode}"/>
                                             <p:message for="categoryCode"/>
                                         </h:panelGroup>
@@ -53,7 +53,7 @@
                                             <p:outputLabel for="defaultFlag" value="#{messages.defaltFlag}"/>
                                             <p:selectOneRadio id="defaultFlag"
                                                               value="#{transactionCategoryView.transactionCategoryModel.defaltFlag}" 
-                                                              required="true" requiredMessage="Please enter Default flag" >
+                                                              required="true" requiredMessage="Please Enter Default flag" >
                                                 <f:selectItem itemLabel="Yes" itemValue="Y" />
                                                 <f:selectItem itemLabel="No" itemValue="N" />
                                             </p:selectOneRadio>
@@ -90,7 +90,7 @@
                                                             effect="fold"
                                                             scrollHeight="250"
                                                             completeMethod="#{transactionCategoryView.getAllTransactionType}" 
-                                                            required="true" requiredMessage="Please enter Transaction Type"
+                                                            required="true" requiredMessage="Please Enter Transaction Type"
                                                             var="transactionType" itemLabel="#{transactionType.transactionTypeName}"  
                                                             itemValue="#{transactionType}"
                                                             converter="#{transactionTypeConverter}">

@@ -158,10 +158,14 @@ public class InvoiceServiceImpl extends InvoiceService {
     public Invoice getClosestDueInvoiceByContactId(Integer contactId) {
         return getDao().getClosestDueInvoiceByContactId(contactId);
     }
-    
+
     @Override
     public List<Invoice> getInvoicesForReports(Date startDate, Date endDate) {
-        return getDao().getInvoicesForReports(startDate,endDate);
+        return getDao().getInvoicesForReports(startDate, endDate);
     }
 
+    @Override
+    public List<Invoice> getInvoiceList() {
+        return getDao().getInvoiceList();
+    }
 }

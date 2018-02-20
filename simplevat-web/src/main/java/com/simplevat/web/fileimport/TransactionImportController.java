@@ -214,9 +214,9 @@ public class TransactionImportController implements Serializable {
                     }
                 }
                 if (!invalidHeaderTransactionList.isEmpty()) {
-                    StringBuilder validationMessage = new StringBuilder("Heading mismatch ");
+                    StringBuilder validationMessage = new StringBuilder("Heading mismatch  ");
                     for (String invalidHeading : invalidHeaderTransactionList) {
-                        validationMessage.append(invalidHeading + " ");
+                        validationMessage.append(invalidHeading + "  ");
                     }
                     validationMessage.append(" heading should be (" + TransactionStatusConstant.TRANSACTION_DATE + "," + TransactionStatusConstant.DESCRIPTION + "," + TransactionStatusConstant.DEBIT_AMOUNT + "," + TransactionStatusConstant.CREDIT_AMOUNT + ")");
                     FacesMessage message = new FacesMessage(validationMessage.toString());

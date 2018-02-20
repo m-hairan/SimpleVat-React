@@ -159,7 +159,7 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
         fileName = event.getFile().getFileName();
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_COMPANY_LOGO", event.getFile().getContents());
         renderProfilePic = true;
-        FacesMessage message = new FacesMessage("Successful", "Image Uploaded Successfully");
+        FacesMessage message = new FacesMessage("Successful", "Uploaded Successfully");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 }

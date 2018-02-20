@@ -158,7 +158,7 @@
                             <p:commandButton action="#{projectController.saveProject()}"
                                              value="#{messages.save}" update="project"
                                              icon="ui-icon-save" />
-                            <p:commandButton action="#{projectController.saveProject()}"
+                            <p:commandButton action="#{projectController.saveAndAddMoreProject()}"
                                              value="#{messages.save_and_add_more}" update="project"
                                              icon="ui-icon-forward" />
                         </ui:fragment>
@@ -166,7 +166,7 @@
                             <p:commandButton action="#{projectController.saveProject()}" update="project"
                                              value="#{messages.update}"
                                              icon="ui-icon-save" />
-                            <p:commandButton action="#{projectController.saveProject()}"
+                            <p:commandButton action="#{projectController.saveAndAddMoreProject()}"
                                              value="#{messages.update_and_add_more}" update="project"
                                              icon="ui-icon-forward" />
                         </ui:fragment>

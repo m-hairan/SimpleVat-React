@@ -176,7 +176,7 @@ public class ContactController extends BaseController implements Serializable {
         }
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Contact saved successfully"));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("","Contact saved successfully"));
         return "list?faces-redirect=true";
     }
 
@@ -191,7 +191,7 @@ public class ContactController extends BaseController implements Serializable {
         }
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Contact saved successfully"));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("","Contact saved successfully"));
         init();
     }
 

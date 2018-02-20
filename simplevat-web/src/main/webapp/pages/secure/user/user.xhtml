@@ -100,6 +100,7 @@
                                             <p:calendar id="dob"
                                                         pattern="dd/MM/yyyy"
                                                         required="true"
+                                                        navigator="true"
                                                         requiredMessage="Please enter Date of Birth"
                                                         value="#{userController.selectedUser.displayDOB}">
                                             </p:calendar>
@@ -211,7 +212,7 @@
                                         <h:panelGroup>
                                             <p:message for="cpassword" />
                                             <o:validateEqual components="password cpassword"
-                                                             message="Passwords are not equal" showMessageFor="password" />
+                                                             message="Password and Confirm Password are Mismatched" showMessageFor="password" />
                                         </h:panelGroup>
                                     </h:panelGroup>
                                 </p:panelGrid>

@@ -487,7 +487,9 @@ public class PurchaseController extends BaseController implements Serializable {
             return "";
         }
         save();
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Purchase saved successfully"));
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        context.addMessage(null, new FacesMessage("Successful", "Purchase saved successfully"));
         return "purchase-list?faces-redirect=true";
     }
 
@@ -496,7 +498,10 @@ public class PurchaseController extends BaseController implements Serializable {
             return "";
         }
         save();
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Purchase saved successfully"));
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        context.addMessage(null, new FacesMessage("Successful", "Purchase saved successfully"));
+
         return "purchase?faces-redirect=true";
     }
 

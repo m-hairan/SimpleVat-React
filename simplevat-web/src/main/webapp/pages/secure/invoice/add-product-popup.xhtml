@@ -19,7 +19,7 @@
                                  style="border:0px none; background-color:transparent;">
 
                         <h:panelGroup styleClass="md-inputfield">
-                            <p:inputText id="name"  required="true" value="#{invoiceController.productModel.productName}" requiredMessage="please enter Name."/>
+                            <p:inputText id="name"  required="true" value="#{invoiceController.productModel.productName}" requiredMessage="Please Enter Name."/>
                             <p:outputLabel for="name" value="#{messages.name}"/>
                             <p:message for="name" />
                         </h:panelGroup>
@@ -75,6 +75,17 @@
                             <p:selectBooleanCheckbox id="vatApply" value="#{invoiceController.productModel.vatIncluded}" >
                             </p:selectBooleanCheckbox>
                             <p:outputLabel for="vatApply" value="Vat Include"/>
+                        </h:panelGroup>
+
+                        <h:panelGroup styleClass="md-inputfield">
+                            <p:inputTextarea
+                                id="productDescription"
+                                value="#{invoiceController.productModel.productDescription}"
+                                rows="5" cols="30" counter="counterValue" maxlength="250"
+                                counterTemplate="  {0} characters remaining."
+                                autoResize="false" />
+                            <h:outputText id="counterValue" />
+                            <p:outputLabel for="productDescription" value="#{messages.description}" />
                         </h:panelGroup>
                     </p:panelGrid>
                 </div>

@@ -76,7 +76,7 @@ public class ManageUserController {
         userService.update(user);
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("Contact deleted SuccessFully"));
+        context.addMessage(null, new FacesMessage("Successful","Contact deleted SuccessFully"));
 
         return "list?faces-redirect=true";
     }

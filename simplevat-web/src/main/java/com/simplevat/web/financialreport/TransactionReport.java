@@ -63,6 +63,10 @@ public class TransactionReport extends BaseController {
 
     private BankAccount bankAccount;
 
+    @Getter
+    @Setter
+    private Company company;
+
     private FinancialPeriod financialPeriod;
 
     @Getter
@@ -98,6 +102,7 @@ public class TransactionReport extends BaseController {
 
     @PostConstruct
     public void init() {
+        company = FacesUtil.getLoggedInUser().getCompany();
         transactionTypeList = transactionTypeService.findAllChild();
     }
 
@@ -147,7 +152,7 @@ public class TransactionReport extends BaseController {
     }
 
     public void view() {
-        totalTransactionAmount=0.00;
+        totalTransactionAmount = 0.00;
         transactionList.clear();
         List<Transaction> transactions = new ArrayList<>();
         System.out.println("entered");

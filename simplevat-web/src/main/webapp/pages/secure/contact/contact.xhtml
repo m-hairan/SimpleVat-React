@@ -109,6 +109,7 @@
                                             <p:ajax update="invoicedetails labuagesPanel organizationName" process="@this" event="itemSelect" listener="#{contactController.updateOrganization()}"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="contactType" value="Contact Type"/>
+                                        <p:message for="contactType" />
                                     </h:panelGroup>
 
 
@@ -162,7 +163,7 @@
                                                      requiredMessage="Please enter address"
                                                      value="#{contactController.contactModel.invoicingAddressLine1}"/>
                                         <p:outputLabel for="addressLine1" value="Address Line1" styleClass="notRequiedSpace" /> 
-
+                                        <p:message for="addressLine1" />
                                     </h:panelGroup>
 
                                     <h:panelGroup styleClass="md-inputfield">
@@ -171,6 +172,8 @@
                                                      requiredMessage="Please enter address"
                                                      value="#{contactController.contactModel.invoicingAddressLine2}"/>
                                         <p:outputLabel for="addressLine2" value="Address Line2" styleClass="notRequiedSpace"/>
+                               
+                                    <p:message for="addressLine2" />
                                     </h:panelGroup>
 
                                     <h:panelGroup styleClass="md-inputfield">
@@ -205,6 +208,7 @@
                                                      requiredMessage="Please enter State"
                                                      value="#{contactController.contactModel.stateRegion}"  />
                                         <p:outputLabel for="stateRegion" value="State Region"/>
+                                  <p:message for="stateRegion" />
                                     </h:panelGroup>
 
                                     <h:panelGroup styleClass="md-inputfield">
@@ -213,6 +217,7 @@
                                                      required="true"
                                                      requiredMessage="Please enter City"/>
                                         <p:outputLabel for="city" value="City"/>
+                                          <p:message for="city" />
                                     </h:panelGroup>
 
                                     <h:panelGroup styleClass="md-inputfield">

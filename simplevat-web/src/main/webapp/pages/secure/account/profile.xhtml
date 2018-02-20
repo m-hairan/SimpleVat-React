@@ -72,6 +72,7 @@
                     <h:panelGroup styleClass="md-inputfield">
                         <p:calendar id="dob"
                                     pattern="MM/dd/yyyy"
+                                    navigator="true" 
                                     maxdate="#{userProfileController.currentUser.today}"
                                     value="#{userProfileController.currentUser.dateOfBirth}"
                                     readonlyInput="#{userProfileController.currentUser.dateOfBirth != null}" />
@@ -118,7 +119,7 @@
                     <h:panelGroup>
                         <p:message for="ecpassword" />
                         <o:validateEqual id="equal" components="epassword ecpassword"
-                                         message="Passwords are not equal" showMessageFor="epassword" />
+                                         message="Password and Confirm Password are Mismatched" showMessageFor="epassword" />
                     </h:panelGroup>
                 </h:panelGroup>
             </p:panelGrid>

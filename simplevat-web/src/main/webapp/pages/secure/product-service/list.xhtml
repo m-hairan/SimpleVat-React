@@ -23,19 +23,19 @@
                     <f:facet name="{TableFooter}">
                         <p:outputLabel styleClass="tableCustomFooter" value="Total Record: #{productListController.productModelList.size()}" />
                     </f:facet>
-                    <p:column headerText="#{messages.name}">
+                    <p:column headerText="#{messages.name}" sortBy="#{product.productName}">
                         <h:outputText value="#{product.productName}"/>
                     </p:column>
                    
-                    <p:column headerText="#{messages.product_code}">
+                    <p:column headerText="#{messages.product_code}" sortBy="#{product.productCode}">
                         <h:outputText value="#{product.productCode}"/>
                     </p:column>
                    
-                    <p:column headerText="#{messages.description}">
+                    <p:column headerText="#{messages.description}" sortBy="#{product.productDescription}">
                         <h:outputText value="#{product.productDescription}"/>
                     </p:column>
                    
-                    <p:column headerText="#{messages.vat}" styleClass="amount">
+                    <p:column headerText="#{messages.vat}" styleClass="amount" sortBy="#{product.vatCategory.name}">
                         <h:outputText  value="#{product.vatCategory.name}">
                         </h:outputText>
                     </p:column>

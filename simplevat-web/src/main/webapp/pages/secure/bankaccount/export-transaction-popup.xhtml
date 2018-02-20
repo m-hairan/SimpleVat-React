@@ -16,14 +16,14 @@
         <p:dialog widgetVar="exportTransactionWidget" modal="true" width="30%" >
             <div class="ui-g form-group" style="margin-bottom: 16px;">
                 <div class="ui-g-12">
-                    <p:panelGrid columns="4" id="exportpanel"
-                                 columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                    <p:panelGrid columns="2" id="exportpanel"
+                                 columnClasses="ui-grid-col-6,ui-grid-col-6" 
                                  layout="grid" 
                                  styleClass="ui-panelgrid-blank form-group"
                                  style="border:0px none; background-color:transparent;">
 
 
-                        <p:outputLabel for="startdate"/>
+                        
                         <h:panelGroup styleClass="md-inputfield" >
                             <p:calendar id="startdate" 
                                         navigator="true"
@@ -31,15 +31,17 @@
                                         value="#{transactionExportController.startDate}" />
                             <label>#{messages.Start_Date}</label>
                             <p:message for="startdate" />
+                            <p:outputLabel for="startdate"/>
                         </h:panelGroup>
 
-                        <p:outputLabel for="enddate"/>
+                        
                         <h:panelGroup styleClass="md-inputfield" >
                             <p:calendar id="enddate" 
                                         navigator="true"
                                         value="#{transactionExportController.endDate}" />
                             <label>#{messages.End_Date}</label>
                             <p:message for="enddate" />
+                            <p:outputLabel for="enddate" />
                         </h:panelGroup>
 
                     </p:panelGrid>
@@ -49,18 +51,18 @@
                                 <p:dataExporter type="csv" target="transactiondata" fileName="transaction" />
                             </h:commandLink>
                         </f:facet>
-                        <p:column headerText="TRANSACTION_DATE">
+                        <p:column headerText="Transaction Date">
                             <h:outputText value="#{transaction.transactionDate}" >
                                 <f:convertDateTime pattern="MM/dd/yyyy" />
                             </h:outputText>
                         </p:column>
-                        <p:column headerText="TRANSACTION_DESCRIPTION">
+                        <p:column headerText="Description">
                             <h:outputText value="#{transaction.transactionDescription}" />
                         </p:column>
-                        <p:column headerText="DEBIT_TRANSACTION_AMOUNT">
+                        <p:column headerText="Debit Amount">
                             <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString().equals('D')}" />
                         </p:column>
-                        <p:column headerText="CREDIT_TRANSACTION_AMOUNT">
+                        <p:column headerText="Credit Amount">
                             <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString().equals('C')}" />
                         </p:column>
                     </p:dataTable>

@@ -142,7 +142,7 @@
                                             </f:facet>
                                             <p:column headerText="Transaction Date" width="130"  sortBy="#{transaction.transactionDate.time}">
                                                 <h:outputText value="#{transaction.transactionDate.time}" >
-                                                    <f:convertDateTime pattern="MM/dd/yyyy"/>
+                                                    <f:convertDateTime pattern="MM/dd/yyyy hh:mm"/>
                                                 </h:outputText>
                                             </p:column>
                                             <p:column headerText="Transaction Description"  width="150">
@@ -155,10 +155,9 @@
                                                 <p:outputLabel value="#{transaction.explainedTransactionCategory.transactionCategoryName}"/>
                                             </p:column>
 
-                                            <p:column headerText="Transaction Amount" styleClass="amount" width="180">
-                                                <p:outputLabel value="#{transaction.bankAccount.bankAccountCurrency.currencySymbol}" />
+                                            <p:column headerText="Transaction Amount" styleClass="amount" width="180" sortBy="#{transaction.transactionAmount}">
                                                 <p:outputLabel value="#{transaction.transactionAmount}" >
-                                                    <f:convertNumber type="currency" currencySymbol=" " />
+                                                    <f:convertNumber type="currency" currencySymbol="#{transactionReport.company.companyCountryCode.currencyCode.currencySymbol} " />
                                                 </p:outputLabel> 
                                             </p:column>
 
@@ -168,9 +167,9 @@
                                                     <p:column styleClass="amount">
                                                         <f:facet name="footer">
                                                             <p:outputPanel autoUpdate="true">
-                                                                <h:outputText id="total" value="#{transaction.bankAccount.bankAccountCurrency.currencySymbol} #{transactionReport.totalTransactionAmount}" >
-                                                                    <f:convertNumber type="currency" currencySymbol=" " />
-                                                                </h:outputText>
+                                                                <p:outputLabel id="total" value="#{transactionReport.totalTransactionAmount}" >
+                                                                    <f:convertNumber type="currency" currencySymbol="#{transactionReport.company.companyCountryCode.currencyCode.currencySymbol} " />
+                                                                </p:outputLabel>
                                                             </p:outputPanel>
                                                         </f:facet>
                                                     </p:column>  

@@ -254,14 +254,31 @@ public class ProjectController extends BaseController implements Serializable {
         context.getExternalContext().getFlash().setKeepMessages(true);
         if (selectedProject.getProjectId() != null && selectedProject.getProjectId() > 0) {
             projectService.update(selectedProject);
-            context.addMessage(null, new FacesMessage("Project updated successfully"));
+            context.addMessage(null, new FacesMessage("Successful", "Project updated successfully"));
         } else {
             projectService.persist(selectedProject);
-            context.addMessage(null, new FacesMessage("Project saved successfully"));
+            context.addMessage(null, new FacesMessage("Successful", "Project saved successfully"));
         }
         init();
 
         return "projects.xhtml?faces-redirect=true";
+    }
+
+    public void saveAndAddMoreProject() throws Exception {
+        User loggedInUser = FacesUtil.getLoggedInUser();
+        selectedProject.setCreatedBy(loggedInUser.getUserId());
+        selectedProject.setCreatedDate(LocalDateTime.now());
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        if (selectedProject.getProjectId() != null && selectedProject.getProjectId() > 0) {
+            projectService.update(selectedProject);
+            context.addMessage(null, new FacesMessage("Successful", "Project updated successfully"));
+        } else {
+            projectService.persist(selectedProject);
+            context.addMessage(null, new FacesMessage("Successful", "Project saved successfully"));
+        }
+        init();
+
     }
 
     public List<Language> completeLanguage(String languageStr) {

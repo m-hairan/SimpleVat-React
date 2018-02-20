@@ -153,7 +153,7 @@ public class SecurityBean implements PhaseListener, Serializable {
                 sendActivationMail(mailEnum, mimeMultipart, mailDefaultConfigurationModel.getMailusername(), email);
                 return "/pages/public/login.xhtml?faces-redirect=true";
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Email address provided."));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Email address provided.",""));
             }
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(SecurityBean.class.getName()).log(Level.SEVERE, null, ex);

@@ -85,7 +85,7 @@ public class InvoiceListController extends BaseController implements Serializabl
     public void initInvoices() {
         System.out.println("inside Post constructor");
         final InvoiceFilter invoiceFilter = new InvoiceFilter();
-        invoices = invoiceService.filter(invoiceFilter);
+        invoices = invoiceService.getInvoiceList();
         populateList();
     }
 

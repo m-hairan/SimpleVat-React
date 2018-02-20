@@ -28,11 +28,8 @@
                             <h1>Import Transaction File</h1>
                             <p:toolbar>
                                 <f:facet name="left">
-                                    <p:fileUpload fileUploadListener="#{transactionImportController.handleFileUpload}" mode="advanced" uploadLabel="Select File"
+                                    <p:fileUpload fileUploadListener="#{transactionImportController.handleFileUpload}" label="Select File (.csv)" mode="advanced" uploadLabel="Select File"
                                                   update="transactionTable footerToolBar" auto="true" sizeLimit="100000" allowTypes="/(\.|\/)(csv)$/"/>
-                                </f:facet>
-                                <f:facet name="left">
-                                    <p:outputLabel value="(.csv)"/>
                                 </f:facet>
                                 <f:facet name="right">
                                     <p:commandButton value="Downlaod Sample File" 
@@ -57,7 +54,9 @@
                                                         completeMethod="#{transactionImportController.completeDateFormat()}"
                                                         value="#{transactionImportController.dateFormat}"
                                                         scrollHeight="250"
-                                                        onkeypress="if (event.keyCode == 13) {return false;}"
+                                                        onkeypress="if (event.keyCode == 13) {
+                                                                    return false;
+                                                                }"
                                                         >
                                             <p:ajax event="itemSelect" process="@this" listener="#{transactionImportController.onDateFormatChange()}" update="transactionTable"/>
                                         </p:autoComplete>
@@ -93,11 +92,11 @@
                                 <p:column headerText="Description" >
                                     <h:outputText value="#{transaction.description}"/>
                                 </p:column>
-                                <p:column headerText="Debit Amount" style="text-align:center" styleClass="debit-#{transaction.invalidFormat}">
-                                    <h:outputText value="#{transaction.drAmount}" />
+                                <p:column headerText="Debit Amount"   styleClass="debit-#{transaction.invalidFormat} amount">
+                                    <h:outputText value="#{transaction.drAmount}" style="text-align:right"/>
                                 </p:column>
-                                <p:column headerText="Credit Amount" style="text-align:center" styleClass="credit-#{transaction.invalidFormat}">
-                                    <h:outputText value="#{transaction.crAmount}" />
+                                <p:column headerText="Credit Amount" styleClass="credit-#{transaction.invalidFormat} amount">
+                                    <h:outputText value="#{transaction.crAmount}" style="text-align:right"/>
                                 </p:column>
                                 <f:facet name="footer">
                                     <h:panelGroup layout="block" style="text-align:left">

@@ -813,6 +813,7 @@ public class InvoiceController extends BaseController implements Serializable {
         product.setDeleteFlag(Boolean.FALSE);
         product.setParentProduct(productModel.getParentProduct());
         product.setVatCategory(productModel.getVatCategory());
+        product.setProductDescription(productModel.getProductDescription());
         product.setCreatedBy(FacesUtil.getLoggedInUser().getUserId());
         product.setCreatedDate(LocalDateTime.now());
         product.setVatIncluded(productModel.getVatIncluded());

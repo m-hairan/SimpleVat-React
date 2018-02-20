@@ -107,7 +107,7 @@
                                                             effect="fold"
                                                             required="true"
                                                             scrollHeight="250"
-                                                            requiredMessage="Please select Contact"
+                                                            requiredMessage="Please Select Contact"
                                                             completeMethod="#{invoiceController.contacts}" 
                                                             value="#{invoiceController.selectedInvoiceModel.invoiceContact}" 
                                                             var="contact"
@@ -184,7 +184,7 @@
                                                         itemLabel="#{country.countryFullName}" 
                                                         required="true"
                                                         scrollHeight="250"
-                                                        requiredMessage="Please select Country"/>
+                                                        requiredMessage="Please Select Country"/>
                                         <p:outputLabel for="CountryCode" value="#{messages.InvoicingCountryCode}" />
                                         <p:message for="CountryCode" />
                                     </h:panelGroup>
@@ -340,7 +340,7 @@
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:calendar id="invoiceDate"
                                                     required="true"
-                                                    requiredMessage="Please enter Invoice Date"
+                                                    requiredMessage="Please Enter Invoice Date"
                                                     navigator="true" 
                                                     pattern="MM/dd/yyyy"
                                                     value="#{invoiceController.selectedInvoiceModel.invoiceDate}"
@@ -355,8 +355,8 @@
                                         <p:inputText 
                                             value="#{invoiceController.selectedInvoiceModel.invoiceDueOn}"
                                             required="true"
-                                            requiredMessage="Please enter Invoice Due In"
-                                            converterMessage="Please enter numbers only." 
+                                            requiredMessage="Please Enter Invoice Due In"
+                                            converterMessage="Please Enter numbers only." 
                                             id="invoiceDueOn" >
                                             <p:ajax event="change" process="invoiceDate invoiceDueOn" update="invoiceDueDate" listener="#{invoiceController.dueDateListener()}"/> 
                                         </p:inputText>
@@ -829,11 +829,11 @@
                                             </p:column>  
                                         </p:row>  
                                         <p:row >  
-                                            <p:column footerText="Total Due" styleClass="amount"/>  
+                                            <p:column footerText="Total Due" styleClass="amount" style="font-weight: bold"/> 
                                             <p:column styleClass="amount">
                                                 <f:facet name="footer">
                                                     <p:outputPanel autoUpdate="true">
-                                                        <h:outputText id="total" value="#{invoiceController.selectedInvoiceModel.invoiceAmount}" >
+                                                        <h:outputText id="total" value="#{invoiceController.selectedInvoiceModel.invoiceAmount}" style="font-weight: bold">
                                                             <f:convertNumber type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} " />
                                                         </h:outputText>
                                                     </p:outputPanel>
