@@ -120,10 +120,10 @@ public class ProductController extends BaseController {
         context.getExternalContext().getFlash().setKeepMessages(true);
         if (productModel.getProductID() == null) {
             productService.persist(product);
-            context.addMessage(null, new FacesMessage("Successful", "Product and Service has been added"));
+            context.addMessage(null, new FacesMessage("Successful", "Product and Service saved successfully"));
         } else {
             productService.update(product);
-            context.addMessage(null, new FacesMessage("Successful", "Product and Service has been updated"));
+            context.addMessage(null, new FacesMessage("Successful", "Product and Service updated successfully"));
         }
 
     }

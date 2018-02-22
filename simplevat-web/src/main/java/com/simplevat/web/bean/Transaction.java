@@ -25,6 +25,6 @@ public class Transaction {
     private String drAmount;
     private String crAmount;
     private Boolean validData;
-    private String invalidFormat;
+    private String format;
     
 }

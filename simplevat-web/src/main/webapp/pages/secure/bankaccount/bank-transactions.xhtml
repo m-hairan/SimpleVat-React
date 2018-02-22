@@ -94,11 +94,11 @@
 
                         <p:column headerText="#{messages.date}" width="115" sortBy="#{transaction.transactionDate.time}" filterMatchMode="contains" filterBy="#{transaction.transactionDate.time}">
                             <h:outputText value="#{transaction.transactionDate.time}" >
-                                <f:convertDateTime pattern="dd/MM/yyyy hh:mm" />
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
                             </h:outputText>
                         </p:column>
 
-                        <p:column headerText="#{messages.description}" filterMatchMode="contains" filterBy="#{transaction.transactionDescription}">
+                        <p:column headerText="#{messages.description}"  filterMatchMode="contains" filterBy="#{transaction.transactionDescription}">
                             <p:outputLabel value="#{transaction.transactionDescription}"/><br/>
                             <h:panelGroup rendered="#{transaction.explanationStatusCode != 2 and transaction.suggestedTransactionString.length() > 0}" >
                                 <p:outputLabel value="#{transaction.suggestedTransactionString}" style="font-size: x-small;color:#ff0000" /> 
@@ -129,7 +129,7 @@
                             </h:outputText>
                         </p:column>
 
-                        <p:column headerText="#{messages.current_balance}" styleClass="amount" width="110" filterMatchMode="contains" filterBy="#{transaction.currentBalance}">
+                        <p:column headerText="#{messages.current_balance}" styleClass="amount" width="130" filterMatchMode="contains" filterBy="#{transaction.currentBalance}" sortBy="#{transaction.currentBalance}">
                             <h:outputText value="#{transaction.currencySymbol} " />
                             <h:outputText value="#{transaction.currentBalance}" >
                                 <f:convertNumber type="currency" currencySymbol=""/>

@@ -205,10 +205,14 @@ public class InvoiceController extends BaseController implements Serializable {
             renderPrintInvoice = true;
             selectedInvoice = invoiceService.findByPK(Integer.parseInt(objSelectedInvoice.toString()));
             selectedInvoiceModel = invoiceModelHelper.getInvoiceModel(selectedInvoice, true);
+            if (selectedInvoiceModel.getShippingContact() != null) {
+                if (selectedInvoiceModel.getInvoiceContact().getContactId() == selectedInvoiceModel.getShippingContact().getContactId()) {
+                    copyInvoiceAddress = true;
+                }
+            }
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("invoiceId", selectedInvoice.getInvoiceId());
         } else {
             selectedInvoiceModel = new InvoiceModel();
-
             currencies = currencyService.getCurrencies();
             setDefaultCurrency();
             Object objSelectedContact = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("contactId");
@@ -221,7 +225,6 @@ public class InvoiceController extends BaseController implements Serializable {
             selectedInvoiceModel.setInvoiceLineItems(new ArrayList());
             selectedInvoiceModel.setInvoiceReferenceNumber("1");
             selectedInvoiceModel.setInvoiceDueDate(getDueDate(selectedInvoiceModel));
-//            selectedInvoiceModel.setInvoiceContact(new Contact());
             configuration = configurationService.getConfigurationByName(ConfigurationConstants.INVOICING_REFERENCE_PATTERN);
             if (configuration != null) {
                 if (configuration.getValue() != null) {
@@ -233,7 +236,6 @@ public class InvoiceController extends BaseController implements Serializable {
                 configuration.setName(ConfigurationConstants.INVOICING_REFERENCE_PATTERN);
             }
         }
-
         titles = titleService.getTitles();
         countries = countryService.getCountries();
         currencies = currencyService.getCurrencies();
@@ -313,18 +315,6 @@ public class InvoiceController extends BaseController implements Serializable {
         }
     }
 
-//    public void addInvoiceItem() {     //---------------
-//        boolean validated = validateInvoiceLineItems();
-//        if (validated) {
-//            InvoiceItemModel invoiceItemModel = new InvoiceItemModel();
-//            VatCategory vatCategory = vatCategoryService.getDefaultVatCategory();
-//            if (vatCategory != null) {
-//                invoiceItemModel.setVatId(vatCategoryService.getDefaultVatCategory());
-//            }
-//            selectedInvoiceModel.addInvoiceItem(invoiceItemModel);
-//        }
-//    }
-    // TODO compare companycurrency and selected Currency
     public String exchangeRate(Currency currency) {
         String exchangeRateString = "";
         currencyConversion = currencyService.getCurrencyRateFromCurrencyConversion(currency.getCurrencyCode());
@@ -339,6 +329,8 @@ public class InvoiceController extends BaseController implements Serializable {
             FacesMessage message = new FacesMessage("Please add atleast one item to create Invoice.");
             message.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage("validationId", message);
+            selectedInvoiceModel.setInvoiceLineItems(new ArrayList());
+            RequestContext.getCurrentInstance().update("invoice:lineItems");
             return false;
         }
         return true;
@@ -577,10 +569,10 @@ public class InvoiceController extends BaseController implements Serializable {
     }
 
     public void saveAndAddMoreInvoice() {
-        removeEmptyRow();
         if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
             return;
         }
+        removeEmptyRow();
         save();
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
@@ -867,14 +859,15 @@ public class InvoiceController extends BaseController implements Serializable {
     }
 
     private void removeEmptyRow() {
+        if(selectedInvoiceModel.getInvoiceLineItems().size()>1){
         List<InvoiceItemModel> invoiceLineItemList = new ArrayList<>();
         for (InvoiceItemModel invoiceLineItem : selectedInvoiceModel.getInvoiceLineItems()) {
-            System.out.println("invoiceLineItem==" + invoiceLineItem.getProductService());
             if (invoiceLineItem.getProductService() == null) {
                 invoiceLineItemList.add(invoiceLineItem);
             }
         }
         selectedInvoiceModel.getInvoiceLineItems().removeAll(invoiceLineItemList);
+        }
     }
 
 }

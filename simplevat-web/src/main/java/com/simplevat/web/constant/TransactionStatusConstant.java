@@ -22,4 +22,6 @@ public final class TransactionStatusConstant {
     public static final String DESCRIPTION = "Description";
     public static final String DEBIT_AMOUNT = "Debit Amount";
     public static final String CREDIT_AMOUNT = "Credit Amount";
+    public static final String INVALID="invalid";
+    public static final String VALID="valid";
 }

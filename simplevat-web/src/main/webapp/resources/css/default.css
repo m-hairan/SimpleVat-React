@@ -32,7 +32,7 @@ body.layout-compact .ui-datatable tbody tr.ui-widget-content td {
     background: url("#{resource['css:paid-icon.png']}") no-repeat left top;
 }
 .status-PARTIALPAID {
-   width: 20px;
+    width: 20px;
     height: 20px;
     background: url("#{resource['css:partial-paid-icon.png']}") no-repeat left top;
 }
@@ -41,6 +41,17 @@ body.layout-compact .ui-datatable tbody tr.ui-widget-content td {
     height: 20px;
     background: url("#{resource['css:unpaid-icon.png']}") no-repeat left top;
 }
+.status-valid {
+    width: 20px;
+    height: 20px;
+    background: url("#{resource['css:right-icon.png']}") no-repeat left top;
+}
+.status-invalid{
+    width: 20px;
+    height: 20px;
+    background: url("#{resource['css:warning-icon.png']}") no-repeat left top;
+}
+
 .transtype-EXPLAINED {
     width: 20px;
     height: 20px;
@@ -78,7 +89,7 @@ body.layout-compact .ui-datatable tbody tr.ui-widget-content td {
 
 .tree td.first-child {
     padding-left: 20px;
-    
+
 }
 .tree tbody tr td.first-child {
     background:  url("#{resource['css:tree-node-line.png']}") center center no-repeat;

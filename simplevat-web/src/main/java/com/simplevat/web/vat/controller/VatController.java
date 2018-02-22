@@ -13,6 +13,7 @@ import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.utils.FacesUtil;
 import java.util.Date;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
@@ -63,6 +64,9 @@ public class VatController extends BaseController {
             category.setId(category.getId());
             vatCategoryService.update(category);
         }
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        context.addMessage(null, new FacesMessage("Successful", "Vat Category saved successfully"));
         return "vat-list?faces-redirect=true";
     }
 

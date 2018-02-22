@@ -26,26 +26,43 @@
                     <div class="ui-g">
                         <div class="ui-g-12">
                             <h1>Import Transaction File</h1>
-                            <p:toolbar>
-                                <f:facet name="left">
-                                    <p:fileUpload fileUploadListener="#{transactionImportController.handleFileUpload}" label="Select File (.csv)" mode="advanced" uploadLabel="Select File"
-                                                  update="transactionTable footerToolBar" auto="true" sizeLimit="100000" allowTypes="/(\.|\/)(csv)$/"/>
-                                </f:facet>
-                                <f:facet name="right">
-                                    <p:commandButton value="Downlaod Sample File" 
-                                                     icon="ui-icon-file-download" ajax="false">
-                                        <p:fileDownload value="#{transactionImportController.file}" />
-                                    </p:commandButton>
-                                </f:facet>
-                            </p:toolbar>
                             <br/>
                             <p:fieldset legend="#{messages.select_dateformat}" toggleable="false"
                                         toggleSpeed="500">
                                 <p:messages autoUpdate="true" id="validationId" closable="true" for="validationId" />
-                                <p:panelGrid columns="3"
-                                             columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
+                                <p:panelGrid columns="3" 
+                                             columnClasses="ui-grid-col-2,ui-grid-col-5,ui-grid-col-5"
                                              layout="grid" styleClass="ui-panelgrid-blank form-group"
                                              style="border:0px none; background-color:transparent;">
+                                    <h:panelGroup >
+                                        <p:fileUpload fileUploadListener="#{transactionImportController.handleFileUpload}" label="Select File (.csv)" mode="advanced" uploadLabel="Select File"
+                                                      update="transactionTable footerToolBar" auto="true" sizeLimit="100000" allowTypes="/(\.|\/)(csv)$/"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="delimiter"  value="#{transactionImportController.delimiter}">  
+                                        </p:inputText>  
+                                        <p:outputLabel for="delimiter" value="Delimiter"/>
+                                        <p:message for="delimiter" />
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputNumber id="ignoreRow" emptyValue="empty" value="#{transactionImportController.headerCount}" onclick="this.select();" minValue="0" maxValue="30">  
+                                            <p:ajax event="keyup" process="@this" listener="#{transactionImportController.onChange()}" update="transactionTable footerToolBar"/>
+                                        </p:inputNumber>  
+                                        <p:outputLabel for="ignoreRow" value="Skip Rows"/>
+                                        <p:message for="ignoreRow" />
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:commandButton value="Downlaod Sample File" 
+                                                         icon="ui-icon-file-download" ajax="false">
+                                            <p:fileDownload value="#{transactionImportController.file}" />
+                                        </p:commandButton>
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputwrapper-focus" >
+                                        <p:selectBooleanCheckbox id="headerRow" value="#{transactionImportController.headerIncluded}">
+                                            <p:ajax update="transactionTable footerToolBar" process="@this" event="change" listener="#{transactionImportController.onChange()}"/>
+                                        </p:selectBooleanCheckbox>
+                                        <p:outputLabel for="headerRow" value="Header Row"/>
+                                    </h:panelGroup>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="dateType"
                                                         dropdown="true"
@@ -58,16 +75,9 @@
                                                                     return false;
                                                                 }"
                                                         >
-                                            <p:ajax event="itemSelect" process="@this" listener="#{transactionImportController.onDateFormatChange()}" update="transactionTable"/>
+                                            <p:ajax event="itemSelect" process="@this" listener="#{transactionImportController.onChange()}" update="transactionTable footerToolBar"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="dateType" value="Date Formats"/>
-                                    </h:panelGroup>
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputNumber id="ignoreRow" emptyValue="empty" value="#{transactionImportController.headerCount}" onclick="this.select();" minValue="0" maxValue="30">  
-                                            <p:ajax event="keyup" process="@this" listener="#{transactionImportController.onIgnoreRowChange()}" update="transactionTable"/>
-                                        </p:inputNumber>  
-                                        <p:outputLabel for="ignoreRow" value="Ignore Header Row"/>
-                                        <p:message for="ignoreRow" />
                                     </h:panelGroup>
                                 </p:panelGrid>
                             </p:fieldset>
@@ -80,22 +90,28 @@
                                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader} {TableFooter}">
                                 <f:facet name="header">Uploaded Transactions</f:facet>
                                 <f:facet name="{TableHeader}">
-                                    <p:outputLabel styleClass="tableCustomHeader" value="Total Invalid Rows  #{transactionImportController.totalErrorRows}"/>
+                                    <p:outputLabel styleClass="tableCustomHeader" value="Total Invalid Row:  #{transactionImportController.totalErrorRows}"/>
                                 </f:facet>
                                 <f:facet name="{TableFooter}">
                                     <p:outputLabel styleClass="tableCustomFooter" value="Total Record: #{transactionImportController.transactionList.size()}"/>
                                 </f:facet>
-                                <!--                            <p:column selectionMode="multiple" style="width:16px;text-align:center"/>-->
-                                <p:column headerText="Transaction Date"  styleClass="date-#{transaction.invalidFormat}">
+                                <p:column width="30" style="text-align: center">
+                                    <h:panelGroup layout="block">
+                                        <h:panelGroup layout="block" style="display:block" styleClass="label status-#{transaction.format}" >
+                                            <h:outputText value=" "/>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                </p:column>
+                                <p:column headerText="Transaction Date" >
                                     <h:outputText value="#{transaction.transactionDate}" />
                                 </p:column>
                                 <p:column headerText="Description" >
                                     <h:outputText value="#{transaction.description}"/>
                                 </p:column>
-                                <p:column headerText="Debit Amount"   styleClass="debit-#{transaction.invalidFormat} amount">
+                                <p:column headerText="Debit Amount"   styleClass="amount">
                                     <h:outputText value="#{transaction.drAmount}" style="text-align:right"/>
                                 </p:column>
-                                <p:column headerText="Credit Amount" styleClass="credit-#{transaction.invalidFormat} amount">
+                                <p:column headerText="Credit Amount" styleClass="amount">
                                     <h:outputText value="#{transaction.crAmount}" style="text-align:right"/>
                                 </p:column>
                                 <f:facet name="footer">
@@ -105,22 +121,23 @@
                             </p:dataTable>
 
                             <p:spacer height="10px"/>
-                            <p:toolbar id="footerToolBar">
+                            <p:toolbar id="footerToolBar" >
                                 <f:facet name="left">
-                                    <h:panelGroup rendered="#{not empty transactionImportController.transactionList}">
+                                    <h:panelGroup rendered="#{transactionImportController.renderButtonOnValidData}" >
                                         <p:commandButton value="Save" 
                                                          action="#{transactionImportController.saveTransactions}"
-                                                         icon="ui-icon-save"/>
+                                                         icon="ui-icon-save" />
 
                                         <span class="ui-separator" style="padding-right: 5px;">
                                             <span class="fa fa-ellipsis-v SoftGray" />
                                         </span>
+
                                     </h:panelGroup>
 
                                     <si:cbutton type="cancel"/>
                                 </f:facet>
 
-                                <f:facet name="right">
+                                <f:facet name="right" >
                                     <si:cbutton type="home"/>
                                 </f:facet>
                             </p:toolbar>

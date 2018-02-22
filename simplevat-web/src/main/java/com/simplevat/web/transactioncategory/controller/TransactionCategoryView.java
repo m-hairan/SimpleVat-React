@@ -23,6 +23,7 @@ import com.simplevat.web.constant.DefualtTypeConstant;
 import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.transactioncategory.model.TransactionCategoryModel;
 import java.io.Serializable;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 import lombok.Getter;
@@ -176,6 +177,9 @@ public class TransactionCategoryView extends BaseController implements Serializa
             selectedTransactionCategory.setLastUpdateDate(LocalDateTime.now());
             transactionCategoryService.update(selectedTransactionCategory);
         }
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        context.addMessage(null, new FacesMessage("Successful", "Transaction saved successfully"));
     }
 
     public String editAction() {
@@ -202,6 +206,9 @@ public class TransactionCategoryView extends BaseController implements Serializa
         selectedTransactionCategory.setDeleteFlag(Boolean.TRUE);
         transactionCategoryService.update(selectedTransactionCategory);
         transactionCategories = transactionCategoryService.findAllTransactionCategory();
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        context.addMessage(null, new FacesMessage("Successful", "Transaction deleted successfully"));
         return HOME_PAGE;
 
     }

@@ -96,6 +96,15 @@ public class TransactionImportController implements Serializable {
     @Setter
     private Integer headerCount;
     private List<String> invalidHeaderTransactionList = new ArrayList<>();
+    @Getter
+    @Setter
+    private boolean headerIncluded = false;
+    @Getter
+    @Setter
+    private String delimiter = ",";
+    @Getter
+    @Setter
+    private boolean renderButtonOnValidData;
 
     @PostConstruct
     public void init() {
@@ -125,11 +134,7 @@ public class TransactionImportController implements Serializable {
         populateTranscationOnFileUpload();
     }
 
-    public void onDateFormatChange() {
-        populateTranscationOnFileUpload();
-    }
-
-    public void onIgnoreRowChange() {
+    public void onChange() {
         populateTranscationOnFileUpload();
     }
 
@@ -139,34 +144,19 @@ public class TransactionImportController implements Serializable {
         creditTransaction.clear();
         invalidHeaderTransactionList.clear();
         totalErrorRows = 0;
+        renderButtonOnValidData=true;
         try {
             if (listParser != null) {
                 int recordNo = 0;
                 int headerIndex = 0;
+                Integer header;
                 for (CSVRecord cSVRecord : listParser) {
-                    if (headerIndex <= headerCount) {
-                        if (headerIndex == headerCount) {
-                            int i = 0;
-                            String dateHeading = cSVRecord.get(i++);
-                            String descriptionHeading = cSVRecord.get(i++);
-                            String drAmountHeading = cSVRecord.get(i++);
-                            String crAmountHeading = cSVRecord.get(i++);
-                            if (!dateHeading.equals(TransactionStatusConstant.TRANSACTION_DATE)) {
-                                invalidHeaderTransactionList.add(dateHeading);
-                            }
-                            if (!descriptionHeading.equals(TransactionStatusConstant.DESCRIPTION)) {
-                                invalidHeaderTransactionList.add(descriptionHeading);
-                            }
-                            if (!drAmountHeading.equals(TransactionStatusConstant.DEBIT_AMOUNT)) {
-                                invalidHeaderTransactionList.add(drAmountHeading);
-                            }
-                            if (!crAmountHeading.equals(TransactionStatusConstant.CREDIT_AMOUNT)) {
-                                invalidHeaderTransactionList.add(crAmountHeading);
-                            }
-                            if (!invalidHeaderTransactionList.isEmpty()) {
-                                break;
-                            }
-                        }
+                    if (headerIncluded) {
+                        header = headerCount + 1;
+                    } else {
+                        header = headerCount;
+                    }
+                    if (headerIndex < header) {
                         headerIndex++;
                     } else {
                         Transaction transaction = new Transaction();
@@ -178,23 +168,21 @@ public class TransactionImportController implements Serializable {
                         String crAmount = cSVRecord.get(i++);
 
                         try {
-                            transaction.setInvalidFormat("date");
+
                             Date dateTranscation = new SimpleDateFormat(dateFormat).parse(date);
                             LocalDateTime transactionDate = Instant.ofEpochMilli(dateTranscation.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
                             if (!drAmount.isEmpty()) {
-                                transaction.setInvalidFormat("debit");
                                 new BigDecimal(Float.valueOf(drAmount));
                             }
                             if (!crAmount.isEmpty()) {
-                                transaction.setInvalidFormat("credit");
                                 new BigDecimal(Float.valueOf(crAmount));
                             }
-                            transaction.setInvalidFormat("no");
                             transaction.setTransactionDate(date);
                             transaction.setDescription(description);
                             transaction.setDrAmount(drAmount);
                             transaction.setCrAmount(crAmount);
                             transaction.setValidData(Boolean.TRUE);
+                            transaction.setFormat(TransactionStatusConstant.VALID);
                             transactionList.add(transaction);
                         } catch (Exception e) {
                             totalErrorRows = totalErrorRows + 1;
@@ -203,7 +191,9 @@ public class TransactionImportController implements Serializable {
                             transaction.setDrAmount(drAmount);
                             transaction.setCrAmount(crAmount);
                             transaction.setValidData(Boolean.FALSE);
+                            transaction.setFormat(TransactionStatusConstant.INVALID);
                             transactionList.add(transaction);
+                            renderButtonOnValidData=false;
                         }
                         if (transaction.getDrAmount() != null && !transaction.getDrAmount().trim().isEmpty()) {
                             debitTransaction.add(transaction);

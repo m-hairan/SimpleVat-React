@@ -46,9 +46,6 @@
                     <p:column headerText="Currency Code" sortBy="#{project.currency.currencyCode}" filterMatchMode="contains" filterBy="#{project.currency.currencyIsoCode}">
                         <h:outputText value="#{project.currency.currencyIsoCode}"/>
                     </p:column>
-<!--                    <p:column headerText="Created By" sortBy="#{project.createdBy}" filterMatchMode="contains" filterBy="#{project.createdBy}">
-                        <h:outputText value="#{project.createdBy}"/>
-                    </p:column>-->
                     <p:column headerText="Contact Name" filterMatchMode="contains" filterBy="#{project.contact.firstName} #{project.contact.lastName}"
                               sortBy="#{project.contact.firstName} #{project.contact.lastName}">
                         <h:outputText
@@ -61,6 +58,7 @@
                             <f:attribute name="pattern" value="dd/MM/yyyy"/>
                         </h:outputText>
                     </p:column>-->
+
                     <p:column headerText="Action">
                         <p:commandButton title="View project"
                                          icon="ui-icon-edit"

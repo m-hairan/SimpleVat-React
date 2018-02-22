@@ -433,7 +433,7 @@ public class PurchaseController extends BaseController implements Serializable {
         Purchase purchase = purchaseControllerHelper.getPurchase(selectedPurchaseModel);
         purchase.setDeleteFlag(true);
         purchaseService.update(purchase);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Purchase deleted successfully"));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("","Purchase deleted successfully"));
         return "purchase-list.xhtml?faces-redirect=true";
     }
 

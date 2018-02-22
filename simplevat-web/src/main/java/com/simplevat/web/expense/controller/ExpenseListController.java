@@ -64,7 +64,7 @@ public class ExpenseListController extends BaseController implements Serializabl
         Expense expense = controllerHelper.getExpense(selectedExpenseModel);
         expense.setDeleteFlag(true);
         expenseService.update(expense);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Expense deleted successfully"));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Successful","Expense deleted successfully"));
         return "list.xhtml?faces-redirect=true";
     }
 
