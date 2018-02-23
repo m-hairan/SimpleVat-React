@@ -548,7 +548,7 @@ public class InvoiceController extends BaseController implements Serializable {
         save();
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("Successful", "Invoice Saved Successfully"));
+        context.addMessage(null, new FacesMessage("", "Invoice Saved successfully"));
         return "list?faces-redirect=true";
 
     }
@@ -576,7 +576,7 @@ public class InvoiceController extends BaseController implements Serializable {
         save();
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("Successful", "Invoice Saved Successfully"));
+        context.addMessage(null, new FacesMessage("", "Invoice Saved successfully"));
         init();
     }
 

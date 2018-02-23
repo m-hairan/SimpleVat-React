@@ -66,7 +66,8 @@
                                                      required="true"
                                                      disabled="true"
                                                      requiredMessage="Please enter Invoice Ref. No."
-                                                     value="#{invoiceController.selectedInvoiceModel.invoiceReferenceNumber}"/>
+                                                     value="#{invoiceController.selectedInvoiceModel.invoiceReferenceNumber}">
+                                            <p:clientValidator event="keyup"/></p:inputText>
                                         <p:outputLabel for="invoiceId" value="#{messages.invoice_ref_no}"/>
                                         <p:message for="invoiceId" />
                                     </h:panelGroup>
@@ -112,6 +113,7 @@
                                                             onkeypress="if (event.keyCode == 13) {
                                                                         return false;
                                                                     }">
+                                                <p:clientValidator event="itemSelect"/>
                                                 <p:ajax event="itemSelect"
                                                         listener="#{invoiceController.updateCurrency}" 
                                                         update="currency invoiceField invoiceItemTable exchangeCurrency @(.shippingContact)" />
@@ -146,6 +148,7 @@
                                                      value="#{invoiceController.selectedInvoiceModel.invoiceContact.invoicingAddressLine1}"
                                                      required="true"
                                                      requiredMessage="Please Enter address">
+                                            <p:clientValidator event="keyup"/>
                                         </p:inputText>
                                         <p:outputLabel  for="Address1" value="#{messages.addressLine1}" />
                                         <p:message for="Address1" />
@@ -157,6 +160,7 @@
                                                      value="#{invoiceController.selectedInvoiceModel.invoiceContact.invoicingAddressLine2}"
                                                      required="true"
                                                      requiredMessage="Please Enter address">
+                                            <p:clientValidator event="keyup"/>
                                         </p:inputText>
                                         <p:outputLabel  for="Address2" value="#{messages.addressLine2}" />
                                         <p:message for="Address2" />
@@ -182,7 +186,8 @@
                                                         itemLabel="#{country.countryFullName}" 
                                                         required="true"
                                                         scrollHeight="250"
-                                                        requiredMessage="Please Select Country"/>
+                                                        requiredMessage="Please Select Country">
+                                            <p:clientValidator event="itemSelect"/></p:autoComplete>
                                         <p:outputLabel for="CountryCode" value="#{messages.InvoicingCountryCode}" />
                                         <p:message for="CountryCode" />
                                     </h:panelGroup>
@@ -194,6 +199,7 @@
                                                      value="#{invoiceController.selectedInvoiceModel.invoiceContact.stateRegion}"
                                                      required="true"
                                                      requiredMessage="Please Enter state">
+                                            <p:clientValidator event="keyup"/>
                                         </p:inputText>
                                         <p:outputLabel  for="state" value="#{messages.CompanyStateRegion}" />
                                         <p:message for="state" />
@@ -204,6 +210,7 @@
                                                      value="#{invoiceController.selectedInvoiceModel.invoiceContact.city}"
                                                      required="true"
                                                      requiredMessage="Please Enter city">
+                                            <p:clientValidator event="keyup"/>
                                         </p:inputText>
                                         <p:outputLabel  for="city" value="#{messages.CompanyCity}"/>
                                         <p:message for="city"/>
@@ -346,6 +353,7 @@
                                                     pattern="MM/dd/yyyy"
                                                     value="#{invoiceController.selectedInvoiceModel.invoiceDate}"
                                                     >
+                                            <p:clientValidator event="dateSelect"/>
                                             <p:ajax event="dateSelect" process="invoiceDate invoiceDueOn" update="invoiceDueDate" listener="#{invoiceController.dueDateListener()}"/> 
                                         </p:calendar>
                                         <p:outputLabel for="invoiceDate" value="#{messages.invoice_date}" />
@@ -359,6 +367,7 @@
                                             requiredMessage="Please Enter Invoice Due In"
                                             converterMessage="Please Enter numbers only." 
                                             id="invoiceDueOn" >
+                                            <p:clientValidator event="keyup"/>
                                             <p:ajax event="change" process="invoiceDate invoiceDueOn" update="invoiceDueDate" listener="#{invoiceController.dueDateListener()}"/> 
                                         </p:inputText>
                                         <p:outputLabel for="invoiceDueOn" value="#{messages.invoice_due_in}"/>
@@ -390,6 +399,7 @@
                                                         value="#{invoiceController.selectedInvoiceModel.currencyCode}"
                                                         var="currency" itemValue="#{currency.currencyCode}"
                                                         itemLabel="#{currency.currencyIsoCode}  #{currency.currencySymbol}" >
+                                            <p:clientValidator event="itemSelect"/>
                                             <p:ajax event="itemSelect" 
                                                     update="invoiceItemTable @form:exchangeCurrency invoiceItemTable:totalHeader" oncomplete="updateLineItemFooterColumnGroup()" />
                                         </p:autoComplete>
@@ -437,6 +447,7 @@
                                                             required="true"
                                                             requiredMessage="Select recurring interval"
                                                             >
+                                                <p:clientValidator event="itemSelect"/>
                                                 <p:ajax event="itemSelect" process="@this" update="recurringPanel"/>
                                             </p:autoComplete>
                                             <label>#{messages.Interval}</label>
@@ -460,6 +471,7 @@
                                                 required="true"
                                                 requiredMessage="Select recurring day"
                                                 >
+                                                <p:clientValidator event="itemSelect"/>
                                                 <p:ajax event="itemSelect" process="@this" update="recurringPanel"/>
                                             </p:autoComplete>
                                             <label>#{messages.On}</label>
@@ -487,6 +499,7 @@
                                                 required="true"
                                                 requiredMessage="Select day from month"
                                                 >
+                                                <p:clientValidator event="itemSelect"/>
                                             </p:autoComplete>
                                             <p:message for="firsttolast"/>
                                         </h:panelGroup>
@@ -514,6 +527,7 @@
                                                 required="true"
                                                 requiredMessage="Select week day"
                                                 >
+                                                <p:clientValidator event="itemSelect"/>
                                             </p:autoComplete>
                                             <label>#{messages.Week}</label>
                                             <p:message for="weeks"/>
@@ -527,10 +541,10 @@
                                                                                              or invoiceController.selectedInvoiceModel.recurringInterval.value == 3}">
 
                                             <p:inputText id="every" 
-
                                                          style="width:100%"
                                                          required="true"
                                                          requiredMessage="Enter day mumber">
+                                                <p:clientValidator event="keyup"/>
                                             </p:inputText>
                                             <label>#{messages.Every}</label>
                                             <p:message for="every"/>
@@ -554,6 +568,7 @@
                                                 required="true"
                                                 requiredMessage="Select Month"
                                                 >
+                                                <p:clientValidator event="itemSelect"/>
                                             </p:autoComplete>
                                             <label>#{messages.Every}</label>
                                             <p:message for="months"/>
@@ -565,7 +580,9 @@
                                             <p:calendar id="startDate" 
                                                         required="true"
                                                         navigator="true"
-                                                        requiredMessage="Select Start Date"/>
+                                                        requiredMessage="Select Start Date">
+                                                <p:clientValidator event="dateSelect"/>
+                                            </p:calendar>
                                             <label>#{messages.Start_Date}</label>
                                             <p:message for="startDate"/>
                                         </h:panelGroup>
@@ -588,6 +605,7 @@
                                                 required="true"
                                                 requiredMessage="Select duration"
                                                 >
+                                                <p:clientValidator event="itemSelect"/>
                                                 <p:ajax event="itemSelect" process="@this" update="recurringPanel"/>
                                             </p:autoComplete>
                                             <label>#{messages.End}</label>
@@ -599,7 +617,9 @@
                                             <p:calendar id="endDate" 
                                                         required="true"
                                                         navigator="true"
-                                                        requiredMessage="Enter End date"/>
+                                                        requiredMessage="Enter End date">
+                                                <p:clientValidator event="dateSelect"/>
+                                            </p:calendar>
                                             <label>#{messages.End_Date}</label>
                                             <p:message for="endDate"/>
                                         </h:panelGroup>
@@ -611,6 +631,7 @@
                                                          style="width:100%"
                                                          required="true"
                                                          requiredMessage="Enter Occurrence">
+                                                <p:clientValidator event="keyup"/>
                                             </p:inputText>
                                             <label>#{messages.Occurrences}</label>
                                             <p:message for="occurences"/>
@@ -655,7 +676,8 @@
                                                             itemValue="#{product}"
                                                             itemLabel="#{product.productName}"
                                                             onkeypress="if (event.keyCode == 13) {
-                                                                        return false;}">
+                                                                        return false;
+                                                                    }">
                                                 <p:ajax update="invoiceItemTable" event="itemSelect" listener="#{invoiceController.updateVatPercentage(invoiceItem,invoiceController.selectedInvoiceModel.invoiceLineItems.size())}" />
                                             </p:autoComplete>
                                             <h:panelGroup styleClass="md-inputfield">
@@ -668,7 +690,8 @@
                                         <p:inputText id="description" 
                                                      value="#{invoiceItem.description}" 
                                                      onkeypress="if (event.keyCode == 13) {
-                                                                 return false;}"
+                                                                 return false;
+                                                             }"
                                                      style="width:100%">
                                             <p:ajax event="change"/>
                                         </p:inputText>
@@ -731,7 +754,7 @@
                                     <p:column  headerText="Subtotal (#{invoiceController.selectedInvoiceModel.currencyCode.currencyIsoCode})" styleClass="amount">
                                         <h:panelGroup id="totalHeader">
                                             <h:outputText   id="subTotal" value="#{invoiceItem.subTotal}" >
-                                                <f:convertNumber id="subTotal1"  type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} "/>
+                                                <f:convertNumber type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} "/>
                                             </h:outputText>
                                         </h:panelGroup>
                                     </p:column>
@@ -807,7 +830,7 @@
                                                 <f:facet name="footer">
                                                     <p:outputPanel autoUpdate="true">
                                                         <h:outputText id="totalDiscount" value="#{invoiceController.selectedInvoiceModel.calculatedDiscountAmount}"  >
-                                                            <f:convertNumber id="totalDis" type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} "/>
+                                                            <f:convertNumber type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} "/>
                                                         </h:outputText>
                                                     </p:outputPanel>
                                                 </f:facet>
@@ -941,6 +964,7 @@
             <script type="text/javascript">
                 //   <![CDATA[
                 function clearTextField(event, element) {
+                    console.log("entered");
                     if ($(element).val() == 0)
                         $(element).val("");
                 }

@@ -42,7 +42,7 @@ public class VatListController extends BaseController implements Serializable {
     private VatCategoryService vatCategoryService;
 
     public VatListController() {
-        super(ModuleName.SETTING_MODULE);
+        super(ModuleName.VATCATEGORY_MODULE);
     }
 
     @PostConstruct
@@ -70,7 +70,7 @@ public class VatListController extends BaseController implements Serializable {
             vatCategoryService.update(vatCategory, vatCategory.getId());
             FacesContext context = FacesContext.getCurrentInstance();
             context.getExternalContext().getFlash().setKeepMessages(true);
-            context.addMessage(null, new FacesMessage("Successful", "Vat Category deleted SuccessFully"));
+            context.addMessage(null, new FacesMessage("", "Vat Category deleted successFully"));
             init();
         }
     }

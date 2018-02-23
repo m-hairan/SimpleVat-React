@@ -31,7 +31,8 @@
                                             value="#{purchaseController.contactModel.title}" 
                                             var="title" 
                                             itemValue="#{title.titleCode}" 
-                                            itemLabel="#{title.titleDescription}"/>
+                                            itemLabel="#{title.titleDescription}">
+                                <p:clientValidator event="itemSelect"/></p:autoComplete>
                             <p:outputLabel for="contactTitle" value="Title"/>
                             <p:message for="contactTitle" />
                         </h:panelGroup>
@@ -43,7 +44,9 @@
 
 
                         <h:panelGroup styleClass="md-inputfield">
-                            <p:inputText id="firstname" value="#{purchaseController.contactModel.firstName}" required="true" requiredMessage="Please Enter name"/>
+                            <p:inputText id="firstname" value="#{purchaseController.contactModel.firstName}"
+                                         required="true" requiredMessage="Please Enter name">
+                                <p:clientValidator event="keyup"/></p:inputText>
                             <p:outputLabel for="firstname" value="First Name" styleClass="notRequiedSpace" />
                             <p:message for="firstname"/>
                         </h:panelGroup>
@@ -57,7 +60,9 @@
 
 
                         <h:panelGroup styleClass="md-inputfield" >
-                            <p:inputText id="lastname" value="#{purchaseController.contactModel.lastName}" required="true" requiredMessage="Enter Last name"/>
+                            <p:inputText id="lastname" value="#{purchaseController.contactModel.lastName}"
+                                         required="true" requiredMessage="Enter Last name">
+                                <p:clientValidator event="keyup"/></p:inputText>
                             <p:outputLabel for="lastname" value="Last Name" styleClass="notRequiedSpace" />
                             <p:message for="lastname"/>
                         </h:panelGroup>
@@ -66,7 +71,9 @@
 
 
                         <h:panelGroup styleClass="md-inputfield">
-                            <p:inputText id="emailid" value="#{purchaseController.contactModel.email}" required="true" validatorMessage="Invalid email format" requiredMessage="Enter EmailId">
+                            <p:inputText id="emailid" value="#{purchaseController.contactModel.email}" 
+                                         required="true" validatorMessage="Invalid email format" requiredMessage="Enter EmailId">
+                                <p:clientValidator event="keyup"/>
                                 <f:validateRegex
                                     pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                             </p:inputText>
@@ -78,7 +85,8 @@
                             <p:inputText id="addressLine1"
                                          required="true"
                                          requiredMessage="Please enter address"
-                                         value="#{purchaseController.contactModel.invoicingAddressLine1}"/>
+                                         value="#{purchaseController.contactModel.invoicingAddressLine1}">
+                                <p:clientValidator event="keyup"/></p:inputText>
                             <p:outputLabel for="addressLine1" value="Address Line1" styleClass="notRequiedSpace" /> 
                             <p:message for="addressLine1" />
                         </h:panelGroup>
@@ -87,7 +95,8 @@
                             <p:inputText id="addressLine2"
                                          required="true"
                                          requiredMessage="Please enter address"
-                                         value="#{purchaseController.contactModel.invoicingAddressLine2}"/>
+                                         value="#{purchaseController.contactModel.invoicingAddressLine2}">
+                                <p:clientValidator event="keyup"/></p:inputText>
                             <p:outputLabel for="addressLine2" value="Address Line2" styleClass="notRequiedSpace"/>
                             <p:message for="addressLine2" />
                         </h:panelGroup>
@@ -95,7 +104,8 @@
                             <p:inputText id="stateRegion"
                                          required="true"
                                          requiredMessage="Please enter State"
-                                         value="#{purchaseController.contactModel.stateRegion}"  />
+                                         value="#{purchaseController.contactModel.stateRegion}"  >
+                                <p:clientValidator event="keyup"/></p:inputText>
                             <p:outputLabel for="stateRegion" value="State Region"/>
                             <p:message for="stateRegion" />
                         </h:panelGroup>
@@ -104,7 +114,8 @@
                             <p:inputText id="city" 
                                          value="#{purchaseController.contactModel.city}"
                                          required="true"
-                                         requiredMessage="Please enter City"/>
+                                         requiredMessage="Please enter City">
+                                <p:clientValidator event="keyup"/></p:inputText>
                             <p:outputLabel for="city" value="City"/>
                             <p:message for="city" />
                         </h:panelGroup>
@@ -123,7 +134,7 @@
                                             itemLabel="#{country.countryFullName}" 
                                             required="true"
                                             requiredMessage="Please select Country">
-
+                                <p:clientValidator event="itemSelect"/>
                             </p:autoComplete>
                             <p:outputLabel for="country" value="Country"/>
                             <p:message for="country" />
@@ -142,7 +153,9 @@
                                             value="#{purchaseController.contactModel.currency}"
                                             var="currency" 
                                             itemValue="#{currency.currencyCode}"
-                                            itemLabel="#{currency.currencyDescription} - #{currency.currencySymbol}" />
+                                            itemLabel="#{currency.currencyDescription} - #{currency.currencySymbol}" >
+                            <p:clientValidator event="itemSelect"/>
+                            </p:autoComplete>
                             <p:outputLabel for="currency" value="Currency Code"/>
                             <p:message for="currency" />
                         </h:panelGroup>
@@ -152,6 +165,7 @@
                                          requiredMessage="Please enter Billing Email"
                                          value="#{purchaseController.contactModel.billingEmail}"
                                          validatorMessage="Invalid email format" >
+                                <p:clientValidator event="keyup"/>
                                 <f:validateRegex
                                     pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                             </p:inputText>

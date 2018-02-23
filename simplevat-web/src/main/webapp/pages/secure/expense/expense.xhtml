@@ -11,6 +11,13 @@
             .ui-fileupload-content{
                 display:none !important;  
             }
+            .ui-grid-col-11{
+                padding: 0 !important;
+                width: 88.66666%;
+            }
+            .ui-grid-col-1{
+                padding: 5px !important;
+            }
         </style>
 
     </ui:define>
@@ -55,6 +62,7 @@
                                                 required="true"
                                                 scrollHeight="250"
                                                 requiredMessage="Please select Claimant">
+                                                <p:clientValidator event="itemSelect"/>
                                             </p:autoComplete>
                                             <p:outputLabel for="expenseClaimantId" value="#{messages.claimant}"/>
                                             <p:message for="expenseClaimantId" />
@@ -77,6 +85,7 @@
                                                 required="true"
                                                 requiredMessage="Please select Transaction Category"
                                                 >
+                                                <p:clientValidator event="itemSelect"/>
                                             </p:autoComplete>
                                             <p:outputLabel for="expenseTransactionCategory" value="#{messages.category}"/>
                                             <p:message for="expenseTransactionCategory"/>
@@ -88,7 +97,8 @@
                                                 value="#{expenseController.selectedExpenseModel.expenseDate}" 
                                                 required="true"
                                                 navigator="true"
-                                                requiredMessage="Please select expense date"/>
+                                                requiredMessage="Please select expense date">
+                                                <p:clientValidator event="dateSelect"/></p:calendar>
                                             <p:outputLabel for="expenseDate" value="#{messages.expense_date}"/>
                                             <p:message for="expenseDate" />
                                         </h:panelGroup>
@@ -107,6 +117,7 @@
                                                             itemLabel="#{currency.currencyIsoCode}  #{currency.currencySymbol} " 
                                                             required="true"
                                                             requiredMessage="Please select currency">
+                                                <p:clientValidator event="itemSelect"/>
                                                 <p:ajax event="itemSelect" 
                                                         update="expenseItemTable,exchangeCurrency" />
                                             </p:autoComplete>
@@ -114,36 +125,42 @@
                                             <p:message for="expenseCurrency" />
                                         </h:panelGroup>
 
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:autoComplete id="conatcts" 
-                                                            converter="#{contactConverter}"
-                                                            dropdown="true" 
-                                                            forceSelection="true"
-                                                            effect="fold"
-                                                            required="true"
-                                                            scrollHeight="250"
-                                                            requiredMessage="Please select Contact"
-                                                            completeMethod="#{expenseController.contacts}" 
-                                                            value="#{expenseController.selectedExpenseModel.expenseContact}" 
-                                                            var="contact"
-                                                            itemValue="#{contact}"
-                                                            itemLabel="#{contact.firstName} #{contact.lastName}"
+                                        <p:panelGrid columns="2" 
+                                                     columnClasses="ui-grid-col-11,ui-grid-col-1"
+                                                     layout="grid" 
+                                                     styleClass="ui-panelgrid-blank form-group"
+                                                     style="border:0px none; background-color:transparent;">
 
-                                                            >
-                                                <p:ajax event="itemSelect"
-                                                        listener="#{expenseController.updateCurrency}" 
-                                                        update="expenseCurrency expenseItemTable exchangeCurrency" />
-                                            </p:autoComplete>
-                                            <p:outputLabel for="conatcts" value="#{messages.contact}"/>
-                                            <p:message for="conatcts" />
-                                        </h:panelGroup>
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:autoComplete id="conatcts" 
+                                                                converter="#{contactConverter}"
+                                                                dropdown="true" 
+                                                                forceSelection="true"
+                                                                effect="fold"
+                                                                required="true"
+                                                                scrollHeight="250"
+                                                                requiredMessage="Please select Contact"
+                                                                completeMethod="#{expenseController.contacts}" 
+                                                                value="#{expenseController.selectedExpenseModel.expenseContact}" 
+                                                                var="contact"
+                                                                itemValue="#{contact}"
+                                                                itemLabel="#{contact.firstName} #{contact.lastName}"
+                                                                >
+                                                    <p:clientValidator event="itemSelect"/>
+                                                    <p:ajax event="itemSelect"
+                                                            listener="#{expenseController.updateCurrency}" 
+                                                            update="expenseCurrency expenseItemTable exchangeCurrency" />
+                                                </p:autoComplete>
+                                                <p:outputLabel for="conatcts" value="#{messages.contact}"/>
+                                                <p:message for="conatcts" />
+                                            </h:panelGroup>
 
-                                        <p:outputLabel value="OR  " id="contactpopup">
-                                            <p:commandLink onsuccess="PF('add_contact_popup').show();" 
-                                                           actionListener="#{expenseController.initCreateContact()}"
-                                                           style="color: #009688" 
-                                                           value="Add New Contact" />
-                                        </p:outputLabel>
+
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:tooltip for="addbtn" position="top" value="Add new contact" />
+                                                <p:commandButton id="addbtn" icon="ui-icon-plus" onsuccess="PF('add_contact_popup').show();" actionListener="#{expenseController.initCreateContact()}"/>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
 
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete
@@ -208,6 +225,7 @@
                                                                 required="true"
                                                                 requiredMessage="Select recurring interval"
                                                                 >
+                                                    <p:clientValidator event="itemSelect"/>
                                                     <p:ajax event="itemSelect" process="@this" update="recurringPanel"/>
                                                 </p:autoComplete>
                                                 <label>#{messages.Interval}</label>
@@ -231,6 +249,7 @@
                                                     required="true"
                                                     requiredMessage="Select recurring day"
                                                     >
+                                                    <p:clientValidator event="itemSelect"/>
                                                     <p:ajax event="itemSelect" process="@this" update="recurringPanel"/>
                                                 </p:autoComplete>
                                                 <label>#{messages.On}</label>
@@ -258,6 +277,7 @@
                                                     required="true"
                                                     requiredMessage="Select recurring day"
                                                     >
+                                                    <p:clientValidator event="itemSelect"/>
                                                 </p:autoComplete>
                                                 <p:message for="firsttolast"/>
                                             </h:panelGroup>
@@ -288,6 +308,7 @@
                                                     required="true"
                                                     requiredMessage="Select recurring week day"
                                                     >
+                                                    <p:clientValidator event="itemSelect"/>
                                                 </p:autoComplete>
                                                 <label>#{messages.Week}</label>
                                                 <p:message for="weeks"/>
@@ -303,6 +324,7 @@
                                                              style="width:100%"
                                                              required="true"
                                                              requiredMessage="Enter day in number">
+                                                    <p:clientValidator event="keyup"/>
                                                 </p:inputText>
                                                 <label>#{messages.Every}</label>
                                                 <p:message for="every"/>
@@ -325,6 +347,7 @@
                                                     required="true"
                                                     requiredMessage="Select recurring month"
                                                     >
+                                                    <p:clientValidator event="itemSelect"/>
                                                 </p:autoComplete>
                                                 <label>#{messages.Every}</label>
                                                 <p:message for="months"/>
@@ -335,7 +358,9 @@
                                                 <p:calendar id="startDate" 
                                                             required="true"
                                                             navigator="true"
-                                                            requiredMessage="Select recurring Start date"/>
+                                                            requiredMessage="Select recurring Start date">
+                                                    <p:clientValidator event="dateSelect"/>
+                                                </p:calendar>
                                                 <label>#{messages.Start_Date}</label>
                                                 <p:message for="startDate"/>
                                             </h:panelGroup>
@@ -358,6 +383,7 @@
                                                     required="true"
                                                     requiredMessage="Select duration"
                                                     >
+                                                    <p:clientValidator event="itemSelect"/>
                                                     <p:ajax event="itemSelect" process="@this" update="recurringPanel"/>
                                                 </p:autoComplete>
                                                 <label>#{messages.End}</label>
@@ -369,7 +395,9 @@
                                                 <p:calendar id="endDate"
                                                             required="true"
                                                             navigator="true"
-                                                            requiredMessage="Select End date"/>
+                                                            requiredMessage="Select End date">
+                                                    <p:clientValidator event="dateSelect"/>
+                                                </p:calendar>
                                                 <label>#{messages.End_Date}</label>
                                                 <p:message for="endDate"/>
                                             </h:panelGroup>
@@ -380,6 +408,7 @@
                                                              style="width:100%"
                                                              required="true"
                                                              requiredMessage="Enter Occurrences">
+                                                    <p:clientValidator event="keyup"/>
                                                 </p:inputText>
                                                 <label>#{messages.Occurrences}</label>
                                             </h:panelGroup>
@@ -447,7 +476,9 @@
                                         <p:column headerText="Description" styleClass="amount" style="width: 320px">
                                             <p:inputText id="description" 
                                                          value="#{expenseItem.description}" 
-                                                         onkeypress="if (event.keyCode == 13) {return false;}"
+                                                         onkeypress="if (event.keyCode == 13) {
+                                                                     return false;
+                                                                 }"
                                                          style="width:100%">
                                                 <p:ajax event="change" />
                                             </p:inputText>
@@ -458,7 +489,9 @@
                                                          validator="positiveNumberValidator"
                                                          validatorMessage="Please enter Quantity more then 0"
                                                          value="#{expenseItem.quatity}" 
-                                                         onkeypress="if (event.keyCode == 13) {return false;}"
+                                                         onkeypress="if (event.keyCode == 13) {
+                                                                     return false;
+                                                                 }"
                                                          style="width:100%">
                                                 <p:ajax event="change" 
                                                         listener="#{expenseController.updateSubTotal(expenseItem)}" 
@@ -473,7 +506,9 @@
                                                            validator="positiveNumberValidator"
                                                            validatorMessage="Please enter Price more then 0"
                                                            value="#{expenseItem.unitPrice}" 
-                                                           onkeypress="if (event.keyCode == 13) {return false;}"
+                                                           onkeypress="if (event.keyCode == 13) {
+                                                                       return false;
+                                                                   }"
                                                            style="width:100%">
                                                 <p:ajax event="change" 
                                                         listener="#{expenseController.updateSubTotal(expenseItem)}" 
@@ -492,7 +527,9 @@
                                                             completeMethod="#{expenseController.vatCategorys}" 
                                                             var="vat"
                                                             itemValue="#{vat}"
-                                                            onkeypress="if (event.keyCode == 13) {return false;}"
+                                                            onkeypress="if (event.keyCode == 13) {
+                                                                        return false;
+                                                                    }"
                                                             itemLabel="#{vat.name}"
                                                             >
                                                 <p:ajax update="subTotal @form:exchangeCurrency" event="itemSelect" listener="#{expenseController.updateSubTotal(expenseItem)}" />

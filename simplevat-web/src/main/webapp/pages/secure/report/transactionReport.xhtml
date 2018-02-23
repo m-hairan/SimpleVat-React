@@ -17,7 +17,7 @@
                                 <h1>#{messages.TransactionReport}</h1>
                             </ui:fragment>
                             <div class="card card-w-title">
-                                <p:fieldset legend="View Report"
+                                <p:fieldset legend="View Report" id="TransactionReportFieldSet"
                                             toggleable="false" toggleSpeed="500">
                                     <p:panelGrid columns="3"
                                                  columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
@@ -39,8 +39,8 @@
                                                 itemLabel="#{financialPeriod.name}"
                                                 required="true"
                                                 requiredMessage="Please select financial period">
-                                                <p:ajax update=" DatestartPanel" event="itemSelect"/>
-                                                <p:ajax update=" DatelastPanel" event="itemSelect"/>
+                                                <p:clientValidator event="itemSelect"/>
+                                                <p:ajax update=" TransactionReportFieldSet" event="itemSelect"/>
                                             </p:autoComplete>
                                             <p:outputLabel for="year" value="#{messages.FinancialPeriod}"/>
                                             <p:message for="year" />
@@ -61,14 +61,14 @@
                                                 itemLabel="#{transactionType.transactionTypeName}" 
                                                 effect="fold"
                                                 >
-                                                <p:ajax update=" transactionCategoryAuto" event="itemSelect" />
-                                                <p:ajax update=" transactionCategoryAuto" event="change" />
+                                                <p:ajax update=" TransactionReportFieldSet" event="itemSelect" />
+                                                <p:ajax update=" TransactionReportFieldSet" event="change" />
                                             </p:autoComplete>
                                             <p:outputLabel for="purchaseTransactionType" value="#{messages.type}"/>
                                         </h:panelGroup>
 
-                                        <h:panelGroup id="transactionCategoryAuto">
-                                            <h:panelGroup styleClass="md-inputfield" rendered="#{transactionReport.transactionType != null}">
+                                        <h:panelGroup id="transactionCategoryAuto" rendered="#{transactionReport.transactionType != null}">
+                                            <h:panelGroup styleClass="md-inputfield" >
                                                 <p:autoComplete
                                                     id="transactionCategory"
                                                     converter="#{transactionCategoryConverter}"
@@ -87,45 +87,42 @@
                                                 <p:outputLabel for="transactionCategory" value="#{messages.category}"/>
                                             </h:panelGroup>
                                         </h:panelGroup>
-                                        <h:panelGroup  id="DatestartPanel">
-                                            <h:panelGroup styleClass="md-inputfield" rendered="#{transactionReport.financialPeriod.id == 1}">
+                                        <h:panelGroup  id="DatestartPanel" rendered="#{transactionReport.financialPeriod.id == 1}">
+                                            <h:panelGroup styleClass="md-inputfield" >
                                                 <p:calendar
                                                     id="startdate"
                                                     required="true"
                                                     requiredMessage="#{messages.EnterStartDate}"
                                                     value="#{transactionReport.financialPeriod.startDate}" 
-                                                    />
+                                                    >
+                                                    <p:clientValidator event="dateSelect"/>
+                                                </p:calendar>
                                                 <p:outputLabel for="startdate" value="#{messages.Start_Date}"/>
                                                 <p:message for="startdate" />
                                             </h:panelGroup>
                                         </h:panelGroup>
 
-                                        <h:panelGroup id="DatelastPanel">
-                                            <h:panelGroup  styleClass="md-inputfield" rendered="#{transactionReport.financialPeriod.id == 1}">
+                                        <h:panelGroup id="DatelastPanel" rendered="#{transactionReport.financialPeriod.id == 1}">
+                                            <h:panelGroup  styleClass="md-inputfield" >
                                                 <p:calendar
                                                     id="enddate"
                                                     required="true"
                                                     requiredMessage="#{messages.EnterEndDate}"
                                                     value="#{transactionReport.financialPeriod.lastDate}" 
-                                                    />
+                                                    >
+                                                    <p:clientValidator event="dateSelect"/>
+                                                </p:calendar>
                                                 <p:outputLabel for="enddate" value="#{messages.End_Date}"/>
                                                 <p:message for="enddate" />
                                             </h:panelGroup>
                                         </h:panelGroup>
-
-                                        <p:outputLabel/>
-                                        <p:outputLabel/>
-
-                                        <p:outputLabel/>
                                         <f:facet name="footer">
                                             <p:commandButton value="#{messages.View}" update="@form"
                                                              action="#{transactionReport.view()}" />
                                         </f:facet>
                                     </p:panelGrid>
                                 </p:fieldset>
-
-                                <h:panelGroup id="transaction"  >
-
+                                <h:panelGroup id="transaction">
                                     <p:fieldset legend="Vat Category Details" rendered="#{transactionReport.transactionList.size() > 0}"
                                                 toggleable="false" toggleSpeed="500">
                                         <p:dataTable id="transactionTable" var="transaction" value="#{transactionReport.transactionList}" 

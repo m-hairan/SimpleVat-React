@@ -88,7 +88,7 @@ public class UserProfileController implements Serializable {
             }
             FacesContext context = FacesContext.getCurrentInstance();
             context.getExternalContext().getFlash().setKeepMessages(true);
-            context.addMessage(null, new FacesMessage("Successful", "User Profile updated successfully"));
+            context.addMessage(null, new FacesMessage("", "User Profile updated successfully"));
             return "/pages/secure/account/index.xhtml?faces-redirect=true";
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(UserProfileController.class.getName()).log(Level.SEVERE, null, ex);
@@ -148,7 +148,7 @@ public class UserProfileController implements Serializable {
         fileName = event.getFile().getFileName();
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_PROFILE_PIC", event.getFile().getContents());
         renderProfilePic = true;
-        FacesMessage message = new FacesMessage("Successful", "Image Uploaded Successfully.");
+        FacesMessage message = new FacesMessage("", "Image Uploaded successfully.");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 

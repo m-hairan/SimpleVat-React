@@ -37,7 +37,7 @@ public class VatController extends BaseController {
     VatCategory category;
 
     public VatController() {
-        super(ModuleName.SETTING_MODULE);
+        super(ModuleName.VATCATEGORY_MODULE);
     }
 
     @PostConstruct
@@ -66,7 +66,7 @@ public class VatController extends BaseController {
         }
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("Successful", "Vat Category saved successfully"));
+        context.addMessage(null, new FacesMessage("", "Vat Category saved successfully"));
         return "vat-list?faces-redirect=true";
     }
 

@@ -38,6 +38,9 @@ public class PageAccessControl {
         adminRoleAccessList.add(ModuleName.REPORT_MODULE.getName());
         adminRoleAccessList.add(ModuleName.PROJECT_MODULE.getName());
         adminRoleAccessList.add(ModuleName.SETTING_MODULE.getName());
+        adminRoleAccessList.add(ModuleName.USER_MODULE.getName());
+        adminRoleAccessList.add(ModuleName.VATCATEGORY_MODULE.getName());
+        adminRoleAccessList.add(ModuleName.TRANSACTIONCATEGORY_MODULE.getName());
         adminRoleAccessList.add(ModuleName.CONTACT_MODULE.getName());
         adminRoleAccessList.add(ModuleName.TAX_MODULE.getName());
         adminRoleAccessList.add(ModuleName.PRODUCT_MODULE.getName());
@@ -50,7 +53,6 @@ public class PageAccessControl {
         shareHolderRoleAccessList.add(ModuleName.BANK_MODULE.getName());
         shareHolderRoleAccessList.add(ModuleName.REPORT_MODULE.getName());
         shareHolderRoleAccessList.add(ModuleName.PROJECT_MODULE.getName());
-        shareHolderRoleAccessList.add(ModuleName.SETTING_MODULE.getName());
         shareHolderRoleAccessList.add(ModuleName.CONTACT_MODULE.getName());
         shareHolderRoleAccessList.add(ModuleName.PRODUCT_MODULE.getName());
         accessMap.put(RoleCode.SHARE_HOLDER.getCode(), shareHolderRoleAccessList);
@@ -62,7 +64,6 @@ public class PageAccessControl {
         directorRoleAccessList.add(ModuleName.BANK_MODULE.getName());
         directorRoleAccessList.add(ModuleName.REPORT_MODULE.getName());
         directorRoleAccessList.add(ModuleName.PROJECT_MODULE.getName());
-        directorRoleAccessList.add(ModuleName.SETTING_MODULE.getName());
         directorRoleAccessList.add(ModuleName.CONTACT_MODULE.getName());
         directorRoleAccessList.add(ModuleName.PRODUCT_MODULE.getName());
         accessMap.put(RoleCode.DIRECTOR.getCode(), directorRoleAccessList);
@@ -74,7 +75,6 @@ public class PageAccessControl {
         employeeRoleAccessList.add(ModuleName.BANK_MODULE.getName());
         employeeRoleAccessList.add(ModuleName.REPORT_MODULE.getName());
         employeeRoleAccessList.add(ModuleName.PROJECT_MODULE.getName());
-        employeeRoleAccessList.add(ModuleName.SETTING_MODULE.getName());
         employeeRoleAccessList.add(ModuleName.CONTACT_MODULE.getName());
         employeeRoleAccessList.add(ModuleName.PRODUCT_MODULE.getName());
         accessMap.put(RoleCode.EMPLOYEE.getCode(), employeeRoleAccessList);
@@ -86,7 +86,6 @@ public class PageAccessControl {
         accountantRoleAccessList.add(ModuleName.BANK_MODULE.getName());
         accountantRoleAccessList.add(ModuleName.REPORT_MODULE.getName());
         accountantRoleAccessList.add(ModuleName.PROJECT_MODULE.getName());
-        accountantRoleAccessList.add(ModuleName.SETTING_MODULE.getName());
         accountantRoleAccessList.add(ModuleName.CONTACT_MODULE.getName());
         accountantRoleAccessList.add(ModuleName.PRODUCT_MODULE.getName());
         accessMap.put(RoleCode.ACCOUNTANT.getCode(), adminRoleAccessList);

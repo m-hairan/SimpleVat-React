@@ -30,7 +30,8 @@
                                                      required="true"
                                                      disabled="true"
                                                      requiredMessage="Please enter Invoice Ref. No."
-                                                     value="#{contactController.contactModel.contactCode}"/>
+                                                     value="#{contactController.contactModel.contactCode}">
+                                        <p:clientValidator event="keyup"/></p:inputText>
                                         <p:outputLabel for="invoiceId" value="#{messages.ref_code}"/>
                                         <p:message for="invoiceId" />
                                     </h:panelGroup>
@@ -46,7 +47,8 @@
                                                         value="#{contactController.contactModel.title}" 
                                                         var="title" 
                                                         itemValue="#{title.titleCode}" 
-                                                        itemLabel="#{title.titleDescription}"/>
+                                                        itemLabel="#{title.titleDescription}">
+                                        <p:clientValidator event="itemSelect"/></p:autoComplete>
                                         <p:outputLabel for="contactTitle" value="Title"/>
                                         <p:message for="contactTitle" />
                                     </h:panelGroup>
@@ -57,7 +59,8 @@
                                         <p:inputText id="firstName" 
                                                      value="#{contactController.contactModel.firstName}"
                                                      required="true" 
-                                                     requiredMessage="Please enter First Name"/>
+                                                     requiredMessage="Please enter First Name">
+                                        <p:clientValidator event="keyup"/></p:inputText>
                                         <p:outputLabel for="firstName" value="First Name"/>
                                         <p:message for="firstName" />
                                     </h:panelGroup>
@@ -73,7 +76,8 @@
                                         <p:inputText id="lastName"
                                                      value="#{contactController.contactModel.lastName}"
                                                      required="true" 
-                                                     requiredMessage="Please enter Last Name"/>
+                                                     requiredMessage="Please enter Last Name">
+                                        <p:clientValidator event="keyup"/></p:inputText>
                                         <p:outputLabel for="lastName" value="Last Name"/>
                                         <p:message for="lastName" />
                                     </h:panelGroup>
@@ -106,6 +110,7 @@
                                                         itemLabel="#{contactType.name}"
                                                         required="true"
                                                         requiredMessage="Please select Contact Type">
+                                            <p:clientValidator event="itemSelect"/>
                                             <p:ajax update="invoicedetails labuagesPanel organizationName" process="@this" event="itemSelect" listener="#{contactController.updateOrganization()}"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="contactType" value="Contact Type"/>
@@ -136,6 +141,7 @@
                                                      required="true"
                                                      requiredMessage="Please enter email address"
                                                      validatorMessage="Invalid email format" >
+                                            <p:clientValidator event="keyup"/>
                                             <p:ajax update="contactForm:billingEmail emailMessage" 
                                                     event="change" 
                                                     listener="#{contactController.updateBillingEmail()}" />
@@ -161,7 +167,9 @@
                                         <p:inputText id="addressLine1"
                                                      required="true"
                                                      requiredMessage="Please enter address"
-                                                     value="#{contactController.contactModel.invoicingAddressLine1}"/>
+                                                     
+                                                     value="#{contactController.contactModel.invoicingAddressLine1}">
+                                        <p:clientValidator event="keyup"/></p:inputText>
                                         <p:outputLabel for="addressLine1" value="Address Line1" styleClass="notRequiedSpace" /> 
                                         <p:message for="addressLine1" />
                                     </h:panelGroup>
@@ -170,7 +178,8 @@
                                         <p:inputText id="addressLine2"
                                                      required="true"
                                                      requiredMessage="Please enter address"
-                                                     value="#{contactController.contactModel.invoicingAddressLine2}"/>
+                                                     value="#{contactController.contactModel.invoicingAddressLine2}">
+                                         <p:clientValidator event="keyup"/></p:inputText>
                                         <p:outputLabel for="addressLine2" value="Address Line2" styleClass="notRequiedSpace"/>
                                
                                     <p:message for="addressLine2" />
@@ -196,6 +205,7 @@
                                                         itemLabel="#{country.countryFullName}" 
                                                         required="true"
                                                         requiredMessage="Please select Country">
+                                            <p:clientValidator event="itemSelect"/>
                                             <p:ajax event="itemSelect" listener="#{contactController.countryOnSelectListner()}" process="@this" update="currency"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="country" value="Country"/>
@@ -206,7 +216,8 @@
                                         <p:inputText id="stateRegion"
                                                      required="true"
                                                      requiredMessage="Please enter State"
-                                                     value="#{contactController.contactModel.stateRegion}"  />
+                                                     value="#{contactController.contactModel.stateRegion}">
+                                        <p:clientValidator event="keyup"/></p:inputText>
                                         <p:outputLabel for="stateRegion" value="State Region"/>
                                   <p:message for="stateRegion" />
                                     </h:panelGroup>
@@ -215,7 +226,8 @@
                                         <p:inputText id="city" 
                                                      value="#{contactController.contactModel.city}"
                                                      required="true"
-                                                     requiredMessage="Please enter City"/>
+                                                     requiredMessage="Please enter City">
+                                        <p:clientValidator event="keyup"/></p:inputText>
                                         <p:outputLabel for="city" value="City"/>
                                           <p:message for="city" />
                                     </h:panelGroup>
@@ -245,6 +257,7 @@
                                                      requiredMessage="Please enter Billing Email"
                                                      value="#{contactController.contactModel.billingEmail}"
                                                      validatorMessage="Invalid email format" >
+                                            <p:clientValidator event="keyup"/>
                                             <f:validateRegex
                                                 pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                         </p:inputText>
@@ -278,7 +291,8 @@
                                                         value="#{contactController.contactModel.currency}"
                                                         var="currency" 
                                                         itemValue="#{currency.currencyCode}"
-                                                        itemLabel="#{currency.currencyDescription} - #{currency.currencySymbol}" />
+                                                        itemLabel="#{currency.currencyDescription} - #{currency.currencySymbol}" >
+                                        <p:clientValidator event="itemSelect"/></p:autoComplete>
                                         <p:outputLabel for="currency" value="Currency Code"/>
                                         <p:message for="currency" />
                                     </h:panelGroup>
@@ -298,7 +312,8 @@
                                                             var="language"
                                                             itemValue="#{language.languageCode}" 
                                                             itemLabel="#{language.languageDescription}"
-                                                            />
+                                                            >
+                                            <p:clientValidator event="itemSelect"/></p:autoComplete>
                                             <p:outputLabel for="language" value="Invoice Language"/>
                                             <p:message for="language" />
                                         </h:panelGroup>

@@ -171,7 +171,7 @@ public class BankAccountController extends BankAccountHelper implements Serializ
         }
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("Successful", "BankAccount saved successfully"));
+        context.addMessage(null, new FacesMessage("", "Bank Account saved successfully"));
         return "/pages/secure/bankaccount/bankaccounts.xhtml?faces-redirect=true";
 
     }
@@ -201,7 +201,7 @@ public class BankAccountController extends BankAccountHelper implements Serializ
         setSelectedBankAccount(new BankAccount());
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("Successful", "BankAccount saved successfully"));
+        context.addMessage(null, new FacesMessage("", "Bank Account saved successfully"));
 
     }
 
@@ -210,7 +210,7 @@ public class BankAccountController extends BankAccountHelper implements Serializ
         bankAccountService.update(selectedBankAccount);
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("Successful", "BankAccount deleted successfully"));
+        context.addMessage(null, new FacesMessage("", "BankAccount deleted successfully"));
        
         return "/pages/secure/bankaccount/bankaccounts.xhtml?faces-redirect=true";
     }

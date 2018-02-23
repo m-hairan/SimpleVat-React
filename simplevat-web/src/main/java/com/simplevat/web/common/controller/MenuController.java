@@ -41,6 +41,7 @@ public class MenuController implements Serializable {
         addBankAccountMenuItem(model);
         addTaxMenuItem(model);
         addReportMenuItem(model);
+        addSettingItem(model);
     }
 
     private void addHomeMenuItem(DefaultMenuModel model) {
@@ -160,5 +161,36 @@ public class MenuController implements Serializable {
         }
     }
 
+    private void addSettingItem(DefaultMenuModel model) {
+        if (PageAccessControl.hasAccess(ModuleName.SETTING_MODULE)) {
+            DefaultSubMenu submenu = new DefaultSubMenu("Setting");
+            submenu.setIcon("settings");
+            if (PageAccessControl.hasAccess(ModuleName.SETTING_MODULE)) {
+                DefaultMenuItem item = new DefaultMenuItem("General");
+                item.setIcon("build");
+                item.setOutcome("/pages/secure/setting/general");
+                submenu.addElement(item);
+            }
+            if (PageAccessControl.hasAccess(ModuleName.VATCATEGORY_MODULE)) {
+                DefaultMenuItem item = new DefaultMenuItem("Vat Category");
+                item.setIcon("bookmark_border");
+                item.setOutcome("/pages/secure/setting/vat-list");
+                submenu.addElement(item);
+            }
+            if (PageAccessControl.hasAccess(ModuleName.TRANSACTIONCATEGORY_MODULE)) {
+                DefaultMenuItem item = new DefaultMenuItem("Transaction Category");
+                item.setIcon("trending_up");
+                item.setOutcome("/pages/secure/setting/transactioncategory-list");
+                submenu.addElement(item);
+            }
+            if (PageAccessControl.hasAccess(ModuleName.USER_MODULE)) {
+                DefaultMenuItem item = new DefaultMenuItem("Users");
+                item.setIcon("supervisor_account");
+                item.setOutcome("/pages/secure/user/list");
+                submenu.addElement(item);
+            }
+            model.addElement(submenu);
+        }
+    }
 
 }

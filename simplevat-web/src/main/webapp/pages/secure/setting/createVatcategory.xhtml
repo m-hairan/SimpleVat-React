@@ -32,7 +32,8 @@
                                                  style="border:0px none; background-color:transparent;">
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText id="vatName" required="true" requiredMessage="Please Enter Vat Name"
-                                                         value="#{vatController.category.name}" />
+                                                         value="#{vatController.category.name}" >
+                                            <p:clientValidator event="keyup"/></p:inputText>
                                             <p:outputLabel for="vatName" value="#{messages.vatCategoryName}"/>
                                             <p:message for="vatName" />
                                         </h:panelGroup>
@@ -41,6 +42,7 @@
                                             <p:inputNumber id="vatPer" symbol="%" symbolPosition="s" validatorMessage="VAT Percentage should be in between 0% to 100%." required="true" requiredMessage="Please Enter Vat Percentage"
                                                            value="#{vatController.category.vat}" >
                                                 <f:validateDoubleRange maximum="100"/>
+                                                <p:clientValidator event="keyup"/>
                                             </p:inputNumber>
                                             <p:outputLabel for="vatPer" value="#{messages.vatCategoryPercentage}"/>
                                             <p:message for="vatPer" />

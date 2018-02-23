@@ -25,7 +25,8 @@
                                      maxlength="25"
                                      required="true"
                                      requiredMessage="Please enter First Name"
-                                     value="#{userProfileController.currentUser.firstName}"/>
+                                     value="#{userProfileController.currentUser.firstName}">
+                            <p:clientValidator event="keyup"/></p:inputText>
                         <p:outputLabel for="firstName" value="#{messages.firstName}" />
                         <p:message for="firstName" />
                     </h:panelGroup>
@@ -35,7 +36,8 @@
                                      required="true"
                                      requiredMessage="Please enter Last Name"
                                      maxlength="25"
-                                     value="#{userProfileController.currentUser.lastName}"/>
+                                     value="#{userProfileController.currentUser.lastName}">
+                            <p:clientValidator event="keyup"/></p:inputText>
                         <p:outputLabel for="lastName" value="#{messages.lastName}" />
                         <p:message for="lastName" />
                     </h:panelGroup>
@@ -47,6 +49,7 @@
                                      requiredMessage="Please enter email address"
                                      validatorMessage="Invalid email format"
                                      value="#{userProfileController.currentUser.userEmailId}">
+                            <p:clientValidator event="keyup"/>
                             <f:validateRegex
                                 pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                         </p:inputText>
@@ -62,6 +65,7 @@
                                      requiredMessage="Please enter email address"
                                      validatorMessage="Invalid email format"
                                      value="#{userProfileController.currentUser.userEmailId}">
+                            <p:clientValidator event="keyup"/>
                             <f:validateRegex
                                 pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                         </p:inputText>

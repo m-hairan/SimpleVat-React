@@ -36,7 +36,8 @@
                                             <p:inputText
                                                 id="bankAccountName"
                                                 value="#{bankAccountController.selectedBankAccount.bankAccountName}"
-                                                required="true" requiredMessage="Please enter bank account name"/>
+                                                required="true" requiredMessage="Please enter bank account name">
+                                            <p:clientValidator event="keyup"/></p:inputText>
                                             <p:outputLabel for="bankAccountName" value="#{messages.account_name}"/>
                                             <p:message for="bankAccountName" />
                                         </h:panelGroup>
@@ -55,6 +56,7 @@
                                                             itemValue="#{currency}"
                                                             itemLabel="#{currency.currencyDescription} #{currency.currencySymbol}" 
                                                             required="true" requiredMessage="Please select bank account currency">
+                                                <p:clientValidator event="itemSelect"/>
                                                 <p:ajax event="itemSelect" process="bankAccountcurrency" update="bankOpeningBalance" />
                                             </p:autoComplete>
                                             <p:outputLabel for="bankAccountcurrency" value="#{messages.currency}"/>
@@ -75,18 +77,21 @@
                                                 itemValue="#{bankAccountStatus}"
                                                 itemLabel="#{bankAccountStatus.bankAccountStatusName}"
                                                 required="true" requiredMessage="Please select bank account status">
+                                                <p:clientValidator event="itemSelect"/>
                                             </p:autoComplete>
                                             <p:outputLabel for="bankAccountStatus" value="#{messages.status}"/>
                                             <p:message for="bankAccountStatus" />
                                         </h:panelGroup>
 
-                                        <h:panelGroup styleClass="md-inputfield">
+                                        <h:panelGroup styleClass="md-inputfield" id="openbalance">
                                             <p:inputNumber
-                                                id="bankOpeningBalance"
+                                                id="bankOpeningBalance" 
                                                 symbol="#{bankAccountController.selectedBankAccount.bankAccountCurrency.currencySymbol} " symbolPosition="p"
                                                 value="#{bankAccountController.selectedBankAccount.openingBalance}"
                                                 disabled="#{bankAccountController.selectedBankAccount.bankAccountId > 0}"
-                                                required="true" requiredMessage="Please enter account opening balance"/>
+                                                required="true" requiredMessage="Please enter account opening balance" >
+                                                <p:ajax event="keyup" update="openbalance" process="@this"/>
+                                            </p:inputNumber>
                                             <p:outputLabel for="bankOpeningBalance" value="#{messages.opening_balance}"/>
                                             <p:message for="bankOpeningBalance" />
                                         </h:panelGroup>
@@ -123,7 +128,8 @@
                                                 scrollHeight="250"
                                                 itemValue="#{bankAccountType}"
                                                 itemLabel="#{bankAccountType.name}"
-                                                required="true" requiredMessage="Please select account type"/>
+                                                required="true" requiredMessage="Please select account type">
+                                            <p:clientValidator event="itemSelect"/></p:autoComplete>
                                             <p:outputLabel for="bank_account_type" value="#{messages.account_type}"/>
                                             <p:message for="bank_account_type" />
                                         </h:panelGroup>

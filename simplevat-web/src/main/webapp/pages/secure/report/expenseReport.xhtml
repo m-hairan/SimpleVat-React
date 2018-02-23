@@ -25,7 +25,7 @@
                                                  layout="grid" styleClass="ui-panelgrid-blank form-group"
                                                  style="border:0px none; background-color:transparent;">
 
-                                        <h:panelGroup styleClass="md-inputfield">
+                                        <h:panelGroup styleClass="md-inputfield" >
                                             <p:autoComplete
                                                 id="year"
                                                 converter="#{financialPeriodConverter}"
@@ -42,42 +42,45 @@
                                                 requiredMessage="Please select financial period">
                                                 <p:ajax update="DatestartPanel" event="itemSelect"/>
                                                 <p:ajax update="DatelastPanel" event="itemSelect"/>
+                                                <p:clientValidator event="itemSelect"/>
                                             </p:autoComplete>
                                             <p:outputLabel for="year" value="#{messages.FinancialPeriod}"/>
                                             <p:message for="year" />
                                         </h:panelGroup>
 
 
-                                        <h:panelGroup  id="DatestartPanel">
-                                            <h:panelGroup styleClass="md-inputfield" rendered="#{expenseReport.financialPeriod.id == 1}">
+                                        <h:panelGroup  id="DatestartPanel" rendered="#{expenseReport.financialPeriod.id == 1}">
+                                            <h:panelGroup styleClass="md-inputfield" >
                                                 <p:calendar
                                                     id="startdate"
                                                     required="true"
                                                     requiredMessage="#{messages.EnterStartDate}"
                                                     value="#{expenseReport.financialPeriod.startDate}" 
-                                                    />
+                                                    >
+                                                    <p:clientValidator event="dateSelect"/></p:calendar>
                                                 <p:outputLabel for="startdate" value="#{messages.Start_Date}"/>
                                                 <p:message for="startdate" />
                                             </h:panelGroup>
                                         </h:panelGroup>
 
 
-                                        <h:panelGroup id="DatelastPanel">
-                                            <h:panelGroup  styleClass="md-inputfield" rendered="#{expenseReport.financialPeriod.id == 1}">
+                                        <h:panelGroup id="DatelastPanel" rendered="#{expenseReport.financialPeriod.id == 1}">
+                                            <h:panelGroup  styleClass="md-inputfield" >
                                                 <p:calendar
                                                     id="enddate"
                                                     required="true"
                                                     requiredMessage="#{messages.EnterEndDate}"
                                                     value="#{expenseReport.financialPeriod.lastDate}" 
-                                                    />
+                                                    >
+                                                    <p:clientValidator event="dateSelect"/></p:calendar>
                                                 <p:outputLabel for="enddate" value="#{messages.End_Date}"/>
                                                 <p:message for="enddate" />
                                             </h:panelGroup>
                                         </h:panelGroup>
-
-
-                                        <p:commandButton value="#{messages.View}" update="@form"
-                                                         action="#{expenseReport.view}" />
+                                        <f:facet name="footer">
+                                            <p:commandButton value="#{messages.View}" update="@form"
+                                                             action="#{expenseReport.view}" />
+                                        </f:facet>
                                     </p:panelGrid>
                                 </p:fieldset>
                                 <h:panelGroup id="#{messages.Report}">

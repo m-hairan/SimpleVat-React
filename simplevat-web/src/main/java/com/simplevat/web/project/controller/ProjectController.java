@@ -254,10 +254,10 @@ public class ProjectController extends BaseController implements Serializable {
         context.getExternalContext().getFlash().setKeepMessages(true);
         if (selectedProject.getProjectId() != null && selectedProject.getProjectId() > 0) {
             projectService.update(selectedProject);
-            context.addMessage(null, new FacesMessage("Successful", "Project updated successfully"));
+            context.addMessage(null, new FacesMessage("", "Project updated successfully"));
         } else {
             projectService.persist(selectedProject);
-            context.addMessage(null, new FacesMessage("Successful", "Project saved successfully"));
+            context.addMessage(null, new FacesMessage("", "Project saved successfully"));
         }
         init();
 
@@ -272,10 +272,10 @@ public class ProjectController extends BaseController implements Serializable {
         context.getExternalContext().getFlash().setKeepMessages(true);
         if (selectedProject.getProjectId() != null && selectedProject.getProjectId() > 0) {
             projectService.update(selectedProject);
-            context.addMessage(null, new FacesMessage("Successful", "Project updated successfully"));
+            context.addMessage(null, new FacesMessage("", "Project updated successfully"));
         } else {
             projectService.persist(selectedProject);
-            context.addMessage(null, new FacesMessage("Successful", "Project saved successfully"));
+            context.addMessage(null, new FacesMessage("", "Project saved successfully"));
         }
         init();
 

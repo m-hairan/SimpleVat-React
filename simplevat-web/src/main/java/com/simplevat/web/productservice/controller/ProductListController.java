@@ -71,7 +71,7 @@ public class ProductListController extends BaseController {
             productService.update(product, product.getProductID());
             FacesContext context = FacesContext.getCurrentInstance();
             context.getExternalContext().getFlash().setKeepMessages(true);
-            context.addMessage(null, new FacesMessage("Successful","Product/Service deleted SuccessFully"));
+            context.addMessage(null, new FacesMessage("","Product/Service deleted successFully"));
             init();
         }
 

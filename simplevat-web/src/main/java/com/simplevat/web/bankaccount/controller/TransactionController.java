@@ -323,7 +323,7 @@ public class TransactionController extends TransactionControllerHelper implement
         }
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("Successful", "Transaction saved successfully"));
+        context.addMessage(null, new FacesMessage("", "Transaction saved successfully"));
         return "bank-transactions?faces-redirect=true";
 
     }
@@ -383,7 +383,7 @@ public class TransactionController extends TransactionControllerHelper implement
         }
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("Successful", "Transaction saved successfully"));
+        context.addMessage(null, new FacesMessage("", "Transaction saved successfully"));
         return "/pages/secure/bankaccount/edit-bank-transaction.xhtml?faces-redirect=true";
 
     }
@@ -414,7 +414,7 @@ public class TransactionController extends TransactionControllerHelper implement
         }
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("Successful", "Transaction deleted successfully"));
+        context.addMessage(null, new FacesMessage("", "Transaction deleted successfully"));
         return "bank-transactions?faces-redirect=true";
     }
 

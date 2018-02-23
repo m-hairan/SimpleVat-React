@@ -47,7 +47,8 @@
                                         itemLabel="#{companyType.companyTypeName}" 
                                         required="true"
                                         scrollHeight="250"
-                                        requiredMessage="Please select Company Type Code"/>
+                                        requiredMessage="Please select Company Type Code">
+                            <p:clientValidator event="itemSelect"/></p:autoComplete>
                         <p:outputLabel for="CompanyTypeCode" value="#{messages.CompanyTypeCode}"/>
                         <p:message for="CompanyTypeCode" />
                     </h:panelGroup>
@@ -95,7 +96,8 @@
                                     itemLabel="#{industryType.industryTypeName}" 
                                     required="true"
                                     scrollHeight="250"
-                                    requiredMessage="Please select industry type"/>
+                                    requiredMessage="Please select industry type">
+                        <p:clientValidator event="itemSelect"/></p:autoComplete>
                     <p:outputLabel value="#{messages.IndustryTypeCode}"/>
                     <p:message for="IndustryTypeCode" />
                 </h:panelGroup>
@@ -210,7 +212,9 @@
                                     itemLabel="#{country.countryFullName}" 
                                     required="true"
                                     scrollHeight="250"
-                                    requiredMessage="Please select Country Code"/>
+                                    requiredMessage="Please select Country Code">
+                        <p:clientValidator event="itemSelect"/>
+                    </p:autoComplete>
                     <p:outputLabel for="InvoicingCountryCode" value="#{messages.InvoicingCountryCode}"/>
                     <p:message for="InvoicingCountryCode" />
                 </h:panelGroup>
@@ -318,7 +322,8 @@
                                     itemLabel="#{country.countryFullName}" 
                                     required="true"
                                     scrollHeight="250"
-                                    requiredMessage="Please select Country Code"/>
+                                    requiredMessage="Please select Country Code">
+                        <p:clientValidator event="itemSelect"/></p:autoComplete>
                     <p:outputLabel for="CompanyCountryCode" value="#{messages.CompanyCountryCode}"/>
                     <p:message for="CompanyCountryCode" />
                 </h:panelGroup>

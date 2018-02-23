@@ -55,7 +55,9 @@
                                             <p:inputText id="firstName"
                                                          required="true"
                                                          requiredMessage="Please enter First Name"
-                                                         value="#{userController.selectedUser.firstName}"/>
+                                                         value="#{userController.selectedUser.firstName}">
+                                                <p:clientValidator event="keyup"/>
+                                            </p:inputText>
                                             <p:outputLabel for="firstName" value="#{messages.firstName}"/>
                                             <p:message for="firstName" />
                                         </h:panelGroup>
@@ -64,7 +66,9 @@
                                             <p:inputText id="lastName"
                                                          required="true"
                                                          requiredMessage="Please enter Last Name"
-                                                         value="#{userController.selectedUser.lastName}"/>
+                                                         value="#{userController.selectedUser.lastName}">
+                                                <p:clientValidator event="keyup"/>
+                                            </p:inputText>
                                             <p:outputLabel for="lastName" value="#{messages.lastName}"/>
                                             <p:message for="lastName" />
                                         </h:panelGroup>
@@ -75,6 +79,7 @@
                                                          requiredMessage="Please enter email address"
                                                          validatorMessage="Invalid email format"
                                                          value="#{userController.selectedUser.userEmail}">
+                                                <p:clientValidator event="keyup"/>
                                                 <f:validateRegex
                                                     pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                             </p:inputText>
@@ -89,6 +94,7 @@
                                                          requiredMessage="Please enter email address"
                                                          validatorMessage="Invalid email format"
                                                          value="#{userController.selectedUser.userEmail}">
+                                                <p:clientValidator event="keyup"/>
                                                 <f:validateRegex
                                                     pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                                             </p:inputText>
@@ -96,13 +102,14 @@
                                             <p:message for="emailId1" />
                                         </h:panelGroup>
 
-                                        <h:panelGroup styleClass="md-inputfield">
+                                        <h:panelGroup styleClass="md-inputfield" id="dobpanel">
                                             <p:calendar id="dob"
                                                         pattern="dd/MM/yyyy"
                                                         required="true"
                                                         navigator="true"
                                                         requiredMessage="Please enter Date of Birth"
                                                         value="#{userController.selectedUser.displayDOB}">
+                                                <p:clientValidator event="dateSelect" />
                                             </p:calendar>
                                             <p:outputLabel for="dob" value="Date of Birth"/>
                                             <p:message for="dob" />
@@ -119,7 +126,9 @@
                                                 completeMethod="#{userController.comoleteRole()}"
                                                 value="#{userController.selectedUser.role}"
                                                 var="role" itemLabel="#{role.roleName}" itemValue="#{role}"
-                                                required="true" requiredMessage="Please select Role."/>
+                                                required="true" requiredMessage="Please select Role.">
+                                                <p:clientValidator event="keyup"/>
+                                            </p:autoComplete>
                                             <label></label>
                                             <p:outputLabel for="role" value="Role" />
                                             <p:message for="role" />
@@ -137,7 +146,9 @@
                                                 completeMethod="#{userController.comoleteRole()}"
                                                 value="#{userController.selectedUser.role}"
                                                 var="role" itemLabel="#{role.roleName}" itemValue="#{role}"
-                                                required="true" requiredMessage="Please select Role."/>
+                                                required="true" requiredMessage="Please select Role."> 
+                                                <p:clientValidator event="itemSelect"/>
+                                            </p:autoComplete>
                                             <p:outputLabel for="role1" value="Role"/>
                                             <p:message for="role1" />
                                         </h:panelGroup>
@@ -149,6 +160,7 @@
                                                               requiredMessage="Please select Status">
                                                 <f:selectItem itemLabel="Active" itemValue="true"/>
                                                 <f:selectItem itemLabel="InActive" itemValue="false"/>
+                                                <p:clientValidator event="click"/>
                                             </p:selectOneRadio>
                                             <p:message for="active" />
                                         </h:panelGroup>
@@ -159,6 +171,7 @@
                                                               requiredMessage="Please select Status">
                                                 <f:selectItem itemLabel="Active" itemValue="true"/>
                                                 <f:selectItem itemLabel="InActive" itemValue="false"/>
+                                                <p:clientValidator event="keyup"/>
                                             </p:selectOneRadio>
                                             <p:message for="active1" />
                                         </h:panelGroup>
@@ -199,7 +212,9 @@
                                         <p:password id="password" autocomplete="false"
                                                     value="#{userController.password}"
                                                     required="true" 
-                                                    requiredMessage="Please enter Password"/>
+                                                    requiredMessage="Please enter Password">
+                                            <p:clientValidator event="keyup"/>
+                                        </p:password>
                                         <p:outputLabel for="password" value="Password"/>
                                         <p:message for="password" />
                                     </h:panelGroup>
@@ -207,7 +222,9 @@
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:password id="cpassword" autocomplete="false"
                                                     required="true"
-                                                    requiredMessage="Please enter Confirm Password"/>
+                                                    requiredMessage="Please enter Confirm Password">
+                                            <p:clientValidator event="keyup"/>
+                                        </p:password>
                                         <p:outputLabel for="cpassword" value="Confirm Password"/>
                                         <h:panelGroup>
                                             <p:message for="cpassword" />
@@ -271,6 +288,18 @@
                     </f:facet>
                 </p:toolbar>
             </div>
+            <script type="text/javascript">
+                //   <![CDATA[
+                function clearTextField(event, element) {
+//                    if ($(element).val() == 0)
+//                        $(element).val("");
+                    console.log("entered");
+
+                    $.ajax(element);
+
+                }
+                //   ]]>
+            </script>
         </h:form>
     </ui:define>
 

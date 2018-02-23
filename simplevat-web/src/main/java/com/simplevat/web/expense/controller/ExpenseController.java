@@ -435,7 +435,7 @@ public class ExpenseController extends BaseController implements Serializable {
         save();
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("Successful", "Expense saved successfully"));
+        context.addMessage(null, new FacesMessage("", "Expense saved successfully"));
         return "/pages/secure/expense/list.xhtml?faces-redirect=true";
     }
 
@@ -446,7 +446,7 @@ public class ExpenseController extends BaseController implements Serializable {
         save();
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("Successful", "Expense saved successfully"));
+        context.addMessage(null, new FacesMessage("", "Expense saved successfully"));
         return "/pages/secure/expense/expense.xhtml?faces-redirect=true";
     }
 

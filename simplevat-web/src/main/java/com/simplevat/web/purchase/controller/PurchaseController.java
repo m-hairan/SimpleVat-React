@@ -433,7 +433,9 @@ public class PurchaseController extends BaseController implements Serializable {
         Purchase purchase = purchaseControllerHelper.getPurchase(selectedPurchaseModel);
         purchase.setDeleteFlag(true);
         purchaseService.update(purchase);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("","Purchase deleted successfully"));
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        context.addMessage(null, new FacesMessage("", "Purchase deleted successfully"));
         return "purchase-list.xhtml?faces-redirect=true";
     }
 
@@ -489,7 +491,7 @@ public class PurchaseController extends BaseController implements Serializable {
         save();
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("Successful", "Purchase saved successfully"));
+        context.addMessage(null, new FacesMessage("", "Purchase saved successfully"));
         return "purchase-list?faces-redirect=true";
     }
 
@@ -500,7 +502,7 @@ public class PurchaseController extends BaseController implements Serializable {
         save();
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("Successful", "Purchase saved successfully"));
+        context.addMessage(null, new FacesMessage("", "Purchase saved successfully"));
 
         return "purchase?faces-redirect=true";
     }

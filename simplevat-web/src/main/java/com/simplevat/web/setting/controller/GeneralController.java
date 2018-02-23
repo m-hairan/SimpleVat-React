@@ -100,7 +100,7 @@ public class GeneralController extends BaseController implements Serializable {
     private InvoicePDFGenerator invoicePDFGenerator;
 
     public GeneralController() {
-        super(ModuleName.SETTING_MODULE);
+        super(ModuleName.GENERALSETTING_MODULE);
     }
 
     @PostConstruct
@@ -271,7 +271,10 @@ public class GeneralController extends BaseController implements Serializable {
                 configurationList.add(configurationInvoiceTemplate);
             }
             configurationService.updateConfigurationList(configurationList);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Configuration saved successfully."));
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.getExternalContext().getFlash().setKeepMessages(true);
+            context.addMessage(null, new FacesMessage("", "Configuration saved successfully"));
+            
         } catch (Exception e) {
             e.printStackTrace();
         }

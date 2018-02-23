@@ -31,11 +31,11 @@
                                         toggleSpeed="500">
                                 <p:messages autoUpdate="true" id="validationId" closable="true" for="validationId" />
                                 <p:panelGrid columns="3" 
-                                             columnClasses="ui-grid-col-2,ui-grid-col-5,ui-grid-col-5"
+                                             columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
                                              layout="grid" styleClass="ui-panelgrid-blank form-group"
                                              style="border:0px none; background-color:transparent;">
                                     <h:panelGroup >
-                                        <p:fileUpload fileUploadListener="#{transactionImportController.handleFileUpload}" label="Select File (.csv)" mode="advanced" uploadLabel="Select File"
+                                        <p:fileUpload fileUploadListener="#{transactionImportController.handleFileUpload}" label="Select File (.csv)" mode="advanced" uploadLabel="Select File (.csv)"
                                                       update="transactionTable footerToolBar" auto="true" sizeLimit="100000" allowTypes="/(\.|\/)(csv)$/"/>
                                     </h:panelGroup>
                                     <h:panelGroup styleClass="md-inputfield">

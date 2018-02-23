@@ -11,6 +11,13 @@
             .ui-fileupload-content{
                 display:none !important;  
             }
+            .ui-grid-col-11{
+                padding: 0 !important;
+                width: 88.66666%;
+            }
+            .ui-grid-col-1{
+                padding: 5px !important;
+            }
         </style>
 
     </ui:define>
@@ -52,6 +59,7 @@
                                                 itemLabel="#{user.firstName}"
                                                 required="true"
                                                 requiredMessage="Please select Claimant">
+                                                <p:clientValidator event="itemSelect"/>
                                             </p:autoComplete>
                                             <p:outputLabel for="purchaseClaimantId" value="#{messages.claimant}"/>
                                             <p:message for="purchaseClaimantId" />
@@ -72,6 +80,7 @@
                                                 itemLabel="#{transactionType.transactionTypeName}"
                                                 required="true"
                                                 requiredMessage="Please select Purchase Type">
+                                                <p:clientValidator event="itemSelect"/>
                                                 <p:ajax event="itemSelect"
                                                         update="purchaseTransactionCategory"  />
                                             </p:autoComplete>
@@ -92,6 +101,7 @@
                                                 itemValue="#{transactionCategory}"
                                                 itemLabel="#{transactionCategory.transactionCategoryName}"
                                                 >
+                                                <p:clientValidator event="itemSelect"/>
                                             </p:autoComplete>
                                             <p:outputLabel for="purchaseTransactionCategory" value="#{messages.category}"/>
                                         </h:panelGroup>
@@ -102,7 +112,8 @@
                                                 value="#{purchaseController.selectedPurchaseModel.purchaseDate}" 
                                                 navigator="true"
                                                 required="true"
-                                                requiredMessage="Please select Purchase Date"/>
+                                                requiredMessage="Please select Purchase Date">
+                                                <p:clientValidator event="dateSelect"/></p:calendar>
                                             <p:outputLabel for="purchaseDate" value="#{messages.purchase_date}"/>
                                             <p:message for="purchaseDate" />
                                         </h:panelGroup>
@@ -122,6 +133,7 @@
                                                             required="true"
                                                             requiredMessage="Please select Currency">
                                                 <p:ajax event="itemSelect" update="purchaseItemTable exchangeCurrency" />
+                                                <p:clientValidator event="itemSelect"/>
                                             </p:autoComplete>
                                             <p:outputLabel for="purchaseCurrency" value="#{messages.currency}"/>
                                             <p:message for="purchaseCurrency" />
@@ -152,46 +164,53 @@
                                                 requiredMessage="Please enter Purchase Due On"
                                                 converterMessage="Please enter numbers only." 
                                                 id="purchaseDueOn" >
+                                                <p:clientValidator event="keyup"/>
                                             </p:inputText>
                                             <p:outputLabel for="purchaseDueOn" value="#{messages.purchase_due_on}"/>
                                             <p:message for="purchaseDueOn" />
                                         </h:panelGroup>
 
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:autoComplete id="conatcts" 
-                                                            converter="#{contactConverter}"
-                                                            dropdown="true" 
-                                                            forceSelection="true"
-                                                            effect="fold"
-                                                            scrollHeight="250"
-                                                            required="true"
-                                                            requiredMessage="Please select Contact"
-                                                            completeMethod="#{purchaseController.contacts}" 
-                                                            value="#{purchaseController.selectedPurchaseModel.purchaseContact}" 
-                                                            var="contact"
-                                                            itemValue="#{contact}"
-                                                            itemLabel="#{contact.firstName} #{contact.lastName}"
-                                                            >
-                                                <p:ajax event="itemSelect" process="@this"
-                                                        listener="#{purchaseController.updateCurrency}" 
-                                                        update="purchaseCurrency purchaseItemTable exchangeCurrency" />
-                                            </p:autoComplete>
-                                            <p:outputLabel for="conatcts" value="#{messages.contact}"/>
-                                            <p:message for="conatcts" />
-                                        </h:panelGroup>
 
-                                        <p:outputLabel value="OR  " id="contactpopup">
-                                            <p:commandLink onsuccess="PF('add_contact_popup').show();" 
-                                                           actionListener="#{purchaseController.initCreateContact()}"
-                                                           style="color: #009688"
-                                                           value="Add New Contact" />
-                                        </p:outputLabel>
+                                        <p:panelGrid columns="2" 
+                                                     columnClasses="ui-grid-col-11,ui-grid-col-1"
+                                                     layout="grid" 
+                                                     styleClass="ui-panelgrid-blank form-group"
+                                                     style="border:0px none; background-color:transparent;">
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:autoComplete id="conatcts" 
+                                                                converter="#{contactConverter}"
+                                                                dropdown="true" 
+                                                                forceSelection="true"
+                                                                effect="fold"
+                                                                scrollHeight="250"
+                                                                required="true"
+                                                                requiredMessage="Please select Contact"
+                                                                completeMethod="#{purchaseController.contacts}" 
+                                                                value="#{purchaseController.selectedPurchaseModel.purchaseContact}" 
+                                                                var="contact"
+                                                                itemValue="#{contact}"
+                                                                itemLabel="#{contact.firstName} #{contact.lastName}"
+                                                                >
+                                                    <p:clientValidator event="itemSelect"/>
+                                                    <p:ajax event="itemSelect" process="@this"
+                                                            listener="#{purchaseController.updateCurrency}" 
+                                                            update="purchaseCurrency purchaseItemTable exchangeCurrency" />
+                                                </p:autoComplete>
+                                                <p:outputLabel for="conatcts" value="#{messages.contact}"/>
+                                                <p:message for="conatcts" />
+                                            </h:panelGroup>
+
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:tooltip for="addbtn" position="top" value="Add new contact" />
+                                                <p:commandButton id="addbtn" icon="ui-icon-plus" onsuccess="PF('add_contact_popup').show();" actionListener="#{purchaseController.initCreateContact()}"/>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
 
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputTextarea
                                                 id="purchaseDescription"
                                                 value="#{purchaseController.selectedPurchaseModel.purchaseDescription}"
-                                                rows="5" cols="30" counter="counterValue" maxlength="250"
+                                                rows="5" cols="30" counter="counterValue" maxlength="255"
                                                 counterTemplate="{0} characters remaining."
                                                 autoResize="false" />
                                             <h:outputText id="counterValue" />
@@ -262,7 +281,9 @@
                                                             completeMethod="#{purchaseController.products}" 
                                                             var="product"
                                                             itemValue="#{product}"
-                                                            onkeypress="if (event.keyCode == 13) {return false;}"
+                                                            onkeypress="if (event.keyCode == 13) {
+                                                                        return false;
+                                                                    }"
                                                             itemLabel="#{product.productName}">
                                                 <p:ajax update="vatId subTotal" event="itemSelect" listener="#{purchaseController.updateVatPercentage(purchaseItem)}" />
                                             </p:autoComplete>
@@ -271,7 +292,9 @@
                                         <p:column headerText="Description" styleClass="amount" style="width: 320px">
                                             <p:inputText id="description" 
                                                          value="#{purchaseItem.description}" 
-                                                         onkeypress="if (event.keyCode == 13) {return false;}"
+                                                         onkeypress="if (event.keyCode == 13) {
+                                                                     return false;
+                                                                 }"
                                                          style="width:100%">
                                                 <p:ajax event="change" />
                                             </p:inputText>
@@ -281,7 +304,9 @@
                                                          validator="positiveNumberValidator"
                                                          validatorMessage="Please enter Quantity more then 0"
                                                          value="#{purchaseItem.quatity}" 
-                                                         onkeypress="if (event.keyCode == 13) {return false;}"
+                                                         onkeypress="if (event.keyCode == 13) {
+                                                                     return false;
+                                                                 }"
                                                          style="width:100%">
 
                                                 <p:ajax event="change" 
@@ -296,7 +321,9 @@
                                                            symbol="#{purchaseController.selectedPurchaseModel.currency.currencySymbol} " symbolPosition="p"
                                                            validator="positiveNumberValidator"
                                                            validatorMessage="Please enter Price more then 0"
-                                                           onkeypress="if (event.keyCode == 13) {return false;}"
+                                                           onkeypress="if (event.keyCode == 13) {
+                                                                       return false;
+                                                                   }"
                                                            style="width:100%">
                                                 <p:ajax event="change" 
                                                         listener="#{purchaseController.updateSubTotal(purchaseItem)}" 
@@ -315,7 +342,9 @@
                                                             value="#{purchaseItem.vatId}"
                                                             completeMethod="#{purchaseController.vatCategorys}" 
                                                             var="vat"
-                                                            onkeypress="if (event.keyCode == 13) {return false;}"
+                                                            onkeypress="if (event.keyCode == 13) {
+                                                                        return false;
+                                                                    }"
                                                             itemValue="#{vat}"
                                                             itemLabel="#{vat.name}"
                                                             >

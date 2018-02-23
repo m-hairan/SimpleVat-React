@@ -563,7 +563,7 @@ public class TransactionListController extends TransactionControllerHelper imple
         }
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("Successful", "Transaction deleted successfully"));
+        context.addMessage(null, new FacesMessage("", "Transaction deleted successfully"));
         return "bank-transactions?faces-redirect=true";
     }
 

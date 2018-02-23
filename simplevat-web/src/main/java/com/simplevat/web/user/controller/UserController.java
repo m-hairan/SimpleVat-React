@@ -12,8 +12,10 @@ import com.simplevat.security.UserContext;
 import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.RoleService;
 import com.simplevat.service.UserServiceNew;
+import com.simplevat.web.common.controller.BaseController;
 import com.simplevat.web.common.controller.StreamedContentSessionController;
 import com.simplevat.web.constant.EmailConstant;
+import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.user.model.UserDTO;
 import com.simplevat.web.utils.FacesUtil;
 import com.simplevat.web.utils.FileUtility;
@@ -50,7 +52,7 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 @SpringScopeView
-public class UserController implements Serializable {
+public class UserController extends BaseController implements Serializable {
 
     private static final long serialVersionUID = -7388960716549948523L;
     private static final String NEW_USER_EMAIL_TEMPLATE_FILE = "/WEB-INF/emailtemplate/new-user-created-template.html";
@@ -93,6 +95,10 @@ public class UserController implements Serializable {
 
     @Getter
     private boolean renderProfilePic;
+    
+    public UserController() {
+        super(ModuleName.USER_MODULE);
+    }
 
     @PostConstruct
     public void init() {
@@ -161,7 +167,7 @@ public class UserController implements Serializable {
         fileName = event.getFile().getFileName();
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_USER_PIC", event.getFile().getContents());
         renderProfilePic = true;
-        FacesMessage message = new FacesMessage("Upload successful", "Image Uploaded Successfully.");
+        FacesMessage message = new FacesMessage("", "Image Uploaded successfully.");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
@@ -188,10 +194,10 @@ public class UserController implements Serializable {
             if (user.getUserId() == null) {
                 userService.persist(user);
                 sendNewUserMail(user, password);
-                context.addMessage(null, new FacesMessage("Successful","User Profile added successfully"));
+                context.addMessage(null, new FacesMessage("","User Profile saved successfully"));
             } else {
                 userService.update(user, user.getUserId());
-                context.addMessage(null, new FacesMessage("Successful","User Profile updated successfully"));
+                context.addMessage(null, new FacesMessage("","User Profile updated successfully"));
             }
             return "list?faces-redirect=true";
         } catch (Exception ex) {

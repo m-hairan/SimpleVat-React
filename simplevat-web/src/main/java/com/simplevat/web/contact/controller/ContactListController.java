@@ -200,8 +200,7 @@ public class ContactListController extends BaseController implements Serializabl
         populateContactList();
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-
-        context.addMessage(null, new FacesMessage("Contact deleted SuccessFully"));
+        context.addMessage(null, new FacesMessage("", "Contact deleted successfully"));
     }
 
     public void populateContactEmployeeList() {

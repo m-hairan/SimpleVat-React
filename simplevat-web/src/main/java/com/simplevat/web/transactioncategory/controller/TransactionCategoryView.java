@@ -75,7 +75,7 @@ public class TransactionCategoryView extends BaseController implements Serializa
     private TranscationCategoryHelper transcationCategoryHelper;
 
     public TransactionCategoryView() {
-        super(ModuleName.SETTING_MODULE);
+        super(ModuleName.TRANSACTIONCATEGORY_MODULE);
     }
 
     @PostConstruct
@@ -179,7 +179,7 @@ public class TransactionCategoryView extends BaseController implements Serializa
         }
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("Successful", "Transaction saved successfully"));
+        context.addMessage(null, new FacesMessage("", "Transaction saved successfully"));
     }
 
     public String editAction() {
@@ -208,7 +208,7 @@ public class TransactionCategoryView extends BaseController implements Serializa
         transactionCategories = transactionCategoryService.findAllTransactionCategory();
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("Successful", "Transaction deleted successfully"));
+        context.addMessage(null, new FacesMessage("", "Transaction deleted successfully"));
         return HOME_PAGE;
 
     }

@@ -56,6 +56,7 @@
                                                 itemLabel="#{transactionType.transactionTypeName}" 
                                                 required="true" requiredMessage="Please select transaction type.">
                                                 <p:ajax update="transactionCategory" event="itemSelect" />
+                                                 <p:clientValidator event="itemSelect"/>
                                             </p:autoComplete>
                                             <p:outputLabel for="transactionType" value="#{messages.type}" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() == 0}"/>
                                             <p:message for="transactionType"/>
@@ -77,6 +78,7 @@
                                                 itemValue="#{transactionType}" 
                                                 itemLabel="#{transactionType.transactionTypeName}" 
                                                 required="true" requiredMessage="Please select transaction type.">
+                                                 <p:clientValidator event="itemSelect"/>
                                                 <p:ajax update="transactionCategory1" event="itemSelect" />
                                             </p:autoComplete>
                                             <p:outputLabel for="transactionType1" value="#{messages.type}" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() > 0}"/>
@@ -89,19 +91,21 @@
                                                 id="transactionDate"
                                                 value="#{transactionController.selectedTransactionModel.transactionDate}"
                                                 navigator="true"
-                                                required="true" requiredMessage="Please select transaction date."/>
+                                                required="true" requiredMessage="Please select transaction date.">
+                                             <p:clientValidator event="dateSelect"/></p:calendar>
                                             <p:outputLabel for="transactionDate" value="#{messages.date}"/>
                                             <p:message for="transactionDate"/>
                                         </h:panelGroup>
 
 
-                                        <h:panelGroup styleClass="md-inputfield" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() == 0}">
+                                        <h:panelGroup styleClass="md-inputfield" id="transactionAmountPanel" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() == 0}">
                                             <p:inputNumber symbol="#{transactionController.selectedTransactionModel.bankAccount.bankAccountCurrency.currencySymbol}"
                                                            symbolPosition="p"
                                                            id="transactionAmount"
                                                            value="#{transactionController.selectedTransactionModel.transactionAmount}"
                                                            required="true" requiredMessage="Please select transaction amount.">
                                                 <p:ajax update="referancePanel"  />
+                                                 <p:ajax event="keyup" update="transactionAmountPanel" process="@this"/>
 
                                             </p:inputNumber>
                                             <p:outputLabel for="transactionAmount" value="#{messages.total_amount}" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() == 0}"/>
@@ -109,12 +113,14 @@
                                         </h:panelGroup>
 
 
-                                        <h:panelGroup styleClass="md-inputfield" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() > 0}">
-                                            <p:inputNumber symbol="#{transactionController.selectedTransactionModel.bankAccount.bankAccountCurrency.currencySymbol }"
+                                        <h:panelGroup styleClass="md-inputfield" id="transactionAmount1Panel" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() > 0}">
+                                            <p:inputNumber symbol="#{transactionController.selectedTransactionModel.bankAccount.bankAccountCurrency.currencySymbol } "
                                                            symbolPosition="p"
                                                            id="transactionAmount1"
                                                            value="#{transactionController.selectedTransactionModel.transactionAmount}"
-                                                           required="true" requiredMessage="Please select transaction amount."/>
+                                                           required="true" requiredMessage="Please select transaction amount.">
+                                                <p:ajax event="keyup" update="transactionAmount1Panel" process="@this"/>
+                                             </p:inputNumber>
                                             <p:outputLabel for="transactionAmount1" value="#{messages.total_amount}" rendered="#{transactionController.selectedTransactionModel.childTransactionList.size() > 0}"/>
                                             <p:message for="transactionAmount1"/>
                                         </h:panelGroup>
@@ -138,7 +144,8 @@
                                                 value="#{transactionController.selectedTransactionModel.transactionDescription}"
                                                 required="true"
                                                 requiredMessage="Please Enter Description."
-                                                />
+                                                >
+                                             <p:clientValidator event="keyup"/></p:inputText>
                                             <p:outputLabel for="description" value="#{messages.description}"/>
                                             <p:message for="description"/>
                                         </h:panelGroup>
@@ -201,6 +208,7 @@
                                                                 itemValue="#{invoice}"
                                                                 itemLabel="#{transactionController.autocompleteInvoiceLebal(invoice)}"
                                                                 required="true" requiredMessage="Please select invoice reference.">
+                                                     <p:clientValidator event="itemSelect"/>
                                                 </p:autoComplete>
                                                 <label>Invoice Reference</label>
                                             </h:panelGroup>
@@ -217,6 +225,7 @@
                                                                 itemValue="#{purchase}"
                                                                 itemLabel="#{purchase.receiptNumber} : #{purchase.purchaseDueAmount} (#{purchase.purchaseContact.firstName})"
                                                                 required="true" requiredMessage="Please select purchase reference.">
+                                                     <p:clientValidator event="itemSelect"/>
                                                 </p:autoComplete>
                                                 <p:message for="purchase1" />
                                                 <label>Purchase Reference</label>

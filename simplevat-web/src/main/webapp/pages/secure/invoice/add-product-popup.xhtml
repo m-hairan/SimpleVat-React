@@ -19,7 +19,8 @@
                                  style="border:0px none; background-color:transparent;">
 
                         <h:panelGroup styleClass="md-inputfield">
-                            <p:inputText id="name"  required="true" value="#{invoiceController.productModel.productName}" requiredMessage="Please Enter Name."/>
+                            <p:inputText id="name"  required="true" value="#{invoiceController.productModel.productName}" requiredMessage="Please Enter Name.">
+                                <p:clientValidator event="keyup"/></p:inputText>
                             <p:outputLabel for="name" value="#{messages.name}"/>
                             <p:message for="name" />
                         </h:panelGroup>

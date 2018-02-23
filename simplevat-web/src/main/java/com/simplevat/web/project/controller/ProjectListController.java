@@ -102,7 +102,9 @@ public class ProjectListController extends BaseController {
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(ProjectListController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Project deleted successfully"));
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        context.addMessage(null, new FacesMessage("", "Project deleted successfully"));
     }
 
     public List<Project> projects(final String searchQuery) throws Exception {

@@ -37,7 +37,9 @@
                                         <p:inputText id="projectName"
                                                      value="#{projectController.selectedProject.projectName}"
                                                      required="true"
-                                                     requiredMessage="Please enter Project Name"/>
+                                                     requiredMessage="Please enter Project Name">
+                                         <p:clientValidator event="keyup"/>
+                                        </p:inputText>
                                         <p:outputLabel for="projectName" value="Project Name"/>
                                         <p:message for="projectName"/>
                                     </h:panelGroup>
@@ -57,6 +59,7 @@
                                                         var="contact"
                                                         itemValue="#{contact}"
                                                         itemLabel="#{contact.firstName} #{contact.lastName}">
+                                             <p:clientValidator event="itemSelect"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="conatcts" value="Contact"/>
                                         <p:message for="conatcts"/>
@@ -109,7 +112,8 @@
                                                         var="currency" itemValue="#{currency}"
                                                         itemLabel="#{currency.currencyDescription} #{currency.currencySymbol}"
                                                         required="true"
-                                                        requiredMessage="Please select currency"/>
+                                                        requiredMessage="Please select currency">
+                                         <p:clientValidator event="itemSelect"/></p:autoComplete>
                                         <p:outputLabel for="currency" value="Currency"/>
                                         <p:message for="currency"/>
                                     </h:panelGroup>
@@ -138,7 +142,8 @@
                                                         completeMethod="#{projectController.completeLanguage}"
                                                         value="#{projectController.selectedProject.invoiceLanguageCode}"
                                                         var="language" itemValue="#{language.languageCode}"
-                                                        itemLabel="#{language.languageDescription}"/>
+                                                        itemLabel="#{language.languageDescription}">
+                                         <p:clientValidator event="itemSelect"/></p:autoComplete>
                                         <p:outputLabel for="language" value="Invoice Language"/>
                                         <p:message for="language"/>
                                     </h:panelGroup>

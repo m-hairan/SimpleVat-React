@@ -152,8 +152,9 @@ public class InvoiceListController extends BaseController implements Serializabl
         invoice.setDeleteFlag(Boolean.TRUE);
         invoiceService.update(invoice, invoice.getInvoiceId());
         initInvoices();
-        FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage("Invoice Deleted SuccessFully"));
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getFlash().setKeepMessages(true);
+        context.addMessage(null, new FacesMessage("", "Invoice deleted successfully"));
     }
 
     @Nonnull

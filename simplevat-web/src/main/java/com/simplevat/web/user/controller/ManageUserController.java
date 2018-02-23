@@ -11,7 +11,10 @@ import com.simplevat.entity.Contact;
 import com.simplevat.entity.User;
 import com.simplevat.service.CompanyService;
 import com.simplevat.service.UserServiceNew;
+import com.simplevat.web.common.controller.BaseController;
+import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.user.model.UserDTO;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -29,7 +32,7 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 @SpringScopeView
-public class ManageUserController {
+public class ManageUserController extends BaseController implements Serializable{
 
     @Autowired
     private UserServiceNew userService;
@@ -49,6 +52,10 @@ public class ManageUserController {
     @Setter
     @Getter
     private List<UserDTO> userDTOList;
+
+    public ManageUserController() {
+        super(ModuleName.USER_MODULE);
+    }
 
     @PostConstruct
     void initController() {
@@ -76,7 +83,7 @@ public class ManageUserController {
         userService.update(user);
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("Successful","Contact deleted SuccessFully"));
+        context.addMessage(null, new FacesMessage("","Contact deleted successFully"));
 
         return "list?faces-redirect=true";
     }
