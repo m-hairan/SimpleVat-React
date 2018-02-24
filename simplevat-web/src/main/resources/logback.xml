@@ -11,28 +11,15 @@
         </encoder>
     </appender>
 
-<!--    TODO Utkarsh file permission on server
-    <appender name="fileAppender" class="ch.qos.logback.core.FileAppender">
+    <!--TODO Utkarsh file permission on server-->
+   <!-- <appender name="fileAppender" class="ch.qos.logback.core.FileAppender">
         <param name="file" value="logs.log"/>
         <param name="append" value="false"/>
         <param name="threshold" value="debug"/>
         <encoder>
             <pattern>%d{dd/MMM/yyyy HH:mm:ss,SSS}- %c{1}: %m%n</pattern>
         </encoder>
-    </appender>-->    
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <!-- Support multiple-JVM writing to the same log file -->
-    <prudent>true</prudent>
-    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
-      <maxHistory>30</maxHistory> 
-      <totalSizeCap>10MB</totalSizeCap>
-    </rollingPolicy>
-
-    <encoder>
-      <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
-    </encoder>
-  </appender> 
+    </appender>-->
 
     <logger name="org.apache.http" level="warn"/>
     <logger name="org.springframework" level="info"/>
@@ -42,14 +29,8 @@
     <logger name="com.simplevat" level="debug"/>
 
     <root>
-        <level value="error"/>
-        <!--<appender-ref ref="consoleAppender"/>-->        
-        <appender-ref ref="FILE" />
+        <level value="INFO"/>
+        <appender-ref ref="consoleAppender"/>
     </root>
-
-<!--    <root level="DEBUG">
-        <appender-ref ref="FILE" />
-    </root>-->
-
 
 </configuration>
