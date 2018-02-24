@@ -13,6 +13,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -24,9 +28,11 @@ public abstract class BaseController {
         System.out.println("PageAccess=======" + PageAccessControl.hasAccess(moduleName));
         if (!PageAccessControl.hasAccess(moduleName)) {
             try {
-                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-                ec.redirect(ec.getRequestContextPath() + "/pages/public/common/unauthorized.xhtml");
-            } catch (IOException ex) {
+                HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+                RequestDispatcher dd = request.getRequestDispatcher("/pages/public/common/unauthorized.xhtml");
+                dd.forward(request,
+                        (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse());
+            } catch (Exception ex) {
                 Logger.getLogger(BaseController.class.getName()).log(Level.SEVERE, null, ex);
                 throw new RuntimeException(ex.getMessage());
             }

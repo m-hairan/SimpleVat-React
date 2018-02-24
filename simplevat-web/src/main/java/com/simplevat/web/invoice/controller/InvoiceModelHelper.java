@@ -199,7 +199,9 @@ public class InvoiceModelHelper {
                     invoiceSubTotal = invoiceSubTotal.add(itemModel.getSubTotal());
                 }
                 if (invoiceModel.getDiscount() != null) {
-                    discountPercentage = invoiceSubTotal.divide(invoiceModel.getDiscount(), 5, RoundingMode.HALF_UP);
+                    if (invoiceModel.getDiscount().compareTo(BigDecimal.ZERO) > 0) {
+                        discountPercentage = invoiceSubTotal.divide(invoiceModel.getDiscount(), 5, RoundingMode.HALF_UP);
+                    }
                 }
             } else if (invoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.PERCENTAGEDISCOUNT) {
                 discountPercentage = invoiceModel.getDiscount();
@@ -236,7 +238,7 @@ public class InvoiceModelHelper {
                 && itemValue != null
                 && discountAmount != null
                 && invoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.PERCENTAGEDISCOUNT) {
-            discountAmount = (itemValue.multiply(discountAmount)).divide(new BigDecimal(100));
+            discountAmount = itemValue.multiply(discountAmount);
         }
         return discountAmount;
     }

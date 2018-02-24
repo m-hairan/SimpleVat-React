@@ -65,7 +65,6 @@ import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.Calendar;
-import java.util.Optional;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
@@ -188,6 +187,7 @@ public class InvoiceController extends BaseController implements Serializable {
 
     @Getter
     private List<Title> titles = new ArrayList<>();
+   
 
     public InvoiceController() {
         super(ModuleName.INVOICE_MODULE);
@@ -222,7 +222,6 @@ public class InvoiceController extends BaseController implements Serializable {
             selectedInvoiceModel.setDiscount(new BigDecimal(0));
             selectedInvoiceModel.setInvoiceDate(new Date());
             selectedInvoiceModel.setInvoiceDueOn(30);
-            selectedInvoiceModel.setInvoiceLineItems(new ArrayList());
             selectedInvoiceModel.setInvoiceReferenceNumber("1");
             selectedInvoiceModel.setInvoiceDueDate(getDueDate(selectedInvoiceModel));
             configuration = configurationService.getConfigurationByName(ConfigurationConstants.INVOICING_REFERENCE_PATTERN);
@@ -818,9 +817,7 @@ public class InvoiceController extends BaseController implements Serializable {
             invoiceItemModelForProductUpdateOnProductAdd.setVatId(vatCategoryService.getDefaultVatCategory());
         }
         invoiceItemModelForProductUpdateOnProductAdd.setDescription(product.getProductDescription());
-
         addLineItem();
-
         RequestContext.getCurrentInstance().execute("PF('add_product_popup').hide();");
         initCreateProduct();
 
@@ -830,6 +827,7 @@ public class InvoiceController extends BaseController implements Serializable {
         InvoiceItemModel invoiceItemModel = new InvoiceItemModel();
         VatCategory vatCategory = vatCategoryService.getDefaultVatCategory();
         invoiceItemModel.setVatId(vatCategory);
+        invoiceItemModel.setUnitPrice(BigDecimal.ZERO);
         selectedInvoiceModel.addInvoiceItem(invoiceItemModel);
     }
 
@@ -843,7 +841,6 @@ public class InvoiceController extends BaseController implements Serializable {
 //            }
 //        }
 //    }
-
     public void dueDateListener() {
         selectedInvoiceModel.setInvoiceDueDate(getDueDate(selectedInvoiceModel));
     }
