@@ -22,8 +22,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 @NamedQueries({
     @NamedQuery(name = "findAllTransactionStatues",
-            query = "SELECT t "
-            + "FROM TransactionStatus t where t.deleteFlag = FALSE order by t.defaltFlag DESC, t.orderSequence ASC")
+            query = "SELECT t FROM TransactionStatus t where t.deleteFlag = FALSE order by t.defaltFlag DESC, t.orderSequence,t.explainationStatusName ASC")
 })
 @Entity
 @Table(name = "EXPLANATION_STATUS")
@@ -50,8 +49,7 @@ public class TransactionStatus implements Serializable {
     private Character defaltFlag;
 
     @Column(name = "ORDER_SEQUENCE")
-    @ColumnDefault(value = "1")
-    @Basic(optional = false)
+    @Basic(optional = true)
     private Integer orderSequence;
 
     @Column(name = "CREATED_BY")

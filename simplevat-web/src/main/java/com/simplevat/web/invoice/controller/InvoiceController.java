@@ -243,7 +243,7 @@ public class InvoiceController extends BaseController implements Serializable {
         setDefaultContactCurrency();
         countries = countryService.getCountries();
         addLineItem();
-        populateVatCategory();
+        //populateVatCategory();
         updateSubTotalOnDiscountAdded();
 
     }
@@ -369,13 +369,9 @@ public class InvoiceController extends BaseController implements Serializable {
 
     public List<VatCategory> vatCategorys(final String searchQuery) throws Exception {
         List<VatCategory> vatCategorys = new ArrayList<>();
-        if (vatCategoryService.getVatCategoryList() != null) {
-            for (VatCategory vatCategory : vatCategoryService.getVatCategoryList()) {
-                vatCategorys.add(vatCategory);
-            }
-            return vatCategorys;
-        }
-        return null;
+        vatCategorys = vatCategoryService.getVatCategorys(searchQuery);
+        return vatCategorys;
+
     }
 
     public void addInvoiceItemOnProductSelect(Integer listSize) {
@@ -837,15 +833,16 @@ public class InvoiceController extends BaseController implements Serializable {
         selectedInvoiceModel.addInvoiceItem(invoiceItemModel);
     }
 
-    private void populateVatCategory() {
-        vatCategoryList = vatCategoryService.getVatCategoryList();
-        if (vatCategoryList != null) {
-            for (VatCategory vatCategory : vatCategoryList) {
-                SelectItem item = new SelectItem(vatCategory.getVat(), vatCategory.getName());
-                vatCategorySelectItemList.add(item);
-            }
-        }
-    }
+//    private void populateVatCategory() {
+//        String name="";
+//        vatCategoryList = vatCategoryService.getVatCategoryList("");
+//        if (vatCategoryList != null) {
+//            for (VatCategory vatCategory : vatCategoryList) {
+//                SelectItem item = new SelectItem(vatCategory.getVat(), vatCategory.getName());
+//                vatCategorySelectItemList.add(item);
+//            }
+//        }
+//    }
 
     public void dueDateListener() {
         selectedInvoiceModel.setInvoiceDueDate(getDueDate(selectedInvoiceModel));
@@ -859,14 +856,14 @@ public class InvoiceController extends BaseController implements Serializable {
     }
 
     private void removeEmptyRow() {
-        if(selectedInvoiceModel.getInvoiceLineItems().size()>1){
-        List<InvoiceItemModel> invoiceLineItemList = new ArrayList<>();
-        for (InvoiceItemModel invoiceLineItem : selectedInvoiceModel.getInvoiceLineItems()) {
-            if (invoiceLineItem.getProductService() == null) {
-                invoiceLineItemList.add(invoiceLineItem);
+        if (selectedInvoiceModel.getInvoiceLineItems().size() > 1) {
+            List<InvoiceItemModel> invoiceLineItemList = new ArrayList<>();
+            for (InvoiceItemModel invoiceLineItem : selectedInvoiceModel.getInvoiceLineItems()) {
+                if (invoiceLineItem.getProductService() == null) {
+                    invoiceLineItemList.add(invoiceLineItem);
+                }
             }
-        }
-        selectedInvoiceModel.getInvoiceLineItems().removeAll(invoiceLineItemList);
+            selectedInvoiceModel.getInvoiceLineItems().removeAll(invoiceLineItemList);
         }
     }
 

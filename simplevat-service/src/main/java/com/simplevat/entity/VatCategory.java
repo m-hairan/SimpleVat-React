@@ -12,7 +12,7 @@ import org.hibernate.annotations.ColumnDefault;
  */
 @NamedQueries({
     @NamedQuery(name = "allVatCategory",
-            query = "SELECT v FROM VatCategory v  where v.deleteFlag = FALSE order by v.defaultFlag DESC, v.orderSequence ASC ")
+            query = "SELECT v FROM VatCategory v  where v.deleteFlag = FALSE order by v.defaultFlag DESC, v.orderSequence,v.name ASC ")
 })
 @Entity
 @Table(name = "VAT_CATEGORY")
@@ -35,7 +35,7 @@ public class VatCategory implements Serializable {
     @ColumnDefault(value = "'N'")
     private Character defaultFlag;
     @Column(name = "ORDER_SEQUENCE")
-    @ColumnDefault(value = "1")
+    @Basic(optional = true)
     private Integer orderSequence;
     @Column(name = "CREATED_BY")
     @Basic(optional = false)

@@ -190,7 +190,7 @@ public class ExpenseController extends BaseController implements Serializable {
         titles = titleService.getTitles();
         countries = countryService.getCountries();
         currencies = currencyService.getCurrencies();
-        populateVatCategory();
+       
         setDefaultCountry();
         setDefaultContactCurrency();
         calculateTotal();
@@ -357,10 +357,11 @@ public class ExpenseController extends BaseController implements Serializable {
     }
 
     public List<VatCategory> vatCategorys(final String searchQuery) throws Exception {
-        if (vatCategoryService.getVatCategoryList() != null) {
-            return vatCategoryService.getVatCategoryList();
-        }
-        return null;
+//        if (vatCategoryService.getVatCategoryList(searchQuery) != null) {
+//            return vatCategoryService.getVatCategoryList();
+//        }
+//        return null;
+        return vatCategoryService.getVatCategoryList();
     }
 
     private boolean validateInvoiceLineItems() { //---------------
@@ -563,13 +564,5 @@ public class ExpenseController extends BaseController implements Serializable {
         }
     }
 
-    private void populateVatCategory() {
-        vatCategoryList = vatCategoryService.getVatCategoryList();
-        if (vatCategoryList != null) {
-            for (VatCategory vatCategory : vatCategoryList) {
-                SelectItem item = new SelectItem(vatCategory.getVat(), vatCategory.getName());
-                vatCategorySelectItemList.add(item);
-            }
-        }
-    }
+    
 }

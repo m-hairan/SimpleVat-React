@@ -11,7 +11,7 @@ import org.hibernate.annotations.ColumnDefault;
  */
 @NamedQueries({
     @NamedQuery(name = "allLanguages",
-            query = "SELECT l FROM Language l where l.deleteFlag=false ORDER BY l.defaultFlag DESC, l.orderSequence ASC ")
+            query = "SELECT l FROM Language l where l.deleteFlag=false ORDER BY l.defaultFlag DESC, l.orderSequence,l.languageName ASC ")
 })
 
 @Entity
@@ -38,8 +38,7 @@ public class Language implements Serializable {
     private Character defaultFlag;
 
     @Column(name = "ORDER_SEQUENCE")
-    @ColumnDefault(value = "1")
-    @Basic(optional = false)
+    @Basic(optional = true)
     private Integer orderSequence;
 
     @Column(name = "CREATED_BY")

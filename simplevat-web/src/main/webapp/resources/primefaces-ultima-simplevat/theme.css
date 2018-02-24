@@ -4719,7 +4719,8 @@ body {
         body .ui-growl .ui-growl-item .ui-growl-image.ui-growl-image-fatal:before {
           content: ""; }
     body .ui-growl .ui-growl-item .ui-growl-message {
-      color: #ffffff; }
+      color: #ffffff;  
+      padding-top:6px;}
     body .ui-growl .ui-growl-item .ui-growl-icon-close {
       font-family: 'Material Icons';
       font-weight: normal;
@@ -4744,7 +4745,7 @@ body {
       /* Support for IE. */
       font-feature-settings: 'liga';
       font-size: 24px;
-      color: #CDDC39; }
+      color: #CDDC39;}
       body .ui-growl .ui-growl-item .ui-growl-icon-close:before {
         content: ""; }
   body .ui-accordion .ui-accordion-header {

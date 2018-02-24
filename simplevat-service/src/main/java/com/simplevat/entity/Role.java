@@ -12,7 +12,7 @@ import org.hibernate.annotations.ColumnDefault;
  */
 @NamedQueries({
     @NamedQuery(name = "Role.FindAllRole",
-            query = "SELECT r FROM Role r where r.deleteFlag=false ORDER BY r.defaultFlag DESC, r.orderSequence ASC ")
+            query = "SELECT r FROM Role r where r.deleteFlag=false ORDER BY r.defaultFlag DESC, r.orderSequence,r.roleName ASC ")
 })
 @Entity
 @Table(name = "ROLE")
@@ -38,8 +38,7 @@ public class Role implements Serializable {
     private Character defaultFlag;
 
     @Column(name = "ORDER_SEQUENCE")
-    @ColumnDefault(value = "1")
-    @Basic(optional = false)
+    @Basic(optional = true)
     private Integer orderSequence;
 
     @Column(name = "CREATED_BY")

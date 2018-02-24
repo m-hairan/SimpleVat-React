@@ -85,6 +85,10 @@
             .fc-center h2{
                 font-size: 1.2em;
             }
+            .ui-panel-content{
+                overflow: auto !important;
+                height: 365px !important;
+            }
         </style>
     </ui:define>
 
@@ -178,7 +182,7 @@
                             </h:panelGroup>
                         </h:panelGroup>
                     </p:panel>
-                    <p:panel id="activity" header="Activity" styleClass="simplevat-dashboardlowerpanel">
+                    <p:panel id="activity" header="Activity" styleClass="simplevat-dashboardlowerpanel" >
                         <h:panelGroup layout="block" id="activityPanel">
                             <ul class="activity-list">
                                 <ui:repeat var="activity" value="#{homeController.activities}">

@@ -18,6 +18,17 @@ public class VatCategoryDaoImpl extends AbstractDao<Integer, VatCategory> implem
     }
 
     @Override
+    public List<VatCategory> getVatCategorys(String name) {
+        TypedQuery<VatCategory> query = getEntityManager().createQuery("SELECT v FROM VatCategory v  where v.deleteFlag = FALSE AND v.name LIKE '%'||:searchToken||'%' order by v.defaultFlag DESC, v.orderSequence ASC", VatCategory.class);
+        query.setParameter("searchToken", name);
+        List<VatCategory> vatCategorys = query.getResultList();
+        if (vatCategorys != null && !vatCategorys.isEmpty()) {
+            return vatCategorys;
+        }
+        return null;
+    }
+
+    @Override
     public VatCategory getDefaultVatCategory() {
         TypedQuery<VatCategory> query = getEntityManager().createQuery("SELECT v FROM VatCategory v WHERE v.deleteFlag = false AND v.defaultFlag = 'Y'", VatCategory.class);
         List<VatCategory> vatCategory = query.getResultList();

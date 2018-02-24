@@ -23,8 +23,7 @@ import org.hibernate.annotations.ColumnDefault;
  */
 @NamedQueries({
     @NamedQuery(name = "allBankAccountStatuses",
-            query = "SELECT status "
-            + "FROM BankAccountStatus status where status.deleteFlag = FALSE order by status.defaultFlag DESC, status.orderSequence ASC"),
+            query = "SELECT status FROM BankAccountStatus status where status.deleteFlag = FALSE order by status.defaultFlag DESC, status.orderSequence,status.bankAccountStatusName ASC"),
     @NamedQuery(name = "findBankAccountStatusByName",
             query = "SELECT status "
             + "FROM BankAccountStatus status where status.bankAccountStatusName = :status")
@@ -52,8 +51,7 @@ public class BankAccountStatus implements Serializable{
     private Character defaultFlag;
 
     @Column(name = "ORDER_SEQUENCE")
-    @ColumnDefault(value = "1")
-    @Basic(optional = false)
+    @Basic(optional = true)
     private Integer orderSequence;
     
     @Column(name = "CREATED_BY")

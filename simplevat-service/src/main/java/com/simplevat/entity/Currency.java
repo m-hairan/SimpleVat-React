@@ -46,8 +46,7 @@ public class Currency implements Serializable{
     private Character defaultFlag;
 
     @Column(name = "ORDER_SEQUENCE")
-    @ColumnDefault(value = "1")
-    @Basic(optional = false)
+    @Basic(optional = true)
     private Integer orderSequence;
     
     @Column(name = "CREATED_BY")

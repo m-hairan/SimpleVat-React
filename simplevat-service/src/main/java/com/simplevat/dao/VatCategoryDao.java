@@ -13,7 +13,10 @@ import java.util.List;
  * @author daynil
  */
 public interface VatCategoryDao extends Dao<Integer, VatCategory> {
-     public List<VatCategory> getVatCategoryList();
+
+    public List<VatCategory> getVatCategoryList();
+  
+    public List<VatCategory> getVatCategorys(String name);
 
     public VatCategory getDefaultVatCategory();
 

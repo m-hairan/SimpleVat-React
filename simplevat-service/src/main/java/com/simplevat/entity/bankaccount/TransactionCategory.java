@@ -5,7 +5,6 @@ import com.simplevat.entity.converter.DateConverter;
 import java.io.Serializable;
 
 import lombok.Data;
-
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
@@ -16,11 +15,10 @@ import org.hibernate.annotations.ColumnDefault;
  */
 @NamedQueries({
     @NamedQuery(name = "findAllTransactionCategory",
-            query = "SELECT t "
-            + "FROM TransactionCategory t where t.deleteFlag=false ORDER BY t.defaltFlag DESC , t.orderSequence ASC")
+            query = "SELECT t FROM TransactionCategory t where t.deleteFlag=false ORDER BY t.defaltFlag DESC , t.orderSequence,t.transactionCategoryName ASC")
     ,
     @NamedQuery(name = "findAllTransactionCategoryByTransactionType",
-            query = "SELECT t FROM TransactionCategory t where t.deleteFlag=FALSE AND t.transactionType.transactionTypeCode =:transactionTypeCode ORDER BY t.defaltFlag DESC , t.orderSequence ASC, t.transactionCategoryName ASC")
+            query = "SELECT t FROM TransactionCategory t where t.deleteFlag=FALSE AND t.transactionType.transactionTypeCode =:transactionTypeCode ORDER BY t.defaltFlag DESC , t.orderSequence,t.transactionCategoryName ASC")
 })
 @Entity
 @Table(name = "TRANSACTION_CATEGORY")
@@ -64,8 +62,7 @@ public class TransactionCategory implements Serializable {
     private Character defaltFlag;
 
     @Column(name = "ORDER_SEQUENCE")
-    @ColumnDefault(value = "1")
-    @Basic(optional = false)
+    @Basic(optional = true)
     private Integer orderSequence;
 
     @Column(name = "CREATED_BY")

@@ -25,35 +25,33 @@ import java.util.ArrayList;
  */
 @Service("vatCategoryService")
 
-public class VatCategoryServiceImpl   extends VatCategoryService {
+public class VatCategoryServiceImpl extends VatCategoryService {
 
     @Autowired
     private VatCategoryDao vatCategoryDao;
 
+
     private static final String VAT_CATEGORY = "VAT_CATEGORY";
-    
-   @Override
+
     public List<VatCategory> getVatCategoryList() {
-        
-        /*List<SelectItem> vatList = new ArrayList<>();
-        List<VatCategory> vatCategoryList =  vatCategoryDao.getVatCategoryList();
-        for (VatCategory vatCategory : vatCategoryList) {
-        SelectItem item=new SelectItem(vatCategory.getVat(), vatCategory.getName());
-        vatList.add(item);
-        }*/
-        
         return vatCategoryDao.getVatCategoryList();
+    }
+    
+    @Override
+    public List<VatCategory> getVatCategorys(String name) {
+        return vatCategoryDao.getVatCategorys(name);
     }
 
     @Override
     protected Dao<Integer, VatCategory> getDao() {
-      return vatCategoryDao;
+        return vatCategoryDao;
     }
 
     @Override
     public VatCategory getDefaultVatCategory() {
         return vatCategoryDao.getDefaultVatCategory();
     }
+
     
     public void persist(VatCategory vatCategory) {
         super.persist(vatCategory, null, getActivity(vatCategory, "CREATED"));
@@ -76,4 +74,5 @@ public class VatCategoryServiceImpl   extends VatCategoryService {
     }
 
     
+
 }

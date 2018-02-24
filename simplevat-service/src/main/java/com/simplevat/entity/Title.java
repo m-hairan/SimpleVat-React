@@ -11,7 +11,7 @@ import org.hibernate.annotations.ColumnDefault;
  */
 @NamedQueries({
     @NamedQuery(name = "allTitles",
-            query = "SELECT t FROM Title t where t.deleteFlag=false ORDER BY t.defaultFlag DESC, t.orderSequence ASC ")
+            query = "SELECT t FROM Title t where t.deleteFlag=false ORDER BY t.defaultFlag DESC, t.orderSequence,t.titleName ASC ")
 })
 
 @Entity
@@ -37,8 +37,7 @@ public class Title implements Serializable {
     private Character defaultFlag;
 
     @Column(name = "ORDER_SEQUENCE")
-    @ColumnDefault(value = "1")
-    @Basic(optional = false)
+    @Basic(optional = true)
     private Integer orderSequence;
 
     @Column(name = "CREATED_BY")

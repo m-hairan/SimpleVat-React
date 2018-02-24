@@ -25,8 +25,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @Table(name = "DISCOUNT_TYPE")
 @NamedQueries({
-    @NamedQuery(name = "DiscountType.discountTypes",
-            query = "from DiscountType dt where dt.deleteFlag = false order by dt.defaultFlag DESC, dt.orderSequence ASC")
+    @NamedQuery(name = "DiscountType.discountTypes",query = "from DiscountType dt where dt.deleteFlag = false order by dt.defaultFlag DESC, dt.orderSequence,dt.discountTypeName ASC")
 })
 public class DiscountType implements Serializable {
 
@@ -50,8 +49,7 @@ public class DiscountType implements Serializable {
     private Character defaultFlag;
 
     @Column(name = "ORDER_SEQUENCE")
-    @ColumnDefault(value = "1")
-    @Basic(optional = false)
+    @Basic(optional = true)
     private Integer orderSequence;
     
     @Column(name = "CREATED_BY")

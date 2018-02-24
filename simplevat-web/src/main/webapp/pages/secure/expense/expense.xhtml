@@ -485,7 +485,8 @@
                                         </p:column>
 
                                         <p:column headerText="Quantity" styleClass="amount" >
-                                            <p:inputText id="quantity" 
+                                            <p:inputText id="quantity"
+                                                         onfocus="clearTextField(event, this)"
                                                          validator="positiveNumberValidator"
                                                          validatorMessage="Please enter Quantity more then 0"
                                                          value="#{expenseItem.quatity}" 
@@ -633,8 +634,16 @@
                     </f:facet>
 
                 </p:toolbar>
-
             </div>
+              <script type="text/javascript">
+                //   <![CDATA[
+                function clearTextField(event, element) {
+                    console.log("entered");
+                    if ($(element).val() == 0)
+                        $(element).val("");
+                }
+                //   ]]>
+            </script>
 
         </h:form>
         <ui:include src="add-contact-popup.xhtml" />
