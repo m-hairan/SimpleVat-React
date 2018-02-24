@@ -1,28 +1,16 @@
 package com.simplevat.service.impl;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.simplevat.criteria.ProjectCriteria;
-import com.simplevat.criteria.ProjectFilter;
 import com.simplevat.dao.Dao;
-import com.simplevat.dao.ProjectDao;
 import com.simplevat.dao.VatCategoryDao;
 import com.simplevat.entity.Activity;
-import com.simplevat.entity.Project;
 import com.simplevat.entity.VatCategory;
-import com.simplevat.entity.bankaccount.BankAccount;
-import com.simplevat.service.ProjectService;
 import com.simplevat.service.VatCategoryService;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
-/**
- * Created by Utkarsh Bhavsar on 21/03/17.
- */
+
 @Service("vatCategoryService")
 
 public class VatCategoryServiceImpl extends VatCategoryService {

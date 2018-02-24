@@ -32,7 +32,7 @@ public class TransactionTypeDaoImpl extends AbstractDao<Integer, TransactionType
 
     @Override
     public List<TransactionType> findByText(String transactionTxt) {
-        TypedQuery<TransactionType> query = getEntityManager().createQuery("SELECT t FROM TransactionType t WHERE t.deleteFlag=false AND t.transactionTypeName LIKE '%'||:searchToken||'%' ORDER BY t.defaltFlag DESC , t.orderSequence ASC", TransactionType.class);
+        TypedQuery<TransactionType> query = getEntityManager().createQuery("SELECT t FROM TransactionType t WHERE t.deleteFlag=false AND t.transactionTypeName LIKE '%'||:searchToken||'%' ORDER BY t.defaltFlag DESC , t.orderSequence,t.transactionTypeName ASC", TransactionType.class);
         query.setParameter("searchToken", transactionTxt);
         return query.getResultList();
     }

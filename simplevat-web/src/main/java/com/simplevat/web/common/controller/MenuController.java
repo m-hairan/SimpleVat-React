@@ -165,7 +165,7 @@ public class MenuController implements Serializable {
         if (PageAccessControl.hasAccess(ModuleName.SETTING_MODULE)) {
             DefaultSubMenu submenu = new DefaultSubMenu("Setting");
             submenu.setIcon("settings");
-            if (PageAccessControl.hasAccess(ModuleName.SETTING_MODULE)) {
+            if (PageAccessControl.hasAccess(ModuleName.GENERALSETTING_MODULE)) {
                 DefaultMenuItem item = new DefaultMenuItem("General");
                 item.setIcon("build");
                 item.setOutcome("/pages/secure/setting/general");

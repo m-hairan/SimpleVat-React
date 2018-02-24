@@ -38,6 +38,7 @@ public class PageAccessControl {
         adminRoleAccessList.add(ModuleName.REPORT_MODULE.getName());
         adminRoleAccessList.add(ModuleName.PROJECT_MODULE.getName());
         adminRoleAccessList.add(ModuleName.SETTING_MODULE.getName());
+        adminRoleAccessList.add(ModuleName.GENERALSETTING_MODULE.getName());
         adminRoleAccessList.add(ModuleName.USER_MODULE.getName());
         adminRoleAccessList.add(ModuleName.VATCATEGORY_MODULE.getName());
         adminRoleAccessList.add(ModuleName.TRANSACTIONCATEGORY_MODULE.getName());
