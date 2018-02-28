@@ -1,5 +1,6 @@
 package com.simplevat.service.impl.bankaccount;
 
+import com.simplevat.constants.TransactionCreditDebitConstant;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import com.simplevat.dao.bankaccount.BankAccountDao;
 import com.simplevat.dao.bankaccount.TransactionDao;
 import com.simplevat.dao.bankaccount.TransactionStatusDao;
 import com.simplevat.dao.invoice.InvoiceDao;
+import com.simplevat.entity.Activity;
 import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.entity.bankaccount.TransactionCategory;
@@ -23,6 +25,7 @@ import com.simplevat.entity.bankaccount.TransactionView;
 import com.simplevat.service.bankaccount.TransactionService;
 import com.simplevat.util.ChartUtil;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -44,6 +47,8 @@ public class TransactionServiceImpl extends TransactionService {
 
     @Autowired
     private BankAccountDao bankAccountDao;
+
+    private static final String TRANSACTION = "TRANSACTION";
 
     @Override
     public List<Transaction> getTransactionsByCriteria(TransactionCriteria transactionCriteria) throws Exception {
@@ -92,7 +97,7 @@ public class TransactionServiceImpl extends TransactionService {
             } else {
                 transaction.setCurrentBalance(transaction.getBankAccount().getCurrentBalance().subtract(transaction.getTransactionAmount()));
             }
-            transactionDao.persist(transaction);
+            transactionDao.update(transaction);
             BigDecimal balanceAmount = transaction.getCurrentBalance();
             updateAccountBalance(balanceAmount, transaction);
         } else {
@@ -121,7 +126,7 @@ public class TransactionServiceImpl extends TransactionService {
                 }
                 transaction.setCurrentBalance(balanceAmount);
             }
-            transactionDao.persist(transaction);
+            super.persist(transaction, null, getActivity(transaction, "Created"));
 
             BigDecimal balance = transaction.getBankAccount().getCurrentBalance();
             if (transaction.getDebitCreditFlag() == 'D') {
@@ -154,7 +159,7 @@ public class TransactionServiceImpl extends TransactionService {
             updateLatestTransaction(differenceAmount, transaction);
             updateAccountBalance(balanceAmount, transaction);
         }
-        transaction = transactionDao.update(transaction);
+        transaction = super.update(transaction, null, getActivity(transaction, "Updated"));
         return transaction;
     }
 
@@ -218,11 +223,11 @@ public class TransactionServiceImpl extends TransactionService {
         }
     }
 
-     @Override
-    public List<Transaction> getAllTransactionsByRefId(int transactionRefType,  int transactionRefId) {
+    @Override
+    public List<Transaction> getAllTransactionsByRefId(int transactionRefType, int transactionRefId) {
         return transactionDao.getAllTransactionsByRefId(transactionRefType, transactionRefId);
     }
-    
+
     @Override
     public List<Transaction> getAllParentTransactions(BankAccount bankAccount) {
         return transactionDao.getAllParentTransactions(bankAccount);
@@ -291,6 +296,18 @@ public class TransactionServiceImpl extends TransactionService {
     @Override
     public List<TransactionView> getTransactionViewListByDateRang(Integer bankAccountId, Date startDate, Date endDate) {
         return transactionDao.getTransactionViewListByDateRang(bankAccountId, startDate, endDate);
+    }
+
+    protected Activity getActivity(Transaction transaction, String activityCode) {
+        Activity activity = new Activity();
+        activity.setActivityCode(activityCode);
+        activity.setModuleCode(TRANSACTION);
+        activity.setField3("Transaction " + activityCode);
+        activity.setField1(String.valueOf(transaction.getTransactionAmount().doubleValue()));
+        activity.setField2(transaction.getTransactionType().getDebitCreditFlag() == 'C' ? "Credit" : "Debit");
+        activity.setLastUpdateDate(LocalDateTime.now());
+        activity.setLoggingRequired(true);
+        return activity;
     }
 
 }

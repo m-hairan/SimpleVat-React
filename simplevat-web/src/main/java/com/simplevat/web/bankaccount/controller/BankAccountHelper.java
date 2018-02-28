@@ -7,14 +7,17 @@ package com.simplevat.web.bankaccount.controller;
 
 import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.web.bankaccount.model.BankAccountModel;
+import java.io.Serializable;
 import java.time.Instant;
 import java.time.ZoneId;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author admin
  */
-public class BankAccountHelper {
+@Component
+public class BankAccountHelper implements Serializable{
 
     public BankAccount getBankAccount(BankAccountModel model) {
         BankAccount bankAccount = new BankAccount();

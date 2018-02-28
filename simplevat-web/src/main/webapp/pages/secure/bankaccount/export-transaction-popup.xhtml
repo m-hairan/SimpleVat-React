@@ -6,14 +6,15 @@
      xmlns:p="http://primefaces.org/ui" >
 
 
-    <h:form id="exportform">
-        <style>
-            .hasDatepicker{
-                padding: 0 !important;
-                font-size: 13px !important;
-            }
-        </style>
-        <p:dialog widgetVar="exportTransactionWidget" modal="true" width="30%" >
+
+    <style>
+        .hasDatepicker{
+            padding: 0 !important;
+            font-size: 13px !important;
+        }
+    </style>
+    <p:dialog widgetVar="exportTransactionWidget" modal="true" width="30%" >
+        <h:form id="exportform">
             <div class="ui-g form-group" style="margin-bottom: 16px;">
                 <div class="ui-g-12">
                     <p:panelGrid columns="2" id="exportpanel"
@@ -23,25 +24,27 @@
                                  style="border:0px none; background-color:transparent;">
 
 
-                        
+
                         <h:panelGroup styleClass="md-inputfield" >
                             <p:calendar id="startdate" 
-                                        navigator="true"
+                                        navigator="true" required="true" requiredMessage="Please Select Start Date"
                                         style="text-align:center"
-                                        value="#{transactionExportController.startDate}" />
-                            <label>#{messages.Start_Date}</label>
+                                        value="#{transactionExportController.startDate}" >
+                                <p:clientValidator event="dateSelect"/>
+                            </p:calendar>
+                            <p:outputLabel for="startdate" value="#{messages.Start_Date}"/>
                             <p:message for="startdate" />
-                            <p:outputLabel for="startdate"/>
                         </h:panelGroup>
 
-                        
+
                         <h:panelGroup styleClass="md-inputfield" >
                             <p:calendar id="enddate" 
-                                        navigator="true"
-                                        value="#{transactionExportController.endDate}" />
-                            <label>#{messages.End_Date}</label>
+                                        navigator="true" required="true" requiredMessage="Please Select End Date"
+                                        value="#{transactionExportController.endDate}" >
+                                <p:clientValidator event="dateSelect"/>
+                            </p:calendar>
+                            <p:outputLabel for="enddate" value="#{messages.End_Date}"/>
                             <p:message for="enddate" />
-                            <p:outputLabel for="enddate" />
                         </h:panelGroup>
 
                     </p:panelGrid>
@@ -71,10 +74,11 @@
             <p:commandButton 
                 value="Export"
                 actionListener="#{transactionExportController.handleFileDownload()}"
-                style="width:auto;float: right" 
-                update="transactiondata" oncomplete="exportTransaction()"
+                style="width:auto;float: right" process="exportform"
+                update="exportform"
                 icon="ui-icon-file-download"/>
-            <p:remoteCommand name="exportTransaction" onsuccess="$('.transactionExporter').click();"/>
-        </p:dialog>
-    </h:form>
+            <p:remoteCommand name="exportTransaction" onsuccess="$('.transactionExporter').click();" oncomplete="PF('exportTransactionWidget').hide()"/>
+        </h:form>
+    </p:dialog>
+
 </div>

@@ -8,6 +8,15 @@
 
 
     <ui:define name="content">
+        <style>
+            .ui-grid-col-11{
+                padding: 0 !important;
+                width: 88.66666%;
+            }
+            .ui-grid-col-1{
+                padding: 5px !important;
+            }
+        </style>
         <h:form id="createProductServiceForm"
                 enctype="multipart/form-data">
 
@@ -93,35 +102,40 @@
                                             <p:outputLabel for="vat" value="#{messages.vat}"/>
                                             <p:message for="vat" />
                                         </h:panelGroup>
+                                        <p:panelGrid columns="2" 
+                                                     columnClasses="ui-grid-col-11,ui-grid-col-1"
+                                                     layout="grid" 
+                                                     styleClass="ui-panelgrid-blank form-group"
+                                                     style="border:0px none; background-color:transparent;">
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:autoComplete id="warehouse" 
+                                                                converter="#{productWarehouseConverter}"
+                                                                dropdown="true" styleClass="warehouse"
+                                                                forceSelection="true"
+                                                                effect="fold"
+                                                                scrollHeight="250"
+                                                                completeMethod="#{productController.completeProductWarehouse()}" 
+                                                                value="#{productController.productModel.productWarehouse}"
+                                                                var="productWarehouse"
+                                                                itemValue="#{productWarehouse}"
+                                                                itemLabel="#{productWarehouse.warehouseName}"
+                                                                >
+                                                </p:autoComplete>
+                                                <p:outputLabel for="warehouse" value="#{messages.Product_warehouse}"/>
+                                                <p:message for="warehouse" />
+                                            </h:panelGroup>
 
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:autoComplete id="warehouse" 
-                                                            converter="#{productWarehouseConverter}"
-                                                            dropdown="true" styleClass="warehouse"
-                                                            forceSelection="true"
-                                                            effect="fold"
-                                                            scrollHeight="250"
-                                                            completeMethod="#{productController.completeProductWarehouse()}" 
-                                                            value="#{productController.productModel.productWarehouse}"
-                                                            var="productWarehouse"
-                                                            itemValue="#{productWarehouse}"
-                                                            itemLabel="#{productWarehouse.warehouseName}"
-                                                            >
-                                            </p:autoComplete>
-                                            <p:outputLabel for="warehouse" value="#{messages.Product_warehouse}"/>
-                                            <p:message for="warehouse" />
-                                        </h:panelGroup>
-                                        <p:outputLabel value="OR  ">
-                                            <p:commandLink onsuccess="PF('add_new_warehouse').show();" 
-                                                           style="color: #009688" 
-                                                           value="Add New Warehouse" />
-                                        </p:outputLabel>
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:tooltip for="addbtn" position="top" value="Add new warehouse" />
+                                                <p:commandButton id="addbtn" icon="ui-icon-plus" onsuccess="PF('add_new_warehouse').show();" />
+                                            </h:panelGroup>
+                                        </p:panelGrid>
 
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputTextarea
                                                 id="productDescription"
                                                 value="#{productController.productModel.productDescription}"
-                                                rows="5" cols="30" counter="counterValue" maxlength="250"
+                                                rows="5" cols="30" counter="counterValue" maxlength="255"
                                                 counterTemplate="{0} characters remaining."
                                                 autoResize="false" />
                                             <h:outputText id="counterValue" />
@@ -172,7 +186,15 @@
                 </p:toolbar>
 
             </div>
-
+            <script type="text/javascript">
+                $('#createProductServiceForm').on('keyup keypress', function (e) {
+                    var keyCode = e.keyCode || e.which;
+                    if (keyCode === 13) {
+                        e.preventDefault();
+                        return false;
+                    }
+                });
+            </script>
         </h:form>
         <ui:include src="add-new-warehouse.xhtml"/>
     </ui:define>

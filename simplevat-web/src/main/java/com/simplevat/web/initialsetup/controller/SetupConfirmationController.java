@@ -35,11 +35,16 @@ public class SetupConfirmationController implements Serializable {
     @Getter
     @Setter
     String userLoginId;
+    
+    @Getter
+    @Setter
+    String name;
 
     @PostConstruct
     public void init() {
         FacesContext context = FacesContext.getCurrentInstance();
         baseUrl = context.getExternalContext().getRequestParameterMap().get("baseUrl");
+        name = context.getExternalContext().getRequestParameterMap().get("name");
         userLoginId = context.getExternalContext().getRequestParameterMap().get("userLoginId");
     }
 

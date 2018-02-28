@@ -37,7 +37,7 @@
                                                 id="bankAccountName"
                                                 value="#{bankAccountController.selectedBankAccount.bankAccountName}"
                                                 required="true" requiredMessage="Please enter bank account name">
-                                            <p:clientValidator event="keyup"/></p:inputText>
+                                                <p:clientValidator event="keyup"/></p:inputText>
                                             <p:outputLabel for="bankAccountName" value="#{messages.account_name}"/>
                                             <p:message for="bankAccountName" />
                                         </h:panelGroup>
@@ -54,7 +54,7 @@
                                                             var="currency" 
                                                             scrollHeight="250"
                                                             itemValue="#{currency}"
-                                                            itemLabel="#{currency.currencyDescription} #{currency.currencySymbol}" 
+                                                            itemLabel="#{currency.currencyDescription} - #{currency.currencyIsoCode} (#{currency.currencySymbol})" 
                                                             required="true" requiredMessage="Please select bank account currency">
                                                 <p:clientValidator event="itemSelect"/>
                                                 <p:ajax event="itemSelect" process="bankAccountcurrency" update="bankOpeningBalance" />
@@ -129,7 +129,7 @@
                                                 itemValue="#{bankAccountType}"
                                                 itemLabel="#{bankAccountType.name}"
                                                 required="true" requiredMessage="Please select account type">
-                                            <p:clientValidator event="itemSelect"/></p:autoComplete>
+                                                <p:clientValidator event="itemSelect"/></p:autoComplete>
                                             <p:outputLabel for="bank_account_type" value="#{messages.account_type}"/>
                                             <p:message for="bank_account_type" />
                                         </h:panelGroup>
@@ -147,13 +147,13 @@
                                                 id="bankName"
                                                 value="#{bankAccountController.selectedBankAccount.bankName}" />
                                             <p:outputLabel for="bankName" value="#{messages.bank_name}"/>
-                                            <label></label>
                                         </h:panelGroup>
 
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText
                                                 id="bankAccountNumber"
-                                                value="#{bankAccountController.selectedBankAccount.accountNumber}" />
+                                                value="#{bankAccountController.selectedBankAccount.accountNumber}" required="true" requiredMessage="Please enter account number">
+                                                <p:clientValidator event="itemSelect"/></p:inputText>
                                             <p:outputLabel for="bankAccountNumber" value="#{messages.account_number}"/>
                                         </h:panelGroup>
 

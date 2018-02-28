@@ -16,6 +16,7 @@ import com.simplevat.web.common.controller.BaseController;
 import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.productservice.model.ProductModel;
 import com.simplevat.web.utils.FacesUtil;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +36,10 @@ import org.springframework.stereotype.Controller;
 @Controller
 @SpringScopeView
 public class ProductController extends BaseController {
-
+    
     @Autowired
     private VatCategoryService vatCategoryService;
-
+    
     @Autowired
     private ProductService productService;
     @Autowired
@@ -50,11 +51,11 @@ public class ProductController extends BaseController {
     @Setter
     private ProductWarehouse productWarehouse;
     private ProductModelHelper productModelHelper;
-
+    
     public ProductController() {
         super(ModuleName.PRODUCT_MODULE);
     }
-
+    
     @PostConstruct
     public void init() {
         productWarehouse = new ProductWarehouse();
@@ -65,16 +66,16 @@ public class ProductController extends BaseController {
             Product product = productService.findByPK(Integer.parseInt(objSelectedProductId.toString()));
             productModel = productModelHelper.convertToProductModel(product);
         }
-
+        
     }
-
+    
     public List<VatCategory> vatCategorys(final String searchQuery) throws Exception {
         if (vatCategoryService.getVatCategoryList() != null) {
             return vatCategoryService.getVatCategoryList();
         }
         return null;
     }
-
+    
     public List<Product> completeProducts() {
         List<Product> productList = productService.getProductList();
         if (productList == null) {
@@ -82,7 +83,7 @@ public class ProductController extends BaseController {
         }
         return productList;
     }
-
+    
     public List<ProductWarehouse> completeProductWarehouse() {
         List<ProductWarehouse> productWarehouseList = productWarehouseService.getProductWarehouseList();
         if (productWarehouseList == null) {
@@ -90,20 +91,23 @@ public class ProductController extends BaseController {
         }
         return productWarehouseList;
     }
-
+    
     public String saveProduct() {
         save();
         return "list?faces-redirect=true";
     }
-
+    
     public String saveAndAddMoreProduct() {
         save();
         return "product?faces-redirect=true";
-
+        
     }
-
+    
     public void save() {
         Product product = productModelHelper.convertToProduct(productModel);
+        if (product.getUnitPrice() == null) {
+            product.setUnitPrice(BigDecimal.ZERO);
+        }
         if (productModel.getProductID() == null) {
             product.setCreatedBy(FacesUtil.getLoggedInUser().getCreatedBy());
             product.setCreatedDate(LocalDateTime.now());
@@ -125,14 +129,14 @@ public class ProductController extends BaseController {
             productService.update(product);
             context.addMessage(null, new FacesMessage("", "Product and Service updated successfully"));
         }
-
+        
     }
-
+    
     public void createNewWarehouse() {
         productWarehouseService.persist(productWarehouse);
         productModel.setProductWarehouse(productWarehouse);
         RequestContext.getCurrentInstance().execute("PF('add_new_warehouse').hide();");
         productWarehouse = new ProductWarehouse();
     }
-
+    
 }

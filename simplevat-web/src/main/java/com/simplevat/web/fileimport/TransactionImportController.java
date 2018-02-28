@@ -98,7 +98,7 @@ public class TransactionImportController implements Serializable {
     private List<String> invalidHeaderTransactionList = new ArrayList<>();
     @Getter
     @Setter
-    private boolean headerIncluded = false;
+    private boolean headerIncluded = true;
     @Getter
     @Setter
     private String delimiter = ",";

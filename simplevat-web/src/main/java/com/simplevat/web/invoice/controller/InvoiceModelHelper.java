@@ -44,7 +44,6 @@ public class InvoiceModelHelper {
         final LocalDateTime invoiceDate = LocalDateTime.ofInstant(invoiceModel.getInvoiceDate().toInstant(), ZoneId.systemDefault());
         final LocalDateTime invoiceDueDate = LocalDateTime.ofInstant(invoiceModel.getInvoiceDueDate().toInstant(), ZoneId.systemDefault());
         Invoice invoice;
-
         if (invoiceModel.getInvoiceId() != null && invoiceModel.getInvoiceId() > 0) {
             invoice = invoiceService.findByPK(invoiceModel.getInvoiceId());
         } else {
@@ -238,7 +237,7 @@ public class InvoiceModelHelper {
                 && itemValue != null
                 && discountAmount != null
                 && invoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.PERCENTAGEDISCOUNT) {
-            discountAmount = itemValue.multiply(discountAmount);
+            discountAmount = itemValue.multiply(discountAmount.divide(new BigDecimal(100)));
         }
         return discountAmount;
     }

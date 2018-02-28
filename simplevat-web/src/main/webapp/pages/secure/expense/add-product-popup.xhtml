@@ -19,21 +19,21 @@
                                  style="border:0px none; background-color:transparent;">
 
                         <h:panelGroup styleClass="md-inputfield">
-                            <p:inputText id="name"  required="true" value="#{invoiceController.productModel.productName}" requiredMessage="Please Enter Name.">
+                            <p:inputText id="name"  required="true" value="#{expenseController.productModel.productName}" requiredMessage="Please Enter Name.">
                                 <p:clientValidator event="keyup"/></p:inputText>
                             <p:outputLabel for="name" value="#{messages.name}"/>
                             <p:message for="name" />
                         </h:panelGroup>
 
                         <h:panelGroup styleClass="md-inputfield">
-                            <p:inputText id="purchase_code" value="#{invoiceController.productModel.productCode}"/>
+                            <p:inputText id="purchase_code" value="#{expenseController.productModel.productCode}"/>
                             <p:outputLabel for="purchase_code" value="#{messages.product_code}"/>
                             <p:message for="purchase_code" />
                         </h:panelGroup>
 
                         <h:panelGroup styleClass="md-inputfield">
                             <p:inputText id="ProductPrice"
-                                         value="#{invoiceController.productModel.unitPrice}"
+                                         value="#{expenseController.productModel.unitPrice}"
                                          />
                             <p:outputLabel for="ProductPrice" value="Product Price"/>
                         </h:panelGroup>
@@ -44,8 +44,8 @@
                                             forceSelection="true"
                                             effect="fold"
                                             scrollHeight="250"
-                                            value="#{invoiceController.productModel.vatCategory}"
-                                            completeMethod="#{invoiceController.vatCategorys}" 
+                                            value="#{expenseController.productModel.vatCategory}"
+                                            completeMethod="#{expenseController.vatCategorys}" 
                                             var="vat"
                                             itemValue="#{vat}"
                                             itemLabel="#{vat.name}"
@@ -62,8 +62,8 @@
                                             forceSelection="true"
                                             effect="fold"
                                             scrollHeight="250"
-                                            value="#{invoiceController.productModel.parentProduct}"
-                                            completeMethod="#{invoiceController.completeProducts()}" 
+                                            value="#{expenseController.productModel.parentProduct}"
+                                            completeMethod="#{expenseController.completeProducts()}" 
                                             var="parentProduct"
                                             itemValue="#{parentProduct}"
                                             itemLabel="#{parentProduct.productName}"
@@ -73,7 +73,7 @@
                             <p:message for="produstList" />
                         </h:panelGroup>
                         <h:panelGroup styleClass="md-inputwrapper-focus" >
-                            <p:selectBooleanCheckbox id="vatApply" value="#{invoiceController.productModel.vatIncluded}" >
+                            <p:selectBooleanCheckbox id="vatApply" value="#{expenseController.productModel.vatIncluded}" >
                             </p:selectBooleanCheckbox>
                             <p:outputLabel for="vatApply" value="Vat Include"/>
                         </h:panelGroup>
@@ -81,7 +81,7 @@
                         <h:panelGroup styleClass="md-inputfield">
                             <p:inputTextarea
                                 id="productDescription"
-                                value="#{invoiceController.productModel.productDescription}"
+                                value="#{expenseController.productModel.productDescription}"
                                 rows="5" cols="30" counter="counterValue" maxlength="255"
                                 counterTemplate="  {0} characters remaining."
                                 autoResize="false" />
@@ -93,9 +93,9 @@
             </div>
             <f:facet name="footer">
                 <p:commandButton 
-                    actionListener="#{invoiceController.createProduct()}"
+                    actionListener="#{expenseController.createProduct()}"
                     value="Save"
-                    update="productPanel invoice:invoiceItemTable"
+                    update="productPanel createExpenseForm:expenseItemTable"
                     style="width:auto" 
                     icon="ui-icon-save"/>
             </f:facet>  

@@ -59,6 +59,7 @@
                                                 var="user"
                                                 itemValue="#{user}"
                                                 itemLabel="#{user.firstName}"
+
                                                 required="true"
                                                 scrollHeight="250"
                                                 requiredMessage="Please select Claimant">
@@ -80,6 +81,7 @@
                                                 value="#{expenseController.selectedExpenseModel.transactionCategory}"
                                                 var="transactionCategory"
                                                 scrollHeight="250"
+
                                                 itemValue="#{transactionCategory}"
                                                 itemLabel="#{transactionCategory.transactionCategoryName}"
                                                 required="true"
@@ -97,6 +99,7 @@
                                                 value="#{expenseController.selectedExpenseModel.expenseDate}" 
                                                 required="true"
                                                 navigator="true"
+
                                                 requiredMessage="Please select expense date">
                                                 <p:clientValidator event="dateSelect"/></p:calendar>
                                             <p:outputLabel for="expenseDate" value="#{messages.expense_date}"/>
@@ -114,7 +117,8 @@
                                                             var="currency" 
                                                             scrollHeight="250"
                                                             itemValue="#{currency}"
-                                                            itemLabel="#{currency.currencyIsoCode}  #{currency.currencySymbol} " 
+
+                                                            itemLabel="#{currency.currencyDescription} - #{currency.currencyIsoCode} (#{currency.currencySymbol})" 
                                                             required="true"
                                                             requiredMessage="Please select currency">
                                                 <p:clientValidator event="itemSelect"/>
@@ -143,6 +147,7 @@
                                                                 completeMethod="#{expenseController.contacts}" 
                                                                 value="#{expenseController.selectedExpenseModel.expenseContact}" 
                                                                 var="contact"
+
                                                                 itemValue="#{contact}"
                                                                 itemLabel="#{contact.firstName} #{contact.lastName}"
                                                                 >
@@ -162,6 +167,9 @@
                                             </h:panelGroup>
                                         </p:panelGrid>
 
+
+
+
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete
                                                 id="expenseProject"
@@ -174,6 +182,7 @@
                                                 value="#{expenseController.selectedExpenseModel.project}"
                                                 var="project"
                                                 itemValue="#{project}"
+
                                                 itemLabel="#{project.projectName}"
                                                 >
                                             </p:autoComplete>
@@ -222,6 +231,7 @@
                                                                 var="interval" 
                                                                 itemValue="#{interval}"
                                                                 itemLabel="#{interval.name}"
+
                                                                 required="true"
                                                                 requiredMessage="Select recurring interval"
                                                                 >
@@ -246,6 +256,7 @@
                                                     var="days"
                                                     itemValue="#{days}"
                                                     itemLabel="#{days.name}"
+
                                                     required="true"
                                                     requiredMessage="Select recurring day"
                                                     >
@@ -272,6 +283,7 @@
                                                     completeMethod="#{expenseController.recurringUtility.completeFirstToLastRecurring()}"
                                                     value="#{expenseController.selectedExpenseModel.fistToLastRecurring}"
                                                     var="firsttolast"
+
                                                     itemValue="#{firsttolast}"
                                                     itemLabel="#{firsttolast.name}"
                                                     required="true"
@@ -304,6 +316,7 @@
                                                     value="#{expenseController.selectedExpenseModel.recurringWeekDays}"
                                                     var="weeks"
                                                     itemValue="#{weeks}"
+
                                                     itemLabel="#{weeks.name}"
                                                     required="true"
                                                     requiredMessage="Select recurring week day"
@@ -323,6 +336,7 @@
                                                 <p:inputText id="every" 
                                                              style="width:100%"
                                                              required="true"
+
                                                              requiredMessage="Enter day in number">
                                                     <p:clientValidator event="keyup"/>
                                                 </p:inputText>
@@ -342,6 +356,7 @@
                                                     completeMethod="#{expenseController.recurringUtility.completeMonthRecurring()}"
                                                     value="#{expenseController.selectedExpenseModel.recurringMonth}"
                                                     var="months"
+
                                                     itemValue="#{months}"
                                                     itemLabel="#{months.name}"
                                                     required="true"
@@ -356,6 +371,7 @@
                                             <p:outputLabel for="startDate" />
                                             <h:panelGroup styleClass="md-inputfield">
                                                 <p:calendar id="startDate" 
+
                                                             required="true"
                                                             navigator="true"
                                                             requiredMessage="Select recurring Start date">
@@ -378,6 +394,7 @@
                                                     completeMethod="#{expenseController.recurringUtility.completeNoneByAfterRecurring()}"
                                                     value="#{expenseController.selectedExpenseModel.recurringByAfter}"
                                                     var="nonebyafter"
+
                                                     itemValue="#{nonebyafter}"
                                                     itemLabel="#{nonebyafter.name}"
                                                     required="true"
@@ -394,6 +411,7 @@
                                             <h:panelGroup styleClass="md-inputfield" rendered="#{expenseController.selectedExpenseModel.recurringByAfter.value == 2}">
                                                 <p:calendar id="endDate"
                                                             required="true"
+
                                                             navigator="true"
                                                             requiredMessage="Select End date">
                                                     <p:clientValidator event="dateSelect"/>
@@ -407,6 +425,7 @@
                                                 <p:inputText id="occurences"
                                                              style="width:100%"
                                                              required="true"
+
                                                              requiredMessage="Enter Occurrences">
                                                     <p:clientValidator event="keyup"/>
                                                 </p:inputText>
@@ -424,6 +443,7 @@
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText
                                                 id="expenseReceiptNumber"
+
                                                 value="#{expenseController.selectedExpenseModel.receiptNumber}" />
                                             <p:outputLabel for="expenseReceiptNumber" value="#{messages.receiptnumber}"/>
                                         </h:panelGroup>
@@ -448,6 +468,7 @@
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText
                                                 id="expenseAttachmentDescription"
+
                                                 value="#{expenseController.selectedExpenseModel.receiptAttachmentDescription}" />
                                             <p:outputLabel for="expenseAttachmentDescription" value="#{messages.attachment_description}"/>
                                         </h:panelGroup>
@@ -468,32 +489,58 @@
                                         <p:column style="width: 32px">
                                             <p:commandButton title="Delete Expense Item" 
                                                              update="expenseItemTable"
-                                                             process="@this"
+                                                             process="@this" 
                                                              actionListener="#{expenseController.deleteLineItem(expenseItem)}"
-                                                             icon="ui-icon-delete">
+                                                             icon="ui-icon-delete" rendered="#{expenseController.selectedExpenseModel.expenseItem.indexOf(expenseItem)!=0}">
                                             </p:commandButton>
                                         </p:column>
-                                        <p:column headerText="Description" styleClass="amount" style="width: 320px">
+
+                                        <p:column headerText="Product/Service"  style="width: 240px">
+                                            <p:panelGrid columns="2" 
+                                                         columnClasses="ui-grid-col-11,ui-grid-col-1" 
+                                                         layout="grid" 
+                                                         styleClass="ui-panelgrid-blank form-group" >
+                                                <p:autoComplete id="product_service" 
+                                                                converter="#{productConverter}"
+                                                                dropdown="true" style="margin-top: 11.5px !important;"
+                                                                forceSelection="true"
+                                                                effect="fold"
+                                                                groupBy="#{product.parentProduct == null ? 'Other' : product.parentProduct.productName}"
+                                                                value="#{expenseItem.expenseLineItemProductService}"
+                                                                completeMethod="#{expenseController.products}" 
+                                                                var="product"
+                                                                scrollHeight="250"
+                                                                itemValue="#{product}"
+                                                                itemLabel="#{product.productName}"
+                                                                >
+                                                    <p:ajax update="expenseItemTable" event="itemSelect" listener="#{expenseController.updateVatPercentage(expenseItem)}" />
+                                                </p:autoComplete>
+                                                <h:panelGroup styleClass="md-inputfield">
+                                                    <p:tooltip for="addproductbtn" position="top" value="Add new product" />
+                                                    <p:commandButton id="addproductbtn" icon="ui-icon-plus" oncomplete="PF('add_product_popup').show();" action="#{expenseController.reserveProductOnAdd(expenseItem)}" process="@this" />
+                                                </h:panelGroup>
+                                            </p:panelGrid>
+                                        </p:column>
+
+                                        <p:column headerText="Description" styleClass="amount" style="width: 240px">
                                             <p:inputText id="description" 
                                                          value="#{expenseItem.description}" 
-                                                         onkeypress="if (event.keyCode == 13) {
-                                                                     return false;
-                                                                 }"
+
                                                          style="width:100%">
                                                 <p:ajax event="change" />
                                             </p:inputText>
                                         </p:column>
 
-                                        <p:column headerText="Quantity" styleClass="amount" >
+                                        <p:column headerText="Quantity" styleClass="amount"  style="width: 50px">
                                             <p:inputText id="quantity"
                                                          onfocus="clearTextField(event, this)"
                                                          validator="positiveNumberValidator"
                                                          validatorMessage="Please enter Quantity more then 0"
+                                                         converterMessage="Please enter a valid number"
                                                          value="#{expenseItem.quatity}" 
-                                                         onkeypress="if (event.keyCode == 13) {
-                                                                     return false;
-                                                                 }"
                                                          style="width:100%">
+                                                <f:convertNumber type="number"/>
+                                                <p:clientValidator event="keyup"/>
                                                 <p:ajax event="change" 
                                                         listener="#{expenseController.updateSubTotal(expenseItem)}" 
                                                         update="subTotal" />
@@ -507,9 +554,6 @@
                                                            validator="positiveNumberValidator"
                                                            validatorMessage="Please enter Price more then 0"
                                                            value="#{expenseItem.unitPrice}" 
-                                                           onkeypress="if (event.keyCode == 13) {
-                                                                       return false;
-                                                                   }"
                                                            style="width:100%">
                                                 <p:ajax event="change" 
                                                         listener="#{expenseController.updateSubTotal(expenseItem)}" 
@@ -528,9 +572,7 @@
                                                             completeMethod="#{expenseController.vatCategorys}" 
                                                             var="vat"
                                                             itemValue="#{vat}"
-                                                            onkeypress="if (event.keyCode == 13) {
-                                                                        return false;
-                                                                    }"
+
                                                             itemLabel="#{vat.name}"
                                                             >
                                                 <p:ajax update="subTotal @form:exchangeCurrency" event="itemSelect" listener="#{expenseController.updateSubTotal(expenseItem)}" />
@@ -546,27 +588,51 @@
                                             </h:outputText>
                                         </p:column>
                                         <p:columnGroup type="footer"  rendered="#{expenseController.selectedExpenseModel.expenseItem.size() > 0}">  
-                                            <p:row >                                        
-                                                <p:column  colspan="5" footerText="Total" styleClass="amount"/>  
 
+
+
+                                            <p:row>      
+                                                <p:column rowspan="3" colspan="5" style="border-bottom: 0 !important; border-left: 0 !important">
+                                                </p:column>
+                                                <p:column footerText="Total Net" styleClass="amount"/>
                                                 <p:column styleClass="amount">
                                                     <f:facet name="footer">
                                                         <p:outputPanel autoUpdate="true">
-                                                            <h:outputText id="total" value="#{expenseController.total}" >
+                                                            <h:outputText id="netTotal" value="#{expenseController.selectedExpenseModel.expenseSubtotal}" >
+                                                                <f:convertNumber type="currency" currencySymbol="#{expenseController.selectedExpenseModel.currency.currencySymbol} " />
+                                                            </h:outputText>
+                                                        </p:outputPanel>
+                                                    </f:facet>
+                                                </p:column> 
+                                            </p:row> 
+                                            <p:row >  
+                                                <p:column footerText="Total VAT" styleClass="amount"/>  
+                                                <p:column styleClass="amount">
+                                                    <f:facet name="footer">
+                                                        <p:outputPanel autoUpdate="true">
+                                                            <h:outputText id="totalVat" value="#{expenseController.selectedExpenseModel.expenseVATAmount}" >
                                                                 <f:convertNumber type="currency" currencySymbol="#{expenseController.selectedExpenseModel.currency.currencySymbol} " />
                                                             </h:outputText>
                                                         </p:outputPanel>
                                                     </f:facet>
                                                 </p:column>  
                                             </p:row>  
+                                            <p:row >                                 
+                                                <p:column footerText="Total" styleClass="amount" style="font-weight: bold"/>  
+                                                <p:column styleClass="amount">
+                                                    <f:facet name="footer">
+                                                        <p:outputPanel autoUpdate="true">
+                                                            <h:outputText value="#{expenseController.totalAmount}" style="font-weight: bold">
+                                                                <f:convertNumber type="currency" currencySymbol="#{expenseController.selectedExpenseModel.currency.currencySymbol} " />
+                                                            </h:outputText>
+                                                        </p:outputPanel>
+                                                    </f:facet>
+                                                </p:column>  
+                                            </p:row> 
+
                                         </p:columnGroup>
                                     </p:dataTable>
-                                    <p:commandButton actionListener="#{expenseController.addExpenseItem()}"
-                                                     style="width: 10%; margin-top: 3px" 
-                                                     update="expenseItemTable"
-                                                     value="Add"
-                                                     process="@this"
-                                                     icon="ui-icon-plus" />
+
                                 </p:fieldset>
                                 <h:panelGroup id="exchangeCurrency"  >
                                     <p:fieldset legend="Currency Exchange Details" 
@@ -602,7 +668,6 @@
                         </div>
                     </div>
                 </div>
-
                 <p:toolbar>
                     <f:facet name="left">
                         <ui:fragment rendered="#{expenseController.selectedExpenseModel.expenseId == null}">
@@ -635,18 +700,27 @@
 
                 </p:toolbar>
             </div>
-              <script type="text/javascript">
+            <script type="text/javascript">
                 //   <![CDATA[
                 function clearTextField(event, element) {
                     console.log("entered");
                     if ($(element).val() == 0)
                         $(element).val("");
                 }
+                $('#createExpenseForm').on('keyup keypress', function (e) {
+                    var keyCode = e.keyCode || e.which;
+                    if (keyCode === 13) {
+                        e.preventDefault();
+                        return false;
+                    }
+                });
+
                 //   ]]>
             </script>
 
         </h:form>
         <ui:include src="add-contact-popup.xhtml" />
+        <ui:include src="add-product-popup.xhtml"/>
     </ui:define>
 
 </ui:composition>

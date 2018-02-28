@@ -44,7 +44,7 @@
                         <h:panelGroup styleClass="md-inputfield">
                             <p:inputText id="firstname" value="#{invoiceController.contactModel.firstName}" 
                                          required="true" requiredMessage="Please Enter name">
-                            <p:clientValidator event="keyup"/></p:inputText>
+                                <p:clientValidator event="keyup"/></p:inputText>
                             <p:outputLabel for="firstname" value="First Name" styleClass="notRequiedSpace" />
                             <p:message for="firstname"/>
                         </h:panelGroup>
@@ -60,13 +60,13 @@
                         <h:panelGroup styleClass="md-inputfield" >
                             <p:inputText id="lastname" value="#{invoiceController.contactModel.lastName}"
                                          required="true" requiredMessage="Enter Last name">
-                             <p:clientValidator event="keyup"/></p:inputText>
+                                <p:clientValidator event="keyup"/></p:inputText>
                             <p:outputLabel for="lastname" value="Last Name" styleClass="notRequiedSpace" />
                             <p:message for="lastname"/>
                         </h:panelGroup>
 
 
-                       
+
 
                         <h:panelGroup styleClass="md-inputfield">
                             <p:inputText id="emailid" value="#{invoiceController.contactModel.email}" required="true" validatorMessage="Invalid email format" requiredMessage="Enter EmailId">
@@ -83,7 +83,7 @@
                                          required="true"
                                          requiredMessage="Please enter address"
                                          value="#{invoiceController.contactModel.invoicingAddressLine1}">
-                             <p:clientValidator event="keyup"/></p:inputText>
+                                <p:clientValidator event="keyup"/></p:inputText>
                             <p:outputLabel for="addressLine1" value="Address Line1" styleClass="notRequiedSpace" /> 
                             <p:message for="addressLine1" />
                         </h:panelGroup>
@@ -93,7 +93,7 @@
                                          required="true"
                                          requiredMessage="Please enter address"
                                          value="#{invoiceController.contactModel.invoicingAddressLine2}">
-                             <p:clientValidator event="keyup"/></p:inputText>
+                                <p:clientValidator event="keyup"/></p:inputText>
                             <p:outputLabel for="addressLine2" value="Address Line2" styleClass="notRequiedSpace"/>
                             <p:message for="addressLine2" />
                         </h:panelGroup>
@@ -102,7 +102,7 @@
                                          required="true"
                                          requiredMessage="Please enter State"
                                          value="#{invoiceController.contactModel.stateRegion}"  >
-                             <p:clientValidator event="keyup"/></p:inputText>
+                                <p:clientValidator event="keyup"/></p:inputText>
                             <p:outputLabel for="stateRegion" value="State Region"/>
                             <p:message for="stateRegion" />
                         </h:panelGroup>
@@ -112,7 +112,7 @@
                                          value="#{invoiceController.contactModel.city}"
                                          required="true"
                                          requiredMessage="Please enter City">
-                             <p:clientValidator event="keyup"/></p:inputText>
+                                <p:clientValidator event="keyup"/></p:inputText>
                             <p:outputLabel for="city" value="City"/>
                             <p:message for="city" />
                         </h:panelGroup>
@@ -131,7 +131,7 @@
                                             itemLabel="#{country.countryFullName}" 
                                             required="true"
                                             requiredMessage="Please select Country">
-                                 <p:clientValidator event="itemSelect"/>
+                                <p:clientValidator event="itemSelect"/>
 
                             </p:autoComplete>
                             <p:outputLabel for="country" value="Country"/>
@@ -151,8 +151,8 @@
                                             value="#{invoiceController.contactModel.currency}"
                                             var="currency" 
                                             itemValue="#{currency.currencyCode}"
-                                            itemLabel="#{currency.currencyDescription} #{currency.currencySymbol}" >
-                            <p:clientValidator event="itemSelect"/>
+                                            itemLabel="#{currency.currencyDescription} - #{currency.currencyIsoCode} (#{currency.currencySymbol})" >
+                                <p:clientValidator event="itemSelect"/>
                             </p:autoComplete>
                             <p:outputLabel for="currency" value="Currency Code"/>
                             <p:message for="currency" />
@@ -163,7 +163,7 @@
                                          requiredMessage="Please enter Billing Email"
                                          value="#{invoiceController.contactModel.billingEmail}"
                                          validatorMessage="Invalid email format" >
-                             <p:clientValidator event="keyup"/>
+                                <p:clientValidator event="keyup"/>
                                 <f:validateRegex
                                     pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
                             </p:inputText>
@@ -172,19 +172,13 @@
                         </h:panelGroup>
 
                     </p:panelGrid>
+                    <p:commandButton actionListener="#{invoiceController.createContact()}"
+                                     value="Save" 
+                                     update="invoice:conatcts contactPanel"
+                                     style="width:auto;float: right;margin-right: 20px" />
                 </div>
 
             </div>
-
-            <f:facet name="footer">
-                <p:commandButton 
-                    actionListener="#{invoiceController.createContact()}"
-                    value="Save"
-                    update="invoice:conatcts contactPanel"
-                    style="width:auto" 
-                    icon="ui-icon-save"/>
-               
-            </f:facet>  
         </p:dialog>
     </h:form>
 </ui:composition>

@@ -40,20 +40,19 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.context.RequestContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Controller
 @SpringScopeView
 public class TransactionListController extends TransactionControllerHelper implements Serializable {
 
-    Logger logger = LoggerFactory.getLogger(TransactionListController.class);  
     @Autowired
     private TransactionService transactionService;
     @Autowired
@@ -66,6 +65,8 @@ public class TransactionListController extends TransactionControllerHelper imple
     private TransactionStatusService transactionStatusService;
     @Autowired
     private TransactionTypeService transactionTypeService;
+    @Autowired
+    private BankAccountHelper bankAccountHelper;
     @Autowired
     private BankAccountService bankAccountService;
     private List<TransactionViewModel> transactionViewModelList = new ArrayList<>();
@@ -142,30 +143,14 @@ public class TransactionListController extends TransactionControllerHelper imple
 
     @PostConstruct
     public void init() {
-        Date initStartTime = new Date();
         try {
-            logger.error("TransactionListController ======Inside INIT Method=========");            
             bankAccountId = FacesUtil.getSelectedBankAccountId();
-            logger.error("getTotalUnexplainedTransactionCountByBankAccountId Started....");
-            Date startTime = new Date();
+            selectedBankAccountModel = bankAccountHelper.getBankAccountModel(bankAccountService.findByPK(bankAccountId));
             totalUnExplained = transactionService.getTotalUnexplainedTransactionCountByBankAccountId(bankAccountId);
-            logger.error("getTotalUnexplainedTransactionCountByBankAccountId Complted :: Time :" + (startTime.getTime() - new Date().getTime()));
-            logger.error("getTotalExplainedTransactionCountByBankAccountId Started....");
-            startTime = new Date();
             totalExplained = transactionService.getTotalExplainedTransactionCountByBankAccountId(bankAccountId);
-            logger.error("getTotalExplainedTransactionCountByBankAccountId Complted :: Time :" + (startTime.getTime() - new Date().getTime()));
-            logger.error("getTotalPartiallyExplainedTransactionCountByBankAccountId Started....");
-            startTime = new Date();
             totalPartiallyExplained = transactionService.getTotalPartiallyExplainedTransactionCountByBankAccountId(bankAccountId);
-            logger.error("getTotalPartiallyExplainedTransactionCountByBankAccountId Complted :: Time :" + (startTime.getTime() - new Date().getTime()));
-            logger.error("getTotalAllTransactionCountByBankAccountId Started....");
-            startTime = new Date();
             totalTransactions = transactionService.getTotalAllTransactionCountByBankAccountId(bankAccountId);
-            logger.error("getTotalAllTransactionCountByBankAccountId Complted :: Time :" + (startTime.getTime() - new Date().getTime()));
-            logger.error("findAllTransactionStatues Started....");
-            startTime = new Date();
             transactionStatuseList = transactionStatusService.findAllTransactionStatues();
-            logger.error("findAllTransactionStatues Complted :: Time :" + (startTime.getTime() - new Date().getTime()));
             transactionViewLazyModel.setTransactionStatusList(transactionStatuseList);
             transactionViewLazyModel.setBankAccountId(bankAccountId);
             transactionViewModelList = new ArrayList<TransactionViewModel>();
@@ -176,10 +161,9 @@ public class TransactionListController extends TransactionControllerHelper imple
                 transactionViewLazyModel.setInvoiceList(invoiceList);
             }
         } catch (Exception ex) {
-//            Logger.getLogger(TransactionListController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TransactionListController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        logger.error("Total Execution :: Time :" + (initStartTime.getTime() - new Date().getTime()));
     }
 
     public void acceptSuggestion(TransactionModel transactionModel) {
@@ -222,11 +206,13 @@ public class TransactionListController extends TransactionControllerHelper imple
 
     private Object getRefObject() {
         Object refObject = null;
-        if (transactionModel.getExplainedTransactionCategory().getTransactionCategoryId() == TransactionCategoryConsatant.TRANSACTION_CATEGORY_INVOICE_PAYMENT) {
-            refObject = transactionModel.getRefObject();
-        } else if (transactionModel.getExplainedTransactionCategory().getParentTransactionCategory() != null) {
-            if (transactionModel.getExplainedTransactionCategory().getParentTransactionCategory().getTransactionCategoryId() == TransactionCategoryConsatant.TRANSACTION_CATEGORY_PURCHASE) {
+        if (transactionModel.getExplainedTransactionCategory() != null) {
+            if (transactionModel.getExplainedTransactionCategory().getTransactionCategoryId() == TransactionCategoryConsatant.TRANSACTION_CATEGORY_INVOICE_PAYMENT) {
                 refObject = transactionModel.getRefObject();
+            } else if (transactionModel.getExplainedTransactionCategory().getParentTransactionCategory() != null) {
+                if (transactionModel.getExplainedTransactionCategory().getParentTransactionCategory().getTransactionCategoryId() == TransactionCategoryConsatant.TRANSACTION_CATEGORY_PURCHASE) {
+                    refObject = transactionModel.getRefObject();
+                }
             }
         }
         return refObject;

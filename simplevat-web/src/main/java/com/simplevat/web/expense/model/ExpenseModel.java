@@ -51,6 +51,8 @@ public class ExpenseModel {
     byte[] receiptAttachmentBinary;
     private List<ExpenseItemModel> expenseItem;
     private Contact expenseContact;
+    private BigDecimal expenseSubtotal;
+    private BigDecimal expenseVATAmount;
 //    private Boolean recurringFlag;
 //    private RecurringNameValueMapping recurringInterval;
 //    private RecurringNameValueMapping recurringWeekDays;

@@ -9,6 +9,15 @@
 
     <ui:define name="title">Project</ui:define>
     <ui:define name="content">
+        <style>
+            .ui-grid-col-11{
+                padding: 0 !important;
+                width: 88.66666%;
+            }
+            .ui-grid-col-1{
+                padding: 5px !important;
+            }
+        </style>
         <h:form id="project">
 
             <!--            <style type="text/css">
@@ -38,40 +47,41 @@
                                                      value="#{projectController.selectedProject.projectName}"
                                                      required="true"
                                                      requiredMessage="Please enter Project Name">
-                                         <p:clientValidator event="keyup"/>
+                                            <p:clientValidator event="keyup"/>
                                         </p:inputText>
                                         <p:outputLabel for="projectName" value="Project Name"/>
                                         <p:message for="projectName"/>
                                     </h:panelGroup>
 
-
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:autoComplete id="conatcts"
-                                                        converter="#{contactConverter}"
-                                                        required="true"
-                                                        requiredMessage="Please select contact"
-                                                        dropdown="true"
-                                                        scrollHeight="250"
-                                                        forceSelection="true"
-                                                        effect="fold"
-                                                        completeMethod="#{projectController.contacts}"
-                                                        value="#{projectController.selectedProject.contact}"
-                                                        var="contact"
-                                                        itemValue="#{contact}"
-                                                        itemLabel="#{contact.firstName} #{contact.lastName}">
-                                             <p:clientValidator event="itemSelect"/>
-                                        </p:autoComplete>
-                                        <p:outputLabel for="conatcts" value="Contact"/>
-                                        <p:message for="conatcts"/>
-                                    </h:panelGroup>
-
-
-                                    <p:outputLabel value="OR  " id="contactpopup" style="margin-left: 10% !important">
-                                        <p:commandLink onsuccess="PF('add_contact_popup').show();" 
-                                                       actionListener="#{projectController.initCreateContact()}"
-                                                       style="color: #009688" 
-                                                       value="Add New Contact" />
-                                    </p:outputLabel>
+                                    <p:panelGrid columns="2" 
+                                                 columnClasses="ui-grid-col-11,ui-grid-col-1"
+                                                 layout="grid" 
+                                                 styleClass="ui-panelgrid-blank form-group"
+                                                 style="border:0px none; background-color:transparent;">
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:autoComplete id="conatcts"
+                                                            converter="#{contactConverter}"
+                                                            required="true"
+                                                            requiredMessage="Please select contact"
+                                                            dropdown="true"
+                                                            scrollHeight="250"
+                                                            forceSelection="true"
+                                                            effect="fold"
+                                                            completeMethod="#{projectController.contacts}"
+                                                            value="#{projectController.selectedProject.contact}"
+                                                            var="contact"
+                                                            itemValue="#{contact}"
+                                                            itemLabel="#{contact.firstName} #{contact.lastName}">
+                                                <p:clientValidator event="itemSelect"/>
+                                            </p:autoComplete>
+                                            <p:outputLabel for="conatcts" value="Contact"/>
+                                            <p:message for="conatcts"/>
+                                        </h:panelGroup>
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:tooltip for="addbtn" position="top" value="Add new contact" />
+                                            <p:commandButton id="addbtn" icon="ui-icon-plus" onsuccess="PF('add_contact_popup').show();" actionListener="#{projectController.initCreateContact()}"/>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
 
                                 </p:panelGrid>
                             </p:fieldset>
@@ -110,10 +120,10 @@
                                                         completeMethod="#{projectController.completeCurrency}"
                                                         value="#{projectController.selectedProject.currency}"
                                                         var="currency" itemValue="#{currency}"
-                                                        itemLabel="#{currency.currencyDescription} #{currency.currencySymbol}"
+                                                        itemLabel="#{currency.currencyDescription} - #{currency.currencyIsoCode} (#{currency.currencySymbol})"
                                                         required="true"
                                                         requiredMessage="Please select currency">
-                                         <p:clientValidator event="itemSelect"/></p:autoComplete>
+                                            <p:clientValidator event="itemSelect"/></p:autoComplete>
                                         <p:outputLabel for="currency" value="Currency"/>
                                         <p:message for="currency"/>
                                     </h:panelGroup>
@@ -143,7 +153,7 @@
                                                         value="#{projectController.selectedProject.invoiceLanguageCode}"
                                                         var="language" itemValue="#{language.languageCode}"
                                                         itemLabel="#{language.languageDescription}">
-                                         <p:clientValidator event="itemSelect"/></p:autoComplete>
+                                            <p:clientValidator event="itemSelect"/></p:autoComplete>
                                         <p:outputLabel for="language" value="Invoice Language"/>
                                         <p:message for="language"/>
                                     </h:panelGroup>

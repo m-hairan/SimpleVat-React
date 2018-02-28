@@ -18,6 +18,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;
+import org.omnifaces.util.Ajax;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -53,5 +54,6 @@ public class TransactionExportController implements Serializable {
 
     public void handleFileDownload() {
         transactionList = transactionService.getTransactionViewListByDateRang(bankAccount.getBankAccountId(), startDate, endDate);
+        Ajax.oncomplete("exportTransaction()");
     }
 }

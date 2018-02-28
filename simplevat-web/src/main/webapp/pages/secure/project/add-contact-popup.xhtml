@@ -162,7 +162,7 @@
                                             value="#{projectController.contactModel.currency}"
                                             var="currency" 
                                             itemValue="#{currency.currencyCode}"
-                                            itemLabel="#{currency.currencyDescription} - #{currency.currencySymbol}" >
+                                            itemLabel="#{currency.currencyDescription} - #{currency.currencyIsoCode} (#{currency.currencySymbol})" >
                             <p:clientValidator event="itemSelect"/></p:autoComplete>
                             <p:outputLabel for="currency" value="Currency Code"/>
                             <p:message for="currency" />

@@ -12,6 +12,10 @@
             }
             .ui-fileupload .ui-fileupload-buttonbar {
                 padding: 0px 0px !important;
+                width: 100%;
+            }
+            .ui-fluid .ui-fileupload .ui-button {
+                width: 155px !important;
             }
             .background-yes{background: tomato;}
             .date-date{background: tomato;}
@@ -27,42 +31,25 @@
                         <div class="ui-g-12">
                             <h1>Import Transaction File</h1>
                             <br/>
-                            <p:fieldset legend="#{messages.select_dateformat}" toggleable="false"
+                            <p:toolbar>
+                                <f:facet name="left">
+                                    <p:fileUpload fileUploadListener="#{transactionImportController.handleFileUpload}" style="width: 155px;" label="Select File (.csv)" mode="advanced" uploadLabel="Select File (.csv)"
+                                                  update="transactionTable footerToolBar" auto="true" sizeLimit="100000" allowTypes="/(\.|\/)(csv)$/"/>
+                                </f:facet>
+                                <f:facet name="right">
+                                    <p:commandButton value="Downlaod Sample File" 
+                                                     icon="ui-icon-file-download" ajax="false">
+                                        <p:fileDownload value="#{transactionImportController.file}" />
+                                    </p:commandButton>
+                                </f:facet>
+                            </p:toolbar>
+                            <p:fieldset legend="#{messages.ImportOptions}Import Options" toggleable="false"
                                         toggleSpeed="500">
                                 <p:messages autoUpdate="true" id="validationId" closable="true" for="validationId" />
                                 <p:panelGrid columns="3" 
                                              columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
                                              layout="grid" styleClass="ui-panelgrid-blank form-group"
                                              style="border:0px none; background-color:transparent;">
-                                    <h:panelGroup >
-                                        <p:fileUpload fileUploadListener="#{transactionImportController.handleFileUpload}" label="Select File (.csv)" mode="advanced" uploadLabel="Select File (.csv)"
-                                                      update="transactionTable footerToolBar" auto="true" sizeLimit="100000" allowTypes="/(\.|\/)(csv)$/"/>
-                                    </h:panelGroup>
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputText id="delimiter"  value="#{transactionImportController.delimiter}">  
-                                        </p:inputText>  
-                                        <p:outputLabel for="delimiter" value="Delimiter"/>
-                                        <p:message for="delimiter" />
-                                    </h:panelGroup>
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:inputNumber id="ignoreRow" emptyValue="empty" value="#{transactionImportController.headerCount}" onclick="this.select();" minValue="0" maxValue="30">  
-                                            <p:ajax event="keyup" process="@this" listener="#{transactionImportController.onChange()}" update="transactionTable footerToolBar"/>
-                                        </p:inputNumber>  
-                                        <p:outputLabel for="ignoreRow" value="Skip Rows"/>
-                                        <p:message for="ignoreRow" />
-                                    </h:panelGroup>
-                                    <h:panelGroup styleClass="md-inputfield">
-                                        <p:commandButton value="Downlaod Sample File" 
-                                                         icon="ui-icon-file-download" ajax="false">
-                                            <p:fileDownload value="#{transactionImportController.file}" />
-                                        </p:commandButton>
-                                    </h:panelGroup>
-                                    <h:panelGroup styleClass="md-inputwrapper-focus" >
-                                        <p:selectBooleanCheckbox id="headerRow" value="#{transactionImportController.headerIncluded}">
-                                            <p:ajax update="transactionTable footerToolBar" process="@this" event="change" listener="#{transactionImportController.onChange()}"/>
-                                        </p:selectBooleanCheckbox>
-                                        <p:outputLabel for="headerRow" value="Header Row"/>
-                                    </h:panelGroup>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="dateType"
                                                         dropdown="true"
@@ -79,6 +66,25 @@
                                         </p:autoComplete>
                                         <p:outputLabel for="dateType" value="Date Formats"/>
                                     </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText id="delimiter"  value="#{transactionImportController.delimiter}">  
+                                        </p:inputText>  
+                                        <p:outputLabel for="delimiter" value="Delimiter"/>
+                                        <p:message for="delimiter" />
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputNumber id="ignoreRow" emptyValue="empty" value="#{transactionImportController.headerCount}" onclick="this.select();" minValue="0" maxValue="30">  
+                                            <p:ajax event="keyup" process="@this" listener="#{transactionImportController.onChange()}" update="transactionTable footerToolBar"/>
+                                        </p:inputNumber>  
+                                        <p:outputLabel for="ignoreRow" value="Skip Rows"/>
+                                        <p:message for="ignoreRow" />
+                                    </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputwrapper-focus" >
+                                        <p:selectBooleanCheckbox id="headerRow" value="#{transactionImportController.headerIncluded}">
+                                            <p:ajax update="transactionTable footerToolBar" process="@this" event="change" listener="#{transactionImportController.onChange()}"/>
+                                        </p:selectBooleanCheckbox>
+                                        <p:outputLabel for="headerRow" value="Header Row"/>
+                                    </h:panelGroup>
                                 </p:panelGrid>
                             </p:fieldset>
                             <p:dataTable var="transaction" id="transactionTable"
@@ -88,12 +94,12 @@
                                          style="margin-top: 2%"
                                          paginator="true" rows="10"
                                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader} {TableFooter}">
-                                <f:facet name="header">Uploaded Transactions</f:facet>
                                 <f:facet name="{TableHeader}">
-                                    <p:outputLabel styleClass="tableCustomHeader" value="Total Invalid Row:  #{transactionImportController.totalErrorRows}"/>
+                                    <p:outputLabel styleClass="tableCustomHeader" value="Uploaded Transactions"/>
                                 </f:facet>
                                 <f:facet name="{TableFooter}">
                                     <p:outputLabel styleClass="tableCustomFooter" value="Total Record: #{transactionImportController.transactionList.size()}"/>
+                                    <p:outputLabel styleClass="tableCustomFooter" value="Total Invalid Row:  #{transactionImportController.totalErrorRows}"/>
                                 </f:facet>
                                 <p:column width="30" style="text-align: center">
                                     <h:panelGroup layout="block">
@@ -114,10 +120,6 @@
                                 <p:column headerText="Credit Amount" styleClass="amount">
                                     <h:outputText value="#{transaction.crAmount}" style="text-align:right"/>
                                 </p:column>
-                                <f:facet name="footer">
-                                    <h:panelGroup layout="block" style="text-align:left">
-                                    </h:panelGroup>
-                                </f:facet>
                             </p:dataTable>
 
                             <p:spacer height="10px"/>

@@ -87,6 +87,11 @@
                                                 <p:outputLabel for="transactionCategory" value="#{messages.category}"/>
                                             </h:panelGroup>
                                         </h:panelGroup>
+                                    </p:panelGrid>
+                                    <p:panelGrid columns="3"
+                                                 columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
+                                                 layout="grid" styleClass="ui-panelgrid-blank form-group"
+                                                 style="border:0px none; background-color:transparent;">
                                         <h:panelGroup  id="DatestartPanel" rendered="#{transactionReport.financialPeriod.id == 1}">
                                             <h:panelGroup styleClass="md-inputfield" >
                                                 <p:calendar

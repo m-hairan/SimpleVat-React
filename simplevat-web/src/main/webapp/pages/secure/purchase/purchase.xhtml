@@ -30,246 +30,261 @@
                 <div class="ui-fluid">
                     <div class="ui-g">
                         <div class="ui-g-12">
-                            <div class="card card-w-title">
-                                <ui:fragment rendered="#{purchaseController.selectedPurchaseModel.purchaseId == null}">
-                                    <h1>New Purchase</h1>
-                                </ui:fragment>
-                                <ui:fragment rendered="#{purchaseController.selectedPurchaseModel.purchaseId != null}">
-                                    <h1>Edit Purchase</h1>
-                                </ui:fragment>
+                            <ui:fragment rendered="#{purchaseController.selectedPurchaseModel.purchaseId == null}">
+                                <h1>New Purchase</h1>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{purchaseController.selectedPurchaseModel.purchaseId != null}">
+                                <h1>Edit Purchase</h1>
+                            </ui:fragment>
 
-                                <p:fieldset legend="Purchase Details" toggleable="false"
-                                            toggleSpeed="500">
-                                    <p:panelGrid columns="3"
-                                                 columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
-                                                 layout="grid" styleClass="ui-panelgrid-blank form-group"
+                            <p:fieldset legend="Purchase Details" toggleable="false"
+                                        toggleSpeed="500">
+                                <p:panelGrid columns="3"
+                                             columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
+                                             layout="grid" styleClass="ui-panelgrid-blank form-group"
+                                             style="border:0px none; background-color:transparent;">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete
+                                            id="purchaseClaimantId"
+                                            converter="#{userConverter}"
+                                            dropdown="true"
+                                            forceSelection="true"
+                                            effect="fold"
+                                            scrollHeight="250"
+                                            completeMethod="#{purchaseController.users}"
+                                            value="#{purchaseController.selectedPurchaseModel.user}"
+                                            var="user"
+                                            itemValue="#{user}"
+                                            itemLabel="#{user.firstName}"
+
+                                            required="true"
+                                            requiredMessage="Please select Claimant">
+                                            <p:clientValidator event="itemSelect"/>
+                                        </p:autoComplete>
+                                        <p:outputLabel for="purchaseClaimantId" value="#{messages.claimant}"/>
+                                        <p:message for="purchaseClaimantId" />
+                                    </h:panelGroup>
+
+                                    <h:panelGroup styleClass="md-inputfield" rendered="false">
+                                        <p:autoComplete
+                                            id="purchaseTransactionType"
+                                            converter="#{transactionTypeConverter}"
+                                            dropdown="true"
+                                            forceSelection="true" 
+                                            effect="fold"
+                                            scrollHeight="250"
+                                            completeMethod="#{purchaseController.getAllTransactionType}"
+                                            value="#{purchaseController.selectedPurchaseModel.transactionType}"
+                                            var="transactionType"
+
+                                            itemValue="#{transactionType}"
+                                            itemLabel="#{transactionType.transactionTypeName}"
+                                            required="true"
+                                            requiredMessage="Please select Purchase Type">
+                                            <p:clientValidator event="itemSelect"/>
+                                            <p:ajax event="itemSelect"
+                                                    update="purchaseTransactionCategory"  />
+                                        </p:autoComplete>
+                                        <p:outputLabel for="purchaseTransactionType" value="#{messages.type}" rendered="false"/>
+                                        <p:message for="purchaseTransactionType" />
+                                    </h:panelGroup>
+
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete
+                                            id="purchaseTransactionCategory"
+                                            converter="#{transactionCategoryConverter}"
+                                            dropdown="true"
+                                            forceSelection="true"
+                                            effect="fold"
+                                            scrollHeight="250"
+
+                                            completeMethod="#{purchaseController.completeCategory()}"
+                                            value="#{purchaseController.selectedPurchaseModel.transactionCategory}"
+                                            var="transactionCategory"
+                                            itemValue="#{transactionCategory}"
+                                            itemLabel="#{transactionCategory.transactionCategoryName}"
+                                            >
+                                            <p:clientValidator event="itemSelect"/>
+                                        </p:autoComplete>
+                                        <p:outputLabel for="purchaseTransactionCategory" value="#{messages.category}"/>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:calendar
+                                            id="purchaseDate"
+                                            value="#{purchaseController.selectedPurchaseModel.purchaseDate}" 
+                                            navigator="true"
+
+                                            required="true"
+                                            requiredMessage="Please select Purchase Date">
+                                            <p:clientValidator event="dateSelect"/></p:calendar>
+                                        <p:outputLabel for="purchaseDate" value="#{messages.purchase_date}"/>
+                                        <p:message for="purchaseDate" />
+                                    </h:panelGroup>
+
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="purchaseCurrency" 
+                                                        dropdown="true"
+                                                        forceSelection="true" 
+                                                        effect="fold"
+                                                        scrollHeight="250"
+
+                                                        converter="#{currencyConverter}"
+                                                        completeMethod="#{currencyController.completeCurrency}"
+                                                        value="#{purchaseController.selectedPurchaseModel.currency}"
+                                                        var="currency" 
+                                                        itemValue="#{currency}"
+                                                        itemLabel="#{currency.currencyDescription} - #{currency.currencyIsoCode} (#{currency.currencySymbol})" 
+                                                        required="true"
+                                                        requiredMessage="Please select Currency">
+                                            <p:ajax event="itemSelect" update="purchaseItemTable exchangeCurrency" />
+                                            <p:clientValidator event="itemSelect"/>
+                                        </p:autoComplete>
+                                        <p:outputLabel for="purchaseCurrency" value="#{messages.currency}"/>
+                                        <p:message for="purchaseCurrency" />
+                                    </h:panelGroup>
+
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete
+                                            id="purchaseProject"
+                                            converter="#{projectConverter}"
+                                            dropdown="true"
+                                            scrollHeight="250"
+                                            forceSelection="true"
+                                            effect="fold"
+
+                                            completeMethod="#{projectController.projects}"
+                                            value="#{purchaseController.selectedPurchaseModel.project}"
+                                            var="project"
+                                            itemValue="#{project}"
+                                            itemLabel="#{project.projectName}"
+                                            >
+                                        </p:autoComplete>
+                                        <p:outputLabel for="purchaseProject" value="#{messages.project}"/>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText 
+                                            value="#{purchaseController.selectedPurchaseModel.purchaseDueOn}"
+                                            required="true"
+
+                                            requiredMessage="Please enter Purchase Due On"
+                                            converterMessage="Please enter numbers only." 
+                                            id="purchaseDueOn" >
+                                            <p:clientValidator event="keyup"/>
+                                        </p:inputText>
+                                        <p:outputLabel for="purchaseDueOn" value="#{messages.purchase_due_on}"/>
+                                        <p:message for="purchaseDueOn" />
+                                    </h:panelGroup>
+
+
+                                    <p:panelGrid columns="2" 
+                                                 columnClasses="ui-grid-col-11,ui-grid-col-1"
+                                                 layout="grid" 
+                                                 styleClass="ui-panelgrid-blank form-group"
                                                  style="border:0px none; background-color:transparent;">
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:autoComplete
-                                                id="purchaseClaimantId"
-                                                converter="#{userConverter}"
-                                                dropdown="true"
-                                                forceSelection="true"
-                                                effect="fold"
-                                                scrollHeight="250"
-                                                completeMethod="#{purchaseController.users}"
-                                                value="#{purchaseController.selectedPurchaseModel.user}"
-                                                var="user"
-                                                itemValue="#{user}"
-                                                itemLabel="#{user.firstName}"
-                                                required="true"
-                                                requiredMessage="Please select Claimant">
-                                                <p:clientValidator event="itemSelect"/>
-                                            </p:autoComplete>
-                                            <p:outputLabel for="purchaseClaimantId" value="#{messages.claimant}"/>
-                                            <p:message for="purchaseClaimantId" />
-                                        </h:panelGroup>
-
-                                        <h:panelGroup styleClass="md-inputfield" rendered="false">
-                                            <p:autoComplete
-                                                id="purchaseTransactionType"
-                                                converter="#{transactionTypeConverter}"
-                                                dropdown="true"
-                                                forceSelection="true" 
-                                                effect="fold"
-                                                scrollHeight="250"
-                                                completeMethod="#{purchaseController.getAllTransactionType}"
-                                                value="#{purchaseController.selectedPurchaseModel.transactionType}"
-                                                var="transactionType"
-                                                itemValue="#{transactionType}"
-                                                itemLabel="#{transactionType.transactionTypeName}"
-                                                required="true"
-                                                requiredMessage="Please select Purchase Type">
-                                                <p:clientValidator event="itemSelect"/>
-                                                <p:ajax event="itemSelect"
-                                                        update="purchaseTransactionCategory"  />
-                                            </p:autoComplete>
-                                            <p:outputLabel for="purchaseTransactionType" value="#{messages.type}" rendered="false"/>
-                                            <p:message for="purchaseTransactionType" />
-                                        </h:panelGroup>
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:autoComplete
-                                                id="purchaseTransactionCategory"
-                                                converter="#{transactionCategoryConverter}"
-                                                dropdown="true"
-                                                forceSelection="true"
-                                                effect="fold"
-                                                scrollHeight="250"
-                                                completeMethod="#{purchaseController.completeCategory()}"
-                                                value="#{purchaseController.selectedPurchaseModel.transactionCategory}"
-                                                var="transactionCategory"
-                                                itemValue="#{transactionCategory}"
-                                                itemLabel="#{transactionCategory.transactionCategoryName}"
-                                                >
-                                                <p:clientValidator event="itemSelect"/>
-                                            </p:autoComplete>
-                                            <p:outputLabel for="purchaseTransactionCategory" value="#{messages.category}"/>
-                                        </h:panelGroup>
-
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:calendar
-                                                id="purchaseDate"
-                                                value="#{purchaseController.selectedPurchaseModel.purchaseDate}" 
-                                                navigator="true"
-                                                required="true"
-                                                requiredMessage="Please select Purchase Date">
-                                                <p:clientValidator event="dateSelect"/></p:calendar>
-                                            <p:outputLabel for="purchaseDate" value="#{messages.purchase_date}"/>
-                                            <p:message for="purchaseDate" />
-                                        </h:panelGroup>
-
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:autoComplete id="purchaseCurrency" 
-                                                            dropdown="true"
-                                                            forceSelection="true" 
+                                            <p:autoComplete id="conatcts" 
+                                                            converter="#{contactConverter}"
+                                                            dropdown="true" 
+                                                            forceSelection="true"
                                                             effect="fold"
+
                                                             scrollHeight="250"
-                                                            converter="#{currencyConverter}"
-                                                            completeMethod="#{currencyController.completeCurrency}"
-                                                            value="#{purchaseController.selectedPurchaseModel.currency}"
-                                                            var="currency" 
-                                                            itemValue="#{currency}"
-                                                            itemLabel="#{currency.currencyIsoCode}  #{currency.currencySymbol} " 
                                                             required="true"
-                                                            requiredMessage="Please select Currency">
-                                                <p:ajax event="itemSelect" update="purchaseItemTable exchangeCurrency" />
+                                                            requiredMessage="Please select Contact"
+                                                            completeMethod="#{purchaseController.contacts}" 
+                                                            value="#{purchaseController.selectedPurchaseModel.purchaseContact}" 
+                                                            var="contact"
+                                                            itemValue="#{contact}"
+                                                            itemLabel="#{contact.firstName} #{contact.lastName}"
+                                                            >
                                                 <p:clientValidator event="itemSelect"/>
+                                                <p:ajax event="itemSelect" process="@this"
+                                                        listener="#{purchaseController.updateCurrency}" 
+                                                        update="purchaseCurrency purchaseItemTable exchangeCurrency" />
                                             </p:autoComplete>
-                                            <p:outputLabel for="purchaseCurrency" value="#{messages.currency}"/>
-                                            <p:message for="purchaseCurrency" />
+                                            <p:outputLabel for="conatcts" value="#{messages.contact}"/>
+                                            <p:message for="conatcts" />
                                         </h:panelGroup>
 
                                         <h:panelGroup styleClass="md-inputfield">
-                                            <p:autoComplete
-                                                id="purchaseProject"
-                                                converter="#{projectConverter}"
-                                                dropdown="true"
-                                                scrollHeight="250"
-                                                forceSelection="true"
-                                                effect="fold"
-                                                completeMethod="#{projectController.projects}"
-                                                value="#{purchaseController.selectedPurchaseModel.project}"
-                                                var="project"
-                                                itemValue="#{project}"
-                                                itemLabel="#{project.projectName}"
-                                                >
-                                            </p:autoComplete>
-                                            <p:outputLabel for="purchaseProject" value="#{messages.project}"/>
+                                            <p:tooltip for="addbtn" position="top" value="Add new contact" />
+                                            <p:commandButton id="addbtn" icon="ui-icon-plus" onsuccess="PF('add_contact_popup').show();" actionListener="#{purchaseController.initCreateContact()}"/>
                                         </h:panelGroup>
+                                    </p:panelGrid>
 
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText 
-                                                value="#{purchaseController.selectedPurchaseModel.purchaseDueOn}"
-                                                required="true"
-                                                requiredMessage="Please enter Purchase Due On"
-                                                converterMessage="Please enter numbers only." 
-                                                id="purchaseDueOn" >
-                                                <p:clientValidator event="keyup"/>
-                                            </p:inputText>
-                                            <p:outputLabel for="purchaseDueOn" value="#{messages.purchase_due_on}"/>
-                                            <p:message for="purchaseDueOn" />
-                                        </h:panelGroup>
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputTextarea
+                                            id="purchaseDescription"
 
+                                            value="#{purchaseController.selectedPurchaseModel.purchaseDescription}"
+                                            rows="5" cols="30" counter="counterValue" maxlength="255"
+                                            counterTemplate="{0} characters remaining."
+                                            autoResize="false" />
+                                        <h:outputText id="counterValue" />
+                                        <p:outputLabel for="purchaseDescription" value="#{messages.description}"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+                            </p:fieldset>
+                            <br />
+                            <p:fieldset legend="Receipt" toggleable="true" toggleSpeed="500">
+                                <p:panelGrid columns="3"
+                                             columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
+                                             layout="grid" styleClass="ui-panelgrid-blank form-group"
+                                             style="border:0px none; background-color:transparent;">
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText
+                                            id="purchaseReceiptNumber"
 
+                                            value="#{purchaseController.selectedPurchaseModel.receiptNumber}" />
+                                        <p:outputLabel for="purchaseReceiptNumber" value="#{messages.receiptnumber}"/>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <div style="text-align: center">
+                                            <p:fileUpload auto="true" 
+                                                          mode="advanced"   update="fileName"  fileUploadListener="#{purchaseController.fileUploadListener}"/>
+
+                                            <h:outputText value="#{purchaseController.fileName}" id="fileName"/>
+                                        </div>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:inputText
+                                            id="purchaseAttachmentDescription"
+
+                                            value="#{purchaseController.selectedPurchaseModel.receiptAttachmentDescription}" />
+                                        <p:outputLabel for="purchaseAttachmentDescription" value="#{messages.attachment_description}"/>
+                                    </h:panelGroup>
+                                </p:panelGrid>
+                            </p:fieldset>
+                            <p:fieldset legend="Purchase Item Details" toggleable="true" 
+                                        toggleSpeed="500">
+                                <p:messages autoUpdate="true" id="validationId" closable="
+                                            true" for="validationId" />
+                                <p:dataTable 
+                                    var="purchaseItem" 
+                                    editMode="cell"
+                                    editable="true"
+                                    value="#{purchaseController.selectedPurchaseModel.purchaseItems}"
+                                    id="purchaseItemTable"
+                                    reflow="true">
+                                    <p:column style="width: 32px">
+                                        <p:commandButton title="Delete Purchase Item" 
+                                                         update="purchaseItemTable"
+                                                         process="@this" 
+                                                         rendered="#{purchaseController.selectedPurchaseModel.purchaseItems.indexOf(purchaseItem)!=0}"
+                                                         actionListener="#{purchaseController.deleteLineItem(purchaseItem)}"
+                                                         icon="ui-icon-delete">
+
+                                        </p:commandButton>
+                                    </p:column>
+                                    <p:column headerText="Product/Service" style="width: 240px">
                                         <p:panelGrid columns="2" 
-                                                     columnClasses="ui-grid-col-11,ui-grid-col-1"
+                                                     columnClasses="ui-grid-col-11,ui-grid-col-1" 
                                                      layout="grid" 
-                                                     styleClass="ui-panelgrid-blank form-group"
-                                                     style="border:0px none; background-color:transparent;">
-                                            <h:panelGroup styleClass="md-inputfield">
-                                                <p:autoComplete id="conatcts" 
-                                                                converter="#{contactConverter}"
-                                                                dropdown="true" 
-                                                                forceSelection="true"
-                                                                effect="fold"
-                                                                scrollHeight="250"
-                                                                required="true"
-                                                                requiredMessage="Please select Contact"
-                                                                completeMethod="#{purchaseController.contacts}" 
-                                                                value="#{purchaseController.selectedPurchaseModel.purchaseContact}" 
-                                                                var="contact"
-                                                                itemValue="#{contact}"
-                                                                itemLabel="#{contact.firstName} #{contact.lastName}"
-                                                                >
-                                                    <p:clientValidator event="itemSelect"/>
-                                                    <p:ajax event="itemSelect" process="@this"
-                                                            listener="#{purchaseController.updateCurrency}" 
-                                                            update="purchaseCurrency purchaseItemTable exchangeCurrency" />
-                                                </p:autoComplete>
-                                                <p:outputLabel for="conatcts" value="#{messages.contact}"/>
-                                                <p:message for="conatcts" />
-                                            </h:panelGroup>
-
-                                            <h:panelGroup styleClass="md-inputfield">
-                                                <p:tooltip for="addbtn" position="top" value="Add new contact" />
-                                                <p:commandButton id="addbtn" icon="ui-icon-plus" onsuccess="PF('add_contact_popup').show();" actionListener="#{purchaseController.initCreateContact()}"/>
-                                            </h:panelGroup>
-                                        </p:panelGrid>
-
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputTextarea
-                                                id="purchaseDescription"
-                                                value="#{purchaseController.selectedPurchaseModel.purchaseDescription}"
-                                                rows="5" cols="30" counter="counterValue" maxlength="255"
-                                                counterTemplate="{0} characters remaining."
-                                                autoResize="false" />
-                                            <h:outputText id="counterValue" />
-                                            <p:outputLabel for="purchaseDescription" value="#{messages.description}"/>
-                                        </h:panelGroup>
-                                    </p:panelGrid>
-                                </p:fieldset>
-                                <br />
-                                <p:fieldset legend="Receipt" toggleable="true" toggleSpeed="500">
-                                    <p:panelGrid columns="3"
-                                                 columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
-                                                 layout="grid" styleClass="ui-panelgrid-blank form-group"
-                                                 style="border:0px none; background-color:transparent;">
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText
-                                                id="purchaseReceiptNumber"
-                                                value="#{purchaseController.selectedPurchaseModel.receiptNumber}" />
-                                            <p:outputLabel for="purchaseReceiptNumber" value="#{messages.receiptnumber}"/>
-                                        </h:panelGroup>
-
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <div style="text-align: center">
-                                                <p:fileUpload auto="true" 
-                                                              mode="advanced"   update="fileName"  fileUploadListener="#{purchaseController.fileUploadListener}"/>
-
-                                                <h:outputText value="#{purchaseController.fileName}" id="fileName"/>
-                                            </div>
-                                        </h:panelGroup>
-
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:inputText
-                                                id="purchaseAttachmentDescription"
-                                                value="#{purchaseController.selectedPurchaseModel.receiptAttachmentDescription}" />
-                                            <p:outputLabel for="purchaseAttachmentDescription" value="#{messages.attachment_description}"/>
-                                        </h:panelGroup>
-                                    </p:panelGrid>
-                                </p:fieldset>
-                                <p:fieldset legend="Purchase Item Details" toggleable="true" 
-                                            toggleSpeed="500">
-                                    <p:messages autoUpdate="true" id="validationId" closable="
-                                                true" for="validationId" />
-                                    <p:dataTable 
-                                        var="purchaseItem" 
-                                        editMode="cell"
-                                        editable="true"
-                                        value="#{purchaseController.selectedPurchaseModel.purchaseItems}"
-                                        id="purchaseItemTable"
-                                        reflow="true">
-                                        <p:column style="width: 32px">
-                                            <p:commandButton title="Delete Purchase Item" 
-                                                             update="purchaseItemTable"
-                                                             process="@this"
-                                                             actionListener="#{purchaseController.deleteLineItem(purchaseItem)}"
-                                                             icon="ui-icon-delete">
-
-                                            </p:commandButton>
-                                        </p:column>
-                                        <p:column headerText="Product/Service" style="width: 200px">
-
+                                                     styleClass="ui-panelgrid-blank form-group" >
                                             <p:autoComplete id="product" 
                                                             converter="#{productConverter}"
                                                             dropdown="true" 
@@ -281,136 +296,154 @@
                                                             completeMethod="#{purchaseController.products}" 
                                                             var="product"
                                                             itemValue="#{product}"
-                                                            onkeypress="if (event.keyCode == 13) {
-                                                                        return false;
-                                                                    }"
+
                                                             itemLabel="#{product.productName}">
-                                                <p:ajax update="vatId subTotal" event="itemSelect" listener="#{purchaseController.updateVatPercentage(purchaseItem)}" />
+                                                <p:ajax update="purchaseItemTable" event="itemSelect" listener="#{purchaseController.updateVatPercentage(purchaseItem)}" />
                                             </p:autoComplete>
+                                            <h:panelGroup styleClass="md-inputfield">
+                                                <p:tooltip for="addproductbtn" position="top" value="Add new product" />
+                                                <p:commandButton id="addproductbtn" icon="ui-icon-plus" oncomplete="PF('add_product_popup').show();" action="#{purchaseController.reserveProductOnAdd(purchaseItem)}" process="@this" />
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+                                    </p:column>
+                                    <p:column headerText="Description" styleClass="amount" style="width: 240px">
+                                        <p:inputText id="description" 
+                                                     value="#{purchaseItem.description}" 
 
-                                        </p:column>
-                                        <p:column headerText="Description" styleClass="amount" style="width: 320px">
-                                            <p:inputText id="description" 
-                                                         value="#{purchaseItem.description}" 
-                                                         onkeypress="if (event.keyCode == 13) {
-                                                                     return false;
-                                                                 }"
-                                                         style="width:100%">
-                                                <p:ajax event="change" />
-                                            </p:inputText>
-                                        </p:column>
-                                        <p:column headerText="Quantity" styleClass="amount">
-                                            <p:inputText id="quantity" 
-                                                         onfocus="clearTextField(event, this)"
-                                                         validator="positiveNumberValidator"
-                                                         validatorMessage="Please enter Quantity more then 0"
-                                                         value="#{purchaseItem.quatity}" 
-                                                         onkeypress="if (event.keyCode == 13) {
-                                                                     return false;
-                                                                 }"
-                                                         style="width:100%">
+                                                     style="width:100%">
+                                            <p:ajax event="change" />
+                                        </p:inputText>
+                                    </p:column>
+                                    <p:column headerText="Quantity" styleClass="amount" style="width: 50px">
+                                        <p:inputText id="quantity" 
+                                                     onfocus="clearTextField(event, this)"
+                                                     validator="positiveNumberValidator"
+                                                     validatorMessage="Please enter Quantity more then 0"
+                                                     value="#{purchaseItem.quatity}" 
 
-                                                <p:ajax event="change" 
-                                                        listener="#{purchaseController.updateSubTotal(purchaseItem)}" 
-                                                        update="subTotal" />
-                                            </p:inputText>
-                                        </p:column>
-                                        <p:column headerText="Unit Price (#{purchaseController.selectedPurchaseModel.currency.currencyIsoCode})" styleClass="amount">
+                                                     style="width:100%">
 
-                                            <p:inputNumber id="unitPrice" 
-                                                           value="#{purchaseItem.unitPrice}"
-                                                           symbol="#{purchaseController.selectedPurchaseModel.currency.currencySymbol} " symbolPosition="p"
-                                                           validator="positiveNumberValidator"
-                                                           validatorMessage="Please enter Price more then 0"
-                                                           onkeypress="if (event.keyCode == 13) {
-                                                                       return false;
-                                                                   }"
-                                                           style="width:100%">
-                                                <p:ajax event="change" 
-                                                        listener="#{purchaseController.updateSubTotal(purchaseItem)}" 
-                                                        update="subTotal @form:exchangeCurrency" />
-                                            </p:inputNumber>
+                                            <p:ajax event="change" 
+                                                    listener="#{purchaseController.updateSubTotal(purchaseItem)}" 
+                                                    update="subTotal" />
+                                        </p:inputText>
+                                    </p:column>
+                                    <p:column headerText="Unit Price (#{purchaseController.selectedPurchaseModel.currency.currencyIsoCode})" styleClass="amount" style="width: 90px">
+                                        <p:inputNumber id="unitPrice" 
+                                                       value="#{purchaseItem.unitPrice}"
+                                                       symbol="#{purchaseController.selectedPurchaseModel.currency.currencySymbol} " symbolPosition="p"
+                                                       validator="positiveNumberValidator"
+                                                       validatorMessage="Please enter Price more then 0"
+                                                         converterMessage="Please enter a valid number"
+                                                       style="width:100%">
+                                                <f:convertNumber type="number"/>
+                                                <p:clientValidator event="keyup"/>
+                                            <p:ajax event="change" 
+                                                    listener="#{purchaseController.updateSubTotal(purchaseItem)}" 
+                                                    update="subTotal @form:exchangeCurrency" />
+                                        </p:inputNumber>
 
-                                        </p:column>
-                                        <p:column headerText="VAT (%)" styleClass="amount" id="vatcategory">
+                                    </p:column>
+                                    <p:column headerText="VAT (%)" styleClass="amount" id="vatcategory" style="width: 100px">
 
-                                            <p:autoComplete id="vatId" 
-                                                            converter="#{vatCategoryConverter}"
-                                                            dropdown="true" 
-                                                            forceSelection="true"
-                                                            scrollHeight="250"
-                                                            effect="fold"
-                                                            value="#{purchaseItem.vatId}"
-                                                            completeMethod="#{purchaseController.vatCategorys}" 
-                                                            var="vat"
-                                                            onkeypress="if (event.keyCode == 13) {
-                                                                        return false;
-                                                                    }"
-                                                            itemValue="#{vat}"
-                                                            itemLabel="#{vat.name}"
-                                                            >
-                                                <p:ajax update="subTotal" event="itemSelect" listener="#{purchaseController.updateSubTotal(purchaseItem)}" />
-                                                <p:ajax event="change" 
-                                                        listener="#{purchaseController.updateSubTotal(purchaseItem)}" 
-                                                        update="subTotal" />
-                                            </p:autoComplete>
+                                        <p:autoComplete id="vatId" 
+                                                        converter="#{vatCategoryConverter}"
+                                                        dropdown="true" 
+                                                        forceSelection="true"
+                                                        scrollHeight="250"
+                                                        effect="fold"
+                                                        value="#{purchaseItem.vatId}"
+                                                        completeMethod="#{purchaseController.vatCategorys}" 
+                                                        var="vat"
 
-                                        </p:column>
-                                        <p:column headerText="Subtotal (#{purchaseController.selectedPurchaseModel.currency.currencyIsoCode})" styleClass="amount">
+                                                        itemValue="#{vat}"
+                                                        itemLabel="#{vat.name}"
+                                                        >
+                                            <p:ajax update="subTotal" event="itemSelect" listener="#{purchaseController.updateSubTotal(purchaseItem)}" />
+                                            <p:ajax event="change" 
+                                                    listener="#{purchaseController.updateSubTotal(purchaseItem)}" 
+                                                    update="subTotal" />
+                                        </p:autoComplete>
+
+                                    </p:column>
+                                    <p:column headerText="Subtotal (#{purchaseController.selectedPurchaseModel.currency.currencyIsoCode})" styleClass="amount" style="width: 90px">
+                                        <p:outputPanel autoUpdate="true">
                                             <h:outputText id="subTotal"  value="#{purchaseItem.subTotal}" >
                                                 <f:convertNumber type="currency" currencySymbol="#{purchaseController.selectedPurchaseModel.currency.currencySymbol} " />
                                             </h:outputText>
-                                        </p:column>
-                                        <p:columnGroup type="footer"  rendered="#{purchaseController.selectedPurchaseModel.purchaseItems.size() > 0}">  
-                                            <p:row >                                        
-                                                <p:column  colspan="6" footerText="Total" styleClass="amount"/>  
-                                                <p:column styleClass="amount">
-                                                    <f:facet name="footer">
-                                                        <p:outputPanel autoUpdate="true">
-                                                            <h:outputText id="total" value="#{purchaseController.total}" >
-                                                                <f:convertNumber type="currency" currencySymbol="#{purchaseController.selectedPurchaseModel.currency.currencySymbol} " />
-                                                            </h:outputText>
-                                                        </p:outputPanel>
-                                                    </f:facet>
-                                                </p:column>  
-                                            </p:row>  
-                                        </p:columnGroup>
-                                    </p:dataTable>
-                                    <p:commandButton actionListener="#{purchaseController.addPurchaseItem()}"
-                                                     style="width: 10%; margin-top: 3px" 
-                                                     update="purchaseItemTable"
-                                                     value="Add"
-                                                     process="@this"
-                                                     icon="ui-icon-plus" />
-                                </p:fieldset>
-                                <h:panelGroup id="exchangeCurrency"  >
-                                    <p:fieldset legend="Currency Exchange Details"
-                                                rendered="#{purchaseController.selectedPurchaseModel.currency.currencyCode != purchaseController.company.companyCountryCode.currencyCode.currencyCode 
-                                                            and purchaseController.currencyConversion != null}">
+                                        </p:outputPanel>
+                                    </p:column>
+                                    <p:columnGroup type="footer"  rendered="#{purchaseController.selectedPurchaseModel.purchaseItems.size() > 0}">  
+                                        <p:row>      
+                                            <p:column rowspan="3" colspan="5" style="border-bottom: 0 !important; border-left: 0 !important">
+                                            </p:column>
+                                            <p:column footerText="Total Net" styleClass="amount"/>
+                                            <p:column styleClass="amount">
+                                                <f:facet name="footer">
+                                                    <p:outputPanel autoUpdate="true">
+                                                        <h:outputText id="netTotal" value="#{purchaseController.selectedPurchaseModel.purchaseSubtotal}" >
+                                                            <f:convertNumber type="currency" currencySymbol="#{purchaseController.selectedPurchaseModel.currency.currencySymbol} " />
+                                                        </h:outputText>
+                                                    </p:outputPanel>
+                                                </f:facet>
+                                            </p:column> 
+                                        </p:row> 
+                                        <p:row >  
+                                            <p:column footerText="Total VAT" styleClass="amount"/>  
+                                            <p:column styleClass="amount">
+                                                <f:facet name="footer">
+                                                    <p:outputPanel autoUpdate="true">
+                                                        <h:outputText id="totalVat" value="#{purchaseController.selectedPurchaseModel.purchaseVATAmount}" >
+                                                            <f:convertNumber type="currency" currencySymbol="#{purchaseController.selectedPurchaseModel.currency.currencySymbol} " />
+                                                        </h:outputText>
+                                                    </p:outputPanel>
+                                                </f:facet>
+                                            </p:column>  
+                                        </p:row>  
+                                        <p:row >                                 
+                                            <p:column footerText="Total" styleClass="amount" style="font-weight: bold"/>  
+                                            <p:column styleClass="amount">
+                                                <f:facet name="footer">
+                                                    <p:outputPanel autoUpdate="true">
+                                                        <h:outputText value="#{purchaseController.totalAmount}" >
+                                                            <f:convertNumber type="currency" currencySymbol="#{purchaseController.selectedPurchaseModel.currency.currencySymbol} " />
+                                                        </h:outputText>
+                                                    </p:outputPanel>
+                                                </f:facet>
+                                            </p:column>  
+                                        </p:row> 
 
-                                        <p:panelGrid columns="6" 
-                                                     columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
-                                                     layout="grid" 
-                                                     styleClass="ui-panelgrid-blank form-group"
-                                                     style="border:0px none; background-color:transparent;">
-                                            <p:outputLabel for="exchangerate"  />
-                                            <h:panelGroup styleClass="md-inputwrapper-filled">
-                                                <label>Exchange Rate :-   </label>
-                                                <h:outputText id="exchangerate"
-                                                              value="#{purchaseController.exchangeRate(purchaseController.selectedPurchaseModel.currency)}" />
-                                            </h:panelGroup>
-                                            <p:outputLabel for="totalvalue"  />
-                                            <h:panelGroup styleClass="md-inputwrapper-filled">
-                                                <label>Total Value :-    </label>
-                                                <h:outputText id="totalvalue"
-                                                              value="#{purchaseController.totalAmountInHomeCurrency(purchaseController.selectedPurchaseModel.currency)}" >
-                                                    <f:convertNumber type="currency" currencySymbol="#{purchaseController.company.companyCountryCode.currencyCode.currencySymbol} "/>
-                                                </h:outputText>
-                                            </h:panelGroup>
-                                        </p:panelGrid>
-                                    </p:fieldset>
-                                </h:panelGroup>
-                            </div>
+                                    </p:columnGroup>
+                                </p:dataTable>
+
+                            </p:fieldset>
+                            <h:panelGroup id="exchangeCurrency"  >
+                                <p:fieldset legend="Currency Exchange Details"
+                                            rendered="#{purchaseController.selectedPurchaseModel.currency.currencyCode != purchaseController.company.companyCountryCode.currencyCode.currencyCode 
+                                                        and purchaseController.currencyConversion != null}">
+
+                                    <p:panelGrid columns="6" 
+                                                 columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                                                 layout="grid" 
+                                                 styleClass="ui-panelgrid-blank form-group"
+                                                 style="border:0px none; background-color:transparent;">
+                                        <p:outputLabel for="exchangerate"  />
+                                        <h:panelGroup styleClass="md-inputwrapper-filled">
+                                            <label>Exchange Rate :-   </label>
+                                            <h:outputText id="exchangerate"
+                                                          value="#{purchaseController.exchangeRate(purchaseController.selectedPurchaseModel.currency)}" />
+                                        </h:panelGroup>
+                                        <p:outputLabel for="totalvalue"  />
+                                        <h:panelGroup styleClass="md-inputwrapper-filled">
+                                            <label>Total Value :-    </label>
+                                            <h:outputText id="totalvalue"
+                                                          value="#{purchaseController.totalAmountInHomeCurrency(purchaseController.selectedPurchaseModel.currency)}" >
+                                                <f:convertNumber type="currency" currencySymbol="#{purchaseController.company.companyCountryCode.currencyCode.currencySymbol} "/>
+                                            </h:outputText>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                </p:fieldset>
+                            </h:panelGroup>
                         </div>
                     </div>
                 </div>
@@ -454,10 +487,18 @@
                     if ($(element).val() == 0)
                         $(element).val("");
                 }
+                $('#createPurchaseForm').on('keyup keypress', function (e) {
+                    var keyCode = e.keyCode || e.which;
+                    if (keyCode === 13) {
+                        e.preventDefault();
+                        return false;
+                    }
+                });
                 //   ]]>
             </script>
         </h:form>
         <ui:include src="add-contact-popup.xhtml" />
+        <ui:include src="add-product-popup.xhtml"/>
 
     </ui:define>
 

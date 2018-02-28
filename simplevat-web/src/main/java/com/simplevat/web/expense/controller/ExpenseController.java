@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.CurrencyConversion;
 import com.simplevat.entity.Expense;
+import com.simplevat.entity.Product;
 import com.simplevat.entity.Project;
 import com.simplevat.entity.Title;
 import com.simplevat.entity.User;
@@ -31,6 +32,7 @@ import com.simplevat.service.CountryService;
 import com.simplevat.web.expense.model.ExpenseModel;
 import com.simplevat.service.CurrencyService;
 import com.simplevat.service.ExpenseService;
+import com.simplevat.service.ProductService;
 import com.simplevat.service.ProjectService;
 import com.simplevat.service.TitleService;
 import com.simplevat.service.TransactionCategoryServiceNew;
@@ -46,6 +48,8 @@ import com.simplevat.web.contact.controller.ContactUtil;
 import com.simplevat.web.contact.model.ContactModel;
 import com.simplevat.web.contact.model.ContactType;
 import com.simplevat.web.expense.model.ExpenseItemModel;
+import com.simplevat.web.invoice.model.InvoiceItemModel;
+import com.simplevat.web.productservice.model.ProductModel;
 import com.simplevat.web.utils.FacesUtil;
 import com.simplevat.web.utils.RecurringUtility;
 import java.io.ByteArrayInputStream;
@@ -154,6 +158,21 @@ public class ExpenseController extends BaseController implements Serializable {
     @Getter
     private List<Currency> currencies = new ArrayList<>();
 
+    @Autowired
+    private ProductService productService;
+
+    @Getter
+    @Setter
+    private ProductModel productModel;
+
+    private ExpenseItemModel expenseItemModelForProductUpdateOnProductAdd;
+
+    @Getter
+    private BigDecimal vatTotal;
+
+    @Getter
+    private BigDecimal totalAmount;
+
     public ExpenseController() {
         super(ModuleName.EXPENSE_MODULE);
     }
@@ -161,6 +180,7 @@ public class ExpenseController extends BaseController implements Serializable {
     @PostConstruct
     public void init() {
         recurringUtility = new RecurringUtility();
+        productModel = new ProductModel();
         company = companyService.findByPK(userServiceNew.findByPK(FacesUtil.getLoggedInUser().getUserId()).getCompany().getCompanyId());
         contactModel = new ContactModel();
         controllerHelper = new ExpenseControllerHelper();
@@ -190,16 +210,80 @@ public class ExpenseController extends BaseController implements Serializable {
         titles = titleService.getTitles();
         countries = countryService.getCountries();
         currencies = currencyService.getCurrencies();
-       
         setDefaultCountry();
         setDefaultContactCurrency();
         calculateTotal();
+        addLineItem();
     }
 
     public String createExpense() {
-
         return "/pages/secure/expense/expense.xhtml?faces-redirect=true";
+    }
 
+    private boolean validateInvoiceItem() { //---------------
+        boolean validated = true;
+        for (int i = 0; i < selectedExpenseModel.getExpenseItem().size() - 1; i++) {
+            ExpenseItemModel lastItem = selectedExpenseModel.getExpenseItem().get(i);
+            StringBuilder validationMessage = new StringBuilder("Please enter ");
+            if (lastItem.getUnitPrice() == null) {
+                validationMessage.append("Unit Price ");
+                validated = false;
+            }
+            if (validated && lastItem.getUnitPrice().compareTo(BigDecimal.ZERO) <= 0) {
+                validationMessage = new StringBuilder("Unit price should be greater than 0 ");
+                validated = false;
+            }
+            if (lastItem.getQuatity() < 1) {
+                if (!validated) {
+                    validationMessage.append("and ");
+                }
+                validationMessage.append("Quantity should be greater than 0 ");
+                validated = false;
+            }
+            if (!validated) {
+                validationMessage.append("in expense items.");
+                FacesMessage message = new FacesMessage(validationMessage.toString());
+                message.setSeverity(FacesMessage.SEVERITY_ERROR);
+                FacesContext.getCurrentInstance().addMessage("validationId", message);
+            }
+        }
+        return validated;
+    }
+
+    public void updateVatPercentage(ExpenseItemModel expenseItemModel) {
+        if (expenseItemModel.getExpenseLineItemProductService() != null) {
+            if (expenseItemModel.getExpenseLineItemProductService().getVatCategory() != null) {
+                VatCategory vatCategory = expenseItemModel.getExpenseLineItemProductService().getVatCategory();
+                expenseItemModel.setVatId(vatCategory);
+            } else {
+                expenseItemModel.setVatId(vatCategoryService.getDefaultVatCategory());
+            }
+            if (expenseItemModel.getExpenseLineItemProductService().getVatIncluded()) {
+                if (expenseItemModel.getExpenseLineItemProductService().getVatCategory() != null) {
+                    BigDecimal unit = (expenseItemModel.getExpenseLineItemProductService().getUnitPrice().divide(expenseItemModel.getExpenseLineItemProductService().getVatCategory().getVat().add(new BigDecimal(100)), 5, RoundingMode.HALF_UP)).multiply(new BigDecimal(100));
+                    expenseItemModel.setUnitPrice(unit);
+                }
+            } else {
+                expenseItemModel.setUnitPrice(expenseItemModel.getExpenseLineItemProductService().getUnitPrice());
+            }
+            expenseItemModel.setDescription(expenseItemModel.getExpenseLineItemProductService().getProductDescription());
+        }
+        updateSubTotal(expenseItemModel);
+        addInvoiceItemOnProductSelect();
+    }
+
+    public void addInvoiceItemOnProductSelect() {
+        if (validateInvoiceItem()) {
+            addLineItem();
+        }
+    }
+
+    public void addLineItem() {
+        ExpenseItemModel expenseItemModel = new ExpenseItemModel();
+        VatCategory vatCategory = vatCategoryService.getDefaultVatCategory();
+        expenseItemModel.setVatId(vatCategory);
+        expenseItemModel.setUnitPrice(BigDecimal.ZERO);
+        selectedExpenseModel.addExpenseItem(expenseItemModel);
     }
 
     public List<Title> completeTitle(String titleStr) {
@@ -292,6 +376,21 @@ public class ExpenseController extends BaseController implements Serializable {
                     .getContact(selectedExpenseModel.getExpenseContact().getContactId());
             selectedExpenseModel.setCurrency(contact.getCurrency());
         }
+    }
+
+    public List<Product> products(final String searchQuery) throws Exception {
+        List<Product> productList = productService.getProductList();
+        if (productList != null) {
+            List<Product> parentProductList = new ArrayList<>();
+            for (Product product : productList) {
+                if (product.getParentProduct() != null) {
+                    parentProductList.add(product.getParentProduct());
+                }
+            }
+            productList.removeAll(parentProductList);
+            return productList;
+        }
+        return null;
     }
 
     public void updateContact() {
@@ -429,7 +528,65 @@ public class ExpenseController extends BaseController implements Serializable {
         initCreateContact();
     }
 
+    public void reserveProductOnAdd(ExpenseItemModel expenseItemModel) {
+        expenseItemModelForProductUpdateOnProductAdd = expenseItemModel;
+    }
+
+    public void createProduct() {
+        final Product product = new Product();
+        product.setProductID(productModel.getProductID());
+        product.setProductName(productModel.getProductName());
+        product.setProductDescription(productModel.getProductDescription());
+        product.setProductCode(productModel.getProductCode());
+        product.setUnitPrice(productModel.getUnitPrice());
+        product.setDeleteFlag(Boolean.FALSE);
+        product.setParentProduct(productModel.getParentProduct());
+        product.setVatCategory(productModel.getVatCategory());
+        product.setProductDescription(productModel.getProductDescription());
+        product.setCreatedBy(FacesUtil.getLoggedInUser().getUserId());
+        product.setCreatedDate(LocalDateTime.now());
+        product.setVatIncluded(productModel.getVatIncluded());
+        if (product.getProductID() != null) {
+            productService.update(product);
+        } else {
+            productService.persist(product);
+        }
+        expenseItemModelForProductUpdateOnProductAdd.setExpenseLineItemProductService(product);
+        if (!product.getVatIncluded()) {
+            expenseItemModelForProductUpdateOnProductAdd.setUnitPrice(product.getUnitPrice());
+        } else {
+            if (product.getVatCategory() != null) {
+
+                BigDecimal unit = (product.getUnitPrice().divide(product.getVatCategory().getVat().add(new BigDecimal(100)), 5, RoundingMode.HALF_UP)).multiply(new BigDecimal(100));
+                expenseItemModelForProductUpdateOnProductAdd.setUnitPrice(unit);
+            }
+        }
+
+        if (product.getVatCategory() != null) {
+            expenseItemModelForProductUpdateOnProductAdd.setVatId(product.getVatCategory());
+        } else {
+            expenseItemModelForProductUpdateOnProductAdd.setVatId(vatCategoryService.getDefaultVatCategory());
+        }
+        expenseItemModelForProductUpdateOnProductAdd.setDescription(product.getProductDescription());
+        addLineItem();
+        RequestContext.getCurrentInstance().execute("PF('add_product_popup').hide();");
+        initCreateProduct();
+    }
+
+    public List<Product> completeProducts() {
+        List<Product> productList = productService.getProductList();
+        if (productList == null) {
+            productList = new ArrayList<>();
+        }
+        return productList;
+    }
+
+    public void initCreateProduct() {
+        productModel = new ProductModel();
+    }
+
     public String saveExpense() {
+        removeEmptyRow();
         if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
             return "";
         }
@@ -441,6 +598,7 @@ public class ExpenseController extends BaseController implements Serializable {
     }
 
     public String saveAndContinueExpense() {
+        removeEmptyRow();
         if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
             return "";
         }
@@ -532,11 +690,11 @@ public class ExpenseController extends BaseController implements Serializable {
         if (null != unitPrice) {
             final BigDecimal amountWithoutTax = unitPrice.multiply(new BigDecimal(quantity));
             expenseItemModel.setSubTotal(amountWithoutTax);
-            if (vatPer != null && vatPer.compareTo(BigDecimal.ZERO) >= 1) {
-                final BigDecimal amountWithTax = amountWithoutTax
-                        .add(amountWithoutTax.multiply(vatPer).multiply(new BigDecimal(0.01)));
-                expenseItemModel.setSubTotal(amountWithTax);
-            }
+//            if (vatPer != null && vatPer.compareTo(BigDecimal.ZERO) >= 1) {
+//                final BigDecimal amountWithTax = amountWithoutTax
+//                        .add(amountWithoutTax.multiply(vatPer).multiply(new BigDecimal(0.01)));
+//                expenseItemModel.setSubTotal(amountWithTax);
+//            }
         }
         calculateTotal();
     }
@@ -554,15 +712,34 @@ public class ExpenseController extends BaseController implements Serializable {
 //    }
     private void calculateTotal() {
         total = new BigDecimal(0);
+        vatTotal = new BigDecimal(0);
         List<ExpenseItemModel> expenseItem = selectedExpenseModel.getExpenseItem();
         if (expenseItem != null) {
             for (ExpenseItemModel expense : expenseItem) {
                 if (expense.getSubTotal() != null) {
                     total = total.add(expense.getSubTotal());
+                    if (expense.getUnitPrice() != null) {
+                        BigDecimal totalAmount = expense.getUnitPrice().multiply(new BigDecimal(expense.getQuatity()));
+                        vatTotal = vatTotal.add((totalAmount.multiply(expense.getVatId().getVat())).divide(new BigDecimal(100)));
+                    }
                 }
             }
         }
+        selectedExpenseModel.setExpenseSubtotal(total);
+        selectedExpenseModel.setExpenseVATAmount(vatTotal);
+        totalAmount = total.add(vatTotal);
     }
 
-    
+    private void removeEmptyRow() {
+        if (selectedExpenseModel.getExpenseItem().size() > 1) {
+            List<ExpenseItemModel> expenseItemModels = new ArrayList<>();
+            for (ExpenseItemModel expenseItemModel : selectedExpenseModel.getExpenseItem()) {
+                if (expenseItemModel.getExpenseLineItemProductService() == null) {
+                    expenseItemModels.add(expenseItemModel);
+                }
+            }
+            selectedExpenseModel.getExpenseItem().removeAll(expenseItemModels);
+        }
+    }
+
 }

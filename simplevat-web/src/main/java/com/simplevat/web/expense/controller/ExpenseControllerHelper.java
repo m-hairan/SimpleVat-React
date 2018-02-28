@@ -75,7 +75,9 @@ public class ExpenseControllerHelper {
         item.setExpenseLineItemUnitPrice(model.getUnitPrice());
         item.setExpenseLineItemVat(model.getVatId());
         item.setVersionNumber(model.getVersionNumber());
+        item.setExpenseLineItemProductService(model.getExpenseLineItemProductService());
         item.setExpense(expense);
+        
         return item;
     }
 
@@ -133,6 +135,7 @@ public class ExpenseControllerHelper {
         model.setUnitPrice(expenseLineItem.getExpenseLineItemUnitPrice());
         model.setVatId(expenseLineItem.getExpenseLineItemVat());
         model.setVersionNumber(expenseLineItem.getVersionNumber());
+        model.setExpenseLineItemProductService(expenseLineItem.getExpenseLineItemProductService());
         this.updateSubTotal(model);
         return model;
     }

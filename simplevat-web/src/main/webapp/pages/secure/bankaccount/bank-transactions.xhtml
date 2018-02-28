@@ -81,7 +81,7 @@
                             <p:outputLabel styleClass="tableCustomHeader" value="#{transactionListController.selectedBankAccountModel.bankAccountName}" />
                         </f:facet>
                         <f:facet name="{TableFooter}">
-                            
+
                             <p:outputLabel styleClass="tableCustomFooter" value="Total Record: #{transactionListController.transactionViewLazyModel.dataBaseRowCount}"/>
                         </f:facet>
                         <p:column width="30" style="text-align: center">
@@ -115,10 +115,8 @@
                         </p:column>
 
                         <p:column headerText="#{messages.credit}" sortBy="#{transaction.transactionAmount}" width="110" styleClass="amount" filterMatchMode="contains" filterBy="#{transaction.transactionAmount}">
-                            <h:outputText value="#{transaction.currencySymbol} " rendered="#{transaction.debitCreditFlag.toString() eq 'C'}" />
-                            <h:outputText 
-                                value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString() eq 'C'}" >
-                                <f:convertNumber type="currency" currencySymbol=""/>
+                            <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString() eq 'C'}" >
+                                <f:convertNumber type="currency" currencySymbol="#{transactionListController.selectedBankAccountModel.bankAccountCurrency.currencySymbol}"/>
                             </h:outputText>
                         </p:column>
 

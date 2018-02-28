@@ -22,7 +22,6 @@
                 background-color: #ebfafa;
                 width: 700px;
                 border: 1px solid #009688;
-                padding-bottom: 20px;
                 margin: 20px;
             }
         </style>
@@ -32,17 +31,18 @@
         <h:form id="loginFormId" prependId="false">
             <div class="card login-panel ui-fluid">
                 <div class="ui-g" align="center">
-                    <div class="ui-g-12" style="padding-top: 0px !important;padding-bottom: 60px !important;">
+                    <div class="ui-g-12" style="padding-top: 0px !important;padding-bottom: 20px !important;">
                         <p:graphicImage name="images/logo-ultima.png" library="ultima-layout"/>
                     </div>
                     <div align="center" style="width: 900px">
-                        <span style="font-size:larger;font-weight: bold">Congratulations, You are all set and ready to manage you business accounts here. </span><br/>
+                        <div style="font-size:xx-large;font-weight: bold;padding-bottom: 20px !important;">Dear #{setupConfirmationController.name},</div>
+                        <span style="font-size:larger;font-weight: bold">Welcome to SimpleVAT!<br/>We are pleased to let you know you the details of your account as shown below: </span><br/>
                         <span>Please feel free to contact <a href="mailto:support@simplevat.com" target="_blank" >support@simplevat.com</a> for any queries or suggestions. </span><br/>
                         <div class="setupDetailsbox">
                             <h2 style="font-weight: bold">Your account details:</h2>
                             Account URL: <a href="#{setupConfirmationController.baseUrl}" target="_blank" >#{setupConfirmationController.baseUrl}</a><br/>
                             Admin User: <a href="mailto:#{setupConfirmationController.userLoginId}" target="_blank" >#{setupConfirmationController.userLoginId}</a><br/>
-                            Please use the same password you used for signup on simplevat.com
+                            Kindly use the same password you entered upon registering to SimpleVAT.<br/><h2 style="font-weight: bold">Thank you. </h2>
                         </div>
 
                         <div class="ui-g-2" style="float: none !important">

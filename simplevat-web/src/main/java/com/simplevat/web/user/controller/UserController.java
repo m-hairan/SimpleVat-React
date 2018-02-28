@@ -95,7 +95,7 @@ public class UserController extends BaseController implements Serializable {
 
     @Getter
     private boolean renderProfilePic;
-    
+
     public UserController() {
         super(ModuleName.USER_MODULE);
     }
@@ -194,10 +194,10 @@ public class UserController extends BaseController implements Serializable {
             if (user.getUserId() == null) {
                 userService.persist(user);
                 sendNewUserMail(user, password);
-                context.addMessage(null, new FacesMessage("","User Profile saved successfully"));
+                context.addMessage(null, new FacesMessage("", "User Profile saved successfully"));
             } else {
                 userService.update(user, user.getUserId());
-                context.addMessage(null, new FacesMessage("","User Profile updated successfully"));
+                context.addMessage(null, new FacesMessage("", "User Profile updated successfully"));
             }
             return "list?faces-redirect=true";
         } catch (Exception ex) {
@@ -210,8 +210,9 @@ public class UserController extends BaseController implements Serializable {
         try {
             MailEnum mailEnum = MailEnum.NEW_USER_CREATED;
             String recipientName = user.getFirstName();
+            String url = "http://" + System.getenv("SIMPLEVAT_SUBDOMAIN") + "." + System.getenv("SIMPLEVAT_ENVIRONMENT") + ".simplevat.com";
             String userMail = user.getUserEmail();
-            Object[] args = {recipientName, userMail, passwordToMail};
+            Object[] args = {recipientName, url, userMail, passwordToMail};
             String pathname = FacesContext.getCurrentInstance().getExternalContext().getRealPath(NEW_USER_EMAIL_TEMPLATE_FILE);
             MessageFormat msgFormat = new MessageFormat(FileUtility.readFile(pathname));
             MimeMultipart mimeMultipart = FileUtility.getMessageBody(msgFormat.format(args));

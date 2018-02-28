@@ -54,7 +54,7 @@ public class VatCategoryServiceImpl extends VatCategoryService {
         activity.setActivityCode(activityCode);
         activity.setModuleCode(VAT_CATEGORY);
         activity.setField3("Vat Category" + activityCode.charAt(0) + activityCode.substring(1, activityCode.length()).toLowerCase());
-        activity.setField1(vatCategory.getId().toString());
+        activity.setField1(vatCategory.getVat().toString());
         activity.setField2(vatCategory.getName());
         activity.setLastUpdateDate(LocalDateTime.now());
         activity.setLoggingRequired(true);

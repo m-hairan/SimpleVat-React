@@ -21,6 +21,7 @@ import lombok.Setter;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 import java.util.Date;
+
 /**
  *
  * @author admin
@@ -58,8 +59,8 @@ public class PurchaseModel {
     private String statusName;
     private Integer paymentMode;
     private Contact purchaseContact;
-
-    
+    private BigDecimal purchaseSubtotal;
+    private BigDecimal purchaseVATAmount;
 
     public void addPurchaseItem(@Nonnull final PurchaseItemModel purchaseItemModel) {
         if (null == this.purchaseItems) {

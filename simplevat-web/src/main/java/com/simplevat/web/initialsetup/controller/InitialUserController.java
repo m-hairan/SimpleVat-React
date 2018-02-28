@@ -157,8 +157,7 @@ public class InitialUserController implements Serializable {
                 context.getExternalContext().getFlash().setKeepMessages(true);
                 userService.persist(user);
                 sendActivationMail(user);
-
-                return "/pages/public/setupConfirmation.xhtml?faces-redirect=true&baseUrl=" + baseUrl + "&userLoginId=" + user.getUserEmail();
+                return "/pages/public/setupConfirmation.xhtml?faces-redirect=true&baseUrl=" + baseUrl + "&userLoginId=" + user.getUserEmail() + "&name=" + user.getFirstName();
             } catch (IllegalArgumentException ex) {
                 java.util.logging.Logger.getLogger(UserProfileController.class.getName()).log(Level.SEVERE, null, ex);
             }

@@ -221,7 +221,7 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
         if (transactionStatus != null) {
             builder.append(" AND t.explanationStatusCode = ").append(transactionStatus);
         }
-        TypedQuery<TransactionView> query = getEntityManager().createQuery("SELECT t FROM TransactionView t WHERE t.bankAccountId =:bankAccountId AND t.parentTransaction = null" + builder.toString() + " ORDER BY t.transactionDate DESC", TransactionView.class);
+        TypedQuery<TransactionView> query = getEntityManager().createQuery("SELECT t FROM TransactionView t WHERE t.bankAccountId =:bankAccountId AND t.parentTransaction = null" + builder.toString() + " ORDER BY t.transactionDate DESC, t.transactionId DESC", TransactionView.class);
         query.setParameter("bankAccountId", bankAccountId);
         query.setFirstResult(pageSize);
         query.setMaxResults(rowCount);
@@ -313,7 +313,7 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
         if (transactionStatus != null) {
             builder.append(" AND t.transactionStatus.explainationStatusCode = ").append(transactionStatus);
         }
-        TypedQuery<Transaction> query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.bankAccount.bankAccountId =:bankAccountId AND t.parentTransaction = null" + builder.toString() + " ORDER BY t.transactionDate DESC", Transaction.class);
+        TypedQuery<Transaction> query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.bankAccount.bankAccountId =:bankAccountId AND t.parentTransaction IS NULL" + builder.toString() + " ORDER BY t.transactionDate DESC", Transaction.class);
         query.setParameter("bankAccountId", bankAccountId);
         query.setFirstResult(pageSize);
         query.setMaxResults(rowCount);

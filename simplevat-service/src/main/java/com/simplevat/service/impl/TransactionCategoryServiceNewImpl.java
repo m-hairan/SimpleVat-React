@@ -11,12 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.simplevat.criteria.TransactionCategoryFilterNew;
 import com.simplevat.criteria.bankaccount.TransactionCategoryCriteria;
 import com.simplevat.dao.bankaccount.TransactionCategoryDaoNew;
+import com.simplevat.entity.Activity;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.service.TransactionCategoryServiceNew;
+import java.time.LocalDateTime;
 
 @Service("transactionCategoryService")
 @Transactional
 public class TransactionCategoryServiceNewImpl extends TransactionCategoryServiceNew {
+
+    private static final String TRANSACTION_CATEGORY = "TRANSACTION_CATEGORY";
 
     @Autowired
     @Qualifier(value = "transactionCategoryDao")
@@ -64,4 +68,23 @@ public class TransactionCategoryServiceNewImpl extends TransactionCategoryServic
         return dao.getDefaultTransactionCategoryByTransactionCategoryId(transactionCategoryId);
     }
 
+    public void persist(TransactionCategory transactionCategory) {
+        super.persist(transactionCategory, null, getActivity(transactionCategory, "CREATED"));
+    }
+
+    public TransactionCategory update(TransactionCategory transactionCategory) {
+        return super.update(transactionCategory, null, getActivity(transactionCategory, "UPDATED"));
+    }
+
+    private Activity getActivity(TransactionCategory transactionCategory, String activityCode) {
+        Activity activity = new Activity();
+        activity.setActivityCode(activityCode);
+        activity.setModuleCode(TRANSACTION_CATEGORY);
+        activity.setField3("Transaction Category " + activityCode.charAt(0) + activityCode.substring(1, activityCode.length()).toLowerCase());
+        activity.setField1(transactionCategory.getTransactionCategoryCode());
+        activity.setField2(transactionCategory.getTransactionCategoryName());
+        activity.setLastUpdateDate(LocalDateTime.now());
+        activity.setLoggingRequired(true);
+        return activity;
+    }
 }

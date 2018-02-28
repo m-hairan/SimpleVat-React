@@ -15,17 +15,13 @@ import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.web.contact.model.ContactModel;
 import com.simplevat.web.invoice.model.InvoiceItemModel;
 import com.simplevat.web.invoice.model.InvoiceModel;
-
 import lombok.Getter;
 import lombok.Setter;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -33,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-
 import com.simplevat.entity.Company;
 import com.simplevat.entity.Configuration;
 import com.simplevat.entity.Country;
@@ -80,7 +75,6 @@ public class InvoiceController extends BaseController implements Serializable {
 
     private static final long serialVersionUID = 6299117288316809011L;
     private final static Logger LOGGER = LoggerFactory.getLogger(InvoiceController.class);
-
     @Autowired
     private ContactService contactService;
 
@@ -187,7 +181,6 @@ public class InvoiceController extends BaseController implements Serializable {
 
     @Getter
     private List<Title> titles = new ArrayList<>();
-   
 
     public InvoiceController() {
         super(ModuleName.INVOICE_MODULE);
@@ -413,6 +406,10 @@ public class InvoiceController extends BaseController implements Serializable {
         boolean validated = true;
         for (InvoiceItemModel lastItem : selectedInvoiceModel.getInvoiceLineItems()) {
             StringBuilder validationMessage = new StringBuilder("Please enter ");
+            if (lastItem.getProductService() == null) {
+                validationMessage.append("Product/Service ");
+                validated = false;
+            }
             if (lastItem.getUnitPrice() == null) {
                 validationMessage.append("Unit Price ");
                 validated = false;
@@ -442,13 +439,21 @@ public class InvoiceController extends BaseController implements Serializable {
     public void updateVatPercentage(InvoiceItemModel invoiceItemModel, Integer listSize) {
         if (invoiceItemModel.getProductService() != null) {
             if (invoiceItemModel.getProductService().getVatCategory() != null) {
-                VatCategory vatCategory = vatCategoryService.findByPK(invoiceItemModel.getProductService().getVatCategory().getId());
+                VatCategory vatCategory = invoiceItemModel.getProductService().getVatCategory();
                 invoiceItemModel.setVatId(vatCategory);
 
             } else {
                 invoiceItemModel.setVatId(vatCategoryService.getDefaultVatCategory());
             }
-            invoiceItemModel.setUnitPrice(invoiceItemModel.getProductService().getUnitPrice());
+
+            if (invoiceItemModel.getProductService().getVatIncluded()) {
+                if (invoiceItemModel.getProductService().getVatCategory() != null) {
+                    BigDecimal unit = (invoiceItemModel.getProductService().getUnitPrice().divide(invoiceItemModel.getProductService().getVatCategory().getVat().add(new BigDecimal(100)), 5, RoundingMode.HALF_UP)).multiply(new BigDecimal(100));
+                    invoiceItemModel.setUnitPrice(unit);
+                }
+            } else {
+                invoiceItemModel.setUnitPrice(invoiceItemModel.getProductService().getUnitPrice());
+            }
             invoiceItemModel.setDescription(invoiceItemModel.getProductService().getProductDescription());
         }
 
@@ -465,7 +470,6 @@ public class InvoiceController extends BaseController implements Serializable {
     }
 
     public void reserveProductOnAdd(InvoiceItemModel invoiceItem) {
-        System.out.println("invoiceItemModelForProductUpdateOnProductAdd" + invoiceItem);
         invoiceItemModelForProductUpdateOnProductAdd = invoiceItem;
     }
 
@@ -506,12 +510,6 @@ public class InvoiceController extends BaseController implements Serializable {
 
     public List<DiscountType> discountTypes(final String searchString) {
         final List<DiscountType> types = discountTypeService.getDiscountTypes();
-//        for (DiscountType type : types) {
-//            if (null != searchString
-//                    && !type.toString().toLowerCase().contains(searchString.toLowerCase())) {
-//                types.remove(type);
-//            }
-//        }
         return types;
     }
 
@@ -538,12 +536,15 @@ public class InvoiceController extends BaseController implements Serializable {
     public String saveInvoice() throws IOException {
         removeEmptyRow();
         if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
+            if (selectedInvoiceModel.getInvoiceLineItems().get(selectedInvoiceModel.getInvoiceLineItems().size() - 1).getProductService() != null) {
+                addLineItem();
+            }
             return "";
         }
         save();
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("", "Invoice Saved successfully"));
+        context.addMessage(null, new FacesMessage("", "Invoice saved successfully"));
         return "list?faces-redirect=true";
 
     }
@@ -551,12 +552,15 @@ public class InvoiceController extends BaseController implements Serializable {
     public String saveAndSendInvoice() throws IOException {
         removeEmptyRow();
         if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
+            if (selectedInvoiceModel.getInvoiceLineItems().get(selectedInvoiceModel.getInvoiceLineItems().size() - 1).getProductService() != null) {
+                addLineItem();
+            }
             return "";
         }
         Integer invoiceId = save();
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("Successful", "Invoice Saved Successfully"));
+        context.addMessage(null, new FacesMessage("Successful", "Invoice saved Successfully"));
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
         session.setAttribute("invoiceId", invoiceId);
         return "invoiceView?faces-redirect=true";
@@ -564,14 +568,17 @@ public class InvoiceController extends BaseController implements Serializable {
     }
 
     public void saveAndAddMoreInvoice() {
+        removeEmptyRow();
         if (!validateInvoiceLineItems() || !validateAtLeastOneItem()) {
+            if (selectedInvoiceModel.getInvoiceLineItems().get(selectedInvoiceModel.getInvoiceLineItems().size() - 1).getProductService() != null) {
+                addLineItem();
+            }
             return;
         }
-        removeEmptyRow();
         save();
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("", "Invoice Saved successfully"));
+        context.addMessage(null, new FacesMessage("", "Invoice saved successfully"));
         init();
     }
 
@@ -810,7 +817,17 @@ public class InvoiceController extends BaseController implements Serializable {
             productService.persist(product);
         }
         invoiceItemModelForProductUpdateOnProductAdd.setProductService(product);
-        invoiceItemModelForProductUpdateOnProductAdd.setUnitPrice(product.getUnitPrice());
+
+        if (!product.getVatIncluded()) {
+            invoiceItemModelForProductUpdateOnProductAdd.setUnitPrice(product.getUnitPrice());
+        } else {
+            if (product.getVatCategory() != null) {
+                BigDecimal unit = (product.getUnitPrice().divide(product.getVatCategory().getVat().add(new BigDecimal(100)), 5, RoundingMode.HALF_UP)).multiply(new BigDecimal(100));
+                invoiceItemModel.setUnitPrice(unit);
+
+            }
+        }
+
         if (product.getVatCategory() != null) {
             invoiceItemModelForProductUpdateOnProductAdd.setVatId(product.getVatCategory());
         } else {
@@ -853,14 +870,16 @@ public class InvoiceController extends BaseController implements Serializable {
     }
 
     private void removeEmptyRow() {
-        if (selectedInvoiceModel.getInvoiceLineItems().size() > 1) {
-            List<InvoiceItemModel> invoiceLineItemList = new ArrayList<>();
-            for (InvoiceItemModel invoiceLineItem : selectedInvoiceModel.getInvoiceLineItems()) {
-                if (invoiceLineItem.getProductService() == null) {
-                    invoiceLineItemList.add(invoiceLineItem);
-                }
+        List<InvoiceItemModel> invoiceLineItemList = new ArrayList<>();
+        for (InvoiceItemModel invoiceLineItem : selectedInvoiceModel.getInvoiceLineItems()) {
+            if (invoiceLineItem.getProductService() == null && (invoiceLineItem.getUnitPrice() == null || invoiceLineItem.getUnitPrice().compareTo(BigDecimal.ZERO) == 0)
+                    && invoiceLineItem.getQuatity() == 0 && (invoiceLineItem.getDescription() == null || invoiceLineItem.getDescription().isEmpty())) {
+                invoiceLineItemList.add(invoiceLineItem);
             }
-            selectedInvoiceModel.getInvoiceLineItems().removeAll(invoiceLineItemList);
+        }
+        selectedInvoiceModel.getInvoiceLineItems().removeAll(invoiceLineItemList);
+        if (selectedInvoiceModel.getInvoiceLineItems().isEmpty()) {
+            addLineItem();
         }
     }
 
