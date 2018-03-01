@@ -79,7 +79,7 @@
                         </h:panelGroup>
 
                         <h:panelGroup styleClass="md-inputfield">
-                            <p:inputTextarea
+                            <p:inputTextarea style="width: 95%;"
                                 id="productDescription"
                                 value="#{invoiceController.productModel.productDescription}"
                                 rows="5" cols="30" counter="counterValue" maxlength="255"
@@ -89,16 +89,12 @@
                             <p:outputLabel for="productDescription" value="#{messages.description}" />
                         </h:panelGroup>
                     </p:panelGrid>
+                    <p:commandButton actionListener="#{invoiceController.createProduct()}"
+                                     value="Save" 
+                                     update="productPanel invoice:invoiceItemTable"
+                                     style="width:auto;float: right;margin-right: 20px" /> 
                 </div>
             </div>
-            <f:facet name="footer">
-                <p:commandButton 
-                    actionListener="#{invoiceController.createProduct()}"
-                    value="Save"
-                    update="productPanel invoice:invoiceItemTable"
-                    style="width:auto" 
-                    icon="ui-icon-save"/>
-            </f:facet>  
         </p:dialog>
     </h:form>
 </ui:composition>

@@ -12,29 +12,25 @@
                   hideEffect="scale">
             <div class="ui-g form-group" style="margin-bottom: 16px;">
                 <div class="ui-g-12">
-                    <p:panelGrid columns="2" id="warehousePanel"
-                                 columnClasses="ui-grid-col-0,ui-grid-col-10" 
+                    <p:panelGrid columns="1" id="warehousePanel"
+                                 columnClasses="ui-grid-col-12" 
                                  layout="grid" 
                                  styleClass="ui-panelgrid-blank form-group"
                                  style="border:0px none; background-color:transparent;">
 
-                        <p:outputLabel />
                         <h:panelGroup styleClass="md-inputfield">
                             <p:inputText id="warehouseName" required="true" requiredMessage="Please Enter Warehouse" value="#{productController.productWarehouse.warehouseName}"/>
-                            <label>Warehouse Name</label>
+                            <p:outputLabel value="Warehouse Name"/>
                             <p:message for="warehouseName"/>
                         </h:panelGroup>
                     </p:panelGrid>
+                    <p:commandButton actionListener="#{productController.createNewWarehouse()}"
+                                     value="#{messages.save}" 
+                                     update="@(.warehouse) warehousePanel"
+                                     style="width:auto;float: right;margin-right: 20px" /> 
                 </div>
 
             </div>
-
-            <f:facet name="footer">
-                <p:commandButton value="#{messages.save}" 
-                                 icon="ui-icon-save" 
-                                 update="@(.warehouse) warehousePanel" 
-                                 actionListener="#{productController.createNewWarehouse()}" />
-            </f:facet>  
         </p:dialog>
     </h:form>
 </ui:composition>

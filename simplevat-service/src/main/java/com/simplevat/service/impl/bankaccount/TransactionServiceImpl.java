@@ -97,7 +97,7 @@ public class TransactionServiceImpl extends TransactionService {
             } else {
                 transaction.setCurrentBalance(transaction.getBankAccount().getCurrentBalance().subtract(transaction.getTransactionAmount()));
             }
-            transactionDao.update(transaction);
+            super.update(transaction, null, getActivity(transaction, "Updated"));
             BigDecimal balanceAmount = transaction.getCurrentBalance();
             updateAccountBalance(balanceAmount, transaction);
         } else {

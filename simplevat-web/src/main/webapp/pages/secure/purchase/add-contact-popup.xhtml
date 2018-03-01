@@ -154,7 +154,7 @@
                                             var="currency" 
                                             itemValue="#{currency.currencyCode}"
                                             itemLabel="#{currency.currencyDescription} - #{currency.currencyIsoCode} (#{currency.currencySymbol})" >
-                            <p:clientValidator event="itemSelect"/>
+                                <p:clientValidator event="itemSelect"/>
                             </p:autoComplete>
                             <p:outputLabel for="currency" value="Currency Code"/>
                             <p:message for="currency" />
@@ -174,17 +174,13 @@
                         </h:panelGroup>
 
                     </p:panelGrid>
+                    <p:commandButton actionListener="#{purchaseController.createContact()}"
+                                     value="Save" 
+                                     update="createPurchaseForm:conatcts contactPanel"
+                                     style="width:auto;float: right;margin-right: 20px" /> 
                 </div>
 
-            </div>
-
-            <f:facet name="footer">
-                <p:commandButton 
-                    actionListener="#{purchaseController.createContact()}"
-                    value="Save"
-                    update="createPurchaseForm:conatcts contactPanel" style="width:auto" 
-                    icon="ui-icon-save"/>
-            </f:facet>   
+            </div> 
         </p:dialog>
     </h:form>
 </ui:composition>

@@ -182,17 +182,13 @@
                         </h:panelGroup>
 
                     </p:panelGrid>
+                    <p:commandButton actionListener="#{projectController.createContact()}"
+                                     value="#{messages.save}" 
+                                     update="project:conatcts contactPanel"
+                                     style="width:auto;float: right;margin-right: 20px" />
                 </div>
 
             </div>
-
-            <f:facet name="footer">
-                <p:commandButton 
-                    actionListener="#{projectController.createContact()}"
-                    value="Save"
-                    update="project:conatcts contactPanel" style="width:auto" 
-                    icon="ui-icon-save"/>
-            </f:facet>  
         </p:dialog>
     </h:form>
 </ui:composition>
