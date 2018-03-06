@@ -18,9 +18,9 @@ public class ContactUtil {
 
     public static List<ContactType> contactTypeList() {
         List<ContactType> contactTypeList = new ArrayList<>();
-        contactTypeList.add(new ContactType(ContactTypeConstant.VENDOR, "Vendor"));
         contactTypeList.add(new ContactType(ContactTypeConstant.CUSTOMER, "Customer"));
         contactTypeList.add(new ContactType(ContactTypeConstant.EMPLOYEE, "Employee"));
+        contactTypeList.add(new ContactType(ContactTypeConstant.VENDOR, "Vendor"));
         return contactTypeList;
     }
 }

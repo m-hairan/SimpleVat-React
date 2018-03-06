@@ -206,7 +206,7 @@
                                                         required="true"
                                                         requiredMessage="Please select Country">
                                             <p:clientValidator event="itemSelect"/>
-                                            <p:ajax event="itemSelect" listener="#{contactController.countryOnSelectListner()}" process="@this" update="currency"/>
+                                            <p:ajax event="change" listener="#{contactController.countryOnSelectListner()}" process="@this" update="currency"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="country" value="Country"/>
                                         <p:message for="country" />

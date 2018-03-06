@@ -95,9 +95,12 @@
                                                             value="#{productController.productModel.vatCategory}"
                                                             completeMethod="#{productController.vatCategorys}" 
                                                             var="vat"
+                                                            required="true"
+                                                            requiredMessage="Please Enter Vat Percentage"
                                                             itemValue="#{vat}"
                                                             itemLabel="#{vat.name}"
                                                             >
+                                                <p:clientValidator event="itemSelect"/>
                                             </p:autoComplete>
                                             <p:outputLabel for="vat" value="#{messages.vat}"/>
                                             <p:message for="vat" />
@@ -124,7 +127,6 @@
                                                 <p:outputLabel for="warehouse" value="#{messages.Product_warehouse}"/>
                                                 <p:message for="warehouse" />
                                             </h:panelGroup>
-
                                             <h:panelGroup styleClass="md-inputfield">
                                                 <p:tooltip for="addbtn" position="top" value="Add new warehouse" />
                                                 <p:commandButton id="addbtn" icon="ui-icon-plus" onsuccess="PF('add_new_warehouse').show();" />
@@ -150,7 +152,6 @@
                         </div>
                     </div>
                 </div>
-
                 <p:toolbar>
                     <f:facet name="left">
                         <ui:fragment rendered="#{productController.productModel.productID == null}">

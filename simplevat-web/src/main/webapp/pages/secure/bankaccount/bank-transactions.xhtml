@@ -46,10 +46,10 @@
                             <span class="fa fa-ellipsis-v SoftGray" />
                         </span>
                         <p:tooltip for="importtransacn" value="#{messages.button_import}" position="top"/>
-                        <p:commandButton id="importtransacn" icon="ui-icon-file-upload" process="@this" styleClass="AquaButton" 
+                        <p:commandButton id="importtransacn"  icon="ui-icon-file-download" process="@this" styleClass="AquaButton" 
                                          action="#{transactionController.importTransaction()}"/>
                         <p:tooltip for="exporttransacn" value="#{messages.button_export}" position="top"/>
-                        <p:commandButton id="exporttransacn" icon="ui-icon-file-download" styleClass="AquaButton" 
+                        <p:commandButton id="exporttransacn" icon="ui-icon-file-upload" styleClass="AquaButton" 
                                          action="#{transactionController.exportTransaction()}" />
                         <span class="ui-separator" style="padding-right: 5px;">
                             <span class="fa fa-ellipsis-v SoftGray" />

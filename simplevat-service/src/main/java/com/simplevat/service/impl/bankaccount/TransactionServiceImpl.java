@@ -97,7 +97,7 @@ public class TransactionServiceImpl extends TransactionService {
             } else {
                 transaction.setCurrentBalance(transaction.getBankAccount().getCurrentBalance().subtract(transaction.getTransactionAmount()));
             }
-            super.update(transaction, null, getActivity(transaction, "Updated"));
+            super.persist(transaction, null, getActivity(transaction, "Created"));
             BigDecimal balanceAmount = transaction.getCurrentBalance();
             updateAccountBalance(balanceAmount, transaction);
         } else {
@@ -304,7 +304,7 @@ public class TransactionServiceImpl extends TransactionService {
         activity.setModuleCode(TRANSACTION);
         activity.setField3("Transaction " + activityCode);
         activity.setField1(String.valueOf(transaction.getTransactionAmount().doubleValue()));
-        activity.setField2(transaction.getTransactionType().getDebitCreditFlag() == 'C' ? "Credit" : "Debit");
+        activity.setField2(transaction.getDebitCreditFlag() == 'C' ? "Credit" : "Debit");
         activity.setLastUpdateDate(LocalDateTime.now());
         activity.setLoggingRequired(true);
         return activity;

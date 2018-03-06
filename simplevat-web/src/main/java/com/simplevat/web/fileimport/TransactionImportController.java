@@ -144,7 +144,7 @@ public class TransactionImportController implements Serializable {
         creditTransaction.clear();
         invalidHeaderTransactionList.clear();
         totalErrorRows = 0;
-        renderButtonOnValidData=true;
+        renderButtonOnValidData = true;
         try {
             if (listParser != null) {
                 int recordNo = 0;
@@ -193,7 +193,7 @@ public class TransactionImportController implements Serializable {
                             transaction.setValidData(Boolean.FALSE);
                             transaction.setFormat(TransactionStatusConstant.INVALID);
                             transactionList.add(transaction);
-                            renderButtonOnValidData=false;
+                            renderButtonOnValidData = false;
                         }
                         if (transaction.getDrAmount() != null && !transaction.getDrAmount().trim().isEmpty()) {
                             debitTransaction.add(transaction);
@@ -227,11 +227,16 @@ public class TransactionImportController implements Serializable {
         return "bank-transactions?faces-redirect=true";
     }
 
+    public String cancelTranscation() {
+        return "bank-transactions?faces-redirect=true";
+    }
+
     public List<String> completeDateFormat() {
         return dateFormatList;
     }
 
     private void save(Transaction transaction) {
+        System.out.println("transaction===" + transaction);
         try {
             User loggedInUser = FacesUtil.getLoggedInUser();
             com.simplevat.entity.bankaccount.Transaction transaction1 = new com.simplevat.entity.bankaccount.Transaction();

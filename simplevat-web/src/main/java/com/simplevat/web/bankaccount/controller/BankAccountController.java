@@ -210,7 +210,7 @@ public class BankAccountController extends BankAccountHelper implements Serializ
         bankAccountService.update(selectedBankAccount);
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("", "BankAccount deleted successfully"));
+        context.addMessage(null, new FacesMessage("", "Bank Account deleted successfully"));
        
         return "/pages/secure/bankaccount/bankaccounts.xhtml?faces-redirect=true";
     }

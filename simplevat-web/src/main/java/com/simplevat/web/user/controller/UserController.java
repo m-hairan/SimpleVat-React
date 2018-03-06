@@ -28,6 +28,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -121,8 +122,9 @@ public class UserController extends BaseController implements Serializable {
             if (role != null) {
                 selectedUser.setRole(role);
             }
+            selectedUser.setIsActive(Boolean.TRUE);
         }
-
+        
     }
 
     public List<Role> comoleteRole() {
@@ -172,36 +174,39 @@ public class UserController extends BaseController implements Serializable {
     }
 
     public String save() {
-        try {
-
-            if (password != null && !password.trim().isEmpty()) {
-                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-                String encodedPassword = passwordEncoder.encode(password);
-                selectedUser.setPassword(encodedPassword);
-            }
-            User user = new User();
-            BeanUtils.copyProperties(selectedUser, user);
-            UserContext userContext = ContextUtils.getUserContext();
-            user.setCompany(FacesUtil.getLoggedInUser().getCompany());
-            user.setCreatedBy(userContext.getUserId());
-            user.setLastUpdatedBy(userContext.getUserId());
-//            if (selectedUser.getRoleCode() != null) {
-//                Role role = roleService.findByPK(selectedUser.getRoleCode());
-//                user.setRole(role);
-//            }
+        Optional<User> userOptional = userService.getUserByEmail(selectedUser.getUserEmail());
+        if (userOptional.isPresent()) {
             FacesContext context = FacesContext.getCurrentInstance();
             context.getExternalContext().getFlash().setKeepMessages(true);
-            if (user.getUserId() == null) {
-                userService.persist(user);
-                sendNewUserMail(user, password);
-                context.addMessage(null, new FacesMessage("", "User Profile saved successfully"));
-            } else {
-                userService.update(user, user.getUserId());
-                context.addMessage(null, new FacesMessage("", "User Profile updated successfully"));
+            context.addMessage(null, new FacesMessage("", "Email is already present"));
+        } else {
+            try {
+
+                if (password != null && !password.trim().isEmpty()) {
+                    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                    String encodedPassword = passwordEncoder.encode(password);
+                    selectedUser.setPassword(encodedPassword);
+                }
+                User user = new User();
+                BeanUtils.copyProperties(selectedUser, user);
+                UserContext userContext = ContextUtils.getUserContext();
+                user.setCompany(FacesUtil.getLoggedInUser().getCompany());
+                user.setCreatedBy(userContext.getUserId());
+                user.setLastUpdatedBy(userContext.getUserId());
+                FacesContext context = FacesContext.getCurrentInstance();
+                context.getExternalContext().getFlash().setKeepMessages(true);
+                if (user.getUserId() == null) {
+                    userService.persist(user);
+                    sendNewUserMail(user, password);
+                    context.addMessage(null, new FacesMessage("", "User Profile saved successfully"));
+                } else {
+                    userService.update(user, user.getUserId());
+                    context.addMessage(null, new FacesMessage("", "User Profile updated successfully"));
+                }
+                return "list?faces-redirect=true";
+            } catch (Exception ex) {
+                Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
             }
-            return "list?faces-redirect=true";
-        } catch (Exception ex) {
-            Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";
     }

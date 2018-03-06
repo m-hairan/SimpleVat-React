@@ -213,9 +213,9 @@ public class TransactionViewLazyModel extends LazyDataModel<TransactionViewModel
                     if (suggestionAmount.doubleValue() == invoice.getDueAmount().doubleValue()) {
                         transactionViewModel.setReferenceId(invoice.getInvoiceId());
                         suggestedTransactionString = transactionViewModel.getTransactionTypeName() != null ? transactionViewModel.getTransactionTypeName() : "" + " : " + transactionViewModel.getTransactionCategoryName() != null ? transactionViewModel.getTransactionCategoryName() : ""
-                                + " : Invoice Paid : " + invoice.getInvoiceReferenceNumber() != null ? invoice.getInvoiceReferenceNumber() : "" + " : " + invoice.getInvoiceContact().getFirstName()
+                                + " | Invoice Paid : " + invoice.getInvoiceReferenceNumber() != null ? invoice.getInvoiceReferenceNumber() : "" + " : " + invoice.getInvoiceContact().getFirstName()
                                 + " : " + invoice.getCurrency().getCurrencySymbol() + " " + invoice.getDueAmount()
-                                + " : Due On : " + new SimpleDateFormat("MM/dd/yyyy").format(Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant()));
+                                + " | Due On : " + new SimpleDateFormat("MM/dd/yyyy").format(Date.from(invoice.getInvoiceDueDate().atZone(ZoneId.systemDefault()).toInstant()));
                         break;
                     }
                 }
@@ -242,17 +242,17 @@ public class TransactionViewLazyModel extends LazyDataModel<TransactionViewModel
             transactionDecription = transactionDecrpStringArr.length > 1 ? transactionDecrpStringArr[0] + " " + transactionDecrpStringArr[1] : transactionDecrpStringArr[0];
         }
         if (transactionViewModel.getReferenceId() != null) {
-            return (transactionViewModel.getTransactionTypeName() != null ? "Type:"+transactionViewModel.getTransactionTypeName() + " : " : "")
-                    + (transactionViewModel.getTransactionCategoryName() != null ? "Category:"+transactionViewModel.getTransactionCategoryName() + " : " : "")
-                    + (transactionViewModel.getReferenceName() != null ? transactionViewModel.getReferenceName() + " : " : "")
+            return (transactionViewModel.getTransactionTypeName() != null ? "Type: "+transactionViewModel.getTransactionTypeName() + " | " : "")
+                    + (transactionViewModel.getTransactionCategoryName() != null ? "Category: "+transactionViewModel.getTransactionCategoryName() + " | " : "")
+                    + (transactionViewModel.getReferenceName() != null ? transactionViewModel.getReferenceName() + " | " : "")
                     + transactionViewModel.getContactName()
-                    + " : " + transactionViewModel.getCurrencySymbol() + " " + transactionViewModel.getDueAmount()
-                    + " : Due On : " + new SimpleDateFormat("MM/dd/yyyy").format(transactionViewModel.getDueOn())
-                    + "......";
+                    + " | " + transactionViewModel.getCurrencySymbol() + " " + transactionViewModel.getDueAmount()
+                    + " | Due On : " + new SimpleDateFormat("MM/dd/yyyy").format(transactionViewModel.getDueOn())
+                    ;
 
         } else {
-            return (transactionViewModel.getTransactionTypeName() != null ? "Type:"+transactionViewModel.getTransactionTypeName() + " " : "") + (transactionViewModel.getTransactionCategoryName() != null ? "Category:"+transactionViewModel.getTransactionCategoryName() + " : " : "")
-                    + "......";
+            return (transactionViewModel.getTransactionTypeName() != null ? "Type:"+transactionViewModel.getTransactionTypeName() + " | " : "") + (transactionViewModel.getTransactionCategoryName() != null ? "Category:"+transactionViewModel.getTransactionCategoryName(): "")
+                    ;
         }
     }
 

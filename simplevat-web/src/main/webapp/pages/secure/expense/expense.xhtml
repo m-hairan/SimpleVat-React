@@ -106,29 +106,6 @@
                                             <p:message for="expenseDate" />
                                         </h:panelGroup>
 
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <p:autoComplete id="expenseCurrency" 
-                                                            dropdown="true"
-                                                            forceSelection="true" 
-                                                            effect="fold"
-                                                            converter="#{currencyConverter}"
-                                                            completeMethod="#{currencyController.completeCurrency}"
-                                                            value="#{expenseController.selectedExpenseModel.currency}"
-                                                            var="currency" 
-                                                            scrollHeight="250"
-                                                            itemValue="#{currency}"
-
-                                                            itemLabel="#{currency.currencyDescription} - #{currency.currencyIsoCode} (#{currency.currencySymbol})" 
-                                                            required="true"
-                                                            requiredMessage="Please select currency">
-                                                <p:clientValidator event="itemSelect"/>
-                                                <p:ajax event="itemSelect" 
-                                                        update="expenseItemTable,exchangeCurrency" />
-                                            </p:autoComplete>
-                                            <p:outputLabel for="expenseCurrency" value="#{messages.currency}"/>
-                                            <p:message for="expenseCurrency" />
-                                        </h:panelGroup>
-
                                         <p:panelGrid columns="2" 
                                                      columnClasses="ui-grid-col-11,ui-grid-col-1"
                                                      layout="grid" 
@@ -167,6 +144,31 @@
                                             </h:panelGroup>
                                         </p:panelGrid>
 
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:autoComplete id="expenseCurrency" 
+                                                            dropdown="true"
+                                                            forceSelection="true" 
+                                                            effect="fold"
+                                                            converter="#{currencyConverter}"
+                                                            completeMethod="#{currencyController.completeCurrency}"
+                                                            value="#{expenseController.selectedExpenseModel.currency}"
+                                                            var="currency" 
+                                                            scrollHeight="250"
+                                                            itemValue="#{currency}"
+
+                                                            itemLabel="#{currency.currencyDescription} - #{currency.currencyIsoCode} (#{currency.currencySymbol})" 
+                                                            required="true"
+                                                            requiredMessage="Please select currency">
+                                                <p:clientValidator event="itemSelect"/>
+                                                <p:ajax event="itemSelect" 
+                                                        update="expenseItemTable,exchangeCurrency" />
+                                            </p:autoComplete>
+                                            <p:outputLabel for="expenseCurrency" value="#{messages.currency}"/>
+                                            <p:message for="expenseCurrency" />
+                                        </h:panelGroup>
+
+
+
 
 
 
@@ -193,7 +195,7 @@
                                             <p:inputTextarea
                                                 id="expenseDescription"
                                                 value="#{expenseController.selectedExpenseModel.expenseDescription}"
-                                                rows="5" cols="30" counter="counterValue" maxlength="100"
+                                                rows="5" cols="30" counter="counterValue" maxlength="255"
                                                 counterTemplate="{0} characters remaining."
                                                 autoResize="false" />
                                             <h:outputText id="counterValue" />

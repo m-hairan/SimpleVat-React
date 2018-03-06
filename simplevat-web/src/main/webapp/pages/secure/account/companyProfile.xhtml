@@ -147,7 +147,6 @@
                     <p:outputLabel for="CompanyRevenueBudget" value="#{messages.CompanyRevenueBudget}"/>
                     <p:message for="CompanyRevenueBudget" />
                 </h:panelGroup>
-
             </p:panelGrid>
         </p:fieldset>
 
@@ -161,6 +160,7 @@
                     <p:inputTextarea id="InvoicingAddressLine1" value="#{companyProfileController.companyModel.invoicingAddressLine1}" 
                                      counter="counterValue"
                                      maxlength="255"
+                                     rows="0"
                                      counterTemplate="{0} characters remaining." />
                     <h:outputText id="counterValue" />
                     <p:outputLabel for="InvoicingAddressLine1" value="#{messages.InvoicingAddressLine1}" />

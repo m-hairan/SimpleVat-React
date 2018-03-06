@@ -22,21 +22,21 @@
                         <div class="card card-w-title">
 <!-- <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />-->
                             <p:fieldset legend="#{messages.CompanyDetail}" toggleable="false" >
-                                <p:panelGrid columns="6" 
-                                             columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                                <p:panelGrid columns="3" 
+                                             columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" 
                                              layout="grid" 
                                              styleClass="ui-panelgrid-blank form-group"
                                              style="border:0px none; background-color:transparent;">
 
-                                    <p:outputLabel for="CompanyName"/>
+                                    
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="CompanyName" required="true"
                                                      requiredMessage="Please enter company name"
                                                      value="#{initialUserController.companyModel.companyName}" />
-                                        <label>#{messages.CompanyName}</label>
                                         <p:message for="CompanyName" />
+                                        <p:outputLabel for="CompanyName" value="#{messages.CompanyName}"/>
                                     </h:panelGroup>
-                                    <p:outputLabel for="IndustryTypeCode"/>
+                                   
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="IndustryTypeCode"
                                                         converter="#{industryTypeConverter}" 
@@ -52,11 +52,11 @@
                                                         itemValue="#{industryType}"
                                                         itemLabel="#{industryType.industryTypeName}"
                                                         />
-                                        <label>#{messages.IndustryTypeCode}</label>
                                         <p:message for="IndustryTypeCode" />
+                                        <p:outputLabel for="IndustryTypeCode" value="#{messages.IndustryTypeCode}"/>
                                     </h:panelGroup>
 
-                                    <p:outputLabel for="CompanyCountryCode" />
+                                   
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="CompanyCountryCode"
                                                         converter="#{countryConverter}" 
@@ -72,8 +72,8 @@
                                                         itemValue="#{country.countryCode}"
                                                         itemLabel="#{country.countryFullName}" 
                                                         />
-                                        <label>#{messages.CompanyCountryCode}</label>
                                         <p:message for="CompanyCountryCode" />
+                                        <p:outputLabel for="CompanyCountryCode" value="#{messages.CompanyCountryCode}" />
                                     </h:panelGroup>
 
                                 </p:panelGrid>

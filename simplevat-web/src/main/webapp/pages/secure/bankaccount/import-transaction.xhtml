@@ -17,6 +17,8 @@
             .ui-fluid .ui-fileupload .ui-button {
                 width: 155px !important;
             }
+            .ui-button-text{
+                font-size: 13px;}
             .background-yes{background: tomato;}
             .date-date{background: tomato;}
             .credit-credit{background:tomato;}
@@ -37,13 +39,13 @@
                                                   update="transactionTable footerToolBar" auto="true" sizeLimit="100000" allowTypes="/(\.|\/)(csv)$/"/>
                                 </f:facet>
                                 <f:facet name="right">
-                                    <p:commandButton value="Downlaod Sample File" 
+                                    <p:commandButton value="Download Sample File" 
                                                      icon="ui-icon-file-download" ajax="false">
                                         <p:fileDownload value="#{transactionImportController.file}" />
                                     </p:commandButton>
                                 </f:facet>
                             </p:toolbar>
-                            <p:fieldset legend="#{messages.ImportOptions}Import Options" toggleable="false"
+                            <p:fieldset legend="#{messages.ImportOptions}" toggleable="false"
                                         toggleSpeed="500">
                                 <p:messages autoUpdate="true" id="validationId" closable="true" for="validationId" />
                                 <p:panelGrid columns="3" 
@@ -64,7 +66,7 @@
                                                         >
                                             <p:ajax event="itemSelect" process="@this" listener="#{transactionImportController.onChange()}" update="transactionTable footerToolBar"/>
                                         </p:autoComplete>
-                                        <p:outputLabel for="dateType" value="Date Formats"/>
+                                        <p:outputLabel for="dateType" value="Date Format"/>
                                     </h:panelGroup>
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="delimiter"  value="#{transactionImportController.delimiter}">  
@@ -95,18 +97,18 @@
                                          paginator="true" rows="10"
                                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader} {TableFooter}">
                                 <f:facet name="{TableHeader}">
-                                    <p:outputLabel styleClass="tableCustomHeader" value="Uploaded Transactions"/>
+                                    <p:outputLabel styleClass="tableCustomHeader" value="Imported Transactions"/>
                                 </f:facet>
                                 <f:facet name="{TableFooter}">
                                     <p:outputLabel styleClass="tableCustomFooter" value="Total Record: #{transactionImportController.transactionList.size()}"/>
                                     <p:outputLabel styleClass="tableCustomFooter" value="Total Invalid Row:  #{transactionImportController.totalErrorRows}"/>
                                 </f:facet>
                                 <p:column width="30" style="text-align: center">
-                                    <h:panelGroup layout="block">
+                                    <div align="center">
                                         <h:panelGroup layout="block" style="display:block" styleClass="label status-#{transaction.format}" >
                                             <h:outputText value=" "/>
                                         </h:panelGroup>
-                                    </h:panelGroup>
+                                    </div>
                                 </p:column>
                                 <p:column headerText="Transaction Date" >
                                     <h:outputText value="#{transaction.transactionDate}" />
@@ -126,7 +128,7 @@
                             <p:toolbar id="footerToolBar" >
                                 <f:facet name="left">
                                     <h:panelGroup rendered="#{transactionImportController.renderButtonOnValidData}" >
-                                        <p:commandButton value="Save" 
+                                        <p:commandButton value="Import File" 
                                                          action="#{transactionImportController.saveTransactions}"
                                                          icon="ui-icon-save" />
 
@@ -135,7 +137,6 @@
                                         </span>
 
                                     </h:panelGroup>
-
                                     <si:cbutton type="cancel"/>
                                 </f:facet>
 

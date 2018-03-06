@@ -126,7 +126,7 @@
                                                 completeMethod="#{userController.comoleteRole()}"
                                                 value="#{userController.selectedUser.role}"
                                                 var="role" itemLabel="#{role.roleName}" itemValue="#{role}"
-                                                required="true" requiredMessage="Please select Role.">
+                                                >
                                                 <p:clientValidator event="keyup"/>
                                             </p:autoComplete>
                                             <label></label>
@@ -146,7 +146,7 @@
                                                 completeMethod="#{userController.comoleteRole()}"
                                                 value="#{userController.selectedUser.role}"
                                                 var="role" itemLabel="#{role.roleName}" itemValue="#{role}"
-                                                required="true" requiredMessage="Please select Role."> 
+                                                > 
                                                 <p:clientValidator event="itemSelect"/>
                                             </p:autoComplete>
                                             <p:outputLabel for="role1" value="Role"/>
@@ -156,10 +156,9 @@
                                         <h:panelGroup rendered="#{userController.selectedUser.createdBy != 0}">
                                             <p:outputLabel for="active" value="Status" />
                                             <label></label>
-                                            <p:selectOneRadio value="#{userController.selectedUser.isActive}" id="active" required="true"
-                                                              requiredMessage="Please select Status">
-                                                <f:selectItem itemLabel="Active" itemValue="true"/>
-                                                <f:selectItem itemLabel="InActive" itemValue="false"/>
+                                            <p:selectOneRadio value="#{userController.selectedUser.isActive}" id="active" >
+                                                <f:selectItem itemLabel="Active" itemValue="true" />
+                                                <f:selectItem itemLabel="Inactive" itemValue="false"/>
                                                 <p:clientValidator event="click"/>
                                             </p:selectOneRadio>
                                             <p:message for="active" />
@@ -187,12 +186,14 @@
                                                 <p:graphicImage name="images/user-avtar-icon1.png" library="ultima-layout" height="140px" width="140px"/>
                                             </ui:fragment>
 
-                                            <div style="width:140px">
+                                            <div style="width:140px" align="center">
                                                 <p:fileUpload fileUploadListener="#{userController.handleFileUpload}" mode="advanced"
                                                               label="Upload Profile" update="profilepic" auto="true" sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
-                                                <h:outputText value="#{userController.fileName}" />
 
 
+                                            </div>
+                                            <div style="width:140px" align="center">
+                                                <h:outputText value="#{userController.fileName}" style="width: 50px;overflow-wrap: break-word;text-align: center" />
                                             </div>
                                         </div>             
 
