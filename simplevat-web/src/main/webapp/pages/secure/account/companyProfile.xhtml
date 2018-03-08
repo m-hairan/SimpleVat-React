@@ -101,10 +101,14 @@
                     <p:outputLabel value="#{messages.IndustryTypeCode}"/>
                     <p:message for="IndustryTypeCode" />
                 </h:panelGroup>
-
                 <p:outputLabel for="Website" />
                 <h:panelGroup styleClass="md-inputfield">
-                    <p:inputText id="Website" value="#{companyProfileController.companyModel.website}"/>
+                    <p:inputText id="Website" value="#{companyProfileController.companyModel.website}"
+                                 validatorMessage="Invalid website format">
+                    
+                    <f:validateRegex
+                            pattern="^(http:\/\/|https:\/\/)?(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[a-z]{3}\.([a-z]+)?$"/>
+                    </p:inputText>
                     <p:outputLabel value="#{messages.Website}"/>
                     <p:message for="Website" />
                 </h:panelGroup>

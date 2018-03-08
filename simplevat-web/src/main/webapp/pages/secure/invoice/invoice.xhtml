@@ -696,7 +696,7 @@
                                             </h:panelGroup>
                                         </p:panelGrid>
                                     </p:column>
-                                    <p:column headerText="Description"  style="width: 230px">
+                                    <p:column headerText="Description"  style="width: 170px">
                                         <p:inputText id="description" 
                                                      value="#{invoiceItem.description}" 
 
@@ -704,7 +704,7 @@
                                             <p:ajax event="change"/>
                                         </p:inputText>
                                     </p:column>
-                                    <p:column headerText="Quantity" styleClass="amount" style="width: 60px">
+                                    <p:column headerText="Quantity" styleClass="amount" style="width: 50px">
                                         <p:inputText id="quantity" 
                                                      validator="positiveNumberValidator"
                                                      validatorMessage="Please enter Quantity more then 0"
@@ -720,7 +720,7 @@
 
                                         </p:inputText>
                                     </p:column>
-                                    <p:column headerText="Unit Price (#{invoiceController.selectedInvoiceModel.currencyCode.currencyIsoCode})" style="width: 90px" styleClass="amount">
+                                    <p:column headerText="Unit Price (#{invoiceController.selectedInvoiceModel.currencyCode.currencyIsoCode})" style="width: 70px" styleClass="amount">
                                         <h:panelGroup>
                                             <h:outputText style="float: left" value="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol}"/>
                                             <p:inputText id="unitPrice" value="#{invoiceItem.unitPrice}" 
@@ -736,7 +736,7 @@
 
                                     </p:column>
 
-                                    <p:column headerText="VAT (%)" styleClass="amount" style="width: 150px">
+                                    <p:column headerText="VAT (%)" styleClass="amount" style="width: 165px">
                                         <p:autoComplete id="vatId" 
                                                         converter="#{vatCategoryConverter}"
                                                         dropdown="true" 
@@ -756,7 +756,7 @@
                                                     update="subTotal @form:exchangeCurrency" />
                                         </p:autoComplete>
                                     </p:column>
-                                    <p:column  headerText="Subtotal (#{invoiceController.selectedInvoiceModel.currencyCode.currencyIsoCode})" styleClass="amount" style="width: 130px">
+                                    <p:column  headerText="Subtotal (#{invoiceController.selectedInvoiceModel.currencyCode.currencyIsoCode})" styleClass="amount" style="width: 120px">
                                         <h:panelGroup id="totalHeader">
                                             <h:outputText id="subTotal" value="#{invoiceItem.subTotal}" >
                                                 <f:convertNumber type="currency" currencySymbol="#{invoiceController.selectedInvoiceModel.currencyCode.currencySymbol} "/>
@@ -781,7 +781,7 @@
                                                     </h:panelGroup>
                                                 </f:facet>
                                             </p:column>
-                                            <p:column colspan="1" styleClass="amount">
+                                            <p:column colspan="1" styleClass="amount" style="padding: 15px 10px">
                                                 <f:facet name="footer">
                                                     <h:panelGroup styleClass="md-inputfield">
                                                         <p:autoComplete id="discountType"
