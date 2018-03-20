@@ -145,8 +145,10 @@
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText
                                                 id="bankName"
-                                                value="#{bankAccountController.selectedBankAccount.bankName}" />
+                                                value="#{bankAccountController.selectedBankAccount.bankName}"
+                                                required="true" requiredMessage="Please enter bank name"/>
                                             <p:outputLabel for="bankName" value="#{messages.bank_name}"/>
+                                             <p:message for="bankName" />
                                         </h:panelGroup>
 
                                         <h:panelGroup styleClass="md-inputfield">

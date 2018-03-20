@@ -107,6 +107,7 @@
                                                         pattern="dd/MM/yyyy"
                                                         required="true"
                                                         navigator="true"
+                                                        maxdate="#{userController.today}"
                                                         requiredMessage="Please enter Date of Birth"
                                                         value="#{userController.selectedUser.displayDOB}">
                                                 <p:clientValidator event="dateSelect" />

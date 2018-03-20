@@ -24,6 +24,17 @@ public class UserNewDaoImpl extends AbstractDao<Integer, User> implements UserNe
         return Optional.empty();
     }
 
+    public User getUserEmail(String emailAddress) {
+        TypedQuery<User> query = this.getEntityManager().createQuery("SELECT u FROM User AS u WHERE u.userEmail =:email", User.class);
+        query.setParameter("email", emailAddress);
+        List<User> resultList = query.getResultList();
+        if (resultList != null && !resultList.isEmpty()) {
+            return resultList.get(0);
+        } else {
+            return null;
+        }
+    }
+
     @Override
     public boolean getUserByEmail(String usaerName, String password) {
         TypedQuery<User> query = getEntityManager().createQuery("SELECT u FROM User u WHERE u.userEmail =:userEmail AND u.password =:password", User.class);

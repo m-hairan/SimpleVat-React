@@ -144,7 +144,7 @@
                                             </f:facet>
                                             <p:column headerText="Transaction Date" width="130"  sortBy="#{transaction.transactionDate.time}">
                                                 <h:outputText value="#{transaction.transactionDate.time}" >
-                                                    <f:convertDateTime pattern="MM/dd/yyyy hh:mm"/>
+                                                    <f:convertDateTime pattern="MM/dd/yyyy"/>
                                                 </h:outputText>
                                             </p:column>
                                             <p:column headerText="Transaction Description"  width="150">

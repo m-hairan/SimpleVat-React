@@ -781,7 +781,7 @@
                                                     </h:panelGroup>
                                                 </f:facet>
                                             </p:column>
-                                            <p:column colspan="1" styleClass="amount" style="padding: 15px 10px">
+                                            <p:column colspan="1" styleClass="amount" style="padding: 20px 25px">
                                                 <f:facet name="footer">
                                                     <h:panelGroup styleClass="md-inputfield">
                                                         <p:autoComplete id="discountType"
@@ -815,8 +815,8 @@
                                                             </p:inputText>
                                                             <h:outputText value="%"/>
                                                         </h:panelGroup>
-                                                        <p:outputLabel for="fixeddiscount"  rendered="false" />
-                                                        <h:panelGroup styleClass="md-inputfield" rendered="false">
+                                                        <p:outputLabel for="fixeddiscount"  rendered="#{invoiceController.selectedInvoiceModel.discountType.discountTypeCode == 2}" />
+                                                        <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.discountType.discountTypeCode == 2}">
                                                             <p:inputText id="fixeddiscount" converterMessage="Percentage must be a number"
 
                                                                          value="#{invoiceController.selectedInvoiceModel.discount}" style="width: 90%;text-align-last: end! important">

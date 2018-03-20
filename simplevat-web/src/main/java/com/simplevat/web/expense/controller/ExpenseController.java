@@ -251,6 +251,7 @@ public class ExpenseController extends BaseController implements Serializable {
     }
 
     public void updateVatPercentage(ExpenseItemModel expenseItemModel) {
+        expenseItemModel.setIsProductSelected(Boolean.FALSE);
         if (expenseItemModel.getExpenseLineItemProductService() != null) {
             if (expenseItemModel.getExpenseLineItemProductService().getVatCategory() != null) {
                 VatCategory vatCategory = expenseItemModel.getExpenseLineItemProductService().getVatCategory();
@@ -425,17 +426,22 @@ public class ExpenseController extends BaseController implements Serializable {
         return new BigDecimal(0);
     }
 
-    public List<TransactionCategory> completeCategory() {
+    public List<TransactionCategory> completeCategory(String name) {
+
+        System.out.println("name==" + name);
         List<TransactionCategory> transactionCategoryParentList = new ArrayList<>();
         List<TransactionCategory> transactionCategoryList = new ArrayList<>();
-        transactionCategoryList = transactionCategoryService.findAllTransactionCategoryByTransactionType(TransactionTypeConstant.TRANSACTION_TYPE_EXPENSE);
-        for (TransactionCategory transactionCategory : transactionCategoryList) {
-            if (transactionCategory.getParentTransactionCategory() != null) {
-                transactionCategoryParentList.add(transactionCategory.getParentTransactionCategory());
+        transactionCategoryList = transactionCategoryService.findAllTransactionCategoryByTransactionType(TransactionTypeConstant.TRANSACTION_TYPE_EXPENSE, name);
+        if (transactionCategoryList != null && !transactionCategoryList.isEmpty()) {
+            for (TransactionCategory transactionCategory : transactionCategoryList) {
+                if (transactionCategory.getParentTransactionCategory() != null) {
+                    transactionCategoryParentList.add(transactionCategory.getParentTransactionCategory());
+                }
             }
+
+            selectedExpenseModel.setTransactionType(transactionCategoryList.get(0).getTransactionType());
+            transactionCategoryList.removeAll(transactionCategoryParentList);
         }
-        selectedExpenseModel.setTransactionType(transactionCategoryList.get(0).getTransactionType());
-        transactionCategoryList.removeAll(transactionCategoryParentList);
         return transactionCategoryList;
 
     }
@@ -568,7 +574,9 @@ public class ExpenseController extends BaseController implements Serializable {
             expenseItemModelForProductUpdateOnProductAdd.setVatId(vatCategoryService.getDefaultVatCategory());
         }
         expenseItemModelForProductUpdateOnProductAdd.setDescription(product.getProductDescription());
-        addLineItem();
+        if (expenseItemModelForProductUpdateOnProductAdd.getIsProductSelected()) {
+            addInvoiceItemOnProductSelect();
+        }
         RequestContext.getCurrentInstance().execute("PF('add_product_popup').hide();");
         initCreateProduct();
     }

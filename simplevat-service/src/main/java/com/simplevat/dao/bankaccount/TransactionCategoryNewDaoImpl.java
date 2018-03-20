@@ -33,9 +33,10 @@ public class TransactionCategoryNewDaoImpl extends AbstractDao<Integer, Transact
     }
 
     @Override
-    public List<TransactionCategory> findAllTransactionCategoryByTransactionType(Integer transactionTypeCode) {
-        TypedQuery<TransactionCategory> query = getEntityManager().createNamedQuery("findAllTransactionCategoryByTransactionType", TransactionCategory.class);
+    public List<TransactionCategory> findAllTransactionCategoryByTransactionType(Integer transactionTypeCode,String name) {
+        TypedQuery<TransactionCategory> query = getEntityManager().createQuery("SELECT t FROM TransactionCategory t where t.deleteFlag=FALSE AND t.transactionType.transactionTypeCode =:transactionTypeCode AND t.transactionCategoryName LIKE '%'||:transactionCategoryName||'%' ORDER BY t.defaltFlag DESC , t.orderSequence,t.transactionCategoryName ASC", TransactionCategory.class);
         query.setParameter("transactionTypeCode", transactionTypeCode);
+        query.setParameter("transactionCategoryName", name);
         if (query.getResultList() != null && !query.getResultList().isEmpty()) {
             return query.getResultList();
         }

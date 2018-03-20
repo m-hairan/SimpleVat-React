@@ -107,11 +107,11 @@
                              action="#{transactionListController.updateTransactionDropDown()}" update="@(.outerTable) @(.innerTable)">
                 <f:setPropertyActionListener target="#{transactionListController.transactionModel}" value="#{transactionViewLazyModel.expandedTransactionModel}" />
             </p:commandButton>
-            <p:commandButton value="#{messages.delete}" icon="ui-icon-delete" rendered="#{transactionController.selectedBankAccountModel.bankAccountStatus.bankAccountStatusCode.intValue() == 1}"
+            <p:commandButton style="margin-left: 20px"  value="#{messages.delete}" icon="ui-icon-delete" rendered="#{transactionController.selectedBankAccountModel.bankAccountStatus.bankAccountStatusCode.intValue() == 1}"
                              action="#{transactionListController.deleteTransaction}">
                 <f:setPropertyActionListener target="#{transactionListController.selectedTransactionViewModel}" value="#{transaction}" />
             </p:commandButton>
-            <p:commandButton value="#{messages.cancel}" icon="ui-icon-cancel" onclick="expandCollapse(event, #{index})"
+            <p:commandButton style="margin-left: 35px" value="#{messages.cancel}" icon="ui-icon-cancel" onclick="expandCollapse(event, #{index})"
                              action="#{transactionListController.expandCollapse(transaction)}"/>
         </p:panelGrid>
 

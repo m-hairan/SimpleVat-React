@@ -441,10 +441,11 @@ public class TransactionController extends TransactionControllerHelper implement
     }
 
     public List<TransactionCategory> transactionCategories(TransactionType transactionType) throws Exception {
+        String name="";
         List<TransactionCategory> transactionCategoryParentList = new ArrayList<>();
         List<TransactionCategory> transactionCategoryList = new ArrayList<>();
         if (transactionType != null) {
-            transactionCategoryList = transactionCategoryService.findAllTransactionCategoryByTransactionType(transactionType.getTransactionTypeCode());
+            transactionCategoryList = transactionCategoryService.findAllTransactionCategoryByTransactionType(transactionType.getTransactionTypeCode(),name);
         }
         for (TransactionCategory transactionCategory : transactionCategoryList) {
             if (transactionCategory.getParentTransactionCategory() != null) {

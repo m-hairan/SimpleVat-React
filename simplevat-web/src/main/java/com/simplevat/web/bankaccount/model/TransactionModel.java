@@ -26,7 +26,7 @@ public class TransactionModel implements Comparable<TransactionModel> {
     private Integer transactionId;
     private Date transactionDate;
     private String transactionDescription;
-    private BigDecimal transactionAmount=BigDecimal.ZERO;
+    private BigDecimal transactionAmount;
     private TransactionType transactionType;
     private String receiptNumber;
     private Character debitCreditFlag;

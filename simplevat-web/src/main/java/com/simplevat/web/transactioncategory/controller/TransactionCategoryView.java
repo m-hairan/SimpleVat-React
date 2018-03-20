@@ -109,8 +109,9 @@ public class TransactionCategoryView extends BaseController implements Serializa
 
     public List<TransactionCategory> completeCategoriesByTransaction(String transcationTxt) {
         System.out.println("===sout==" + transcationTxt);
+        String name="";
         if (transactionCategoryModel.getTransactionType() != null) {
-            return transactionCategoryService.findAllTransactionCategoryByTransactionType(transactionCategoryModel.getTransactionType().getTransactionTypeCode());
+            return transactionCategoryService.findAllTransactionCategoryByTransactionType(transactionCategoryModel.getTransactionType().getTransactionTypeCode(),name);
         }
         return new ArrayList<>();
     }

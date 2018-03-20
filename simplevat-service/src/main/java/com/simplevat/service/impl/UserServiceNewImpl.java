@@ -33,6 +33,11 @@ public class UserServiceNewImpl extends UserServiceNew implements Serializable {
     public Optional<User> getUserByEmail(String emailAddress) {
         return getDao().getUserByEmail(emailAddress);
     }
+    
+    @Override
+    public User getUserEmail(String emailAddress) {
+        return getDao().getUserEmail(emailAddress);
+    }
 
     @Override
     public boolean authenticateUser(String usaerName, String password) {

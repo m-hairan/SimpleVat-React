@@ -54,8 +54,8 @@ public class TransactionCategoryServiceNewImpl extends TransactionCategoryServic
     }
 
     @Override
-    public List<TransactionCategory> findAllTransactionCategoryByTransactionType(Integer transactionTypeCode) {
-        return dao.findAllTransactionCategoryByTransactionType(transactionTypeCode);
+    public List<TransactionCategory> findAllTransactionCategoryByTransactionType(Integer transactionTypeCode,String name) {
+        return dao.findAllTransactionCategoryByTransactionType(transactionTypeCode, name);
     }
 
     @Override

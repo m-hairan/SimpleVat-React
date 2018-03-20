@@ -77,7 +77,7 @@
                                                 forceSelection="true"
                                                 effect="fold"
                                                 groupBy="#{(transactionCategory.parentTransactionCategory.transactionCategoryName != null)?transactionCategory.parentTransactionCategory.transactionCategoryName:'Others'}"
-                                                completeMethod="#{expenseController.completeCategory()}"
+                                                completeMethod="#{expenseController.completeCategory}"
                                                 value="#{expenseController.selectedExpenseModel.transactionCategory}"
                                                 var="transactionCategory"
                                                 scrollHeight="250"
@@ -191,6 +191,14 @@
                                             <p:outputLabel for="expenseProject" value="#{messages.project}"/>
                                         </h:panelGroup>
 
+
+
+                                    </p:panelGrid>
+                                    <p:panelGrid columns="2"
+                                                 columnClasses="ui-grid-col-8,ui-grid-col-4"
+                                                 layout="grid" styleClass="ui-panelgrid-blank form-group"
+                                                 style="border:0px none; background-color:transparent;">
+
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputTextarea
                                                 id="expenseDescription"
@@ -200,14 +208,6 @@
                                                 autoResize="false" />
                                             <h:outputText id="counterValue" />
                                             <p:outputLabel for="expenseDescription" value="#{messages.description}"/>
-                                        </h:panelGroup>
-                                        <h:panelGroup styleClass="md-inputfield"/>
-                                        <h:panelGroup styleClass="md-inputfield"/>
-                                        <h:panelGroup rendered="false">
-                                            <p:outputLabel for="makeRecurring"/>
-                                            <p:selectBooleanButton id="makeRecurring" onLabel="Remove Recurring" offLabel="Make Recurring" value="#{expenseController.selectedExpenseModel.recurringFlag}">
-                                                <p:ajax event="change" update="recurringDetails"/>
-                                            </p:selectBooleanButton>
                                         </h:panelGroup>
                                     </p:panelGrid>
                                 </p:fieldset>

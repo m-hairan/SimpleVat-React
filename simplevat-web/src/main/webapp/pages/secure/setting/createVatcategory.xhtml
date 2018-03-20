@@ -58,11 +58,11 @@
                                                      >
                                             <h:panelGroup styleClass="md-inputfield" id="vatPerPanel" > 
                                                 <p:inputNumber id="vatPer"  validatorMessage="VAT Percentage should be in between 0% to 100%." required="true" requiredMessage="Please Enter Vat Percentage"
+                                                               decimalPlaces="0"
                                                                value="#{vatController.category.vat}">
                                                     <f:validateDoubleRange minimum="0" maximum="100"/>
                                                     <p:ajax event="keyup" update="vatPerPanel" process="@this"/>
                                                 </p:inputNumber>
-
                                                 <p:outputLabel for="vatPer" value="#{messages.vatCategoryPercentage}"/>
                                                 <p:message for="vatPer" />
                                             </h:panelGroup>

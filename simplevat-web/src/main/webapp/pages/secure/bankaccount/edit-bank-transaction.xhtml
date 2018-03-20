@@ -104,7 +104,7 @@
                                                            id="transactionAmount"
                                                            validatorMessage="Amount should be greater than zero."
                                                            value="#{transactionController.selectedTransactionModel.transactionAmount}"
-                                                           required="true" requiredMessage="Please select transaction amount.">
+                                                           required="true" requiredMessage="Please input transaction amount.">
                                                 <p:ajax update="referancePanel"  />
                                                 <p:ajax event="keyup" update="transactionAmountPanel" process="@this"/>
                                                 <f:validateDoubleRange minimum="1"/>

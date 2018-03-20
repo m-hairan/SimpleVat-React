@@ -9,7 +9,7 @@ public abstract class TransactionCategoryServiceNew extends SimpleVatService<Int
 	
 	public abstract  List<TransactionCategory> findAllTransactionCategory();
         
-        public abstract  List<TransactionCategory> findAllTransactionCategoryByTransactionType(Integer transactionTypeCode);
+        public abstract  List<TransactionCategory> findAllTransactionCategoryByTransactionType(Integer transactionTypeCode,String name);
         
         public abstract  List<TransactionCategory> findTransactionCategoryListByParentCategory(Integer parentCategoryId);
 	

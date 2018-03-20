@@ -137,12 +137,12 @@
                         <p:column headerText="Action" width="130" >
 
                             <p:rowToggler/>
-                            <p:commandButton  icon="#{transaction.expandIcon ? 'ui-icon-expand-less' : 'ui-icon-expand-more'}" onclick="expandCollapse(event, #{index})" action="#{transactionListController.expandCollapse(transaction)}" styleClass="AquaButton parentExpandButton rowExpand#{index}" update="transactionsTable:@row(#{index}) @(.parentExpandButton)"/>
-                            <p:commandButton rendered="#{transactionController.selectedBankAccountModel.bankAccountStatus.bankAccountStatusCode.intValue() == 1}" icon="ui-icon-edit" styleClass="AquaButton" action="#{transactionListController.editTransection()}" >
+                            <p:commandButton  icon="#{transaction.expandIcon ? 'ui-icon-expand-less' : 'ui-icon-expand-more'}" onclick="expandCollapse(event, #{index})" action="#{transactionListController.expandCollapse(transaction)}" styleClass="AquaButton parentExpandButton rowExpand#{index}" update="transactionsTable:@row(#{index}) @(.parentExpandButton)" title="Explain Transaction"/>
+                            <p:commandButton rendered="#{transactionController.selectedBankAccountModel.bankAccountStatus.bankAccountStatusCode.intValue() == 1}" icon="ui-icon-edit" styleClass="AquaButton" action="#{transactionListController.editTransection()}" title="Edit Transaction" >
                                 <f:setPropertyActionListener value="#{transaction}" target="#{transactionListController.selectedTransactionViewModel}" />
                             </p:commandButton>
 
-                            <p:commandButton rendered="#{transactionController.selectedBankAccountModel.bankAccountStatus.bankAccountStatusCode.intValue() == 1}" icon="ui-icon-delete" styleClass="AquaButton" action="#{transactionListController.deleteTransaction}" update="transactionsTable">
+                            <p:commandButton rendered="#{transactionController.selectedBankAccountModel.bankAccountStatus.bankAccountStatusCode.intValue() == 1}" icon="ui-icon-delete" styleClass="AquaButton" action="#{transactionListController.deleteTransaction}" update="transactionsTable" title="Delete Transaction">
                                 <f:setPropertyActionListener value="#{transaction}" target="#{transactionListController.selectedTransactionViewModel}" />
                                 <p:confirm header="#{messages.delete}" message="#{messages.are_you_sure_want_to_delete}" icon="ui-icon-alert" />
                             </p:commandButton>

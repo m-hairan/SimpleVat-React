@@ -27,4 +27,5 @@ public class ExpenseItemModel {
     private BigDecimal subTotal;
     private Integer versionNumber;
     private Product expenseLineItemProductService;
+    private Boolean isProductSelected=Boolean.TRUE;
 }

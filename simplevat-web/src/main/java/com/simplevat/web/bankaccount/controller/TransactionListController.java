@@ -422,10 +422,11 @@ public class TransactionListController extends TransactionControllerHelper imple
     }
 
     public List<TransactionCategory> transactionCategories(TransactionType transactionType) throws Exception {
+        String name="";
         List<TransactionCategory> transactionCategoryParentList = new ArrayList<>();
         List<TransactionCategory> transactionCategoryList = new ArrayList<>();
         if (transactionType != null) {
-            transactionCategoryList = transactionCategoryService.findAllTransactionCategoryByTransactionType(transactionType.getTransactionTypeCode());
+            transactionCategoryList = transactionCategoryService.findAllTransactionCategoryByTransactionType(transactionType.getTransactionTypeCode(),name);
         }
         System.out.println("transactionCategoryList" + transactionCategoryList);
         for (TransactionCategory transactionCategory : transactionCategoryList) {

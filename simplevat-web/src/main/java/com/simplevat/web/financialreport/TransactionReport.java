@@ -167,11 +167,12 @@ public class TransactionReport extends BaseController {
 
     public List<TransactionCategory> transactionCategories() throws Exception {
         System.out.println("transactionType==" + transactionType);
+        String name="";
         List<TransactionCategory> transactionCategoryParentList = new ArrayList<>();
         List<TransactionCategory> transactionCategoryList = new ArrayList<>();
         transactionCategoryList.clear();
         if (transactionType != null) {
-            transactionCategoryList = transactionCategoryService.findAllTransactionCategoryByTransactionType(transactionType.getTransactionTypeCode());
+            transactionCategoryList = transactionCategoryService.findAllTransactionCategoryByTransactionType(transactionType.getTransactionTypeCode(),name);
             for (TransactionCategory transactionCategory : transactionCategoryList) {
                 if (transactionCategory.getParentTransactionCategory() != null) {
                     transactionCategoryParentList.add(transactionCategory.getParentTransactionCategory());

@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -97,6 +98,13 @@ public class UserController extends BaseController implements Serializable {
     @Getter
     private boolean renderProfilePic;
 
+    @Getter
+    @Setter
+    private Date today;
+
+    private boolean isEmailPresent = false;
+    private boolean isUserNew = true;
+
     public UserController() {
         super(ModuleName.USER_MODULE);
     }
@@ -124,7 +132,7 @@ public class UserController extends BaseController implements Serializable {
             }
             selectedUser.setIsActive(Boolean.TRUE);
         }
-        
+        today = new Date();
     }
 
     public List<Role> comoleteRole() {
@@ -169,17 +177,31 @@ public class UserController extends BaseController implements Serializable {
         fileName = event.getFile().getFileName();
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_USER_PIC", event.getFile().getContents());
         renderProfilePic = true;
-        FacesMessage message = new FacesMessage("", "Image Uploaded successfully.");
+        FacesMessage message = new FacesMessage("", "Image uploaded successfully.");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     public String save() {
-        Optional<User> userOptional = userService.getUserByEmail(selectedUser.getUserEmail());
-        if (userOptional.isPresent()) {
-            FacesContext context = FacesContext.getCurrentInstance();
-            context.getExternalContext().getFlash().setKeepMessages(true);
-            context.addMessage(null, new FacesMessage("", "Email is already present"));
-        } else {
+
+        if (selectedUser.getUserId() != null) {
+            User user = userService.getUserEmail(selectedUser.getUserEmail());
+            if (user == null || user.getUserId() != selectedUser.getUserId()) {
+                isUserNew = true;
+            } else {
+                isUserNew = false;
+            }
+        }
+
+        if (isUserNew) {
+            Optional<User> userOptional = userService.getUserByEmail(selectedUser.getUserEmail());
+            if (userOptional.isPresent()) {
+                isEmailPresent = true;
+                FacesContext context = FacesContext.getCurrentInstance();
+                context.getExternalContext().getFlash().setKeepMessages(true);
+                context.addMessage(null, new FacesMessage("", "Email address already exist."));
+            }
+        }
+        if (!isEmailPresent) {
             try {
 
                 if (password != null && !password.trim().isEmpty()) {
