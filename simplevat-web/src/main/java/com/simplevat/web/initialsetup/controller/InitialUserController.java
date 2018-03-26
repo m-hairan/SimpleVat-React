@@ -41,6 +41,7 @@ import com.simplevat.service.IndustryTypeService;
 import com.simplevat.web.company.controller.CompanyHelper;
 import com.simplevat.web.company.controller.CompanyModel;
 import com.simplevat.web.constant.EmailConstant;
+import com.simplevat.web.constant.RoleCode;
 import com.simplevat.web.newactivation.NewActivationMailSender;
 import com.simplevat.web.utils.FileUtility;
 import com.simplevat.web.utils.LoggerUtil;
@@ -130,7 +131,7 @@ public class InitialUserController implements Serializable {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(password);
         selectedUser.setPassword(encodedPassword);
-        Role role = roleService.getDefaultRole();
+        Role role = roleService.findByPK(RoleCode.ADMIN.getCode());
         if (role != null) {
             selectedUser.setRole(role);
         }
