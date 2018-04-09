@@ -19,30 +19,42 @@
     <h:body styleClass="login-body">
         <h:form id="loginFormId" prependId="false">
             <div class="card login-panel ui-fluid">
-                <div class="ui-g">
+                <h:panelGroup styleClass="ui-g" id="content_login">
                     <div class="ui-g-12">
                         <p:graphicImage name="images/logo-ultima.png" library="ultima-layout"/>
                     </div>
+                    <h:panelGroup style="padding-left: 60px;color: red" rendered="#{securityBean.badcredential}">
+                        <p:outputLabel value="Bad Credential. Try again" />
+                    </h:panelGroup>
                     <div class="ui-g-12">
                         <h:panelGroup styleClass="md-inputfield">
-                            <p:inputText id="j_username" value="#{securityBean.username}" maxlength="50" autocomplete="off" required="true" requiredMessage="Username is mandatory"/>
+                            <p:inputText id="j_username" value="#{securityBean.username}" maxlength="50" autocomplete="off" required="true" requiredMessage="Username is mandatory">
+                                <p:clientValidator event="keyup"/>
+                            </p:inputText>
                             <label>Email Address</label>
+                            <p:message for="j_username"/>
                         </h:panelGroup>
                     </div>
                     <div class="ui-g-12">
                         <h:panelGroup styleClass="md-inputfield">
-                            <p:password id="j_password" value="#{securityBean.password}" maxlength="50" autocomplete="off" required="true" requiredMessage="Password is mandatory"/>
+                            <p:password id="j_password" value="#{securityBean.password}" maxlength="50" autocomplete="off" required="true" requiredMessage="Password is mandatory">
+                                <p:clientValidator event="keyup"/>
+                            </p:password>
                             <label>Password</label>
+                            <p:message for="j_password"/>
+
                         </h:panelGroup>
                     </div>
                     <div class="ui-g-12">
                         <p:commandButton id="btnLogin" value="Sign In" action="#{securityBean.login()}" style="padding: 0 !important"
+                                         update="content_login" 
                                          ajax="false"
                                          icon="ui-icon-person"/>
                         <p:button outcome="/pages/public/forget-password" value="Forgot Password" icon="ui-icon-help" styleClass="secondary"/>
                     </div>
-                    <p:growl showDetail="true"/>
-                </div>
+
+                </h:panelGroup>
+
             </div>
         </h:form>
         <div class="login-footer">

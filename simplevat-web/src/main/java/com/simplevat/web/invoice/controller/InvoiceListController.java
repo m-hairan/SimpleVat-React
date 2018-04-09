@@ -10,13 +10,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-
 import lombok.Getter;
 import lombok.Setter;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
 import com.simplevat.dao.invoice.InvoiceFilter;
 import com.simplevat.entity.invoice.DiscountType;
 import com.simplevat.entity.invoice.Invoice;
@@ -26,7 +23,6 @@ import com.simplevat.web.common.controller.BaseController;
 import com.simplevat.web.constant.InvoicePurchaseStatusConstant;
 import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.invoice.model.InvoiceModel;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -35,7 +31,6 @@ import javax.servlet.http.HttpSession;
 @Controller
 @SpringScopeView
 public class InvoiceListController extends BaseController implements Serializable {
-
     private static final long serialVersionUID = 9066359395680732884L;
 
     @Autowired
@@ -143,7 +138,6 @@ public class InvoiceListController extends BaseController implements Serializabl
 
     public String redirectToViewInvoice() {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("invoiceId", selectedInvoiceModel.getInvoiceId());
-
         return "invoiceView.xhtml?faces-redirect=true";
     }
 

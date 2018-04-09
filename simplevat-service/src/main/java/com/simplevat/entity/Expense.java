@@ -148,6 +148,14 @@ public class Expense implements Serializable {
     @Lob
     @Column(name = "RECEIPT_ATTACHMENT")
     private byte[] receiptAttachmentBinary;
+    
+    @Basic
+    @Column(name = "RECEIPT_ATTACHMENT_NAME")
+    private String receiptAttachmentName;
+    
+    @Basic
+    @Column(name = "RECEIPT_ATTACHMENT_CONTENT_TYPE")
+    private String receiptAttachmentContentType;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "expense", orphanRemoval = true)
     private Collection<ExpenseLineItem> expenseLineItems;

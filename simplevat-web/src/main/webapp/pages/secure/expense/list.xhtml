@@ -49,16 +49,16 @@
                     </p:column>
 
                     <p:column headerText="Action">
+                        <div align="center">
+                            <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" action="#{expenseListController.redirectToEdit}" title="Edit Expense">
+                                <f:setPropertyActionListener value="#{expense}" target="#{expenseListController.selectedExpenseModel}" />
+                            </p:commandButton>
 
-                        <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" action="#{expenseListController.redirectToEdit}" title="Edit expense">
-                            <f:setPropertyActionListener value="#{expense}" target="#{expenseListController.selectedExpenseModel}" />
-                        </p:commandButton>
-
-                        <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{expenseListController.deleteExpense}" update="expensesTable" title="Delete expense">
-                            <f:setPropertyActionListener value="#{expense}" target="#{expenseListController.selectedExpenseModel}" />
-                            <p:confirm header="#{messages.delete}" message="#{messages.are_you_sure_want_to_delete}" icon="ui-icon-alert" />
-                        </p:commandButton>
-
+                            <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{expenseListController.deleteExpense}" update="expensesTable" title="Delete Expense">
+                                <f:setPropertyActionListener value="#{expense}" target="#{expenseListController.selectedExpenseModel}" />
+                                <p:confirm header="#{messages.delete}" message="#{messages.are_you_sure_want_to_delete}" icon="ui-icon-alert" />
+                            </p:commandButton>
+                        </div>
                     </p:column>
 
                 </p:dataTable>

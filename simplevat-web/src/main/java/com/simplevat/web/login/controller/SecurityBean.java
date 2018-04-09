@@ -77,6 +77,8 @@ public class SecurityBean implements PhaseListener, Serializable {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    
+    private Boolean badcredential=false;
 
     @PostConstruct
     public void init() {
@@ -118,6 +120,7 @@ public class SecurityBean implements PhaseListener, Serializable {
     public String login() {
         LOGGER.info("Starting login from LoginManagedBean");
         try {
+            badcredential=false;
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, password);
             Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authenticate);
@@ -131,10 +134,20 @@ public class SecurityBean implements PhaseListener, Serializable {
     }
 
     public void invalidLoginMessage() {
+        badcredential=true;
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage(FacesMessage.SEVERITY_FATAL,
                         "Invalid login", "Bad Credential. Try again"));
     }
+
+    public Boolean getBadcredential() {
+        return badcredential;
+    }
+
+    public void setBadcredential(Boolean badcredential) {
+        this.badcredential = badcredential;
+    }
+    
 
     public String forgotPassword() throws Exception {
         try {

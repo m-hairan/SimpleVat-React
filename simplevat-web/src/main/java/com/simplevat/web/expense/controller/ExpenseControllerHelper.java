@@ -45,6 +45,8 @@ public class ExpenseControllerHelper {
         expense.setTransactionCategory(model.getTransactionCategory());
         expense.setTransactionType(model.getTransactionType());
         expense.setVersionNumber(model.getVersionNumber());
+        expense.setReceiptAttachmentName(model.getReceiptAttachmentName());
+        expense.setReceiptAttachmentContentType(model.getReceiptAttachmentContentType());
 //        expense.setRecurringFlag(model.getRecurringFlag());
 //        expense.setRecurringInterval(model.getRecurringInterval().getValue());
 //        expense.setRecurringMonth(model.getRecurringMonth().getValue());
@@ -77,7 +79,7 @@ public class ExpenseControllerHelper {
         item.setVersionNumber(model.getVersionNumber());
         item.setExpenseLineItemProductService(model.getExpenseLineItemProductService());
         item.setExpense(expense);
-        
+
         return item;
     }
 
@@ -106,7 +108,8 @@ public class ExpenseControllerHelper {
         expenseModel.setTransactionType(entity.getTransactionType());
         expenseModel.setVersionNumber(entity.getVersionNumber());
         expenseModel.setReceiptAttachmentBinary(entity.getReceiptAttachmentBinary());
-
+        expenseModel.setReceiptAttachmentName(entity.getReceiptAttachmentName());
+        expenseModel.setReceiptAttachmentContentType(entity.getReceiptAttachmentContentType());
         final List<ExpenseItemModel> items = entity
                 .getExpenseLineItems()
                 .stream()

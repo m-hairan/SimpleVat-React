@@ -781,7 +781,7 @@
                                                     </h:panelGroup>
                                                 </f:facet>
                                             </p:column>
-                                            <p:column colspan="1" styleClass="amount" style="padding: 20px 25px">
+                                            <p:column colspan="1" styleClass="amount" style="padding: 20px 6px">
                                                 <f:facet name="footer">
                                                     <h:panelGroup styleClass="md-inputfield">
                                                         <p:autoComplete id="discountType"
@@ -796,7 +796,7 @@
                                                                         itemLabel="#{type.discountTypeName}" >
                                                             <p:ajax event="itemSelect" update="discount" process="discountType" />
                                                         </p:autoComplete>
-                                                        <p:outputLabel for="discountType" value="#{messages.discount_type}"/>
+                                                        <p:outputLabel for="discountType" value="fixed/percentage discount"/>
                                                     </h:panelGroup>
                                                 </f:facet>
                                             </p:column>

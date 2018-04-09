@@ -76,12 +76,12 @@
                                                 dropdown="true"
                                                 forceSelection="true"
                                                 effect="fold"
+                                                onclick="clearAutoCompleteField(event, this)"
                                                 groupBy="#{(transactionCategory.parentTransactionCategory.transactionCategoryName != null)?transactionCategory.parentTransactionCategory.transactionCategoryName:'Others'}"
                                                 completeMethod="#{expenseController.completeCategory}"
                                                 value="#{expenseController.selectedExpenseModel.transactionCategory}"
                                                 var="transactionCategory"
                                                 scrollHeight="250"
-
                                                 itemValue="#{transactionCategory}"
                                                 itemLabel="#{transactionCategory.transactionCategoryName}"
                                                 required="true"
@@ -167,11 +167,6 @@
                                             <p:message for="expenseCurrency" />
                                         </h:panelGroup>
 
-
-
-
-
-
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete
                                                 id="expenseProject"
@@ -190,9 +185,6 @@
                                             </p:autoComplete>
                                             <p:outputLabel for="expenseProject" value="#{messages.project}"/>
                                         </h:panelGroup>
-
-
-
                                     </p:panelGrid>
                                     <p:panelGrid columns="2"
                                                  columnClasses="ui-grid-col-8,ui-grid-col-4"
@@ -442,6 +434,8 @@
                                                  layout="grid" styleClass="ui-panelgrid-blank form-group"
                                                  style="border:0px none; background-color:transparent;">
 
+
+
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText
                                                 id="expenseReceiptNumber"
@@ -454,17 +448,15 @@
                                             <div style="text-align: center">
                                                 <p:fileUpload auto="true" 
                                                               mode="advanced" update="fileName"  fileUploadListener="#{expenseController.fileUploadListener}"  />
-
                                                 <h:outputText value="#{expenseController.fileName}"  id="fileName"/>
-
-
                                             </div>
-                                            <h:panelGroup rendered="#{expenseController.selectedExpenseModel.attachmentFileContent != null}">
-
-                                                <p:commandButton value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
-                                                    <p:fileDownload value="#{expenseController.selectedExpenseModel.attachmentFileContent}" />
-                                                </p:commandButton>
-                                            </h:panelGroup>
+                                            <div style="text-align: center;margin-top: 10px" >
+                                                <h:panelGroup rendered="#{expenseController.selectedExpenseModel.attachmentFileContent != null}">
+                                                    <p:commandButton value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
+                                                        <p:fileDownload value="#{expenseController.selectedExpenseModel.attachmentFileContent}" />
+                                                    </p:commandButton>
+                                                </h:panelGroup>
+                                            </div>
                                         </h:panelGroup>
 
                                         <h:panelGroup styleClass="md-inputfield">
@@ -497,7 +489,7 @@
                                             </p:commandButton>
                                         </p:column>
 
-                                        <p:column headerText="Product/Service"  style="width: 240px">
+                                        <p:column headerText="Product/Service"  style="width: 280px">
                                             <p:panelGrid columns="2" 
                                                          columnClasses="ui-grid-col-11,ui-grid-col-1" 
                                                          layout="grid" 
@@ -708,6 +700,12 @@
                     console.log("entered");
                     if ($(element).val() == 0)
                         $(element).val("");
+                }
+                function clearAutoCompleteField(event, element) {
+                    console.log("entered");
+                    console.log("entered1");
+                    $(element).val("");
+
                 }
                 $('#createExpenseForm').on('keyup keypress', function (e) {
                     var keyCode = e.keyCode || e.which;

@@ -38,6 +38,7 @@
         </style>
 
         <h:form id="transactionListForm">
+            <p:messages autoUpdate="true" id="validationId" closable="true" for="validationId" />
             <p:remoteCommand autoRun="true" onstart="renderToolBar(#{transactionController.selectedBankAccountModel.bankAccountStatus.bankAccountStatusCode.intValue()});"/>
             <div class="ui-fluid tree">
                 <si:cdataPanel newAction= "#{transactionController.createTransaction()}" hideOptions="true">
@@ -101,14 +102,14 @@
                         <p:column headerText="#{messages.description}"  filterMatchMode="contains" filterBy="#{transaction.transactionDescription}">
                             <p:outputLabel value="#{transaction.transactionDescription}"/><br/>
                             <h:panelGroup rendered="#{transaction.explanationStatusCode != 2 and transaction.suggestedTransactionString.length() > 0}" >
-                                <p:outputLabel value="#{transaction.suggestedTransactionString}" style="font-size: x-small;color:#ff0000" /> 
+                                <h:outputText value="#{transaction.suggestedTransactionString}" style="font-size: x-small;color:#ff0000" escape="false"/> 
                                 <p:spacer width="10px"/>
                                 <p:commandLink value=" Accept " action="#{transactionListController.acceptSuggestion(transaction)}" update="transactionsTable" style="font-size: x-small; font-weight: bold;color:#14ad3c"/>
                                 <p:outputLabel value="/" />
                                 <p:commandLink value=" Edit" action="#{transactionListController.transactionViewLazyModel.expandToggler(transaction)}" update="transactionsTable" style="font-size: x-small; font-weight: bold;color:#ff0000"/>
                             </h:panelGroup>
                             <h:panelGroup rendered="#{transaction.explanationStatusCode == 2}" >
-                                <p:outputLabel value="#{transaction.suggestedTransactionString}" style="font-size: x-small;color:#14ad3c" /> 
+                                <p:outputLabel value="#{transaction.suggestedTransactionString}" style="font-size: x-small;color:#14ad3c" escape="false"/> 
                                 <p:spacer width="10px"/>
                                 <p:commandLink value=" More" action="#{transactionListController.expandCollapse(transaction)}" onclick="expandCollapse(event, #{index})" update="transactionsTable:@row(#{index}) @(.parentExpandButton)" style="font-size: x-small; font-weight: bold;color:#14ad3c" />
                             </h:panelGroup>

@@ -380,9 +380,10 @@ public class PurchaseController extends BaseController implements Serializable {
         }
     }
 
-    private boolean validateInvoiceItem() { //---------------
+    private boolean validateInvoiceItem() {
+       
         boolean validated = true;
-        for (int i = 0; i < selectedPurchaseModel.getPurchaseItems().size() - 1; i++) {
+        for (int i = 0; i < selectedPurchaseModel.getPurchaseItems().size()-1; i++) {
             PurchaseItemModel lastItem = selectedPurchaseModel.getPurchaseItems().get(i);
             StringBuilder validationMessage = new StringBuilder("Please enter ");
             if (lastItem.getUnitPrice() == null) {
@@ -720,13 +721,6 @@ public class PurchaseController extends BaseController implements Serializable {
         if (null != unitPrice) {
             final BigDecimal amountWithoutTax = unitPrice.multiply(new BigDecimal(quantity));
             itemModel.setSubTotal(amountWithoutTax);
-
-//            if (vatPer != null && vatPer.compareTo(BigDecimal.ZERO) >= 1) {
-//                final BigDecimal amountWithTax = amountWithoutTax
-//                        .add(amountWithoutTax.multiply(vatPer).multiply(new BigDecimal(0.01)));
-//                itemModel.setSubTotal(amountWithTax);
-//            }
-
         }
         calculateTotal();
     }

@@ -45,6 +45,8 @@ public class ExpenseModel {
     private LocalDateTime lastUpdateDate;
     private boolean deleteFlag = false;
     private UploadedFile attachmentFile;
+    private String receiptAttachmentName;
+    private String receiptAttachmentContentType;
     private StreamedContent attachmentFileContent;
     private Integer versionNumber;
     private Integer paymentMode;

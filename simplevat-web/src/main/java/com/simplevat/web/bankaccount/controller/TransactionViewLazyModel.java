@@ -242,16 +242,16 @@ public class TransactionViewLazyModel extends LazyDataModel<TransactionViewModel
             transactionDecription = transactionDecrpStringArr.length > 1 ? transactionDecrpStringArr[0] + " " + transactionDecrpStringArr[1] : transactionDecrpStringArr[0];
         }
         if (transactionViewModel.getReferenceId() != null) {
-            return (transactionViewModel.getTransactionTypeName() != null ? "Type: "+transactionViewModel.getTransactionTypeName() + " | " : "")
-                    + (transactionViewModel.getTransactionCategoryName() != null ? "Category: "+transactionViewModel.getTransactionCategoryName() + " | " : "")
+            return (transactionViewModel.getTransactionTypeName() != null ? "<b>Type:</b> "+transactionViewModel.getTransactionTypeName() + " | " : "")
+                    + (transactionViewModel.getTransactionCategoryName() != null ? "<b>Category:</b> "+transactionViewModel.getTransactionCategoryName() + " | " : "")
                     + (transactionViewModel.getReferenceName() != null ? transactionViewModel.getReferenceName() + " | " : "")
                     + transactionViewModel.getContactName()
                     + " | " + transactionViewModel.getCurrencySymbol() + " " + transactionViewModel.getDueAmount()
-                    + " | Due On : " + new SimpleDateFormat("MM/dd/yyyy").format(transactionViewModel.getDueOn())
+                    + " |<b> Due On :</b> " + new SimpleDateFormat("MM/dd/yyyy").format(transactionViewModel.getDueOn())
                     ;
 
         } else {
-            return (transactionViewModel.getTransactionTypeName() != null ? "Type:"+transactionViewModel.getTransactionTypeName() + " | " : "") + (transactionViewModel.getTransactionCategoryName() != null ? "Category:"+transactionViewModel.getTransactionCategoryName(): "")
+            return (transactionViewModel.getTransactionTypeName() != null ? "<b>Type:</b>"+transactionViewModel.getTransactionTypeName() + " | " : "") + (transactionViewModel.getTransactionCategoryName() != null ? "<b>Category:</b>"+transactionViewModel.getTransactionCategoryName(): "")
                     ;
         }
     }

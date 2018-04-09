@@ -56,18 +56,19 @@
                         </f:facet>
                         <p:column headerText="Transaction Date">
                             <h:outputText value="#{transaction.transactionDate}" >
-                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
                             </h:outputText>
                         </p:column>
                         <p:column headerText="Description">
                             <h:outputText value="#{transaction.transactionDescription}" />
                         </p:column>
-                        <p:column headerText="Debit Amount">
-                            <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString().equals('D')}" />
-                        </p:column>
                         <p:column headerText="Credit Amount">
                             <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString().equals('C')}" />
                         </p:column>
+                        <p:column headerText="Debit Amount">
+                            <h:outputText value="#{transaction.transactionAmount}" rendered="#{transaction.debitCreditFlag.toString().equals('D')}" />
+                        </p:column>
+
                     </p:dataTable>
                 </div>
             </div>

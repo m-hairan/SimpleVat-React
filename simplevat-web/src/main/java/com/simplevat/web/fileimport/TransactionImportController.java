@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -30,9 +31,11 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -168,9 +171,17 @@ public class TransactionImportController implements Serializable {
                         String crAmount = cSVRecord.get(i++);
 
                         try {
+                            //     Date dateTranscation = new SimpleDateFormat(dateFormat).parse(date);
 
-                            Date dateTranscation = new SimpleDateFormat(dateFormat).parse(date);
+                            TemporalAccessor ta = DateTimeFormatter.ofPattern(dateFormat).parse(date);
+                            DateFormat formatter = new SimpleDateFormat(dateFormat, Locale.US);
+                            Date dateTranscation = (Date) formatter.parse(date);
+
                             LocalDateTime transactionDate = Instant.ofEpochMilli(dateTranscation.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+                            DateFormat df = new SimpleDateFormat(dateFormat);
+                            String reportDate = df.format(dateTranscation);
+                            System.out.println("==reportDate==" + reportDate);
                             if (!drAmount.isEmpty()) {
                                 new BigDecimal(Float.valueOf(drAmount));
                             }

@@ -51,10 +51,10 @@
                         <h:outputText value="#{transactionCategory.transactionType.transactionTypeName}" />
                     </p:column>
                     <p:column headerText="Action">
-                        <p:commandButton icon="ui-icon-edit" title="Edit Transcation" styleClass="AquaButton" action="#{transactionCategoryView.editAction}">
+                        <p:commandButton icon="ui-icon-edit" title="Edit Transaction" styleClass="AquaButton" action="#{transactionCategoryView.editAction}">
                             <f:setPropertyActionListener value="#{transactionCategory}" target="#{transactionCategoryView.selectedTransactionCategory}" />
                         </p:commandButton>
-                        <p:commandButton icon="ui-icon-delete" title="Delete Transcation" styleClass="AquaButton" action="#{transactionCategoryView.deleteTransactionCategory}" >
+                        <p:commandButton icon="ui-icon-delete" title="Delete Transaction" styleClass="AquaButton" action="#{transactionCategoryView.deleteTransactionCategory}" >
                             <f:setPropertyActionListener value="#{transactionCategory}" target="#{transactionCategoryView.selectedTransactionCategory}" />
                              <p:confirm header="#{messages.delete}" message="#{messages.are_you_sure_want_to_delete}" icon="ui-icon-alert" />
                         </p:commandButton>

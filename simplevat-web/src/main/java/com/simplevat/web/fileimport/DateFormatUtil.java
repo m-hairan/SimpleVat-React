@@ -22,6 +22,7 @@ public class DateFormatUtil {
         dateFormats.add("MM-dd-yyyy");
         dateFormats.add("yyyy-MM-dd");
         dateFormats.add("dd MMMM yyyy");
+        dateFormats.add("MM/dd/yyyy");
         return dateFormats;
     }
 }

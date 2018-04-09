@@ -422,11 +422,11 @@ public class TransactionListController extends TransactionControllerHelper imple
     }
 
     public List<TransactionCategory> transactionCategories(TransactionType transactionType) throws Exception {
-        String name="";
+        String name = "";
         List<TransactionCategory> transactionCategoryParentList = new ArrayList<>();
         List<TransactionCategory> transactionCategoryList = new ArrayList<>();
         if (transactionType != null) {
-            transactionCategoryList = transactionCategoryService.findAllTransactionCategoryByTransactionType(transactionType.getTransactionTypeCode(),name);
+            transactionCategoryList = transactionCategoryService.findAllTransactionCategoryByTransactionType(transactionType.getTransactionTypeCode(), name);
         }
         System.out.println("transactionCategoryList" + transactionCategoryList);
         for (TransactionCategory transactionCategory : transactionCategoryList) {
@@ -540,7 +540,7 @@ public class TransactionListController extends TransactionControllerHelper imple
         return "edit-bank-transaction?faces-redirect=true&selectedTransactionId=" + selectedTransactionViewModel.getTransactionId();
     }
 
-    public String deleteTransaction() {
+    public void deleteTransaction() {
         Transaction transaction = transactionService.findByPK(selectedTransactionViewModel.getTransactionId());
         transaction.setDeleteFlag(true);
         if (transaction.getParentTransaction() != null) {
@@ -548,10 +548,11 @@ public class TransactionListController extends TransactionControllerHelper imple
         } else {
             transactionService.deleteTransaction(transaction);
         }
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.getExternalContext().getFlash().setKeepMessages(true);
-        context.addMessage(null, new FacesMessage("", "Transaction deleted successfully"));
-        return "bank-transactions?faces-redirect=true";
+        FacesMessage message = new FacesMessage( "Transaction deleted successfully");
+        message.setSeverity(FacesMessage.SEVERITY_INFO);
+        FacesContext.getCurrentInstance().addMessage("validationId",message);
+      
+//        return "bank-transactions?faces-redirect=true";
     }
 
 }

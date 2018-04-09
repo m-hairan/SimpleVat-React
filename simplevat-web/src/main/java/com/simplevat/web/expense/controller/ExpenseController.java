@@ -204,7 +204,7 @@ public class ExpenseController extends BaseController implements Serializable {
             selectedExpenseModel = controllerHelper.getExpenseModel(expense);
             if (selectedExpenseModel.getReceiptAttachmentBinary() != null) {
                 InputStream stream = new ByteArrayInputStream(selectedExpenseModel.getReceiptAttachmentBinary());
-                selectedExpenseModel.setAttachmentFileContent(new DefaultStreamedContent(stream));
+                selectedExpenseModel.setAttachmentFileContent(new DefaultStreamedContent(stream,selectedExpenseModel.getReceiptAttachmentContentType(),selectedExpenseModel.getReceiptAttachmentName()));
             }
         }
         titles = titleService.getTitles();
@@ -649,6 +649,8 @@ public class ExpenseController extends BaseController implements Serializable {
 
     public void fileUploadListener(FileUploadEvent e) {
         fileName = e.getFile().getFileName();
+        selectedExpenseModel.setReceiptAttachmentName(fileName);
+        selectedExpenseModel.setReceiptAttachmentContentType(e.getFile().getContentType());
         selectedExpenseModel.setReceiptAttachmentBinary(e.getFile().getContents());
         if (selectedExpenseModel.getReceiptAttachmentBinary() != null) {
             InputStream stream = new ByteArrayInputStream(selectedExpenseModel.getReceiptAttachmentBinary());
