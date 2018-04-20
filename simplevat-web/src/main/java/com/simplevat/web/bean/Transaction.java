@@ -15,10 +15,10 @@ import lombok.Setter;
  *
  * @author uday
  */
-
 @Getter
 @Setter
 public class Transaction {
+
     private int id;
     private String transactionDate;
     private String description;
@@ -26,5 +26,8 @@ public class Transaction {
     private String crAmount;
     private Boolean validData;
     private String format;
-    
+    private String date;
+    private String credit;
+    private String debit;
+
 }

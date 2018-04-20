@@ -172,21 +172,24 @@ public class TransactionImportController implements Serializable {
 
                         try {
                             //     Date dateTranscation = new SimpleDateFormat(dateFormat).parse(date);
-
+                            transaction.setDate("date");
                             TemporalAccessor ta = DateTimeFormatter.ofPattern(dateFormat).parse(date);
                             DateFormat formatter = new SimpleDateFormat(dateFormat, Locale.US);
                             Date dateTranscation = (Date) formatter.parse(date);
-
                             LocalDateTime transactionDate = Instant.ofEpochMilli(dateTranscation.getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime();
-
                             DateFormat df = new SimpleDateFormat(dateFormat);
                             String reportDate = df.format(dateTranscation);
+                            transaction.setDate("");
                             System.out.println("==reportDate==" + reportDate);
                             if (!drAmount.isEmpty()) {
+                                transaction.setDebit("debit");
                                 new BigDecimal(Float.valueOf(drAmount));
+                                transaction.setDebit("");
                             }
                             if (!crAmount.isEmpty()) {
+                                transaction.setCredit("credit");
                                 new BigDecimal(Float.valueOf(crAmount));
+                                transaction.setCredit("");
                             }
                             transaction.setTransactionDate(date);
                             transaction.setDescription(description);

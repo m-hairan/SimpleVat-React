@@ -23,7 +23,7 @@
                     <f:facet name="{TableFooter}">
                         <p:outputLabel styleClass="tableCustomFooter" value="Total Record: #{productListController.productModelList.size()}" />
                     </f:facet>
-                    <p:column headerText="#{messages.name}" sortBy="#{product.productName}">
+                    <p:column headerText="#{messages.name}" sortBy="#{product.productName}" filterMatchMode="contains" filterBy="#{product.productName}">
                         <h:outputText value="#{product.productName}"/>
                     </p:column>
                    

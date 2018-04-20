@@ -82,7 +82,6 @@
                             <p:outputLabel styleClass="tableCustomHeader" value="#{transactionListController.selectedBankAccountModel.bankAccountName}" />
                         </f:facet>
                         <f:facet name="{TableFooter}">
-
                             <p:outputLabel styleClass="tableCustomFooter" value="Total Record: #{transactionListController.transactionViewLazyModel.dataBaseRowCount}"/>
                         </f:facet>
                         <p:column width="30" style="text-align: center">
@@ -93,8 +92,8 @@
                             </h:panelGroup>
                         </p:column>
 
-                        <p:column headerText="#{messages.date}" width="115" sortBy="#{transaction.transactionDate.time}" filterMatchMode="contains" filterBy="#{transaction.transactionDate.time}">
-                            <h:outputText value="#{transaction.transactionDate.time}" >
+                        <p:column headerText="#{messages.date}" width="115" >
+                            <h:outputText value="#{transaction.transactionDate}" >
                                 <f:convertDateTime pattern="dd/MM/yyyy" />
                             </h:outputText>
                         </p:column>

@@ -11,15 +11,19 @@ import com.simplevat.entity.bankaccount.TransactionStatus;
 import com.simplevat.entity.bankaccount.TransactionView;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.service.bankaccount.TransactionService;
+import com.simplevat.web.bankaccount.model.LazySorter;
 import com.simplevat.web.bankaccount.model.TransactionModel;
 import com.simplevat.web.bankaccount.model.TransactionViewModel;
 import com.simplevat.web.constant.TransactionCreditDebitConstant;
 import com.simplevat.web.constant.TransactionStatusConstant;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import lombok.Getter;
@@ -76,9 +80,10 @@ public class TransactionViewLazyModel extends LazyDataModel<TransactionViewModel
     @Override
     public List<TransactionViewModel> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         transactionViewModelList = new ArrayList<>();
+        List<TransactionViewModel> data = new ArrayList<>();
         transactionModelList.clear();
         childTransactionViewList.clear();
-        List<Transaction> transactionList = transactionService.getParentTransactionListByRangeAndBankAccountId(first, bankAccountId, pageSize, transactionStatus);
+        List<Transaction> transactionList = transactionService.getParentTransactionListByRangeAndBankAccountId(first, bankAccountId, pageSize, transactionStatus,filters,sortField,sortOrder.name());
         if (transactionList != null) {
             for (Transaction transaction : transactionList) {
                 TransactionModel transactionModel = transactionControllerHelper.getTransactionModel(transaction);
@@ -88,11 +93,11 @@ public class TransactionViewLazyModel extends LazyDataModel<TransactionViewModel
         }
         List<TransactionView> transactionViewList;
         if (transactionStatus == null) {
-            transactionViewList = transactionService.getTransactionViewList(first, bankAccountId, pageSize, transactionStatus);
+            transactionViewList = transactionService.getTransactionViewList(first, bankAccountId, pageSize, transactionStatus,filters,sortField,sortOrder.name());
         } else {
-            transactionViewList = transactionService.getTransactionViewList(first, bankAccountId, pageSize, transactionStatus);
+            transactionViewList = transactionService.getTransactionViewList(first, bankAccountId, pageSize, transactionStatus,filters,sortField,sortOrder.name());
             if (transactionViewList == null) {
-                transactionViewList = transactionService.getTransactionViewList(0, bankAccountId, pageSize, transactionStatus);
+                transactionViewList = transactionService.getTransactionViewList(0, bankAccountId, pageSize, transactionStatus,filters,sortField,sortOrder.name());
             }
         }
         if (transactionViewList == null) {
@@ -100,41 +105,49 @@ public class TransactionViewLazyModel extends LazyDataModel<TransactionViewModel
         }
         populateTransactionList(transactionViewList);
         //filter
-//        for (TransactionViewModel transactionViewModel : data) {
+        dataBaseRowCount = transactionService.getTotalTransactionCountByBankAccountIdForLazyModel(bankAccountId, transactionStatus);// + transactionService.getTotalPartiallyExplainedTransactionCountByBankAccountId(bankAccountId);
+        this.setPageSize(transactionViewList.size());
+
+//        for (TransactionViewModel transactionViewModel : transactionViewModelList) {
 //            boolean match = true;
 //            if (filters != null) {
+//              
 //                for (Iterator<String> it = filters.keySet().iterator(); it.hasNext();) {
 //                    try {
 //                        String filterProperty = it.next();
 //                        Object filterValue = filters.get(filterProperty);
-//                        String fieldValue = String.valueOf(transactionViewModel.getClass().getField(filterProperty).get(transactionViewModel));
-//
-//                        if (filterValue == null || fieldValue.startsWith(filterValue.toString())) {
+//                        System.out.println("filterValue==" + filterValue);
+//                        Field field = transactionViewModel.getClass().getDeclaredField(filterProperty);
+//                        field.setAccessible(true);
+//                        
+//                        String fieldValue = String.valueOf(field.get(transactionViewModel));
+//                        System.out.println("fieldValue==" + field.toString());
+//                        if (filterValue == null || fieldValue.contains(filterValue.toString())) {
 //                            match = true;
 //                        } else {
 //                            match = false;
 //                            break;
 //                        }
-//                    } catch (Exception e) { 
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
 //                        match = false;
 //                    }
 //                }
 //            }
 //
 //            if (match) {
-//
 //                data.add(transactionViewModel);
 //            }
 //        }
-        //sort
-//        if(sortField != null) {
+
+//        if (sortField != null && !sortField.isEmpty()) {
 //            Collections.sort(data, new LazySorter(sortField, sortOrder));
 //        }
+
+//        transactionViewModelList = data;
+        this.setRowCount(dataBaseRowCount);
         //rowCount
 
-        dataBaseRowCount = transactionService.getTotalTransactionCountByBankAccountIdForLazyModel(bankAccountId, transactionStatus);// + transactionService.getTotalPartiallyExplainedTransactionCountByBankAccountId(bankAccountId);
-        this.setRowCount(dataBaseRowCount);
-        this.setPageSize(transactionViewList.size());
         //paginate
 //        if (dataSize > pageSize) {
 //            try {
@@ -242,17 +255,15 @@ public class TransactionViewLazyModel extends LazyDataModel<TransactionViewModel
             transactionDecription = transactionDecrpStringArr.length > 1 ? transactionDecrpStringArr[0] + " " + transactionDecrpStringArr[1] : transactionDecrpStringArr[0];
         }
         if (transactionViewModel.getReferenceId() != null) {
-            return (transactionViewModel.getTransactionTypeName() != null ? "<b>Type:</b> "+transactionViewModel.getTransactionTypeName() + " | " : "")
-                    + (transactionViewModel.getTransactionCategoryName() != null ? "<b>Category:</b> "+transactionViewModel.getTransactionCategoryName() + " | " : "")
+            return (transactionViewModel.getTransactionTypeName() != null ? "<b>Type: </b> " + transactionViewModel.getTransactionTypeName() + " | " : "")
+                    + (transactionViewModel.getTransactionCategoryName() != null ? "<b>Category: </b> " + transactionViewModel.getTransactionCategoryName() + " | " : "")
                     + (transactionViewModel.getReferenceName() != null ? transactionViewModel.getReferenceName() + " | " : "")
                     + transactionViewModel.getContactName()
                     + " | " + transactionViewModel.getCurrencySymbol() + " " + transactionViewModel.getDueAmount()
-                    + " |<b> Due On :</b> " + new SimpleDateFormat("MM/dd/yyyy").format(transactionViewModel.getDueOn())
-                    ;
+                    + " |<b> Due On : </b> " + new SimpleDateFormat("MM/dd/yyyy").format(transactionViewModel.getDueOn());
 
         } else {
-            return (transactionViewModel.getTransactionTypeName() != null ? "<b>Type:</b>"+transactionViewModel.getTransactionTypeName() + " | " : "") + (transactionViewModel.getTransactionCategoryName() != null ? "<b>Category:</b>"+transactionViewModel.getTransactionCategoryName(): "")
-                    ;
+            return (transactionViewModel.getTransactionTypeName() != null ? "<b>Type: </b>" + transactionViewModel.getTransactionTypeName() + " | " : "") + (transactionViewModel.getTransactionCategoryName() != null ? "<b>Category: </b>" + transactionViewModel.getTransactionCategoryName() : "");
         }
     }
 

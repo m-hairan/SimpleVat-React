@@ -110,16 +110,16 @@
                                         </h:panelGroup>
                                     </div>
                                 </p:column>
-                                <p:column headerText="Transaction Date" >
+                                <p:column headerText="Transaction Date" styleClass="date-#{transaction.date}" >
                                     <h:outputText value="#{transaction.transactionDate}" />
                                 </p:column>
                                 <p:column headerText="Description" >
                                     <h:outputText value="#{transaction.description}"/>
                                 </p:column>
-                                <p:column headerText="Debit Amount"   styleClass="amount">
+                                <p:column headerText="Debit Amount"   styleClass="debit-#{transaction.debit}">
                                     <h:outputText value="#{transaction.drAmount}" style="text-align:right"/>
                                 </p:column>
-                                <p:column headerText="Credit Amount" styleClass="amount">
+                                <p:column headerText="Credit Amount"  styleClass="credit-#{transaction.credit}">
                                     <h:outputText value="#{transaction.crAmount}" style="text-align:right"/>
                                 </p:column>
                             </p:dataTable>

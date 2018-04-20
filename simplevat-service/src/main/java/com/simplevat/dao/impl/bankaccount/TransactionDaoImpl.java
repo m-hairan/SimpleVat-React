@@ -1,6 +1,7 @@
 package com.simplevat.dao.impl.bankaccount;
 
 import com.simplevat.constants.TransactionStatusConstant;
+import com.simplevat.criteria.SortOrder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,8 @@ import com.simplevat.entity.bankaccount.TransactionType;
 import com.simplevat.entity.bankaccount.TransactionView;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.util.Iterator;
+import java.util.Map;
 import javax.persistence.TypedQuery;
 
 @Repository
@@ -216,12 +219,25 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
     }
 
     @Override
-    public List<TransactionView> getTransactionViewList(int pageSize, Integer bankAccountId, int rowCount, Integer transactionStatus) {
+    public List<TransactionView> getTransactionViewList(int pageSize, Integer bankAccountId, int rowCount, Integer transactionStatus, Map<String, Object> filters, String sortField, String sortOrder) {
+        System.out.println("sortOrder==" + sortOrder);
         StringBuilder builder = new StringBuilder("");
+        StringBuilder filterBuilder = new StringBuilder("");
+        for (String filedName : filters.keySet()) {
+            Object filterValue = filters.get(filedName);
+            if (filterValue != null && !((String) filterValue).isEmpty()) {
+                filterBuilder.append(" And ").append(filedName).append(" like '%").append((String) filterValue).append("%'");
+            }
+        }
+        if (sortField != null) {
+            filterBuilder.append(" order by ").append(sortField).append(sortOrder.equalsIgnoreCase("ASCENDING") ? " ASC," : " DESC,");
+        } else {
+            filterBuilder.append(" order by ");
+        }
         if (transactionStatus != null) {
             builder.append(" AND t.explanationStatusCode = ").append(transactionStatus);
         }
-        TypedQuery<TransactionView> query = getEntityManager().createQuery("SELECT t FROM TransactionView t WHERE t.bankAccountId =:bankAccountId AND t.parentTransaction = null" + builder.toString() + " ORDER BY t.transactionDate DESC, t.transactionId DESC", TransactionView.class);
+        TypedQuery<TransactionView> query = getEntityManager().createQuery("SELECT t FROM TransactionView t WHERE t.bankAccountId =:bankAccountId AND t.parentTransaction = null" + builder.toString() + filterBuilder.toString() + "  t.transactionDate DESC, t.transactionId DESC", TransactionView.class);
         query.setParameter("bankAccountId", bankAccountId);
         query.setFirstResult(pageSize);
         query.setMaxResults(rowCount);
@@ -308,12 +324,26 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
     }
 
     @Override
-    public List<Transaction> getParentTransactionListByRangeAndBankAccountId(int pageSize, Integer bankAccountId, int rowCount, Integer transactionStatus) {
+    public List<Transaction> getParentTransactionListByRangeAndBankAccountId(int pageSize, Integer bankAccountId, int rowCount, Integer transactionStatus, Map<String, Object> filters, String sortField, String sortOrder) {
+        System.out.println("sortOrder==" + sortOrder);
         StringBuilder builder = new StringBuilder("");
+        StringBuilder filterBuilder = new StringBuilder("");
         if (transactionStatus != null) {
             builder.append(" AND t.transactionStatus.explainationStatusCode = ").append(transactionStatus);
         }
-        TypedQuery<Transaction> query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.bankAccount.bankAccountId =:bankAccountId AND t.parentTransaction IS NULL" + builder.toString() + " ORDER BY t.transactionDate DESC", Transaction.class);
+        //sql.append(" and ").append(entry.getKey()).append(" like '%").append(value).append("%'");
+        for (String filedName : filters.keySet()) {
+            Object filterValue = filters.get(filedName);
+            if (filterValue != null && !((String) filterValue).isEmpty()) {
+                filterBuilder.append(" And ").append(filedName).append(" like '%").append((String) filterValue).append("%'");
+            }
+        }
+        if (sortField != null) {
+            filterBuilder.append(" order by ").append(sortField).append(sortOrder.equalsIgnoreCase("ASCENDING") ? " ASC," : " DESC,");
+        } else {
+            filterBuilder.append(" order by ");
+        }
+        TypedQuery<Transaction> query = getEntityManager().createQuery("SELECT t FROM Transaction t WHERE t.bankAccount.bankAccountId =:bankAccountId AND t.parentTransaction IS NULL" + builder.toString() + filterBuilder.toString() + "  t.transactionDate DESC", Transaction.class);
         query.setParameter("bankAccountId", bankAccountId);
         query.setFirstResult(pageSize);
         query.setMaxResults(rowCount);
@@ -326,7 +356,7 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
 
     @Override
     public List<TransactionView> getTransactionViewListByDateRang(Integer bankAccountId, Date startDate, Date endDate) {
-        TypedQuery<TransactionView> query = getEntityManager().createQuery("SELECT t FROM TransactionView t WHERE t.bankAccountId =:bankAccountId AND t.parentTransaction = null AND t.transactionDate >=:startDate AND t.transactionDate <=:endDate ORDER BY t.transactionDate DESC", TransactionView.class);
+        TypedQuery<TransactionView> query = getEntityManager().createQuery("SELECT t FROM TransactionView t WHERE t.bankAccountId =:bankAccountId AND t.parentTransaction = null AND t.transactionDate >=:startDate AND t.transactionDate <=:endDate ORDER BY t.transactionDate DESC, t.transactionId DESC", TransactionView.class);
         query.setParameter("bankAccountId", bankAccountId);
         query.setParameter("startDate", startDate, TemporalType.TIMESTAMP);
         query.setParameter("endDate", endDate, TemporalType.TIMESTAMP);

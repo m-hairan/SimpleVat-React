@@ -20,7 +20,7 @@ import org.hibernate.annotations.ColumnDefault;
  */
 @NamedQueries({
     @NamedQuery(name = "allBankAccounts",
-            query = "SELECT b FROM BankAccount b where b.deleteFlag = FALSE  ORDER BY b.bankAccountName ASC")
+            query = "SELECT b FROM BankAccount b where b.deleteFlag = FALSE  ORDER BY b.bankAccountStatus.bankAccountStatusName,b.bankAccountName ASC")
 })
 
 @Entity

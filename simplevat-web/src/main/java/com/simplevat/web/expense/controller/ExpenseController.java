@@ -204,7 +204,7 @@ public class ExpenseController extends BaseController implements Serializable {
             selectedExpenseModel = controllerHelper.getExpenseModel(expense);
             if (selectedExpenseModel.getReceiptAttachmentBinary() != null) {
                 InputStream stream = new ByteArrayInputStream(selectedExpenseModel.getReceiptAttachmentBinary());
-                selectedExpenseModel.setAttachmentFileContent(new DefaultStreamedContent(stream,selectedExpenseModel.getReceiptAttachmentContentType(),selectedExpenseModel.getReceiptAttachmentName()));
+                selectedExpenseModel.setAttachmentFileContent(new DefaultStreamedContent(stream, selectedExpenseModel.getReceiptAttachmentContentType(), selectedExpenseModel.getReceiptAttachmentName()));
             }
         }
         titles = titleService.getTitles();
@@ -251,26 +251,28 @@ public class ExpenseController extends BaseController implements Serializable {
     }
 
     public void updateVatPercentage(ExpenseItemModel expenseItemModel) {
-        expenseItemModel.setIsProductSelected(Boolean.FALSE);
-        if (expenseItemModel.getExpenseLineItemProductService() != null) {
-            if (expenseItemModel.getExpenseLineItemProductService().getVatCategory() != null) {
-                VatCategory vatCategory = expenseItemModel.getExpenseLineItemProductService().getVatCategory();
-                expenseItemModel.setVatId(vatCategory);
-            } else {
-                expenseItemModel.setVatId(vatCategoryService.getDefaultVatCategory());
-            }
-            if (expenseItemModel.getExpenseLineItemProductService().getVatIncluded()) {
+        if (expenseItemModel != null) {
+            expenseItemModel.setIsProductSelected(Boolean.FALSE);
+            if (expenseItemModel.getExpenseLineItemProductService() != null) {
                 if (expenseItemModel.getExpenseLineItemProductService().getVatCategory() != null) {
-                    BigDecimal unit = (expenseItemModel.getExpenseLineItemProductService().getUnitPrice().divide(expenseItemModel.getExpenseLineItemProductService().getVatCategory().getVat().add(new BigDecimal(100)), 5, RoundingMode.HALF_UP)).multiply(new BigDecimal(100));
-                    expenseItemModel.setUnitPrice(unit);
+                    VatCategory vatCategory = expenseItemModel.getExpenseLineItemProductService().getVatCategory();
+                    expenseItemModel.setVatId(vatCategory);
+                } else {
+                    expenseItemModel.setVatId(vatCategoryService.getDefaultVatCategory());
                 }
-            } else {
-                expenseItemModel.setUnitPrice(expenseItemModel.getExpenseLineItemProductService().getUnitPrice());
+                if (expenseItemModel.getExpenseLineItemProductService().getVatIncluded()) {
+                    if (expenseItemModel.getExpenseLineItemProductService().getVatCategory() != null) {
+                        BigDecimal unit = (expenseItemModel.getExpenseLineItemProductService().getUnitPrice().divide(expenseItemModel.getExpenseLineItemProductService().getVatCategory().getVat().add(new BigDecimal(100)), 5, RoundingMode.HALF_UP)).multiply(new BigDecimal(100));
+                        expenseItemModel.setUnitPrice(unit);
+                    }
+                } else {
+                    expenseItemModel.setUnitPrice(expenseItemModel.getExpenseLineItemProductService().getUnitPrice());
+                }
+                expenseItemModel.setDescription(expenseItemModel.getExpenseLineItemProductService().getProductDescription());
             }
-            expenseItemModel.setDescription(expenseItemModel.getExpenseLineItemProductService().getProductDescription());
+            updateSubTotal(expenseItemModel);
+            addInvoiceItemOnProductSelect();
         }
-        updateSubTotal(expenseItemModel);
-        addInvoiceItemOnProductSelect();
     }
 
     public void addInvoiceItemOnProductSelect() {

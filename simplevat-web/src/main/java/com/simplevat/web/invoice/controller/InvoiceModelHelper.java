@@ -199,6 +199,7 @@ public class InvoiceModelHelper {
                 }
                 if (invoiceModel.getDiscount() != null) {
                     if (invoiceModel.getDiscount().compareTo(BigDecimal.ZERO) > 0) {
+                        System.out.println("discount" + invoiceModel.getDiscount());
                         discountPercentage = invoiceSubTotal.divide(invoiceModel.getDiscount(), 5, RoundingMode.HALF_UP);
                     }
                 }
@@ -208,38 +209,64 @@ public class InvoiceModelHelper {
         }
 
         for (InvoiceItemModel itemModel : invoiceModel.getInvoiceLineItems()) {
-            if (itemModel.getSubTotal() != null) {
-                BigDecimal vatAmount = new BigDecimal(BigInteger.ZERO);
-                BigDecimal itemAmount = new BigDecimal(BigInteger.ZERO);
-                if (invoiceModel.getDiscountType() != null) {
-                    BigDecimal discountAmount = getDiscountAmount(itemModel.getSubTotal(), invoiceModel, discountPercentage);
-                    itemAmount = itemModel.getSubTotal().subtract(discountAmount);
-                    invoiceModel.setCalculatedDiscountAmount(invoiceModel.getCalculatedDiscountAmount().add(discountAmount));
-                } else {
-                    itemAmount = itemModel.getSubTotal();
-                }
-                if (itemModel.getVatId() != null) {
-                    vatAmount = (itemAmount.multiply(itemModel.getVatId().getVat())).divide(new BigDecimal(100));
-                }
+            if (itemModel.getProductService() != null) {
+                if (itemModel.getSubTotal() != null) {
+                    BigDecimal vatAmount = new BigDecimal(BigInteger.ZERO);
+                    BigDecimal itemAmount = new BigDecimal(BigInteger.ZERO);
+                    if (invoiceModel.getDiscountType() != null) {
+                        BigDecimal discountAmount = BigDecimal.ZERO;
+                        if (invoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.PERCENTAGEDISCOUNT) {
+                            discountAmount = getDiscountAmount(itemModel.getSubTotal(), invoiceModel, discountPercentage);
+                        } else {
+                            discountPercentage = getDiscountPercentage(itemModel.getSubTotal(), invoiceModel, invoiceModel.getDiscount());
+                            System.out.println("discountPercentage==" + discountPercentage);
+                            discountAmount = getDiscountAmount(itemModel.getSubTotal(), invoiceModel, discountPercentage);
+                            System.out.println("discountAmount========="+discountAmount);
+                            //  discountAmount = invoiceModel.getDiscount();
+                        }
+                        if (discountAmount != null) {
+                            itemAmount = itemModel.getSubTotal().subtract(discountAmount);
+                            System.out.println("discount amount==" + itemAmount);
+                            invoiceModel.setCalculatedDiscountAmount(invoiceModel.getCalculatedDiscountAmount().add(discountAmount));
+                        }
+                    } else {
+                        itemAmount = itemModel.getSubTotal();
+                    }
+                    if (itemModel.getVatId() != null) {
+                        vatAmount = (itemAmount.multiply(itemModel.getVatId().getVat())).divide(new BigDecimal(100));
+                    }
 
-                invoiceSubtotal = invoiceSubtotal.add(itemAmount);
-                invoiceVATAmount = invoiceVATAmount.add(vatAmount);
-                invoiceAmount = invoiceAmount.add(itemAmount.add(vatAmount));
+                    invoiceSubtotal = invoiceSubtotal.add(itemAmount);
+                    invoiceVATAmount = invoiceVATAmount.add(vatAmount);
+                    invoiceAmount = invoiceAmount.add(itemAmount.add(vatAmount));
+                }
             }
+            invoiceModel.setInvoiceAmount(invoiceAmount);
+            invoiceModel.setInvoiceVATAmount(invoiceVATAmount);
+            invoiceModel.setInvoiceSubtotal(invoiceSubtotal);
         }
-        invoiceModel.setInvoiceAmount(invoiceAmount);
-        invoiceModel.setInvoiceVATAmount(invoiceVATAmount);
-        invoiceModel.setInvoiceSubtotal(invoiceSubtotal);
     }
 
     private BigDecimal getDiscountAmount(BigDecimal itemValue, InvoiceModel invoiceModel, BigDecimal discountAmount) {
         if (invoiceModel.getDiscountType() != null
                 && itemValue != null
                 && discountAmount != null
-                && invoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.PERCENTAGEDISCOUNT) {
+                ) {
             discountAmount = itemValue.multiply(discountAmount.divide(new BigDecimal(100)));
         }
         return discountAmount;
+    }
+
+    private BigDecimal getDiscountPercentage(BigDecimal itemValue, InvoiceModel invoiceModel, BigDecimal discountAmount) {
+        BigDecimal dicountPercentage = BigDecimal.ZERO;
+        if (invoiceModel.getDiscountType() != null
+                && itemValue != null && itemValue != BigDecimal.ZERO
+                && discountAmount != null
+                && invoiceModel.getDiscountType().getDiscountTypeCode() == DiscountTypeConstant.ABSOLUTEDISCOUNT) {
+            System.out.println("itemValue==" + itemValue);
+            dicountPercentage = (discountAmount.multiply(new BigDecimal(100))).divide(itemValue, 5, RoundingMode.HALF_UP);
+        }
+        return dicountPercentage;
     }
 
     private void updateSubTotal(@Nonnull final InvoiceItemModel invoiceItemModel) {

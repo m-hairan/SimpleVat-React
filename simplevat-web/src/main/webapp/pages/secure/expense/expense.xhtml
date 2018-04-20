@@ -18,6 +18,12 @@
             .ui-grid-col-1{
                 padding: 5px !important;
             }
+
+            .ui-datatable-header{
+                background: transparent !important;
+                border: none !important;
+            }
+
         </style>
 
     </ui:define>
@@ -480,6 +486,16 @@
                                                  editable="true"
                                                  id="expenseItemTable"
                                                  reflow="true">
+                                        <f:facet name="header">
+                                            <p:commandButton title="Add More Item"
+                                                             update="expenseItemTable"
+                                                             process="@this" style="float: left"
+                                                             icon="ui-icon-plus"
+                                                             actionListener="#{expenseController.addInvoiceItemOnProductSelect()}"
+                                                             value="Add more">
+                                            </p:commandButton>
+                                            <div style="clear: both;"/>
+                                        </f:facet>
                                         <p:column style="width: 32px">
                                             <p:commandButton title="Delete Expense Item" 
                                                              update="expenseItemTable"
@@ -535,7 +551,7 @@
                                                          style="width:100%">
                                                 <f:convertNumber type="number"/>
                                                 <p:clientValidator event="keyup"/>
-                                                <p:ajax event="change" 
+                                                <p:ajax event="keyup" 
                                                         listener="#{expenseController.updateSubTotal(expenseItem)}" 
                                                         update="subTotal" />
                                             </p:inputText>
@@ -549,7 +565,7 @@
                                                            validatorMessage="Please enter Price more then 0"
                                                            value="#{expenseItem.unitPrice}" 
                                                            style="width:100%">
-                                                <p:ajax event="change" 
+                                                <p:ajax event="keyup" 
                                                         listener="#{expenseController.updateSubTotal(expenseItem)}" 
                                                         update="subTotal @form:exchangeCurrency" />
                                             </p:inputNumber>

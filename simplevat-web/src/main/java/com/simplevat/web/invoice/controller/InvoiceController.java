@@ -366,7 +366,8 @@ public class InvoiceController extends BaseController implements Serializable {
 
     }
 
-    public void addInvoiceItemOnProductSelect(Integer listSize) {
+    public void addInvoiceItemOnProductSelect() {
+        System.out.println("==validateInvoiceItem()="+validateInvoiceItem());
         if (validateInvoiceItem()) {
             addLineItem();
         }
@@ -457,7 +458,7 @@ public class InvoiceController extends BaseController implements Serializable {
             invoiceItemModel.setDescription(invoiceItemModel.getProductService().getProductDescription());
         }
 
-        addInvoiceItemOnProductSelect(listSize);
+        addInvoiceItemOnProductSelect();
     }
 
     public void updateSubTotal(InvoiceItemModel invoiceItem) {

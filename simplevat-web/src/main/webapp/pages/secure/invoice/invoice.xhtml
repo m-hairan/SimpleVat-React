@@ -37,6 +37,11 @@
             .ui-dialog .ui-dialog-content {
                 padding: 0 !important;
             }
+            .ui-datatable-header{
+                background: transparent !important;
+                border: none !important;
+            }
+
         </style>
     </ui:define>
     <ui:define name="title">Invoices</ui:define>
@@ -663,6 +668,16 @@
                                              editable="true"
                                              id="invoiceItemTable"
                                              reflow="true" >
+                                    <f:facet name="header">
+                                        <p:commandButton title="Add More Item"
+                                                         update="invoiceItemTable"
+                                                         process="@this" style="float: left"
+                                                         icon="ui-icon-plus"
+                                                         actionListener="#{invoiceController.addInvoiceItemOnProductSelect()}"
+                                                         value="Add more">
+                                        </p:commandButton>
+                                        <div style="clear: both;"/>
+                                    </f:facet>
                                     <p:column style="width: 30px">
                                         <p:commandButton title="Delete Invoice Item" rendered="#{invoiceController.selectedInvoiceModel.invoiceLineItems.indexOf(invoiceItem) != 0}"
                                                          update="invoiceItemTable"
@@ -714,7 +729,7 @@
                                                      style="width:100%">
                                             <f:convertNumber type="number"/>
                                             <p:clientValidator event="keyup"/>
-                                            <p:ajax event="change" 
+                                            <p:ajax event="keyup" 
                                                     listener="#{invoiceController.updateSubTotal(invoiceItem)}" 
                                                     update="subTotal" />
 
@@ -728,7 +743,7 @@
                                                          style="width:80%">
                                                 <f:convertNumber type="number"/>
                                                 <p:clientValidator event="keyup"/>
-                                                <p:ajax event="change" 
+                                                <p:ajax event="keyup" 
                                                         listener="#{invoiceController.updateSubTotal(invoiceItem)}" 
                                                         update="subTotal @form:exchangeCurrency" />
                                             </p:inputText>
@@ -764,7 +779,11 @@
                                         </h:panelGroup>
                                     </p:column>
                                     <p:columnGroup id="lineItemFooterColumnGroup"  type="footer" rendered="#{invoiceController.selectedInvoiceModel.invoiceLineItems.size() > 0}">  
+
+
                                         <p:row >  
+
+
                                             <p:column rowspan="5" colspan="5" style="border-bottom: 0 !important; border-left: 0 !important">
                                                 <f:facet name="footer">
                                                     <h:panelGroup styleClass="md-inputfield" style="margin-top: 20px;">
@@ -781,7 +800,7 @@
                                                     </h:panelGroup>
                                                 </f:facet>
                                             </p:column>
-                                            <p:column colspan="1" styleClass="amount" style="padding: 20px 6px">
+                                            <p:column colspan="1" styleClass="amount" style="padding: 20px 8px">
                                                 <f:facet name="footer">
                                                     <h:panelGroup styleClass="md-inputfield">
                                                         <p:autoComplete id="discountType"

@@ -1,6 +1,7 @@
 package com.simplevat.service.impl.bankaccount;
 
 import com.simplevat.constants.TransactionCreditDebitConstant;
+import com.simplevat.criteria.SortOrder;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -254,8 +255,8 @@ public class TransactionServiceImpl extends TransactionService {
     }
 
     @Override
-    public List<TransactionView> getTransactionViewList(int pageSize, Integer bankAccountId, int rowCount, Integer transactionStatus) {
-        return transactionDao.getTransactionViewList(pageSize, bankAccountId, rowCount, transactionStatus);
+    public List<TransactionView> getTransactionViewList(int pageSize, Integer bankAccountId, int rowCount, Integer transactionStatus, Map<String, Object> filters,String sortField, String sortOrder) {
+        return transactionDao.getTransactionViewList(pageSize, bankAccountId, rowCount, transactionStatus,filters,sortField,sortOrder);
     }
 
     @Override
@@ -269,8 +270,8 @@ public class TransactionServiceImpl extends TransactionService {
     }
 
     @Override
-    public List<Transaction> getParentTransactionListByRangeAndBankAccountId(int pageSize, Integer bankAccountId, int rowCount, Integer transactionStatus) {
-        return transactionDao.getParentTransactionListByRangeAndBankAccountId(pageSize, bankAccountId, rowCount, transactionStatus);
+    public List<Transaction> getParentTransactionListByRangeAndBankAccountId(int pageSize, Integer bankAccountId, int rowCount, Integer transactionStatus,Map<String, Object> filters,String sortField, String sortOrder) {
+        return transactionDao.getParentTransactionListByRangeAndBankAccountId(pageSize, bankAccountId, rowCount, transactionStatus,filters,sortField,sortOrder);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.simplevat.dao.bankaccount;
 
+import com.simplevat.criteria.SortOrder;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionType;
 import com.simplevat.entity.bankaccount.TransactionView;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 public interface TransactionDao extends Dao<Integer, Transaction> {
 
@@ -41,7 +43,7 @@ public interface TransactionDao extends Dao<Integer, Transaction> {
     
     public List<TransactionView> getChildTransactionViewListByParentId(Integer parentTransaction);
 
-    public List<TransactionView> getTransactionViewList(int pageSize, Integer bankAccountId, int rowCount, Integer transactionStatus);
+    public List<TransactionView> getTransactionViewList(int pageSize, Integer bankAccountId, int rowCount, Integer transactionStatus, Map<String, Object> filters,String sortField, String sortOrder);
 
     public Integer getTotalTransactionCountByBankAccountIdForLazyModel(Integer bankAccountId, Integer transactionStatus);
 
@@ -55,7 +57,7 @@ public interface TransactionDao extends Dao<Integer, Transaction> {
 
     public Integer getTransactionCountByRangeAndBankAccountId(int pageSize, Integer bankAccountId, int rowCount);
 
-    public List<Transaction> getParentTransactionListByRangeAndBankAccountId(int pageSize, Integer bankAccountId, int rowCount, Integer transactionStatus);
+    public List<Transaction> getParentTransactionListByRangeAndBankAccountId(int pageSize, Integer bankAccountId, int rowCount, Integer transactionStatus,Map<String, Object> filters,String sortField, String sortOrder);
 
     public List<TransactionView> getTransactionViewListByDateRang(Integer bankAccountId, Date startDate, Date endDate);
 

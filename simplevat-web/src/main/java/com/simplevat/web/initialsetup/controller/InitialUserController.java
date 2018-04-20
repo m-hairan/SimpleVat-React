@@ -104,14 +104,14 @@ public class InitialUserController implements Serializable {
         String envToken = System.getenv("SIMPLEVAT_TOKEN");
         if (!userService.findAll().isEmpty()) {
             try {
-                context.getExternalContext().redirect("/pages/public/login.xhtml");
+                context.getExternalContext().redirect("#{request.contextPath}/pages/public/login.xhtml");
             } catch (IOException ex) {
                 java.util.logging.Logger.getLogger(SecurityBean.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         if (token == null || !token.equals(envToken)) {
             try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect("/pages/public/token-mismatched-error.xhtml");
+                FacesContext.getCurrentInstance().getExternalContext().redirect("#{request.contextPath}/pages/public/token-mismatched-error.xhtml");
             } catch (IOException ex) {
                 java.util.logging.Logger.getLogger(InitialUserController.class.getName()).log(Level.SEVERE, null, ex);
             }

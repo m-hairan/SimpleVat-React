@@ -18,6 +18,10 @@
             .ui-grid-col-1{
                 padding: 5px !important;
             }
+            .ui-datatable-header{
+                background: transparent !important;
+                border: none !important;
+            }
         </style>
 
     </ui:define>
@@ -270,6 +274,16 @@
                                     value="#{purchaseController.selectedPurchaseModel.purchaseItems}"
                                     id="purchaseItemTable"
                                     reflow="true">
+                                    <f:facet name="header">
+                                        <p:commandButton title="Add More Item"
+                                                         update="purchaseItemTable"
+                                                         icon="ui-icon-plus"
+                                                         process="@this" style="float: left"
+                                                         actionListener="#{purchaseController.addInvoiceItemOnProductSelect()}"
+                                                         value="Add more">
+                                        </p:commandButton>
+                                        <div style="clear: both;"/>
+                                    </f:facet>
                                     <p:column style="width: 32px">
                                         <p:commandButton title="Delete Purchase Item" 
                                                          update="purchaseItemTable"
@@ -323,7 +337,7 @@
 
                                                      style="width:100%">
 
-                                            <p:ajax event="change" 
+                                            <p:ajax event="keyup" 
                                                     listener="#{purchaseController.updateSubTotal(purchaseItem)}" 
                                                     update="subTotal" />
                                         </p:inputText>
@@ -334,11 +348,11 @@
                                                        symbol="#{purchaseController.selectedPurchaseModel.currency.currencySymbol} " symbolPosition="p"
                                                        validator="positiveNumberValidator"
                                                        validatorMessage="Please enter Price more then 0"
-                                                         converterMessage="Please enter a valid number"
+                                                       converterMessage="Please enter a valid number"
                                                        style="width:100%">
-                                                <f:convertNumber type="number"/>
-                                                <p:clientValidator event="keyup"/>
-                                            <p:ajax event="change" 
+                                            <f:convertNumber type="number"/>
+                                            <p:clientValidator event="keyup"/>
+                                            <p:ajax event="keyup" 
                                                     listener="#{purchaseController.updateSubTotal(purchaseItem)}" 
                                                     update="subTotal @form:exchangeCurrency" />
                                         </p:inputNumber>
