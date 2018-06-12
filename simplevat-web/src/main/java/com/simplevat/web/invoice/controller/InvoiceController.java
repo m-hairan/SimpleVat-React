@@ -273,7 +273,7 @@ public class InvoiceController extends BaseController implements Serializable {
     }
 
     private void setDefaultContactCurrency() {
-        Currency defaultCurrency = company.getCompanyCountryCode().getCurrencyCode();
+        Currency defaultCurrency = company.getCurrencyCode();
         if (defaultCurrency != null) {
             contactModel.setCurrency(defaultCurrency);
         }
@@ -301,7 +301,7 @@ public class InvoiceController extends BaseController implements Serializable {
     }
 
     private void setDefaultCurrency() {
-        Currency defaultCurrency = company.getCompanyCountryCode().getCurrencyCode();
+        Currency defaultCurrency = company.getCurrencyCode();
         if (defaultCurrency != null) {
             selectedInvoiceModel.setCurrencyCode(defaultCurrency);
         }
@@ -311,7 +311,9 @@ public class InvoiceController extends BaseController implements Serializable {
         String exchangeRateString = "";
         currencyConversion = currencyService.getCurrencyRateFromCurrencyConversion(currency.getCurrencyCode());
         if (currencyConversion != null) {
-            exchangeRateString = "1 " + currency.getCurrencyIsoCode() + " = " + new BigDecimal(BigInteger.ONE).divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP) + " " + company.getCompanyCountryCode().getCurrencyCode().getCurrencyIsoCode();
+            if (company.getCurrencyCode() != null) {
+                exchangeRateString = "1 " + currency.getCurrencyIsoCode() + " = " + new BigDecimal(BigInteger.ONE).divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP) + " " + company.getCurrencyCode().getCurrencyIsoCode();
+            }
         }
         return exchangeRateString;
     }
@@ -367,7 +369,7 @@ public class InvoiceController extends BaseController implements Serializable {
     }
 
     public void addInvoiceItemOnProductSelect() {
-        System.out.println("==validateInvoiceItem()="+validateInvoiceItem());
+        System.out.println("==validateInvoiceItem()=" + validateInvoiceItem());
         if (validateInvoiceItem()) {
             addLineItem();
         }

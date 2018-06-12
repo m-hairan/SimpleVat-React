@@ -6,16 +6,12 @@ import com.simplevat.entity.Contact;
 import com.simplevat.entity.Country;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-
 import lombok.Getter;
 import lombok.Setter;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.CurrencyConversion;
 import com.simplevat.entity.Expense;
@@ -193,7 +189,7 @@ public class ExpenseController extends BaseController implements Serializable {
             }
 //            selectedExpenseModel.setAttachmentFile(new DefaultUploadedFile());
             selectedExpenseModel.setExpenseItem(new ArrayList<>());
-            Currency defaultCurrency = company.getCompanyCountryCode().getCurrencyCode();
+            Currency defaultCurrency = company.getCurrencyCode();
             if (defaultCurrency != null) {
                 selectedExpenseModel.setCurrency(defaultCurrency);
             }
@@ -202,14 +198,21 @@ public class ExpenseController extends BaseController implements Serializable {
         } else {
             Expense expense = expenseService.findByPK(Integer.parseInt(objSelectedExpenseModel.toString()));
             selectedExpenseModel = controllerHelper.getExpenseModel(expense);
+            if (selectedExpenseModel.getReceiptAttachmentName() != null) {
+                if (selectedExpenseModel.getReceiptAttachmentName().length() > 27) {
+                    selectedExpenseModel.setReceiptAttachmentName(selectedExpenseModel.getReceiptAttachmentName().substring(0, 27).concat("..."));
+                }
+            }
             if (selectedExpenseModel.getReceiptAttachmentBinary() != null) {
                 InputStream stream = new ByteArrayInputStream(selectedExpenseModel.getReceiptAttachmentBinary());
                 selectedExpenseModel.setAttachmentFileContent(new DefaultStreamedContent(stream, selectedExpenseModel.getReceiptAttachmentContentType(), selectedExpenseModel.getReceiptAttachmentName()));
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_PREVIEW_PIC", selectedExpenseModel.getReceiptAttachmentBinary());
             }
         }
         titles = titleService.getTitles();
         countries = countryService.getCountries();
         currencies = currencyService.getCurrencies();
+        selectedExpenseModel.setUser(userServiceNew.findByPK(FacesUtil.getLoggedInUser().getUserId()));
         setDefaultCountry();
         setDefaultContactCurrency();
         calculateTotal();
@@ -366,7 +369,7 @@ public class ExpenseController extends BaseController implements Serializable {
     }
 
     private void setDefaultContactCurrency() {
-        Currency defaultCurrency = company.getCompanyCountryCode().getCurrencyCode();
+        Currency defaultCurrency = company.getCurrencyCode();
         if (defaultCurrency != null) {
             contactModel.setCurrency(defaultCurrency);
         }
@@ -403,7 +406,7 @@ public class ExpenseController extends BaseController implements Serializable {
     }
 
     private void setDefaultCurrency() {
-        Currency defaultCurrency = company.getCompanyCountryCode().getCurrencyCode();
+        Currency defaultCurrency = company.getCurrencyCode();
         if (defaultCurrency != null) {
             selectedExpenseModel.setCurrency(defaultCurrency);
         }
@@ -414,15 +417,15 @@ public class ExpenseController extends BaseController implements Serializable {
         String exchangeRateString = "";
         currencyConversion = currencyService.getCurrencyRateFromCurrencyConversion(currency.getCurrencyCode());
         if (currencyConversion != null) {
-            exchangeRateString = "1 " + currency.getCurrencyIsoCode() + " = " + new BigDecimal(BigInteger.ONE).divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP) + " " + company.getCompanyCountryCode().getCurrencyCode().getCurrencyIsoCode();
+            exchangeRateString = currencyConversion.getExchangeRate() + "";
         }
         return exchangeRateString;
     }
 
     public BigDecimal totalAmountInHomeCurrency(Currency currency) {
-        if (total != null) {
+        if (totalAmount != null) {
             if (currencyConversion != null) {
-                return total.divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP);
+                return totalAmount.divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP);
             }
         }
         return new BigDecimal(0);
@@ -623,7 +626,12 @@ public class ExpenseController extends BaseController implements Serializable {
         User loggedInUser = FacesUtil.getLoggedInUser();
         selectedExpenseModel.setTransactionType(selectedExpenseModel.getTransactionCategory().getTransactionType());
         Expense expense = controllerHelper.getExpense(selectedExpenseModel);
-        expense.setExpenseAmount(total);
+        expense.setExpenseAmount(totalAmount);
+        if (currencyConversion != null) {
+            expense.setExpencyAmountCompanyCurrency(totalAmount.divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP));
+        } else {
+            expense.setExpencyAmountCompanyCurrency(totalAmount);
+        }
         if (selectedExpenseModel.getReceiptAttachmentBinary() != null) {
             expense.setReceiptAttachmentBinary(selectedExpenseModel.getReceiptAttachmentBinary());
         }
@@ -746,7 +754,7 @@ public class ExpenseController extends BaseController implements Serializable {
         if (selectedExpenseModel.getExpenseItem().size() > 1) {
             List<ExpenseItemModel> expenseItemModels = new ArrayList<>();
             for (ExpenseItemModel expenseItemModel : selectedExpenseModel.getExpenseItem()) {
-                if (expenseItemModel.getExpenseLineItemProductService() == null) {
+                if ((expenseItemModel.getProductName() == null || expenseItemModel.getProductName().isEmpty()) || expenseItemModel.getQuatity() == 0) {
                     expenseItemModels.add(expenseItemModel);
                 }
             }

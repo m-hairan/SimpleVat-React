@@ -9,7 +9,13 @@ import com.simplevat.dao.CurrencyDao;
 import com.simplevat.entity.Currency;
 import com.simplevat.dao.AbstractDao;
 import com.simplevat.entity.CurrencyConversion;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by mohsin on 3/11/2017.
@@ -39,12 +45,48 @@ public class CurrencyDaoImpl extends AbstractDao<Integer, Currency> implements C
 
     @Override
     public CurrencyConversion getCurrencyRateFromCurrencyConversion(int currencyCode) {
-        TypedQuery<CurrencyConversion> query = getEntityManager().createQuery("select c from CurrencyConversion c where c.currencyCode =:currencyCode", CurrencyConversion.class);
+        Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            Date dateWithoutTime = cal.getTime();
+        TypedQuery<CurrencyConversion> query = getEntityManager().createQuery("select c from CurrencyConversion c where c.currencyCodeConvertedTo =:currencyCode AND c.createdDate=:createdDate", CurrencyConversion.class);
         query.setParameter("currencyCode", currencyCode);
+        query.setParameter("createdDate",LocalDateTime.ofInstant(dateWithoutTime.toInstant(), ZoneId.systemDefault()));
         List<CurrencyConversion> currencyConversionList = query.getResultList();
         if (currencyConversionList != null && !currencyConversionList.isEmpty()) {
             return currencyConversionList.get(0);
         }
         return null;
+    }
+
+    @Override
+    public String getCountryCodeAsString(String CountryCode) {
+        Query query = getEntityManager().createQuery("select c.currencyIsoCode from Currency c where c.currencyIsoCode !=:currencyCode");
+        query.setParameter("currencyCode", CountryCode);
+        List<String> currency = query.getResultList();
+        String name = StringUtils.join(currency, ',');
+        System.out.println("currency===" + name);
+// query.setParameter("currencyCode", currencyCode);
+
+        return name;
+    }
+    
+     public List<Currency> getCurrencyList(Currency currency) {
+        Query query = getEntityManager().createQuery("select c from Currency c where c.currencyIsoCode !=:currencyCode");
+        query.setParameter("currencyCode", currency.getCurrencyIsoCode());
+        List<Currency> currencyList = query.getResultList();
+       
+// query.setParameter("currencyCode", currencyCode);
+
+        return currencyList;
+    }
+    
+    @Override
+    public List<String> getCountryCodeString() {
+        Query query = getEntityManager().createQuery("select c.currencyIsoCode from Currency c");
+        List<String> currency = query.getResultList();
+        return currency;
     }
 }

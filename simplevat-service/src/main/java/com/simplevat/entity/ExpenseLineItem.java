@@ -57,5 +57,8 @@ public class ExpenseLineItem implements Serializable {
     @ManyToOne
     @JoinColumn(name = "EXPENSE_ID")
     private Expense expense;
+    
+    @Column(name = "EXPENSE_PRODUCT_NAME")
+    private String productName;
 
 }

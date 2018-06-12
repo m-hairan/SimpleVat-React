@@ -47,6 +47,7 @@ public class ExpenseControllerHelper {
         expense.setVersionNumber(model.getVersionNumber());
         expense.setReceiptAttachmentName(model.getReceiptAttachmentName());
         expense.setReceiptAttachmentContentType(model.getReceiptAttachmentContentType());
+        
 //        expense.setRecurringFlag(model.getRecurringFlag());
 //        expense.setRecurringInterval(model.getRecurringInterval().getValue());
 //        expense.setRecurringMonth(model.getRecurringMonth().getValue());
@@ -78,6 +79,7 @@ public class ExpenseControllerHelper {
         item.setExpenseLineItemVat(model.getVatId());
         item.setVersionNumber(model.getVersionNumber());
         item.setExpenseLineItemProductService(model.getExpenseLineItemProductService());
+        item.setProductName(model.getProductName());
         item.setExpense(expense);
 
         return item;
@@ -138,6 +140,7 @@ public class ExpenseControllerHelper {
         model.setUnitPrice(expenseLineItem.getExpenseLineItemUnitPrice());
         model.setVatId(expenseLineItem.getExpenseLineItemVat());
         model.setVersionNumber(expenseLineItem.getVersionNumber());
+        model.setProductName(expenseLineItem.getProductName());
         model.setExpenseLineItemProductService(expenseLineItem.getExpenseLineItemProductService());
         this.updateSubTotal(model);
         return model;
@@ -154,11 +157,11 @@ public class ExpenseControllerHelper {
             final BigDecimal amountWithoutTax = unitPrice.multiply(new BigDecimal(quantity));
             expenseItemModel.setSubTotal(amountWithoutTax);
 
-            if (vatPer != null && vatPer.compareTo(BigDecimal.ZERO) >= 1) {
-                final BigDecimal amountWithTax = amountWithoutTax
-                        .add(amountWithoutTax.multiply(vatPer).multiply(new BigDecimal(0.01)));
-                expenseItemModel.setSubTotal(amountWithTax);
-            }
+//            if (vatPer != null && vatPer.compareTo(BigDecimal.ZERO) >= 1) {
+//                final BigDecimal amountWithTax = amountWithoutTax
+//                        .add(amountWithoutTax.multiply(vatPer).multiply(new BigDecimal(0.01)));
+//                expenseItemModel.setSubTotal(amountWithTax);
+//            }
         }
 
     }

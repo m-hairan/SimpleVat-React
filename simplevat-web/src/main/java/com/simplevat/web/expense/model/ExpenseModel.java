@@ -22,9 +22,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.Nonnull;
+import javax.faces.bean.SessionScoped;
 
 @Getter
 @Setter
+@SessionScoped
 public class ExpenseModel {
 
     private Integer expenseId;
@@ -55,6 +57,7 @@ public class ExpenseModel {
     private Contact expenseContact;
     private BigDecimal expenseSubtotal;
     private BigDecimal expenseVATAmount;
+    private BigDecimal expenseAmountCompanyCurrency;
 //    private Boolean recurringFlag;
 //    private RecurringNameValueMapping recurringInterval;
 //    private RecurringNameValueMapping recurringWeekDays;

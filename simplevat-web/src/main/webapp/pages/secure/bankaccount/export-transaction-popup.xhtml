@@ -29,6 +29,7 @@
                             <p:calendar id="startdate" 
                                         navigator="true" required="true" requiredMessage="Please Select Start Date"
                                         style="text-align:center"
+                                        yearRange="c-100:c+20"
                                         value="#{transactionExportController.startDate}" >
                                 <p:clientValidator event="dateSelect"/>
                             </p:calendar>
@@ -39,6 +40,7 @@
 
                         <h:panelGroup styleClass="md-inputfield" >
                             <p:calendar id="enddate" 
+                                        yearRange="c-100:c+20"
                                         navigator="true" required="true" requiredMessage="Please Select End Date"
                                         value="#{transactionExportController.endDate}" >
                                 <p:clientValidator event="dateSelect"/>

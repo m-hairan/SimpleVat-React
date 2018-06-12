@@ -14,11 +14,14 @@ import org.springframework.web.context.annotation.SessionScope;
 @Controller
 @SessionScope
 public class StreamedContentSessionController implements Serializable {
-
     public static final String STREAMED_CONTENT_PROFILE_PIC = "STREAMED_CONTENT_PROFILE_PIC";
     public static final String STREAMED_CONTENT_USER_PIC = "STREAMED_CONTENT_USER_PIC";
     public static final String STREAMED_CONTENT_COMPANY_LOGO = "STREAMED_CONTENT_COMPANY_LOGO";
+    public static final String STREAMED_CONTENT_PREVIEW_PIC = "STREAMED_CONTENT_PREVIEW_PIC";
     public StreamedContent StreamedProfilePic;
+    public StreamedContent StreamedPreviewPic;
+    
+   // public static final String STREAMED_CONTENT_USER_PIC = "STREAMED_CONTENT_USER_PIC";
 
     public StreamedContent getStreamedProfilePic() {
         Object objProfilePic = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(STREAMED_CONTENT_PROFILE_PIC);
@@ -42,6 +45,15 @@ public class StreamedContentSessionController implements Serializable {
         Object objProfilePic = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(STREAMED_CONTENT_COMPANY_LOGO);
         if (objProfilePic != null) {
             ByteArrayInputStream inputStream = new ByteArrayInputStream((byte[]) objProfilePic);
+            return new DefaultStreamedContent(inputStream);
+        }
+        return null;
+    }
+    
+    public StreamedContent getStreamedPreviewPic() {
+        Object objPreviewPic = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(STREAMED_CONTENT_PREVIEW_PIC);
+        if (objPreviewPic != null) {
+            ByteArrayInputStream inputStream = new ByteArrayInputStream((byte[]) objPreviewPic);
             return new DefaultStreamedContent(inputStream);
         }
         return null;

@@ -28,4 +28,5 @@ public class ExpenseItemModel {
     private Integer versionNumber;
     private Product expenseLineItemProductService;
     private Boolean isProductSelected=Boolean.TRUE;
+    private String productName;
 }

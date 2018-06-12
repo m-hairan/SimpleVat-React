@@ -224,7 +224,6 @@
                     <span class="ui-separator" style="padding-right: 5px;">
                         <span class="fa fa-ellipsis-v SoftGray" />
                     </span>
-                    <p:commandButton icon="Contact-Employee" value="Employee (#{contactListController.totalEmployees})" action="#{contactListController.populateContactEmployeeList()}" styleClass="AquaButton" update="#{p:component('contacts')}" />
                     <p:commandButton icon="Contact-Vendor" value="Vendor (#{contactListController.totalVendors})" action="#{contactListController.populateContactVendorList()}" styleClass="AquaButton" update="#{p:component('contacts')}" />
                     <p:commandButton icon="Contact-Customer" value="Customer (#{contactListController.totalCustomers})" action="#{contactListController.populateContactCustomerList()}" styleClass="AquaButton" update="#{p:component('contacts')}"/>
                 </f:facet>

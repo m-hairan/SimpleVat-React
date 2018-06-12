@@ -23,7 +23,14 @@
                 background: transparent !important;
                 border: none !important;
             }
+            .ui-widget-header{
 
+                background: none!important;
+                border: none !important;
+            }
+            .ui-icon-circle-zoomin{
+                color: black !important;
+            }
         </style>
 
     </ui:define>
@@ -105,51 +112,12 @@
                                                 value="#{expenseController.selectedExpenseModel.expenseDate}" 
                                                 required="true"
                                                 navigator="true"
-
-                                                requiredMessage="Please select expense date">
+                                                yearRange="c-100:c+20"
+                                                requiredMessage="Please select Expense Date">
                                                 <p:clientValidator event="dateSelect"/></p:calendar>
                                             <p:outputLabel for="expenseDate" value="#{messages.expense_date}"/>
                                             <p:message for="expenseDate" />
                                         </h:panelGroup>
-
-                                        <p:panelGrid columns="2" 
-                                                     columnClasses="ui-grid-col-11,ui-grid-col-1"
-                                                     layout="grid" 
-                                                     styleClass="ui-panelgrid-blank form-group"
-                                                     style="border:0px none; background-color:transparent;">
-
-                                            <h:panelGroup styleClass="md-inputfield">
-                                                <p:autoComplete id="conatcts" 
-                                                                converter="#{contactConverter}"
-                                                                dropdown="true" 
-                                                                forceSelection="true"
-                                                                effect="fold"
-                                                                required="true"
-                                                                scrollHeight="250"
-                                                                requiredMessage="Please select Contact"
-                                                                completeMethod="#{expenseController.contacts}" 
-                                                                value="#{expenseController.selectedExpenseModel.expenseContact}" 
-                                                                var="contact"
-
-                                                                itemValue="#{contact}"
-                                                                itemLabel="#{contact.firstName} #{contact.lastName}"
-                                                                >
-                                                    <p:clientValidator event="itemSelect"/>
-                                                    <p:ajax event="itemSelect"
-                                                            listener="#{expenseController.updateCurrency}" 
-                                                            update="expenseCurrency expenseItemTable exchangeCurrency" />
-                                                </p:autoComplete>
-                                                <p:outputLabel for="conatcts" value="#{messages.contact}"/>
-                                                <p:message for="conatcts" />
-                                            </h:panelGroup>
-
-
-                                            <h:panelGroup styleClass="md-inputfield">
-                                                <p:tooltip for="addbtn" position="top" value="Add new contact" />
-                                                <p:commandButton id="addbtn" icon="ui-icon-plus" onsuccess="PF('add_contact_popup').show();" actionListener="#{expenseController.initCreateContact()}"/>
-                                            </h:panelGroup>
-                                        </p:panelGrid>
-
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:autoComplete id="expenseCurrency" 
                                                             dropdown="true"
@@ -166,8 +134,8 @@
                                                             required="true"
                                                             requiredMessage="Please select currency">
                                                 <p:clientValidator event="itemSelect"/>
-                                                <p:ajax event="itemSelect" 
-                                                        update="expenseItemTable,exchangeCurrency" />
+                                                <p:ajax event="itemSelect" oncomplete="update();"
+                                                        update="expenseItemTable,exchangeCurrency,#{p:component('abc')}" />
                                             </p:autoComplete>
                                             <p:outputLabel for="expenseCurrency" value="#{messages.currency}"/>
                                             <p:message for="expenseCurrency" />
@@ -435,8 +403,8 @@
                                     </p:fieldset>
                                 </h:panelGroup>
                                 <p:fieldset legend="Receipt" toggleable="true" toggleSpeed="500">
-                                    <p:panelGrid columns="3"
-                                                 columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
+                                    <p:panelGrid columns="2"
+                                                 columnClasses="ui-grid-col-6,ui-grid-col-6"
                                                  layout="grid" styleClass="ui-panelgrid-blank form-group"
                                                  style="border:0px none; background-color:transparent;">
 
@@ -450,28 +418,47 @@
                                             <p:outputLabel for="expenseReceiptNumber" value="#{messages.receiptnumber}"/>
                                         </h:panelGroup>
 
-                                        <h:panelGroup styleClass="md-inputfield">
-                                            <div style="text-align: center">
-                                                <p:fileUpload auto="true" 
-                                                              mode="advanced" update="fileName"  fileUploadListener="#{expenseController.fileUploadListener}"  />
-                                                <h:outputText value="#{expenseController.fileName}"  id="fileName"/>
-                                            </div>
-                                            <div style="text-align: center;margin-top: 10px" >
-                                                <h:panelGroup rendered="#{expenseController.selectedExpenseModel.attachmentFileContent != null}">
-                                                    <p:commandButton value="Download" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s">
-                                                        <p:fileDownload value="#{expenseController.selectedExpenseModel.attachmentFileContent}" />
-                                                    </p:commandButton>
-                                                </h:panelGroup>
-                                            </div>
-                                        </h:panelGroup>
+
 
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText
                                                 id="expenseAttachmentDescription"
-
                                                 value="#{expenseController.selectedExpenseModel.receiptAttachmentDescription}" />
                                             <p:outputLabel for="expenseAttachmentDescription" value="#{messages.attachment_description}"/>
                                         </h:panelGroup>
+
+                                        <p:panelGrid columns="3" style="margin-left: -25px">
+                                            <h:panelGroup >
+                                                <div style="text-align: center">
+                                                    <p:fileUpload auto="true" 
+                                                                  mode="advanced" update="fileName"  fileUploadListener="#{expenseController.fileUploadListener}"  />
+                                                    <h:outputText value="#{expenseController.fileName}"  id="fileName"/>
+
+                                                </div>
+                                            </h:panelGroup>
+                                            <h:panelGroup rendered="#{expenseController.selectedExpenseModel.attachmentFileContent != null}" style="margin-left: -30px">
+                                                <p:commandButton value="#{expenseController.selectedExpenseModel.receiptAttachmentName}" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" style="background-color: white!important;color: blue!important;border: 0px!important;text-decoration: underline!important;
+                                                                 box-shadow: 0 1px 2.5px 0 rgba(255, 255, 255, 0.26), 0 1px 5px 0 rgba(255, 255, 255, 0.16)">
+                                                    <p:fileDownload value="#{expenseController.selectedExpenseModel.attachmentFileContent}" />
+                                                </p:commandButton>
+
+                                            </h:panelGroup>
+                                            <h:panelGroup style="margin-left: -80%;padding: 0px" rendered="#{expenseController.selectedExpenseModel.receiptAttachmentContentType!=null and (expenseController.selectedExpenseModel.receiptAttachmentContentType.equals('image/jpeg') or expenseController.selectedExpenseModel.receiptAttachmentContentType.equals('image/png'))}">
+
+                                                <p:commandButton  id="img" icon="ui-icon-circle-zoomin" style="cursor:pointer;background: none!important;color: black" >
+                                                </p:commandButton>
+                                                <p:overlayPanel id="imgPanel" for="img" showEffect="blind"  showEvent="mouseover" hideEvent="mouseout"
+                                                                dismissable="false">
+                                                    <p:graphicImage value="#{streamedContentSessionController.streamedPreviewPic}" cache="false" width="300" />
+                                                </p:overlayPanel>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+
+
+
+
+
+
 
 
                                     </p:panelGrid>
@@ -506,41 +493,12 @@
                                         </p:column>
 
                                         <p:column headerText="Product/Service"  style="width: 280px">
-                                            <p:panelGrid columns="2" 
-                                                         columnClasses="ui-grid-col-11,ui-grid-col-1" 
-                                                         layout="grid" 
-                                                         styleClass="ui-panelgrid-blank form-group" >
-                                                <p:autoComplete id="product_service" 
-                                                                converter="#{productConverter}"
-                                                                dropdown="true" style="margin-top: 11.5px !important;"
-                                                                forceSelection="true"
-                                                                effect="fold"
-                                                                groupBy="#{product.parentProduct == null ? 'Other' : product.parentProduct.productName}"
-                                                                value="#{expenseItem.expenseLineItemProductService}"
-                                                                completeMethod="#{expenseController.products}" 
-                                                                var="product"
-                                                                scrollHeight="250"
-                                                                itemValue="#{product}"
-                                                                itemLabel="#{product.productName}"
-                                                                >
-                                                    <p:ajax update="expenseItemTable" event="itemSelect" listener="#{expenseController.updateVatPercentage(expenseItem)}" />
-                                                </p:autoComplete>
-                                                <h:panelGroup styleClass="md-inputfield">
-                                                    <p:tooltip for="addproductbtn" position="top" value="Add new product" />
-                                                    <p:commandButton id="addproductbtn" icon="ui-icon-plus" oncomplete="PF('add_product_popup').show();" action="#{expenseController.reserveProductOnAdd(expenseItem)}" process="@this" />
-                                                </h:panelGroup>
-                                            </p:panelGrid>
+                                            <p:inputText id="product_name"
+                                                         value="#{expenseItem.productName}" 
+                                                         style="width:100%" >
+                                                <p:ajax event="change" process="product_name" />
+                                            </p:inputText> 
                                         </p:column>
-
-                                        <p:column headerText="Description" styleClass="amount" style="width: 240px">
-                                            <p:inputText id="description" 
-                                                         value="#{expenseItem.description}" 
-
-                                                         style="width:100%">
-                                                <p:ajax event="change" />
-                                            </p:inputText>
-                                        </p:column>
-
                                         <p:column headerText="Quantity" styleClass="amount"  style="width: 50px">
                                             <p:inputText id="quantity"
                                                          onfocus="clearTextField(event, this)"
@@ -602,7 +560,7 @@
 
 
                                             <p:row>      
-                                                <p:column rowspan="3" colspan="5" style="border-bottom: 0 !important; border-left: 0 !important">
+                                                <p:column rowspan="3" colspan="4" style="border-bottom: 0 !important; border-left: 0 !important">
                                                 </p:column>
                                                 <p:column footerText="Total Net" styleClass="amount"/>
                                                 <p:column styleClass="amount">
@@ -631,7 +589,7 @@
                                                 <p:column footerText="Total" styleClass="amount" style="font-weight: bold"/>  
                                                 <p:column styleClass="amount">
                                                     <f:facet name="footer">
-                                                        <p:outputPanel autoUpdate="true">
+                                                        <p:outputPanel autoUpdate="true" id="abc">
                                                             <h:outputText value="#{expenseController.totalAmount}" style="font-weight: bold">
                                                                 <f:convertNumber type="currency" currencySymbol="#{expenseController.selectedExpenseModel.currency.currencySymbol} " />
                                                             </h:outputText>
@@ -646,8 +604,7 @@
                                 </p:fieldset>
                                 <h:panelGroup id="exchangeCurrency"  >
                                     <p:fieldset legend="Currency Exchange Details" 
-                                                rendered="#{expenseController.selectedExpenseModel.currency.currencyCode != expenseController.company.companyCountryCode.currencyCode.currencyCode 
-                                                            and expenseController.currencyConversion != null}">
+                                                rendered="#{expenseController.selectedExpenseModel.currency.currencyCode != expenseController.company.currencyCode.currencyCode}">
 
                                         <p:panelGrid columns="6" 
                                                      columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
@@ -665,10 +622,11 @@
 
                                             <p:outputLabel for="totalvalue"  />
                                             <h:panelGroup styleClass="md-inputwrapper-filled">
-                                                <label>Total Value :-    </label>
+
+                                                <label>Total Value :-</label>
                                                 <h:outputText id="totalvalue"
                                                               value="#{expenseController.totalAmountInHomeCurrency(expenseController.selectedExpenseModel.currency)}" >
-                                                    <f:convertNumber type="currency" currencySymbol="#{expenseController.company.companyCountryCode.currencyCode.currencySymbol} "/>
+                                                    <f:convertNumber type="currency" currencySymbol="#{expenseController.company.currencyCode.currencySymbol} " />
                                                 </h:outputText>
                                             </h:panelGroup>
                                         </p:panelGrid>
@@ -733,7 +691,7 @@
 
                 //   ]]>
             </script>
-
+            <p:remoteCommand name="update" update="#{p:component('abc')}"/>
         </h:form>
         <ui:include src="add-contact-popup.xhtml" />
         <ui:include src="add-product-popup.xhtml"/>

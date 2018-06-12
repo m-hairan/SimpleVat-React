@@ -9,11 +9,13 @@ import com.github.javaplugs.jsf.SpringScopeView;
 import com.simplevat.entity.Company;
 import com.simplevat.entity.CompanyType;
 import com.simplevat.entity.Country;
+import com.simplevat.entity.Currency;
 import com.simplevat.entity.IndustryType;
 import com.simplevat.entity.User;
 import com.simplevat.service.CompanyService;
 import com.simplevat.service.CompanyTypeService;
 import com.simplevat.service.CountryService;
+import com.simplevat.service.CurrencyService;
 import com.simplevat.service.IndustryTypeService;
 import com.simplevat.web.user.controller.UserProfileController;
 import com.simplevat.web.utils.FacesUtil;
@@ -71,6 +73,10 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
     String fileName;
     @Getter
     private boolean renderProfilePic;
+    @Getter
+    private List<Currency> currencys = new ArrayList<>();
+    @Autowired
+    private CurrencyService currencyService;
 
     @PostConstruct
     public void init() {
@@ -78,6 +84,7 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
         countries = countryService.getCountries();
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_COMPANY_LOGO", companyModel.getCompanyLogo());
         renderProfilePic = true;
+        currencys = currencyService.getCurrencies();
     }
 
     public List<CompanyType> completeCompanyType() {
@@ -86,6 +93,10 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
 
     public List<IndustryType> completeIndustryType() {
         return industryTypeService.getIndustryTypes();
+    }
+
+    public List<Currency> completeCurrency() {
+        return currencys;
     }
 
     public List<Country> completeCountry(String countryStr) {
@@ -162,4 +173,13 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
         FacesMessage message = new FacesMessage("", "Uploaded successfully");
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
+
+    public CurrencyService getCurrencyService() {
+        return currencyService;
+    }
+
+    public void setCurrencyService(CurrencyService currencyService) {
+        this.currencyService = currencyService;
+    }
+
 }

@@ -20,7 +20,7 @@
                     </div>
                     <div class="ui-g-12">
                         <div class="card card-w-title">
-<!-- <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />-->
+                            <!-- <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />-->
                             <p:fieldset legend="#{messages.CompanyDetail}" toggleable="false" >
                                 <p:panelGrid columns="3" 
                                              columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" 
@@ -28,7 +28,7 @@
                                              styleClass="ui-panelgrid-blank form-group"
                                              style="border:0px none; background-color:transparent;">
 
-                                    
+
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:inputText id="CompanyName" required="true"
                                                      requiredMessage="Please enter company name"
@@ -36,7 +36,7 @@
                                         <p:message for="CompanyName" />
                                         <p:outputLabel for="CompanyName" value="#{messages.CompanyName}"/>
                                     </h:panelGroup>
-                                   
+
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="IndustryTypeCode"
                                                         converter="#{industryTypeConverter}" 
@@ -56,7 +56,7 @@
                                         <p:outputLabel for="IndustryTypeCode" value="#{messages.IndustryTypeCode}"/>
                                     </h:panelGroup>
 
-                                   
+
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:autoComplete id="CompanyCountryCode"
                                                         converter="#{countryConverter}" 
@@ -74,6 +74,25 @@
                                                         />
                                         <p:message for="CompanyCountryCode" />
                                         <p:outputLabel for="CompanyCountryCode" value="#{messages.CompanyCountryCode}" />
+                                    </h:panelGroup>
+
+                                    <h:panelGroup styleClass="md-inputfield">
+                                        <p:autoComplete id="currencyCode"
+                                                        converter="#{currencyConverter}" 
+                                                        dropdown="true" 
+                                                        forceSelection="true" 
+                                                        effect="fold"
+                                                        completeMethod="#{initialUserController.completeCurrency()}"
+                                                        value="#{initialUserController.companyModel.currencyCode}"
+                                                        var="currency"
+                                                        itemValue="#{currency}"
+                                                        itemLabel="#{currency.currencyName}" 
+                                                        required="true"
+                                                        scrollHeight="250"
+                                                        requiredMessage="Please select Currency Code">
+                                            <p:clientValidator event="itemSelect"/></p:autoComplete>
+                                        <p:outputLabel for="currencyCode" value="Currency Code"/>
+                                        <p:message for="currencyCode" />
                                     </h:panelGroup>
 
                                 </p:panelGrid>

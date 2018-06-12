@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import com.simplevat.entity.Country;
+import com.simplevat.entity.Currency;
 import com.simplevat.entity.IndustryType;
 import com.simplevat.entity.Mail;
 import com.simplevat.entity.MailEnum;
@@ -37,6 +38,7 @@ import com.simplevat.integration.MailIntegration;
 import com.simplevat.service.CompanyService;
 import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.CountryService;
+import com.simplevat.service.CurrencyService;
 import com.simplevat.service.IndustryTypeService;
 import com.simplevat.web.company.controller.CompanyHelper;
 import com.simplevat.web.company.controller.CompanyModel;
@@ -54,6 +56,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMultipart;
+import javax.servlet.ServletContext;
 
 /**
  *
@@ -96,9 +99,15 @@ public class InitialUserController implements Serializable {
     private List<Country> countries = new ArrayList<>();
     private Base64.Decoder decoder = Base64.getDecoder();
     String userId;
+    @Autowired
+    private CurrencyService currencyService;
+    @Getter
+    private List<Currency> currencys = new ArrayList<>();
 
     @PostConstruct
     public void init() {
+        companyModel = new CompanyModel();
+        companyHelper = new CompanyHelper();
         FacesContext context = FacesContext.getCurrentInstance();
         String token = context.getExternalContext().getRequestParameterMap().get("token");
         String envToken = System.getenv("SIMPLEVAT_TOKEN");
@@ -118,9 +127,9 @@ public class InitialUserController implements Serializable {
         }
         baseUrl = context.getExternalContext().getRequestParameterMap().get("baseUrl");
         password = new String(decoder.decode(context.getExternalContext().getRequestParameterMap().get("password"))).replace(token, "");
-        companyModel = new CompanyModel();
+        
         companyModel.setCompanyName(context.getExternalContext().getRequestParameterMap().get("companyname"));
-        companyHelper = new CompanyHelper();
+        
         selectedUser = new UserDTO();
         selectedUser.setFirstName(context.getExternalContext().getRequestParameterMap().get("userFirstName"));
         String userLastName = context.getExternalContext().getRequestParameterMap().get("userLastName");
@@ -135,35 +144,42 @@ public class InitialUserController implements Serializable {
         if (role != null) {
             selectedUser.setRole(role);
         }
+        currencys = currencyService.getCurrencies();
         countries = countryService.getCountries();
     }
 
     public String saveUpdate() {
-        if (!userService.getUserByEmail(selectedUser.getUserEmail()).isPresent()) {
-            try {
-                Company c = companyHelper.getCompanyFromCompanyModel(companyModel);
-                c.setCompanyExpenseBudget(BigDecimal.ZERO);
-                c.setCompanyRevenueBudget(BigDecimal.ZERO);
-                c.setCreatedBy(0);
-                c.setCreatedDate(LocalDateTime.now());
-                companyService.persist(c);
+          if (!userService.getUserByEmail(selectedUser.getUserEmail()).isPresent()) {
+        try {
+            Company c = companyHelper.getCompanyFromCompanyModel(companyModel);
+            c.setCompanyExpenseBudget(BigDecimal.ZERO);
+            c.setCompanyRevenueBudget(BigDecimal.ZERO);
+            c.setCreatedBy(0);
+            c.setCreatedDate(LocalDateTime.now());
+            companyService.persist(c);
+            ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+            servletContext.setAttribute("companyId", c.getCompanyId());
+            User user = new User();
+            BeanUtils.copyProperties(selectedUser, user);
+            user.setCreatedBy(0);
+            user.setCreatedDate(LocalDateTime.now());
+            user.setIsActive(Boolean.TRUE);
+            user.setCompany(companyService.findByPK(c.getCompanyId()));
+            FacesContext context = FacesContext.getCurrentInstance();
+            context.getExternalContext().getFlash().setKeepMessages(true);
+            userService.persist(user);
+            sendActivationMail(user);
 
-                User user = new User();
-                BeanUtils.copyProperties(selectedUser, user);
-                user.setCreatedBy(0);
-                user.setCreatedDate(LocalDateTime.now());
-                user.setIsActive(Boolean.TRUE);
-                user.setCompany(companyService.findByPK(c.getCompanyId()));
-                FacesContext context = FacesContext.getCurrentInstance();
-                context.getExternalContext().getFlash().setKeepMessages(true);
-                userService.persist(user);
-                sendActivationMail(user);
-                return "/pages/public/setupConfirmation.xhtml?faces-redirect=true&baseUrl=" + baseUrl + "&userLoginId=" + user.getUserEmail() + "&name=" + user.getFirstName();
-            } catch (IllegalArgumentException ex) {
-                java.util.logging.Logger.getLogger(UserProfileController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            return "/pages/public/setupConfirmation.xhtml?faces-redirect=true&baseUrl=" + baseUrl + "&userLoginId=" + user.getUserEmail() + "&name=" + user.getFirstName();
+        } catch (IllegalArgumentException ex) {
+            java.util.logging.Logger.getLogger(UserProfileController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         }
         return "";
+    }
+
+    public List<Currency> completeCurrency() {
+        return currencys;
     }
 
     public List<Country> completeCountry(String countryStr) {

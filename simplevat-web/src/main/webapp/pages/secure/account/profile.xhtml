@@ -77,6 +77,7 @@
                         <p:calendar id="dob"
                                     pattern="MM/dd/yyyy"
                                     navigator="true" 
+                                    yearRange="c-100:c+20"
                                     maxdate="#{userProfileController.currentUser.today}"
                                     value="#{userProfileController.currentUser.dateOfBirth}"
                                     readonlyInput="#{userProfileController.currentUser.dateOfBirth != null}" />

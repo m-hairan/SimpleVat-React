@@ -50,6 +50,7 @@ public class CompanyHelper {
         companyModel.setVatRegistrationNumber(company.getVatRegistrationNumber());
         companyModel.setVersionNumber(company.getVersionNumber());
         companyModel.setWebsite(company.getWebsite());
+        companyModel.setCurrencyCode(company.getCurrencyCode());
         return companyModel;
     }
 
@@ -67,7 +68,7 @@ public class CompanyHelper {
         company.setCompanyRegistrationNumber(companyModel.getCompanyRegistrationNumber());
         company.setCompanyStateRegion(companyModel.getCompanyStateRegion());
         company.setCompanyTypeCode(companyModel.getCompanyTypeCode());
-		company.setCompanyExpenseBudget(companyModel.getCompanyExpenseBudget());
+        company.setCompanyExpenseBudget(companyModel.getCompanyExpenseBudget());
         company.setCompanyRevenueBudget(companyModel.getCompanyRevenueBudget());
         company.setIndustryTypeCode(companyModel.getIndustryTypeCode());
         company.setCompanyName(companyModel.getCompanyName());
@@ -90,6 +91,7 @@ public class CompanyHelper {
         company.setVatRegistrationNumber(companyModel.getVatRegistrationNumber());
         company.setVersionNumber(companyModel.getVersionNumber());
         company.setWebsite(companyModel.getWebsite());
+        company.setCurrencyCode(companyModel.getCurrencyCode());
         return company;
     }
 

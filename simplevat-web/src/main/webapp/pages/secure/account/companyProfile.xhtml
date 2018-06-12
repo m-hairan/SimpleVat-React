@@ -105,8 +105,8 @@
                 <h:panelGroup styleClass="md-inputfield">
                     <p:inputText id="Website" value="#{companyProfileController.companyModel.website}"
                                  validatorMessage="Invalid website format">
-                    
-                    <f:validateRegex
+
+                        <f:validateRegex
                             pattern="^(http:\/\/|https:\/\/)?(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[a-z]{3}\.([a-z]+)?$"/>
                     </p:inputText>
                     <p:outputLabel value="#{messages.Website}"/>
@@ -127,7 +127,27 @@
                     <p:inputMask id="phone" mask="9999999999" value="#{companyProfileController.companyModel.phoneNumber}"/>
                     <p:outputLabel for="phone" value="#{messages.PhoneNumber}"/>
                 </h:panelGroup>
+                <h:panelGroup styleClass="md-inputfield">
+                    <p:autoComplete id="currencyCode"
+                                    converter="#{currencyConverter}" 
+                                    dropdown="true" 
+                                    forceSelection="true" 
+                                    effect="fold"
+                                    completeMethod="#{companyProfileController.completeCurrency()}"
+                                    value="#{companyProfileController.companyModel.currencyCode}"
+                                    var="currency"
+                                    itemValue="#{currency}"
+                                    itemLabel="#{currency.currencyName}" 
+                                    required="true"
+                                    scrollHeight="250"
+                                    requiredMessage="Please select Currency Code">
+                        <p:clientValidator event="itemSelect"/></p:autoComplete>
+                    <p:outputLabel for="currencyCode" value="Currency Code"/>
+                    <p:message for="currencyCode" />
+                </h:panelGroup>
             </p:panelGrid>
+
+
         </p:fieldset>
 
         <p:fieldset legend="#{messages.CompanyCostDetatil}" toggleable="false">

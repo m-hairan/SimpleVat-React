@@ -53,6 +53,7 @@
                                                 <p:calendar
                                                     id="startdate"
                                                     required="true"
+                                                    yearRange="c-100:c+20"
                                                     requiredMessage="#{messages.EnterStartDate}"
                                                     value="#{invoiceReport.financialPeriod.startDate}" 
                                                     >
@@ -67,6 +68,7 @@
                                                 <p:calendar
                                                     id="enddate"
                                                     required="true"
+                                                    yearRange="c-100:c+20"
                                                     requiredMessage="#{messages.EnterEndDate}"
                                                     value="#{invoiceReport.financialPeriod.lastDate}" 
                                                     >

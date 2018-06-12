@@ -27,14 +27,14 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @Table(name = "EXPENSE")
 @Data
-@TableGenerator(name="INCREMENT_INITIAL_VALUE", initialValue = 1000)
+@TableGenerator(name = "INCREMENT_INITIAL_VALUE", initialValue = 1000)
 public class Expense implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name = "EXPENSE_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY,generator ="INCREMENT_INITIAL_VALUE")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "INCREMENT_INITIAL_VALUE")
     private Integer expenseId;
 
     @Basic
@@ -114,7 +114,6 @@ public class Expense implements Serializable {
 //    @Column(name = "RECURRING_FLAG")
 //    @ColumnDefault(value = "0")
 //    private Boolean recurringFlag = Boolean.FALSE;
-
     @Column(name = "VERSION_NUMBER")
     @ColumnDefault(value = "1")
     @Basic(optional = false)
@@ -138,7 +137,6 @@ public class Expense implements Serializable {
 //
 //    @Column(name = "RECURRING_BY_AFTER")
 //    private Integer recurringByAfter;
-
 //    @Column(name = "STATUS")
 //    private Integer status;
     @Column(name = "PAYMENTMODE")
@@ -148,14 +146,19 @@ public class Expense implements Serializable {
     @Lob
     @Column(name = "RECEIPT_ATTACHMENT")
     private byte[] receiptAttachmentBinary;
-    
+
     @Basic
     @Column(name = "RECEIPT_ATTACHMENT_NAME")
     private String receiptAttachmentName;
-    
+
     @Basic
     @Column(name = "RECEIPT_ATTACHMENT_CONTENT_TYPE")
     private String receiptAttachmentContentType;
+
+    @Basic
+    @ColumnDefault(value = "0.00")
+    @Column(name = "EXPENSE_AMOUNT_COMPANY_CURRENCY")
+    private BigDecimal expencyAmountCompanyCurrency;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "expense", orphanRemoval = true)
     private Collection<ExpenseLineItem> expenseLineItems;

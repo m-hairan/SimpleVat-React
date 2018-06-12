@@ -48,4 +48,6 @@ public class PurchaseLineItem implements Serializable {
     @ManyToOne
     @JoinColumn(name = "PURCHASE_ID")
     private Purchase purchase;
+    @Column(name = "PURCHASE_PRODUCT_NAME")
+    private String productName;
 }

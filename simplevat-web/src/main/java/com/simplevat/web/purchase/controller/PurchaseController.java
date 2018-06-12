@@ -119,7 +119,7 @@ public class PurchaseController extends BaseController implements Serializable {
 
     @Getter
     private BigDecimal total;
-    
+
     @Getter
     private BigDecimal totalAmount;
 
@@ -189,7 +189,7 @@ public class PurchaseController extends BaseController implements Serializable {
                 selectedPurchaseModel.setPurchaseContact(contactService.findByPK(Integer.parseInt(objSelectedContact.toString())));
             }
             selectedPurchaseModel.setPurchaseDueOn(30);
-            Currency defaultCurrency = company.getCompanyCountryCode().getCurrencyCode();
+            Currency defaultCurrency = company.getCurrencyCode();
             if (defaultCurrency != null) {
                 selectedPurchaseModel.setCurrency(defaultCurrency);
             }
@@ -206,6 +206,7 @@ public class PurchaseController extends BaseController implements Serializable {
         titles = titleService.getTitles();
         countries = countryService.getCountries();
         currencies = currencyService.getCurrencies();
+        selectedPurchaseModel.setUser(userServiceNew.findByPK(FacesUtil.getLoggedInUser().getUserId()));
         setDefaultCountry();
         setDefaultContactCurrency();
         addLineItem();
@@ -297,7 +298,7 @@ public class PurchaseController extends BaseController implements Serializable {
     }
 
     private void setDefaultContactCurrency() {
-        Currency defaultCurrency = company.getCompanyCountryCode().getCurrencyCode();
+        Currency defaultCurrency = company.getCurrencyCode();
         if (defaultCurrency != null) {
             contactModel.setCurrency(defaultCurrency);
         }
@@ -381,9 +382,9 @@ public class PurchaseController extends BaseController implements Serializable {
     }
 
     private boolean validateInvoiceItem() {
-       
+
         boolean validated = true;
-        for (int i = 0; i < selectedPurchaseModel.getPurchaseItems().size()-1; i++) {
+        for (int i = 0; i < selectedPurchaseModel.getPurchaseItems().size() - 1; i++) {
             PurchaseItemModel lastItem = selectedPurchaseModel.getPurchaseItems().get(i);
             StringBuilder validationMessage = new StringBuilder("Please enter ");
             if (lastItem.getUnitPrice() == null) {
@@ -490,7 +491,9 @@ public class PurchaseController extends BaseController implements Serializable {
         String exchangeRateString = "";
         currencyConversion = currencyService.getCurrencyRateFromCurrencyConversion(currency.getCurrencyCode());
         if (currencyConversion != null) {
-            exchangeRateString = "1 " + currency.getCurrencyIsoCode() + " = " + new BigDecimal(BigInteger.ONE).divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP) + " " + company.getCompanyCountryCode().getCurrencyCode().getCurrencyIsoCode();
+            if (company.getCurrencyCode() != null) {
+                exchangeRateString = "1 " + currency.getCurrencyIsoCode() + " = " + new BigDecimal(BigInteger.ONE).divide(currencyConversion.getExchangeRate(), 9, RoundingMode.HALF_UP) + " " + company.getCurrencyCode().getCurrencyIsoCode();
+            }
         }
         return exchangeRateString;
     }
@@ -590,7 +593,7 @@ public class PurchaseController extends BaseController implements Serializable {
     }
 
     private void setDefaultCurrency() {
-        Currency defaultCurrency = company.getCompanyCountryCode().getCurrencyCode();
+        Currency defaultCurrency = company.getCurrencyCode();
         if (defaultCurrency != null) {
             selectedPurchaseModel.setCurrency(defaultCurrency);
         }
@@ -733,16 +736,16 @@ public class PurchaseController extends BaseController implements Serializable {
             for (PurchaseItemModel itemModel : purchaseItemModels) {
                 if (itemModel.getSubTotal() != null) {
                     total = total.add(itemModel.getSubTotal());
-                    if(itemModel.getUnitPrice()!=null){
-                    BigDecimal totalAmount = itemModel.getUnitPrice().multiply(new BigDecimal(itemModel.getQuatity()));
-                    vatTotal = vatTotal.add((totalAmount.multiply(itemModel.getVatId().getVat())).divide(new BigDecimal(100)));
+                    if (itemModel.getUnitPrice() != null) {
+                        BigDecimal totalAmount = itemModel.getUnitPrice().multiply(new BigDecimal(itemModel.getQuatity()));
+                        vatTotal = vatTotal.add((totalAmount.multiply(itemModel.getVatId().getVat())).divide(new BigDecimal(100)));
                     }
                 }
             }
         }
         selectedPurchaseModel.setPurchaseSubtotal(total);
         selectedPurchaseModel.setPurchaseVATAmount(vatTotal);
-        totalAmount=total.add(vatTotal);
+        totalAmount = total.add(vatTotal);
     }
 
     private Date getDueDate(PurchaseModel purchaseModel) {

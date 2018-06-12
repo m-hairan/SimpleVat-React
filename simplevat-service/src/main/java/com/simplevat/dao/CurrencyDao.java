@@ -11,10 +11,16 @@ import java.util.List;
 public interface CurrencyDao extends Dao<Integer, Currency> {
 
     List<Currency> getCurrencies();
-    
+
     Currency getCurrency(final int currencyCode);
 
     Currency getDefaultCurrency();
 
     public CurrencyConversion getCurrencyRateFromCurrencyConversion(int currencyCode);
+
+    public String getCountryCodeAsString(String CountryCode);
+
+    public List<String> getCountryCodeString();
+
+    public List<Currency> getCurrencyList(Currency currency);
 }

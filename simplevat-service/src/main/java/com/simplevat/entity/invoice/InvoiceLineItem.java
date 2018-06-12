@@ -77,4 +77,6 @@ public class InvoiceLineItem implements Serializable {
     @ManyToOne
     @JoinColumn(name = "INVOICE_ID")
     private Invoice invoice;
+    @Column(name = "INVOICE_PRODUCT_NAME")
+    private String productName;
 }

@@ -101,6 +101,11 @@
         <servlet-class>com.simplevat.user.config.PatchExecutionServlet</servlet-class>
         <load-on-startup>0</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>CurrencyExchangeServlet</servlet-name>
+        <servlet-class>com.simplevat.user.config.CurrencyExchangeServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.jsf</url-pattern>

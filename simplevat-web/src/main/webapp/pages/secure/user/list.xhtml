@@ -20,7 +20,7 @@
                     <f:facet name="{TableHeader}">
                         <p:outputLabel styleClass="tableCustomHeader" value="#{messages.users}" />
                     </f:facet>
-                    
+
                     <f:facet name="{TableFooter}">
                         <p:outputLabel styleClass="tableCustomFooter" value="Total Record: #{manageUserController.userDTOList.size()}" />
                     </f:facet>
@@ -31,7 +31,8 @@
 
                     <p:column headerText="DOB" sortBy="#{user.displayDOB}" filterMatchMode="contains" filterBy="#{user.displayDOB}" >
                         <f:facet name="filter">
-                            <p:calendar  pattern="dd/MM/yyyy" locale="de" navigator="true">
+                            <p:calendar  pattern="dd/MM/yyyy" locale="de" navigator="true"
+                                         yearRange="c-100:c+20">
                                 <p:ajax event="dateSelect"  oncomplete="PF('userTable').filter()"/>
                             </p:calendar>
                         </f:facet>

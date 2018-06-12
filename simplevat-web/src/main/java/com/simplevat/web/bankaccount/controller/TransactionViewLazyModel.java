@@ -260,7 +260,7 @@ public class TransactionViewLazyModel extends LazyDataModel<TransactionViewModel
                     + (transactionViewModel.getReferenceName() != null ? transactionViewModel.getReferenceName() + " | " : "")
                     + transactionViewModel.getContactName()
                     + " | " + transactionViewModel.getCurrencySymbol() + " " + transactionViewModel.getDueAmount()
-                    + " |<b> Due On : </b> " + new SimpleDateFormat("MM/dd/yyyy").format(transactionViewModel.getDueOn());
+                    + " |<b> Due On: </b> " + new SimpleDateFormat("MM/dd/yyyy").format(transactionViewModel.getDueOn());
 
         } else {
             return (transactionViewModel.getTransactionTypeName() != null ? "<b>Type: </b>" + transactionViewModel.getTransactionTypeName() + " | " : "") + (transactionViewModel.getTransactionCategoryName() != null ? "<b>Category: </b>" + transactionViewModel.getTransactionCategoryName() : "");

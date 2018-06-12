@@ -1,6 +1,7 @@
 package com.simplevat.web.expense.controller;
 
 import com.github.javaplugs.jsf.SpringScopeView;
+import com.simplevat.entity.Company;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,10 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.simplevat.entity.Expense;
+import com.simplevat.service.CompanyService;
 import com.simplevat.web.expense.model.ExpenseModel;
 import com.simplevat.service.ExpenseService;
+import com.simplevat.service.UserServiceNew;
 import com.simplevat.web.common.controller.BaseController;
 import com.simplevat.web.constant.ModuleName;
+import com.simplevat.web.utils.FacesUtil;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -28,6 +32,11 @@ public class ExpenseListController extends BaseController implements Serializabl
 
     @Autowired
     private ExpenseService expenseService;
+
+    @Autowired
+    private UserServiceNew userServiceNew;
+    @Autowired
+    private CompanyService companyService;
     @Getter
     @Setter
     private ExpenseModel selectedExpenseModel;
@@ -39,6 +48,10 @@ public class ExpenseListController extends BaseController implements Serializabl
     @Setter
     ExpenseControllerHelper controllerHelper;
 
+    @Getter
+    @Setter
+    Company company;
+
     public ExpenseListController() {
         super(ModuleName.EXPENSE_MODULE);
     }
@@ -48,9 +61,11 @@ public class ExpenseListController extends BaseController implements Serializabl
         controllerHelper = new ExpenseControllerHelper();
         List<Expense> expenseList = expenseService.getExpenses();
         expenses = new ArrayList<>();
+        company = companyService.findByPK(userServiceNew.findByPK(FacesUtil.getLoggedInUser().getUserId()).getCompany().getCompanyId());
 
         for (Expense expense : expenseList) {
             ExpenseModel model = controllerHelper.getExpenseModel(expense);
+            model.setExpenseAmountCompanyCurrency(expense.getExpencyAmountCompanyCurrency());
             expenses.add(model);
         }
     }
@@ -64,7 +79,7 @@ public class ExpenseListController extends BaseController implements Serializabl
         Expense expense = controllerHelper.getExpense(selectedExpenseModel);
         expense.setDeleteFlag(true);
         expenseService.update(expense);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("","Expense deleted successfully"));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "Expense deleted successfully"));
         return "list.xhtml?faces-redirect=true";
     }
 

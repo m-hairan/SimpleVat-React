@@ -5,10 +5,15 @@
                 xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
                 xmlns:p="http://primefaces.org/ui" 
                 template="/WEB-INF/templates/template.xhtml">
-
     <ui:define name="title">#{messages.expenses}</ui:define>
-    <ui:define name="content">
 
+    <ui:define name="content">
+        <style>
+            .amount tbody tr td {
+                border: none !important;
+
+            }
+        </style>
         <h:form id="form">
             <si:cdataPanel newAction="#{expenseController.createExpense()}">
                 <p:dataTable var="expense" 
@@ -31,11 +36,31 @@
                         <h:outputText value="#{expense.receiptNumber}" />
                     </p:column>
 
-                    <p:column headerText="#{messages.amount}" sortBy="#{expense.expenseAmount}" styleClass="amount" filterMatchMode="contains" filterBy="#{expense.expenseAmount}">
-                        <h:outputText value="#{expense.currency.currencySymbol} " />
-                        <h:outputText value="#{expense.expenseAmount}" >
-                            <f:convertNumber type="currency" currencySymbol=""/>
-                        </h:outputText>
+                    <p:column class="panelAmount" headerText="#{messages.amount}" sortBy="#{expense.expenseAmount}" styleClass="amount" filterMatchMode="contains" filterBy="#{expense.expenseAmount}">
+                        <table  style="amount" >
+                            <tr>
+                                <td>
+                                    <h:panelGroup>
+                                        <h:outputText value="#{expense.currency.currencySymbol} " />
+                                        <h:outputText value="#{expense.expenseAmount}" >
+                                            <f:convertNumber type="currency" currencySymbol=""/>
+
+                                        </h:outputText>
+                                    </h:panelGroup>
+                                </td>
+                            </tr>
+                            <h:panelGroup rendered="#{expenseListController.company.currencyCode.currencyCode!=expense.currency.currencyCode}">
+                                <tr>
+                                    <td>
+                                        <sub>
+                                            <h:outputText value="#{expense.expenseAmountCompanyCurrency}" >
+                                                <f:convertNumber type="currency" currencySymbol="#{expenseListController.company.currencyCode.currencySymbol}"/>
+                                            </h:outputText>
+                                        </sub>
+                                    </td>
+                                </tr>
+                            </h:panelGroup>
+                        </table>
                     </p:column>
 
                     <p:column headerText="#{messages.description}" sortBy="#{expense.expenseDescription}" filterMatchMode="contains" filterBy="#{expense.expenseDescription}">

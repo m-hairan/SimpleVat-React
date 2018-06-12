@@ -33,13 +33,25 @@ public class CurrencyServiceImpl extends CurrencyService {
         return getDao().getDefaultCurrency();
     }
 
-	@Override
-	public CurrencyDao getDao() {
-		return currencyDao;
-	}
+    @Override
+    public CurrencyDao getDao() {
+        return currencyDao;
+    }
 
     @Override
     public CurrencyConversion getCurrencyRateFromCurrencyConversion(int currencyCode) {
         return currencyDao.getCurrencyRateFromCurrencyConversion(currencyCode);
+    }
+
+    public String getCountryCodeAsString(String CountryCode) {
+        return currencyDao.getCountryCodeAsString(CountryCode);
+    }
+
+    public List<String> getCountryCodeString() {
+        return currencyDao.getCountryCodeString();
+    }
+
+    public List<Currency> getCurrencyList(Currency currency) {
+        return currencyDao.getCurrencyList(currency);
     }
 }

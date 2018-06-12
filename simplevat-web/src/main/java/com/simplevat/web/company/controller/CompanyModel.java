@@ -7,6 +7,7 @@ package com.simplevat.web.company.controller;
 
 import com.simplevat.entity.CompanyType;
 import com.simplevat.entity.Country;
+import com.simplevat.entity.Currency;
 import com.simplevat.entity.IndustryType;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -58,5 +59,6 @@ public class CompanyModel {
     private UploadedFile profileImage;
     private Boolean deleteFlag = Boolean.FALSE;
     private Integer versionNumber;
+    private Currency currencyCode;
 
 }

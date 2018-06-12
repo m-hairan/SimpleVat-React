@@ -365,7 +365,7 @@
                                     <h:panelGroup styleClass="md-inputfield">
                                         <p:calendar id="invoiceDate"
                                                     required="true"
-
+                                                    yearRange="c-100:c+20"
                                                     requiredMessage="Please Enter Invoice Date"
                                                     navigator="true" 
                                                     pattern="MM/dd/yyyy"
@@ -396,7 +396,7 @@
                                         <p:calendar id="invoiceDueDate"
                                                     pattern="MM/dd/yyyy" disabled="true"
                                                     navigator="true"
-
+                                                    yearRange="c-100:c+20"
                                                     value="#{invoiceController.selectedInvoiceModel.invoiceDueDate}"
                                                     >
 
@@ -598,7 +598,7 @@
                                             <p:calendar id="startDate" 
                                                         required="true"
                                                         navigator="true"
-
+                                                        yearRange="c-100:c+20"
                                                         requiredMessage="Select Start Date">
                                                 <p:clientValidator event="dateSelect"/>
                                             </p:calendar>
@@ -635,7 +635,7 @@
                                             <p:calendar id="endDate" 
                                                         required="true"
                                                         navigator="true"
-
+                                                        yearRange="c-100:c+20"
                                                         requiredMessage="Enter End date">
                                                 <p:clientValidator event="dateSelect"/>
                                             </p:calendar>
@@ -711,14 +711,6 @@
                                             </h:panelGroup>
                                         </p:panelGrid>
                                     </p:column>
-                                    <p:column headerText="Description"  style="width: 170px">
-                                        <p:inputText id="description" 
-                                                     value="#{invoiceItem.description}" 
-
-                                                     style="width:100%">
-                                            <p:ajax event="change"/>
-                                        </p:inputText>
-                                    </p:column>
                                     <p:column headerText="Quantity" styleClass="amount" style="width: 50px">
                                         <p:inputText id="quantity" 
                                                      validator="positiveNumberValidator"
@@ -779,12 +771,8 @@
                                         </h:panelGroup>
                                     </p:column>
                                     <p:columnGroup id="lineItemFooterColumnGroup"  type="footer" rendered="#{invoiceController.selectedInvoiceModel.invoiceLineItems.size() > 0}">  
-
-
                                         <p:row >  
-
-
-                                            <p:column rowspan="5" colspan="5" style="border-bottom: 0 !important; border-left: 0 !important">
+                                            <p:column rowspan="5" colspan="4" style="border-bottom: 0 !important; border-left: 0 !important">
                                                 <f:facet name="footer">
                                                     <h:panelGroup styleClass="md-inputfield" style="margin-top: 20px;">
                                                         <p:inputTextarea rows="5" 

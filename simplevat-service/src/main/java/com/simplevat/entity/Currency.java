@@ -12,7 +12,7 @@ import org.hibernate.annotations.ColumnDefault;
 @NamedQueries({
     @NamedQuery(name = "allCurrencies",
             query = "SELECT c "
-            + "FROM Currency c ORDER BY c.defaultFlag DESC, c.orderSequence,c.currencyDescription ASC ")
+            + "FROM Currency c where c.deleteFlag=false ORDER BY c.defaultFlag DESC, c.orderSequence,c.currencyDescription ASC ")
 })
 
 @Entity
