@@ -13,5 +13,5 @@ import com.simplevat.entity.Company;
  * @author admin
  */
 public interface CompanyDao extends Dao<Integer, Company>{
-    
+    public Company getCompany();
 }

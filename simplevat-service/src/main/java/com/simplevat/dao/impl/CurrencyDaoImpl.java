@@ -46,19 +46,38 @@ public class CurrencyDaoImpl extends AbstractDao<Integer, Currency> implements C
     @Override
     public CurrencyConversion getCurrencyRateFromCurrencyConversion(int currencyCode) {
         Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-            Date dateWithoutTime = cal.getTime();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date dateWithoutTime = cal.getTime();
         TypedQuery<CurrencyConversion> query = getEntityManager().createQuery("select c from CurrencyConversion c where c.currencyCodeConvertedTo =:currencyCode AND c.createdDate=:createdDate", CurrencyConversion.class);
         query.setParameter("currencyCode", currencyCode);
-        query.setParameter("createdDate",LocalDateTime.ofInstant(dateWithoutTime.toInstant(), ZoneId.systemDefault()));
+        query.setParameter("createdDate", LocalDateTime.ofInstant(dateWithoutTime.toInstant(), ZoneId.systemDefault()));
         List<CurrencyConversion> currencyConversionList = query.getResultList();
         if (currencyConversionList != null && !currencyConversionList.isEmpty()) {
             return currencyConversionList.get(0);
         }
         return null;
+    }
+
+    @Override
+    public Boolean isCurrencyDataAvailableOnTodayDate() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date dateWithoutTime = cal.getTime();
+        TypedQuery<CurrencyConversion> query = getEntityManager().createQuery("select c from CurrencyConversion c where c.createdDate=:createdDate", CurrencyConversion.class);
+        query.setParameter("createdDate", LocalDateTime.ofInstant(dateWithoutTime.toInstant(), ZoneId.systemDefault()));
+        List<CurrencyConversion> currencyConversionList = query.getResultList();
+        if (currencyConversionList != null && !currencyConversionList.isEmpty()) {
+            return true;
+        } else {
+            return false;
+
+        }
     }
 
     @Override
@@ -72,17 +91,16 @@ public class CurrencyDaoImpl extends AbstractDao<Integer, Currency> implements C
 
         return name;
     }
-    
-     public List<Currency> getCurrencyList(Currency currency) {
+
+    public List<Currency> getCurrencyList(Currency currency) {
         Query query = getEntityManager().createQuery("select c from Currency c where c.currencyIsoCode !=:currencyCode");
         query.setParameter("currencyCode", currency.getCurrencyIsoCode());
         List<Currency> currencyList = query.getResultList();
-       
-// query.setParameter("currencyCode", currencyCode);
 
+// query.setParameter("currencyCode", currencyCode);
         return currencyList;
     }
-    
+
     @Override
     public List<String> getCountryCodeString() {
         Query query = getEntityManager().createQuery("select c.currencyIsoCode from Currency c");

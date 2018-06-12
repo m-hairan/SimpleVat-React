@@ -740,7 +740,11 @@ public class ExpenseController extends BaseController implements Serializable {
                     total = total.add(expense.getSubTotal());
                     if (expense.getUnitPrice() != null) {
                         BigDecimal totalAmount = expense.getUnitPrice().multiply(new BigDecimal(expense.getQuatity()));
-                        vatTotal = vatTotal.add((totalAmount.multiply(expense.getVatId().getVat())).divide(new BigDecimal(100)));
+                        if (expense.getVatId() != null) {
+                            vatTotal = vatTotal.add((totalAmount.multiply(expense.getVatId().getVat())).divide(new BigDecimal(100)));
+                        } else {
+                            vatTotal = vatTotal.add(totalAmount);
+                        }
                     }
                 }
             }

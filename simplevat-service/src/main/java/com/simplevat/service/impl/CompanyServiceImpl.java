@@ -42,4 +42,9 @@ public class CompanyServiceImpl extends CompanyService {
         update(company);
     }
 
+    @Override
+    public Company getCompany() {
+        return companyDao.getCompany();
+    }
+
 }

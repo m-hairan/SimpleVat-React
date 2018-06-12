@@ -23,4 +23,6 @@ public interface CurrencyDao extends Dao<Integer, Currency> {
     public List<String> getCountryCodeString();
 
     public List<Currency> getCurrencyList(Currency currency);
+    
+    public Boolean isCurrencyDataAvailableOnTodayDate();
 }

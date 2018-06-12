@@ -25,7 +25,8 @@ import org.hibernate.annotations.ColumnDefault;
  * @author admin
  */
 @Entity
-@Table(name = "CURRENCY_CONVERSION")
+//@Table(name = "CURRENCY_CONVERSION")
+@Table(name = "CONVERTED_CURRENCY")
 @Data
 public class CurrencyConversion implements Serializable {
 

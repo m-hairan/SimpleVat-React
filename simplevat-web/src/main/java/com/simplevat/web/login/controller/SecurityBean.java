@@ -1,12 +1,17 @@
 package com.simplevat.web.login.controller;
 
 import com.github.javaplugs.jsf.SpringScopeView;
+import com.simplevat.entity.Company;
+import com.simplevat.entity.Currency;
 import com.simplevat.entity.Mail;
 import com.simplevat.entity.MailEnum;
 import com.simplevat.entity.User;
 import com.simplevat.integration.MailIntegration;
 import com.simplevat.integration.MailPreparer;
+import com.simplevat.service.CompanyService;
 import com.simplevat.service.ConfigurationService;
+import com.simplevat.service.CurrencyExchangeService;
+import com.simplevat.service.CurrencyService;
 import com.simplevat.service.UserServiceNew;
 import com.simplevat.web.constant.EmailConstant;
 import com.simplevat.web.utils.FileUtility;
@@ -36,6 +41,7 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import java.io.Serializable;
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import javax.annotation.PostConstruct;
@@ -77,12 +83,36 @@ public class SecurityBean implements PhaseListener, Serializable {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-    
-    private Boolean badcredential=false;
+
+    @Autowired
+    private CompanyService companyService;
+
+    @Autowired
+    private CurrencyService currencyService;
+
+    @Autowired
+    private CurrencyExchangeService currencyExchangeService;
+
+    private Boolean badcredential = false;
+
+    private Company company;
 
     @PostConstruct
     public void init() {
         versionNumber = System.getenv("SIMPLEVAT_RELEASE");
+
+        Thread thread = new Thread(new Runnable() {
+            public void run() {
+                company = companyService.getCompany();
+                if (!currencyService.isCurrencyDataAvailableOnTodayDate()) {
+                    if (company != null) {
+                        List<Currency> currencys = currencyService.getCurrencyList(company.getCurrencyCode());
+                        currencyExchangeService.saveExchangeCurrencies(company.getCurrencyCode(), currencys);
+                    }
+                }
+            }
+        });
+        thread.start();
         if (userService.findAll().isEmpty()) {
             try {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("/pages/public/token-mismatched-error.xhtml");
@@ -93,6 +123,7 @@ public class SecurityBean implements PhaseListener, Serializable {
     }
 
     @Override
+
     public void afterPhase(PhaseEvent event) {
     }
 
@@ -120,7 +151,7 @@ public class SecurityBean implements PhaseListener, Serializable {
     public String login() {
         LOGGER.info("Starting login from LoginManagedBean");
         try {
-            badcredential=false;
+            badcredential = false;
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, password);
             Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authenticate);
@@ -134,7 +165,7 @@ public class SecurityBean implements PhaseListener, Serializable {
     }
 
     public void invalidLoginMessage() {
-        badcredential=true;
+        badcredential = true;
         FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage(FacesMessage.SEVERITY_FATAL,
                         "Invalid login", "Bad Credential. Try again"));
@@ -147,7 +178,6 @@ public class SecurityBean implements PhaseListener, Serializable {
     public void setBadcredential(Boolean badcredential) {
         this.badcredential = badcredential;
     }
-    
 
     public String forgotPassword() throws Exception {
         try {
@@ -166,7 +196,7 @@ public class SecurityBean implements PhaseListener, Serializable {
                 sendActivationMail(mailEnum, mimeMultipart, mailDefaultConfigurationModel.getMailusername(), email);
                 return "/pages/public/login.xhtml?faces-redirect=true";
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Email address provided.",""));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Invalid Email address provided.", ""));
             }
         } catch (IOException ex) {
             java.util.logging.Logger.getLogger(SecurityBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -182,7 +212,7 @@ public class SecurityBean implements PhaseListener, Serializable {
             public void run() {
                 try {
                     Mail mail = new Mail();
-                    mail.setFrom(userName);                    
+                    mail.setFrom(userName);
                     mail.setFromName(EmailConstant.ADMIN_EMAIL_SENDER_NAME);
                     mail.setTo(senderMailAddress);
                     mail.setSubject(mailEnum.getSubject());

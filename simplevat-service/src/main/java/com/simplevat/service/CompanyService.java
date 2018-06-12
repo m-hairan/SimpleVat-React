@@ -13,8 +13,8 @@ import java.math.BigDecimal;
  * @author admin
  */
 public abstract class CompanyService extends SimpleVatService<Integer, Company> {
-
     public abstract void updateCompanyExpenseBudget(BigDecimal expenseAmount, Company company);
-
     public abstract void updateCompanyRevenueBudget(BigDecimal revenueAmount, Company company);
+    public abstract Company getCompany();
+ 
 }

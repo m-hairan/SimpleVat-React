@@ -54,4 +54,8 @@ public class CurrencyServiceImpl extends CurrencyService {
     public List<Currency> getCurrencyList(Currency currency) {
         return currencyDao.getCurrencyList(currency);
     }
+
+    public Boolean isCurrencyDataAvailableOnTodayDate() {
+        return currencyDao.isCurrencyDataAvailableOnTodayDate();
+    }
 }
