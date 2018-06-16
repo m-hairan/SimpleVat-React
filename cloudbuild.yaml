@@ -2,10 +2,10 @@ steps:
 - name: 'gcr.io/cloud-builders/mvn'
   args: ['clean','install']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '--tag=gcr.io/simplevat-cluster/simplevat:$TAG_NAME', '.']
+  args: ['build', '--tag=gcr.io/simplevat-web-app/simplevat:$TAG_NAME', '.']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/simplevat-cluster/simplevat:$TAG_NAME']    
-images: ['gcr.io/simplevat-cluster/simplevat:$TAG_NAME']
+  args: ['push', 'gcr.io/simplevat-web-app/simplevat:$TAG_NAME']    
+images: ['gcr.io/simplevat-web-app/simplevat:$TAG_NAME']
 timeout: 2400s
 options:
   machineType: 'N1_HIGHCPU_32'  
