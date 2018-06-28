@@ -97,6 +97,7 @@
                                                 <p:calendar
                                                     id="startdate"
                                                     required="true"
+                                                    yearRange="c-100:c+20"
                                                     requiredMessage="#{messages.EnterStartDate}"
                                                     value="#{transactionReport.financialPeriod.startDate}" 
                                                     >
@@ -112,6 +113,7 @@
                                                 <p:calendar
                                                     id="enddate"
                                                     required="true"
+                                                    yearRange="c-100:c+20"
                                                     requiredMessage="#{messages.EnterEndDate}"
                                                     value="#{transactionReport.financialPeriod.lastDate}" 
                                                     >

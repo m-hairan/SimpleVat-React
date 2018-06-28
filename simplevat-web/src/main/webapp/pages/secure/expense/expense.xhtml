@@ -413,7 +413,7 @@
                                         <h:panelGroup styleClass="md-inputfield">
                                             <p:inputText
                                                 id="expenseReceiptNumber"
-
+                                                maxlength="50"
                                                 value="#{expenseController.selectedExpenseModel.receiptNumber}" />
                                             <p:outputLabel for="expenseReceiptNumber" value="#{messages.receiptnumber}"/>
                                         </h:panelGroup>
@@ -427,32 +427,40 @@
                                             <p:outputLabel for="expenseAttachmentDescription" value="#{messages.attachment_description}"/>
                                         </h:panelGroup>
 
+
+
                                         <p:panelGrid columns="3" style="margin-left: -25px">
-                                            <h:panelGroup >
+                                            <h:panelGroup  id="file_upload">
                                                 <div style="text-align: center">
                                                     <p:fileUpload auto="true" 
-                                                                  mode="advanced" update="fileName"  fileUploadListener="#{expenseController.fileUploadListener}"  />
+                                                                  mode="advanced" update="file_upload"  fileUploadListener="#{expenseController.fileUploadListener}"  />
                                                     <h:outputText value="#{expenseController.fileName}"  id="fileName"/>
+                                                    <p:commandButton title="Remove file" 
+                                                                     style="margin-left: 10px"
+                                                                     rendered="#{expenseController.fileName!=null}"
+                                                                     process="@this" 
+                                                                     actionListener="#{expenseController.removeFile()}"
+                                                                     update="file_upload"
+                                                                     icon="ui-icon-delete" >
+                                                    </p:commandButton>
 
                                                 </div>
                                             </h:panelGroup>
                                             <h:panelGroup rendered="#{expenseController.selectedExpenseModel.attachmentFileContent != null}" style="margin-left: -30px">
-                                                <p:commandButton value="#{expenseController.selectedExpenseModel.receiptAttachmentName}" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" style="background-color: white!important;color: blue!important;border: 0px!important;text-decoration: underline!important;
+                                                <p:commandButton id="img" value="#{expenseController.selectedExpenseModel.receiptAttachmentName}" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" style="background-color: white!important;color: blue!important;border: 0px!important;text-decoration: underline!important;
                                                                  box-shadow: 0 1px 2.5px 0 rgba(255, 255, 255, 0.26), 0 1px 5px 0 rgba(255, 255, 255, 0.16)">
                                                     <p:fileDownload value="#{expenseController.selectedExpenseModel.attachmentFileContent}" />
                                                 </p:commandButton>
 
                                             </h:panelGroup>
                                             <h:panelGroup style="margin-left: -80%;padding: 0px" rendered="#{expenseController.selectedExpenseModel.receiptAttachmentContentType!=null and (expenseController.selectedExpenseModel.receiptAttachmentContentType.equals('image/jpeg') or expenseController.selectedExpenseModel.receiptAttachmentContentType.equals('image/png'))}">
-
-                                                <p:commandButton  id="img" icon="ui-icon-circle-zoomin" style="cursor:pointer;background: none!important;color: black" >
-                                                </p:commandButton>
                                                 <p:overlayPanel id="imgPanel" for="img" showEffect="blind"  showEvent="mouseover" hideEvent="mouseout"
                                                                 dismissable="false">
                                                     <p:graphicImage value="#{streamedContentSessionController.streamedPreviewPic}" cache="false" width="300" />
                                                 </p:overlayPanel>
                                             </h:panelGroup>
                                         </p:panelGrid>
+
 
 
 
@@ -522,6 +530,8 @@
                                                            validator="positiveNumberValidator"
                                                            validatorMessage="Please enter Price more then 0"
                                                            value="#{expenseItem.unitPrice}" 
+                                                           decimalPlaces="0"
+                                                           onfocus="clearTextField1(event, this)"
                                                            style="width:100%">
                                                 <p:ajax event="keyup" 
                                                         listener="#{expenseController.updateSubTotal(expenseItem)}" 
@@ -673,6 +683,10 @@
                 function clearTextField(event, element) {
                     console.log("entered");
                     if ($(element).val() == 0)
+                        $(element).val("");
+                }
+                function clearTextField1(event, element) {
+                    console.log("entered");
                         $(element).val("");
                 }
                 function clearAutoCompleteField(event, element) {

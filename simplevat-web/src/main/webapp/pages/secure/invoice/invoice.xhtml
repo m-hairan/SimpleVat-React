@@ -642,8 +642,6 @@
                                             <label>#{messages.End_Date}</label>
                                             <p:message for="endDate"/>
                                         </h:panelGroup>
-
-
                                         <p:outputLabel for="occurences" rendered="#{invoiceController.selectedInvoiceModel.recurringByAfter.value == 3}"/>
                                         <h:panelGroup styleClass="md-inputfield" rendered="#{invoiceController.selectedInvoiceModel.recurringByAfter.value == 3}">
                                             <p:inputText id="occurences" 

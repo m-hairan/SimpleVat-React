@@ -112,6 +112,7 @@ public class ExpenseControllerHelper {
         expenseModel.setReceiptAttachmentBinary(entity.getReceiptAttachmentBinary());
         expenseModel.setReceiptAttachmentName(entity.getReceiptAttachmentName());
         expenseModel.setReceiptAttachmentContentType(entity.getReceiptAttachmentContentType());
+        expenseModel.setExpenseAmountCompanyCurrency(entity.getExpencyAmountCompanyCurrency());
         final List<ExpenseItemModel> items = entity
                 .getExpenseLineItems()
                 .stream()

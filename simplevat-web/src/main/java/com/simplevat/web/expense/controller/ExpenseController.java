@@ -668,6 +668,14 @@ public class ExpenseController extends BaseController implements Serializable {
         }
     }
 
+    public void removeFile() {
+        fileName = null;
+        selectedExpenseModel.setReceiptAttachmentName(null);
+        selectedExpenseModel.setReceiptAttachmentContentType(null);
+        selectedExpenseModel.setReceiptAttachmentBinary(null);
+        selectedExpenseModel.setAttachmentFileContent(null);
+    }
+
     public List<User> users(final String searchQuery) throws Exception {
         return userServiceNew.executeNamedQuery("findAllUsers");
 

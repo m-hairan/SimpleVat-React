@@ -265,6 +265,8 @@ public class HomeController implements Serializable {
         animatedModel1.getAxes().put(AxisType.X, xAxis);
         Axis yAxis = animatedModel1.getAxis(AxisType.Y);
         yAxis.setMin(0);
+        yAxis.setTickInterval("1000");
+        yAxis.setTickFormat("%#.1f");
         if (invoiceService.getMaxValue(invoiseData) >= expenseService.getMaxValue(expesneData)) {
             yAxis.setMax(invoiceService.getMaxValue(invoiseData));
         } else {

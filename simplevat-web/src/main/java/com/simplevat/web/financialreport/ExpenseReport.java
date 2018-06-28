@@ -20,6 +20,7 @@ import com.simplevat.entity.Expense;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.service.CompanyService;
 import com.simplevat.service.ExpenseService;
+import com.simplevat.service.UserServiceNew;
 import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.web.common.controller.BaseController;
 import com.simplevat.web.constant.ModuleName;
@@ -58,7 +59,13 @@ public class ExpenseReport extends BaseController {
     @Getter
     @Setter
     double totalExpenseAmount;
-    
+
+    @Getter
+    private Company company;
+
+    @Autowired
+    private UserServiceNew userServiceNew;
+
     private List<ExpenseModel> expenseList = new ArrayList<>();
 
     public ExpenseReport() {
@@ -68,6 +75,7 @@ public class ExpenseReport extends BaseController {
     @PostConstruct
     public void init() {
         controllerHelper = new ExpenseControllerHelper();
+        company = companyService.findByPK(userServiceNew.findByPK(FacesUtil.getLoggedInUser().getUserId()).getCompany().getCompanyId());
     }
 
     public List<FinancialPeriod> completeFinancialPeriods() {
@@ -98,14 +106,14 @@ public class ExpenseReport extends BaseController {
     }
 
     public void view() {
-        totalExpenseAmount=0.0;
+        totalExpenseAmount = 0.0;
         expenseList.clear();
         List<Expense> expenses = new ArrayList<>();
         System.out.println("entered==" + financialPeriod.getLastDate());
         expenses = expenseService.getExpenseForReports(financialPeriod.getStartDate(), financialPeriod.getLastDate());
         if (expenses != null && !expenses.isEmpty()) {
             for (Expense expense : expenses) {
-                totalExpenseAmount=totalExpenseAmount+expense.getExpenseAmount().doubleValue();
+                totalExpenseAmount = totalExpenseAmount + expense.getExpencyAmountCompanyCurrency().doubleValue();
                 expenseList.add(controllerHelper.getExpenseModel(expense));
             }
         }

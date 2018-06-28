@@ -45,7 +45,11 @@ public class UserContext extends User {
     }
 
     private static List<GrantedAuthority> getGrantedAuthorities(com.simplevat.entity.User user) {
-        return new ArrayList<>(Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().getRoleName().toUpperCase())));
+        String role = "ROLE_EMPLOYEE";
+        if(user.getRole().getRoleName().equalsIgnoreCase("ADMIN")){
+            role = "ROLE_ADMIN";
+        }
+        return new ArrayList<>(Collections.singletonList(new SimpleGrantedAuthority(role)));
     }
 
 }

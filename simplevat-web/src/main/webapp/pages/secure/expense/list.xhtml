@@ -38,28 +38,32 @@
 
                     <p:column class="panelAmount" headerText="#{messages.amount}" sortBy="#{expense.expenseAmount}" styleClass="amount" filterMatchMode="contains" filterBy="#{expense.expenseAmount}">
                         <table  style="amount" >
-                            <tr>
-                                <td>
-                                    <h:panelGroup>
-                                        <h:outputText value="#{expense.currency.currencySymbol} " />
-                                        <h:outputText value="#{expense.expenseAmount}" >
-                                            <f:convertNumber type="currency" currencySymbol=""/>
 
-                                        </h:outputText>
-                                    </h:panelGroup>
-                                </td>
-                            </tr>
-                            <h:panelGroup rendered="#{expenseListController.company.currencyCode.currencyCode!=expense.currency.currencyCode}">
+                            <h:panelGroup rendered="#{expenseListController.company.currencyCode.currencyCode!=expense.currency.currencyCode or expenseListController.company.currencyCode.currencyCode==expense.currency.currencyCode}">
                                 <tr>
                                     <td>
-                                        <sub>
-                                            <h:outputText value="#{expense.expenseAmountCompanyCurrency}" >
-                                                <f:convertNumber type="currency" currencySymbol="#{expenseListController.company.currencyCode.currencySymbol}"/>
-                                            </h:outputText>
-                                        </sub>
+
+                                        <h:outputText value="#{expense.expenseAmountCompanyCurrency}" >
+                                            <f:convertNumber type="currency" currencySymbol="#{expenseListController.company.currencyCode.currencySymbol}"/>
+                                        </h:outputText>
+
                                     </td>
                                 </tr>
                             </h:panelGroup>
+                            <tr>
+                                <td>
+                                    <h:panelGroup  rendered="#{expenseListController.company.currencyCode.currencyCode!=expense.currency.currencyCode}">
+                                        <sub>
+                                            <h:outputText value="#{expense.currency.currencySymbol} " style="color: #585f63"/>
+                                            <h:outputText value="#{expense.expenseAmount}" style="color: #585f63">
+                                               
+
+                                            </h:outputText>
+                                        </sub>
+                                    </h:panelGroup>
+                                </td>
+                            </tr>
+
                         </table>
                     </p:column>
 

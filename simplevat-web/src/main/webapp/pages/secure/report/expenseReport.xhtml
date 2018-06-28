@@ -70,6 +70,7 @@
                                                 <p:calendar
                                                     id="enddate"
                                                     required="true"
+                                                    yearRange="c-100:c+20"
                                                     requiredMessage="#{messages.EnterEndDate}"
                                                     value="#{expenseReport.financialPeriod.lastDate}" 
                                                     >
@@ -119,8 +120,8 @@
                                                 <h:outputText value="#{expense.expenseDescription}" />
                                             </p:column>
                                             <p:column headerText="#{messages.amount}" sortBy="#{expense.expenseAmount}" styleClass="amount" filterMatchMode="contains" filterBy="#{expense.expenseAmount}">
-                                                <h:outputText value="#{expense.currency.currencySymbol} " />
-                                                <h:outputText value="#{expense.expenseAmount}" >
+                                                <h:outputText value="#{expenseReport.company.currencyCode.currencySymbol} " />
+                                                <h:outputText value="#{expense.expenseAmountCompanyCurrency}" >
                                                     <f:convertNumber type="currency" currencySymbol=""/>
                                                 </h:outputText>
                                             </p:column>
@@ -130,7 +131,7 @@
                                                     <p:column styleClass="amount">
                                                         <f:facet name="footer">
                                                             <p:outputPanel autoUpdate="true">
-                                                                <h:outputText value="#{expense.currency.currencySymbol} " />
+                                                                <h:outputText value="#{expenseReport.company.currencyCode.currencySymbol} " />
                                                                 <h:outputText id="total" value="#{expenseReport.totalExpenseAmount}" >
                                                                     <f:convertNumber type="currency" currencySymbol=" " />
                                                                 </h:outputText>

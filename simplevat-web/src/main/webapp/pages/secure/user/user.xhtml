@@ -105,11 +105,9 @@
                                         <h:panelGroup styleClass="md-inputfield" id="dobpanel">
                                             <p:calendar id="dob"
                                                         pattern="dd/MM/yyyy"
-                                                        required="true"
                                                         navigator="true"
                                                         maxdate="#{userController.today}"
                                                         yearRange="c-100:c+20"
-                                                        requiredMessage="Please enter Date of Birth"
                                                         value="#{userController.selectedUser.displayDOB}">
                                                 <p:clientValidator event="dateSelect" />
                                             </p:calendar>
