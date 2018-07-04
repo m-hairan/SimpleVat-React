@@ -168,6 +168,9 @@ public class ExpenseController extends BaseController implements Serializable {
 
     @Getter
     private BigDecimal totalAmount;
+    
+    @Getter
+    private String expenseView;
 
     public ExpenseController() {
         super(ModuleName.EXPENSE_MODULE);
@@ -180,6 +183,7 @@ public class ExpenseController extends BaseController implements Serializable {
         company = companyService.findByPK(userServiceNew.findByPK(FacesUtil.getLoggedInUser().getUserId()).getCompany().getCompanyId());
         contactModel = new ContactModel();
         controllerHelper = new ExpenseControllerHelper();
+        System.out.println("expenseView"+expenseView);
         Object objSelectedExpenseModel = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("selectedExpenseModelId");
         if (objSelectedExpenseModel == null) {
             selectedExpenseModel = new ExpenseModel();
@@ -223,6 +227,9 @@ public class ExpenseController extends BaseController implements Serializable {
         return "/pages/secure/expense/expense.xhtml?faces-redirect=true";
     }
 
+    public void createExpenses() {
+       selectedExpenseModel.getExpenseItem().remove(selectedExpenseModel.getExpenseItem().size()-1);
+    }
     private boolean validateInvoiceItem() { //---------------
         boolean validated = true;
         for (int i = 0; i < selectedExpenseModel.getExpenseItem().size() - 1; i++) {

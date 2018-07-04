@@ -1,0 +1,324 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
+                template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="head">
+        <style>
+            .ui-fileupload-content{
+                display:none !important;  
+            }
+            .ui-grid-col-11{
+                padding: 0 !important;
+                width: 88.66666%;
+            }
+            .ui-grid-col-1{
+                padding: 5px !important;
+            }
+
+            .ui-datatable-header{
+                background: transparent !important;
+                border: none !important;
+            }
+            .ui-widget-header{
+
+                background: none!important;
+                border: none !important;
+            }
+            .ui-icon-circle-zoomin{
+                color: black !important;
+            }
+
+            .label{
+                font-weight: bold;
+            }
+            .value{
+                margin-left: -40px;
+
+            }
+        </style>
+
+    </ui:define>
+
+    <ui:define name="title">New Expense</ui:define>
+
+    <ui:define name="content">
+
+        <f:metadata>
+            <f:viewAction action="#{expenseController.createExpenses()}"/>
+        </f:metadata>
+        <h:form id="createExpenseForm" enctype="multipart/form-data">
+
+            <div class="card card-w-title">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+
+                        <div class="ui-g-12">
+                            <div class="card card-w-title">
+                                <ui:fragment rendered="#{expenseController.selectedExpenseModel.expenseId != null}">
+                                    <h1>View Expense</h1>
+                                </ui:fragment>
+                                <p:fieldset legend="Expense Details" toggleable="false"
+                                            toggleSpeed="500">
+                                    <p:panelGrid columns="6"
+                                                 columnClasses="ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2"
+                                                 layout="grid" styleClass="ui-panelgrid-blank form-group"
+                                                 style="border:0px none; background-color:transparent;">
+
+                                        <p:outputLabel  value="#{messages.claimant} :" styleClass="label"/>
+                                        <p:outputLabel  value="#{expenseController.selectedExpenseModel.user.firstName}" styleClass="value"/>
+                                        <p:outputLabel value="#{messages.category} :"  styleClass="label"/>
+                                        <p:outputLabel  value="#{expenseController.selectedExpenseModel.transactionCategory.transactionCategoryName}" styleClass="value"/>
+
+
+                                        <p:outputLabel value="#{messages.expense_date} :" styleClass="label"/>
+                                        <p:outputLabel value="#{expenseController.selectedExpenseModel.expenseDate}" styleClass="value"/>
+
+                                        <p:outputLabel  value="#{messages.currency} :" styleClass="label"/>
+                                        <p:outputLabel  value="#{expenseController.selectedExpenseModel.currency.currencyDescription} - #{expenseController.selectedExpenseModel.currency.currencyIsoCode} (#{expenseController.selectedExpenseModel.currency.currencySymbol})" styleClass="value"/>
+
+                                        <p:outputLabel value="#{messages.project} :" styleClass="label"/>
+                                        <p:outputLabel value="#{expenseController.selectedExpenseModel.project.projectName}" styleClass="value"/>
+
+
+                                    </p:panelGrid>
+                                    <p:panelGrid columns="1"
+                                                 columnClasses="ui-grid-col-6"
+                                                 layout="grid" styleClass="ui-panelgrid-blank form-group"
+                                                 style="border:0px none; background-color:transparent;">
+<!--                                        <p:outputLabel  value="#{messages.description} :" styleClass="label"/>
+                                        <h:outputText value="#{expenseController.selectedExpenseModel.expenseDescription}"/>-->
+                                    </p:panelGrid>
+                                </p:fieldset>
+                                <br />
+
+                                <p:fieldset legend="Receipt" toggleable="true" toggleSpeed="500">
+                                    <p:panelGrid columns="2"
+                                                 columnClasses="ui-grid-col-3,ui-grid-col-3"
+                                                 layout="grid" styleClass="ui-panelgrid-blank form-group"
+                                                 style="border:0px none; background-color:transparent;">
+
+
+
+
+                                        <p:outputLabel for="expenseReceiptNumber" value="#{messages.receiptnumber} :" styleClass="label"/>
+                                        <p:outputLabel id="expenseReceiptNumber"
+                                                       value="#{expenseController.selectedExpenseModel.receiptNumber}" styleClass="value"/>
+
+
+
+
+                                        <p:outputLabel for="expenseAttachmentDescription" value="#{messages.attachment_description} :" styleClass="label"/>
+                                        <p:outputLabel
+                                            id="expenseAttachmentDescription"
+                                            value="#{expenseController.selectedExpenseModel.receiptAttachmentDescription}" styleClass="value"/>
+
+
+                                        <h:panelGroup rendered="#{expenseController.selectedExpenseModel.attachmentFileContent != null}" style="margin-left: -10px">
+                                            <p:commandButton id="img" value="#{expenseController.selectedExpenseModel.receiptAttachmentName}" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" style="background-color: white!important;color: blue!important;border: 0px!important;text-decoration: underline!important;
+                                                             box-shadow: 0 1px 2.5px 0 rgba(255, 255, 255, 0.26), 0 1px 5px 0 rgba(255, 255, 255, 0.16)">
+                                                <p:fileDownload value="#{expenseController.selectedExpenseModel.attachmentFileContent}" />
+                                            </p:commandButton>
+
+                                        </h:panelGroup>
+                                        <h:panelGroup style="margin-left: -80%;padding: 0px" rendered="#{expenseController.selectedExpenseModel.receiptAttachmentContentType!=null and (expenseController.selectedExpenseModel.receiptAttachmentContentType.equals('image/jpeg') or expenseController.selectedExpenseModel.receiptAttachmentContentType.equals('image/png'))}">
+                                            <p:overlayPanel id="imgPanel" for="img" showEffect="blind"  showEvent="mouseover" hideEvent="mouseout"
+                                                            dismissable="false">
+                                                <p:graphicImage value="#{streamedContentSessionController.streamedPreviewPic}" cache="false" width="300" />
+                                            </p:overlayPanel>
+                                        </h:panelGroup>
+
+                                    </p:panelGrid>
+                                </p:fieldset>
+
+                                <p:fieldset legend="Expense Item Details" toggleable="true" style="margin-top: 2%"
+                                            toggleSpeed="300">
+                                    <p:messages autoUpdate="true" id="validationId" closable="true" for="validationId" />
+                                    <p:dataTable value="#{expenseController.selectedExpenseModel.expenseItem}"
+                                                 var="expenseItem" 
+                                                 editMode="cell"
+                                                 editable="true"
+                                                 id="expenseItemTable"
+                                                 reflow="true"
+                                                 >
+
+                                        <p:column style="width: 10px" ></p:column>
+                                        <p:column headerText="Product/Service"  style="width: 280px">
+                                            <p:outputLabel id="product_name"
+                                                           value="#{expenseItem.productName}" 
+                                                           style="width:100%" >
+                                            </p:outputLabel> 
+                                        </p:column>
+                                        <p:column headerText="Quantity" styleClass="amount"  style="width: 50px">
+                                            <p:outputLabel id="quantity"
+                                                           onfocus="clearTextField(event, this)"
+                                                           value="#{expenseItem.quatity}" 
+                                                           style="width:100%">
+
+                                            </p:outputLabel>
+                                        </p:column>
+
+                                        <p:column headerText="Unit Price (#{expenseController.selectedExpenseModel.currency.currencyIsoCode})" styleClass="amount">
+                                            <p:outputLabel id="unitPrice" 
+                                                           value="#{expenseItem.unitPrice}" 
+                                                           style="width:100%">
+                                            </p:outputLabel>
+                                        </p:column>
+
+                                        <p:column headerText="VAT (%)" styleClass="amount">
+                                            <p:outputLabel id="vatId" 
+                                                           value="#{expenseItem.vatId.name}" 
+                                                           style="width:100%"/>
+                                        </p:column>
+                                        <p:column headerText="Subtotal (#{expenseController.selectedExpenseModel.currency.currencyIsoCode})" styleClass="amount">
+                                            <h:outputText id="subTotal" value="#{expenseItem.subTotal}" >
+                                                <f:convertNumber type="currency" currencySymbol="#{expenseController.selectedExpenseModel.currency.currencySymbol} " />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:columnGroup type="footer"  rendered="#{expenseController.selectedExpenseModel.expenseItem.size() > 0}">  
+                                            <p:row>      
+                                                <p:column rowspan="3" colspan="4" style="border-bottom: 0 !important; border-left: 0 !important">
+                                                </p:column>
+                                                <p:column footerText="Total Net" styleClass="amount"/>
+                                                <p:column styleClass="amount">
+                                                    <f:facet name="footer">
+                                                        <p:outputPanel autoUpdate="true">
+                                                            <h:outputText id="netTotal" value="#{expenseController.selectedExpenseModel.expenseSubtotal}" >
+                                                                <f:convertNumber type="currency" currencySymbol="#{expenseController.selectedExpenseModel.currency.currencySymbol} " />
+                                                            </h:outputText>
+                                                        </p:outputPanel>
+                                                    </f:facet>
+                                                </p:column> 
+                                            </p:row> 
+                                            <p:row >  
+                                                <p:column footerText="Total VAT" styleClass="amount"/>  
+                                                <p:column styleClass="amount">
+                                                    <f:facet name="footer">
+                                                        <p:outputPanel autoUpdate="true">
+                                                            <h:outputText id="totalVat" value="#{expenseController.selectedExpenseModel.expenseVATAmount}" >
+                                                                <f:convertNumber type="currency" currencySymbol="#{expenseController.selectedExpenseModel.currency.currencySymbol} " />
+                                                            </h:outputText>
+                                                        </p:outputPanel>
+                                                    </f:facet>
+                                                </p:column>  
+                                            </p:row>  
+                                            <p:row >                                 
+                                                <p:column footerText="Total" styleClass="amount" style="font-weight: bold"/>  
+                                                <p:column styleClass="amount">
+                                                    <f:facet name="footer">
+                                                        <p:outputPanel autoUpdate="true" id="abc">
+                                                            <h:outputText value="#{expenseController.totalAmount}" style="font-weight: bold">
+                                                                <f:convertNumber type="currency" currencySymbol="#{expenseController.selectedExpenseModel.currency.currencySymbol} " />
+                                                            </h:outputText>
+                                                        </p:outputPanel>
+                                                    </f:facet>
+                                                </p:column>  
+                                            </p:row> 
+
+                                        </p:columnGroup>
+                                    </p:dataTable>
+
+                                </p:fieldset>
+                                <h:panelGroup id="exchangeCurrency"  >
+                                    <p:fieldset legend="Currency Exchange Details" 
+                                                rendered="#{expenseController.selectedExpenseModel.currency.currencyCode != expenseController.company.currencyCode.currencyCode}">
+
+                                        <p:panelGrid columns="6" 
+                                                     columnClasses="ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4,ui-grid-col-0,ui-grid-col-4" 
+                                                     layout="grid" 
+                                                     styleClass="ui-panelgrid-blank form-group"
+                                                     style="border:0px none; background-color:transparent;">
+
+                                            <p:outputLabel for="exchangerate"  />
+                                            <h:panelGroup styleClass="md-inputwrapper-filled">
+                                                <label>Exchange Rate :-   </label>
+                                                <h:outputText id="exchangerate"
+                                                              value="#{expenseController.exchangeRate(expenseController.selectedExpenseModel.currency)}" />
+                                            </h:panelGroup>
+
+
+                                            <p:outputLabel for="totalvalue"  />
+                                            <h:panelGroup styleClass="md-inputwrapper-filled">
+
+                                                <label>Total Value :-</label>
+                                                <h:outputText id="totalvalue"
+                                                              value="#{expenseController.totalAmountInHomeCurrency(expenseController.selectedExpenseModel.currency)}" >
+                                                    <f:convertNumber type="currency" currencySymbol="#{expenseController.company.currencyCode.currencySymbol} " />
+                                                </h:outputText>
+                                            </h:panelGroup>
+                                        </p:panelGrid>
+                                    </p:fieldset>
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p:toolbar>
+                    <f:facet name="left">
+                        <ui:fragment rendered="#{expenseController.selectedExpenseModel.expenseId == null}">
+                            <p:commandButton value="#{messages.save}" icon="ui-icon-save" update="createExpenseForm"
+                                             action="#{expenseController.saveExpense()}" />
+                            <p:commandButton value="#{messages.save_and_add_more}"
+                                             icon="ui-icon-forward"  update="createExpenseForm"
+                                             action="#{expenseController.saveAndContinueExpense}" />
+                        </ui:fragment>
+                        <ui:fragment rendered="#{expenseController.selectedExpenseModel.expenseId != null}">
+                            <p:commandButton value="#{messages.update}" icon="ui-icon-save" update="createExpenseForm"
+                                             action="#{expenseController.saveExpense()}" />
+                            <p:commandButton value="#{messages.update_and_add_more}"
+                                             icon="ui-icon-forward" update="createExpenseForm"
+                                             action="#{expenseController.saveAndContinueExpense}" />
+                        </ui:fragment>
+                        <span class="ui-separator" style="padding-right: 5px;"> <span
+                                class="fa fa-ellipsis-v SoftGray" />
+                        </span>
+
+
+                        <si:cbutton type="cancel"/>
+                    </f:facet>
+
+                    <f:facet name="right">
+
+                        <si:cbutton type="home"/>
+
+                    </f:facet>
+
+                </p:toolbar>
+            </div>
+            <script type="text/javascript">
+                //   <![CDATA[
+                function clearTextField(event, element) {
+                    console.log("entered");
+                    if ($(element).val() == 0)
+                        $(element).val("");
+                }
+                function clearTextField1(event, element) {
+                    console.log("entered");
+                    $(element).val("");
+                }
+                function clearAutoCompleteField(event, element) {
+                    console.log("entered");
+                    console.log("entered1");
+                    $(element).val("");
+
+                }
+                $('#createExpenseForm').on('keyup keypress', function (e) {
+                    var keyCode = e.keyCode || e.which;
+                    if (keyCode === 13) {
+                        e.preventDefault();
+                        return false;
+                    }
+                });
+
+                //   ]]>
+            </script>
+            <p:remoteCommand name="update" update="#{p:component('abc')}"/>
+        </h:form>
+        <ui:include src="add-contact-popup.xhtml" />
+        <ui:include src="add-product-popup.xhtml"/>
+    </ui:define>
+
+</ui:composition>

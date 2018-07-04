@@ -73,6 +73,10 @@ public class ExpenseListController extends BaseController implements Serializabl
     public String redirectToEdit() {
         return "expense?faces-redirect=true&selectedExpenseModelId=" + selectedExpenseModel.getExpenseId();
     }
+    
+    public String redirectToView() {
+        return "expense-view?faces-redirect=true&selectedExpenseModelId=" + selectedExpenseModel.getExpenseId();
+    }
 
     public String deleteExpense() {
         System.out.println("selected Model : :" + selectedExpenseModel.getExpenseId());

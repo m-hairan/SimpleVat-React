@@ -56,8 +56,6 @@
                                         <sub>
                                             <h:outputText value="#{expense.currency.currencySymbol} " style="color: #585f63"/>
                                             <h:outputText value="#{expense.expenseAmount}" style="color: #585f63">
-                                               
-
                                             </h:outputText>
                                         </sub>
                                     </h:panelGroup>
@@ -66,11 +64,9 @@
 
                         </table>
                     </p:column>
-
                     <p:column headerText="#{messages.description}" sortBy="#{expense.expenseDescription}" filterMatchMode="contains" filterBy="#{expense.expenseDescription}">
                         <h:outputText value="#{expense.expenseDescription}" />
                     </p:column>
-
                     <p:column headerText="#{messages.expense_date}" sortBy="#{expense.expenseDate}" filterMatchMode="contains" filterBy="#{expense.expenseDate}">
                         <h:outputText value="#{expense.expenseDate}" >
                             <f:convertDateTime pattern="dd/MM/yyyy" />
@@ -82,7 +78,9 @@
                             <p:commandButton icon="ui-icon-edit" styleClass="AquaButton" action="#{expenseListController.redirectToEdit}" title="Edit Expense">
                                 <f:setPropertyActionListener value="#{expense}" target="#{expenseListController.selectedExpenseModel}" />
                             </p:commandButton>
-
+                            <p:commandButton id="view" style="margin-right: 7px" title="view expense" icon="ui-icon-view-carousel" styleClass="AquaButton" action="#{expenseListController.redirectToView()}">
+                                <f:setPropertyActionListener value="#{expense}" target="#{expenseListController.selectedExpenseModel}" />
+                            </p:commandButton>
                             <p:commandButton icon="ui-icon-delete" styleClass="AquaButton" action="#{expenseListController.deleteExpense}" update="expensesTable" title="Delete Expense">
                                 <f:setPropertyActionListener value="#{expense}" target="#{expenseListController.selectedExpenseModel}" />
                                 <p:confirm header="#{messages.delete}" message="#{messages.are_you_sure_want_to_delete}" icon="ui-icon-alert" />

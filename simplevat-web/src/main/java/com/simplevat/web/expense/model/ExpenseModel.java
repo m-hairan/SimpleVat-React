@@ -58,6 +58,7 @@ public class ExpenseModel {
     private BigDecimal expenseSubtotal;
     private BigDecimal expenseVATAmount;
     private BigDecimal expenseAmountCompanyCurrency;
+    private Integer flagView;
 //    private Boolean recurringFlag;
 //    private RecurringNameValueMapping recurringInterval;
 //    private RecurringNameValueMapping recurringWeekDays;
