@@ -17,11 +17,8 @@ import com.simplevat.service.bankaccount.TransactionService;
 import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.web.utils.FacesUtil;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.math.BigDecimal;
+import java.util.*;
 import javax.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;
@@ -265,8 +262,45 @@ public class HomeController implements Serializable {
         animatedModel1.getAxes().put(AxisType.X, xAxis);
         Axis yAxis = animatedModel1.getAxis(AxisType.Y);
         yAxis.setMin(0);
-        yAxis.setTickInterval("1000");
-        yAxis.setTickFormat("%#.1f");
+//        yAxis.setMax(15915);
+        ArrayList expenseArray = new ArrayList(expesneData.entrySet());
+        for(Iterator<Map.Entry> it = expenseArray.iterator(); it.hasNext();) {
+            String strNum = it.next().getValue().toString();
+            if(strNum.toString().equals("0")) {
+                it.remove();
+            }
+        }
+
+        ArrayList invoiceArray = new ArrayList(invoiseData.entrySet());
+        for(Iterator<Map.Entry> it = invoiceArray.iterator(); it.hasNext();) {
+            String strNum = it.next().getValue().toString();
+            if(strNum.toString().equals("0")) {
+                it.remove();
+            }
+        }
+
+        Number maxExpense = expesneData.get(Collections.max(expenseArray, Map.Entry.comparingByValue()).getKey()).floatValue();
+        Number maxInvoice = invoiseData.get(Collections.max(invoiceArray, Map.Entry.comparingByValue()).getKey()).floatValue();
+
+        float maxValue = Math.max(maxExpense.floatValue(),maxInvoice.floatValue());
+        if(maxValue > 1000)
+        {
+            maxValue = Math.round(maxValue/1000);
+            maxValue = maxValue * 1000;
+        }
+        else if (maxValue > 100)
+        {
+            maxValue = Math.round(maxValue/100);
+            maxValue = maxValue * 100;
+        }
+        else
+        {
+            maxValue = 100;
+        }
+//        yAxis.setMax(maxValue);
+        yAxis.setTickInterval(maxValue/10+"");
+//        yAxis.setTickFormat("%#.1f");
+        yAxis.setTickCount(11);
         if (invoiceService.getMaxValue(invoiseData) >= expenseService.getMaxValue(expesneData)) {
             yAxis.setMax(invoiceService.getMaxValue(invoiseData));
         } else {

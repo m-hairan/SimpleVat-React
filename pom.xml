@@ -74,6 +74,12 @@
 					<password>password</password>
 					<path>/</path>
 					<update>true</update>
+					<systemProperties>
+						<SIMPLEVAT_DB_HOST>localhost</SIMPLEVAT_DB_HOST>
+						<SIMPLEVAT_DB>simplevat_app</SIMPLEVAT_DB>
+						<SIMPLEVAT_DB_USER>simplevat_app</SIMPLEVAT_DB_USER>
+						<SIMPLEVAT_DB_PASSWORD>simplevat123$</SIMPLEVAT_DB_PASSWORD>
+					</systemProperties>
 				</configuration>
 			</plugin>
 			<plugin>
