@@ -709,6 +709,12 @@
                                             </h:panelGroup>
                                         </p:panelGrid>
                                     </p:column>
+                                    <p:column headerText="Description"  style="width: 150px">
+                                        <p:inputText id="description" 
+                                                     value="#{invoiceItem.description}" 
+                                                     >
+                                        </p:inputText>
+                                    </p:column>
                                     <p:column headerText="Quantity" styleClass="amount" style="width: 50px">
                                         <p:inputText id="quantity" 
                                                      validator="positiveNumberValidator"
@@ -770,7 +776,7 @@
                                     </p:column>
                                     <p:columnGroup id="lineItemFooterColumnGroup"  type="footer" rendered="#{invoiceController.selectedInvoiceModel.invoiceLineItems.size() > 0}">  
                                         <p:row >  
-                                            <p:column rowspan="5" colspan="4" style="border-bottom: 0 !important; border-left: 0 !important">
+                                            <p:column rowspan="6" colspan="5" style="border-bottom: 0 !important; border-left: 0 !important">
                                                 <f:facet name="footer">
                                                     <h:panelGroup styleClass="md-inputfield" style="margin-top: 20px;">
                                                         <p:inputTextarea rows="5" 

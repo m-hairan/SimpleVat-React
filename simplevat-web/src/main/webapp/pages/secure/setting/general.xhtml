@@ -89,7 +89,6 @@
                                             <p:column>
                                                 <h:outputText value="#{invoiceTemplate.name}" />
                                             </p:column>
-
                                             <p:ajax event="itemSelect" process="@this" listener="#{generalController.invoiceTemplateValue()}"></p:ajax>
                                         </p:autoComplete>
                                         <p:outputLabel for="invoicingTemplate" value="#{messages.InvoicingTemplate}"/>

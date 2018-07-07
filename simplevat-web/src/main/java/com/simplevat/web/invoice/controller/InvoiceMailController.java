@@ -194,8 +194,9 @@ public class InvoiceMailController implements Serializable {
             @Override
             public void run() {
                 try {
-                    mailIntegration.sendHtmlMail(mail, mailAttachmentList, MailUtility.getJavaMailSender(configurationService.getConfigurationList()));
                     updateInvoice();
+                    mailIntegration.sendHtmlMail(mail, mailAttachmentList, MailUtility.getJavaMailSender(configurationService.getConfigurationList()));
+                    
                 } catch (Exception ex) {
                     Logger.getLogger(InvoiceMailController.class.getName()).log(Level.SEVERE, null, ex);
                 }

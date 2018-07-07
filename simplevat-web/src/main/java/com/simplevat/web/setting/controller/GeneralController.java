@@ -11,22 +11,29 @@ import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.service.ConfigurationService;
 import com.simplevat.web.common.controller.BaseController;
 import com.simplevat.web.constant.ConfigurationConstants;
+import com.simplevat.web.constant.InvoiceNumberReferenceEnum;
 import com.simplevat.web.constant.InvoiceReferenceVariable;
 import com.simplevat.web.constant.ModuleName;
 import com.simplevat.web.invoice.controller.InvoicePDFGenerator;
+import com.simplevat.web.invoice.model.InvoiceModel;
 import com.simplevat.web.utils.FacesUtil;
 import com.simplevat.web.utils.GeneralSettingUtil;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 import org.primefaces.model.DefaultStreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -108,6 +115,10 @@ public class GeneralController extends BaseController implements Serializable {
         invoiceVariables();
         configurationList = configurationService.getConfigurationList();
         invoicePreviewTemplate = new InvoicePreviewTemplate();
+        Invoice invoice=InvoicePreviewTemplate.getInvoiceObject();
+        invoice.setInvoiceReferenceNumber("XXXX-XXXX-0123");
+        ByteArrayOutputStream invoicepdfOutputStream = invoicePDFGenerator.generatePDF(invoice, GeneralSettingUtil.invoiceTemplateList().get(0));
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(DefaultStreamContentInvoicePdf.STREAMED_CONTENT_PDF, invoicepdfOutputStream);
         if (configurationList != null && !configurationList.isEmpty()) {
             if (configurationList != null && configurationList.stream().filter(configuration -> configuration.getName().equals(ConfigurationConstants.INVOICING_REFERENCE_PATTERN)).findAny().isPresent()) {
                 configurationInvoiceRefPtrn = configurationList.stream().filter(configuration -> configuration.getName().equals(ConfigurationConstants.INVOICING_REFERENCE_PATTERN)).findFirst().get();
@@ -179,12 +190,14 @@ public class GeneralController extends BaseController implements Serializable {
                 configurationInvoiceTemplate = new Configuration();
                 configurationInvoiceTemplate.setName(ConfigurationConstants.INVOICING_TEMPLATE);
             }
+            invoiceTemplateValue();
         } else {
             configurationList = new ArrayList<>();
 
             configurationInvoiceRefPtrn = new Configuration();
             configurationInvoiceRefPtrn.setName(ConfigurationConstants.INVOICING_REFERENCE_PATTERN);
 
+            
             configurationMailHost = new Configuration();
             configurationMailHost.setName(ConfigurationConstants.MAIL_HOST);
 
@@ -211,9 +224,9 @@ public class GeneralController extends BaseController implements Serializable {
 
             configurationInvoiceTemplate = new Configuration();
             configurationInvoiceTemplate.setName(ConfigurationConstants.INVOICING_TEMPLATE);
+
         }
-        ByteArrayOutputStream invoicepdfOutputStream = invoicePDFGenerator.generatePDF(InvoicePreviewTemplate.getInvoiceObject(), GeneralSettingUtil.invoiceTemplateList().get(0));
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(DefaultStreamContentInvoicePdf.STREAMED_CONTENT_PDF, invoicepdfOutputStream);
+
     }
 
     public void saveUpdate() {
@@ -274,7 +287,7 @@ public class GeneralController extends BaseController implements Serializable {
             FacesContext context = FacesContext.getCurrentInstance();
             context.getExternalContext().getFlash().setKeepMessages(true);
             context.addMessage(null, new FacesMessage("", "Configuration saved successfully"));
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -284,8 +297,13 @@ public class GeneralController extends BaseController implements Serializable {
 //        return new DefaultStreamedContent(new ByteArrayInputStream(.toByteArray()), "application/pdf");
 //    }
     public void invoiceTemplateValue() {
-        System.out.println("===invoiceTemplateModel======" + invoiceTemplateModel);
-        ByteArrayOutputStream invoicepdfOutputStream = invoicePDFGenerator.generatePDF(InvoicePreviewTemplate.getInvoiceObject(), invoiceTemplateModel);
+        Invoice invoice=InvoicePreviewTemplate.getInvoiceObject();
+        if(configurationInvoiceRefPtrn.getValue()==null || configurationInvoiceRefPtrn.getValue().isEmpty()){
+        invoice.setInvoiceReferenceNumber("XXXX-XXXX-0123");
+        }else{
+        invoice.setInvoiceReferenceNumber(getNextInvoiceRefNumber(configurationInvoiceRefPtrn.getValue()));
+        }
+        ByteArrayOutputStream invoicepdfOutputStream = invoicePDFGenerator.generatePDF(invoice, invoiceTemplateModel);
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().replace(DefaultStreamContentInvoicePdf.STREAMED_CONTENT_PDF, invoicepdfOutputStream);
     }
 
@@ -303,5 +321,45 @@ public class GeneralController extends BaseController implements Serializable {
 
     public List<InvoiceTemplateModel> completeInvoiceTemplate() {
         return GeneralSettingUtil.invoiceTemplateList();
+    }
+    
+    public String getNextInvoiceRefNumber(String invoicingReferencePattern) {
+        if (invoicingReferencePattern != null) {
+            if (invoicingReferencePattern.contains(InvoiceNumberReferenceEnum.DDMMYY.getValue())) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
+                LocalDateTime dateTime = LocalDateTime.now();
+                String currentDateString = dateTime.format(formatter);
+                System.out.println("=currentDateString=" + currentDateString);
+                invoicingReferencePattern = invoicingReferencePattern.replace(InvoiceNumberReferenceEnum.DDMMYY.getValue(), currentDateString);
+            }
+            if (invoicingReferencePattern.contains(InvoiceNumberReferenceEnum.CONTACT_CODE.getValue())) {
+               
+                    invoicingReferencePattern = invoicingReferencePattern.replace(InvoiceNumberReferenceEnum.CONTACT_CODE.getValue(), 0 + "");
+               
+            }
+        }
+
+        Pattern p = Pattern.compile("[a-z]+|\\d+");
+        Matcher m = p.matcher(invoicingReferencePattern);
+        int invoceNumber = 0;
+        String invoiceReplacementString = "";
+        String invoiceRefNumber = "";
+        while (m.find()) {
+            if (StringUtils.isNumeric(m.group())) {
+                invoiceReplacementString = m.group();
+                invoceNumber = Integer.parseInt(m.group());
+                invoiceRefNumber = ++invoceNumber + "";
+                while (invoiceRefNumber.length() < invoiceReplacementString.length()) {
+                    invoiceRefNumber = "0" + invoiceRefNumber;
+                }
+            }
+        }
+        String nextInvoiceNumber = replaceLast(invoicingReferencePattern, invoiceReplacementString, invoiceRefNumber);
+        return nextInvoiceNumber;
+    }
+
+   
+    public static String replaceLast(String text, String regex, String replacement) {
+        return text.replaceFirst("(?s)(.*)" + regex, "$1" + replacement);
     }
 }

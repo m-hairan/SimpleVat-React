@@ -1,5 +1,6 @@
 package com.simplevat.web.setting.controller;
 import com.simplevat.entity.Contact;
+import com.simplevat.entity.Country;
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.Product;
 import com.simplevat.entity.Project;
@@ -25,6 +26,12 @@ public class InvoicePreviewTemplate implements Serializable {
         contact.setContactId(1200);
         contact.setFirstName("Mr Mark");
         contact.setLastName("Johnson");
+        contact.setInvoicingAddressLine1("UNICEF Junin 1940 - Planta Baja Codigo Postal C1113AAX"
+                + "Buenos Aires, Argentina");
+        Country country=new Country();
+        country.setCountryName("Argentina - (ARG)");
+        country.setCountryFullName("Argentina - (ARG)");
+        contact.setCountry(country);
         invoice.setInvoiceContact(contact);
         Currency currency = new Currency();
         currency.setCurrencySymbol("$");
@@ -34,8 +41,15 @@ public class InvoicePreviewTemplate implements Serializable {
         invoice.setInvoiceDueDate(dateTimeDueBy);
         Contact contactShipping = new Contact();
         contactShipping.setContactId(1201);
-        contactShipping.setFirstName("MR DAVID");
-        contactShipping.setLastName("WEBSTER");
+        contactShipping.setFirstName("Mr David");
+        contactShipping.setLastName("Webster");
+        contactShipping.setInvoicingAddressLine1("GPO Box 4245 Sydney NSW 2001 Australia");
+      
+        Country countryShipping=new Country();
+        countryShipping.setCountryName("Australia - (AUS)");
+        countryShipping.setCountryFullName("Australia - (AUS)");
+       
+        contactShipping.setCountry(countryShipping);
         invoice.setShippingContact(contactShipping);
         InvoiceLineItem invoiceLineItem = new InvoiceLineItem();
         Product product = new Product();
@@ -57,6 +71,7 @@ public class InvoicePreviewTemplate implements Serializable {
         invoice.setInvoiceDueOn(1);
         invoice.setInvoiceReferenceNumber("1234-1234-1234");
         invoice.setInvoiceNotes("Thank you");
+        
         invoice.setFreeze(Boolean.FALSE);
         invoice.setStatus(0);
         return invoice;

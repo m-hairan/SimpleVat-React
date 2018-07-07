@@ -105,6 +105,7 @@ public class InvoicePDFGenerator implements Serializable {
         currency = invoice.getCurrency();
         configuration = configurationService.getConfigurationByName(ConfigurationConstants.INVOICING_TEMPLATE);
         setTemplate();
+        
         try {
             ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
             baseFont = BaseFont.createFont(servletContext.getRealPath("/resources/ultima-layout/fonts/Roboto-Regular.ttf"), BaseFont.WINANSI, BaseFont.EMBEDDED);
@@ -170,7 +171,7 @@ public class InvoicePDFGenerator implements Serializable {
         if (user.getCompany().getCompanyLogo() != null) {
             try {
                 img = Image.getInstance(user.getCompany().getCompanyLogo());
-                img.scaleAbsolute(120f, 60f);
+                img.scaleAbsolute(90f, 90f);
             } catch (Exception ex) {
                 Logger.getLogger(InvoicePDFGenerator.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -592,6 +593,7 @@ public class InvoicePDFGenerator implements Serializable {
 
     public void setTemplate() {
         if (configuration != null) {
+            System.out.println("configuration.getValue()"+configuration.getValue());
             if (configuration.getValue().equals(InvoiceTemplateTypeConstant.GRAY)) {
                 primaryBaseColor = new BaseColor(102, 102, 102);
                 secondaryBaseColor = new BaseColor(242, 242, 242);
