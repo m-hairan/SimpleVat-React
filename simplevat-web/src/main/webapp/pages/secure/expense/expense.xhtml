@@ -524,12 +524,11 @@
 
                                         <p:column headerText="Unit Price (#{expenseController.selectedExpenseModel.currency.currencyIsoCode})" styleClass="amount">
 
-                                            <p:inputNumber id="unitPrice" 
-                                                           symbol="#{expenseController.selectedExpenseModel.currency.currencySymbol} " symbolPosition="p"
+                                            <p:inputNumber id="unitPrice"
                                                            validator="positiveNumberValidator"
                                                            validatorMessage="Please enter Price more then 0"
                                                            value="#{expenseItem.unitPrice}" 
-                                                           decimalPlaces="0"
+                                                           decimalPlaces="2"
                                                            onfocus="clearTextField1(event, this)"
                                                            style="width:100%">
                                                 <p:ajax event="keyup" 
@@ -686,6 +685,7 @@
                 }
                 function clearTextField1(event, element) {
                     console.log("entered");
+                    if ($(element).val() == 0)
                         $(element).val("");
                 }
                 function clearAutoCompleteField(event, element) {
