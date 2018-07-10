@@ -521,7 +521,6 @@
                                                         update="subTotal" />
                                             </p:inputText>
                                         </p:column>
-
                                         <p:column headerText="Unit Price (#{expenseController.selectedExpenseModel.currency.currencyIsoCode})" styleClass="amount">
 
                                             <p:inputNumber id="unitPrice"
@@ -684,14 +683,12 @@
                         $(element).val("");
                 }
                 function clearTextField1(event, element) {
-                    console.log("entered");
-                    if ($(element).val() == 0)
-                        $(element).val("");
+                if ($(element).val()==="$ 0.00")
+                    $(element).val("");
                 }
                 function clearAutoCompleteField(event, element) {
-                    console.log("entered");
-                    console.log("entered1");
-                    $(element).val("");
+                    
+                        $(element).val("");
 
                 }
                 $('#createExpenseForm').on('keyup keypress', function (e) {
