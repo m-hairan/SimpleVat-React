@@ -95,11 +95,9 @@
 
     <ui:define name="content">
         <h:form>
-
             <h:panelGroup layout="block" styleClass="ui-g dashboard" id="dashboardPanel">
-                <p:dashboard id="board" model="#{homeController.model}" styleClass="ui-g-12 ui-md-12">
-                    <p:ajax event="reorder" />
-
+                <p:panelGrid columns="2" columnClasses="ui-g-8 ui-panelgrid-nopad, ui-g-4 ui-panelgrid-nopad" 
+                             layout="grid" style="width:100%" styleClass="no-border">            
                     <p:panel id="cashflow" header="Cash Flow" styleClass="simplevat-dashboardupperpanel">
                         <h:panelGroup layout="block" style="width: auto;position:relative;">
                             <h:panelGroup styleClass="cashFlowChartPanelPlaceHolder" style="position:absolute;width:90%">
@@ -126,19 +124,8 @@
                             </h:panelGroup>
                         </h:panelGroup>
                     </p:panel>
-                    <p:panel id="vatActivity" header="VAT Acivity"  styleClass="simplevat-dashboardupperpanel">
-                        <h:panelGroup layout="block" style="position:relative">
-                            <h:panelGroup styleClass="vatActivityPanelPlaceHolder" style="position:absolute;width:90%">
-                                <ui:include src="../content-loading-placeholder.xhtml"/>
-                            </h:panelGroup>
-                            <h:panelGroup id="vatActivityPanel" styleClass="vatActivityPanel" >
-                                <p:chart type="bar" model="#{homeController.animatedModel2}" rendered="#{homeController.renderVatInVatOutChart}"
-                                         style="height:280px;margin-top: 20px;" responsive="true" />
-                                <p:graphicImage value="/resources/images/placeholder/vatinout_placeholder.png" styleClass="vatActivityPanel" style="display:none;" width="360" height="300" rendered="#{!homeController.renderVatInVatOutChart}"/>
-                                <!--<p:commandButton value="Create Your First Invoice" style="position: absolute; top:130px;left:85px" rendered="#{!homeController.renderVatInVatOutChart}"/>-->
-                            </h:panelGroup>
-                        </h:panelGroup>
-                    </p:panel>
+                </p:panelGrid>
+                <p:panelGrid columns="3" styleClass="no-border" layout="grid" style="width:100%">
                     <p:panel id="bankAccount"  header="Bank Account" styleClass="simplevat-dashboardlowerpanel" style="position:relative">
                         <p:scrollPanel mode="native" style="border: none">
                             <h:panelGroup layout="block"  style="border:none;">
@@ -152,7 +139,7 @@
                                             var="value">
                                             <li>
                                                 <div class="ui-g">
-                                                    <div class="ui-g-6">
+                                                    <div class="ui-g-7">
                                                         <div style="color: #757575; font-size: 17px;">
                                                             <p:commandLink value="#{value.bankAccountName} " action="#{homeController.loadBankAccountTransaction}" style="color: #009688;">
                                                                 <f:setPropertyActionListener value="#{value.bankAccountId}" target="#{homeController.selectedBankAccountId}"/>
@@ -161,7 +148,7 @@
 
                                                         <div style="color: #757575; font-size: 14px;">#{value.bankAccountType.name} Saving Account</div>
                                                     </div>
-                                                    <div class="ui-g-6">
+                                                    <div class="ui-g-5" style="text-align:right">
                                                         #{value.bankAccountCurrency.currencySymbol}#{value.currentBalance}
                                                     </div>
                                                 </div>
@@ -172,6 +159,19 @@
                                 </h:panelGroup>
                             </h:panelGroup>
                         </p:scrollPanel>
+                    </p:panel>
+                    <p:panel id="vatActivity" header="VAT Acivity"  styleClass="simplevat-dashboardlowerpanel">
+                        <h:panelGroup layout="block" style="position:relative">
+                            <h:panelGroup styleClass="vatActivityPanelPlaceHolder" style="position:absolute;width:90%">
+                                <ui:include src="../content-loading-placeholder.xhtml"/>
+                            </h:panelGroup>
+                            <h:panelGroup id="vatActivityPanel" styleClass="vatActivityPanel" >
+                                <p:chart type="bar" model="#{homeController.animatedModel2}" rendered="#{homeController.renderVatInVatOutChart}"
+                                         style="height:300px;margin-top: 20px;" responsive="true" />
+                                <p:graphicImage value="/resources/images/placeholder/vatinout_placeholder.png" styleClass="vatActivityPanel" style="display:none;" width="360" height="300" rendered="#{!homeController.renderVatInVatOutChart}"/>
+                                <!--<p:commandButton value="Create Your First Invoice" style="position: absolute; top:130px;left:85px" rendered="#{!homeController.renderVatInVatOutChart}"/>-->
+                            </h:panelGroup>
+                        </h:panelGroup>
                     </p:panel>
                     <p:panel id="activity" header="Activity" styleClass="simplevat-dashboardlowerpanel" >
                         <h:panelGroup layout="block" id="activityPanel">
@@ -195,9 +195,7 @@
                             </ul>
                         </h:panelGroup>
                     </p:panel>
-
-                </p:dashboard>
-
+                </p:panelGrid>
                 <p:panel id="scheduler" header="Calendar" styleClass="simplevat-dashboardlowerpanel ui-g-12 ui-md-12">
                     <h:panelGroup layout="block" style="position:relative">
                         <h:panelGroup styleClass="eventPanelPlaceHolder" style="position:absolute;width:90%">

@@ -108,3 +108,7 @@ body.layout-compact .ui-datatable tbody tr.ui-widget-content td {
     border:0px solid;
     /*padding-right:2px !important;*/
 }
+
+.no-border, .no-border .ui-panelgrid-content{
+    border: 0px solid !important;
+}
