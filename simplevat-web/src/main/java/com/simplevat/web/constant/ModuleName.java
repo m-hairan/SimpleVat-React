@@ -12,6 +12,7 @@ package com.simplevat.web.constant;
 public enum ModuleName {
     INVOICE_MODULE("INVOICE_MODULE"), 
     EXPENSE_MODULE ("EXPANSE_MODULE"),
+    IMPORT_MODULE ("IMPORT_MODULE"),
     TAX_MODULE ("TAX_MODULE"),
     BANK_MODULE ("BANK_MODULE"),
     PURCHASE_MODULE ("PURCHASE_MODULE"),

@@ -27,9 +27,7 @@
 .blue-side label{
     color: white;
     margin-top: 12px;
-
     float: left;
-
 }
 .form-control:focus{border-color:transparent !important;}
 

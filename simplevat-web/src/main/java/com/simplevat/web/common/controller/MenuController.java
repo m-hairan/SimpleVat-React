@@ -37,14 +37,13 @@ public class MenuController implements Serializable {
         model = new DefaultMenuModel();
         settingModel = new DefaultMenuModel();
         addHomeMenuItem(model);
-        addContactMenuItem(model);
-        addProjectMenuItem(model);
-        addProductServiceItem(model);
         addInvoiceMenuItem(model);
         addExpenseMenuItem(model);
         addBankAccountMenuItem(model);
         addTaxMenuItem(model);
         addReportMenuItem(model);
+        addImportMenuItem(model);
+        addMoreMenuItem(model);
 //        addSettingItem(model);
         populateSettingMenuItemModel();
     }
@@ -54,24 +53,6 @@ public class MenuController implements Serializable {
         item.setIcon("home");
         item.setOutcome("/pages/secure/home");
         model.addElement(item);
-    }
-
-    private void addContactMenuItem(DefaultMenuModel model) {
-        if (PageAccessControl.hasAccess(ModuleName.CONTACT_MODULE)) {
-            DefaultMenuItem item = new DefaultMenuItem("Contact");
-            item.setIcon("contacts");
-            item.setOutcome("/pages/secure/contact/list");
-            model.addElement(item);
-        }
-    }
-
-    private void addProjectMenuItem(DefaultMenuModel model) {
-        if (PageAccessControl.hasAccess(ModuleName.PROJECT_MODULE)) {
-            DefaultMenuItem item = new DefaultMenuItem("Project");
-            item.setIcon("book");
-            item.setOutcome("/pages/secure/project/projects");
-            model.addElement(item);
-        }
     }
 
     private void addInvoiceMenuItem(DefaultMenuModel model) {
@@ -119,6 +100,44 @@ public class MenuController implements Serializable {
         }
     }
 
+    private void addMoreMenuItem(DefaultMenuModel model) {
+        DefaultSubMenu submenu = new DefaultSubMenu("Master");
+        submenu.setIcon("insert_chart");
+        addContactMasterMenuItem(submenu);
+        addProductServiceMasterMenuItem(submenu);
+        addProjectMasterMenuItem(submenu);
+        if (submenu.getElementsCount() > 0) {
+            model.addElement(submenu);
+        }
+    }
+
+    private void addContactMasterMenuItem(DefaultSubMenu subMenu) {
+        if (PageAccessControl.hasAccess(ModuleName.CONTACT_MODULE)) {
+            DefaultMenuItem item = new DefaultMenuItem("Contact Master");
+            item.setIcon("contacts");
+            item.setOutcome("/pages/secure/contact/list");
+            subMenu.addElement(item);
+        }
+    }
+
+    private void addProjectMasterMenuItem(DefaultSubMenu subMenu) {
+        if (PageAccessControl.hasAccess(ModuleName.PROJECT_MODULE)) {
+            DefaultMenuItem item = new DefaultMenuItem("Project Master");
+            item.setIcon("book");
+            item.setOutcome("/pages/secure/project/projects");
+            subMenu.addElement(item);
+        }
+    }
+
+    private void addProductServiceMasterMenuItem(DefaultSubMenu subMenu) {
+        if (PageAccessControl.hasAccess(ModuleName.PRODUCT_MODULE)) {
+            DefaultMenuItem item = new DefaultMenuItem("Product Master");
+            item.setIcon("receipt");
+            item.setOutcome("/pages/secure/product-service/list");
+            subMenu.addElement(item);
+        }
+    }
+
     private void addReportMenuItem(DefaultMenuModel model) {
         if (PageAccessControl.hasAccess(ModuleName.REPORT_MODULE)) {
             DefaultSubMenu submenu = new DefaultSubMenu("Report");
@@ -157,11 +176,10 @@ public class MenuController implements Serializable {
         }
     }
 
-    private void addProductServiceItem(DefaultMenuModel model) {
-        if (PageAccessControl.hasAccess(ModuleName.PRODUCT_MODULE)) {
-            DefaultMenuItem item = new DefaultMenuItem("Product");
-            item.setIcon("receipt");
-            item.setOutcome("/pages/secure/product-service/list");
+    private void addImportMenuItem(DefaultMenuModel model) {
+        if (PageAccessControl.hasAccess(ModuleName.IMPORT_MODULE)) {
+            DefaultMenuItem item = new DefaultMenuItem("Imports");
+            item.setIcon("exposure");
             model.addElement(item);
         }
     }
@@ -197,7 +215,6 @@ public class MenuController implements Serializable {
 //            model.addElement(submenu);
 //        }
 //    }
-    
     private void populateSettingMenuItemModel() {
         if (PageAccessControl.hasAccess(ModuleName.SETTING_MODULE)) {
             if (PageAccessControl.hasAccess(ModuleName.GENERALSETTING_MODULE)) {

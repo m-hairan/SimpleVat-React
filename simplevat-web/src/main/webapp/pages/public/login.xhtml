@@ -62,7 +62,10 @@
                                     <p:message for="j_password"/>
 
                                     <p><a href="#">Forget Password ?</a></p>
-                                    <button>  Login </button>
+                                    <p:commandButton id="btnLogin" value="Sign In" action="#{securityBean.login()}" style="padding: 0 !important"
+                                                     update="content_login" 
+                                                     ajax="false"
+                                                     icon="ui-icon-person"/>
 
                                 </h:form> 
                             </div> 
