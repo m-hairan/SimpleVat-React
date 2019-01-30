@@ -19,7 +19,7 @@
             <a id="topbar-menu-button" href="#">
                 <i class="material-icons">&#xE5D2;</i>
             </a>
-            <ul class="topbar-items fadeInDown animated">
+            <ul class="topbar-items">
                 <ui:fragment rendered="#{guestPreferences.profileMode == 'overlay'||guestPreferences.menuLayout == 'menu-layout-static menu-layout-horizontal'}">
                     <li class="profile-item">
                         <a href="#">
@@ -56,126 +56,53 @@
                         </ul>
                     </li>
                 </ui:fragment>
-                <li>
-                    <a href="#">
-                        <i class="topbar-icon material-icons">&#xE8B8;</i>
-                        <span class="topbar-item-name">Settings</span>
-                    </a>
-                    <ul class="ultima-menu animated">
 
+                <li role="menuitem">
+                    <a href="#{request.contextPath}/j_spring_security_logout">
+                        <i class="topbar-icon material-icons">&#xE8AC;</i>
+                        <span class="topbar-item-name">Logout</span>
+                    </a>
+                </li>
+
+                <li>
+                    <h:outputLink id="dynaButton">
+                        <i class="topbar-icon material-icons">&#xE8B8;</i>
+                        <span class="topbar-item-name">Settings</span>                
+                    </h:outputLink>
+                    <p:menu overlay="true" trigger="dynaButton" my="left top" at="left bottom" widgetVar="me1" model="#{menuController.settingModel}">
+                    </p:menu>
+<!--                    <ul class="ultima-menu animated">
                         <li role="menuitem">
                             <p:link
                                 outcome="/pages/secure/account/index" styleClass="ripplelink">
                                 <i class="material-icons">&#xE7FD;</i>
-                                <span>Profile</span>
+                                <span>Account</span>
                             </p:link>
                         </li>
-
-                        <li role="menuitem">
-                            <a href="#{request.contextPath}/j_spring_security_logout">
-                                <i class="material-icons">&#xE8AC;</i>
-                                <span>Logout</span>
-                            </a>
-                        </li>
-                        <!-- <li role="menuitem">
-                          <a href="#">
-                              <i class="material-icons">&#xE40A;</i>
-                              <span>Change Theme</span>
-                          </a>
-                      </li>
-                      <li role="menuitem">
-                          <a href="#">
-                              <i class="material-icons">&#xE87E;</i>
-                              <span>Favorites</span>
-                          </a>
-                      </li>-->
-                        <!--<li role="menuitem">
-                            <a href="#">
-                                <i class="material-icons">&#xE1BC;</i>
-                                <span>Wallpaper</span>
-                            </a>
-                        </li>-->
-                    </ul>
+                    </ul>-->
                 </li>
-                <!--li>
-                    <a href="#">
-                        <i class="topbar-icon material-icons animated swing">&#xE0C9;</i>
-                        <span class="topbar-badge animated rubberBand">5</span>
-                        <span class="topbar-item-name">Messages</span>
-                    </a>
-                    <ul class="ultima-menu animated">
-                        <li role="menuitem">
-                            <a href="#" class="topbar-message">
-                                <p:graphicImage name="images/avatar1.png" library="ultima-layout" width="35"/>
-                                <span>Give me a call</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#" class="topbar-message">
-                                <p:graphicImage name="images/avatar2.png" library="ultima-layout" width="35"/>
-                                <span>Sales reports attached</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#" class="topbar-message">
-                                <p:graphicImage name="images/avatar3.png" library="ultima-layout" width="35"/>
-                                <span>About your invoice</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#" class="topbar-message">
-                                <p:graphicImage name="images/avatar2.png" library="ultima-layout" width="35"/>
-                                <span>Meeting today at 10pm</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#" class="topbar-message">
-                                <p:graphicImage name="images/avatar4.png" library="ultima-layout" width="35"/>
-                                <span>Out of office</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li-->
-                <!--li>
-                    <a href="#">
-                        <i class="topbar-icon material-icons">&#xE425;</i>
-                        <span class="topbar-badge animated rubberBand">4</span>
-                        <span class="topbar-item-name">Notifications</span>
-                    </a>
-                    <ul class="ultima-menu animated">
-                        <li role="menuitem">
-                            <a href="#">
-                                <i class="material-icons">&#xE868;</i>
-                                <span>Pending tasks</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#">
-                                <i class="material-icons">&#xE878;</i>
-                                <span>Meeting today at 3pm</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#">
-                                <i class="material-icons">&#xE2C4;</i>
-                                <span>Download documents</span>
-                            </a>
-                        </li>
-                        <li role="menuitem">
-                            <a href="#">
-                                <i class="material-icons">&#xE539;</i>
-                                <span>Book flight</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li-->
+
+                <li>
+                    <p:link outcome="/pages/secure/account/index" styleClass="ripplelink">
+                        <div class="profile-image">
+                            <ui:fragment rendered="#{userProfileController.renderProfilePic}">
+                                <p:graphicImage styleClass="profile-circular" cache="false"
+                                                value="#{streamedContentSessionController.streamedProfilePic}" />
+                            </ui:fragment>
+                            <ui:fragment rendered="#{!userProfileController.renderProfilePic}">
+                                <p:graphicImage name="images/user-avtar-icon1.png" library="ultima-layout" height="60px" width="60px" cache="false"/>
+
+                            </ui:fragment>
+                        </div>
+                        <span class="topbar-item-name">Profile</span>
+                    </p:link>
+                </li>
                 <li class="search-item">
                     <h:panelGroup styleClass="md-inputfield">
                         <p:inputText/>
                         <label>Search</label>
                         <i class="topbar-icon material-icons">&#xE8B6;</i>
                     </h:panelGroup>
-
                 </li>
 
             </ul>

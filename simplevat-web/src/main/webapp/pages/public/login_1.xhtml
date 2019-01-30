@@ -1,0 +1,68 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes"/>
+            <link rel="shortcut icon" type="image/png" href="#{request.contextPath}/resources/images/simplevat-favicon.png"/>
+        </f:facet>
+        <title>#{messages.application_name}</title>
+        <h:outputScript name="js/ripple.js" library="ultima-layout"/>
+        <h:outputScript name="js/layout.js" library="ultima-layout"/>
+    </h:head>
+
+    <h:body styleClass="login-body">
+        <h:form id="loginFormId" prependId="false">
+            <div class="card login-panel ui-fluid">
+                <h:panelGroup styleClass="ui-g" id="content_login">
+                    <div class="ui-g-12">
+                        <p:graphicImage name="images/logo-ultima.png" library="ultima-layout"/>
+                    </div>
+                    <h:panelGroup style="padding-left: 60px;color: red" rendered="#{securityBean.badcredential}">
+                        <p:outputLabel value="Bad Credential. Try again" />
+                    </h:panelGroup>
+                    <div class="ui-g-12">
+                        <h:panelGroup styleClass="md-inputfield">
+                            <p:inputText id="j_username" value="#{securityBean.username}" maxlength="50" autocomplete="off" required="true" requiredMessage="Username is mandatory">
+                                <p:clientValidator event="keyup"/>
+                            </p:inputText>
+                            <label>Email Address</label>
+                            <p:message for="j_username"/>
+                        </h:panelGroup>
+                    </div>
+                    <div class="ui-g-12">
+                        <h:panelGroup styleClass="md-inputfield">
+                            <p:password id="j_password" value="#{securityBean.password}" maxlength="50" autocomplete="off" required="true" requiredMessage="Password is mandatory">
+                                <p:clientValidator event="keyup"/>
+                            </p:password>
+                            <label>Password</label>
+                            <p:message for="j_password"/>
+
+                        </h:panelGroup>
+                    </div>
+                    <div class="ui-g-12">
+                        <p:commandButton id="btnLogin" value="Sign In" action="#{securityBean.login()}" style="padding: 0 !important"
+                                         update="content_login" 
+                                         ajax="false"
+                                         icon="ui-icon-person"/>
+                        <p:button outcome="/pages/public/forget-password" value="Forgot Password" icon="ui-icon-help" styleClass="secondary"/>
+                    </div>
+
+                </h:panelGroup>
+
+            </div>
+        </h:form>
+        <div class="login-footer">
+            <div><p:outputLabel value="Version: #{securityBean.versionNumber}"/></div>
+        </div>
+
+        <h:outputStylesheet name="css/ripple.css" library="ultima-layout"/>
+        <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="ultima-layout"/>
+    </h:body>
+
+</html>

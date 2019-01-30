@@ -21,18 +21,12 @@
     </cc:interface>
 
     <cc:implementation>
-        <si:cpanel>
+        <!--<si:cpanel>-->
             <si:ctoolbar newAction="#{cc.attrs.newAction}" hideOptions="#{cc.attrs.hideOptions}">
                 <cc:insertFacet name="left"/>
                 <cc:insertFacet name="right"/>
             </si:ctoolbar>
-            <p:spacer height="5"/>
             <cc:insertChildren />
-            <p:spacer height="5"/>
-            <si:ctoolbar newAction="#{cc.attrs.newAction}" hideOptions="#{cc.attrs.hideOptions}">
-                <cc:insertFacet name="left"/>
-                <cc:insertFacet name="right"/>
-            </si:ctoolbar> 
-        </si:cpanel>
+        <!--</si:cpanel>-->
     </cc:implementation>
 </html>

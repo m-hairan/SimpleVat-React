@@ -28,10 +28,14 @@ public class MenuController implements Serializable {
     @Getter
     @Setter
     DefaultMenuModel model;
+    @Getter
+    @Setter
+    DefaultMenuModel settingModel;
 
     @PostConstruct
     public void init() {
         model = new DefaultMenuModel();
+        settingModel = new DefaultMenuModel();
         addHomeMenuItem(model);
         addContactMenuItem(model);
         addProjectMenuItem(model);
@@ -41,7 +45,8 @@ public class MenuController implements Serializable {
         addBankAccountMenuItem(model);
         addTaxMenuItem(model);
         addReportMenuItem(model);
-        addSettingItem(model);
+//        addSettingItem(model);
+        populateSettingMenuItemModel();
     }
 
     private void addHomeMenuItem(DefaultMenuModel model) {
@@ -161,35 +166,64 @@ public class MenuController implements Serializable {
         }
     }
 
-    private void addSettingItem(DefaultMenuModel model) {
+//    private void addSettingItem(DefaultMenuModel model) {
+//        if (PageAccessControl.hasAccess(ModuleName.SETTING_MODULE)) {
+//            DefaultSubMenu submenu = new DefaultSubMenu("Setting");
+//            submenu.setIcon("settings");
+//            if (PageAccessControl.hasAccess(ModuleName.GENERALSETTING_MODULE)) {
+//                DefaultMenuItem item = new DefaultMenuItem("General");
+//                item.setIcon("build");
+//                item.setOutcome("/pages/secure/setting/general");
+//                submenu.addElement(item);
+//            }
+//            if (PageAccessControl.hasAccess(ModuleName.VATCATEGORY_MODULE)) {
+//                DefaultMenuItem item = new DefaultMenuItem("Vat Category");
+//                item.setIcon("bookmark_border");
+//                item.setOutcome("/pages/secure/setting/vat-list");
+//                submenu.addElement(item);
+//            }
+//            if (PageAccessControl.hasAccess(ModuleName.TRANSACTIONCATEGORY_MODULE)) {
+//                DefaultMenuItem item = new DefaultMenuItem("Transaction Category");
+//                item.setIcon("trending_up");
+//                item.setOutcome("/pages/secure/setting/transactioncategory-list");
+//                submenu.addElement(item);
+//            }
+//            if (PageAccessControl.hasAccess(ModuleName.USER_MODULE)) {
+//                DefaultMenuItem item = new DefaultMenuItem("Users");
+//                item.setIcon("supervisor_account");
+//                item.setOutcome("/pages/secure/user/list");
+//                submenu.addElement(item);
+//            }
+//            model.addElement(submenu);
+//        }
+//    }
+    
+    private void populateSettingMenuItemModel() {
         if (PageAccessControl.hasAccess(ModuleName.SETTING_MODULE)) {
-            DefaultSubMenu submenu = new DefaultSubMenu("Setting");
-            submenu.setIcon("settings");
             if (PageAccessControl.hasAccess(ModuleName.GENERALSETTING_MODULE)) {
                 DefaultMenuItem item = new DefaultMenuItem("General");
                 item.setIcon("build");
                 item.setOutcome("/pages/secure/setting/general");
-                submenu.addElement(item);
+                settingModel.addElement(item);
             }
             if (PageAccessControl.hasAccess(ModuleName.VATCATEGORY_MODULE)) {
                 DefaultMenuItem item = new DefaultMenuItem("Vat Category");
                 item.setIcon("bookmark_border");
                 item.setOutcome("/pages/secure/setting/vat-list");
-                submenu.addElement(item);
+                settingModel.addElement(item);
             }
             if (PageAccessControl.hasAccess(ModuleName.TRANSACTIONCATEGORY_MODULE)) {
                 DefaultMenuItem item = new DefaultMenuItem("Transaction Category");
                 item.setIcon("trending_up");
                 item.setOutcome("/pages/secure/setting/transactioncategory-list");
-                submenu.addElement(item);
+                settingModel.addElement(item);
             }
             if (PageAccessControl.hasAccess(ModuleName.USER_MODULE)) {
                 DefaultMenuItem item = new DefaultMenuItem("Users");
                 item.setIcon("supervisor_account");
                 item.setOutcome("/pages/secure/user/list");
-                submenu.addElement(item);
+                settingModel.addElement(item);
             }
-            model.addElement(submenu);
         }
     }
 

@@ -739,7 +739,7 @@ body {
     padding: 0;
     margin: 0; }
 body.main-body {
-    background-color: #f7f7f7; }
+    background-color: #fff; }
 body a {
     text-decoration: none; }
 
@@ -2023,6 +2023,35 @@ body.layout-compact .ui-widget-content .phone {
     height: 50px; }
 .amount, .ui-datatable tfoot td.amount {
     text-align: right;
+}
+.layout-wrapper .layout-menu li {
+    border-bottom: 1px solid #e3e9ea;
+}
+
+.layout-wrapper .layout-menu li:last-child {
+    border-bottom: 0px solid;
+}
+body .ui-toolbar {
+    background-color: #FFF;
+    border: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+}
+.profile-circular{
+    width: 37px;
+    height: 37px;
+    display: block;
+    border-radius: 100px;
+    margin-left:0px !important;
+}
+
+body.layout-compact .page-toolbar.ui-toolbar {
+    padding-left: 1px;
+    padding-right: 1px;
+}
+.footer{
+    margin-top:10px;
 }
 /* sourceMappingURL=layout-simplevat.css.map */
 /*# sourceMappingURL=#{resource['ultima-layout/css:layout-simplevat.css.map']} */

@@ -9,75 +9,48 @@
         <div class="layout-menu #{guestPreferences.menuClass}">
             <div class="nano">
                 <div class="nano-content menu-scroll-content">
-                    <ui:fragment
-                        rendered="#{guestPreferences.profileMode == 'inline' and guestPreferences.menuLayout != 'menu-layout-static menu-layout-horizontal'}">
-                        <div class="profile">
-                            <div class="profile-image">
-                                <ui:fragment rendered="#{userProfileController.renderProfilePic}">
-                                    <p:graphicImage height="60px" width="60px" cache="false"
-                                                    value="#{streamedContentSessionController.streamedProfilePic}" />
-                                </ui:fragment>
-                                <ui:fragment rendered="#{!userProfileController.renderProfilePic}">
-                                    <p:graphicImage name="images/user-avtar-icon1.png" library="ultima-layout" height="60px" width="60px" cache="false"/>
+                    <!--                    <ui:fragment
+                                            rendered="#{guestPreferences.profileMode == 'inline' and guestPreferences.menuLayout != 'menu-layout-static menu-layout-horizontal'}">
+                                            <div class="profile">
+                                                <div class="profile-image">
+                                                    <ui:fragment rendered="#{userProfileController.renderProfilePic}">
+                                                        <p:graphicImage height="60px" width="60px" cache="false"
+                                                                        value="#{streamedContentSessionController.streamedProfilePic}" />
+                                                    </ui:fragment>
+                                                    <ui:fragment rendered="#{!userProfileController.renderProfilePic}">
+                                                        <p:graphicImage name="images/user-avtar-icon1.png" library="ultima-layout" height="60px" width="60px" cache="false"/>
+                    
+                                                    </ui:fragment>
+                    
+                                                </div>
+                                                <a id="profile-options" href="#"> <span class="profile-name">#{userProfileController.currentUser.firstName}
+                    #{userProfileController.currentUser.lastName}</span> <i
+                    class="material-icons">&#xE313;</i>
+            </a>
+        </div>
 
-                                </ui:fragment>
+        <ul id="profile-menu" class="ultima-menu">
+            <li role="menuitem"><p:link
+                    outcome="/pages/secure/account/index" styleClass="ripplelink">
+                    <i class="material-icons">&#xE7FD;</i>
+                    <span>Account</span>
+                </p:link>
+            </li>
+            <li role="menuitem">
+                <a href="#" class="ripplelink"> <i
+                        class="material-icons">&#xE32A;</i> <span>Privacy</span>
+                </a>
+            </li>
+            <li role="menuitem">
+                <a
+                    href="#{request.contextPath}/j_spring_security_logout"
+                    class="ripplelink"> <i class="material-icons">&#xE8AC;</i> <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </ui:fragment>-->
 
-                            </div>
-                            <a id="profile-options" href="#"> <span class="profile-name">#{userProfileController.currentUser.firstName}
-                                    #{userProfileController.currentUser.lastName}</span> <i
-                                    class="material-icons">&#xE313;</i>
-                            </a>
-                        </div>
-
-                        <ul id="profile-menu" class="ultima-menu">
-                            <li role="menuitem"><p:link
-                                    outcome="/pages/secure/account/index" styleClass="ripplelink">
-                                    <i class="material-icons">&#xE7FD;</i>
-                                    <span>Account</span>
-                                </p:link>
-                            </li>
-                            <li role="menuitem"><a href="#" class="ripplelink"> <i
-                                        class="material-icons">&#xE32A;</i> <span>Privacy</span>
-                                </a></li>
-<!--                            <li role="menuitem"><a id="setting-options" href="#" styleClass="ripplelink setting-expanded">
-                                    <i class="material-icons">&#xE8B9;</i> 
-                                    <span>Settings</span>
-                                    <i class="material-icons">&#xE313;</i> 
-                                </a>
-                                <ul id="setting-menu" class="ultima-menu">
-                                    <li role="menuitem"><p:link
-                                            outcome="/pages/secure/setting/general" styleClass="ripplelink">
-                                            <i class="material-icons">&#xE869;</i>
-                                            <span>General</span>
-                                        </p:link>
-                                    </li>
-                                    <li role="menuitem"><p:link
-                                            outcome="/pages/secure/setting/vat-list" styleClass="ripplelink">
-                                            <i class="material-icons">&#xE8E7;</i>
-                                            <span>Vat Category</span>
-                                        </p:link>
-                                    </li>
-                                    <li role="menuitem"><p:link
-                                            outcome="/pages/secure/setting/transactioncategory-list" styleClass="ripplelink">
-                                            <i class="material-icons">&#xE922;</i>
-                                            <span>Transaction Category</span>
-                                        </p:link>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li role="menuitem"><p:link outcome="/pages/secure/user/list" styleClass="ripplelink">
-                                    <i class="material-icons">&#xE7FB;</i>
-                                    <span>Users</span>
-                                </p:link>
-                            </li>-->
-                            <li role="menuitem"><a
-                                    href="#{request.contextPath}/j_spring_security_logout"
-                                    class="ripplelink"> <i class="material-icons">&#xE8AC;</i> <span>Logout</span>
-                                </a></li>
-                        </ul>
-                    </ui:fragment>
-
-                    <pu:menu widgetVar="me" model="#{menuController.model}">
+                    <pu:menu widgetVar="me" model="#{menuController.model}" id="sidemenu">
 
                     </pu:menu>
 

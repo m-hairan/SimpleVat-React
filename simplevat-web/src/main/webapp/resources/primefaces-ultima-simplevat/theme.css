@@ -3109,8 +3109,8 @@ body {
     font-family: 'FontAwesome'; }
   body .ui-inputfield {
     background: transparent;
-    border-width: 0 0 1px 0;
-    padding: 2px 2px 1px 2px;
+    border: 1px solid #aeb0b5;
+    padding: 4px;
     font-size: 16px;
     border-color: #bdbdbd;
     border-style: solid;
@@ -3122,9 +3122,9 @@ body {
     -webkit-border-radius: 0px;
     border-radius: 0px; }
     body .ui-inputfield.ui-state-focus {
-      border-width: 0 0 2px 0;
+      /*border-width: 1px;Comment by Uday*/
       border-color: #009688;
-      padding-bottom: 0px; }
+      /*padding-bottom: 0px; */}
     body .ui-inputfield.ui-state-disabled {
       border-bottom: 1px dotted; }
     body .ui-inputfield.ui-widget-content {
@@ -3641,8 +3641,8 @@ body {
     body .md-inputfield textarea.ui-state-filled ~ label,
     body .md-inputfield .md-inputwrapper-focus ~ label,
     body .md-inputfield .md-inputwrapper-filled ~ label {
-      top: -20px;
-      font-size: 12px;
+      /*top: -20px;
+      font-size: 12px; Comment by Uday*/
       color: #009688; }
     body .md-inputfield label {
       color: #999;
@@ -3650,7 +3650,8 @@ body {
       position: absolute;
       pointer-events: none;
       left: 5px;
-      top: 1px;
+      /*top: 1px;Comment by Uday*/
+      top: -25px;
       transition: 0.3s ease all;
       -moz-transition: 0.3s ease all;
       -webkit-transition: 0.3s ease all; }

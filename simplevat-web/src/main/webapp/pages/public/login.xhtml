@@ -1,6 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:p="http://primefaces.org/ui">
 
     <h:head>
@@ -12,57 +13,99 @@
             <link rel="shortcut icon" type="image/png" href="#{request.contextPath}/resources/images/simplevat-favicon.png"/>
         </f:facet>
         <title>#{messages.application_name}</title>
-        <h:outputScript name="js/ripple.js" library="ultima-layout"/>
-        <h:outputScript name="js/layout.js" library="ultima-layout"/>
+        <h:outputStylesheet name="login.css" library="css"/>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     </h:head>
 
-    <h:body styleClass="login-body">
-        <h:form id="loginFormId" prependId="false">
-            <div class="card login-panel ui-fluid">
-                <h:panelGroup styleClass="ui-g" id="content_login">
-                    <div class="ui-g-12">
-                        <p:graphicImage name="images/logo-ultima.png" library="ultima-layout"/>
-                    </div>
-                    <h:panelGroup style="padding-left: 60px;color: red" rendered="#{securityBean.badcredential}">
-                        <p:outputLabel value="Bad Credential. Try again" />
-                    </h:panelGroup>
-                    <div class="ui-g-12">
-                        <h:panelGroup styleClass="md-inputfield">
-                            <p:inputText id="j_username" value="#{securityBean.username}" maxlength="50" autocomplete="off" required="true" requiredMessage="Username is mandatory">
-                                <p:clientValidator event="keyup"/>
-                            </p:inputText>
-                            <label>Email Address</label>
-                            <p:message for="j_username"/>
-                        </h:panelGroup>
-                    </div>
-                    <div class="ui-g-12">
-                        <h:panelGroup styleClass="md-inputfield">
-                            <p:password id="j_password" value="#{securityBean.password}" maxlength="50" autocomplete="off" required="true" requiredMessage="Password is mandatory">
-                                <p:clientValidator event="keyup"/>
-                            </p:password>
-                            <label>Password</label>
-                            <p:message for="j_password"/>
-
-                        </h:panelGroup>
-                    </div>
-                    <div class="ui-g-12">
-                        <p:commandButton id="btnLogin" value="Sign In" action="#{securityBean.login()}" style="padding: 0 !important"
-                                         update="content_login" 
-                                         ajax="false"
-                                         icon="ui-icon-person"/>
-                        <p:button outcome="/pages/public/forget-password" value="Forgot Password" icon="ui-icon-help" styleClass="secondary"/>
-                    </div>
-
-                </h:panelGroup>
-
+    <h:body styleClass="login-bg" >
+        <div>
+            <div class="header hidden-md hidden-lg">
+                <h:graphicImage name="SimpleVatLogoFinalFinal.png" library="images" alt=""/>
             </div>
-        </h:form>
-        <div class="login-footer">
-            <div><p:outputLabel value="Version: #{securityBean.versionNumber}"/></div>
-        </div>
+            <div class="container">
+                <div class="login-panel">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12" style="padding:0px;">
+                            <!--<img class="hidden-md hidden-lg" src="simplevat-logo.png" alt="" style="width: 50%;margin-left: 22%;">-->
+                            <div class="blue-side">
+                                <h1>WELCOME TO SIMPLEVAT</h1>
+                                <h1>LOG <strong> IN</strong></h1>
+                                <h:form>
+                                    <h:panelGroup style="padding-left: 60px;color: red" rendered="#{securityBean.badcredential}">
+                                        <p:outputLabel value="Bad Credential. Try again" />
+                                    </h:panelGroup>
+                                    <label>User Name: </label><br/>
+                                    <div class="input-group margin-bottom-sm">
+                                        <span class="input-group-addon"><i class="fa fa-user-circle-o"></i></span>
+                                        <h:inputText id="j_username" styleClass="form-control" value="#{securityBean.username}"
+                                                     maxlength="50" autocomplete="off" required="true"
+                                                     pt:placeholder="Enter User Name" requiredMessage="Username is mandatory" >
+                                            <p:clientValidator event="keyup"/>
+                                        </h:inputText>
+                                    </div>  
+                                    <p:message for="j_username"/>
 
-        <h:outputStylesheet name="css/ripple.css" library="ultima-layout"/>
-        <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="ultima-layout"/>
+                                    <label>Password: </label><br/>
+                                    <div class="input-group margin-bottom-sm">
+                                        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                        <h:inputSecret id="j_password" styleClass="form-control" 
+                                                       value="#{securityBean.password}" maxlength="50" autocomplete="off" 
+                                                       required="true" requiredMessage="Password is mandatory"
+                                                       pt:placeholder="Enter Password">
+                                            <p:clientValidator event="keyup"/>
+                                        </h:inputSecret>
+                                    </div>
+                                    <p:message for="j_password"/>
+
+                                    <p><a href="#">Forget Password ?</a></p>
+                                    <button>  Login </button>
+
+                                </h:form> 
+                            </div> 
+                        </div>
+                        <div class="col-md-6 col-sm-12" style="padding:0px;">
+                            <div class="white-side">
+                                <h:graphicImage styleClass="hidden-sm hidden-xs" name="SimpleVatLogoFinalFinal.png" library="images" alt=""/>
+                                <div class="feature-img">
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-6">
+                                            <div class="feature-box br-btm" style="float: left;border-bottom:1px dotted #7ea721;">
+                                                <h:graphicImage styleClass="service-img" name="login/services-analytics.png" library="images" alt=""/>
+                                                <h1>Automated VAT Processing</h1>
+                                            </div>
+
+                                            <div class="feature-box br-btm" style="float: right;">
+                                                <h:graphicImage styleClass="service-img" name="login/services-seo.png" library="images" alt=""/>
+                                                <h1>Comprehensive VAT Reports</h1>
+                                            </div>
+                                        </div>
+                                        <div class="vl"></div>
+                                        <div class="col-md-6 col-sm-6">
+                                            <div class="feature-box br-btm-md" style="float: left;">
+                                                <h:graphicImage styleClass="service-img" name="login/services-payperclick.png" library="images" alt=""/>
+                                                <h1>Government Compliance</h1>
+                                            </div>
+
+                                            <div class="feature-box" style="float: right;">
+                                                <h:graphicImage styleClass="service-img" name="login/services-socialmediamarketing.png" library="images" alt=""/>
+                                                <h1> Hassle-free VAT Filing	</h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="login-footer" align="right">
+                        <div><p:outputLabel value="Version: #{securityBean.versionNumber}"/></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </h:body>
 
 </html>
