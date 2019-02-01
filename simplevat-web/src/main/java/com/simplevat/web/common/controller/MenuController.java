@@ -44,8 +44,8 @@ public class MenuController implements Serializable {
         addReportMenuItem(model);
         addImportMenuItem(model);
         addMoreMenuItem(model);
-//        addSettingItem(model);
-        populateSettingMenuItemModel();
+        addSettingMenuItem(model);
+//        populateSettingMenuItemModel(model);
     }
 
     private void addHomeMenuItem(DefaultMenuModel model) {
@@ -103,9 +103,10 @@ public class MenuController implements Serializable {
     private void addMoreMenuItem(DefaultMenuModel model) {
         DefaultSubMenu submenu = new DefaultSubMenu("Master");
         submenu.setIcon("insert_chart");
-        addContactMasterMenuItem(submenu);
         addProductServiceMasterMenuItem(submenu);
         addProjectMasterMenuItem(submenu);
+        addContactMasterMenuItem(submenu);
+        addUserMenuItem(submenu);
         if (submenu.getElementsCount() > 0) {
             model.addElement(submenu);
         }
@@ -113,7 +114,7 @@ public class MenuController implements Serializable {
 
     private void addContactMasterMenuItem(DefaultSubMenu subMenu) {
         if (PageAccessControl.hasAccess(ModuleName.CONTACT_MODULE)) {
-            DefaultMenuItem item = new DefaultMenuItem("Contact Master");
+            DefaultMenuItem item = new DefaultMenuItem("Contact");
             item.setIcon("contacts");
             item.setOutcome("/pages/secure/contact/list");
             subMenu.addElement(item);
@@ -122,7 +123,7 @@ public class MenuController implements Serializable {
 
     private void addProjectMasterMenuItem(DefaultSubMenu subMenu) {
         if (PageAccessControl.hasAccess(ModuleName.PROJECT_MODULE)) {
-            DefaultMenuItem item = new DefaultMenuItem("Project Master");
+            DefaultMenuItem item = new DefaultMenuItem("Project");
             item.setIcon("book");
             item.setOutcome("/pages/secure/project/projects");
             subMenu.addElement(item);
@@ -131,10 +132,19 @@ public class MenuController implements Serializable {
 
     private void addProductServiceMasterMenuItem(DefaultSubMenu subMenu) {
         if (PageAccessControl.hasAccess(ModuleName.PRODUCT_MODULE)) {
-            DefaultMenuItem item = new DefaultMenuItem("Product Master");
+            DefaultMenuItem item = new DefaultMenuItem("Product");
             item.setIcon("receipt");
             item.setOutcome("/pages/secure/product-service/list");
             subMenu.addElement(item);
+        }
+    }
+
+    private void addUserMenuItem(DefaultSubMenu submenu) {
+        if (PageAccessControl.hasAccess(ModuleName.USER_MODULE)) {
+            DefaultMenuItem item = new DefaultMenuItem("Users");
+            item.setIcon("supervisor_account");
+            item.setOutcome("/pages/secure/user/list");
+            submenu.addElement(item);
         }
     }
 
@@ -184,64 +194,60 @@ public class MenuController implements Serializable {
         }
     }
 
-//    private void addSettingItem(DefaultMenuModel model) {
-//        if (PageAccessControl.hasAccess(ModuleName.SETTING_MODULE)) {
-//            DefaultSubMenu submenu = new DefaultSubMenu("Setting");
-//            submenu.setIcon("settings");
-//            if (PageAccessControl.hasAccess(ModuleName.GENERALSETTING_MODULE)) {
-//                DefaultMenuItem item = new DefaultMenuItem("General");
-//                item.setIcon("build");
-//                item.setOutcome("/pages/secure/setting/general");
-//                submenu.addElement(item);
-//            }
-//            if (PageAccessControl.hasAccess(ModuleName.VATCATEGORY_MODULE)) {
-//                DefaultMenuItem item = new DefaultMenuItem("Vat Category");
-//                item.setIcon("bookmark_border");
-//                item.setOutcome("/pages/secure/setting/vat-list");
-//                submenu.addElement(item);
-//            }
-//            if (PageAccessControl.hasAccess(ModuleName.TRANSACTIONCATEGORY_MODULE)) {
-//                DefaultMenuItem item = new DefaultMenuItem("Transaction Category");
-//                item.setIcon("trending_up");
-//                item.setOutcome("/pages/secure/setting/transactioncategory-list");
-//                submenu.addElement(item);
-//            }
-//            if (PageAccessControl.hasAccess(ModuleName.USER_MODULE)) {
-//                DefaultMenuItem item = new DefaultMenuItem("Users");
-//                item.setIcon("supervisor_account");
-//                item.setOutcome("/pages/secure/user/list");
-//                submenu.addElement(item);
-//            }
-//            model.addElement(submenu);
-//        }
-//    }
-    private void populateSettingMenuItemModel() {
+    private void addSettingMenuItem(DefaultMenuModel model) {
         if (PageAccessControl.hasAccess(ModuleName.SETTING_MODULE)) {
+            DefaultSubMenu submenu = new DefaultSubMenu("Setting");
+            submenu.setIcon("settings");
             if (PageAccessControl.hasAccess(ModuleName.GENERALSETTING_MODULE)) {
                 DefaultMenuItem item = new DefaultMenuItem("General");
                 item.setIcon("build");
                 item.setOutcome("/pages/secure/setting/general");
-                settingModel.addElement(item);
+                submenu.addElement(item);
             }
             if (PageAccessControl.hasAccess(ModuleName.VATCATEGORY_MODULE)) {
                 DefaultMenuItem item = new DefaultMenuItem("Vat Category");
                 item.setIcon("bookmark_border");
                 item.setOutcome("/pages/secure/setting/vat-list");
-                settingModel.addElement(item);
+                submenu.addElement(item);
             }
             if (PageAccessControl.hasAccess(ModuleName.TRANSACTIONCATEGORY_MODULE)) {
                 DefaultMenuItem item = new DefaultMenuItem("Transaction Category");
                 item.setIcon("trending_up");
                 item.setOutcome("/pages/secure/setting/transactioncategory-list");
-                settingModel.addElement(item);
+                submenu.addElement(item);
             }
-            if (PageAccessControl.hasAccess(ModuleName.USER_MODULE)) {
-                DefaultMenuItem item = new DefaultMenuItem("Users");
-                item.setIcon("supervisor_account");
-                item.setOutcome("/pages/secure/user/list");
-                settingModel.addElement(item);
+            if (submenu.getElementsCount() > 0) {
+                model.addElement(submenu);
             }
         }
     }
+//    private void populateSettingMenuItemModel(DefaultMenuModel model) {
+//        if (PageAccessControl.hasAccess(ModuleName.SETTING_MODULE)) {
+//            if (PageAccessControl.hasAccess(ModuleName.GENERALSETTING_MODULE)) {
+//                DefaultMenuItem item = new DefaultMenuItem("General");
+//                item.setIcon("build");
+//                item.setOutcome("/pages/secure/setting/general");
+//                model.addElement(item);
+//            }
+//            if (PageAccessControl.hasAccess(ModuleName.VATCATEGORY_MODULE)) {
+//                DefaultMenuItem item = new DefaultMenuItem("Vat Category");
+//                item.setIcon("bookmark_border");
+//                item.setOutcome("/pages/secure/setting/vat-list");
+//                model.addElement(item);
+//            }
+//            if (PageAccessControl.hasAccess(ModuleName.TRANSACTIONCATEGORY_MODULE)) {
+//                DefaultMenuItem item = new DefaultMenuItem("Transaction Category");
+//                item.setIcon("trending_up");
+//                item.setOutcome("/pages/secure/setting/transactioncategory-list");
+//                model.addElement(item);
+//            }
+//            if (PageAccessControl.hasAccess(ModuleName.USER_MODULE)) {
+//                DefaultMenuItem item = new DefaultMenuItem("Users");
+//                item.setIcon("supervisor_account");
+//                item.setOutcome("/pages/secure/user/list");
+//                model.addElement(item);
+//            }
+//        }
+//    }
 
 }

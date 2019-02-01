@@ -63,27 +63,8 @@
                         <span class="topbar-item-name">Logout</span>
                     </a>
                 </li>
-
                 <li>
-                    <h:outputLink id="dynaButton">
-                        <i class="topbar-icon material-icons">&#xE8B8;</i>
-                        <span class="topbar-item-name">Settings</span>                
-                    </h:outputLink>
-                    <p:menu overlay="true" trigger="dynaButton" my="left top" at="left bottom" widgetVar="me1" model="#{menuController.settingModel}">
-                    </p:menu>
-<!--                    <ul class="ultima-menu animated">
-                        <li role="menuitem">
-                            <p:link
-                                outcome="/pages/secure/account/index" styleClass="ripplelink">
-                                <i class="material-icons">&#xE7FD;</i>
-                                <span>Account</span>
-                            </p:link>
-                        </li>
-                    </ul>-->
-                </li>
-
-                <li>
-                    <p:link outcome="/pages/secure/account/index" styleClass="ripplelink">
+                    <p:link outcome="/pages/secure/account/index?faces-redirect=true" styleClass="ripplelink">
                         <div class="profile-image">
                             <ui:fragment rendered="#{userProfileController.renderProfilePic}">
                                 <p:graphicImage styleClass="profile-circular" cache="false"
