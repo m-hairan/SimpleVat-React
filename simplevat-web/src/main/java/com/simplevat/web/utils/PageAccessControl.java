@@ -28,6 +28,7 @@ public class PageAccessControl {
         managerRoleAccessList.add(ModuleName.EXPENSE_MODULE.getName());
         managerRoleAccessList.add(ModuleName.CONTACT_MODULE.getName());
         managerRoleAccessList.add(ModuleName.PRODUCT_MODULE.getName());
+        managerRoleAccessList.add(ModuleName.IMPORT_MODULE.getName());
         accessMap.put(RoleCode.MANGER.getCode(), managerRoleAccessList);
 
         List<String> adminRoleAccessList = new ArrayList<>();
@@ -45,6 +46,7 @@ public class PageAccessControl {
         adminRoleAccessList.add(ModuleName.CONTACT_MODULE.getName());
         adminRoleAccessList.add(ModuleName.TAX_MODULE.getName());
         adminRoleAccessList.add(ModuleName.PRODUCT_MODULE.getName());
+        adminRoleAccessList.add(ModuleName.IMPORT_MODULE.getName());
         accessMap.put(RoleCode.ADMIN.getCode(), adminRoleAccessList);
 
         List<String> shareHolderRoleAccessList = new ArrayList<>();
@@ -56,6 +58,7 @@ public class PageAccessControl {
         shareHolderRoleAccessList.add(ModuleName.PROJECT_MODULE.getName());
         shareHolderRoleAccessList.add(ModuleName.CONTACT_MODULE.getName());
         shareHolderRoleAccessList.add(ModuleName.PRODUCT_MODULE.getName());
+        shareHolderRoleAccessList.add(ModuleName.IMPORT_MODULE.getName());
         accessMap.put(RoleCode.SHARE_HOLDER.getCode(), shareHolderRoleAccessList);
 
         List<String> directorRoleAccessList = new ArrayList<>();
@@ -67,6 +70,7 @@ public class PageAccessControl {
         directorRoleAccessList.add(ModuleName.PROJECT_MODULE.getName());
         directorRoleAccessList.add(ModuleName.CONTACT_MODULE.getName());
         directorRoleAccessList.add(ModuleName.PRODUCT_MODULE.getName());
+        directorRoleAccessList.add(ModuleName.IMPORT_MODULE.getName());
         accessMap.put(RoleCode.DIRECTOR.getCode(), directorRoleAccessList);
 
         List<String> employeeRoleAccessList = new ArrayList<>();
@@ -78,6 +82,7 @@ public class PageAccessControl {
         employeeRoleAccessList.add(ModuleName.PROJECT_MODULE.getName());
         employeeRoleAccessList.add(ModuleName.CONTACT_MODULE.getName());
         employeeRoleAccessList.add(ModuleName.PRODUCT_MODULE.getName());
+        employeeRoleAccessList.add(ModuleName.IMPORT_MODULE.getName());
         accessMap.put(RoleCode.EMPLOYEE.getCode(), employeeRoleAccessList);
 
         List<String> accountantRoleAccessList = new ArrayList<>();
@@ -89,6 +94,7 @@ public class PageAccessControl {
         accountantRoleAccessList.add(ModuleName.PROJECT_MODULE.getName());
         accountantRoleAccessList.add(ModuleName.CONTACT_MODULE.getName());
         accountantRoleAccessList.add(ModuleName.PRODUCT_MODULE.getName());
+        accountantRoleAccessList.add(ModuleName.IMPORT_MODULE.getName());
         accessMap.put(RoleCode.ACCOUNTANT.getCode(), adminRoleAccessList);
 
     }
