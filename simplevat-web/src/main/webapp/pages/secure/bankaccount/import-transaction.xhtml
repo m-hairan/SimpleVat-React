@@ -103,7 +103,7 @@
                                     <p:outputLabel styleClass="tableCustomFooter" value="Total Record: #{transactionImportController.transactionList.size()}"/>
                                     <p:outputLabel styleClass="tableCustomFooter" value="Total Invalid Row:  #{transactionImportController.totalErrorRows}"/>
                                 </f:facet>
-                                <p:column  style="text-align: center" headerText="Import Status">
+                                <p:column  style="text-align: center" headerText="Status">
                                     <div align="center">
                                         <h:panelGroup layout="block" style="display:block" styleClass="label status-#{transaction.format}" >
                                             <h:outputText value=" "/>
@@ -149,6 +149,7 @@
                 </div>
             </div>
         </h:form> 
+         <ui:include src="import-transaction-status-popup.xhtml"/>
     </ui:define>
 
 </ui:composition>

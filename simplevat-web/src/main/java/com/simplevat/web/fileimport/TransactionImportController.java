@@ -34,8 +34,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -46,6 +48,7 @@ import lombok.Setter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -108,6 +111,35 @@ public class TransactionImportController implements Serializable {
     @Getter
     @Setter
     private boolean renderButtonOnValidData;
+    @Getter
+    @Setter
+    private String transactionDate = "Transaction Date";
+    @Getter
+    @Setter
+    private String description = "Description";
+    @Getter
+    @Setter
+    private String debitAmount = "Debit Amount";
+    @Getter
+    @Setter
+    private String creditAmount = "Credit Amount";
+    @Getter
+    @Setter
+    private boolean transactionDateBoolean = false;
+    @Getter
+    @Setter
+    private boolean descriptionBoolean = false;
+    @Getter
+    @Setter
+    private boolean debitAmountBoolean = false;
+    @Getter
+    @Setter
+    private boolean creditAmountBoolean = false;
+    @Getter
+    @Setter
+    List<String> headerText = new ArrayList<String>();
+    List<String> headerTextData = new ArrayList<String>();
+    private boolean isDataRepeated = false;
 
     @PostConstruct
     public void init() {
@@ -127,6 +159,10 @@ public class TransactionImportController implements Serializable {
 
     public void handleFileUpload(FileUploadEvent event) {
         listParser.clear();
+        transactionDate = "Transaction Date";
+        description = "Description";
+        debitAmount = "Debit Amount";
+        creditAmount = "Credit Amount";
         try {
             InputStream inputStream = event.getFile().getInputstream();
             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
@@ -142,22 +178,125 @@ public class TransactionImportController implements Serializable {
     }
 
     public void populateTranscationOnFileUpload() {
+        headerText.clear();
+        headerTextData.clear();
         transactionList.clear();
         debitTransaction.clear();
         creditTransaction.clear();
         invalidHeaderTransactionList.clear();
         totalErrorRows = 0;
         renderButtonOnValidData = true;
+        isDataRepeated=false;
+        getHeaderListData();
+        Set<String> setToReturn = new HashSet<>();
+        for (String name : headerTextData) {
+            if (setToReturn.add(name) == false) {
+                // your duplicate element
+                isDataRepeated = true;
+                break;
+            }
+        }
+
         try {
             if (listParser != null) {
                 int recordNo = 0;
                 int headerIndex = 0;
                 Integer header;
+                Integer headerIndexPosition = 0;
+                Integer headerIndexPositionCounter = 0;
+                Integer transcationDatePosition = -1;
+                Integer transcationDescriptionPosition = -1;
+                Integer transcationDebitPosition = -1;
+                Integer transcationCreditPosition = -1;
                 for (CSVRecord cSVRecord : listParser) {
                     if (headerIncluded) {
                         header = headerCount + 1;
+                        headerIndexPosition = header;
                     } else {
                         header = headerCount;
+                        headerIndexPosition = header;
+                    }
+
+                    if (headerIndexPosition == header) {
+                        if (headerIncluded) {
+                            if (headerIndexPositionCounter == header - 1) {
+                                int i = 0;
+                                boolean isDataPresent = true;
+                                while (isDataPresent) {
+                                    try {
+                                        if (cSVRecord.get(i).equals(transactionDate)) {
+                                            transactionDateBoolean = true;
+                                            transcationDatePosition = i;
+                                        } else if (cSVRecord.get(i).equals(description)) {
+                                            descriptionBoolean = true;
+                                            transcationDescriptionPosition = i;
+                                        } else if (cSVRecord.get(i).equals(debitAmount)) {
+                                            debitAmountBoolean = true;
+                                            transcationDebitPosition = i;
+                                        } else if (cSVRecord.get(i).equals(creditAmount)) {
+                                            creditAmountBoolean = true;
+                                            transcationCreditPosition = i;
+                                        }
+                                        headerText.add(cSVRecord.get(i));
+                                        i = i + 1;
+                                    } catch (Exception e) {
+                                        isDataPresent = false;
+                                    }
+                                }
+                                if (!isDataPresent) {
+
+                                }
+                                headerIndexPosition++;
+                            }
+
+                        } else {
+                            if (headerIndexPositionCounter == header) {
+                                int i = 0;
+                                boolean isDataPresent = true;
+                                while (isDataPresent) {
+                                    try {
+                                        if (cSVRecord.get(i).equals(transactionDate)) {
+                                            transactionDateBoolean = true;
+                                            transcationDatePosition = i;
+                                        } else if (cSVRecord.get(i).equals(description)) {
+                                            descriptionBoolean = true;
+                                            transcationDescriptionPosition = i;
+                                        } else if (cSVRecord.get(i).equals(debitAmount)) {
+                                            debitAmountBoolean = true;
+                                            transcationDebitPosition = i;
+                                        } else if (cSVRecord.get(i).equals(creditAmount)) {
+                                            creditAmountBoolean = true;
+                                            transcationCreditPosition = i;
+                                        }
+                                        headerText.add(cSVRecord.get(i));
+                                        i = i + 1;
+                                    } catch (Exception e) {
+                                        isDataPresent = false;
+                                    }
+                                }
+                                headerIndexPosition++;
+                            }
+                        }
+
+                        headerIndexPositionCounter++;
+                    }
+
+                    if (isDataRepeated) {
+                        FacesMessage message = new FacesMessage("Column mapping cannot be repeated");
+                        message.setSeverity(FacesMessage.SEVERITY_ERROR);
+                        FacesContext.getCurrentInstance().addMessage("importStatusMessage", message);
+                    }
+                    if (transactionDateBoolean && descriptionBoolean && debitAmountBoolean && creditAmountBoolean) {
+                        RequestContext.getCurrentInstance().update("importstatus");
+                        RequestContext.getCurrentInstance().update("form:footerToolBar");
+                        RequestContext.getCurrentInstance().update("form:transactionTable");
+                        RequestContext context = RequestContext.getCurrentInstance();
+                        context.execute("PF('importStatusPopUp').hide();");
+                    } else {
+                        RequestContext.getCurrentInstance().update("importstatus");
+                        RequestContext context = RequestContext.getCurrentInstance();
+                        context.execute("PF('importStatusPopUp').show();");
+                        break;
                     }
                     if (headerIndex < header) {
                         headerIndex++;
@@ -165,13 +304,13 @@ public class TransactionImportController implements Serializable {
                         Transaction transaction = new Transaction();
                         transaction.setId(++recordNo);
                         int i = 0;
-                        String date = cSVRecord.get(i++);
-                        String description = cSVRecord.get(i++);
-                        String drAmount = cSVRecord.get(i++);
-                        String crAmount = cSVRecord.get(i++);
+                        String date = cSVRecord.get(transcationDatePosition);
+                        String description = cSVRecord.get(transcationDescriptionPosition);
+                        String drAmount = cSVRecord.get(transcationDebitPosition);
+                        String crAmount = cSVRecord.get(transcationCreditPosition);
 
                         try {
-                            //     Date dateTranscation = new SimpleDateFormat(dateFormat).parse(date);
+                            //Date dateTranscation = new SimpleDateFormat(dateFormat).parse(date);
                             transaction.setDate("date");
                             TemporalAccessor ta = DateTimeFormatter.ofPattern(dateFormat).parse(date);
                             DateFormat formatter = new SimpleDateFormat(dateFormat, Locale.US);
@@ -180,7 +319,6 @@ public class TransactionImportController implements Serializable {
                             DateFormat df = new SimpleDateFormat(dateFormat);
                             String reportDate = df.format(dateTranscation);
                             transaction.setDate("");
-                            System.out.println("==reportDate==" + reportDate);
                             if (!drAmount.isEmpty()) {
                                 transaction.setDebit("debit");
                                 new BigDecimal(Float.valueOf(drAmount));
@@ -217,6 +355,14 @@ public class TransactionImportController implements Serializable {
                         }
                     }
                 }
+                if (transactionDateBoolean && descriptionBoolean && debitAmountBoolean && creditAmountBoolean) {
+                    transactionDateBoolean = false;
+                    descriptionBoolean = false;
+                    debitAmountBoolean = false;
+                    creditAmountBoolean = false;
+
+                }
+
                 if (!invalidHeaderTransactionList.isEmpty()) {
                     StringBuilder validationMessage = new StringBuilder("Heading mismatch  ");
                     for (String invalidHeading : invalidHeaderTransactionList) {
@@ -227,10 +373,18 @@ public class TransactionImportController implements Serializable {
                     message.setSeverity(FacesMessage.SEVERITY_ERROR);
                     FacesContext.getCurrentInstance().addMessage("validationId", message);
                 }
+
             }
         } catch (Exception ex) {
             Logger.getLogger(TransactionImportController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void getHeaderListData() {
+        headerTextData.add(transactionDate);
+        headerTextData.add(description);
+        headerTextData.add(debitAmount);
+        headerTextData.add(creditAmount);
     }
 
     public String saveTransactions() {
@@ -274,6 +428,19 @@ public class TransactionImportController implements Serializable {
             transactionService.persist(transaction1);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void editColumn(String columnName) {
+        System.out.println("==editColumn==" + columnName);
+        if (columnName.equals("TDate")) {
+            transactionDateBoolean = false;
+        } else if (columnName.equals("TDescription")) {
+            descriptionBoolean = false;
+        } else if (columnName.equals("TDebit")) {
+            debitAmountBoolean = false;
+        } else if (columnName.equals("TCredit")) {
+            creditAmountBoolean = false;
         }
     }
 
