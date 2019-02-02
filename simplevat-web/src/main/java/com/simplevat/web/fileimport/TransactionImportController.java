@@ -140,6 +140,11 @@ public class TransactionImportController implements Serializable {
     List<String> headerText = new ArrayList<String>();
     List<String> headerTextData = new ArrayList<String>();
     private boolean isDataRepeated = false;
+    private boolean tableChange = true;
+    Integer transcationDatePosition = -1;
+    Integer transcationDescriptionPosition = -1;
+    Integer transcationDebitPosition = -1;
+    Integer transcationCreditPosition = -1;
 
     @PostConstruct
     public void init() {
@@ -174,6 +179,25 @@ public class TransactionImportController implements Serializable {
     }
 
     public void onChange() {
+        transactionDate = "Transaction Date";
+        description = "Description";
+        debitAmount = "Debit Amount";
+        creditAmount = "Credit Amount";
+        tableChange = true;
+        populateTranscationOnFileUpload();
+    }
+
+    public void onChangeTable() {
+        tableChange = false;
+        transactionDateBoolean = false;
+        descriptionBoolean = false;
+        debitAmountBoolean = false;
+        creditAmountBoolean = false;
+        populateTranscationOnFileUpload();
+    }
+
+    public void onChangeInitial() {
+        tableChange = true;
         populateTranscationOnFileUpload();
     }
 
@@ -186,7 +210,8 @@ public class TransactionImportController implements Serializable {
         invalidHeaderTransactionList.clear();
         totalErrorRows = 0;
         renderButtonOnValidData = true;
-        isDataRepeated=false;
+        isDataRepeated = false;
+        Integer headerValue = 0;
         getHeaderListData();
         Set<String> setToReturn = new HashSet<>();
         for (String name : headerTextData) {
@@ -204,26 +229,24 @@ public class TransactionImportController implements Serializable {
                 Integer header;
                 Integer headerIndexPosition = 0;
                 Integer headerIndexPositionCounter = 0;
-                Integer transcationDatePosition = -1;
-                Integer transcationDescriptionPosition = -1;
-                Integer transcationDebitPosition = -1;
-                Integer transcationCreditPosition = -1;
+
                 for (CSVRecord cSVRecord : listParser) {
                     if (headerIncluded) {
                         header = headerCount + 1;
                         headerIndexPosition = header;
+                        headerValue = 1;
                     } else {
                         header = headerCount;
                         headerIndexPosition = header;
+                        headerValue = 0;
                     }
-
                     if (headerIndexPosition == header) {
-                        if (headerIncluded) {
-                            if (headerIndexPositionCounter == header - 1) {
-                                int i = 0;
-                                boolean isDataPresent = true;
-                                while (isDataPresent) {
-                                    try {
+                        if (headerIndexPositionCounter == header - headerValue) {
+                            int i = 0;
+                            boolean isDataPresent = true;
+                            while (isDataPresent) {
+                                try {
+                                    if (tableChange) {
                                         if (cSVRecord.get(i).equals(transactionDate)) {
                                             transactionDateBoolean = true;
                                             transcationDatePosition = i;
@@ -237,67 +260,37 @@ public class TransactionImportController implements Serializable {
                                             creditAmountBoolean = true;
                                             transcationCreditPosition = i;
                                         }
-                                        headerText.add(cSVRecord.get(i));
-                                        i = i + 1;
-                                    } catch (Exception e) {
-                                        isDataPresent = false;
                                     }
+                                    headerText.add(cSVRecord.get(i));
+                                    i = i + 1;
+                                } catch (Exception e) {
+                                    isDataPresent = false;
                                 }
-                                if (!isDataPresent) {
-
-                                }
-                                headerIndexPosition++;
                             }
 
-                        } else {
-                            if (headerIndexPositionCounter == header) {
-                                int i = 0;
-                                boolean isDataPresent = true;
-                                while (isDataPresent) {
-                                    try {
-                                        if (cSVRecord.get(i).equals(transactionDate)) {
-                                            transactionDateBoolean = true;
-                                            transcationDatePosition = i;
-                                        } else if (cSVRecord.get(i).equals(description)) {
-                                            descriptionBoolean = true;
-                                            transcationDescriptionPosition = i;
-                                        } else if (cSVRecord.get(i).equals(debitAmount)) {
-                                            debitAmountBoolean = true;
-                                            transcationDebitPosition = i;
-                                        } else if (cSVRecord.get(i).equals(creditAmount)) {
-                                            creditAmountBoolean = true;
-                                            transcationCreditPosition = i;
-                                        }
-                                        headerText.add(cSVRecord.get(i));
-                                        i = i + 1;
-                                    } catch (Exception e) {
-                                        isDataPresent = false;
-                                    }
-                                }
-                                headerIndexPosition++;
+                            headerIndexPosition++;
+                            if (isDataRepeated) {
+                                FacesMessage message = new FacesMessage("Column mapping cannot be repeated");
+                                message.setSeverity(FacesMessage.SEVERITY_ERROR);
+                                FacesContext.getCurrentInstance().addMessage("importStatusMessage", message);
+                                 break;
+                            }
+                            if (transactionDateBoolean && descriptionBoolean && debitAmountBoolean && creditAmountBoolean) {
+                                RequestContext.getCurrentInstance().update("importstatus");
+                                RequestContext.getCurrentInstance().update("form:footerToolBar");
+                                RequestContext.getCurrentInstance().update("form:transactionTable");
+                                RequestContext context = RequestContext.getCurrentInstance();
+                                context.execute("PF('importStatusPopUp').hide();");
+                            } else {
+                                RequestContext.getCurrentInstance().update("importstatus");
+                                RequestContext context = RequestContext.getCurrentInstance();
+                                context.execute("PF('importStatusPopUp').show();");
+                                break;
                             }
                         }
-
                         headerIndexPositionCounter++;
                     }
 
-                    if (isDataRepeated) {
-                        FacesMessage message = new FacesMessage("Column mapping cannot be repeated");
-                        message.setSeverity(FacesMessage.SEVERITY_ERROR);
-                        FacesContext.getCurrentInstance().addMessage("importStatusMessage", message);
-                    }
-                    if (transactionDateBoolean && descriptionBoolean && debitAmountBoolean && creditAmountBoolean) {
-                        RequestContext.getCurrentInstance().update("importstatus");
-                        RequestContext.getCurrentInstance().update("form:footerToolBar");
-                        RequestContext.getCurrentInstance().update("form:transactionTable");
-                        RequestContext context = RequestContext.getCurrentInstance();
-                        context.execute("PF('importStatusPopUp').hide();");
-                    } else {
-                        RequestContext.getCurrentInstance().update("importstatus");
-                        RequestContext context = RequestContext.getCurrentInstance();
-                        context.execute("PF('importStatusPopUp').show();");
-                        break;
-                    }
                     if (headerIndex < header) {
                         headerIndex++;
                     } else {

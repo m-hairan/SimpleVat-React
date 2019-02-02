@@ -23,6 +23,9 @@
             .date-date{background: tomato;}
             .credit-credit{background:tomato;}
             .debit-debit{background: tomato;}
+            .ui-button .ui-widget .ui-state-default .ui-corner-all .ui-button-text-only .AquaButton{
+                display: none!important;
+            }
         </style>
     </ui:define>
     <ui:define name="content">
@@ -64,7 +67,7 @@
                                                                     return false;
                                                                 }"
                                                         >
-                                            <p:ajax event="itemSelect" process="@this" listener="#{transactionImportController.onChange()}" update="transactionTable footerToolBar"/>
+                                            <p:ajax event="itemSelect" process="@this" listener="#{transactionImportController.onChangeInitial()}" update="transactionTable footerToolBar"/>
                                         </p:autoComplete>
                                         <p:outputLabel for="dateType" value="Date Format"/>
                                     </h:panelGroup>
@@ -98,6 +101,8 @@
                                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {TableHeader} {TableFooter}">
                                 <f:facet name="{TableHeader}">
                                     <p:outputLabel styleClass="tableCustomHeader" value="Imported Transactions"/>
+                                    <p:commandButton value="Change" styleClass="AquaButton" action="#{transactionImportController.onChangeTable()}" />
+
                                 </f:facet>
                                 <f:facet name="{TableFooter}">
                                     <p:outputLabel styleClass="tableCustomFooter" value="Total Record: #{transactionImportController.transactionList.size()}"/>
@@ -149,7 +154,7 @@
                 </div>
             </div>
         </h:form> 
-         <ui:include src="import-transaction-status-popup.xhtml"/>
+        <ui:include src="import-transaction-status-popup.xhtml"/>
     </ui:define>
 
 </ui:composition>

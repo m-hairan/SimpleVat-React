@@ -190,6 +190,7 @@ public class MenuController implements Serializable {
         if (PageAccessControl.hasAccess(ModuleName.IMPORT_MODULE)) {
             DefaultMenuItem item = new DefaultMenuItem("Imports");
             item.setIcon("exposure");
+            item.setOutcome("/pages/secure/bankaccount/import-transaction.xhtml?faces-redirect=true");
             model.addElement(item);
         }
     }
