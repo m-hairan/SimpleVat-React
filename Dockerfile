@@ -79,7 +79,7 @@ RUN set -eux; \
 	\
 	export GNUPGHOME="$(mktemp -d)"; \
 	for key in $GPG_KEYS; do \
-		gpg --batch --keyserver hkps://hkps.pool.sks-keyservers.net --recv-keys "$key"; \
+		gpg --batch --keyserver  ipv4.pool.sks-keyservers.net --recv-keys "$key"; \
 	done; \
 	\
 	apt-get install -y --no-install-recommends wget ca-certificates; \
