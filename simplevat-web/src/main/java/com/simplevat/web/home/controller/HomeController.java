@@ -95,7 +95,7 @@ public class HomeController implements Serializable {
     @Getter
     @Setter
     private boolean renderVatInVatOutChart;
-    
+
     @Getter
     @Setter
     private boolean renderInvoiceExpanseChart = false;
@@ -264,41 +264,42 @@ public class HomeController implements Serializable {
         yAxis.setMin(0);
 //        yAxis.setMax(15915);
         ArrayList expenseArray = new ArrayList(expesneData.entrySet());
-        for(Iterator<Map.Entry> it = expenseArray.iterator(); it.hasNext();) {
+        for (Iterator<Map.Entry> it = expenseArray.iterator(); it.hasNext();) {
             String strNum = it.next().getValue().toString();
-            if(strNum.toString().equals("0")) {
+            if (strNum.toString().equals("0")) {
                 it.remove();
             }
         }
 
         ArrayList invoiceArray = new ArrayList(invoiseData.entrySet());
-        for(Iterator<Map.Entry> it = invoiceArray.iterator(); it.hasNext();) {
+        for (Iterator<Map.Entry> it = invoiceArray.iterator(); it.hasNext();) {
             String strNum = it.next().getValue().toString();
-            if(strNum.toString().equals("0")) {
+            if (strNum.toString().equals("0")) {
                 it.remove();
             }
         }
+        System.out.println("===expenseArray=====" + expenseArray);
+        Number maxExpense = 0L;
+        Number maxInvoice = 0L;
 
-        Number maxExpense = expesneData.get(Collections.max(expenseArray, Map.Entry.comparingByValue()).getKey()).floatValue();
-        Number maxInvoice = invoiseData.get(Collections.max(invoiceArray, Map.Entry.comparingByValue()).getKey()).floatValue();
-
-        float maxValue = Math.max(maxExpense.floatValue(),maxInvoice.floatValue());
-        if(maxValue > 1000)
-        {
-            maxValue = Math.round(maxValue/1000);
+        if (!expenseArray.isEmpty()) {
+            maxExpense = expesneData.get(Collections.max(expenseArray, Map.Entry.comparingByValue()).getKey()).floatValue();
+        }
+        if (!invoiceArray.isEmpty()) {
+            maxInvoice = invoiseData.get(Collections.max(invoiceArray, Map.Entry.comparingByValue()).getKey()).floatValue();
+        }
+        float maxValue = Math.max(maxExpense.floatValue(), maxInvoice.floatValue());
+        if (maxValue > 1000) {
+            maxValue = Math.round(maxValue / 1000);
             maxValue = maxValue * 1000;
-        }
-        else if (maxValue > 100)
-        {
-            maxValue = Math.round(maxValue/100);
+        } else if (maxValue > 100) {
+            maxValue = Math.round(maxValue / 100);
             maxValue = maxValue * 100;
-        }
-        else
-        {
+        } else {
             maxValue = 100;
         }
 //        yAxis.setMax(maxValue);
-        yAxis.setTickInterval(maxValue/10+"");
+        yAxis.setTickInterval(maxValue / 10 + "");
 //        yAxis.setTickFormat("%#.1f");
         yAxis.setTickCount(11);
         if (invoiceService.getMaxValue(invoiseData) >= expenseService.getMaxValue(expesneData)) {
@@ -380,7 +381,6 @@ public class HomeController implements Serializable {
             model.addSeries(expenses);
             renderInvoiceExpanseChart = true;
         }
-        
 
         return model;
     }

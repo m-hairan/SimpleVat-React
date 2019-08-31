@@ -1,0 +1,55 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
+                xmlns:p="http://primefaces.org/ui" 
+                template="/WEB-INF/templates/template.xhtml">
+
+    <ui:define name="title">Search Result</ui:define>
+    <ui:define name="content">
+        <style>
+            .editItem {
+                width :95%;
+                height:auto;
+                box-shadow: 1px 1px 5px 1px grey;
+                padding: 15px;
+                border: .5px solid grey;
+                color:black;
+                background-color: #ffffff;
+            }
+            hr{
+                width: 100%;
+                border: 0; 
+                height: 1px; 
+                background-image: -webkit-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+                background-image: -moz-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+                background-image: -ms-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+                background-image: -o-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0); 
+            }
+            .ui-datalist-content{
+                border : 0 !important; 
+                background-color: inherit !important;
+            }
+        </style>
+        <h:form id="form">
+            <div style="padding: 10px 0 0 30px;">
+                <div class="editItem" >
+                    <p:dataList value="#{searchResultController.searchResultList}" var="result" type="definition" style="border: 0 !important">
+
+
+                        <h4><p:commandLink value="#{result.name}" style="color: #009688 !important" /></h4>
+
+                        <p:outputLabel value="#{result.description}"/>
+                        <!--                            <p:commandButton styleClass="AquaButton" style="float:right;margin-right:2px;" value="view" />
+                                                    <p:commandButton styleClass="AquaButton" style="float:right;margin-right:2px;" value="edit" />
+                                                    <p:commandButton styleClass="AquaButton" style="float:right;margin-right:2px;" value="delete" />-->
+
+                        <hr/>
+                    </p:dataList>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

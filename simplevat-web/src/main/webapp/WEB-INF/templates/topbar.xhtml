@@ -58,13 +58,13 @@
                 </ui:fragment>
 
                 <li role="menuitem">
-                    <a href="#{request.contextPath}/j_spring_security_logout">
+                    <a href="#{request.contextPath}/j_spring_security_logout" onclick="redirect('#{request.contextPath}/j_spring_security_logout')">
                         <i class="topbar-icon material-icons">&#xE8AC;</i>
                         <span class="topbar-item-name">Logout</span>
                     </a>
                 </li>
                 <li>
-                    <p:link outcome="/pages/secure/account/index?faces-redirect=true" styleClass="ripplelink">
+                    <p:link styleClass="ripplelink" onclick="redirect('#{request.contextPath}/pages/secure/account/index.xhtml')">
                         <div class="profile-image">
                             <ui:fragment rendered="#{userProfileController.renderProfilePic}">
                                 <p:graphicImage styleClass="profile-circular" cache="false"
@@ -79,15 +79,22 @@
                     </p:link>
                 </li>
                 <li class="search-item">
-                    <h:panelGroup styleClass="md-inputfield">
-                        <p:inputText/>
-                        <label>Search</label>
-                        <i class="topbar-icon material-icons">&#xE8B6;</i>
-                    </h:panelGroup>
+                    <h:form >
+                        <h:panelGroup class="md-inputfield">
+                            <p:inputText id="searchinput" binding="#{input1}" value="#{searchController.token}" />
+                            <label>Search</label>
+                            <p:commandLink action="#{searchController.redirectToSearchResult(input1.value)}"  ><i class="topbar-icon material-icons">&#xE8B6;</i></p:commandLink>
+                        </h:panelGroup>
+                    </h:form>
+
                 </li>
 
             </ul>
         </div>
     </div>
-
+    <script>
+        const redirect = (val) => {
+            window.location.href = val;
+        }
+    </script>
 </ui:composition>

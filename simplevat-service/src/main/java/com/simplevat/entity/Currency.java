@@ -18,24 +18,24 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @Table(name = "CURRENCY")
 @Data
-public class Currency implements Serializable{
+public class Currency implements Serializable {
 
     @Id
     @Column(name = "CURRENCY_CODE")
     private Integer currencyCode;
-    
+
     @Basic(optional = false)
     @Column(name = "CURRENCY_NAME")
     private String currencyName;
-    
+
     @Basic
     @Column(name = "CURRENCY_DESCRIPTION")
     private String currencyDescription;
-    
+
     @Basic
     @Column(name = "CURRENCY_ISO_CODE", length = 3)
     private String currencyIsoCode;
-    
+
     @Basic
     @Column(name = "CURRENCY_SYMBOL")
     private String currencySymbol;
@@ -48,7 +48,7 @@ public class Currency implements Serializable{
     @Column(name = "ORDER_SEQUENCE")
     @Basic(optional = true)
     private Integer orderSequence;
-    
+
     @Column(name = "CREATED_BY")
     @Basic(optional = false)
     private Integer createdBy;
@@ -77,4 +77,10 @@ public class Currency implements Serializable{
     @Version
     private Integer versionNumber;
 
+    @Transient
+    private String description;
+
+    public String getDescription() {
+        return currencyDescription + " - " + currencyIsoCode + "(" + currencySymbol + ")";
+    }
 }
