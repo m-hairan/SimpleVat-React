@@ -145,10 +145,21 @@ public class TransactionImportController implements Serializable {
     Integer transcationDescriptionPosition = -1;
     Integer transcationDebitPosition = -1;
     Integer transcationCreditPosition = -1;
+    @Getter
+    @Setter
+    private List<BankAccount> bankAccounts;
+    @Getter
+    @Setter
+    Integer bankAccountId = null;
+
+    @Getter
+    @Setter
+    BankAccount bankAccountIdMainMenu = null;
 
     @PostConstruct
     public void init() {
-        Integer bankAccountId = FacesUtil.getSelectedBankAccountId();
+        bankAccountId = FacesUtil.getSelectedBankAccountId();
+        bankAccounts = bankAccountService.getBankAccounts();
         if (bankAccountId != null) {
             bankAccount = bankAccountService.findByPK(bankAccountId);
         }
@@ -176,6 +187,10 @@ public class TransactionImportController implements Serializable {
         } catch (IOException e) {
         }
         populateTranscationOnFileUpload();
+    }
+
+    public void onChangeBankAccount() {
+        bankAccountId = bankAccountIdMainMenu.getBankAccountId();
     }
 
     public void onChange() {
@@ -273,7 +288,7 @@ public class TransactionImportController implements Serializable {
                                 FacesMessage message = new FacesMessage("Column mapping cannot be repeated");
                                 message.setSeverity(FacesMessage.SEVERITY_ERROR);
                                 FacesContext.getCurrentInstance().addMessage("importStatusMessage", message);
-                                 break;
+                                break;
                             }
                             if (transactionDateBoolean && descriptionBoolean && debitAmountBoolean && creditAmountBoolean) {
                                 RequestContext.getCurrentInstance().update("importstatus");
@@ -384,6 +399,7 @@ public class TransactionImportController implements Serializable {
         for (Transaction transaction : transactionList) {
             save(transaction);
         }
+        FacesUtil.setSelectedBankAccountId(bankAccountId);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Transaction saved successfully"));
         return "bank-transactions?faces-redirect=true";
     }
@@ -394,6 +410,10 @@ public class TransactionImportController implements Serializable {
 
     public List<String> completeDateFormat() {
         return dateFormatList;
+    }
+
+    public List<BankAccount> completeMethodBankAccount() {
+        return bankAccounts;
     }
 
     private void save(Transaction transaction) {

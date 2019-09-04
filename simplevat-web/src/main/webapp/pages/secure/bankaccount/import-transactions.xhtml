@@ -37,8 +37,35 @@
                             <h1>Import Transaction File</h1>
                             <br/>
 
-                            <h:panelGroup>
-                                <h:panelGroup >
+                            <h:panelGroup id="main_panel">
+                                <p:fieldset legend="Bank Account" toggleable="false"
+                                            toggleSpeed="500">
+                                    <p:panelGrid columns="3" 
+                                                 columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4"
+                                                 layout="grid" styleClass="ui-panelgrid-blank form-group"
+                                                 style="border:0px none; background-color:transparent;">
+                                        <h:panelGroup styleClass="md-inputfield">
+                                            <p:autoComplete id="bank_account"
+                                                            dropdown="true"
+                                                            forceSelection="true"
+                                                            effect="fold"
+                                                            converter="#{bankAccountConverter}"
+                                                            completeMethod="#{transactionImportController.completeMethodBankAccount()}"
+                                                            value="#{transactionImportController.bankAccountIdMainMenu}"
+                                                            scrollHeight="250"
+                                                            var="account"
+                                                            itemLabel="#{account.bankAccountName}"
+                                                            itemValue="#{account}"
+                                                            onkeypress="if (event.keyCode == 13) {
+                                                                        return false;
+                                                                    }">
+                                                <p:ajax event="itemSelect" process="@this" listener="#{transactionImportController.onChangeBankAccount()}" update="main_panel"/>
+                                            </p:autoComplete>
+                                            <p:outputLabel for="bank_account" value="Bank Account"/>
+                                        </h:panelGroup>
+                                    </p:panelGrid>
+                                </p:fieldset>
+                                <h:panelGroup rendered="#{transactionImportController.bankAccountIdMainMenu!=null}">
                                     <p:toolbar>
                                         <f:facet name="left">
                                             <p:fileUpload fileUploadListener="#{transactionImportController.handleFileUpload}" style="width: 155px;" label="Browse file (.csv)" mode="advanced" uploadLabel="Select File (.csv)"
