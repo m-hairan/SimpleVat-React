@@ -90,7 +90,7 @@
                                 </p:panelGrid>
                             </p:fieldset>
                             <br/>
-                            <p:fieldset legend="Contact Details" toggleable="true" toggleSpeed="500">
+                            <p:fieldset legend="Contact Details" toggleable="true" toggleSpeed="500" rendered="#{contactController.contactModel.contactType.id!=3}">
                                 <p:panelGrid columns="3" columnClasses=",ui-grid-col-4,ui-grid-col-4,,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
 
 

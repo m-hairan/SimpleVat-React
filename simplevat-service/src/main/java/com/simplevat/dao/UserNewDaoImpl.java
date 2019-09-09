@@ -9,6 +9,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
 import com.simplevat.entity.User;
+import java.util.ArrayList;
 import javax.persistence.TypedQuery;
 
 @Repository(value = "userDao")
@@ -42,5 +43,16 @@ public class UserNewDaoImpl extends AbstractDao<Integer, User> implements UserNe
         query.setParameter("password", password);
         User user = query.getSingleResult();
         return user != null;
+    }
+
+    @Override
+    public List<User> getAllUserNotEmployee() {
+        TypedQuery<User> query = this.getEntityManager().createQuery("SELECT u FROM User AS u WHERE u.employeeId IS NULL", User.class);
+        List<User> resultList = query.getResultList();
+        if (resultList != null && !resultList.isEmpty()) {
+            return resultList;
+        } else {
+            return new ArrayList<>();
+        }
     }
 }

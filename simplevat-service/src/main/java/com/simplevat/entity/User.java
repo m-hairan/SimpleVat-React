@@ -96,6 +96,11 @@ public class User implements Serializable {
     @Column(name = "PROFILE_IMAGE")
     private byte[] profileImageBinary;
 
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "EMPLOYEE_ID")
+    private Contact employeeId;
+    
     @PrePersist
     public void updateDates() {
         createdDate = LocalDateTime.now();

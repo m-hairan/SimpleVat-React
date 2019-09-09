@@ -3,6 +3,7 @@ package com.simplevat.dao;
 import java.util.Optional;
 
 import com.simplevat.entity.User;
+import java.util.List;
 
 public interface UserNewDao extends Dao<Integer, User> {
 
@@ -11,4 +12,6 @@ public interface UserNewDao extends Dao<Integer, User> {
     public User getUserEmail(String emailAddress);
 
     public boolean getUserByEmail(String usaerName, String password);
+    
+    public List<User> getAllUserNotEmployee();
 }

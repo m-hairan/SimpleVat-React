@@ -90,6 +90,28 @@
                 overflow: auto !important;
                 height: 365px !important;
             }
+
+            body .ui-widget-header{
+                background-color: #FFFFFF !important;
+                color: #000000 !important;
+                border-bottom: none !important;
+                font-size: 25px !important;
+                font-weight: 500 !important;
+
+            }
+
+            .simplevat-dashboardupperpanel,.simplevat-dashboardlowerpanel{
+                border-radius: 3px !important;
+                box-shadow: 0 2px 0 #d4d7dc,-1px -1px 0 #eceef1,1px 0 0 #eceef1 !important;
+                border:none !important;
+                padding: 10px !important;
+            }
+            .ui-grid-row{
+                background: #f4f5f8 !important;
+            }
+            .layout-main{
+                background: #f4f5f8 !important;
+            }
         </style>
     </ui:define>
 
@@ -106,7 +128,7 @@
                             <h:panelGroup styleClass="cashFlowChartPanel" id="cashFlowChartPanel" layout="block" >
                                 <p:chart type="line" model="#{homeController.cashFlowLineChartModel}" rendered="#{homeController.renderCashFlowLineChartModel}"
                                          style="height:280px;margin-top: 20px;" responsive="true" />
-                                <p:graphicImage value="/resources/images/placeholder/cashflow_placeholder.png" width="360" height="300" style="display:none" rendered="#{!homeController.renderCashFlowLineChartModel}"/>
+                                <p:graphicImage value="/resources/images/placeholder/cashflow_placeholder.png" width="360" height="300"  rendered="#{!homeController.renderCashFlowLineChartModel}"/>
                             </h:panelGroup>
                         </h:panelGroup>
                     </p:panel>
@@ -118,7 +140,7 @@
                             <h:panelGroup styleClass="invoiceAndExpansePanel" id="invoiceAndExpansePanel">
                                 <p:chart type="line" model="#{homeController.animatedModel1}" rendered="#{homeController.renderInvoiceExpanseChart}"
                                          style="height:280px;margin-top: 20px;" responsive="true"/>
-                                <p:graphicImage styleClass="cashFlowChartPanel" value="/resources/images/placeholder/invoice_expanse_placeholder.png" width="360" height="300" style="display:none;" rendered="#{!homeController.renderInvoiceExpanseChart}"/>
+                                <p:graphicImage styleClass="cashFlowChartPanel" value="/resources/images/placeholder/invoice_expanse_placeholder.png" width="300" height="300" style="display:none;" rendered="#{!homeController.renderInvoiceExpanseChart}"/>
                                 <p:commandButton styleClass="cashFlowChartPanel" value="Create Your First Invoice" action="#{homeController.redirectToCreateInvoice}" style="display:none;position: absolute; top:115px;left:80px;padding-left: 17px;padding-right: 20px;" rendered="#{!homeController.renderInvoiceExpanseChart}"/>
                                 <p:commandButton styleClass="cashFlowChartPanel" value="Create Your First Expanse" action="#{homeController.redirectToCreateExpense}" style="display:none;position: absolute; top:155px;left:80px" rendered="#{!homeController.renderInvoiceExpanseChart}"/>
                             </h:panelGroup>
@@ -168,7 +190,7 @@
                             <h:panelGroup id="vatActivityPanel" styleClass="vatActivityPanel" >
                                 <p:chart type="bar" model="#{homeController.animatedModel2}" rendered="#{homeController.renderVatInVatOutChart}"
                                          style="height:300px;margin-top: 20px;" responsive="true" />
-                                <p:graphicImage value="/resources/images/placeholder/vatinout_placeholder.png" styleClass="vatActivityPanel" style="display:none;" width="360" height="300" rendered="#{!homeController.renderVatInVatOutChart}"/>
+                                <p:graphicImage value="/resources/images/placeholder/vatinout_placeholder.png" styleClass="vatActivityPanel" style="display:none;" width="300" height="300" rendered="#{!homeController.renderVatInVatOutChart}"/>
                                 <!--<p:commandButton value="Create Your First Invoice" style="position: absolute; top:130px;left:85px" rendered="#{!homeController.renderVatInVatOutChart}"/>-->
                             </h:panelGroup>
                         </h:panelGroup>

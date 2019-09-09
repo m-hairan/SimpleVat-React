@@ -191,13 +191,13 @@ public class HomeController implements Serializable {
         Map<Object, Number> cashInDataMap = transactionService.getCashInData();
         cashIn.setData(cashInDataMap);
         cashIn.setLabel("Cash In");
-
+        System.out.println("cashInDataMap==" + cashInDataMap);
         LineChartSeries cashOut = new LineChartSeries();
         cashOut.setFill(true);
         cashOut.setLabel("Cash Out");
         Map<Object, Number> cashOutDataMap = transactionService.getCashOutData();
         cashOut.setData(cashOutDataMap);
-
+        System.out.println("cashOut==" + cashOutDataMap);
         cashFlowLineChartModel.addSeries(cashIn);
         cashFlowLineChartModel.addSeries(cashOut);
 

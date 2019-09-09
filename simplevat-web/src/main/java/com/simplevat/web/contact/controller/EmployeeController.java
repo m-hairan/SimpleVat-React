@@ -6,15 +6,21 @@ import com.simplevat.service.*;
 import com.simplevat.web.constant.ContactTypeConstant;
 import com.simplevat.web.common.controller.BaseController;
 import com.simplevat.web.constant.ModuleName;
+import com.simplevat.web.constant.RoleCode;
 import com.simplevat.web.contact.model.ContactModel;
 import com.simplevat.web.contact.model.ContactType;
 import com.simplevat.web.utils.FacesUtil;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -25,8 +31,8 @@ import lombok.Setter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -34,11 +40,11 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 @SpringScopeView
-public class ContactController extends BaseController implements Serializable {
+public class EmployeeController extends BaseController implements Serializable {
 
     private static final long serialVersionUID = -6783876735681802047L;
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(ContactController.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(EmployeeController.class);
 
     @Autowired
     private ContactService contactService;
@@ -89,8 +95,19 @@ public class ContactController extends BaseController implements Serializable {
     @Setter
     private ContactHelper contactHelper;
 
-    public ContactController() {
-        super(ModuleName.CONTACT_MODULE);
+    @Getter
+    @Setter
+    private Date today = new Date();
+
+    @Autowired
+    private RoleService roleService;
+
+    @Getter
+    @Setter
+    private String type = null;
+
+    public EmployeeController() {
+        super(ModuleName.EMPLOYEE_MODULE);
     }
 
     @PostConstruct
@@ -130,8 +147,8 @@ public class ContactController extends BaseController implements Serializable {
     }
 
     private void setDefaultCurrency() {
-        
-        Currency defaultCurrency = company.getCompanyCountryCode()!=null?company.getCompanyCountryCode().getCurrencyCode():null;
+
+        Currency defaultCurrency = company.getCompanyCountryCode() != null ? company.getCompanyCountryCode().getCurrencyCode() : null;
         if (defaultCurrency != null) {
             contactModel.setCurrency(defaultCurrency);
         }
@@ -142,6 +159,10 @@ public class ContactController extends BaseController implements Serializable {
         if (defaultCountry != null) {
             contactModel.setCountry(defaultCountry);
         }
+    }
+
+    public void changeType() {
+        contactModel.setNonEmployeeUser(null);
     }
 
     private void setDefaultLanguage() {
@@ -166,19 +187,66 @@ public class ContactController extends BaseController implements Serializable {
         }
     }
 
-    public String createOrUpdateContact() throws IOException {
-        User loggedInUser = FacesUtil.getLoggedInUser();
-        selectedContact = contactHelper.getContact(contactModel);
-        if (selectedContact.getContactId() != null && selectedContact.getContactId() > 0) {
-            this.contactService.update(selectedContact);
+    public void createOrUpdateContact() throws IOException {
+        Optional<User> optionalUser = userServiceNew.getUserByEmail(contactModel.getEmail());
+        String message = "";
+        Boolean isPresent = false;
+        User user = null;
+        if (contactModel.getNonEmployeeUser() != null) {
+            isPresent = false;
+            user = contactModel.getNonEmployeeUser();
         } else {
-            selectedContact.setCreatedBy(loggedInUser.getUserId());
-            this.contactService.persist(selectedContact);
+            isPresent = optionalUser.isPresent();
+            user = new User();
+        }
+        if (!isPresent) {
+            User loggedInUser = FacesUtil.getLoggedInUser();
+
+            selectedContact = contactHelper.getContact(contactModel);
+            if (contactModel.getNonEmployeeUser() != null) {
+                selectedContact.setEmail(contactModel.getNonEmployeeUser().getUserEmail());
+            }
+            selectedContact.setContactType(ContactTypeConstant.EMPLOYEE);
+            if (selectedContact.getContactId() != null && selectedContact.getContactId() > 0) {
+                this.contactService.update(selectedContact);
+            } else {
+                selectedContact.setCreatedBy(loggedInUser.getUserId());
+                this.contactService.persist(selectedContact);
+            }
+            setUserData(user, selectedContact, loggedInUser, contactModel);
+            if (contactModel.getNonEmployeeUser() != null) {
+                userServiceNew.update(user);
+            } else {
+                userServiceNew.persist(user);
+            }
+            contactModel = new ContactModel();
+            message = "Employee saved successfully ";
+        } else {
+            message = "Email already present";
         }
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("","Contact saved successfully"));
-        return "list?faces-redirect=true";
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", message));
+        //return "list?faces-redirect=true";
+    }
+
+    public void setUserData(User user, Contact contact, User loggedInUser, ContactModel contactModel) {
+        if (contactModel.getNonEmployeeUser() == null) {
+            user.setCompany(loggedInUser.getCompany());
+            user.setCreatedBy(loggedInUser.getUserId());
+            user.setCreatedDate(LocalDateTime.now());
+            user.setDeleteFlag(Boolean.FALSE);
+            user.setIsActive(Boolean.TRUE);
+            user.setUserEmail(contactModel.getEmail());
+            user.setPassword((new BCryptPasswordEncoder()).encode(contactModel.getPassword()));
+        }
+        user.setDateOfBirth(Instant.ofEpochMilli(contactModel.getDob() != null ? contactModel.getDob().getTime() : (new Date()).getTime()).atZone(ZoneId.systemDefault()).toLocalDateTime());
+        user.setEmployeeId(contact);
+        user.setFirstName(contact.getFirstName());
+        user.setLastName(contact.getLastName());
+        Role role = roleService.findByPK(RoleCode.EMPLOYEE.getCode());
+        user.setRole(role);
+
     }
 
     public void createOrUpdateAndAddMore() {
@@ -192,7 +260,7 @@ public class ContactController extends BaseController implements Serializable {
         }
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getFlash().setKeepMessages(true);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("","Contact saved successfully"));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("", "Contact saved successfully"));
         init();
     }
 
@@ -215,6 +283,23 @@ public class ContactController extends BaseController implements Serializable {
         LOGGER.debug(" Size :" + titleSuggestion.size());
 
         return titleSuggestion;
+    }
+
+    public List<User> completeUser(String userStr) {
+        List<User> users = userServiceNew.getAllUserNotEmployee();
+        return users;
+    }
+
+    public void updateUserDetailOnFront() {
+        if (contactModel.getNonEmployeeUser() != null) {
+            User nonEmployeeUser = contactModel.getNonEmployeeUser();
+            contactModel.setFirstName(nonEmployeeUser.getFirstName());
+            contactModel.setLastName(nonEmployeeUser.getLastName());
+            if (nonEmployeeUser.getDateOfBirth() != null) {
+                contactModel.setDob(Date.from(nonEmployeeUser.getDateOfBirth().atZone(ZoneId.systemDefault()).toInstant()));
+            }
+            contactModel.setEmail(nonEmployeeUser.getUserEmail());
+        }
     }
 
     public List<Country> completeCountry(String countryStr) {

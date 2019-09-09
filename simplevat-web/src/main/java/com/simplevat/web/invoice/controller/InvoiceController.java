@@ -787,6 +787,7 @@ public class InvoiceController extends BaseController implements Serializable {
         contact.setCreatedDate(LocalDateTime.now());
         contact.setDeleteFlag(Boolean.FALSE);
         contact.setContactType(ContactTypeConstant.CUSTOMER);
+       
         if (contact.getContactId() != null && contact.getContactId() > 0) {
             this.contactService.update(contact);
         } else {

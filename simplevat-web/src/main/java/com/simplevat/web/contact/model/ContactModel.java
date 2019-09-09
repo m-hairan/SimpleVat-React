@@ -4,6 +4,7 @@ import com.simplevat.entity.Country;
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.Language;
 import com.simplevat.entity.Title;
+import com.simplevat.entity.User;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -76,16 +77,22 @@ public class ContactModel implements Serializable {
     private Currency currency;
 
     private Title title;
+    
+    private User nonEmployeeUser;
 
     private ContactType contactType;
-    
+
     private Date closestDueDate;
 
     private BigDecimal dueAmount;
 
     private Boolean selected = Boolean.FALSE;
-    
+
     private Integer contactCode;
+
+    private String password;
+
+    private Date dob;
 
     public String getFullName() {
         StringBuilder sb = new StringBuilder();
@@ -103,5 +110,5 @@ public class ContactModel implements Serializable {
         }
         return sb.toString();
     }
-    
+
 }

@@ -45,6 +45,7 @@ public class MenuController implements Serializable {
         addImportMenuItem(model);
         addMoreMenuItem(model);
         addSettingMenuItem(model);
+        addEmployeeMenuItem(model);
 //        populateSettingMenuItemModel(model);
     }
 
@@ -191,6 +192,15 @@ public class MenuController implements Serializable {
             DefaultMenuItem item = new DefaultMenuItem("Imports");
             item.setIcon("exposure");
             item.setOutcome("/pages/secure/bankaccount/import-transactions.xhtml?faces-redirect=true");
+            model.addElement(item);
+        }
+    }
+    
+     private void addEmployeeMenuItem(DefaultMenuModel model) {
+        if (PageAccessControl.hasAccess(ModuleName.IMPORT_MODULE)) {
+            DefaultMenuItem item = new DefaultMenuItem("Employee");
+            item.setIcon("supervisor_account");
+            item.setOutcome("/pages/secure/employee/employee.xhtml?faces-redirect=true");
             model.addElement(item);
         }
     }

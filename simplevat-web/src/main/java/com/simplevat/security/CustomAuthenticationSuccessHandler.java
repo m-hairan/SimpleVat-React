@@ -47,7 +47,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         boolean isAdmin = false;
         Collection<? extends GrantedAuthority> authorities
                 = authentication.getAuthorities();
+        System.out.println("===authorities===="+authorities);
         for (GrantedAuthority grantedAuthority : authorities) {
+             System.out.println("===grantedAuthority===="+grantedAuthority.getAuthority());
             if ("ROLE_EMPLOYEE".equalsIgnoreCase(grantedAuthority.getAuthority())) {
                 isUser = true;
                 break;

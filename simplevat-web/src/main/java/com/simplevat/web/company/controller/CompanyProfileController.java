@@ -17,6 +17,7 @@ import com.simplevat.service.CompanyTypeService;
 import com.simplevat.service.CountryService;
 import com.simplevat.service.CurrencyService;
 import com.simplevat.service.IndustryTypeService;
+import com.simplevat.web.fileimport.DateFormatUtil;
 import com.simplevat.web.user.controller.UserProfileController;
 import com.simplevat.web.utils.FacesUtil;
 import java.io.Serializable;
@@ -77,6 +78,9 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
     private List<Currency> currencys = new ArrayList<>();
     @Autowired
     private CurrencyService currencyService;
+    @Getter
+    @Setter
+    private List<String> dateFormatList;
 
     @PostConstruct
     public void init() {
@@ -85,6 +89,8 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("STREAMED_CONTENT_COMPANY_LOGO", companyModel.getCompanyLogo());
         renderProfilePic = true;
         currencys = currencyService.getCurrencies();
+        dateFormatList = DateFormatUtil.dateFormatList();
+        
     }
 
     public List<CompanyType> completeCompanyType() {
@@ -97,6 +103,10 @@ public class CompanyProfileController extends CompanyHelper implements Serializa
 
     public List<Currency> completeCurrency() {
         return currencys;
+    }
+
+    public List<String> completeDateFormat() {
+        return dateFormatList;
     }
 
     public List<Country> completeCountry(String countryStr) {

@@ -7,6 +7,7 @@ package com.simplevat.web.contact.controller;
 
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.ContactView;
+import com.simplevat.web.constant.ContactTypeConstant;
 import com.simplevat.web.contact.model.ContactModel;
 import com.simplevat.web.contact.model.ContactType;
 import com.simplevat.web.contact.model.ContactViewModel;
@@ -51,10 +52,14 @@ public class ContactHelper {
         contactModel.setLastUpdatedBy(contact.getLastUpdatedBy());
         contactModel.setDeleteFlag(contact.getDeleteFlag());
         contactModel.setContactCode(contact.getContactId());
-        for (ContactType contactType : ContactUtil.contactTypeList()) {
-            if (contactType.getId() == contact.getContactType()) {
-                contactModel.setContactType(contactType);
+        if (contact.getContactType() != 3) {
+            for (ContactType contactType : ContactUtil.contactTypeList()) {
+                if (contactType.getId() == contact.getContactType()) {
+                    contactModel.setContactType(contactType);
+                }
             }
+        } else {
+            contactModel.setContactType(new ContactType(ContactTypeConstant.EMPLOYEE, "Employee"));
         }
         return contactModel;
     }
@@ -89,9 +94,10 @@ public class ContactHelper {
         contact.setLastUpdateDate(contactModel.getLastUpdateDate());
         contact.setLastUpdatedBy(contactModel.getLastUpdatedBy());
         contact.setDeleteFlag(contactModel.getDeleteFlag());
-        if(contactModel.getContactType()!=null){
-        contact.setContactType(contactModel.getContactType().getId());
+        if (contactModel.getContactType() != null) {
+            contact.setContactType(contactModel.getContactType().getId());
         }
+
         return contact;
     }
 
@@ -125,10 +131,14 @@ public class ContactHelper {
         contactViewModel.setTitle(contactView.getTitle());
         contactViewModel.setCurrencySymbol(contactView.getCurrencySymbol());
         contactViewModel.setDueAmount(contactView.getDueAmount());
-        for (ContactType contactType : ContactUtil.contactTypeList()) {
-            if (contactType.getId() == contactView.getContactType()) {
-                contactViewModel.setContactType(contactType);
+        if (contactView.getContactType() != 3) {
+            for (ContactType contactType : ContactUtil.contactTypeList()) {
+                if (contactType.getId() == contactView.getContactType()) {
+                    contactViewModel.setContactType(contactType);
+                }
             }
+        } else {
+            contactViewModel.setContactType(new ContactType(ContactTypeConstant.EMPLOYEE, "Employee"));
         }
         return contactViewModel;
     }

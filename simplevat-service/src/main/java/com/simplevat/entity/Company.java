@@ -170,4 +170,8 @@ public class Company implements Serializable {
     @Basic(optional = false)
     @Version
     private Integer versionNumber = 1;
+    
+    @Basic
+    @Column(name = "DATE_FORMAT")
+    private String dateFormat;
 }

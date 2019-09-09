@@ -51,6 +51,8 @@ public class CompanyHelper {
         companyModel.setVersionNumber(company.getVersionNumber());
         companyModel.setWebsite(company.getWebsite());
         companyModel.setCurrencyCode(company.getCurrencyCode());
+        System.out.println("=company.getDateFormat()=="+company.getDateFormat());
+        companyModel.setDateFormat(company.getDateFormat());
         return companyModel;
     }
 
@@ -92,6 +94,7 @@ public class CompanyHelper {
         company.setVersionNumber(companyModel.getVersionNumber());
         company.setWebsite(companyModel.getWebsite());
         company.setCurrencyCode(companyModel.getCurrencyCode());
+        company.setDateFormat(companyModel.getDateFormat());
         return company;
     }
 

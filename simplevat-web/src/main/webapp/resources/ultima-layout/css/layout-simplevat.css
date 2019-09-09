@@ -1049,8 +1049,12 @@ body a {
     display: inline-block;
     vertical-align: middle; }
 .layout-wrapper .ultima-menu li.active-menuitem > a {
-    color: #009688;
-    background-color: #e8e8e8; }
+    color: #ffffff;
+    background-color:#009688; }
+
+.layout-wrapper .ultima-menu li.active-menuitem > a > .material-icons {
+    color: #ffffff; }
+
 .layout-wrapper .ultima-menu li.active-menuitem > a i:last-child {
     -webkit-transform: rotate(-180deg);
     -moz-transform: rotate(-180deg);
@@ -1457,7 +1461,8 @@ body.layout-compact .ui-panel .ui-panel-titlebar .ui-panel-titlebar-icon {
     height: 24px;
     margin: 0; }
 body.layout-compact .ui-panel .ui-panel-content {
-    padding: 8px 14px; }
+    padding: 15px 15px; }
+
 body.layout-compact .ui-panel .ui-panel-footer {
     padding: 8px 14px; }
 body.layout-compact .ui-panel.ui-panel-collapsed-h .ui-panel-titlebar {

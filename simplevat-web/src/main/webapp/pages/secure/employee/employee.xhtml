@@ -1,0 +1,59 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:si="http://java.sun.com/jsf/composite/ccomponent"
+                template="/WEB-INF/templates/template.xhtml">
+    <ui:define name="head">
+        <style>
+            .ui-fileupload-content{
+                display:none !important;
+            }
+            .ui-fileupload .ui-fileupload-buttonbar {
+                padding: 0px 0px !important;
+                width: 100%;
+            }
+            .ui-fluid .ui-fileupload .ui-button {
+                width: 155px !important;
+            }
+            .ui-button-text{
+                font-size: 13px;}
+            .background-yes{background: tomato;}
+            .date-date{background: tomato;}
+            .credit-credit{background:tomato;}
+            .debit-debit{background: tomato;}
+            .ui-button .ui-widget .ui-state-default .ui-corner-all .ui-button-text-only .AquaButton{
+                display: none!important;
+            }
+        </style>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="contactForm">
+            <div class="card card-w-title">
+                <div class="ui-fluid">
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <h1>Create Employee</h1>
+                            <br/>
+                            <h:panelGroup id="main_panel">
+                                <p:selectOneRadio id="console" binding="#{type}" value="#{employeeController.type}">
+                                    <f:selectItem itemLabel="New Employee" itemValue="1" />
+                                    <f:selectItem itemLabel="Already User" itemValue="2" />
+                                    <p:ajax event="change" update="panel" listener="#{employeeController.changeType()}"/>
+                                </p:selectOneRadio>
+                            </h:panelGroup>
+                            <h:panelGroup id="panel">
+                                <h:panelGroup rendered="#{type.value!=null}">
+                                    
+                                    <ui:include src="contact.xhtml"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form> 
+    </ui:define>
+
+</ui:composition>

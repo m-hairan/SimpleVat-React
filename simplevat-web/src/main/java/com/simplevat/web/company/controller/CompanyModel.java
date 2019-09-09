@@ -40,6 +40,7 @@ public class CompanyModel {
     private String invoicingCity;
     private String invoicingStateRegion;
     private String invoicingPostZipCode;
+    private String dateFormat;
     private String invoicingPoBoxNumber;
     private Country invoicingCountryCode;
     private String companyAddressLine1;

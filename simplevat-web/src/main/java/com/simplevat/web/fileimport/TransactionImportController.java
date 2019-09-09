@@ -168,7 +168,11 @@ public class TransactionImportController implements Serializable {
             file = new DefaultStreamedContent(stream, "application/vnd.ms-excel", "SampleTransaction.csv");
         } catch (Exception e) {
         }
-        dateFormat = TransactionStatusConstant.DEFAULT_DATE_FORMAT;
+        if (FacesUtil.getLoggedInUser().getCompany().getDateFormat() != null) {
+            dateFormat = FacesUtil.getLoggedInUser().getCompany().getDateFormat();
+        } else {
+            dateFormat = TransactionStatusConstant.DEFAULT_DATE_FORMAT;
+        }
         dateFormatList = DateFormatUtil.dateFormatList();
         headerCount = TransactionStatusConstant.HEADER_COUNT;
     }

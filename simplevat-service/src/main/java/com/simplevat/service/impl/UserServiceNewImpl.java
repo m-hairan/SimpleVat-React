@@ -33,7 +33,7 @@ public class UserServiceNewImpl extends UserServiceNew implements Serializable {
     public Optional<User> getUserByEmail(String emailAddress) {
         return getDao().getUserByEmail(emailAddress);
     }
-    
+
     @Override
     public User getUserEmail(String emailAddress) {
         return getDao().getUserEmail(emailAddress);
@@ -44,4 +44,8 @@ public class UserServiceNewImpl extends UserServiceNew implements Serializable {
         return getDao().getUserByEmail(usaerName, password);
     }
 
+    @Override
+    public List<User> getAllUserNotEmployee() {
+        return getDao().getAllUserNotEmployee();
+    }
 }

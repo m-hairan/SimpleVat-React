@@ -254,8 +254,18 @@
                     <p:outputLabel for="InvoicingPostZipCode" value="#{messages.InvoicingPostZipCode}"/>
                     <p:message for="InvoicingPostZipCode" />
                 </h:panelGroup>
-
-                <p:outputLabel  />
+                <h:panelGroup styleClass="md-inputfield">
+                    <p:autoComplete id="dateType"
+                                    dropdown="true"
+                                    forceSelection="true"
+                                    effect="fold"
+                                    completeMethod="#{companyProfileController.completeDateFormat()}"
+                                    value="#{companyProfileController.companyModel.dateFormat}"
+                                    scrollHeight="250"
+                                    >
+                    </p:autoComplete>
+                    <p:outputLabel for="dateType" value="Date Format"/>
+                </h:panelGroup>
                 <h:panelGroup />
 
             </p:panelGrid>
