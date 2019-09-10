@@ -5,7 +5,9 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '--tag=gcr.io/simplevat-dev/simplevat:$TAG_NAME', '.']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/simplevat-dev/simplevat:$TAG_NAME']    
+  args: ['push', 'gcr.io/simplevat-dev/simplevat:$TAG_NAME']
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['app', 'deploy', '--image-url', 'gcr.io/simplevat-dev/simplevat:$TAG_NAME', '--project', 'simplevat-dev', '--version', '$TAG_NAME', '--promote','--stop-previous-version']
 images: ['gcr.io/simplevat-dev/simplevat:$TAG_NAME']
 timeout: 2400s
 options:
