@@ -161,8 +161,8 @@
 
         <!--dependency>
             <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId-->
-        </dependency>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency-->
 	    
 	<dependency>              <!-- http://dev.mysql.com/doc/connector-j/en/ -->
 	  <groupId>mysql</groupId>
