@@ -11,3 +11,9 @@ automatic_scaling:
   cool_down_period_sec: 180
   cpu_utilization:
     target_utilization: 0.8
+env_variables:
+  SIMPLEVAT_DB_HOST: "simplevat-dev:us-central1:simplevat-dev-db"
+  SIMPLEVAT_DB: "simplevat_db"
+  SIMPLEVAT_DB_USER: "simplevat_user"
+  SIMPLEVAT_DB_PASSWORD: "SimpleVat123$$"
+  
