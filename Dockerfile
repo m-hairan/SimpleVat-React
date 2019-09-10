@@ -109,6 +109,7 @@ RUN set -eux; \
 # fix permissions (especially for running as non-root)
 # https://github.com/docker-library/tomcat/issues/35
 	chmod -R +rX .; \
+	rm -rf ${CATALINA_HOME}/webapps/*; \
 	chmod 777 logs temp work
 
 # verify Tomcat Native is working properly
@@ -123,3 +124,4 @@ RUN set -e \
 
 EXPOSE 8080
 CMD ["catalina.sh", "run"]
+COPY simplevat-web/target/ROOT.war ${CATALINA_HOME}/webapps/
