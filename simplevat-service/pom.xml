@@ -24,8 +24,6 @@
 	    <password>myPassword</password>
 	    <database>sqldemo</database>
 
-	    <failOnMissingWebXml>false</failOnMissingWebXml> <!-- REQUIRED -->
-
 	    <sqlURL>jdbc:mysql://google/${database}?cloudSqlInstance=${INSTANCE_CONNECTION_NAME}&amp;socketFactory=com.google.cloud.sql.mysql.SocketFactory&amp;user=${user}&amp;password=${password}&amp;useSSL=false</sqlURL>
 	  </properties>
 	<!-- [END gae_flex_mysql_properties] -->
