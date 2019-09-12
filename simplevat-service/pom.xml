@@ -196,15 +196,4 @@
 <!--	</dependency>-->
 
     </dependencies>
-
-	<build>
-	    <!-- [START gae_flex_mysql_resources] -->
-	    <resources>
-	      <resource>
-		<directory>src/main/resources</directory>
-		<filtering>true</filtering>
-	      </resource>
-	    </resources>
-	    <!-- [END gae_flex_mysql_resources] -->
-	  </build>
 </project>
