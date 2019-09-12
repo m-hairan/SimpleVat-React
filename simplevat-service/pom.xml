@@ -13,22 +13,6 @@
 
     <name>simplevat-service</name>
 
-	<!-- [START gae_flex_mysql_properties] -->
-	  <properties>
-	<!--
-	    INSTANCE_CONNECTION_NAME from Cloud Console > SQL > Instance Details > Properties
-	    or `gcloud sql instances describe <instance> | grep connectionName`
-	-->
-	    <INSTANCE_CONNECTION_NAME>simplevat-dev:us-central1:simplevat-dev-db</INSTANCE_CONNECTION_NAME>
-		  <CLOUD_SQL_FORCE_UNIX_SOCKET>Yes</CLOUD_SQL_FORCE_UNIX_SOCKET>
-	    <user>simplevat_user</user>
-	    <password>SimpleVat123$$</password>
-	    <database>simplevat_db</database>
-
-	    <sqlURL>jdbc:mysql://google/${database}?cloudSqlInstance=${INSTANCE_CONNECTION_NAME}&amp;socketFactory=com.google.cloud.sql.mysql.SocketFactory&amp;user=${user}&amp;password=${password}&amp;useSSL=false</sqlURL>
-	  </properties>
-	<!-- [END gae_flex_mysql_properties] -->
-
     <dependencies>
 
         <dependency>
@@ -187,29 +171,29 @@
 	</dependency>
 
 	<!-- https://mvnrepository.com/artifact/com.google.cloud.sql/mysql-socket-factory-connector-j-8 -->
-	<dependency>
-	    <groupId>com.google.cloud.sql</groupId>
-	    <artifactId>mysql-socket-factory-connector-j-8</artifactId>
-	    <version>1.0.10</version>
-		<exclusions>
-			<exclusion>
-				<artifactId>commons-logging</artifactId>
-				<groupId>commons-logging</groupId>
-			</exclusion>
-			<exclusion>
-				<groupId>org.apache.httpcomponents</groupId>
-				<artifactId>httpclient</artifactId>
-			</exclusion>
-			<exclusion>
-				<groupId>com.google.guava</groupId>
-				<artifactId>guava</artifactId>
-			</exclusion>
-			<exclusion>
-				<groupId>com.fasterxml.jackson.core</groupId>
-				<artifactId>jackson-core</artifactId>
-			</exclusion>
-		</exclusions>
-	</dependency>
+<!--	<dependency>-->
+<!--	    <groupId>com.google.cloud.sql</groupId>-->
+<!--	    <artifactId>mysql-socket-factory-connector-j-8</artifactId>-->
+<!--	    <version>1.0.10</version>-->
+<!--		<exclusions>-->
+<!--			<exclusion>-->
+<!--				<artifactId>commons-logging</artifactId>-->
+<!--				<groupId>commons-logging</groupId>-->
+<!--			</exclusion>-->
+<!--			<exclusion>-->
+<!--				<groupId>org.apache.httpcomponents</groupId>-->
+<!--				<artifactId>httpclient</artifactId>-->
+<!--			</exclusion>-->
+<!--			<exclusion>-->
+<!--				<groupId>com.google.guava</groupId>-->
+<!--				<artifactId>guava</artifactId>-->
+<!--			</exclusion>-->
+<!--			<exclusion>-->
+<!--				<groupId>com.fasterxml.jackson.core</groupId>-->
+<!--				<artifactId>jackson-core</artifactId>-->
+<!--			</exclusion>-->
+<!--		</exclusions>-->
+<!--	</dependency>-->
 
     </dependencies>
 
