@@ -111,7 +111,7 @@ public class InitialUserController implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         //String token = context.getExternalContext().getRequestParameterMap().get("token");
         String token = "XXX"; //Hard coded token to bypass the logic
-        String envToken = System.getenv("SIMPLEVAT_TOKEN");
+        String envToken = "XXX"; //System.getenv("SIMPLEVAT_TOKEN");
         if (!userService.findAll().isEmpty()) {
             try {
                 context.getExternalContext().redirect("#{request.contextPath}/pages/public/login.xhtml");
