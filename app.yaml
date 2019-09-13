@@ -16,4 +16,5 @@ env_variables:
   SIMPLEVAT_DB: "simplevat_dev_db"
   SIMPLEVAT_DB_USER: "simplevat_user"
   SIMPLEVAT_DB_PASSWORD: "SimpleVat123$$"
+  SIMPLEVAT_TOKEN: "XXX"
 
