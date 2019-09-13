@@ -99,7 +99,15 @@ public class SecurityBean implements PhaseListener, Serializable {
 
     @PostConstruct
     public void init() {
-        versionNumber = System.getenv("SIMPLEVAT_RELEASE");
+        
+    if (System.getenv("SIMPLEVAT_RELEASE") != null && !System.getenv("SIMPLEVAT_RELEASE").isEmpty()) {
+      versionNumber = System.getenv("SIMPLEVAT_RELEASE");
+    } else if (System.getenv("GAE_VERSION") != null && !System.getenv("GAE_VERSION").isEmpty()) {
+      versionNumber = System.getenv("GAE_VERSION");
+    } else {
+      versionNumber = "Unknown";
+    }
+        
 
         Thread thread = new Thread(new Runnable() {
             public void run() {
