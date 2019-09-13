@@ -28,9 +28,6 @@ automatic_scaling:
   cool_down_period_sec: 180
   cpu_utilization:
     target_utilization: 0.8
-servingStatus: SERVING
-threadsafe: true
-versionUrl: https://simplevat-dev.appspot.com
 
 env_variables:
   SIMPLEVAT_DB_HOST: "34.68.185.169"
