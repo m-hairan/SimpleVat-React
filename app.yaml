@@ -1,9 +1,11 @@
 env: flex
+service: simplevat-dev
 runtime: custom
 
 resources:
-  cpu: 1
-  memory_gb: 3.75
+  cpu: 2
+  diskGb: 10.0
+  memory_gb: 8
 
 automatic_scaling:
   min_num_instances: 1
@@ -11,10 +13,16 @@ automatic_scaling:
   cool_down_period_sec: 180
   cpu_utilization:
     target_utilization: 0.8
+servingStatus: SERVING
+threadsafe: true
+versionUrl: https://simplevat-dev.appspot.com
+
 env_variables:
   SIMPLEVAT_DB_HOST: "34.68.185.169"
   SIMPLEVAT_DB: "simplevat_dev_db"
   SIMPLEVAT_DB_USER: "simplevat_user"
   SIMPLEVAT_DB_PASSWORD: "SimpleVat123$$"
   SIMPLEVAT_TOKEN: "XXX"
-
+  
+createTime: '2019-09-12T17:21:16Z'
+createdBy: mohsin@simplevat.com
