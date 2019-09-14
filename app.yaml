@@ -1,5 +1,4 @@
 env: flex
-service: simplevat-dev
 runtime: custom
 
 resources:
