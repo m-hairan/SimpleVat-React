@@ -229,3 +229,5 @@ pip-log.txt
 *.iml
 simplevat.iml
 /simplevat-web/nb-configuration.xml
+
+!.idea/*
