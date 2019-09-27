@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: simplevat
-          image: gcr.io/simplevat-dev/simplevat:0-0-2-beta-1-5
+          image: gcr.io/simplevat-dev/simplevat:0-0-2-beta-1-6
           ports:
           - containerPort: 8080
           readinessProbe:
@@ -47,7 +47,7 @@ spec:
             - name: SIMPLEVAT_TOKEN
               value: XXXX
             - name: SIMPLEVAT_RELEASE
-              value: 0-0-2-beta-1-5
+              value: 0-0-2-beta-1-6
             - name: SIMPLEVAT_DB_HOST
               value: "34.68.185.169"
             - name: SIMPLEVAT_DB
