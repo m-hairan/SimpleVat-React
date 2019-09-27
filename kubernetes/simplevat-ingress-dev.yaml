@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: simplevat-ingress-dev
+  namespace: simplevat-dev
+  #annotations:
+    #kubernetes.io/ingress.class: "gce"
+    #kubernetes.io/ingress.global-static-ip-name: simplevat-static-ip
+spec:
+  rules:
+  - host: k8s.dev.simplevat.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: simplevat-service-dev
+          servicePort: 80
