@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<Context>
+	<context-param>
+		<param-name>companyName</param-name>
+		<param-value>My Company, Incorporated</param-value>
+	</context-param>
+</Context>
+
 <!--<Context antiJARLocking="true" path="/simplevat-web"/>-->
