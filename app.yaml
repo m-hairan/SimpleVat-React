@@ -5,14 +5,14 @@ resources:
   cpu: 2
   disk_size_gb: 10.0
   memory_gb: 8
-  
+
 liveness_check:
   path: "/healthz/index.html"
   check_interval_sec: 30
   timeout_sec: 4
   failure_threshold: 2
   success_threshold: 2
-  
+
 readiness_check:
   path: "/healthz/index.html"
   check_interval_sec: 5
@@ -29,7 +29,7 @@ automatic_scaling:
     target_utilization: 0.8
 
 env_variables:
-  SIMPLEVAT_DB_HOST: "34.68.185.169"
+  SIMPLEVAT_DB_HOST: "34.66.15.92"
   SIMPLEVAT_DB: "simplevat_db"
   SIMPLEVAT_DB_USER: "simplevat_user"
   SIMPLEVAT_DB_PASSWORD: "SimpleVat123$$"

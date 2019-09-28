@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: simplevat
-          image: gcr.io/simplevat-dev/simplevat:0-0-2-beta-1-6
+          image: gcr.io/simplevat-dev/simplevat:0-0-2-beta-1-8
           ports:
           - containerPort: 8080
           readinessProbe:
@@ -47,55 +47,55 @@ spec:
             - name: SIMPLEVAT_TOKEN
               value: XXXX
             - name: SIMPLEVAT_RELEASE
-              value: 0-0-2-beta-1-6
+              value: 0-0-2-beta-1-8
             - name: SIMPLEVAT_DB_HOST
-              value: "34.68.185.169"
+              value: 34.66.15.92
             - name: SIMPLEVAT_DB
-              value: "simplevat_dev_db"
+              value: simplevat_db
             - name: SIMPLEVAT_DB_USER
-              value: "simplevat_user"
+              value: simplevat_user
             - name: SIMPLEVAT_DB_PASSWORD
-              value: "SimpleVat123$$"
+              value: SimpleVat123$$
             # These secrets are required to start the pod.
             # [START cloudsql_secrets]
-            #- name: SIMPLEVAT_DB_USER
-              #valueFrom:
-               # secretKeyRef:
-                #  name: cloudsql-db-credentials
-                 # key: username
-            #- name: SIMPLEVAT_DB_PASSWORD
-              #valueFrom:
-               # secretKeyRef:
-                #  name: cloudsql-db-credentials
-                 # key: password
+#            - name: SIMPLEVAT_DB_USER
+#              valueFrom:
+#                secretKeyRef:
+#                  name: cloudsql-db-credentials
+#                  key: username
+#            - name: SIMPLEVAT_DB_PASSWORD
+#              valueFrom:
+#                secretKeyRef:
+#                  name: cloudsql-db-credentials
+#                  key: password
             # [END cloudsql_secrets]
         # Change <INSTANCE_CONNECTION_NAME> here to include your GCP
         # project, the region of your Cloud SQL instance and the name
         # of your Cloud SQL instance. The format is
         # $PROJECT:$REGION:$INSTANCE
         # [START proxy_container]
-#        - name: cloudsql-proxy
-#          image: gcr.io/cloudsql-docker/gce-proxy:1.11
-#          command: ["/cloud_sql_proxy", "--dir=/cloudsql",
-#                    "-instances=simplevat-dev:us-central1:simplevat-dev-db=tcp:3306",
-#                    "-credential_file=/secrets/cloudsql/credentials.json"]
-#          volumeMounts:
-#            - name: cloudsql-instance-credentials
-#              mountPath: /secrets/cloudsql
-#              readOnly: true
-#            - name: ssl-certs
-#              mountPath: /etc/ssl/certs
-#            - name: cloudsql
-#              mountPath: /cloudsql
-#        # [END proxy_container]
-#      # [START volumes]
-#      volumes:
-#        - name: cloudsql-instance-credentials
-#          secret:
-#            secretName: cloudsql-instance-credentials
-#        - name: cloudsql
-#          emptyDir:
-#        - name: ssl-certs
-#          hostPath:
-#            path: /etc/ssl/certs
-#      # [END volumes]
+        - name: cloudsql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:1.11
+          command: ["/cloud_sql_proxy", "--dir=/cloudsql",
+                    "-instances=simplevat-dev:us-central1:simplevat-dev-db=tcp:3306",
+                    "-credential_file=/secrets/cloudsql/credentials.json"]
+          volumeMounts:
+            - name: cloudsql-instance-credentials
+              mountPath: /secrets/cloudsql
+              readOnly: true
+            - name: ssl-certs
+              mountPath: /etc/ssl/certs
+            - name: cloudsql
+              mountPath: /cloudsql
+        # [END proxy_container]
+      # [START volumes]
+      volumes:
+        - name: cloudsql-instance-credentials
+          secret:
+            secretName: cloudsql-instance-credentials
+        - name: cloudsql
+          emptyDir:
+        - name: ssl-certs
+          hostPath:
+            path: /etc/ssl/certs
+      # [END volumes]
