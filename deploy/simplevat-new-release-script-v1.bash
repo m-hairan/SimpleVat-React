@@ -47,10 +47,11 @@ echo "Set BACKEND-SERVICE-LABEL             : $BACKEND_SERVICE_LABEL"
 echo "Set SIMPLEVAT-TOKEN                   : $SIMPLEVAT_TOKEN"
 echo "Set SIMPLEVAT-SUBDOMAIN               : $SIMPLEVAT_SUBDOMAIN"
 
-cp -rf ../deploy/simplevat-replicationcontroller-dev.yaml ./simplevat-replicationcontroller-dev.yaml
+cp -rf ./../deploy/simplevat-replicationcontroller-dev.yaml ./simplevat-replicationcontroller-dev.yaml
 
 sed -i "s/{RELEASE-TAG}/$RELEASE_TAG/g" ./simplevat-replicationcontroller-dev.yaml
 
+echo "Directory: " pwd
 
 echo "Rolling-update replicationcontroller: $OLD_REPLICATION_CONTROLLER_NAME with $REPLICATION_CONTROLLER_NAME-$RELEASE_TAG"
 echo "Executing : kubectl rolling-update $OLD_REPLICATION_CONTROLLER_NAME -f ./simplevat-replicationcontroller-dev.yaml"
