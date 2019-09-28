@@ -53,7 +53,9 @@ echo "Set SIMPLEVAT-SUBDOMAIN               : $SIMPLEVAT_SUBDOMAIN"
 
 
 echo "Rolling-update replicationcontroller: $OLD_REPLICATION_CONTROLLER_NAME with $REPLICATION_CONTROLLER_NAME-$RELEASE_TAG"
-echo "Executing : kubectl rolling-update $OLD_REPLICATION_CONTROLLER_NAME $REPLICATION_CONTROLLER_NAME-$RELEASE_TAG --image=gcr.io/simplevat-dev/simplevat:$RELEASE_TAG""
+echo "Executing : kubectl rolling-update $OLD_REPLICATION_CONTROLLER_NAME $REPLICATION_CONTROLLER_NAME-$RELEASE_TAG --image=gcr.io/simplevat-dev/simplevat:$RELEASE_TAG"
+
 kubectl rolling-update "$OLD_REPLICATION_CONTROLLER_NAME" "$REPLICATION_CONTROLLER_NAME-$RELEASE_TAG" --image=gcr.io/simplevat-dev/simplevat:"$RELEASE_TAG"
 
 echo "Rolling Upgrade complete"
+
