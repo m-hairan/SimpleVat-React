@@ -27,6 +27,9 @@ echo "Executing rolling-update-new-release.bash for release $@"
 
 kubectl get replicationcontrollers --namespace="simplevat-$2"
 
+echo " Executing kubectl get replicationcontrollers --namespace="simplevat-$2" > rc.txt"
+kubectl get replicationcontrollers --namespace="simplevat-$2" > rc.txt
+
 i=0
 echo "Upgrading replication controllers"
 while read line
