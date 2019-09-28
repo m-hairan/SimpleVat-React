@@ -14,7 +14,7 @@ fi
 set -e
 
 echo "Setting contianer credentials"
-gcloud beta container clusters get-credentials simplevat-web-app --region europe-west1 --project simplevat-web-app
+gcloud container clusters get-credentials simplevat-dev --zone us-central1-a --project simplevat-dev
 
 SUB_DOMAIN="$(sed 's/\(-rep-.*\|-rep$\)//' <<< "$1")"
 NAMESPACE_NAME=$2
