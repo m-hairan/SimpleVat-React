@@ -32,8 +32,6 @@ echo "Started to deploy subdomain: $SUB_DOMAIN"
 
 echo "Copying configuration template files"
 
-#kubectl get replicationcontroller  --namespace=simplevat-dev -o yaml > ./deploy/rc.yaml
-
 echo "Configuring application deployment yaml"
 
 echo "Set SUB-DOMAIN                        : $SUB_DOMAIN"
@@ -49,13 +47,13 @@ echo "Set BACKEND-SERVICE-LABEL             : $BACKEND_SERVICE_LABEL"
 echo "Set SIMPLEVAT-TOKEN                   : $SIMPLEVAT_TOKEN"
 echo "Set SIMPLEVAT-SUBDOMAIN               : $SIMPLEVAT_SUBDOMAIN"
 
-#sed -i '/- name: SIMPLEVAT_RELEASE/{n;s/value: .*/value: ABC/}' ./deploy/rc.yaml
+sed -i "s/{RELEASE-TAG}/$RELEASE_TAG/g" ./deploy/simplevat-replicationcontroller-dev.yaml
 
 
 echo "Rolling-update replicationcontroller: $OLD_REPLICATION_CONTROLLER_NAME with $REPLICATION_CONTROLLER_NAME-$RELEASE_TAG"
-echo "Executing : kubectl rolling-update $OLD_REPLICATION_CONTROLLER_NAME $REPLICATION_CONTROLLER_NAME-$RELEASE_TAG --image=gcr.io/simplevat-dev/simplevat:$RELEASE_TAG"
+echo "Executing : kubectl rolling-update $OLD_REPLICATION_CONTROLLER_NAME -f ./deploy/simplevat-replicationcontroller-dev.yaml"
 
-kubectl rolling-update "$OLD_REPLICATION_CONTROLLER_NAME" "$REPLICATION_CONTROLLER_NAME-$RELEASE_TAG" --image=gcr.io/simplevat-dev/simplevat:"$RELEASE_TAG" --namespace=simplevat-dev
+kubectl rolling-update "$OLD_REPLICATION_CONTROLLER_NAME" -f ./deploy/simplevat-replicationcontroller-dev.yaml
 
 echo "Rolling Upgrade complete"
 

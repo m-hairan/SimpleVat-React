@@ -3,7 +3,7 @@ kind: ReplicationController
 metadata:
   labels:
     app: simplevat
-  name: simplevat-dev-rep-0-0-2-beta-1-12
+  name: simplevat-dev-rep-{RELEASE-TAG}
   namespace: simplevat-dev
 spec:
   replicas: 3
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: simplevat
-          image: gcr.io/simplevat-dev/simplevat:0-0-2-beta-1-12
+          image: gcr.io/simplevat-dev/simplevat:{RELEASE-TAG}
           ports:
           - containerPort: 8080
           readinessProbe:
@@ -47,7 +47,7 @@ spec:
             - name: SIMPLEVAT_TOKEN
               value: XXXX
             - name: SIMPLEVAT_RELEASE
-              value: 0-0-2-beta-1-12
+              value: {RELEASE-TAG}
             - name: SIMPLEVAT_DB_HOST
               value: 34.68.185.169
             - name: SIMPLEVAT_DB
