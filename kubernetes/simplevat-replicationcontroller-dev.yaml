@@ -3,7 +3,7 @@ kind: ReplicationController
 metadata:
   labels:
     app: simplevat
-  name: simplevat-rc-dev
+  name: simplevat-dev-rep-0-0-2-beta-1-12
   namespace: simplevat-dev
 spec:
   replicas: 3

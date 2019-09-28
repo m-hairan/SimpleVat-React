@@ -23,15 +23,11 @@
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes>
-      <connection connection-id="75d64503-08d0-429c-89a6-8d65813af0af">
-        <schema name="simplevat_db" object-types="view, table" />
-      </connection>
-    </loaded-nodes>
+    <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="75d64503-08d0-429c-89a6-8d65813af0af">
-      <console name=" simplevat-dev-db-new" type="STANDARD" schema="simplevat_db" session="Main"><![CDATA[select * from USER;]]></console>
+      <console name=" simplevat-dev-db-new" type="STANDARD" schema="simplevat_db" session="Main" />
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
