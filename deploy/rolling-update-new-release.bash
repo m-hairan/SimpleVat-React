@@ -43,7 +43,7 @@ do
 
       echo "./deploy/simplevat-new-release-script.bash $rc $2 $1"
 
-      ./deploy/simplevat-new-release-script.bash "$rc" $2 "$1" X
+      ./deploy/simplevat-new-release-script-v1.bash "$rc" $2 "$1" X
 
       echo "Replication Controller for $domain upgraded"
 
