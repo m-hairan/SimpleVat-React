@@ -14,7 +14,7 @@ spec:
     metadata:
       labels:
         app: simplevat
-		deployment: v-{RELEASE-TAG}
+        deployment: v-{RELEASE-TAG}
     spec:
       containers:
         - name: simplevat
