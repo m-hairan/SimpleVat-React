@@ -47,7 +47,7 @@ echo "Set BACKEND-SERVICE-LABEL             : $BACKEND_SERVICE_LABEL"
 echo "Set SIMPLEVAT-TOKEN                   : $SIMPLEVAT_TOKEN"
 echo "Set SIMPLEVAT-SUBDOMAIN               : $SIMPLEVAT_SUBDOMAIN"
 
-cp -rf ./kubernetes/simplevat-replicationcontroller-dev.yaml ./deploy/simplevat-replicationcontroller-dev.yaml
+cp -rf ./kubernetes/simplevat-replicationcontroller-dev-template.yaml ./deploy/simplevat-replicationcontroller-dev.yaml
 
 sed -i "s/{RELEASE-TAG}/$RELEASE_TAG/g" ./deploy/simplevat-replicationcontroller-dev.yaml
 cat ./deploy/simplevat-replicationcontroller-dev.yaml
