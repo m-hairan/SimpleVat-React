@@ -58,5 +58,5 @@ kubectl rolling-update "$OLD_REPLICATION_CONTROLLER_NAME" -f ./deploy/simplevat-
 
 echo "Rolling Upgrade complete"
 
-rm -rf ./simplevat-replicationcontroller-dev.yaml
+rm -rf ./deploy/simplevat-replicationcontroller-dev.yaml
 
