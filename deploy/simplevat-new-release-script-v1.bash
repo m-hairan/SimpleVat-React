@@ -50,6 +50,7 @@ echo "Set SIMPLEVAT-SUBDOMAIN               : $SIMPLEVAT_SUBDOMAIN"
 cp -rf ./kubernetes/simplevat-replicationcontroller-dev.yaml ./deploy/simplevat-replicationcontroller-dev.yaml
 
 sed -i "s/{RELEASE-TAG}/$RELEASE_TAG/g" ./deploy/simplevat-replicationcontroller-dev.yaml
+cat ./deploy/simplevat-replicationcontroller-dev.yaml
 
 echo "Rolling-update replicationcontroller: $OLD_REPLICATION_CONTROLLER_NAME with $REPLICATION_CONTROLLER_NAME-$RELEASE_TAG"
 echo "Executing : kubectl rolling-update $OLD_REPLICATION_CONTROLLER_NAME -f ./deploy/simplevat-replicationcontroller-dev.yaml --namespace=simplevat-dev"
