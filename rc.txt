@@ -1,2 +1,0 @@
-NAME                                DESIRED   CURRENT   READY   AGE
-simplevat-dev-rep-0-0-2-beta-1-20   3         3         3       6h38m

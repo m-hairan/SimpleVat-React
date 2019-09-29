@@ -9,10 +9,12 @@ spec:
   replicas: 3
   selector:
     app: simplevat
+    deployment: v-{RELEASE-TAG}
   template:
     metadata:
       labels:
         app: simplevat
+		deployment: v-{RELEASE-TAG}
     spec:
       containers:
         - name: simplevat
