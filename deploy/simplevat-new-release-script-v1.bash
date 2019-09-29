@@ -52,9 +52,9 @@ cp -rf ./kubernetes/simplevat-replicationcontroller-dev.yaml ./deploy/simplevat-
 sed -i "s/{RELEASE-TAG}/$RELEASE_TAG/g" ./deploy/simplevat-replicationcontroller-dev.yaml
 
 echo "Rolling-update replicationcontroller: $OLD_REPLICATION_CONTROLLER_NAME with $REPLICATION_CONTROLLER_NAME-$RELEASE_TAG"
-echo "Executing : kubectl rolling-update $OLD_REPLICATION_CONTROLLER_NAME -f ./deploy/simplevat-replicationcontroller-dev.yaml"
+echo "Executing : kubectl rolling-update $OLD_REPLICATION_CONTROLLER_NAME -f ./deploy/simplevat-replicationcontroller-dev.yaml --namespace=simplevat-dev"
 
-kubectl rolling-update "$OLD_REPLICATION_CONTROLLER_NAME" -f ./deploy/simplevat-replicationcontroller-dev.yaml
+kubectl rolling-update "$OLD_REPLICATION_CONTROLLER_NAME" -f ./deploy/simplevat-replicationcontroller-dev.yaml --namespace=simplevat-dev
 
 echo "Rolling Upgrade complete"
 
