@@ -1,0 +1,11 @@
+
+.vat-actions{
+    width: 2.3rem !important;
+    margin: 0 0.5rem !important;
+}
+
+.loader{
+    position: absolute !important;
+    top: 50%;
+    left: 50%;
+}
