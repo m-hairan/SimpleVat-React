@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Sonu
  */
 @RestController
-@RequestMapping("/contact")
+@RequestMapping("/rest/contact")
 public class ContactController implements Serializable {
 
     @Autowired

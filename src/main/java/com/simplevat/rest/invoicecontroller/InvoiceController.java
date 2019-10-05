@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.simplevat.rest.invoiceController;
+package com.simplevat.rest.invoicecontroller;
 
 import com.simplevat.entity.Company;
 import com.simplevat.entity.Configuration;
@@ -46,7 +46,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Sonu
  */
 @RestController
-@RequestMapping("/invoice")
+@RequestMapping("/rest/invoice")
 public class InvoiceController implements Serializable {
 
     private static final long serialVersionUID = 6299117288316809011L;

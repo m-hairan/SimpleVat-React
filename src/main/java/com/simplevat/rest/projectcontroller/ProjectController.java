@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.simplevat.rest.projectController;
+package com.simplevat.rest.projectcontroller;
 
 import com.simplevat.criteria.ProjectCriteria;
 import com.simplevat.entity.Contact;
@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Sonu
  */
 @RestController
-@RequestMapping(value = "/project")
+@RequestMapping(value = "/rest/project")
 public class ProjectController {
 
     @Autowired

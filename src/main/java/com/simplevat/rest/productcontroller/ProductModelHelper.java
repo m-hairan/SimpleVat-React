@@ -1,4 +1,4 @@
-package com.simplevat.rest.productController;
+package com.simplevat.rest.productcontroller;
 
 import com.simplevat.entity.Product;
 import com.simplevat.productservice.model.ProductModel;

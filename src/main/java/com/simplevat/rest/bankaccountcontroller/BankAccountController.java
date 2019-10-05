@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Sonu
  */
 @RestController
-@RequestMapping(value = "/bank")
+@RequestMapping(value = "/rest/bank")
 public class BankAccountController implements Serializable {
 
     @Autowired

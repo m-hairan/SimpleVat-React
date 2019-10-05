@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.simplevat.rest.employeeController;
+package com.simplevat.rest.employeecontroller;
 
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Currency;
@@ -46,7 +46,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Sonu
  */
 @RestController
-@RequestMapping(value = "/employee")
+@RequestMapping(value = "/rest/employee")
 public class EmployeeController implements Serializable{
 
     @Autowired

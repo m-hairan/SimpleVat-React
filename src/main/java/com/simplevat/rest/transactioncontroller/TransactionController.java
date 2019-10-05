@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.simplevat.rest.transactionController;
+package com.simplevat.rest.transactioncontroller;
 
 import com.simplevat.entity.VatCategory;
 import com.simplevat.entity.bankaccount.TransactionCategory;
@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Sonu
  */
 @RestController
-@RequestMapping(value = "/transaction")
+@RequestMapping(value = "/rest/transaction")
 public class TransactionController  implements Serializable{
 
     @Autowired

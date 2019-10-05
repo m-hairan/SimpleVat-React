@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.simplevat.rest.taxtransactionController;
+package com.simplevat.rest.taxtransactioncontroller;
 
 import com.simplevat.entity.Purchase;
 import com.simplevat.entity.PurchaseLineItem;
@@ -11,12 +11,9 @@ import com.simplevat.entity.TaxTransaction;
 import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.entity.invoice.InvoiceLineItem;
-import com.simplevat.rest.transactionController.TranscationCategoryHelper;
 import com.simplevat.service.PurchaseService;
 import com.simplevat.service.TaxTransactionService;
-import com.simplevat.service.TransactionCategoryServiceNew;
 import com.simplevat.service.bankaccount.TransactionService;
-import com.simplevat.service.impl.TaxTransactionServiceImpl;
 import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.constant.TaxTransactionStatusConstant;
 import com.simplevat.constant.TransactionCreditDebitConstant;
@@ -31,11 +28,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +44,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Sonu
  */
 @RestController
-@RequestMapping(value = "/taxtransaction")
+@RequestMapping(value = "/rest/taxtransaction")
 public class TaxTransactionController implements Serializable {
 
     @Autowired

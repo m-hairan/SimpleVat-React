@@ -16,7 +16,6 @@ import com.simplevat.service.bankaccount.TransactionService;
 import com.simplevat.service.bankaccount.TransactionStatusService;
 import com.simplevat.service.bankaccount.TransactionTypeService;
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,8 +39,6 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import lombok.Data;
-import lombok.Getter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -62,7 +59,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author Sonu
  */
 @RestController
-@RequestMapping(value = "/transactionimport")
+@RequestMapping(value = "/rest/transactionimport")
 public class TransactionImportController implements Serializable {
 
     @Autowired
