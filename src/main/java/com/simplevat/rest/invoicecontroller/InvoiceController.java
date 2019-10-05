@@ -46,7 +46,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Sonu
  */
 @RestController
-@RequestMapping("/invoice")
+@RequestMapping("/rest/invoice")
 public class InvoiceController implements Serializable {
 
     private static final long serialVersionUID = 6299117288316809011L;

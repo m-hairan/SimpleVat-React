@@ -44,7 +44,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Sonu
  */
 @RestController
-@RequestMapping(value = "/taxtransaction")
+@RequestMapping(value = "/rest/taxtransaction")
 public class TaxTransactionController implements Serializable {
 
     @Autowired

@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Sonu
  */
 @RestController
-@RequestMapping(value = "/product")
+@RequestMapping(value = "/rest/product")
 public class ProductController implements Serializable {
 
     @Autowired

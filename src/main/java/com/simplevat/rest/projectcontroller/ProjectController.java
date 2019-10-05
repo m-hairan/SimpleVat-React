@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Sonu
  */
 @RestController
-@RequestMapping(value = "/project")
+@RequestMapping(value = "/rest/project")
 public class ProjectController {
 
     @Autowired

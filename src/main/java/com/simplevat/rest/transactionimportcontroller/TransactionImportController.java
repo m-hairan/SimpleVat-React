@@ -59,7 +59,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author Sonu
  */
 @RestController
-@RequestMapping(value = "/transactionimport")
+@RequestMapping(value = "/rest/transactionimport")
 public class TransactionImportController implements Serializable {
 
     @Autowired

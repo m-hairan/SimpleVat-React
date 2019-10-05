@@ -44,7 +44,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Sonu
  */
 @RestController
-@RequestMapping(value = "/user")
+@RequestMapping(value = "/rest/user")
 public class UserController implements Serializable {
 
     @Autowired

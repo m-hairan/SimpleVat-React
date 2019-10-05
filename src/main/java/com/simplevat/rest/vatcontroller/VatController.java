@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.simplevat.rest.vatController;
+package com.simplevat.rest.vatcontroller;
 
 import com.simplevat.entity.VatCategory;
 import com.simplevat.service.VatCategoryService;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Sonu
  */
 @RestController
-@RequestMapping(value = "/vat")
+@RequestMapping(value = "/rest/vat")
 public class VatController implements Serializable {
 
     @Autowired
