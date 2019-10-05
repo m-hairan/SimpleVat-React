@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+
 import {
   Card,
   CardHeader,
@@ -15,15 +16,21 @@ import sendRequest from "../../../../xhrRequest";
 import _ from "lodash";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Autosuggest from "react-autosuggest";
 
 class CreateOrEditTransactionCategory extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      value: "",
+      suggestions: [],
       transactionCategoryList: [],
       vatCategoryList: [],
-      transactionData: {},
+      transactionData: {
+        defaltFlag: "N",
+        transactionTypeName: ""
+      },
       loading: false
     };
   }
@@ -48,18 +55,72 @@ class CreateOrEditTransactionCategory extends Component {
           }
         })
         .then(data => {
-          this.setState({ transactionData: data });
+          const {
+            transactionCategoryId,
+            transactionCategoryName,
+            transactionCategoryCode,
+            transactionCategoryDescription,
+            parentTransactionCategory,
+            defaltFlag,
+            parentTransactionType,
+            selectTransactionType,
+            transactionType
+          } = data;
+          this.setState({
+            transactionData: {
+              transactionCategoryId,
+              categoryName: transactionCategoryName,
+              categoryCode: transactionCategoryCode,
+              defaultFlag: defaltFlag,
+              categoryDiscription: transactionCategoryDescription,
+              transactionTypeCode: transactionType.transactionTypeCode,
+              parentTransactionCategory:
+                parentTransactionCategory.transactionCategoryName,
+              transactionTypeName: transactionType.transactionTypeName
+            },
+            selectedTransactionCategory: transactionType.transactionTypeName
+          });
         });
     }
   }
+  getSuggestions = value => {
+    const inputValue = value.trim().toLowerCase();
+    const inputLength = inputValue.length;
+
+    return inputLength === 0
+      ? []
+      : this.state.transactionCategoryList.filter(
+          transaction =>
+            transaction.transactionTypeName
+              .toLowerCase()
+              .slice(0, inputLength) === inputValue
+        );
+  };
+  getSuggestionValue = suggestion => suggestion.transactionTypeName;
+
+  // Use your imagination to render suggestions.
+  renderSuggestion = suggestion => <div>{suggestion.transactionTypeName}</div>;
+
+  onChange = (event, { newValue }) => {
+    this.setState({
+      value: newValue
+    });
+  };
+  onSuggestionsFetchRequested = ({ value }) => {
+    this.setState({
+      suggestions: this.getSuggestions(value)
+    });
+  };
+
+  // Autosuggest will call this function every time you need to clear suggestions.
+  onSuggestionsClearRequested = () => {
+    this.setState({
+      suggestions: []
+    });
+  };
 
   getTransactionListData = () => {
-    const res = sendRequest(
-      `transaction/gettransactioncategory`,
-      "get",
-      "",
-      ""
-    );
+    const res = sendRequest(`transaction/gettransactiontype`, "get", "", "");
     res
       .then(res => {
         if (res.status === 200) {
@@ -72,7 +133,7 @@ class CreateOrEditTransactionCategory extends Component {
       });
   };
   getvatListData = () => {
-    const res = sendRequest(`/transaction/getvatcategories`, "get", "", "");
+    const res = sendRequest(`transaction/getvatcategories`, "get", "", "");
     res
       .then(res => {
         if (res.status === 200) {
@@ -102,42 +163,73 @@ class CreateOrEditTransactionCategory extends Component {
   };
 
   handleSubmit = e => {
+    const params = new URLSearchParams(this.props.location.search);
+    const id = params.get("id");
     this.setState({ loading: true });
     e.preventDefault();
+    console.log(this.state.transactionData);
     const {
       categoryName,
       categoryCode,
       categoryDiscription,
-      selectCategoryCode,
+      selectVatCategoryCode,
+      defaltFlag,
+      parentTransactionType,
       selectTransactionType
     } = this.state.transactionData;
-    const postObj = {
-      categoryName: categoryName,
-      categoryCode: categoryCode,
-      categoryDiscription: categoryDiscription,
-      selectCategoryCode: selectCategoryCode,
-      selectTransactionType: selectTransactionType
-    };
-    console.log(postObj);
-    //  const res = sendRequest(
-    //   `/transaction/savetransaction?id=1`,
-    //   "post",
-    //   "",
-    //   postObj
-    // );
-    // res.then(res => {
-    //   if (res.status === 200) {
-    //     this.success();
-    //     this.props.history.push("settings/transaction-category");
-    //   }
-    // });
+    let postObj;
+    if (!id) {
+      postObj = {
+        transactionCategoryName: categoryName,
+        transactionCategoryCode: categoryCode,
+        defaltFlag: defaltFlag,
+        parentTransactionCategory: parentTransactionType,
+        transactionCategoryDescription: categoryDiscription,
+        vatCategory: selectVatCategoryCode,
+        transactionType: this.state.selectedTransactionCategory
+          ? this.state.selectedTransactionCategory.transactionTypeCode
+          : ""
+      };
+    } else {
+      postObj = { ...this.state.transactionData };
+    }
+    const res = sendRequest(
+      `transaction/savetransaction?id=1`,
+      "post",
+      postObj
+    );
+    res.then(res => {
+      if (res.status === 200) {
+        this.success();
+        this.props.history.push("settings/transaction-category");
+      }
+    });
+  };
+
+  onSuggestionSelected = (e, val) => {
+    this.setState({ selectedTransactionCategory: val.suggestion });
   };
 
   render() {
-    const { loading } = this.state;
-    const { id, name, vat } = this.state.transactionData
-      ? this.state.transactionData
-      : {};
+    const { loading, selectedTransactionCategory } = this.state;
+    const {
+      id,
+      transactionTypeName,
+      categoryName,
+      categoryCode,
+      defaultFlag,
+      categoryDiscription,
+      parentTransactionCategory
+    } = this.state.transactionData ? this.state.transactionData : {};
+    const { value, suggestions } = this.state;
+
+    // Autosuggest will pass through all these props to the input.
+    const inputProps = {
+      placeholder: "Type Transaction CategoryType",
+      value: transactionTypeName,
+      onChange: this.onChange
+    };
+
     return (
       <div className="animated">
         <Card>
@@ -156,6 +248,7 @@ class CreateOrEditTransactionCategory extends Component {
                       id="categoryName"
                       name="categoryName"
                       placeholder="Enter Category Name"
+                      value={categoryName}
                       onChange={this.handleChange}
                       required
                     />
@@ -171,6 +264,7 @@ class CreateOrEditTransactionCategory extends Component {
                       id="categoryCode"
                       name="categoryCode"
                       placeholder="Enter Category Code"
+                      value={categoryCode}
                       onChange={this.handleChange}
                       required
                     />
@@ -187,6 +281,7 @@ class CreateOrEditTransactionCategory extends Component {
                       type="textarea"
                       id="categoryDiscription"
                       name="categoryDiscription"
+                      value={categoryDiscription}
                       placeholder="Enter  Category Description"
                       onChange={this.handleChange}
                       required
@@ -204,8 +299,10 @@ class CreateOrEditTransactionCategory extends Component {
                       className="form-check-input"
                       type="radio"
                       id="inline-radio1"
-                      name="inline-radios"
-                      value="option1"
+                      name="defaltFlag"
+                      value="Y"
+                      checked={defaultFlag === "Y"}
+                      onChange={this.handleChange}
                     />
                     <Label
                       className="form-check-label"
@@ -220,8 +317,10 @@ class CreateOrEditTransactionCategory extends Component {
                       className="form-check-input"
                       type="radio"
                       id="inline-radio2"
-                      name="inline-radios"
-                      value="option2"
+                      name="defaltFlag"
+                      value="N"
+                      checked={defaultFlag === "N"}
+                      onChange={this.handleChange}
                     />
                     <Label
                       className="form-check-label"
@@ -241,13 +340,14 @@ class CreateOrEditTransactionCategory extends Component {
                     </Label>
                     <Input
                       type="select"
-                      name="selectCategoryCode"
+                      name="selectVatCategoryCode"
+                      value={transactionTypeName}
                       id="selectCategoryCode"
                       onChange={this.handleChange}
                       required
                     >
                       {this.state.vatCategoryList.map((item, index) => (
-                        <option key={index} value={item.name}>
+                        <option key={index} value={item.id}>
                           {" "}
                           {item.name}
                         </option>
@@ -262,23 +362,44 @@ class CreateOrEditTransactionCategory extends Component {
                     <Label htmlFor="selectTransactionType">
                       Transaction Type
                     </Label>
-                    <Input
-                      type="select"
-                      name="selectTransactionType"
-                      id="selectTransactionType"
-                      onChange={this.handleChange}
-                      required
-                    >
-                      {this.state.transactionCategoryList.map((item, index) => (
-                        <option key={index} value={item.id}>
-                          {" "}
-                          {item.transactionType.transactionTypeName}
-                        </option>
-                      ))}
-                    </Input>
+                    <Autosuggest
+                      className="autoSuggest"
+                      suggestions={suggestions}
+                      onSuggestionsFetchRequested={
+                        this.onSuggestionsFetchRequested
+                      }
+                      onSuggestionsClearRequested={
+                        this.onSuggestionsClearRequested
+                      }
+                      getSuggestionValue={this.getSuggestionValue}
+                      onSuggestionSelected={this.onSuggestionSelected}
+                      renderSuggestion={this.renderSuggestion}
+                      inputProps={inputProps}
+                    />
                   </FormGroup>
                 </Col>
               </FormGroup>
+              {selectedTransactionCategory ? (
+                <FormGroup>
+                  <Col xs="4">
+                    <FormGroup>
+                      <Label htmlFor="selectTransactionType">
+                        Parent Transaction Type
+                      </Label>
+                      <Input
+                        type="text"
+                        name="parentTransactionType"
+                        id="parentTransactionType"
+                        value={parentTransactionCategory}
+                        onChange={this.handleChange}
+                        required
+                      ></Input>
+                    </FormGroup>
+                  </Col>
+                </FormGroup>
+              ) : (
+                ""
+              )}
               <FormGroup>
                 <Col>
                   <Button type="submit" size="sm" color="primary">

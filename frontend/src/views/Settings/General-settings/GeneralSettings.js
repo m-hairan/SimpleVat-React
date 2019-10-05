@@ -1,4 +1,9 @@
-import React, { useState, useEffect } from "react";
+// import React, { useState, useEffect } from "react";
+import React, { Component } from "react";
+
+import { Editor } from "react-draft-wysiwyg";
+import { EditorState } from "draft-js";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import {
   Card,
   CardBody,
@@ -10,7 +15,14 @@ import {
   Label,
   Row
 } from "reactstrap";
-const GeneralSettings = props => {
+class GeneralSettings extends Component {
+   constructor(props) {
+    super(props);
+    this.state = {
+      editorState: EditorState.createEmpty()
+    };
+  };
+  render(){
   return (
     <div className="animated fadeIn">
       <Row>
@@ -66,95 +78,114 @@ const GeneralSettings = props => {
               >
                 <FormGroup row>
                   <Col md="3">
-                    <Label htmlFor="text-input">
-                      Mailing Host
-                    </Label>
+                    <Label htmlFor="text-input">Mailing Host</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input
-                      type="text"
-                      id="text-input"
-                      name="text-input"
-                      
-                    />
+                    <Input type="text" id="text-input" name="text-input" />
                   </Col>
                 </FormGroup>
                 <FormGroup row>
                   <Col md="3">
-                    <Label htmlFor="text-input">
-                      Mailing Post
-                    </Label>
+                    <Label htmlFor="text-input">Mailing Post</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input
-                      type="text"
-                      id="text-input"
-                      name="text-input"
-                      
-                    />
+                    <Input type="text" id="text-input" name="text-input" />
                   </Col>
                 </FormGroup>
                 <FormGroup row>
                   <Col md="3">
-                    <Label htmlFor="text-input">
-                      Mailing UserName
-                    </Label>
+                    <Label htmlFor="text-input">Mailing UserName</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input
-                      type="text"
-                      id="text-input"
-                      name="text-input"
-                      
-                    />
+                    <Input type="text" id="text-input" name="text-input" />
                   </Col>
                 </FormGroup>
                 <FormGroup row>
                   <Col md="3">
-                    <Label htmlFor="text-input">
-                      Mailing Password
-                    </Label>
+                    <Label htmlFor="text-input">Mailing Password</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input
-                      type="text"
-                      id="text-input"
-                      name="text-input"
-                      
-                    />
+                    <Input type="text" id="text-input" name="text-input" />
                   </Col>
                 </FormGroup>
                 <FormGroup row>
-                    <Col md="3">
-                      <Label>Mailing SMTP Authorization</Label>
-                    </Col>
-                    <Col md="9">
-                      <FormGroup check inline>
-                        <Input className="form-check-input" type="radio" id="inline-radio1" name="inline-radios" value="option1" />
-                        <Label className="form-check-label" check htmlFor="inline-radio1">True</Label>
-                      </FormGroup>
-                      <FormGroup check inline>
-                        <Input className="form-check-input" type="radio" id="inline-radio2" name="inline-radios" value="option2" />
-                        <Label className="form-check-label" check htmlFor="inline-radio2">False</Label>
-                      </FormGroup>
-                    </Col>
-                  </FormGroup>
-                  <FormGroup row>
-                    <Col md="3">
-                      <Label>Mailing Smtp Starttls Enable</Label>
-                    </Col>
-                    <Col md="9">
-                      <FormGroup check inline>
-                        <Input className="form-check-input" type="radio" id="inline-radio1" name="inline-radios" value="option1" />
-                        <Label className="form-check-label" check htmlFor="inline-radio1">True</Label>
-                      </FormGroup>
-                      <FormGroup check inline>
-                        <Input className="form-check-input" type="radio" id="inline-radio2" name="inline-radios" value="option2" />
-                        <Label className="form-check-label" check htmlFor="inline-radio2">False</Label>
-                      </FormGroup>
-                      
-                    </Col>
-                  </FormGroup>
+                  <Col md="3">
+                    <Label>Mailing SMTP Authorization</Label>
+                  </Col>
+                  <Col md="9">
+                    <FormGroup check inline>
+                      <Input
+                        className="form-check-input"
+                        type="radio"
+                        id="inline-radio1"
+                        name="inline-radios"
+                        value="option1"
+                      />
+                      <Label
+                        className="form-check-label"
+                        check
+                        htmlFor="inline-radio1"
+                      >
+                        True
+                      </Label>
+                    </FormGroup>
+                    <FormGroup check inline>
+                      <Input
+                        className="form-check-input"
+                        type="radio"
+                        id="inline-radio2"
+                        name="inline-radios"
+                        value="option2"
+                      />
+                      <Label
+                        className="form-check-label"
+                        check
+                        htmlFor="inline-radio2"
+                      >
+                        False
+                      </Label>
+                    </FormGroup>
+                  </Col>
+                </FormGroup>
+                <FormGroup row>
+                  <Col md="3">
+                    <Label>Mailing Smtp Starttls Enable</Label>
+                  </Col>
+                  <Col md="9">
+                    <FormGroup check inline>
+                      <Input
+                        className="form-check-input"
+                        type="radio"
+                        id="inline-radio1"
+                        name="inline-radios"
+                        value="option1"
+                      />
+                      <Label
+                        className="form-check-label"
+                        check
+                        htmlFor="inline-radio1"
+                      >
+                        True
+                      </Label>
+                    </FormGroup>
+                    <FormGroup check inline>
+                      <Input
+                        className="form-check-input"
+                        type="radio"
+                        id="inline-radio2"
+                        name="inline-radios"
+                        value="option2"
+                      />
+                      <Label
+                        className="form-check-label"
+                        check
+                        htmlFor="inline-radio2"
+                      >
+                        False
+                      </Label>
+                    </FormGroup>
+                  </Col>
+                </FormGroup>
               </Form>
             </CardBody>
           </Card>
@@ -169,9 +200,7 @@ const GeneralSettings = props => {
               >
                 <FormGroup row>
                   <Col md="3">
-                    <Label htmlFor="text-input">
-                      Subject
-                    </Label>
+                    <Label htmlFor="text-input">Subject</Label>
                   </Col>
                   <Col xs="12" md="9">
                     <Input
@@ -184,17 +213,19 @@ const GeneralSettings = props => {
                 </FormGroup>
                 <FormGroup row>
                   <Col md="3">
-                    <Label htmlFor="select">Invoicing Templates</Label>
+                    <Label htmlFor="text-input">Message</Label>
                   </Col>
                   <Col xs="12" md="9">
-                    <Input type="select" name="select" id="select">
-                      <option value="0">Please select</option>
-                      <option value="1">Option #1</option>
-                      <option value="2">Option #2</option>
-                      <option value="3">Option #3</option>
-                    </Input>
+                  <Editor
+                  editorState={this.state.editorState}
+                  toolbarClassName="toolbarClassName"
+                  wrapperClassName="wrapperClassName"
+                  editorClassName="editorClassName"
+                  onEditorStateChange={this.onEditorStateChange}
+                />
                   </Col>
                 </FormGroup>
+               
               </Form>
             </CardBody>
           </Card>
@@ -202,6 +233,7 @@ const GeneralSettings = props => {
       </Row>
     </div>
   );
+  };
 };
 
 export default GeneralSettings;
