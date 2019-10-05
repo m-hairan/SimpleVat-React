@@ -3,6 +3,8 @@
 #################
 
 target/
+frontend/node_module/
+frontend/node/
 .idea/*
 *.iml
 

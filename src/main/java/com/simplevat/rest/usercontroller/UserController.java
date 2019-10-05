@@ -3,14 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.simplevat.rest.userController;
+package com.simplevat.rest.usercontroller;
 
 import com.simplevat.entity.Mail;
 import com.simplevat.entity.MailEnum;
 import com.simplevat.entity.Role;
 import com.simplevat.entity.User;
 import com.simplevat.integration.MailIntegration;
-import com.simplevat.rest.usercontroller.UserModel;
 import com.simplevat.service.CompanyService;
 import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.RoleService;

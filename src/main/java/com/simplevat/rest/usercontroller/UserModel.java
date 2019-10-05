@@ -5,7 +5,6 @@
  */
 package com.simplevat.rest.usercontroller;
 
-import com.simplevat.entity.Company;
 import com.simplevat.entity.Role;
 import java.io.Serializable;
 import lombok.Data;

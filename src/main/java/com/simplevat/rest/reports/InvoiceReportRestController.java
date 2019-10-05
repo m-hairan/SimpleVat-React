@@ -6,7 +6,7 @@
 package com.simplevat.rest.reports;
 
 import com.simplevat.entity.invoice.Invoice;
-import com.simplevat.rest.invoiceController.InvoiceModelHelper;
+import com.simplevat.rest.invoicecontroller.InvoiceModelHelper;
 import com.simplevat.service.invoice.InvoiceService;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.simplevat.rest.invoiceController;
+package com.simplevat.rest.invoicecontroller;
 
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.entity.invoice.InvoiceLineItem;
