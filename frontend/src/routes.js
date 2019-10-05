@@ -1,11 +1,14 @@
 import React from "react";
 
+const Login = React.lazy(() => import("./views/Login"));
 const Dashboard = React.lazy(() => import("./views/Dashboard"));
 const GeneralSettings = React.lazy(() =>
   import("./views/Settings/General-settings")
 );
 const VatCategory = React.lazy(() => import("./views/Settings/Vat-Category"));
 const Invoice = React.lazy(() => import("./views/Invoice"));
+const BankAccount = React.lazy(() => import("./views/BankAccount/BankAccount"));
+const CreateOrEditBankAccount = React.lazy(() => import("./views/BankAccount/CreateOrEditBankAccount/CreateOrEditBankAccount"));
 const CreateOrEditVatCategory = React.lazy(() =>
   import(
     "./views/Settings/Vat-Category/CreateOrEditVatCategory/CreateOrEditVatCategory"
@@ -22,9 +25,12 @@ const TransactionCategory = React.lazy(() =>
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
-  { path: "/", exact: true, name: "Home" },
+  { path: "/login", exact: true, name: "Login", component: Login },
+  // { path: "/", exact: true, name: "Home" },
   { path: "/home", name: "Home", component: Dashboard },
   { path: "/invoice", name: "Invoice", component: Invoice },
+  { path: "/bankAccount", name: "BankAccount", component: BankAccount },
+  { path: "/create-bank-account", name: "CreateOrEditBankAccount", component: CreateOrEditBankAccount },
   {
     path: "/settings/general",
     name: "General Settings",

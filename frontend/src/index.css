@@ -26,3 +26,16 @@
     box-shadow 0.15s ease-in-out;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
+
+.create-bank-wrapper{
+    padding: 1.5rem;
+}
+
+.row-wrapper{
+    margin-bottom: 1rem !important;
+}
+
+.bank-btn-wrapper{
+    padding: 1rem;
+}
+

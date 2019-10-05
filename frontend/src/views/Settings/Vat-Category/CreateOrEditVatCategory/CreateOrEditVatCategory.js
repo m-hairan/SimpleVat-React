@@ -143,8 +143,8 @@ class CreateOrEditCategory extends Component {
             <div className="sk-child sk-double-bounce2"></div>
           </div>
         ) : (
-          ""
-        )}
+            ""
+          )}
       </div>
     );
   }

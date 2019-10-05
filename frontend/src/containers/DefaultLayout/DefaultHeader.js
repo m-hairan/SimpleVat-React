@@ -15,8 +15,15 @@ const propTypes = {
 const defaultProps = {};
 
 class DefaultHeader extends Component {
-  render() {
 
+  signOut = (e) => {
+    e.preventDefault()
+    // this.props.history.push('/login');
+    sessionStorage.clear();
+    window.location.replace('/#/login')
+  }
+
+  render() {
     // eslint-disable-next-line
     const { children, ...attributes } = this.props;
 
@@ -33,9 +40,10 @@ class DefaultHeader extends Component {
             <DropdownToggle nav>
               <img src={avatar} className="img-avatar" alt="admin@bootstrapmaster.com" />
             </DropdownToggle>
-            <DropdownMenu right style={{ height: '400px', right: 0 }}>
+            {/* <DropdownMenu right style={{ height: '400px', right: 0 }}> */}
+            <DropdownMenu right style={{ height: 'auto', right: 0 }}>
               <DropdownItem>
-                AppHeaderDropdown
+                <DropdownItem onClick={this.signOut}><i className="fa fa-lock"></i> Logout</DropdownItem>
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>

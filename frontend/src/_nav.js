@@ -19,6 +19,15 @@ export default {
       // },
     },
     {
+      name: 'BankAccount',
+      url: '/bankAccount',
+      icon: 'icon-file',
+      // badge: {
+      //   variant: 'info',
+      //   text: 'NEW',
+      // },
+    },
+    {
       name: 'Settings',
       url: '/settings',
       icon: 'icon-settings',
