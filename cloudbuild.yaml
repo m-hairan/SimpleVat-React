@@ -1,8 +1,8 @@
 steps:
-- name: 'jdenly/java-maven-yarn-build-server'
-  entrypoint: 'mvn'
+- name: 'gcr.io/cloud-builders/yarn'
+  entrypoint: 'yarn'
   args: ['install']
-  id: mvn-build
+  id: yarn-build
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '--tag=gcr.io/simplevat-dev/simplevat:$TAG_NAME', '.']
   id: docker-build
