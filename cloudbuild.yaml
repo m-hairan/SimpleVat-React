@@ -7,7 +7,7 @@ steps:
   args: ['build', '--tag=gcr.io/simplevat-dev/simplevat:$TAG_NAME', '.']
   id: docker-build
   waitFor:
-  - mvn-build
+  - yarn-build
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/simplevat-dev/simplevat:$TAG_NAME']
   id: docker-push
