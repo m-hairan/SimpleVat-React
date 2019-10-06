@@ -3,8 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/simplevat.iml" filepath="$PROJECT_DIR$/.idea/simplevat.iml" />
-      <module fileurl="file://$PROJECT_DIR$/simplevat-service/simplevat-service.iml" filepath="$PROJECT_DIR$/simplevat-service/simplevat-service.iml" />
-      <module fileurl="file://$PROJECT_DIR$/simplevat-web/simplevat-web.iml" filepath="$PROJECT_DIR$/simplevat-web/simplevat-web.iml" />
     </modules>
   </component>
 </project>

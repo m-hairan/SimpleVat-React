@@ -3,6 +3,8 @@
 #################
 
 target/
+frontend/node_module/
+frontend/node/
 .idea/*
 *.iml
 
@@ -231,3 +233,4 @@ simplevat.iml
 /simplevat-web/nb-configuration.xml
 
 !.idea/*
+/.idea/

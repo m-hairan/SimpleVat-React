@@ -1,0 +1,6 @@
+{
+  "name": "Transaction Category",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./TransactionCategory.js"
+}
