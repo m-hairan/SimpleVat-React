@@ -1,5 +1,5 @@
 steps:
-- name: 'jdenly/java-maven-yarn-build-server:latest'
+- name: 'jdenly/java-maven-yarn-build-server'
   entrypoint: 'mvn'
   args: ['install']
   id: mvn-build

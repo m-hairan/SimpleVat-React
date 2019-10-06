@@ -16,6 +16,7 @@
       <configuration>
         <setting name="validation-enabled" value="true" />
         <datasource-mapping>
+          <factory-entry name="entityManagerFactory" />
           <factory-entry name="persistenceUnit" value="b9a63f37-f04a-4137-8959-49434f17e30a" />
         </datasource-mapping>
         <naming-strategy-map />
