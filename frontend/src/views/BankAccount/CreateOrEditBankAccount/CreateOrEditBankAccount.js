@@ -17,29 +17,38 @@ import sendRequest from "../../../xhrRequest";
 import _ from "lodash";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Autosuggest from "react-autosuggest";
 
 class CreateOrEditBankAccount extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      transactionCategoryList: [],
+      countryValue: "",
+      selectedCountry: {},
+      countryList: [],
+      accountTypeList: [],
       vatCategoryList: [],
-      transactionData: {},
+      bankData: {
+        countryName: "",
+        primaryAccount: "Y",
+        personalAccount: "N"
+      },
       collapse: true,
       loading: false,
     };
   }
 
   componentDidMount() {
-    this.getTransactionListData();
-    this.getvatListData();
+
+    // this.getCountryListData();
+    this.getAccountType();
     const params = new URLSearchParams(this.props.location.search);
     const id = params.get("id");
     if (id) {
       this.setState({ loading: true });
       const res = sendRequest(
-        `/transaction/edittransactioncategory?id=${id}`,
+        `rest/transaction/edittransactioncategory?id=${id}`,
         "get",
         ""
       );
@@ -56,13 +65,8 @@ class CreateOrEditBankAccount extends Component {
     }
   }
 
-  getTransactionListData = () => {
-    const res = sendRequest(
-      `transaction/gettransactioncategory`,
-      "get",
-      "",
-      ""
-    );
+  getCountryListData = (countryStr) => {
+    const res = sendRequest(`rest/bank/getcountry?countryStr=${countryStr}`, "get", "");
     res
       .then(res => {
         if (res.status === 200) {
@@ -71,11 +75,13 @@ class CreateOrEditBankAccount extends Component {
         }
       })
       .then(data => {
-        this.setState({ transactionCategoryList: data });
+        this.setState({ countryList: data })
+        return data;
       });
   };
-  getvatListData = () => {
-    const res = sendRequest(`/transaction/getvatcategories`, "get", "", "");
+
+  getAccountType = () => {
+    const res = sendRequest(`rest/bank/getaccounttype`, "get", "");
     res
       .then(res => {
         if (res.status === 200) {
@@ -84,7 +90,7 @@ class CreateOrEditBankAccount extends Component {
         }
       })
       .then(data => {
-        this.setState({ vatCategoryList: data });
+        this.setState({ accountTypeList: data });
       });
   };
 
@@ -107,23 +113,13 @@ class CreateOrEditBankAccount extends Component {
   handleSubmit = e => {
     this.setState({ loading: true });
     e.preventDefault();
-    const {
-      categoryName,
-      categoryCode,
-      categoryDiscription,
-      selectCategoryCode,
-      selectTransactionType
-    } = this.state.transactionData;
+    const { } = this.state.transactionData;
     const postObj = {
-      categoryName: categoryName,
-      categoryCode: categoryCode,
-      categoryDiscription: categoryDiscription,
-      selectCategoryCode: selectCategoryCode,
-      selectTransactionType: selectTransactionType
+
     };
     console.log(postObj);
     //  const res = sendRequest(
-    //   `/transaction/savetransaction?id=1`,
+    //   `rest//transaction/savetransaction?id=1`,
     //   "post",
     //   "",
     //   postObj
@@ -140,11 +136,60 @@ class CreateOrEditBankAccount extends Component {
     this.setState({ collapse: !this.state.collapse });
   }
 
+  getSuggestions = value => {
+    const inputValue = value.trim().toLowerCase();
+    const inputLength = inputValue.length;
+
+    this.getCountryListData(inputValue);
+    return inputLength === 0
+      ? []
+      : this.state.countryList.filter(
+        transaction =>
+          transaction.countryName
+            .toLowerCase()
+            .slice(0, inputLength) === inputValue
+      )
+  };
+
+  onSuggestionsFetchRequested = ({ value }) => {
+    this.setState({
+      countryList: this.getSuggestions(value)
+    });
+  };
+
+  onSuggestionsClearRequested = () => {
+    this.setState({
+      countryList: []
+    });
+  };
+
+  getSuggestionValue = suggestion => suggestion.countryFullName;
+
+  onSuggestionSelected = (e, val) => {
+    console.log("val ==> ", val)
+    this.setState({ selectedCountry: val.suggestion });
+  };
+
+  renderSuggestion = suggestion => <div>{suggestion.countryFullName}</div>;
+
+  onCountryChange = (event, { newValue }) => {
+    console.log(newValue);
+    this.setState({
+      bankData: { ...this.state.bankData, countryName: newValue }
+    });
+  };
+
   render() {
-    const { loading } = this.state;
-    const { id, name, vat } = this.state.transactionData
-      ? this.state.transactionData
+    const { loading, countryList, accountTypeList } = this.state;
+    const { id, countryName, primaryAccount, personalAccount, accountType, bankName, accountNumber, swiftCode, IBANNumber } = this.state.bankData
+      ? this.state.bankData
       : {};
+    const { currencyCode } = this.state.selectedCountry;
+    const inputProps = {
+      placeholder: "Type Country Name",
+      value: countryName,
+      onChange: this.onCountryChange
+    };
     return (
       <div className="animated fadeIn">
         <Card>
@@ -166,27 +211,36 @@ class CreateOrEditBankAccount extends Component {
                       <Row className="row-wrapper">
                         <Col md="4">
                           <FormGroup >
-                            <Label htmlFor="text-input">
+                            <Label htmlFor="accountName">
                               Account Name
                           </Label>
                             <Input
                               type="text"
-                              id="text-input"
-                              name="text-input"
-                              placeholder="Text"
+                              id="accountName"
+                              name="accountName"
+                              placeholder="Enter Account Name"
                               required
+                              onChange={this.handleChange}
                             />
                           </FormGroup>
                         </Col>
                         <Col md="4">
                           <FormGroup >
-                            <Label htmlFor="select">Invoicing Templates</Label>
-                            <Input type="select" name="select" id="select" required>
-                              <option value="0">Please select</option>
-                              <option value="1">Option #1</option>
-                              <option value="2">Option #2</option>
-                              <option value="3">Option #3</option>
-                            </Input>
+                            <Label htmlFor="select">Currency</Label>
+                            <Autosuggest
+                              className="autoSuggest"
+                              suggestions={countryList}
+                              onSuggestionsFetchRequested={
+                                this.onSuggestionsFetchRequested
+                              }
+                              onSuggestionsClearRequested={
+                                this.onSuggestionsClearRequested
+                              }
+                              getSuggestionValue={this.getSuggestionValue}
+                              onSuggestionSelected={this.onSuggestionSelected}
+                              renderSuggestion={this.renderSuggestion}
+                              inputProps={inputProps}
+                            />
                           </FormGroup>
                         </Col>
                         <Col md="4">
@@ -194,10 +248,12 @@ class CreateOrEditBankAccount extends Component {
                             <Label htmlFor="select">Opening Balance</Label>
                             <Input
                               type="text"
-                              id="text-input"
-                              name="text-input"
-                              placeholder="Text"
+                              id="openingBalance"
+                              name="openingBalance"
+                              placeholder="Enter Openning Balance"
+                              value={`${currencyCode ? currencyCode.currencySymbol : ""} `}
                               required
+                              onChange={this.handleChange}
                             />
                           </FormGroup>
                         </Col>
@@ -206,35 +262,43 @@ class CreateOrEditBankAccount extends Component {
                         <Col md="4">
                           <Label htmlFor="select" className="d-block">Is this your primary account?</Label>
                           <FormGroup check inline>
-                            <Input className="form-check-input" type="radio" id="inline-radio1" name="inline-radios" value="option1" />
-                            <Label className="form-check-label" check htmlFor="inline-radio1">True</Label>
+                            <Input className="form-check-input" type="radio" id="inline-radio1" name="primaryAccount" value="Y" onChange={this.handleChange} checked={primaryAccount === "Y"} />
+                            <Label className="form-check-label" check htmlFor="inline-radio1">Yes</Label>
                           </FormGroup>
                           <FormGroup check inline>
-                            <Input className="form-check-input" type="radio" id="inline-radio2" name="inline-radios" value="option2" />
-                            <Label className="form-check-label" check htmlFor="inline-radio2">False</Label>
+                            <Input className="form-check-input" type="radio" id="inline-radio2" name="primaryAccount" value="N" onChange={this.handleChange} checked={primaryAccount === "N"} />
+                            <Label className="form-check-label" check htmlFor="inline-radio2">No</Label>
                           </FormGroup>
                         </Col>
                         <Col md="4">
                           <Label htmlFor="select" className="d-block">Is this your personal account?</Label>
                           <FormGroup check inline>
-                            <Input className="form-check-input" type="radio" id="inline-radio1" name="inline-radios" value="option1" />
-                            <Label className="form-check-label" check htmlFor="inline-radio1">True</Label>
+                            <Input className="form-check-input" type="radio" id="inline-radio1" name="personalAccount" value="Y" onChange={this.handleChange} checked={personalAccount === "Y"} />
+                            <Label className="form-check-label" check htmlFor="inline-radio1">Yes</Label>
                           </FormGroup>
                           <FormGroup check inline>
-                            <Input className="form-check-input" type="radio" id="inline-radio2" name="inline-radios" value="option2" />
-                            <Label className="form-check-label" check htmlFor="inline-radio2">False</Label>
+                            <Input className="form-check-input" type="radio" id="inline-radio2" name="personalAccount" value="N" onChange={this.handleChange} checked={personalAccount === "N"} />
+                            <Label className="form-check-label" check htmlFor="inline-radio2">No</Label>
                           </FormGroup>
                         </Col>
                         <Col md="4">
                           <FormGroup >
-                            <Label htmlFor="select">Opening Balance</Label>
+                            <Label htmlFor="select">Account Type</Label>
                             <Input
-                              type="text"
-                              id="text-input"
-                              name="text-input"
-                              placeholder="Text"
+                              type="select"
+                              name="accountType"
+                              value={accountType}
+                              id="accountType"
+                              onChange={e => this.handleChange(e, "accountType")}
                               required
-                            />
+                            >
+                              {accountTypeList.map((item, index) => (
+                                <option key={index} value={item.id}>
+                                  {" "}
+                                  {item.name}
+                                </option>
+                              ))}
+                            </Input>
                           </FormGroup>
                         </Col>
                       </Row>
@@ -253,42 +317,48 @@ class CreateOrEditBankAccount extends Component {
                         <Row className="row-wrapper">
                           <Col md="4">
                             <FormGroup >
-                              <Label htmlFor="text-input">
+                              <Label htmlFor="bankName">
                                 Bank Name
                               </Label>
                               <Input
                                 type="text"
-                                id="text-input"
-                                name="text-input"
-                                placeholder="Text"
+                                id="bankName"
+                                name="bankName"
+                                placeholder="Enter Bank Name"
+                                value={bankName}
+                                onChange={this.handleChange}
                                 required
                               />
                             </FormGroup>
                           </Col>
                           <Col md="4">
                             <FormGroup >
-                              <Label htmlFor="text-input">
+                              <Label htmlFor="accountNumber">
                                 Account Number
                               </Label>
                               <Input
-                                type="text"
-                                id="text-input"
-                                name="text-input"
-                                placeholder="Text"
+                                type="number"
+                                id="accountNumber"
+                                name="accountNumber"
+                                value={accountNumber}
+                                placeholder="Enter Account Number"
+                                onChange={this.handleChange}
                                 required
                               />
                             </FormGroup>
                           </Col>
                           <Col md="4">
                             <FormGroup >
-                              <Label htmlFor="text-input">
+                              <Label htmlFor="swiftCode">
                                 Swift Code
                               </Label>
                               <Input
                                 type="text"
-                                id="text-input"
-                                name="text-input"
-                                placeholder="Text"
+                                id="swiftCode"
+                                name="swiftCode"
+                                placeholder="Enter Swift Code"
+                                value={swiftCode}
+                                onChange={this.handleChange}
                                 required
                               />
                             </FormGroup>
@@ -297,14 +367,16 @@ class CreateOrEditBankAccount extends Component {
                         <Row>
                           <Col md="4">
                             <FormGroup >
-                              <Label htmlFor="text-input">
+                              <Label htmlFor="IBANNumber">
                                 IBAN Number
                               </Label>
                               <Input
                                 type="text"
-                                id="text-input"
-                                name="text-input"
+                                id="IBANNumber"
+                                name="IBANNumber"
                                 placeholder="Text"
+                                value={IBANNumber}
+                                onChange={this.handleChange}
                                 required
                               />
                             </FormGroup>
@@ -319,6 +391,7 @@ class CreateOrEditBankAccount extends Component {
                                 id="text-input"
                                 name="text-input"
                                 placeholder="Text"
+                                onChange={this.handleChange}
                                 required
                               />
                             </FormGroup>
@@ -330,10 +403,10 @@ class CreateOrEditBankAccount extends Component {
                   <Row className="bank-btn-wrapper">
                     <FormGroup>
                       <Button type="submit" size="sm" color="primary">
-                        <i className="fa fa-dot-circle-o"></i> Submit
+                        <i className="fa fa-dot-circle-o "></i> Save
                       </Button>
                       <Button type="submit" size="sm" color="primary">
-                        <i className="fa fa-dot-circle-o"></i> Submit
+                        <i className="fa fa-dot-circle-o"></i> Save & Add More
                       </Button>
                     </FormGroup>
                   </Row>

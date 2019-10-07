@@ -33,7 +33,7 @@ class CreateOrEditCategory extends Component {
     const id = params.get("id");
     if (id) {
       this.setState({ loading: true });
-      const res = sendRequest(`vat/getvatbyid?id=${id}`, "get", "");
+      const res = sendRequest(`rest/vat/getbyid?id=${id}`, "get", "");
       res
         .then(res => {
           if (res.status === 200) {
@@ -73,7 +73,7 @@ class CreateOrEditCategory extends Component {
     } else {
       postObj = { name, vat };
     }
-    const res = sendRequest(`vat/savevat?id=1`, "post", postObj);
+    const res = sendRequest(`rest/vat/savevat?id=1`, "post", postObj);
     res.then(res => {
       if (res.status === 200) {
         this.success();

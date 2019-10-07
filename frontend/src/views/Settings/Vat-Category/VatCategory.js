@@ -45,7 +45,7 @@ class VatCategory extends Component {
     }
 
     getVatListData = () => {
-        const res = sendRequest(`vat/getvat`, "get", "");
+        const res = sendRequest(`rest/vat/getvat`, "get", "");
         res.then((res) => {
             if (res.status === 200) {
                 this.setState({ loading: false });
@@ -85,7 +85,7 @@ class VatCategory extends Component {
     deleteVat = (data) => {
         this.setState({ loading: true })
         this.setState({ openDeleteModal: false });
-        const res = sendRequest(`vat/deletevat?id=${this.state.selectedData.id}`, "delete", "");
+        const res = sendRequest(`rest/vat/deletevat?id=${this.state.selectedData.id}`, "delete", "");
         res.then(res => {
             if (res.status === 200) {
                 this.setState({ loading: false });
