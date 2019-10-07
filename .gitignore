@@ -3,11 +3,11 @@
 #################
 
 target/
-frontend/node_module/
-frontend/node/
+frontend/node_module/*
+frontend/node/*
 .idea/*
 *.iml
-
+yarn.lock
 
 #################
 ## Eclipse
@@ -234,3 +234,4 @@ simplevat.iml
 
 !.idea/*
 /.idea/
+/frontend/node_modules/
