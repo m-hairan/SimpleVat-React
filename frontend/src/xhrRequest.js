@@ -1,5 +1,5 @@
 import { local } from "./constant";
-// import getAccessToken from "Authorization";
+import getAccessToken from "./Authorization";
 
 export default function sendRequest(url, method, postObj) {
   let request;
@@ -10,8 +10,8 @@ export default function sendRequest(url, method, postObj) {
       body: JSON.stringify(postObj ? postObj : {}),
       headers: new Headers({
         Accept: "application/json",
-        "Content-Type": "application/json"
-        // Authorization: "Bearer " + getAccessToken()
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + getAccessToken()
       })
     });
   } else if (method === "get" || method === "delete") {
@@ -19,8 +19,8 @@ export default function sendRequest(url, method, postObj) {
       method: method,
       headers: new Headers({
         Accept: "application/json",
-        "Content-Type": "application/json"
-        // Authorization: "Bearer " + getAccessToken()
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + getAccessToken()
       })
     });
   }
