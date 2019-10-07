@@ -43,7 +43,7 @@ class CreateOrEditTransactionCategory extends Component {
     if (id) {
       this.setState({ loading: true });
       const res = sendRequest(
-        `/transaction/edittransactioncategory?id=${id}`,
+        `rest/transaction/edittransactioncategory?id=${id}`,
         "get",
         ""
       );
@@ -120,7 +120,7 @@ class CreateOrEditTransactionCategory extends Component {
   };
 
   getTransactionListData = () => {
-    const res = sendRequest(`transaction/gettransactiontype`, "get", "", "");
+    const res = sendRequest(`rest/transaction/gettransactiontype`, "get", "", "");
     res
       .then(res => {
         if (res.status === 200) {
@@ -133,7 +133,7 @@ class CreateOrEditTransactionCategory extends Component {
       });
   };
   getvatListData = () => {
-    const res = sendRequest(`transaction/getvatcategories`, "get", "", "");
+    const res = sendRequest(`rest/transaction/getvatcategories`, "get", "", "");
     res
       .then(res => {
         if (res.status === 200) {
@@ -194,7 +194,7 @@ class CreateOrEditTransactionCategory extends Component {
       postObj = { ...this.state.transactionData };
     }
     const res = sendRequest(
-      `transaction/savetransaction?id=1`,
+      `rest/transaction/savetransaction?id=1`,
       "post",
       postObj
     );

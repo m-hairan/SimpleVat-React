@@ -44,7 +44,7 @@ class BankAccount extends Component {
   }
 
   getBankListData = () => {
-    const res = sendRequest(`bank/getbanklist`, "get", "");
+    const res = sendRequest(`rest/bank/getbanklist`, "get", "");
     res.then((res) => {
       if (res.status === 200) {
         this.setState({ loading: false });
@@ -64,7 +64,7 @@ class BankAccount extends Component {
   deleteBank = (data) => {
     this.setState({ loading: true })
     this.setState({ openDeleteModal: false });
-    const res = sendRequest(`bank/deletebank?id=${this.state.selectedData.bankAccountId}`, "delete", "");
+    const res = sendRequest(`rest/bank/deletebank?id=${this.state.selectedData.bankAccountId}`, "delete", "");
     res.then(res => {
       if (res.status === 200) {
         this.setState({ loading: false });
