@@ -135,7 +135,8 @@ class CreateOrEditBankAccount extends Component {
     this.setState({ loading: true });
     e.preventDefault();
     const { accountName, bankName, personalCorporateAccountInd, primaryAccount, accountNumber, IBANNumber, swiftCode, accountType, countryName, currencyName } = this.state.bankData;
-    let bal = this.state.bankData.openingBalance.split();
+    let bal = this.state.bankData.openingBalance.split(`${this.state.currencySymbol} `);
+    console.log(bal, bal[1])
     const postObj = {
       bankAccountId: "0",
       bankAccountName: accountName,
@@ -240,7 +241,7 @@ class CreateOrEditBankAccount extends Component {
 
   onCurrencySuggestionSelected = (e, val) => {
     this.setState({ selectedCurrency: val.suggestion });
-    this.setState({ bankData: { ...this.state.bankData, currencyName: val.suggestion.description, openingBalance: `${val.suggestion.currencySymbol} ` } });
+    this.setState({ currencySymbol: val.suggestion.currencySymbol, bankData: { ...this.state.bankData, currencyName: val.suggestion.description, openingBalance: `${val.suggestion.currencySymbol} ` } });
   };
 
   renderCurrencySuggestion = suggestion => <div>{suggestion.description}</div>;
