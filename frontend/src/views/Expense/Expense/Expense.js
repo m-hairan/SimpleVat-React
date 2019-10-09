@@ -4,12 +4,12 @@ import { Card, CardHeader, CardBody, Button, Modal, ModalHeader, ModalBody, Moda
 import { NavLink } from 'react-router-dom';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
-// import sendRequest from '../../../xhrRequest';
+import sendRequest from '../../../xhrRequest';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-class Taxes extends Component {
+class Expense extends Component {
     constructor(props) {
         super(props);
 
@@ -40,21 +40,21 @@ class Taxes extends Component {
 
     }
 
-    // componentDidMount() {
-    //     this.getVatListData();
-    // }
+    componentDidMount() {
+        this.getVatListData();
+    }
 
-    // getVatListData = () => {
-    //     const res = sendRequest(`rest/vat/getvat`, "get", "");
-    //     res.then((res) => {
-    //         if (res.status === 200) {
-    //             this.setState({ loading: false });
-    //             return res.json();
-    //         }
-    //     }).then(data => {
-    //         this.setState({ vatCategoryList: data });
-    //     })
-    // }
+    getVatListData = () => {
+        const res = sendRequest(`rest/vat/getvat`, "get", "");
+        res.then((res) => {
+            if (res.status === 200) {
+                this.setState({ loading: false });
+                return res.json();
+            }
+        }).then(data => {
+            this.setState({ vatCategoryList: data });
+        })
+    }
 
     customTotal = (from, to, size) => (
         <span className="react-bootstrap-table-pagination-total">
@@ -82,18 +82,18 @@ class Taxes extends Component {
         });
     }
 
-    // deleteVat = (data) => {
-    //     this.setState({ loading: true })
-    //     this.setState({ openDeleteModal: false });
-    //     const res = sendRequest(`rest/vat/deletevat?id=${this.state.selectedData.id}`, "delete", "");
-    //     res.then(res => {
-    //         if (res.status === 200) {
-    //             this.setState({ loading: false });
-    //             this.success();
-    //             this.getVatListData();
-    //         }
-    //     })
-    // }
+    deleteVat = (data) => {
+        this.setState({ loading: true })
+        this.setState({ openDeleteModal: false });
+        const res = sendRequest(`rest/vat/deletevat?id=${this.state.selectedData.id}`, "delete", "");
+        res.then(res => {
+            if (res.status === 200) {
+                this.setState({ loading: false });
+                this.success();
+                this.getVatListData();
+            }
+        })
+    }
 
     render() {
         const { vatCategoryList, loading } = this.state;
@@ -106,21 +106,15 @@ class Taxes extends Component {
                 <ToastContainer position="top-right" autoClose={5000} style={containerStyle} />
                 <Card>
                     <CardHeader>
-                        <i className="icon-menu"></i>Vat
+                        <i className="icon-menu"></i>Expenses
                     </CardHeader>
                     <CardBody>
-                        <Button className="mb-3" onClick={() => this.props.history.push(`/create-vat-category`)}>New</Button>
+                        <Button className="mb-3" onClick={() => this.props.history.push(`/create-Expense`)}>New</Button>
                         <BootstrapTable data={vatCategoryList} version="4" striped hover pagination={paginationFactory(this.options)} totalSize={vatCategoryList ? vatCategoryList.length : 0} >
-                            <TableHeaderColumn isKey dataField="name">Vat Name</TableHeaderColumn>
-                            <TableHeaderColumn >Start Date</TableHeaderColumn>
-                            <TableHeaderColumn >End Date</TableHeaderColumn>
-                            <TableHeaderColumn >Vat IN</TableHeaderColumn>
-                            <TableHeaderColumn >Vat OUT</TableHeaderColumn>
-                            <TableHeaderColumn >Total</TableHeaderColumn>
-                            <TableHeaderColumn >Payment Date</TableHeaderColumn>
-                            <TableHeaderColumn >Due Date</TableHeaderColumn>
-                            <TableHeaderColumn >Due Amount</TableHeaderColumn>
-                            <TableHeaderColumn >Status</TableHeaderColumn>
+                            <TableHeaderColumn isKey dataField="name">Reciept Number</TableHeaderColumn>
+                            <TableHeaderColumn >Amount</TableHeaderColumn>
+                            <TableHeaderColumn >Description</TableHeaderColumn>
+                            <TableHeaderColumn dataField="vat" dataFormat={this.vatPercentageFormat}>Expense Date</TableHeaderColumn>
                             <TableHeaderColumn dataFormat={this.vatActions}>Action</TableHeaderColumn>
                         </BootstrapTable>
                     </CardBody>
@@ -149,4 +143,4 @@ class Taxes extends Component {
     }
 }
 
-export default Taxes;
+export default Expense;

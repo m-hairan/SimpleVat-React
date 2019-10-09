@@ -24,13 +24,13 @@ export default {
       icon: 'icon-settings',
       children: [
         {
-          name: 'General Settings',
-          url: '/settings/general',
+          name: 'Expence',
+          url: '/Expense/Expense',
           icon: 'icon-wrench',
         },
         {
-          name: 'Vat Category',
-          url: '/settings/vat-category',
+          name: 'Purchase',
+          url: '/Expense/Purchase',
           icon: 'icon-briefcase',
         },
       ],
@@ -54,6 +54,64 @@ export default {
       // },
     },
     {
+      name: 'Report',
+      url: '/Report',
+      icon: 'icon-settings',
+      children: [
+        {
+          name: 'Transaction Report',
+          url: '/Report/TransactionReport',
+          icon: 'icon-wrench',
+        },
+        {
+          name: 'Invoice Report',
+          url: '/Report/InvoiceReport',
+          icon: 'icon-briefcase',
+        },
+        {
+          name: 'Expense Report',
+          url: '/Report/ExpenseReport',
+          icon: 'icon-graph',
+        },
+      ],
+    },
+    {
+      name: 'Imports',
+      url: '/Imports',
+      icon: 'icon-file',
+      // badge: {
+      //   variant: 'info',
+      //   text: 'NEW',
+      // },
+    },
+    {
+      name: 'Master',
+      url: '/settings',
+      icon: 'icon-settings',
+      children: [
+        {
+          name: 'Product',
+          url: '/settings/general',
+          icon: 'icon-wrench',
+        },
+        {
+          name: 'Project',
+          url: '/settings/vat-category',
+          icon: 'icon-briefcase',
+        },
+        {
+          name: 'Contact',
+          url: '/settings/transaction-category',
+          icon: 'icon-graph',
+        },
+        {
+          name: 'Users',
+          url: '/settings/transaction-category',
+          icon: 'icon-graph',
+        },
+      ],
+    },
+    {
       name: 'Settings',
       url: '/settings',
       icon: 'icon-settings',
@@ -74,6 +132,15 @@ export default {
           icon: 'icon-graph',
         },
       ],
+    },
+    {
+      name: 'Employee',
+      url: '/Employee',
+      icon: 'icon-file',
+      // badge: {
+      //   variant: 'info',
+      //   text: 'NEW',
+      // },
     },
   ]
 };
