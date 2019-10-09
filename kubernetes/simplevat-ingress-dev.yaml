@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: simplevat-ingress-dev
+  namespace: simplevat-dev
+spec:
+  backend:
+    serviceName: simplevat-service-dev
+    servicePort: 80
+  rules:
+    - host: k8s.dev.simplevat.com
+      http:
+        paths:
+          - backend:
+              serviceName: simplevat-service-dev
+              servicePort: 80
+            path: /*
+status:
+  loadBalancer:
+    ingress:
+      - ip: 35.244.221.60
