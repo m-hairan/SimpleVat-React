@@ -8,6 +8,7 @@ const GeneralSettings = React.lazy(() =>
 const VatCategory = React.lazy(() => import("./views/Settings/Vat-Category"));
 const Invoice = React.lazy(() => import("./views/Invoice"));
 const BankAccount = React.lazy(() => import("./views/BankAccount/BankAccount"));
+const Taxes = React.lazy(() => import("./views/Taxes/Taxes"));
 const CreateOrEditInvoice = React.lazy(() => import("./views/Invoice/CreateOrEditInvoice/CreateOrEditInvoice"));
 const CreateOrEditBankAccount = React.lazy(() => import("./views/BankAccount/CreateOrEditBankAccount/CreateOrEditBankAccount"));
 const CreateOrEditVatCategory = React.lazy(() =>
@@ -31,6 +32,7 @@ const routes = [
   { path: "/home", name: "Home", component: Dashboard },
   { path: "/invoice", name: "Invoice", component: Invoice },
   { path: "/bankAccount", name: "BankAccount", component: BankAccount },
+  { path: "/Taxes", name: "Taxes", component: Taxes },
   { path: "/create-Invoice", name: "CreateOrEditInvoice", component: CreateOrEditInvoice },
   { path: "/create-bank-account", name: "CreateOrEditBankAccount", component: CreateOrEditBankAccount },
   {
