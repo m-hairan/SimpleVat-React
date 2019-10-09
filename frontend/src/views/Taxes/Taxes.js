@@ -8,12 +8,12 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-class BankAccount extends Component {
+class Taxes extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      bankAccountList: [],
+      invoiceList: [],
       loading: true
     }
 
@@ -33,7 +33,7 @@ class BankAccount extends Component {
       }, {
         text: '10', value: 10
       }, {
-        text: 'All', value: this.state.bankAccountList ? this.state.bankAccountList.length : 0
+        text: 'All', value: this.state.invoiceList ? this.state.invoiceList.length : 0
       }]
     }
 
@@ -44,19 +44,19 @@ class BankAccount extends Component {
   }
 
   getBankListData = () => {
-    const res = sendRequest(`rest/bank/getbanklist`, "get", "");
+    const res = sendRequest(`invoice/invoicelist`, "get", "");
     res.then((res) => {
       if (res.status === 200) {
         this.setState({ loading: false });
         return res.json();
       }
     }).then(data => {
-      this.setState({ bankAccountList: data });
+      this.setState({ invoiceList: data });
     })
   }
 
   success = () => {
-    return toast.success('Bank Account Deleted Successfully... ', {
+    return toast.success('Invoice Deleted Successfully... ', {
       position: toast.POSITION.TOP_RIGHT
     });
   }
@@ -64,7 +64,7 @@ class BankAccount extends Component {
   deleteBank = (data) => {
     this.setState({ loading: true })
     this.setState({ openDeleteModal: false });
-    const res = sendRequest(`rest/bank/deletebank?id=${this.state.selectedData.bankAccountId}`, "delete", "");
+    const res = sendRequest(`invoice/deleteinvoice=${this.state.selectedData.bankAccountId}`, "delete", "");
     res.then(res => {
       if (res.status === 200) {
         this.setState({ loading: false });
@@ -77,8 +77,8 @@ class BankAccount extends Component {
   bankAccounttActions = (cell, row) => {
     return (
       <div className="d-flex">
-        <Button block color="primary" className="btn-pill vat-actions" title="Edit Vat Category" onClick={() => this.props.history.push(`/create-bank-account?id=${row.id}`)}><i className="far fa-edit"></i></Button>
-        <Button block color="primary" className="btn-pill vat-actions" title="Transaction" onClick={() => this.props.history.push(`/create-bank-account?id=${row.id}`)}><i className="fas fa-university"></i></Button>
+        <Button block color="primary" className="btn-pill vat-actions" title="Edit Vat Category" onClick={() => this.props.history.push(`/create-Invoice?id=${row.id}`)}><i className="far fa-edit"></i></Button>
+        <Button block color="primary" className="btn-pill vat-actions" title="Transaction" onClick={() => this.props.history.push(`/create-Invoice?id=${row.id}`)}><i className="fas fa-university"></i></Button>
         <Button block color="primary" className="btn-pill vat-actions" title="Delete Vat Ctegory" onClick={() => this.setState({ selectedData: row }, () => this.setState({ openDeleteModal: true }))}><i className="fas fa-trash-alt"></i></Button>
       </div>
     );
@@ -87,7 +87,7 @@ class BankAccount extends Component {
   setStatus = (cell, row) => row.bankAccountStatus.bankAccountStatusName;
 
   render() {
-    const { bankAccountList, loading } = this.state;
+    const { invoiceList, loading } = this.state;
     const containerStyle = {
       zIndex: 1999
     };
@@ -96,16 +96,21 @@ class BankAccount extends Component {
         <ToastContainer position="top-right" autoClose={5000} style={containerStyle} />
         <Card>
           <CardHeader>
-            <i className="icon-menu"></i>Bank Account
+            <i className="icon-menu"></i>Invoices
                     </CardHeader>
           <CardBody>
-            <Button className="mb-3" onClick={() => this.props.history.push(`/create-bank-account`)}>New</Button>
-            <BootstrapTable data={bankAccountList} version="4" striped hover pagination={paginationFactory(this.options)} totalSize={bankAccountList ? bankAccountList.length : 0} >
-              <TableHeaderColumn isKey dataField="bankAccountName">Account Name</TableHeaderColumn>
-              <TableHeaderColumn dataField="accountNumber" >Account Number</TableHeaderColumn>
-              <TableHeaderColumn dataField="swiftCode" >Swift Code</TableHeaderColumn>
-              <TableHeaderColumn dataFormat={this.setStatus} >Status</TableHeaderColumn>
-              <TableHeaderColumn dataField="openingBalance" >Current Balance</TableHeaderColumn>
+            <Button className="mb-3 invoice" onClick={() => this.props.history.push(`/create-Invoice`)}>New</Button>
+            <Button className="mb-3 invoice" onClick={() => this.props.history.push(`/create-Invoice`)}>All</Button>
+            <Button className="mb-3 invoice" onClick={() => this.props.history.push(`/create-Invoice`)}>Paid</Button>
+            <Button className="mb-3 invoice" onClick={() => this.props.history.push(`/create-Invoice`)}>Unpaid</Button>
+            <Button className="mb-3 invoice" onClick={() => this.props.history.push(`/create-Invoice`)}>Partially Paid</Button>
+            <BootstrapTable data={invoiceList} version="4" striped hover pagination={paginationFactory(this.options)} totalSize={invoiceList ? invoiceList.length : 0} >
+              <TableHeaderColumn isKey dataField="bankAccountName">Ref Number</TableHeaderColumn>
+              <TableHeaderColumn dataField="accountNumber" >Date</TableHeaderColumn>
+              <TableHeaderColumn dataField="swiftCode" >Due Date</TableHeaderColumn>
+              <TableHeaderColumn dataFormat={this.setStatus} >Contact Name</TableHeaderColumn>
+              <TableHeaderColumn dataField="openingBalance" >No Of Items</TableHeaderColumn>
+              <TableHeaderColumn dataField="openingBalance" >Total Cost</TableHeaderColumn>
               <TableHeaderColumn dataFormat={this.bankAccounttActions}>Action</TableHeaderColumn>
             </BootstrapTable>
           </CardBody>
@@ -134,4 +139,4 @@ class BankAccount extends Component {
   }
 }
 
-export default BankAccount;
+export default Taxes;
