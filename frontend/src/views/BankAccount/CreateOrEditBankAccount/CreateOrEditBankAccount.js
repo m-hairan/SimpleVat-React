@@ -25,14 +25,20 @@ class CreateOrEditBankAccount extends Component {
 
     this.state = {
       countryValue: "",
+      currencyValue: "",
       selectedCountry: {},
+      selectedCurrency: {},
       countryList: [],
+      currencylist: [],
       accountTypeList: [],
       vatCategoryList: [],
       bankData: {
         countryName: "",
-        primaryAccount: "Y",
-        personalAccount: "N"
+        currencyName: "",
+        primaryAccount: "true",
+        personalCorporateAccountInd: "C",
+        openingBalance: "",
+        accountType: {}
       },
       collapse: true,
       loading: false,
@@ -60,7 +66,7 @@ class CreateOrEditBankAccount extends Component {
           }
         })
         .then(data => {
-          this.setState({ transactionData: data });
+          this.setState({ bankData: data });
         });
     }
   }
@@ -80,6 +86,21 @@ class CreateOrEditBankAccount extends Component {
       });
   };
 
+  getCurrencyListData = (currencyStr) => {
+    const res = sendRequest(`rest/bank/getcurrenncy?currencyStr=${currencyStr}`, "get", "");
+    res
+      .then(res => {
+        if (res.status === 200) {
+          this.setState({ loading: false });
+          return res.json();
+        }
+      })
+      .then(data => {
+        this.setState({ currencylist: data })
+        return data;
+      });
+  };
+
   getAccountType = () => {
     const res = sendRequest(`rest/bank/getaccounttype`, "get", "");
     res
@@ -90,14 +111,14 @@ class CreateOrEditBankAccount extends Component {
         }
       })
       .then(data => {
-        this.setState({ accountTypeList: data });
+        this.setState({ accountTypeList: data, bankData: { ...this.state.bankData, accountType: data[0] } });
       });
   };
 
   handleChange = (e, name) => {
     this.setState({
-      transactionData: _.set(
-        { ...this.state.transactionData },
+      bankData: _.set(
+        { ...this.state.bankData },
         e.target.name && e.target.name !== "" ? e.target.name : name,
         e.target.type === "checkbox" ? e.target.checked : e.target.value
       )
@@ -110,33 +131,44 @@ class CreateOrEditBankAccount extends Component {
     });
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e, status) => {
     this.setState({ loading: true });
     e.preventDefault();
-    const { } = this.state.transactionData;
+    const { accountName, bankName, personalCorporateAccountInd, primaryAccount, accountNumber, IBANNumber, swiftCode, accountType, countryName, currencyName } = this.state.bankData;
+    let bal = this.state.bankData.openingBalance.split();
     const postObj = {
-
+      bankAccountId: "0",
+      bankAccountName: accountName,
+      bankName,
+      bankCountry: this.state.selectedCountry.countryCode,
+      personalCorporateAccountInd,
+      isprimaryAccountFlag: primaryAccount,
+      bankAccountCurrency: this.state.selectedCurrency.currencyCode,
+      bankAccountStatus: accountType.id,
+      // bankAccountStatus: this.state.bankData.accountType instanceof Object ? this.state.bankData.accountType : JSON.parse(this.state.bankData.accountType),
+      openingBalance: bal[1],
+      accountNumber,
+      ibanNumber: IBANNumber,
+      swiftCode
     };
-    console.log(postObj);
-    //  const res = sendRequest(
-    //   `rest//transaction/savetransaction?id=1`,
-    //   "post",
-    //   "",
-    //   postObj
-    // );
-    // res.then(res => {
-    //   if (res.status === 200) {
-    //     this.success();
-    //     this.props.history.push("settings/transaction-category");
-    //   }
-    // });
+    const res = sendRequest(
+      `rest/bank/savebank?id=1`,
+      "post",
+      postObj
+    );
+    res.then(res => {
+      if (res.status === 200) {
+        this.success();
+        this.props.history.push("bankAccount");
+      }
+    });
   };
 
   toggle = () => {
     this.setState({ collapse: !this.state.collapse });
   }
 
-  getSuggestions = value => {
+  getCountrySuggestions = value => {
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
 
@@ -151,44 +183,90 @@ class CreateOrEditBankAccount extends Component {
       )
   };
 
-  onSuggestionsFetchRequested = ({ value }) => {
+  onCountrySuggestionsFetchRequested = ({ value }) => {
     this.setState({
-      countryList: this.getSuggestions(value)
+      countryList: this.getCountrySuggestions(value)
     });
   };
 
-  onSuggestionsClearRequested = () => {
+  onCountrySuggestionsClearRequested = () => {
     this.setState({
       countryList: []
     });
   };
 
-  getSuggestionValue = suggestion => suggestion.countryFullName;
+  getCountrySuggestionValue = suggestion => suggestion.countryFullName;
 
-  onSuggestionSelected = (e, val) => {
-    console.log("val ==> ", val)
+  onCountrySuggestionSelected = (e, val) => {
     this.setState({ selectedCountry: val.suggestion });
   };
 
-  renderSuggestion = suggestion => <div>{suggestion.countryFullName}</div>;
+  renderCountrySuggestion = suggestion => <div>{suggestion.countryFullName}</div>;
 
   onCountryChange = (event, { newValue }) => {
-    console.log(newValue);
     this.setState({
       bankData: { ...this.state.bankData, countryName: newValue }
     });
   };
 
+  getCurrencySuggestions = value => {
+    const inputValue = value.trim().toLowerCase();
+    const inputLength = inputValue.length;
+
+    this.getCurrencyListData(inputValue);
+    return inputLength === 0
+      ? []
+      : this.state.currencylist.filter(
+        transaction =>
+          transaction.currencyName
+            .toLowerCase()
+            .slice(0, inputLength) === inputValue
+      )
+  };
+
+  onCurrencySuggestionsFetchRequested = ({ value }) => {
+    this.setState({
+      currencylist: this.getCurrencySuggestions(value)
+    });
+  };
+
+  onCurrencySuggestionsClearRequested = () => {
+    this.setState({
+      currencylist: []
+    });
+  };
+
+  getCurrencySuggestionValue = suggestion => suggestion.description;
+
+  onCurrencySuggestionSelected = (e, val) => {
+    this.setState({ selectedCurrency: val.suggestion });
+    this.setState({ bankData: { ...this.state.bankData, currencyName: val.suggestion.description, openingBalance: `${val.suggestion.currencySymbol} ` } });
+  };
+
+  renderCurrencySuggestion = suggestion => <div>{suggestion.description}</div>;
+
+  onCurrencyChange = (event, { newValue }) => {
+    this.setState({
+      bankData: { ...this.state.bankData, currencyName: newValue }
+    });
+  };
+
   render() {
-    const { loading, countryList, accountTypeList } = this.state;
-    const { id, countryName, primaryAccount, personalAccount, accountType, bankName, accountNumber, swiftCode, IBANNumber } = this.state.bankData
+    const { loading, countryList, accountTypeList, currencylist, selectedCurrency } = this.state;
+    const { id, countryName, accountName, currencyName, primaryAccount, personalCorporateAccountInd, accountType, bankName, accountNumber, swiftCode, IBANNumber, openingBalance } = this.state.bankData
       ? this.state.bankData
       : {};
-    const { currencyCode } = this.state.selectedCountry;
-    const inputProps = {
+
+    const countryInputProps = {
       placeholder: "Type Country Name",
       value: countryName,
       onChange: this.onCountryChange
+    };
+
+    const currencyInputProps = {
+      placeholder: "Type Currency Name",
+      value: currencyName,
+      onChange: this.onCurrencyChange
     };
     return (
       <div className="animated fadeIn">
@@ -199,12 +277,7 @@ class CreateOrEditBankAccount extends Component {
           <div className="create-bank-wrapper">
             <Row >
               <Col xs="12">
-                <Form
-                  action=""
-                  method="post"
-                  encType="multipart/form-data"
-                  className="form-horizontal"
-                >
+                <Form onSubmit={this.handleSubmit} name="simpleForm">
                   <Card>
                     <CardHeader> Bank Account</CardHeader>
                     <CardBody>
@@ -220,6 +293,7 @@ class CreateOrEditBankAccount extends Component {
                               name="accountName"
                               placeholder="Enter Account Name"
                               required
+                              value={accountName}
                               onChange={this.handleChange}
                             />
                           </FormGroup>
@@ -229,17 +303,17 @@ class CreateOrEditBankAccount extends Component {
                             <Label htmlFor="select">Currency</Label>
                             <Autosuggest
                               className="autoSuggest"
-                              suggestions={countryList}
+                              suggestions={currencylist}
                               onSuggestionsFetchRequested={
-                                this.onSuggestionsFetchRequested
+                                this.onCurrencySuggestionsFetchRequested
                               }
                               onSuggestionsClearRequested={
-                                this.onSuggestionsClearRequested
+                                this.onCurrencySuggestionsClearRequested
                               }
-                              getSuggestionValue={this.getSuggestionValue}
-                              onSuggestionSelected={this.onSuggestionSelected}
-                              renderSuggestion={this.renderSuggestion}
-                              inputProps={inputProps}
+                              getSuggestionValue={this.getCurrencySuggestionValue}
+                              onSuggestionSelected={this.onCurrencySuggestionSelected}
+                              renderSuggestion={this.renderCurrencySuggestion}
+                              inputProps={currencyInputProps}
                             />
                           </FormGroup>
                         </Col>
@@ -251,7 +325,7 @@ class CreateOrEditBankAccount extends Component {
                               id="openingBalance"
                               name="openingBalance"
                               placeholder="Enter Openning Balance"
-                              value={`${currencyCode ? currencyCode.currencySymbol : ""} `}
+                              value={openingBalance}
                               required
                               onChange={this.handleChange}
                             />
@@ -262,22 +336,22 @@ class CreateOrEditBankAccount extends Component {
                         <Col md="4">
                           <Label htmlFor="select" className="d-block">Is this your primary account?</Label>
                           <FormGroup check inline>
-                            <Input className="form-check-input" type="radio" id="inline-radio1" name="primaryAccount" value="Y" onChange={this.handleChange} checked={primaryAccount === "Y"} />
+                            <Input className="form-check-input" type="radio" id="inline-radio1" name="primaryAccount" value="true" onChange={this.handleChange} checked={primaryAccount === "true"} />
                             <Label className="form-check-label" check htmlFor="inline-radio1">Yes</Label>
                           </FormGroup>
                           <FormGroup check inline>
-                            <Input className="form-check-input" type="radio" id="inline-radio2" name="primaryAccount" value="N" onChange={this.handleChange} checked={primaryAccount === "N"} />
+                            <Input className="form-check-input" type="radio" id="inline-radio2" name="primaryAccount" value="false" onChange={this.handleChange} checked={primaryAccount === "false"} />
                             <Label className="form-check-label" check htmlFor="inline-radio2">No</Label>
                           </FormGroup>
                         </Col>
                         <Col md="4">
                           <Label htmlFor="select" className="d-block">Is this your personal account?</Label>
                           <FormGroup check inline>
-                            <Input className="form-check-input" type="radio" id="inline-radio1" name="personalAccount" value="Y" onChange={this.handleChange} checked={personalAccount === "Y"} />
+                            <Input className="form-check-input" type="radio" id="inline-radio1" name="personalCorporateAccountInd" value="P" onChange={this.handleChange} checked={personalCorporateAccountInd === "P"} />
                             <Label className="form-check-label" check htmlFor="inline-radio1">Yes</Label>
                           </FormGroup>
                           <FormGroup check inline>
-                            <Input className="form-check-input" type="radio" id="inline-radio2" name="personalAccount" value="N" onChange={this.handleChange} checked={personalAccount === "N"} />
+                            <Input className="form-check-input" type="radio" id="inline-radio2" name="personalCorporateAccountInd" value="C" onChange={this.handleChange} checked={personalCorporateAccountInd === "C"} />
                             <Label className="form-check-label" check htmlFor="inline-radio2">No</Label>
                           </FormGroup>
                         </Col>
@@ -293,6 +367,7 @@ class CreateOrEditBankAccount extends Component {
                               required
                             >
                               {accountTypeList.map((item, index) => (
+                                // <option key={index} value={JSON.stringify(item)}>
                                 <option key={index} value={item.id}>
                                   {" "}
                                   {item.name}
@@ -374,7 +449,7 @@ class CreateOrEditBankAccount extends Component {
                                 type="text"
                                 id="IBANNumber"
                                 name="IBANNumber"
-                                placeholder="Text"
+                                placeholder="Enter IBAN Number"
                                 value={IBANNumber}
                                 onChange={this.handleChange}
                                 required
@@ -386,14 +461,28 @@ class CreateOrEditBankAccount extends Component {
                               <Label htmlFor="text-input">
                                 Country
                               </Label>
-                              <Input
+                              <Autosuggest
+                                className="autoSuggest"
+                                suggestions={countryList}
+                                onSuggestionsFetchRequested={
+                                  this.onCountrySuggestionsFetchRequested
+                                }
+                                onSuggestionsClearRequested={
+                                  this.onCountrySuggestionsClearRequested
+                                }
+                                getSuggestionValue={this.getCountrySuggestionValue}
+                                onSuggestionSelected={this.onCountrySuggestionSelected}
+                                renderSuggestion={this.renderCountrySuggestion}
+                                inputProps={countryInputProps}
+                              />
+                              {/* <Input
                                 type="text"
                                 id="text-input"
                                 name="text-input"
-                                placeholder="Text"
+                                placeholder="Enter Country"
                                 onChange={this.handleChange}
                                 required
-                              />
+                              /> */}
                             </FormGroup>
                           </Col>
                         </Row>
@@ -402,10 +491,12 @@ class CreateOrEditBankAccount extends Component {
                   </Card>
                   <Row className="bank-btn-wrapper">
                     <FormGroup>
-                      <Button type="submit" size="sm" color="primary">
+                      <Button type="submit" size="sm" color="primary" value="Submit" name="simpleForm">
                         <i className="fa fa-dot-circle-o "></i> Save
                       </Button>
-                      <Button type="submit" size="sm" color="primary">
+                    </FormGroup>
+                    <FormGroup>
+                      <Button type="submit" size="sm" color="primary" value="SubmitAndAdd" name="simpleForm">
                         <i className="fa fa-dot-circle-o"></i> Save & Add More
                       </Button>
                     </FormGroup>
