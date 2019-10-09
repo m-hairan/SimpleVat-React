@@ -19,8 +19,34 @@ export default {
       // },
     },
     {
+      name: 'Expense',
+      url: '/Expense',
+      icon: 'icon-settings',
+      children: [
+        {
+          name: 'General Settings',
+          url: '/settings/general',
+          icon: 'icon-wrench',
+        },
+        {
+          name: 'Vat Category',
+          url: '/settings/vat-category',
+          icon: 'icon-briefcase',
+        },
+      ],
+    },
+    {
       name: 'BankAccount',
       url: '/bankAccount',
+      icon: 'icon-file',
+      // badge: {
+      //   variant: 'info',
+      //   text: 'NEW',
+      // },
+    },
+    {
+      name: 'Taxes',
+      url: '/Taxes',
       icon: 'icon-file',
       // badge: {
       //   variant: 'info',

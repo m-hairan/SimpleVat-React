@@ -48,3 +48,12 @@
 .address{
     margin-top: 30px;
 }
+.modal-header{
+  border: none !important;
+}
+.modal-footer{
+  border: none !important;
+}
+.submit-invoice{
+  margin-right: 10px;
+}

@@ -9,6 +9,10 @@ import {
   FormGroup,
   Label,
   Input,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
   Form,
   Collapse
 } from "reactstrap";
@@ -17,18 +21,29 @@ import sendRequest from "../../../xhrRequest";
 import _ from "lodash";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Autosuggest from 'react-autosuggest';
 
 class CreateOrEditInvoice extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      transactionCategoryList: [],
+      value: "",
+      suggestions: [],
+      projectList: [],
       vatCategoryList: [],
       transactionData: {},
       collapse: true,
-      loading: false
+      loading: false,
+      large: false
     };
+    this.toggleLarge = this.toggleLarge.bind(this);
+  }
+
+  toggleLarge() {
+    this.setState({
+      large: !this.state.large
+    });
   }
 
   componentDidMount() {
@@ -55,6 +70,26 @@ class CreateOrEditInvoice extends Component {
         });
     }
   }
+
+  // Teach Autosuggest how to calculate suggestions for any given input value.
+  getSuggestions = value => {
+    const inputValue = value.trim().toLowerCase();
+    const inputLength = inputValue.length;
+
+    return inputLength === 0
+      ? []
+      :this.state.projectList.filter(
+          lang => lang.name.toLowerCase().slice(0, inputLength) === inputValue
+        );
+  };
+
+  // When suggestion is clicked, Autosuggest needs to populate the input
+  // based on the clicked suggestion. Teach Autosuggest how to calculate the
+  // input value for every given suggestion.
+  getSuggestionValue = suggestion => suggestion.name;
+
+  // Use your imagination to render suggestions.
+  renderSuggestion = suggestion => <div>{suggestion.name}</div>;
 
   getTransactionListData = () => {
     const res = sendRequest(
@@ -140,11 +175,39 @@ class CreateOrEditInvoice extends Component {
     this.setState({ collapse: !this.state.collapse });
   };
 
+  onChange = (event, { newValue }) => {
+    this.setState({
+      value: newValue
+    });
+  };
+  // Autosuggest will call this function every time you need to update suggestions.
+  // You already implemented this logic above, so just use it.
+  onSuggestionsFetchRequested = ({ value }) => {
+    this.setState({
+      suggestions: this.getSuggestions(value)
+    });
+  };
+
+  // Autosuggest will call this function every time you need to clear suggestions.
+  onSuggestionsClearRequested = () => {
+    this.setState({
+      suggestions: []
+    });
+  };
+
   render() {
     const { loading } = this.state;
     const { id, name, vat } = this.state.transactionData
       ? this.state.transactionData
       : {};
+
+    const { value, suggestions } = this.state;
+
+    // Autosuggest will pass through all these props to the input.
+    const inputProps = {
+      value,
+      onChange: this.onChange
+    };
     return (
       <div className="animated fadeIn">
         <Card>
@@ -176,17 +239,18 @@ class CreateOrEditInvoice extends Component {
                         <Col md="4">
                           <FormGroup>
                             <Label htmlFor="select">Project</Label>
-                            <Input
-                              type="select"
-                              name="select"
-                              id="select"
-                              required
-                            >
-                              <option value="0">Please select</option>
-                              <option value="1">Option #1</option>
-                              <option value="2">Option #2</option>
-                              <option value="3">Option #3</option>
-                            </Input>
+                            <Autosuggest
+                              suggestions={suggestions}
+                              onSuggestionsFetchRequested={
+                                this.onSuggestionsFetchRequested
+                              }
+                              onSuggestionsClearRequested={
+                                this.onSuggestionsClearRequested
+                              }
+                              getSuggestionValue={this.getSuggestionValue}
+                              renderSuggestion={this.renderSuggestion}
+                              inputProps={inputProps}
+                            />
                           </FormGroup>
                         </Col>
                       </Row>
@@ -209,13 +273,12 @@ class CreateOrEditInvoice extends Component {
                         </Col>
                         <Col md="4">
                           <Button
-                            type="submit"
                             size="sm"
                             color="primary"
                             onClick={this.toggleLarge}
                             className="mr-1 add-btn"
                           >
-                            <i class="fas fa-plus"></i> Add
+                            <i className="fas fa-plus"></i> Add
                           </Button>
                         </Col>
                       </Row>
@@ -225,22 +288,161 @@ class CreateOrEditInvoice extends Component {
                         className={"modal-lg " + this.props.className}
                       >
                         <ModalHeader toggle={this.toggleLarge}>
-                          Modal title
+                          New Contact
                         </ModalHeader>
                         <ModalBody>
-                          Lorem ipsum dolor sit amet, consectetur adipisicing
-                          elit, sed do eiusmod tempor incididunt ut labore et
-                          dolore magna aliqua. Ut enim ad minim veniam, quis
-                          nostrud exercitation ullamco laboris nisi ut aliquip
-                          ex ea commodo consequat. Duis aute irure dolor in
-                          reprehenderit in voluptate velit esse cillum dolore eu
-                          fugiat nulla pariatur. Excepteur sint occaecat
-                          cupidatat non proident, sunt in culpa qui officia
-                          deserunt mollit anim id est laborum.
+                          <Row className="row-wrapper">
+                            <Col md="4">
+                              <FormGroup>
+                                <Label htmlFor="text-input">Title</Label>
+                                <Input
+                                  type="text"
+                                  id="text-input"
+                                  name="text-input"
+                                  required
+                                />
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                          <Row className="row-wrapper">
+                            <Col md="4">
+                              <FormGroup>
+                                <Label htmlFor="text-input">First Name</Label>
+                                <Input
+                                  type="text"
+                                  id="text-input"
+                                  name="text-input"
+                                  required
+                                />
+                              </FormGroup>
+                            </Col>
+                            <Col md="4">
+                              <FormGroup>
+                                <Label htmlFor="text-input">
+                                  Middle Number
+                                </Label>
+                                <Input
+                                  type="text"
+                                  id="text-input"
+                                  name="text-input"
+                                  required
+                                />
+                              </FormGroup>
+                            </Col>
+                            <Col md="4">
+                              <FormGroup>
+                                <Label htmlFor="text-input">Last Name</Label>
+                                <Input
+                                  type="text"
+                                  id="text-input"
+                                  name="text-input"
+                                  required
+                                />
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                          <Row className="row-wrapper">
+                            <Col md="4">
+                              <FormGroup>
+                                <Label htmlFor="text-input">Email</Label>
+                                <Input
+                                  type="text"
+                                  id="text-input"
+                                  name="text-input"
+                                  required
+                                />
+                              </FormGroup>
+                            </Col>
+                            <Col md="4">
+                              <FormGroup>
+                                <Label htmlFor="text-input">Address1</Label>
+                                <Input
+                                  type="text"
+                                  id="text-input"
+                                  name="text-input"
+                                  required
+                                />
+                              </FormGroup>
+                            </Col>
+                            <Col md="4">
+                              <FormGroup>
+                                <Label htmlFor="text-input">Address2</Label>
+                                <Input
+                                  type="text"
+                                  id="text-input"
+                                  name="text-input"
+                                  required
+                                />
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                          <Row className="row-wrapper">
+                            <Col md="4">
+                              <FormGroup>
+                                <Label htmlFor="text-input">State Region</Label>
+                                <Input
+                                  type="text"
+                                  id="text-input"
+                                  name="text-input"
+                                  required
+                                />
+                              </FormGroup>
+                            </Col>
+                            <Col md="4">
+                              <FormGroup>
+                                <Label htmlFor="text-input">City</Label>
+                                <Input
+                                  type="text"
+                                  id="text-input"
+                                  name="text-input"
+                                  required
+                                />
+                              </FormGroup>
+                            </Col>
+                            <Col md="4">
+                              <FormGroup>
+                                <Label htmlFor="text-input">Country</Label>
+                                <Input
+                                  type="text"
+                                  id="text-input"
+                                  name="text-input"
+                                  required
+                                />
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                          <Row className="row-wrapper">
+                            <Col md="4">
+                              <FormGroup>
+                                <Label htmlFor="text-input">
+                                  Currency Code
+                                </Label>
+                                <Input
+                                  type="text"
+                                  id="text-input"
+                                  name="text-input"
+                                  required
+                                />
+                              </FormGroup>
+                            </Col>
+                            <Col md="4">
+                              <FormGroup>
+                                <Label htmlFor="text-input">
+                                  Billing Email
+                                </Label>
+                                <Input
+                                  type="text"
+                                  id="text-input"
+                                  name="text-input"
+                                  required
+                                />
+                              </FormGroup>
+                            </Col>
+                          </Row>
                         </ModalBody>
                         <ModalFooter>
                           <Button color="primary" onClick={this.toggleLarge}>
-                            Do Something
+                            Save
                           </Button>{" "}
                           <Button color="secondary" onClick={this.toggleLarge}>
                             Cancel
@@ -323,7 +525,7 @@ class CreateOrEditInvoice extends Component {
                         <Row className="row-wrapper">
                           <Col md="4">
                             <FormGroup>
-                              <Label htmlFor="text-input">Bank Name</Label>
+                              <Label htmlFor="text-input">Invoice Date</Label>
                               <Input
                                 type="text"
                                 id="text-input"
@@ -335,7 +537,7 @@ class CreateOrEditInvoice extends Component {
                           </Col>
                           <Col md="4">
                             <FormGroup>
-                              <Label htmlFor="text-input">Account Number</Label>
+                              <Label htmlFor="text-input">Invoice Due Days</Label>
                               <Input
                                 type="text"
                                 id="text-input"
@@ -347,7 +549,33 @@ class CreateOrEditInvoice extends Component {
                           </Col>
                           <Col md="4">
                             <FormGroup>
-                              <Label htmlFor="text-input">Swift Code</Label>
+                              <Label htmlFor="text-input">Invoice Due Date</Label>
+                              <Input
+                                type="text"
+                                id="text-input"
+                                name="text-input"
+                                placeholder="Text"
+                                required
+                              />
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        <Row className="row-wrapper">
+                          <Col md="4">
+                            <FormGroup>
+                              <Label htmlFor="text-input">Currency</Label>
+                              <Input
+                                type="text"
+                                id="text-input"
+                                name="text-input"
+                                placeholder="Text"
+                                required
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col md="4">
+                            <FormGroup>
+                              <Label htmlFor="text-input">Contract PO Number</Label>
                               <Input
                                 type="text"
                                 id="text-input"
@@ -361,10 +589,30 @@ class CreateOrEditInvoice extends Component {
                       </CardBody>
                     </Collapse>
                   </Card>
+                  <Card>
+                    <CardHeader>
+                    Invoice Item Details
+                      <div className="card-header-actions">
+                        <Button
+                          color="link"
+                          className="card-header-action btn-minimize"
+                          data-target="#collapseExample"
+                          onClick={this.toggle}
+                        >
+                          <i className="icon-arrow-up"></i>
+                        </Button>
+                      </div>
+                    </CardHeader>
+                    <Collapse isOpen={this.state.collapse} id="collapseExample">
+                      <CardBody>
+                        
+                      </CardBody>
+                    </Collapse>
+                  </Card>
                   <Row className="bank-btn-wrapper">
                     <FormGroup>
-                      <Button type="submit" size="sm" color="primary">
-                        <i className="fa fa-dot-circle-o"></i> Submit
+                      <Button type="submit" className="submit-invoice" size="sm" color="primary">
+                        <i className="fa fa-dot-circle-o "></i> Submit
                       </Button>
                       <Button type="submit" size="sm" color="primary">
                         <i className="fa fa-dot-circle-o"></i> Submit
