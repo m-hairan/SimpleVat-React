@@ -61,7 +61,7 @@ class TransactionCategory extends Component {
 
   getTransactionListData = () => {
     const res = sendRequest(
-      `transaction/gettransactioncategory`,
+      `rest/transaction/gettransactioncategory`,
       "get",
       "",
       ""
@@ -130,7 +130,7 @@ class TransactionCategory extends Component {
     this.setState({ loading: true });
     this.setState({ openDeleteModal: false });
     const res = sendRequest(
-      `transaction/deletetransactioncategory?id=${this.state.selectedData.transactionCategoryId}`,
+      `rest/transaction/deletetransactioncategory?id=${this.state.selectedData.transactionCategoryId}`,
       "delete",
       "",
       ""

@@ -20,7 +20,7 @@ class DefaultHeader extends Component {
     e.preventDefault()
     // this.props.history.push('/login');
     sessionStorage.clear();
-    window.location.replace('/#/login')
+    window.location.replace('/login')
   }
 
   render() {
