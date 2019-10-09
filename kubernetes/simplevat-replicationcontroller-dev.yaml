@@ -23,7 +23,7 @@ spec:
           - containerPort: 8080
           readinessProbe:
             httpGet:
-              path: /public/healthz/index.html
+              path: /healthz/index.html
               port: 8080
             periodSeconds: 1
             timeoutSeconds: 1
