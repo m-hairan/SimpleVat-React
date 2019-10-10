@@ -8,7 +8,7 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-class Expense extends Component {
+class Product extends Component {
     constructor(props) {
         super(props);
 
@@ -105,15 +105,15 @@ class Expense extends Component {
                 <ToastContainer position="top-right" autoClose={5000} style={containerStyle} />
                 <Card>
                     <CardHeader>
-                        <i className="icon-menu"></i>Expenses
+                        <i className="icon-menu"></i>Product And Service
                     </CardHeader>
                     <CardBody>
-                        <Button className="mb-3" onClick={() => this.props.history.push(`/create-Expense`)}>New</Button>
+                        <Button className="mb-3" onClick={() => this.props.history.push(`/create-Product`)}>New</Button>
                         <BootstrapTable data={vatCategoryList} version="4" striped hover pagination={paginationFactory(this.options)} totalSize={vatCategoryList ? vatCategoryList.length : 0} >
-                            <TableHeaderColumn isKey dataField="name">Reciept Number</TableHeaderColumn>
-                            <TableHeaderColumn >Amount</TableHeaderColumn>
+                            <TableHeaderColumn isKey dataField="name">Name</TableHeaderColumn>
+                            <TableHeaderColumn>Product Code</TableHeaderColumn>
                             <TableHeaderColumn >Description</TableHeaderColumn>
-                            <TableHeaderColumn dataField="vat" dataFormat={this.vatPercentageFormat}>Expense Date</TableHeaderColumn>
+                            <TableHeaderColumn dataField="vat" dataFormat={this.vatPercentageFormat}>Vat Percentage</TableHeaderColumn>
                             <TableHeaderColumn dataFormat={this.vatActions}>Action</TableHeaderColumn>
                         </BootstrapTable>
                     </CardBody>
@@ -142,4 +142,4 @@ class Expense extends Component {
     }
 }
 
-export default Expense;
+export default Product;

@@ -15,15 +15,17 @@ import {
 import "react-bootstrap-table/dist/react-bootstrap-table-all.min.css";
 import _ from "lodash";
 import "react-toastify/dist/ReactToastify.css";
-import Autosuggest from 'react-autosuggest';
 
-class CreateOrEditExpense extends Component {
+class CreateOrEditUsers extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       value: "",
       suggestions: [],
+      projectList: [],
+      vatCategoryList: [],
+      transactionData: {},
       collapse: true,
       loading: false,
       large: false
@@ -37,7 +39,6 @@ class CreateOrEditExpense extends Component {
     });
   }
 
- 
   getSuggestions = value => {
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
@@ -45,13 +46,14 @@ class CreateOrEditExpense extends Component {
     return inputLength === 0
       ? []
       : this.state.projectList.filter(
-        lang => lang.name.toLowerCase().slice(0, inputLength) === inputValue
-      );
+          lang => lang.name.toLowerCase().slice(0, inputLength) === inputValue
+        );
   };
 
   getSuggestionValue = suggestion => suggestion.name;
 
   renderSuggestion = suggestion => <div>{suggestion.name}</div>;
+
 
   handleChange = (e, name) => {
     this.setState({
@@ -62,6 +64,7 @@ class CreateOrEditExpense extends Component {
       )
     });
   };
+
 
   toggle = () => {
     this.setState({ collapse: !this.state.collapse });
@@ -84,17 +87,11 @@ class CreateOrEditExpense extends Component {
   };
 
   render() {
-  
-    const { value, suggestions } = this.state;
-
-    const inputProps = {
-      value,
-      onChange: this.onChange
-    };
+ 
     return (
       <div className="animated fadeIn">
         <Card>
-          <CardHeader>New Expense</CardHeader>
+          <CardHeader>New User</CardHeader>
           <div className="create-bank-wrapper">
             <Row>
               <Col xs="12">
@@ -105,95 +102,105 @@ class CreateOrEditExpense extends Component {
                   className="form-horizontal"
                 >
                   <Card>
-                    <CardHeader>Expense Details</CardHeader>
+                    <CardHeader>Basic Detail</CardHeader>
                     <CardBody>
                       <Row className="row-wrapper">
                         <Col md="4">
                           <FormGroup>
-                            <Label htmlFor="text-input">Cliement</Label>
+                            <Label htmlFor="text-input">First Name</Label>
                             <Input
                               type="text"
-                              id="Cliement"
-                              name="Cliement"
+                              id="text-input"
+                              name="text-input"
                               required
                             />
                           </FormGroup>
                         </Col>
                         <Col md="4">
                           <FormGroup>
-                            <Label htmlFor="select">Category</Label>
-                            <Autosuggest
-                              suggestions={suggestions}
-                              onSuggestionsFetchRequested={
-                                this.onSuggestionsFetchRequested
-                              }
-                              onSuggestionsClearRequested={
-                                this.onSuggestionsClearRequested
-                              }
-                              getSuggestionValue={this.getSuggestionValue}
-                              renderSuggestion={this.renderSuggestion}
-                              inputProps={inputProps}
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col md="4">
-                          <FormGroup>
-                            <Label htmlFor="select">Expense Date</Label>
-                            <Autosuggest
-                              suggestions={suggestions}
-                              onSuggestionsFetchRequested={
-                                this.onSuggestionsFetchRequested
-                              }
-                              onSuggestionsClearRequested={
-                                this.onSuggestionsClearRequested
-                              }
-                              getSuggestionValue={this.getSuggestionValue}
-                              renderSuggestion={this.renderSuggestion}
-                              inputProps={inputProps}
+                            <Label htmlFor="text-input">Last Name</Label>
+                            <Input
+                              type="text"
+                              id="text-input"
+                              name="text-input"
+                              required
                             />
                           </FormGroup>
                         </Col>
                       </Row>
-                      <Row>
+                      <Row className="row-wrapper">
                         <Col md="4">
                           <FormGroup>
-                            <Label htmlFor="select">Currency</Label>
+                            <Label htmlFor="text-input">Email Id</Label>
                             <Input
-                              type="select"
-                              name="Currency"
-                              id="Currency"
+                              type="text"
+                              id="text-input"
+                              name="text-input"
                               required
-                            >
-                              <option value="0">Please select</option>
-                              <option value="1">Option #1</option>
-                              <option value="2">Option #2</option>
-                              <option value="3">Option #3</option>
-                            </Input>
+                            />
                           </FormGroup>
                         </Col>
                         <Col md="4">
                           <FormGroup>
-                            <Label htmlFor="select">Project</Label>
+                            <Label htmlFor="text-input">Date Of Birth</Label>
                             <Input
                               type="text"
-                              name="Project"
-                              id="Project"
+                              id="text-input"
+                              name="text-input"
                               required
                             />
-
                           </FormGroup>
                         </Col>
                       </Row>
-                      <Row>
-                        <Col md="8">
+                      <Row className="row-wrapper">
+                        <Col md="4">
                           <FormGroup>
-                            <Label htmlFor="Description">Description</Label>
+                            <Label htmlFor="text-input">Role</Label>
                             <Input
-                              type="textarea"
-                              id="Description"
-                              name="Description"
+                              type="text"
+                              id="text-input"
+                              name="text-input"
                               required
                             />
+                          </FormGroup>
+                        </Col>
+                        <Col md="4">
+                          <FormGroup>
+                            <Label htmlFor="text-input">Status</Label>
+                            <Row className="row-wrapper">
+                              <FormGroup check inline>
+                                <Input
+                                  className="form-check-input"
+                                  type="radio"
+                                  id="inline-radio1"
+                                  name="inline-radios"
+                                  value="option1"
+                                />
+                                <Label
+                                  className="form-check-label"
+                                  check
+                                  htmlFor="inline-radio1"
+                                >
+                                  Active
+                                </Label>
+                              </FormGroup>
+                              <FormGroup check inline>
+                                <Input
+                                  className="form-check-input"
+                                  type="radio"
+                                  id="inline-radio2"
+                                  name="inline-radios"
+                                  value="option2"
+                                />
+                                <Label
+                                  className="form-check-label"
+                                  check
+                                  htmlFor="inline-radio2"
+                                >
+                                  Inactive
+                                </Label>
+                              </FormGroup>
+                            </Row>
                           </FormGroup>
                         </Col>
                       </Row>
@@ -201,7 +208,7 @@ class CreateOrEditExpense extends Component {
                   </Card>
                   <Card>
                     <CardHeader>
-                      Receipt
+                      Password
                       <div className="card-header-actions">
                         <Button
                           color="link"
@@ -216,58 +223,44 @@ class CreateOrEditExpense extends Component {
                     <Collapse isOpen={this.state.collapse} id="collapseExample">
                       <CardBody>
                         <Row className="row-wrapper">
-                         
-                          <Col md="6">
+                          <Col md="4">
                             <FormGroup>
-                              <Label htmlFor="text-input">Reciept Number</Label>
+                              <Label htmlFor="text-input">
+                                Password
+                              </Label>
                               <Input
                                 type="text"
-                                name="RecieptNumber"
-                                id="RecieptNumber"
+                                id="text-input"
+                                name="text-input"
                                 required
                               />
-                            
                             </FormGroup>
                           </Col>
-                          <Col md="6">
+                          <Col md="4">
                             <FormGroup>
-                              <Label htmlFor="text-input">Attachment Description</Label>
+                              <Label htmlFor="text-input">
+                                Confirm Password
+                              </Label>
                               <Input
                                 type="text"
-                                name="Description"
-                                id="Description"
+                                id="text-input"
+                                name="text-input"
                                 required
                               />
-                                
                             </FormGroup>
                           </Col>
                         </Row>
                       </CardBody>
                     </Collapse>
                   </Card>
-                  <Card>
-                    <CardHeader>
-                    Expense Item Details
-                      <div className="card-header-actions">
-                        <Button
-                          color="link"
-                          className="card-header-action btn-minimize"
-                          data-target="#collapseExample"
-                          onClick={this.toggle}
-                        >
-                          <i className="icon-arrow-up"></i>
-                        </Button>
-                      </div>
-                    </CardHeader>
-                    <Collapse isOpen={this.state.collapse} id="collapseExample">
-                      <CardBody>
-
-                      </CardBody>
-                    </Collapse>
-                  </Card>
                   <Row className="bank-btn-wrapper">
                     <FormGroup>
-                      <Button type="submit" className="submit-invoice" size="sm" color="primary">
+                      <Button
+                        type="submit"
+                        className="submit-invoice"
+                        size="sm"
+                        color="primary"
+                      >
                         <i className="fa fa-dot-circle-o "></i> Submit
                       </Button>
                       <Button type="submit" size="sm" color="primary">
@@ -285,4 +278,4 @@ class CreateOrEditExpense extends Component {
   }
 }
 
-export default CreateOrEditExpense;
+export default CreateOrEditUsers;

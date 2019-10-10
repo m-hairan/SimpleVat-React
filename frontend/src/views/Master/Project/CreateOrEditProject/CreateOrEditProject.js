@@ -17,12 +17,11 @@ import {
   Collapse
 } from "reactstrap";
 import "react-bootstrap-table/dist/react-bootstrap-table-all.min.css";
-import sendRequest from "../../../xhrRequest";
 import _ from "lodash";
 import "react-toastify/dist/ReactToastify.css";
 import Autosuggest from 'react-autosuggest';
 
-class CreateOrEditInvoice extends Component {
+class CreateOrEditProject extends Component {
   constructor(props) {
     super(props);
 
@@ -45,31 +44,6 @@ class CreateOrEditInvoice extends Component {
     });
   }
 
-  componentDidMount() {
-    this.getTransactionListData();
-    this.getvatListData();
-    const params = new URLSearchParams(this.props.location.search);
-    const id = params.get("id");
-    if (id) {
-      this.setState({ loading: true });
-      const res = sendRequest(
-        `/transaction/edittransactioncategory?id=${id}`,
-        "get",
-        ""
-      );
-      res
-        .then(res => {
-          if (res.status === 200) {
-            this.setState({ loading: false });
-            return res.json();
-          }
-        })
-        .then(data => {
-          this.setState({ transactionData: data });
-        });
-    }
-  }
-
   getSuggestions = value => {
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
@@ -81,42 +55,8 @@ class CreateOrEditInvoice extends Component {
         );
   };
 
-
   getSuggestionValue = suggestion => suggestion.name;
-
   renderSuggestion = suggestion => <div>{suggestion.name}</div>;
-
-  getTransactionListData = () => {
-    const res = sendRequest(
-      `transaction/gettransactioncategory`,
-      "get",
-      "",
-      ""
-    );
-    res
-      .then(res => {
-        if (res.status === 200) {
-          this.setState({ loading: false });
-          return res.json();
-        }
-      })
-      .then(data => {
-        this.setState({ transactionCategoryList: data });
-      });
-  };
-  getvatListData = () => {
-    const res = sendRequest(`/transaction/getvatcategories`, "get", "", "");
-    res
-      .then(res => {
-        if (res.status === 200) {
-          this.setState({ loading: false });
-          return res.json();
-        }
-      })
-      .then(data => {
-        this.setState({ vatCategoryList: data });
-      });
-  };
 
   handleChange = (e, name) => {
     this.setState({
@@ -128,6 +68,8 @@ class CreateOrEditInvoice extends Component {
     });
   };
 
+ 
+
   toggle = () => {
     this.setState({ collapse: !this.state.collapse });
   };
@@ -137,6 +79,7 @@ class CreateOrEditInvoice extends Component {
       value: newValue
     });
   };
+  
   onSuggestionsFetchRequested = ({ value }) => {
     this.setState({
       suggestions: this.getSuggestions(value)
@@ -150,9 +93,7 @@ class CreateOrEditInvoice extends Component {
   };
 
   render() {
-   
     const { value, suggestions } = this.state;
-
     const inputProps = {
       value,
       onChange: this.onChange
@@ -160,7 +101,7 @@ class CreateOrEditInvoice extends Component {
     return (
       <div className="animated fadeIn">
         <Card>
-          <CardHeader>New Invoice</CardHeader>
+          <CardHeader>New Project</CardHeader>
           <div className="create-bank-wrapper">
             <Row>
               <Col xs="12">
@@ -171,12 +112,12 @@ class CreateOrEditInvoice extends Component {
                   className="form-horizontal"
                 >
                   <Card>
-                    <CardHeader>Contact and Project Details</CardHeader>
+                    <CardHeader>Project Details</CardHeader>
                     <CardBody>
                       <Row className="row-wrapper">
                         <Col md="4">
                           <FormGroup>
-                            <Label htmlFor="text-input">Invoice Ref No.</Label>
+                            <Label htmlFor="text-input">Project Name</Label>
                             <Input
                               type="text"
                               id="text-input"
@@ -187,7 +128,7 @@ class CreateOrEditInvoice extends Component {
                         </Col>
                         <Col md="4">
                           <FormGroup>
-                            <Label htmlFor="select">Project</Label>
+                            <Label htmlFor="select">Contact</Label>
                             <Autosuggest
                               suggestions={suggestions}
                               onSuggestionsFetchRequested={
@@ -200,24 +141,6 @@ class CreateOrEditInvoice extends Component {
                               renderSuggestion={this.renderSuggestion}
                               inputProps={inputProps}
                             />
-                          </FormGroup>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col md="4">
-                          <FormGroup>
-                            <Label htmlFor="select">Contact</Label>
-                            <Input
-                              type="select"
-                              name="select"
-                              id="select"
-                              required
-                            >
-                              <option value="0">Please select</option>
-                              <option value="1">Option #1</option>
-                              <option value="2">Option #2</option>
-                              <option value="3">Option #3</option>
-                            </Input>
                           </FormGroup>
                         </Col>
                         <Col md="4">
@@ -400,9 +323,10 @@ class CreateOrEditInvoice extends Component {
                       </Modal>
                     </CardBody>
                   </Card>
+                
                   <Card>
                     <CardHeader>
-                      Shipping Details
+                    Project Details
                       <div className="card-header-actions">
                         <Button
                           color="link"
@@ -417,111 +341,6 @@ class CreateOrEditInvoice extends Component {
                     <Collapse isOpen={this.state.collapse} id="collapseExample">
                       <CardBody>
                         <Row className="row-wrapper">
-                          <Col md="4">
-                            <FormGroup check className="checkbox address">
-                              <Input
-                                className="form-check-input"
-                                type="checkbox"
-                                id="checkbox1"
-                                name="checkbox1"
-                                value="option1"
-                              />
-                              <Label
-                                check
-                                className="form-check-label"
-                                htmlFor="checkbox1"
-                              >
-                                Address is same as above Address
-                              </Label>
-                            </FormGroup>
-                          </Col>
-                          <Col md="4">
-                            <FormGroup>
-                              <Label htmlFor="text-input">Contact</Label>
-                              <Input
-                                type="select"
-                                name="select"
-                                id="select"
-                                required
-                              >
-                                <option value="0">Please select</option>
-                                <option value="1">Option #1</option>
-                                <option value="2">Option #2</option>
-                                <option value="3">Option #3</option>
-                              </Input>
-                            </FormGroup>
-                          </Col>
-                        </Row>
-                      </CardBody>
-                    </Collapse>
-                  </Card>
-                  <Card>
-                    <CardHeader>
-                      Invoice Details
-                      <div className="card-header-actions">
-                        <Button
-                          color="link"
-                          className="card-header-action btn-minimize"
-                          data-target="#collapseExample"
-                          onClick={this.toggle}
-                        >
-                          <i className="icon-arrow-up"></i>
-                        </Button>
-                      </div>
-                    </CardHeader>
-                    <Collapse isOpen={this.state.collapse} id="collapseExample">
-                      <CardBody>
-                        <Row className="row-wrapper">
-                          <Col md="4">
-                            <FormGroup>
-                              <Label htmlFor="text-input">Invoice Date</Label>
-                              <Input
-                                type="text"
-                                id="text-input"
-                                name="text-input"
-                                placeholder="Text"
-                                required
-                              />
-                            </FormGroup>
-                          </Col>
-                          <Col md="4">
-                            <FormGroup>
-                              <Label htmlFor="text-input">Invoice Due Days</Label>
-                              <Input
-                                type="text"
-                                id="text-input"
-                                name="text-input"
-                                placeholder="Text"
-                                required
-                              />
-                            </FormGroup>
-                          </Col>
-                          <Col md="4">
-                            <FormGroup>
-                              <Label htmlFor="text-input">Invoice Due Date</Label>
-                              <Input
-                                type="text"
-                                id="text-input"
-                                name="text-input"
-                                placeholder="Text"
-                                required
-                              />
-                            </FormGroup>
-                          </Col>
-                        </Row>
-                        <Row className="row-wrapper">
-                          <Col md="4">
-                            <FormGroup>
-                              <Label htmlFor="text-input">Currency</Label>
-                              <Input
-                                type="text"
-                                id="text-input"
-                                name="text-input"
-                                placeholder="Text"
-                                required
-                              />
-                            </FormGroup>
-                          </Col>
                           <Col md="4">
                             <FormGroup>
                               <Label htmlFor="text-input">Contract PO Number</Label>
@@ -529,32 +348,68 @@ class CreateOrEditInvoice extends Component {
                                 type="text"
                                 id="text-input"
                                 name="text-input"
-                                placeholder="Text"
+                                required
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col md="4">
+                            <FormGroup>
+                              <Label htmlFor="text-input">Vat Registration Number</Label>
+                              <Input
+                                type="text"
+                                id="text-input"
+                                name="text-input"
+                                required
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col md="4">
+                            <FormGroup>
+                              <Label htmlFor="text-input">Currency</Label>
+                              <Input
+                                type="text"
+                                id="text-input"
+                                name="text-input"
                                 required
                               />
                             </FormGroup>
                           </Col>
                         </Row>
-                      </CardBody>
-                    </Collapse>
-                  </Card>
-                  <Card>
-                    <CardHeader>
-                    Invoice Item Details
-                      <div className="card-header-actions">
-                        <Button
-                          color="link"
-                          className="card-header-action btn-minimize"
-                          data-target="#collapseExample"
-                          onClick={this.toggle}
-                        >
-                          <i className="icon-arrow-up"></i>
-                        </Button>
-                      </div>
-                    </CardHeader>
-                    <Collapse isOpen={this.state.collapse} id="collapseExample">
-                      <CardBody>
-                        
+                        <Row className="row-wrapper">
+                          <Col md="4">
+                            <FormGroup>
+                              <Label htmlFor="text-input">Expense Budget</Label>
+                              <Input
+                                type="text"
+                                id="text-input"
+                                name="text-input"
+                                required
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col md="4">
+                            <FormGroup>
+                              <Label htmlFor="text-input">Revenue Budget</Label>
+                              <Input
+                                type="text"
+                                id="text-input"
+                                name="text-input"
+                                required
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col md="4">
+                            <FormGroup>
+                              <Label htmlFor="text-input">Invoice Language</Label>
+                              <Input
+                                type="text"
+                                id="text-input"
+                                name="text-input"
+                                required
+                              />
+                            </FormGroup>
+                          </Col>
+                        </Row>
                       </CardBody>
                     </Collapse>
                   </Card>
@@ -578,4 +433,4 @@ class CreateOrEditInvoice extends Component {
   }
 }
 
-export default CreateOrEditInvoice;
+export default CreateOrEditProject;

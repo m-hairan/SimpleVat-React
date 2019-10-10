@@ -1,10 +1,8 @@
 
 import React, { Component } from 'react';
 import { Card, CardHeader, CardBody, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
-// import sendRequest from '../../../xhrRequest';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -40,21 +38,7 @@ class Taxes extends Component {
 
     }
 
-    // componentDidMount() {
-    //     this.getVatListData();
-    // }
-
-    // getVatListData = () => {
-    //     const res = sendRequest(`rest/vat/getvat`, "get", "");
-    //     res.then((res) => {
-    //         if (res.status === 200) {
-    //             this.setState({ loading: false });
-    //             return res.json();
-    //         }
-    //     }).then(data => {
-    //         this.setState({ vatCategoryList: data });
-    //     })
-    // }
+   
 
     customTotal = (from, to, size) => (
         <span className="react-bootstrap-table-pagination-total">
@@ -82,18 +66,6 @@ class Taxes extends Component {
         });
     }
 
-    // deleteVat = (data) => {
-    //     this.setState({ loading: true })
-    //     this.setState({ openDeleteModal: false });
-    //     const res = sendRequest(`rest/vat/deletevat?id=${this.state.selectedData.id}`, "delete", "");
-    //     res.then(res => {
-    //         if (res.status === 200) {
-    //             this.setState({ loading: false });
-    //             this.success();
-    //             this.getVatListData();
-    //         }
-    //     })
-    // }
 
     render() {
         const { vatCategoryList, loading } = this.state;

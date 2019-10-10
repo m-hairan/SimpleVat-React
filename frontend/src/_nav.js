@@ -86,27 +86,27 @@ export default {
     },
     {
       name: 'Master',
-      url: '/settings',
+      url: '/Master',
       icon: 'icon-settings',
       children: [
         {
           name: 'Product',
-          url: '/settings/general',
+          url: '/Master/Product',
           icon: 'icon-wrench',
         },
         {
           name: 'Project',
-          url: '/settings/vat-category',
+          url: '/Master/Project',
           icon: 'icon-briefcase',
         },
         {
           name: 'Contact',
-          url: '/settings/transaction-category',
+          url: '/Master/Contact',
           icon: 'icon-graph',
         },
         {
           name: 'Users',
-          url: '/settings/transaction-category',
+          url: '/Master/Users',
           icon: 'icon-graph',
         },
       ],

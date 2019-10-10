@@ -57,3 +57,10 @@
 .submit-invoice{
   margin-right: 10px;
 }
+.vat-includeInput{
+  margin: 33px 0px 0px 0px;
+}
+.vat-includeLable{
+  margin-top: 31px;
+  margin-left: 25px;
+}

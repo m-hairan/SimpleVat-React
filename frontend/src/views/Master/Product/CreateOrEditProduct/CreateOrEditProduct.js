@@ -9,21 +9,27 @@ import {
   FormGroup,
   Label,
   Input,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
   Form,
-  Collapse
 } from "reactstrap";
 import "react-bootstrap-table/dist/react-bootstrap-table-all.min.css";
 import _ from "lodash";
 import "react-toastify/dist/ReactToastify.css";
-import Autosuggest from 'react-autosuggest';
+import Autosuggest from "react-autosuggest";
 
-class CreateOrEditExpense extends Component {
+class CreateOrEditProduct extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       value: "",
       suggestions: [],
+      projectList: [],
+      vatCategoryList: [],
+      transactionData: {},
       collapse: true,
       loading: false,
       large: false
@@ -37,7 +43,6 @@ class CreateOrEditExpense extends Component {
     });
   }
 
- 
   getSuggestions = value => {
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
@@ -45,8 +50,8 @@ class CreateOrEditExpense extends Component {
     return inputLength === 0
       ? []
       : this.state.projectList.filter(
-        lang => lang.name.toLowerCase().slice(0, inputLength) === inputValue
-      );
+          lang => lang.name.toLowerCase().slice(0, inputLength) === inputValue
+        );
   };
 
   getSuggestionValue = suggestion => suggestion.name;
@@ -63,6 +68,9 @@ class CreateOrEditExpense extends Component {
     });
   };
 
+
+
+
   toggle = () => {
     this.setState({ collapse: !this.state.collapse });
   };
@@ -77,6 +85,7 @@ class CreateOrEditExpense extends Component {
       suggestions: this.getSuggestions(value)
     });
   };
+
   onSuggestionsClearRequested = () => {
     this.setState({
       suggestions: []
@@ -84,7 +93,6 @@ class CreateOrEditExpense extends Component {
   };
 
   render() {
-  
     const { value, suggestions } = this.state;
 
     const inputProps = {
@@ -94,7 +102,7 @@ class CreateOrEditExpense extends Component {
     return (
       <div className="animated fadeIn">
         <Card>
-          <CardHeader>New Expense</CardHeader>
+          <CardHeader>New Product And Service</CardHeader>
           <div className="create-bank-wrapper">
             <Row>
               <Col xs="12">
@@ -105,23 +113,23 @@ class CreateOrEditExpense extends Component {
                   className="form-horizontal"
                 >
                   <Card>
-                    <CardHeader>Expense Details</CardHeader>
+                    <CardHeader>Product And Service Details</CardHeader>
                     <CardBody>
                       <Row className="row-wrapper">
                         <Col md="4">
                           <FormGroup>
-                            <Label htmlFor="text-input">Cliement</Label>
+                            <Label htmlFor="text-input">Name</Label>
                             <Input
                               type="text"
-                              id="Cliement"
-                              name="Cliement"
+                              id="text-input"
+                              name="text-input"
                               required
                             />
                           </FormGroup>
                         </Col>
                         <Col md="4">
                           <FormGroup>
-                            <Label htmlFor="select">Category</Label>
+                            <Label htmlFor="select">Product Code</Label>
                             <Autosuggest
                               suggestions={suggestions}
                               onSuggestionsFetchRequested={
@@ -138,7 +146,7 @@ class CreateOrEditExpense extends Component {
                         </Col>
                         <Col md="4">
                           <FormGroup>
-                            <Label htmlFor="select">Expense Date</Label>
+                            <Label htmlFor="select">Parent Code</Label>
                             <Autosuggest
                               suggestions={suggestions}
                               onSuggestionsFetchRequested={
@@ -157,11 +165,11 @@ class CreateOrEditExpense extends Component {
                       <Row>
                         <Col md="4">
                           <FormGroup>
-                            <Label htmlFor="select">Currency</Label>
+                            <Label htmlFor="select">Product Price</Label>
                             <Input
                               type="select"
-                              name="Currency"
-                              id="Currency"
+                              name="select"
+                              id="select"
                               required
                             >
                               <option value="0">Please select</option>
@@ -173,101 +181,118 @@ class CreateOrEditExpense extends Component {
                         </Col>
                         <Col md="4">
                           <FormGroup>
-                            <Label htmlFor="select">Project</Label>
+                            <Label htmlFor="select">Vat Percentage</Label>
                             <Input
                               type="text"
-                              name="Project"
-                              id="Project"
+                              name="select"
+                              id="select"
                               required
                             />
-
+                          </FormGroup>
+                        </Col>
+                        <Col md="4">
+                          <FormGroup>
+                            <Input
+                              className="form-check-input vat-includeInput"
+                              type="checkbox"
+                              id="checkbox1"
+                              name="checkbox1"
+                              value="option1"
+                            />
+                            <Label
+                              check
+                              className="form-check-label vat-includeLable"
+                              htmlFor="checkbox1"
+                            >
+                              Vat Include
+                            </Label>
                           </FormGroup>
                         </Col>
                       </Row>
                       <Row>
-                        <Col md="8">
+                        <Col md="4">
                           <FormGroup>
-                            <Label htmlFor="Description">Description</Label>
+                            <Label htmlFor="select">Description</Label>
                             <Input
                               type="textarea"
-                              id="Description"
-                              name="Description"
+                              id="categoryDiscription"
+                              name="categoryDiscription"
                               required
                             />
                           </FormGroup>
                         </Col>
+                        <Col md="4">
+                          <FormGroup>
+                            <Label htmlFor="select">Contact</Label>
+                            <Input
+                              type="select"
+                              name="select"
+                              id="select"
+                              required
+                            >
+                              <option value="0">Please select</option>
+                              <option value="1">Option #1</option>
+                              <option value="2">Option #2</option>
+                              <option value="3">Option #3</option>
+                            </Input>
+                          </FormGroup>
+                        </Col>
+                        <Col md="4">
+                          <Button
+                            size="sm"
+                            color="primary"
+                            onClick={this.toggleLarge}
+                            className="mr-1 add-btn"
+                          >
+                            <i className="fas fa-plus"></i> Add
+                          </Button>
+                        </Col>
                       </Row>
-                    </CardBody>
-                  </Card>
-                  <Card>
-                    <CardHeader>
-                      Receipt
-                      <div className="card-header-actions">
-                        <Button
-                          color="link"
-                          className="card-header-action btn-minimize"
-                          data-target="#collapseExample"
-                          onClick={this.toggle}
-                        >
-                          <i className="icon-arrow-up"></i>
-                        </Button>
-                      </div>
-                    </CardHeader>
-                    <Collapse isOpen={this.state.collapse} id="collapseExample">
-                      <CardBody>
-                        <Row className="row-wrapper">
-                         
-                          <Col md="6">
-                            <FormGroup>
-                              <Label htmlFor="text-input">Reciept Number</Label>
-                              <Input
-                                type="text"
-                                name="RecieptNumber"
-                                id="RecieptNumber"
-                                required
-                              />
-                            
-                            </FormGroup>
-                          </Col>
-                          <Col md="6">
-                            <FormGroup>
-                              <Label htmlFor="text-input">Attachment Description</Label>
-                              <Input
-                                type="text"
-                                name="Description"
-                                id="Description"
-                                required
-                              />
-                                
-                            </FormGroup>
-                          </Col>
-                        </Row>
-                      </CardBody>
-                    </Collapse>
-                  </Card>
-                  <Card>
-                    <CardHeader>
-                    Expense Item Details
-                      <div className="card-header-actions">
-                        <Button
-                          color="link"
-                          className="card-header-action btn-minimize"
-                          data-target="#collapseExample"
-                          onClick={this.toggle}
-                        >
-                          <i className="icon-arrow-up"></i>
-                        </Button>
-                      </div>
-                    </CardHeader>
-                    <Collapse isOpen={this.state.collapse} id="collapseExample">
-                      <CardBody>
 
-                      </CardBody>
-                    </Collapse>
+                      <Modal
+                        isOpen={this.state.large}
+                        toggle={this.toggleLarge}
+                        className={"modal-lg " + this.props.className}
+                      >
+                        <ModalHeader toggle={this.toggleLarge}>
+                          New warehouse
+                        </ModalHeader>
+                        <ModalBody>
+                          <Row className="row-wrapper">
+                            <Col md="12">
+                              <FormGroup>
+                                <Label htmlFor="text-input">
+                                  warehouse Name
+                                </Label>
+                                <Input
+                                  type="text"
+                                  id="text-input"
+                                  name="text-input"
+                                  required
+                                />
+                              </FormGroup>
+                            </Col>
+                          </Row>
+                        </ModalBody>
+                        <ModalFooter>
+                          <Button color="primary" onClick={this.toggleLarge}>
+                            Save
+                          </Button>{" "}
+                          <Button color="secondary" onClick={this.toggleLarge}>
+                            Cancel
+                          </Button>
+                        </ModalFooter>
+                      </Modal>
+                    </CardBody>
                   </Card>
                   <Row className="bank-btn-wrapper">
                     <FormGroup>
-                      <Button type="submit" className="submit-invoice" size="sm" color="primary">
+                      <Button
+                        type="submit"
+                        className="submit-invoice"
+                        size="sm"
+                        color="primary"
+                      >
                         <i className="fa fa-dot-circle-o "></i> Submit
                       </Button>
                       <Button type="submit" size="sm" color="primary">
@@ -285,4 +310,4 @@ class CreateOrEditExpense extends Component {
   }
 }
 
-export default CreateOrEditExpense;
+export default CreateOrEditProduct;
