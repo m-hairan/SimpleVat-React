@@ -20,6 +20,7 @@ import com.simplevat.service.bankaccount.BankAccountService;
 import com.simplevat.service.bankaccount.BankAccountStatusService;
 import com.simplevat.service.bankaccount.TransactionStatusService;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -69,47 +70,34 @@ public class BankAccountController implements Serializable {
         if (bankAccounts != null) {
             return new ResponseEntity<>(bankAccounts, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping(value = "/savebank")
-    private ResponseEntity saveBankAccount(@RequestBody BankAccount bankAccount, @RequestParam(value = "id") Integer id) {
+    private ResponseEntity saveBankAccount(@RequestBody BankModel bankModel, @RequestParam(value = "id") Integer id) {
         try {
-
+            BankHelper bankHelper = new BankHelper();
+            BankAccount bankAccount = bankHelper.getBankAccountByBankAccountModel(bankModel, bankAccountStatusService, currencyService, bankAccountTypeService,countryService);
             User user = userServiceNew.findByPK(id);
-            bankAccount.setCreatedBy(user.getUserId());
-
-            if (bankAccount.getBankAccountStatus() != null) {
-                BankAccountStatus bankAccountStatus = bankAccountStatusService
-                        .getBankAccountStatus(bankAccount.getBankAccountStatus().getBankAccountStatusCode());
-                bankAccount.setBankAccountStatus(bankAccountStatus);
+            if (user != null) {
+                bankAccount.setCreatedDate(LocalDateTime.now());
+                bankAccount.setCreatedBy(user.getUserId());
             }
-            if (bankAccount.getBankAccountCurrency() != null) {
-                Currency currency = currencyService
-                        .getCurrency(bankAccount.getBankAccountCurrency().getCurrencyCode());
-                bankAccount.setBankAccountCurrency(currency);
-            }
-
-            if (bankAccount.getBankAccountType() != null) {
-                BankAccountType bankAccountType = bankAccountTypeService.getBankAccountType(bankAccount.getBankAccountType().getId());
-                bankAccount.setBankAccountType(bankAccountType);
-            }
-
-            if (bankAccount.getBankAccountId() == null || bankAccount.getBankAccountId() == 0) {
-                bankAccount.setCurrentBalance(bankAccount.getOpeningBalance());
-                BankAccountStatus bankAccountStatus = bankAccountStatusService.getBankAccountStatusByName("ACTIVE");
-                bankAccount.setBankAccountStatus(bankAccountStatus);
-            }
-            if (bankAccount.getBankAccountId() == null) {
+            if (bankModel.getBankAccountId() == null) {
                 bankAccountService.persist(bankAccount);
             } else {
+                bankAccount.setBankAccountId(bankModel.getBankAccountId());
+                bankAccount.setLastUpdateDate(LocalDateTime.now());
+                bankAccount.setLastUpdatedBy(user.getUserId());
                 bankAccountService.update(bankAccount);
             }
+
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace();        
         }
         return new ResponseEntity<>(HttpStatus.OK);
+
     }
 
     @GetMapping(value = "/getaccounttype")
@@ -117,10 +105,15 @@ public class BankAccountController implements Serializable {
         List<BankAccountType> bankAccountTypes = bankAccountTypeService.getBankAccountTypeList();
         if (bankAccountTypes != null) {
             return new ResponseEntity<>(bankAccountTypes, HttpStatus.OK);
-
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping(value = "/getbankaccountstatus")
+    private ResponseEntity<List<BankAccountStatus>> getBankAccountStatus() {
+        List<BankAccountStatus> bankAccountStatuses = bankAccountStatusService.getBankAccountStatuses();
+        return new ResponseEntity<>(bankAccountStatuses, HttpStatus.OK);
     }
 
     @GetMapping(value = "/getcountry")
@@ -128,7 +121,7 @@ public class BankAccountController implements Serializable {
         List<Country> countrySuggestion = new ArrayList<>();
         List<Country> countries = countryService.getCountries();
         if (countries == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         Iterator<Country> countryIterator = countries.iterator();
         while (countryIterator.hasNext()) {
@@ -154,14 +147,47 @@ public class BankAccountController implements Serializable {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping(value = "/editbank")
+    @GetMapping(value = "/getbyid")
     private ResponseEntity<BankAccount> editBankAccount(@RequestParam("id") Integer id) {
-        BankAccount bankAccount = bankAccountService.findByPK(id);
-        if (bankAccount != null) {
+        try {
+            BankAccount bankAccount = bankAccountService.findByPK(id);
             return new ResponseEntity<>(bankAccount, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @GetMapping(value = "/getcurrenncy")
+    private ResponseEntity<List<Currency>> getCurrency(@RequestParam(value = "currencyStr") String currencyStr) {
+        List<Currency> currencySuggestion = new ArrayList<>();
+        List<Currency> currencies = currencyService.getCurrencies();
+
+        Iterator<Currency> currencyIterator = currencies.iterator();
+        if (currencyIterator == null) {
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            while (currencyIterator.hasNext()) {
+                Currency currency = currencyIterator.next();
+                if (currency.getCurrencyName() != null
+                        && !currency.getCurrencyName().isEmpty()
+                        && currency.getCurrencyName().toUpperCase().contains(currencyStr.toUpperCase())) {
+
+                    currencySuggestion.add(currency);
+                } else if (currency.getCurrencyDescription() != null
+                        && !currency.getCurrencyDescription().isEmpty()
+                        && currency.getCurrencyDescription().toUpperCase().contains(currencyStr.toUpperCase())) {
+                    currencySuggestion.add(currency);
+
+                } else if (currency.getCurrencyIsoCode() != null
+                        && !currency.getCurrencyIsoCode().isEmpty()
+                        && currency.getCurrencyIsoCode().toUpperCase().contains(currencyStr.toUpperCase())) {
+                    currencySuggestion.add(currency);
+
+                }
+            }
+
+            return new ResponseEntity<>(currencySuggestion, HttpStatus.OK);
+        }
+    }
 }
