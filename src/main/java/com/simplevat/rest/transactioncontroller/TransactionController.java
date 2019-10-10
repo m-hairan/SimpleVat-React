@@ -12,7 +12,9 @@ import com.simplevat.service.TransactionCategoryServiceNew;
 import com.simplevat.service.VatCategoryService;
 import com.simplevat.service.bankaccount.TransactionTypeService;
 import com.simplevat.constant.DefualtTypeConstant;
+import com.simplevat.entity.User;
 import com.simplevat.exceptions.UnauthorizedException;
+import com.simplevat.service.UserServiceNew;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(value = "/rest/transaction")
-public class TransactionController  implements Serializable{
+public class TransactionController implements Serializable {
 
     @Autowired
     private TransactionCategoryServiceNew transactionCategoryService;
@@ -45,9 +47,8 @@ public class TransactionController  implements Serializable{
     @Autowired
     TransactionTypeService transactionTypeService;
 
-    private TranscationCategoryHelper transcationCategoryHelper = new TranscationCategoryHelper();
-
-    private TransactionCategory selectedTransactionCategory = new TransactionCategory();
+    @Autowired
+    private UserServiceNew userServiceNew;
 
     @GetMapping(value = "/gettransactioncategory")
     private ResponseEntity<List<TransactionCategory>> getAllTransactionCategory() {
@@ -55,7 +56,7 @@ public class TransactionController  implements Serializable{
         if (transactionCategories != null) {
             return new ResponseEntity(transactionCategories, HttpStatus.OK);
         }
-        return new ResponseEntity(HttpStatus.NOT_FOUND);
+        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 
@@ -65,7 +66,7 @@ public class TransactionController  implements Serializable{
         if (transactionCategories != null) {
             return new ResponseEntity(transactionCategories, HttpStatus.OK);
         }
-        return new ResponseEntity(HttpStatus.NOT_FOUND);
+        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 
@@ -73,7 +74,7 @@ public class TransactionController  implements Serializable{
     private ResponseEntity<TransactionCategory> deleteTransactionCategory(@RequestParam("id") Integer id) {
         TransactionCategory transactionCategories = transactionCategoryService.findByPK(id);
         if (transactionCategories == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         transactionCategories.setDeleteFlag(Boolean.TRUE);
         transactionCategoryService.update(transactionCategories, id);
@@ -86,7 +87,7 @@ public class TransactionController  implements Serializable{
         if (vatCategorys != null) {
             return new ResponseEntity(vatCategorys, HttpStatus.OK);
         } else {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
     }
@@ -106,27 +107,51 @@ public class TransactionController  implements Serializable{
     }
 
     @PostMapping(value = "/savetransaction")
-    private ResponseEntity save(@RequestBody TransactionCategoryModel transactionCategoryModel, @RequestParam("id") Integer id) throws UnauthorizedException {
-        selectedTransactionCategory = transcationCategoryHelper.getTrascationModel(transactionCategoryModel);
-        if (selectedTransactionCategory.getDefaltFlag() == DefualtTypeConstant.YES) {
-            System.out.println("insideif=========1=========" + selectedTransactionCategory.getDefaltFlag());
-            TransactionCategory transactionCategory = transactionCategoryService.getDefaultTransactionCategoryByTransactionCategoryId(selectedTransactionCategory.getTransactionCategoryId());
-            if (transactionCategory != null) {
-                System.out.println("insideif=========3=========" + transactionCategory.getDefaltFlag());
-                transactionCategory.setDefaltFlag(DefualtTypeConstant.NO);
-                transactionCategoryService.update(transactionCategory);
-            }
-        }
-        if (selectedTransactionCategory.getTransactionCategoryId() == null) {
-            selectedTransactionCategory.setOrderSequence(1);
-            selectedTransactionCategory.setCreatedBy(id);
+    private ResponseEntity save(@RequestBody TransactionCategoryBean transactionCategoryBean, @RequestParam("id") Integer id) throws UnauthorizedException {
+        try {
+            TranscationCategoryHelper transcationCategoryHelper = new TranscationCategoryHelper();
+            User user = userServiceNew.findByPK(id);
+            TransactionCategory selectedTransactionCategory = transcationCategoryHelper.getTrascationByTrascationModel(transactionCategoryBean, transactionTypeService, transactionCategoryService, vatCategoryService);
+
+            selectedTransactionCategory = transcationCategoryHelper.getTrascationByTrascationModel(transactionCategoryBean, transactionTypeService, transactionCategoryService, vatCategoryService);
+            selectedTransactionCategory.setCreatedBy(user.getUserId());
             selectedTransactionCategory.setCreatedDate(LocalDateTime.now());
-            transactionCategoryService.persist(selectedTransactionCategory);
-        } else {
-            selectedTransactionCategory.setLastUpdateBy(id);
-            selectedTransactionCategory.setLastUpdateDate(LocalDateTime.now());
-            transactionCategoryService.update(selectedTransactionCategory);
+            if (selectedTransactionCategory.getDefaltFlag() == DefualtTypeConstant.YES) {
+                System.out.println("insideif=========1=========" + selectedTransactionCategory.getDefaltFlag());
+                TransactionCategory transactionCategory = transactionCategoryService.getDefaultTransactionCategoryByTransactionCategoryId(selectedTransactionCategory.getTransactionCategoryId());
+                if (transactionCategory != null) {
+                    System.out.println("insideif=========3=========" + transactionCategory.getDefaltFlag());
+                    transactionCategory.setDefaltFlag(DefualtTypeConstant.NO);
+                    transactionCategoryService.update(transactionCategory);
+                }
+            }
+            if (selectedTransactionCategory.getTransactionCategoryId() == 0) {
+                selectedTransactionCategory.setOrderSequence(1);
+                transactionCategoryService.persist(selectedTransactionCategory);
+            } else {
+//                TransactionCategory transactionCategory = transactionCategoryService.getDefaultTransactionCategoryByTransactionCategoryId(selectedTransactionCategory.getTransactionCategoryId());
+//               selectedTransactionCategory.setCreatedBy(transactionCategory.getCreatedBy());
+//                selectedTransactionCategory.setCreatedDate(transactionCategory.getCreatedDate());
+                selectedTransactionCategory.setLastUpdateBy(user.getUserId());
+                selectedTransactionCategory.setLastUpdateDate(LocalDateTime.now());
+                transactionCategoryService.update(selectedTransactionCategory);
+            }
+
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @GetMapping(value = "/getparenttransaction")
+    public ResponseEntity<List<TransactionCategory>> getParentTransaction(@RequestParam("TransactionTypeCode") Integer TransactionTypeCode, @RequestParam("transcationTxt") String transcationTxt) {
+
+        if (TransactionTypeCode != null) {
+            List<TransactionCategory> transactionCategorys = transactionCategoryService.findAllTransactionCategoryByTransactionType(TransactionTypeCode, transcationTxt);
+            return new ResponseEntity<>(transactionCategorys, HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }

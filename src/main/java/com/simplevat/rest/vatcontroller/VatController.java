@@ -56,7 +56,7 @@ public class VatController implements Serializable {
 
     }
 
-    @GetMapping(value = "/editvat")
+    @GetMapping(value = "/getbyid")
     private ResponseEntity<VatCategory> editInvoice(@RequestParam(value = "id") Integer id) {
         VatCategory vatCategory = vatCategoryService.findByPK(id);
         if (vatCategory != null) {
