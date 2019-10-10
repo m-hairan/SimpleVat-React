@@ -5,17 +5,15 @@ import {
   CardBody,
   Button,
   Col,
-  Row,
   FormGroup,
   Label,
   Input,
   Form
 } from "reactstrap";
-import { NavLink } from "react-router-dom";
 import "react-bootstrap-table/dist/react-bootstrap-table-all.min.css";
 import sendRequest from "../../../../xhrRequest";
 import _ from "lodash";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 class CreateOrEditCategory extends Component {
