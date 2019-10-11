@@ -7,13 +7,14 @@ import sendRequest from '../../../xhrRequest';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Loader from '../../../Loader';
 
 class Expense extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            vatCategoryList: [],
+            expenseList: [],
             openDeleteModal: false,
             loading: true
         }
@@ -33,7 +34,7 @@ class Expense extends Component {
             }, {
                 text: '10', value: 10
             }, {
-                text: 'All', value: this.state.vatCategoryList ? this.state.vatCategoryList.length : 0
+                text: 'All', value: this.state.expenseList ? this.state.expenseList.length : 0
             }]
         }
 
@@ -44,14 +45,14 @@ class Expense extends Component {
     }
 
     getVatListData = () => {
-        const res = sendRequest(`rest/vat/getvat`, "get", "");
+        const res = sendRequest(`rest/expense/retrieveExpenseList`, "get", "");
         res.then((res) => {
             if (res.status === 200) {
                 this.setState({ loading: false });
                 return res.json();
             }
         }).then(data => {
-            this.setState({ vatCategoryList: data });
+            this.setState({ expenseList: data });
         })
     }
 
@@ -64,16 +65,34 @@ class Expense extends Component {
         </span >
     );
 
-    vatPercentageFormat = (cell, row) => `${row.vat} %`;
+    formatExpenseDate = (cell, row) => {
+        const date = new Date(row.createdDate);
+        return `${date.getDate() > 9 ? date.getDate() : `0${date.getDate()}`}/${date.getMonth() + 1 > 9 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`}/${date.getFullYear()}`
+    };
 
-    vatActions = (cell, row) => {
+    expenseActions = (cell, row) => {
         return (
             <div className="d-flex">
-                <Button block color="primary" className="btn-pill vat-actions" title="Edit Vat Category" onClick={() => this.props.history.push(`/create-vat-category?id=${row.id}`)}><i className="far fa-edit"></i></Button>
-                <Button block color="primary" className="btn-pill vat-actions" title="Delete Vat Ctegory" onClick={() => this.setState({ selectedData: row }, () => this.setState({ openDeleteModal: true }))}><i className="fas fa-trash-alt"></i></Button>
+                <Button block color="primary" className="btn-pill vat-actions" title="Edit Expense" onClick={() => this.props.history.push(`/create-vat-category?id=${row.id}`)}><i className="far fa-edit"></i></Button>
+                <Button block color="primary" className="btn-pill vat-actions" title="View Expense" onClick={() => this.props.history.push(`/create-vat-category?id=${row.id}`)}><i className="far fa-edit"></i></Button>
+                <Button block color="primary" className="btn-pill vat-actions" title="Delete Expense" onClick={() => this.setState({ selectedData: row }, () => this.setState({ openDeleteModal: true }))}><i className="fas fa-trash-alt"></i></Button>
             </div>
         );
     };
+
+    formatAmount = (cell, row) => {
+        return (
+            <div>
+                <div>
+                    <div>{`${row.expenseAmountCompanyCurrency}.00`}</div>
+                </div>
+                <div>
+                    <label>{row.expenseContact.currency.currencySymbol}</label>
+                    <label>{`${row.expenseAmount}.00`}</label>
+                </div>
+            </div>
+        )
+    }
 
     success = () => {
         return toast.success('Vat Category Deleted Successfully... ', {
@@ -95,7 +114,7 @@ class Expense extends Component {
     }
 
     render() {
-        const { vatCategoryList, loading } = this.state;
+        const { expenseList, loading } = this.state;
         const containerStyle = {
             zIndex: 1999
         };
@@ -109,12 +128,12 @@ class Expense extends Component {
                     </CardHeader>
                     <CardBody>
                         <Button className="mb-3" onClick={() => this.props.history.push(`/create-Expense`)}>New</Button>
-                        <BootstrapTable data={vatCategoryList} version="4" striped hover pagination={paginationFactory(this.options)} totalSize={vatCategoryList ? vatCategoryList.length : 0} >
-                            <TableHeaderColumn isKey dataField="name">Reciept Number</TableHeaderColumn>
-                            <TableHeaderColumn >Amount</TableHeaderColumn>
-                            <TableHeaderColumn >Description</TableHeaderColumn>
-                            <TableHeaderColumn dataField="vat" dataFormat={this.vatPercentageFormat}>Expense Date</TableHeaderColumn>
-                            <TableHeaderColumn dataFormat={this.vatActions}>Action</TableHeaderColumn>
+                        <BootstrapTable data={expenseList} version="4" striped hover pagination={paginationFactory(this.options)} totalSize={expenseList ? expenseList.length : 0} >
+                            <TableHeaderColumn isKey dataField="receiptNumber">Reciept Number</TableHeaderColumn>
+                            <TableHeaderColumn dataFormat={this.formatAmount}>Amount</TableHeaderColumn>
+                            <TableHeaderColumn dataField="expenseDescription">Description</TableHeaderColumn>
+                            <TableHeaderColumn dataFormat={this.formatExpenseDate}>Expense Date</TableHeaderColumn>
+                            <TableHeaderColumn dataFormat={this.expenseActions}>Action</TableHeaderColumn>
                         </BootstrapTable>
                     </CardBody>
                 </Card>
@@ -131,10 +150,7 @@ class Expense extends Component {
                 </Modal>
                 {
                     loading ?
-                        <div className="sk-double-bounce loader">
-                            <div className="sk-child sk-double-bounce1"></div>
-                            <div className="sk-child sk-double-bounce2"></div>
-                        </div>
+                        <Loader></Loader>
                         : ""
                 }
             </div>

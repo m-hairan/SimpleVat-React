@@ -6,7 +6,7 @@ import sendRequest from '../../xhrRequest';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import Loader from "../../Loader";
 class BankAccount extends Component {
   constructor(props) {
     super(props);
@@ -122,10 +122,7 @@ class BankAccount extends Component {
         </Modal>
         {
           loading ?
-            <div className="sk-double-bounce loader">
-              <div className="sk-child sk-double-bounce1"></div>
-              <div className="sk-child sk-double-bounce2"></div>
-            </div>
+            <Loader></Loader>
             : ""
         }
       </div>

@@ -16,6 +16,8 @@ import "react-bootstrap-table/dist/react-bootstrap-table-all.min.css";
 import _ from "lodash";
 import "react-toastify/dist/ReactToastify.css";
 import Autosuggest from 'react-autosuggest';
+import sendRequest from "../../../../xhrRequest";
+import Loader from "../../../../Loader";
 
 class CreateOrEditExpense extends Component {
   constructor(props) {
@@ -24,11 +26,24 @@ class CreateOrEditExpense extends Component {
     this.state = {
       value: "",
       suggestions: [],
-      collapse: true,
+      categorySuggestion: [],
+      categoryValue: "",
+      currencySuggestions: [],
+      currencyValue: "",
+      projectSuggestions: [],
+      projectValue: "",
+      collapseReceipt: true,
+      collapseitemDetails: true,
       loading: false,
-      large: false
+      large: false,
+      expenseData: { description: "" },
+      cliementList: []
     };
     this.toggleLarge = this.toggleLarge.bind(this);
+  }
+
+  componentDidMount() {
+    this.getcliementList();
   }
 
   toggleLarge() {
@@ -37,59 +52,178 @@ class CreateOrEditExpense extends Component {
     });
   }
 
- 
-  getSuggestions = value => {
+  getcliementList = () => {
+    this.setState({ loading: true });
+    const res = sendRequest(`rest/expense/claimants`, "get", "");
+    res
+      .then(res => {
+        if (res.status === 200) {
+          this.setState({ loading: false });
+          return res.json();
+        }
+      })
+      .then(data => {
+        this.setState({ cliementList: data ? data : [] });
+      });
+  }
+
+  getCurrencyList = (val) => {
+    this.setState({ loading: true });
+    const res = sendRequest(`rest/expense/currencys?currency=${val}`, "get", "");
+    res
+      .then(res => {
+        if (res.status === 200) {
+          this.setState({ loading: false });
+          return res.json();
+        }
+      })
+      .then(data => {
+        this.setState({ currencySuggestions: data });
+      });
+  }
+
+  getProjectList = (val) => {
+    this.setState({ loading: true });
+    const res = sendRequest(`rest/expense/projects?projectName=${val}`, "get", "");
+    res
+      .then(res => {
+        if (res.status === 200) {
+          this.setState({ loading: false });
+          return res.json();
+        }
+      })
+      .then(data => {
+        this.setState({ projectSuggestions: data });
+      });
+  }
+
+  getCategorySuggestions = (value) => {
+    this.setState({ loading: true });
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
-
+    this.getCategoryList(inputValue);
     return inputLength === 0
       ? []
-      : this.state.projectList.filter(
-        lang => lang.name.toLowerCase().slice(0, inputLength) === inputValue
-      );
+      : this.state.categorySuggestion.length ? this.state.categorySuggestion.filter(
+        lang => lang.transactionCategoryName.toLowerCase().slice(0, inputLength) === inputValue
+      ) : [];
   };
 
-  getSuggestionValue = suggestion => suggestion.name;
+  getCurrencySuggestions = (value) => {
+    this.setState({ loading: true });
+    const inputValue = value.trim().toLowerCase();
+    const inputLength = inputValue.length;
+    this.getCurrencyList(inputValue);
+    return inputLength === 0
+      ? []
+      : this.state.categorySuggestion.length ? this.state.categorySuggestion.filter(
+        lang => lang.transactionCategoryName.toLowerCase().slice(0, inputLength) === inputValue
+      ) : [];
+  };
 
-  renderSuggestion = suggestion => <div>{suggestion.name}</div>;
+  getProjectSuggestions = (value) => {
+    this.setState({ loading: true });
+    const inputValue = value.trim().toLowerCase();
+    const inputLength = inputValue.length;
+    this.getProjectList(inputValue);
+    return inputLength === 0
+      ? []
+      : this.state.projectSuggestions.length ? this.state.projectSuggestions.filter(
+        lang => lang.transactionCategoryName.toLowerCase().slice(0, inputLength) === inputValue
+      ) : [];
+  };
+
+  getCategoryList = (val) => {
+    this.setState({ loading: true });
+    const res = sendRequest(`rest/expense/categories?categoryName=${val}`, "get", "");
+    res
+      .then(res => {
+        if (res.status === 200) {
+          this.setState({ loading: false });
+          return res.json();
+        }
+      })
+      .then(data => {
+        this.setState({ categorySuggestion: data });
+      });
+  }
+
+  getCategorySuggestionValue = suggestion => suggestion.transactionCategoryName;
+
+  renderCategorySuggestion = suggestion => <div>{suggestion.transactionCategoryName}</div>;
+
+  getCurrencySuggestionValue = suggestion => suggestion.description;
+
+  renderCurrencySuggestion = suggestion => <div>{suggestion.description}</div>;
+
+  getProjectSuggestionValue = suggestion => suggestion.projectName;
+
+  renderProjectSuggestion = suggestion => <div>{suggestion.projectName}</div>;
 
   handleChange = (e, name) => {
     this.setState({
-      transactionData: _.set(
-        { ...this.state.transactionData },
+      expenseData: _.set(
+        { ...this.state.expenseData },
         e.target.name && e.target.name !== "" ? e.target.name : name,
         e.target.type === "checkbox" ? e.target.checked : e.target.value
       )
     });
   };
 
-  toggle = () => {
-    this.setState({ collapse: !this.state.collapse });
+  // toggle = () => {
+  //   this.setState({ collapse: !this.state.collapse });
+  // };
+
+  onChange = (event, { newValue }, value) => {
+    let data = {};
+    data[value] = newValue
+    this.setState(data);
+    // this.setState({
+    //   value: newValue
+    // });
   };
 
-  onChange = (event, { newValue }) => {
-    this.setState({
-      value: newValue
-    });
+  onSuggestionsFetchRequested = ({ value }, suggestions) => {
+    let data = {};
+    if (suggestions === "categorySuggestion") {
+      data[suggestions] = this.getCategorySuggestions(value, suggestions);
+    } else if (suggestions === "currencySuggestions") {
+      data[suggestions] = this.getCurrencySuggestions(value, suggestions);
+    } else if (suggestions === "projectSuggestions") {
+      data[suggestions] = this.getProjectSuggestions(value, suggestions);
+    }
+    this.setState(data)
+    // this.setState({
+    //   suggestions: this.getSuggestions(value)
+    // });
   };
-  onSuggestionsFetchRequested = ({ value }) => {
-    this.setState({
-      suggestions: this.getSuggestions(value)
-    });
-  };
-  onSuggestionsClearRequested = () => {
-    this.setState({
-      suggestions: []
-    });
+
+  onSuggestionsClearRequested = (e, suggestions) => {
+    let data = {};
+    data[suggestions] = [];
+    this.setState(data)
+    // this.setState({
+    //   suggestions: []
+    // });
   };
 
   render() {
-  
-    const { value, suggestions } = this.state;
-
-    const inputProps = {
-      value,
-      onChange: this.onChange
+    const { categorySuggestion, categoryValue, currencySuggestions, currencyValue, projectSuggestions, projectValue, expenseData, cliementList, loading } = this.state;
+    const { expenseDate, description, attachmentDescription, recieptNumber } = expenseData;
+    const categoryInputProps = {
+      placeholder: "Type Category Name",
+      value: categoryValue,
+      onChange: (e, data) => this.onChange(e, data, "categoryValue")
+    };
+    const currencyInputProps = {
+      placeholder: "Type Currency Name",
+      value: currencyValue,
+      onChange: (e, data) => this.onChange(e, data, "currencyValue")
+    };
+    const projectInputProps = {
+      placeholder: "Type Project Name",
+      value: projectValue,
+      onChange: (e, data) => this.onChange(e, data, "projectValue")
     };
     return (
       <div className="animated fadeIn">
@@ -111,45 +245,50 @@ class CreateOrEditExpense extends Component {
                         <Col md="4">
                           <FormGroup>
                             <Label htmlFor="text-input">Cliement</Label>
-                            <Input
+                            {/* <Input
                               type="text"
                               id="Cliement"
                               name="Cliement"
                               required
-                            />
+                            /> */}
+                            <Input
+                              type="select"
+                              name="cliement"
+                              id="cliement"
+                              required
+                            >
+                              {
+                                cliementList.length ? cliementList.map((item, ind) => <option key={ind} value={item.userId}>{item.firstName}</option>) : ""
+                              }
+                            </Input>
                           </FormGroup>
                         </Col>
                         <Col md="4">
                           <FormGroup>
                             <Label htmlFor="select">Category</Label>
                             <Autosuggest
-                              suggestions={suggestions}
+                              suggestions={categorySuggestion}
                               onSuggestionsFetchRequested={
-                                this.onSuggestionsFetchRequested
+                                e => this.onSuggestionsFetchRequested(e, "categorySuggestion")
                               }
                               onSuggestionsClearRequested={
-                                this.onSuggestionsClearRequested
+                                e => this.onSuggestionsClearRequested(e, "categorySuggestion")
                               }
-                              getSuggestionValue={this.getSuggestionValue}
-                              renderSuggestion={this.renderSuggestion}
-                              inputProps={inputProps}
+                              getSuggestionValue={this.getCategorySuggestionValue}
+                              renderSuggestion={this.renderCategorySuggestion}
+                              inputProps={categoryInputProps}
                             />
                           </FormGroup>
                         </Col>
                         <Col md="4">
                           <FormGroup>
                             <Label htmlFor="select">Expense Date</Label>
-                            <Autosuggest
-                              suggestions={suggestions}
-                              onSuggestionsFetchRequested={
-                                this.onSuggestionsFetchRequested
-                              }
-                              onSuggestionsClearRequested={
-                                this.onSuggestionsClearRequested
-                              }
-                              getSuggestionValue={this.getSuggestionValue}
-                              renderSuggestion={this.renderSuggestion}
-                              inputProps={inputProps}
+                            <Input
+                              type="date"
+                              name="expenseDate"
+                              id="expenseDate"
+                              value={expenseDate}
+                              onChange={e => this.handleChange(e, "expenseDate")}
                             />
                           </FormGroup>
                         </Col>
@@ -158,29 +297,42 @@ class CreateOrEditExpense extends Component {
                         <Col md="4">
                           <FormGroup>
                             <Label htmlFor="select">Currency</Label>
-                            <Input
-                              type="select"
-                              name="Currency"
-                              id="Currency"
-                              required
-                            >
-                              <option value="0">Please select</option>
-                              <option value="1">Option #1</option>
-                              <option value="2">Option #2</option>
-                              <option value="3">Option #3</option>
-                            </Input>
+                            <Autosuggest
+                              suggestions={currencySuggestions}
+                              onSuggestionsFetchRequested={
+                                e => this.onSuggestionsFetchRequested(e, "currencySuggestions")
+                              }
+                              onSuggestionsClearRequested={
+                                e => this.onSuggestionsClearRequested(e, "currencySuggestions")
+                              }
+                              getSuggestionValue={this.getCurrencySuggestionValue}
+                              renderSuggestion={this.renderCurrencySuggestion}
+                              inputProps={currencyInputProps}
+                            />
                           </FormGroup>
                         </Col>
                         <Col md="4">
                           <FormGroup>
                             <Label htmlFor="select">Project</Label>
-                            <Input
+                            {/* <Input
                               type="text"
-                              name="Project"
-                              id="Project"
+                              name="project"
+                              id="project"
+                              onChange={e => this.handleChange(e, "project")}
                               required
+                            /> */}
+                            <Autosuggest
+                              suggestions={projectSuggestions}
+                              onSuggestionsFetchRequested={
+                                e => this.onSuggestionsFetchRequested(e, "projectSuggestions")
+                              }
+                              onSuggestionsClearRequested={
+                                e => this.onSuggestionsClearRequested(e, "projectSuggestions")
+                              }
+                              getSuggestionValue={this.getProjectSuggestionValue}
+                              renderSuggestion={this.renderProjectSuggestion}
+                              inputProps={projectInputProps}
                             />
-
                           </FormGroup>
                         </Col>
                       </Row>
@@ -190,10 +342,14 @@ class CreateOrEditExpense extends Component {
                             <Label htmlFor="Description">Description</Label>
                             <Input
                               type="textarea"
-                              id="Description"
-                              name="Description"
+                              id="description"
+                              name="description"
+                              maxLength="255"
+                              value={description}
+                              onChange={e => this.handleChange(e, "description")}
                               required
                             />
+                            <span>{`${255 - description.split('').length} characters remaining.`}</span>
                           </FormGroup>
                         </Col>
                       </Row>
@@ -207,26 +363,26 @@ class CreateOrEditExpense extends Component {
                           color="link"
                           className="card-header-action btn-minimize"
                           data-target="#collapseExample"
-                          onClick={this.toggle}
+                          onClick={() => { this.setState({ collapseReceipt: !this.state.collapseReceipt }) }}
                         >
                           <i className="icon-arrow-up"></i>
                         </Button>
                       </div>
                     </CardHeader>
-                    <Collapse isOpen={this.state.collapse} id="collapseExample">
+                    <Collapse isOpen={this.state.collapseReceipt} id="collapseExample">
                       <CardBody>
                         <Row className="row-wrapper">
-                         
+
                           <Col md="6">
                             <FormGroup>
                               <Label htmlFor="text-input">Reciept Number</Label>
                               <Input
-                                type="text"
-                                name="RecieptNumber"
-                                id="RecieptNumber"
-                                required
+                                type="number"
+                                name="recieptNumber"
+                                id="recieptNumber"
+                                value={recieptNumber}
                               />
-                            
+
                             </FormGroup>
                           </Col>
                           <Col md="6">
@@ -234,34 +390,99 @@ class CreateOrEditExpense extends Component {
                               <Label htmlFor="text-input">Attachment Description</Label>
                               <Input
                                 type="text"
-                                name="Description"
-                                id="Description"
-                                required
+                                name="attachmentDescription"
+                                id="attachmentDescription"
+                                value={attachmentDescription}
                               />
-                                
+
                             </FormGroup>
                           </Col>
                         </Row>
+                        <Input type="file" id="file-input" name="file-input" />
                       </CardBody>
                     </Collapse>
                   </Card>
                   <Card>
                     <CardHeader>
-                    Expense Item Details
+                      Expense Item Details
                       <div className="card-header-actions">
                         <Button
                           color="link"
                           className="card-header-action btn-minimize"
                           data-target="#collapseExample"
-                          onClick={this.toggle}
+                          onClick={() => this.setState({ collapseitemDetails: !this.state.collapseitemDetails })}
                         >
                           <i className="icon-arrow-up"></i>
                         </Button>
                       </div>
                     </CardHeader>
-                    <Collapse isOpen={this.state.collapse} id="collapseExample">
+                    <Collapse isOpen={this.state.collapseitemDetails} id="collapseExample">
                       <CardBody>
-
+                        <Button type="submit" className="submit-invoice" size="sm" color="primary">
+                          <i className="fas fa-plus "></i> Add More
+                      </Button>
+                        <table className="expense-items-table">
+                          <thead>
+                            <tr>
+                              <th></th>
+                              <th>Product/Service</th>
+                              <th>Quantity</th>
+                              <th>Unit Price ()</th>
+                              <th>VAT (%)</th>
+                              <th>Subtotal ()</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                <Button
+                                  block
+                                  color="primary"
+                                  className="btn-pill vat-actions"
+                                  title="Delete Expense"
+                                // onClick={() => this.setState({ selectedData:  }, () => this.setState({ openDeleteModal: true }))}
+                                >
+                                  <i className="fas fa-trash-alt"></i>
+                                </Button>
+                              </td>
+                              <td>
+                                <Input
+                                  type="text"
+                                  name="attachmentDescription"
+                                  id="attachmentDescription"
+                                  value={attachmentDescription}
+                                />
+                              </td>
+                              <td>
+                                <Input
+                                  type="text"
+                                  name="attachmentDescription"
+                                  id="attachmentDescription"
+                                  value={attachmentDescription}
+                                />
+                              </td>
+                              <td>
+                                <Input
+                                  type="text"
+                                  name="attachmentDescription"
+                                  id="attachmentDescription"
+                                  value={attachmentDescription}
+                                />
+                              </td>
+                              <td>
+                                <Input
+                                  type="text"
+                                  name="attachmentDescription"
+                                  id="attachmentDescription"
+                                  value={attachmentDescription}
+                                />
+                              </td>
+                              <td>
+                                120
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </CardBody>
                     </Collapse>
                   </Card>
@@ -280,6 +501,11 @@ class CreateOrEditExpense extends Component {
             </Row>
           </div>
         </Card>
+        {
+          loading ?
+            <Loader></Loader>
+            : ""
+        }
       </div>
     );
   }

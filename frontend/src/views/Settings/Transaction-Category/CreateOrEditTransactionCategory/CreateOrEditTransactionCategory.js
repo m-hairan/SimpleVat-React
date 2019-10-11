@@ -17,7 +17,7 @@ import _ from "lodash";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Autosuggest from "react-autosuggest";
-
+import Loader from "../../../../Loader";
 class CreateOrEditTransactionCategory extends Component {
   constructor(props) {
     super(props);
@@ -485,10 +485,7 @@ class CreateOrEditTransactionCategory extends Component {
           </CardBody>
         </Card>
         {loading ? (
-          <div className="sk-double-bounce loader">
-            <div className="sk-child sk-double-bounce1"></div>
-            <div className="sk-child sk-double-bounce2"></div>
-          </div>
+          <Loader></Loader>
         ) : (
             ""
           )}
