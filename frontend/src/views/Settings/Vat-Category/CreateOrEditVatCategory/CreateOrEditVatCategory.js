@@ -5,23 +5,20 @@ import {
   CardBody,
   Button,
   Col,
-  Row,
   FormGroup,
   Label,
   Input,
   Form
 } from "reactstrap";
-import { NavLink } from "react-router-dom";
 import "react-bootstrap-table/dist/react-bootstrap-table-all.min.css";
 import sendRequest from "../../../../xhrRequest";
 import _ from "lodash";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import Loader from "../../../../Loader";
 class CreateOrEditCategory extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       vatData: {},
       loading: false
@@ -138,10 +135,7 @@ class CreateOrEditCategory extends Component {
           </CardBody>
         </Card>
         {loading ? (
-          <div className="sk-double-bounce loader">
-            <div className="sk-child sk-double-bounce1"></div>
-            <div className="sk-child sk-double-bounce2"></div>
-          </div>
+          <Loader></Loader>
         ) : (
             ""
           )}

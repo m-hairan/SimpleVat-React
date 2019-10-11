@@ -1,14 +1,13 @@
 
 import React, { Component } from 'react';
 import { Card, CardHeader, CardBody, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import sendRequest from '../../../xhrRequest';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import Loader from "../../../Loader";
 class VatCategory extends Component {
     constructor(props) {
         super(props);
@@ -130,10 +129,7 @@ class VatCategory extends Component {
                 </Modal>
                 {
                     loading ?
-                        <div className="sk-double-bounce loader">
-                            <div className="sk-child sk-double-bounce1"></div>
-                            <div className="sk-child sk-double-bounce2"></div>
-                        </div>
+                        <Loader></Loader>
                         : ""
                 }
             </div>

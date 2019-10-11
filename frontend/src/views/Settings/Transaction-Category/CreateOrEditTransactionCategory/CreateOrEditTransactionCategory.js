@@ -14,10 +14,10 @@ import {
 import "react-bootstrap-table/dist/react-bootstrap-table-all.min.css";
 import sendRequest from "../../../../xhrRequest";
 import _ from "lodash";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Autosuggest from "react-autosuggest";
-
+import Loader from "../../../../Loader";
 class CreateOrEditTransactionCategory extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +25,10 @@ class CreateOrEditTransactionCategory extends Component {
     this.state = {
       value: "",
       suggestions: [],
+      parentValue: "",
+      parentSuggestions: [],
       transactionCategoryList: [],
+      parentCategoryCodeList: [],
       vatCategoryList: [],
       transactionData: {
         defaltFlag: "N",
@@ -62,8 +65,6 @@ class CreateOrEditTransactionCategory extends Component {
             transactionCategoryDescription,
             parentTransactionCategory,
             defaltFlag,
-            parentTransactionType,
-            selectTransactionType,
             transactionType
           } = data;
           this.setState({
@@ -71,14 +72,14 @@ class CreateOrEditTransactionCategory extends Component {
               transactionCategoryId,
               categoryName: transactionCategoryName,
               categoryCode: transactionCategoryCode,
-              defaultFlag: defaltFlag,
+              defaltFlag,
               categoryDiscription: transactionCategoryDescription,
               transactionTypeCode: transactionType.transactionTypeCode,
-              parentTransactionCategory:
-                parentTransactionCategory.transactionCategoryName,
+              parentTransactionCategory: parentTransactionCategory.transactionCategoryName,
               transactionTypeName: transactionType.transactionTypeName
             },
-            selectedTransactionCategory: transactionType.transactionTypeName
+            selectedParentCategory: parentTransactionCategory,
+            selectedTransactionCategory: transactionType
           });
         });
     }
@@ -90,11 +91,11 @@ class CreateOrEditTransactionCategory extends Component {
     return inputLength === 0
       ? []
       : this.state.transactionCategoryList.filter(
-          transaction =>
-            transaction.transactionTypeName
-              .toLowerCase()
-              .slice(0, inputLength) === inputValue
-        );
+        transaction =>
+          transaction.transactionTypeName
+            .toLowerCase()
+            .slice(0, inputLength) === inputValue
+      );
   };
   getSuggestionValue = suggestion => suggestion.transactionTypeName;
 
@@ -119,6 +120,57 @@ class CreateOrEditTransactionCategory extends Component {
     });
   };
 
+  getParentCategoryCodeListData = (val) => {
+    const code = this.state.selectedTransactionCategory.transactionTypeCode;
+    const res = sendRequest(`rest/transaction/getparenttransaction?TransactionTypeCode=${code}&transcationTxt=${val}`, "get", "", "");
+    res
+      .then(res => {
+        if (res.status === 200) {
+          this.setState({ loading: false });
+          return res.json();
+        }
+      })
+      .then(data => {
+        this.setState({ parentCategoryCodeList: data });
+        return data;
+      });
+  };
+
+  getParentSuggestions = value => {
+    const inputValue = value.trim().toLowerCase();
+    const inputLength = inputValue.length;
+    this.getParentCategoryCodeListData(inputValue);
+    return inputLength === 0
+      ? []
+      : this.state.parentCategoryCodeList.filter(
+        transaction =>
+          transaction.transactionCategoryName
+            .toLowerCase()
+            .slice(0, inputLength) === inputValue
+      );
+  };
+
+  getParentSuggestionValue = suggestion => suggestion.transactionCategoryName;
+
+  renderParentSuggestion = suggestion => <div>{suggestion.transactionCategoryName}</div>
+
+  onParentChange = (event, { newValue }) => {
+    this.setState({
+      parentValue: newValue
+    });
+  };
+  onParentSuggestionsFetchRequested = ({ value }) => {
+    this.setState({
+      parentSuggestions: this.getParentSuggestions(value)
+    });
+  };
+
+  onParentSuggestionsClearRequested = () => {
+    this.setState({
+      parentSuggestions: []
+    });
+  };
+
   getTransactionListData = () => {
     const res = sendRequest(`rest/transaction/gettransactiontype`, "get", "", "");
     res
@@ -132,6 +184,7 @@ class CreateOrEditTransactionCategory extends Component {
         this.setState({ transactionCategoryList: data });
       });
   };
+
   getvatListData = () => {
     const res = sendRequest(`rest/transaction/getvatcategories`, "get", "", "");
     res
@@ -162,37 +215,35 @@ class CreateOrEditTransactionCategory extends Component {
     });
   };
 
-  handleSubmit = e => {
+  handleSubmit = (e, status) => {
     const params = new URLSearchParams(this.props.location.search);
     const id = params.get("id");
     this.setState({ loading: true });
     e.preventDefault();
-    console.log(this.state.transactionData);
     const {
       categoryName,
       categoryCode,
       categoryDiscription,
       selectVatCategoryCode,
-      defaltFlag,
-      parentTransactionType,
-      selectTransactionType
+      defaltFlag
     } = this.state.transactionData;
+    const { selectedParentCategory } = this.state;
     let postObj;
-    if (!id) {
-      postObj = {
-        transactionCategoryName: categoryName,
-        transactionCategoryCode: categoryCode,
-        defaltFlag: defaltFlag,
-        parentTransactionCategory: parentTransactionType,
-        transactionCategoryDescription: categoryDiscription,
-        vatCategory: selectVatCategoryCode,
-        transactionType: this.state.selectedTransactionCategory
-          ? this.state.selectedTransactionCategory.transactionTypeCode
-          : ""
-      };
-    } else {
-      postObj = { ...this.state.transactionData };
-    }
+    postObj = {
+      transactionCategoryId: id ? id : "0",
+      transactionCategoryName: categoryName,
+      transactionCategoryCode: categoryCode,
+      defaltFlag: defaltFlag,
+      parentTransactionCategory: selectedParentCategory.transactionCategoryId,
+      transactionCategoryDescription: categoryDiscription,
+      vatCategory: selectVatCategoryCode,
+      transactionType: this.state.selectedTransactionCategory
+        ? this.state.selectedTransactionCategory.transactionTypeCode
+        : ""
+    };
+    //  else {
+    //   postObj = { ...this.state.transactionData };
+    // }
     const res = sendRequest(
       `rest/transaction/savetransaction?id=1`,
       "post",
@@ -201,7 +252,12 @@ class CreateOrEditTransactionCategory extends Component {
     res.then(res => {
       if (res.status === 200) {
         this.success();
-        this.props.history.push("settings/transaction-category");
+        if (status === "addMore") {
+          this.setState({ transaction: {} })
+          this.props.history.push("create-transaction-category");
+        } else {
+          this.props.history.push("settings/transaction-category");
+        }
       }
     });
   };
@@ -210,26 +266,34 @@ class CreateOrEditTransactionCategory extends Component {
     this.setState({ selectedTransactionCategory: val.suggestion });
   };
 
+  onParentSuggestionSelected = (e, val) => {
+    this.setState({ selectedParentCategory: val.suggestion });
+  };
+
   render() {
-    const { loading, selectedTransactionCategory } = this.state;
+    const params = new URLSearchParams(this.props.location.search);
+    const id = params.get("id");
+    const { loading, selectedTransactionCategory, transactionData } = this.state;
     const {
-      id,
       transactionTypeName,
       categoryName,
       categoryCode,
-      defaultFlag,
+      defaltFlag,
       categoryDiscription,
-      parentTransactionCategory
-    } = this.state.transactionData ? this.state.transactionData : {};
-    const { value, suggestions } = this.state;
+      parentTransactionCategory,
+    } = transactionData;
+    const { value, suggestions, parentValue, parentSuggestions } = this.state;
 
-    // Autosuggest will pass through all these props to the input.
     const inputProps = {
       placeholder: "Type Transaction CategoryType",
-      value: transactionTypeName,
+      value: transactionTypeName ? transactionTypeName : value,
       onChange: this.onChange
     };
-
+    const parentInputProps = {
+      placeholder: "Type Prent Category Code",
+      value: parentTransactionCategory ? parentTransactionCategory : parentValue,
+      onChange: this.onParentChange
+    };
     return (
       <div className="animated">
         <Card>
@@ -301,7 +365,7 @@ class CreateOrEditTransactionCategory extends Component {
                       id="inline-radio1"
                       name="defaltFlag"
                       value="Y"
-                      checked={defaultFlag === "Y"}
+                      checked={defaltFlag === "Y"}
                       onChange={this.handleChange}
                     />
                     <Label
@@ -319,7 +383,7 @@ class CreateOrEditTransactionCategory extends Component {
                       id="inline-radio2"
                       name="defaltFlag"
                       value="N"
-                      checked={defaultFlag === "N"}
+                      checked={defaltFlag === "N"}
                       onChange={this.handleChange}
                     />
                     <Label
@@ -386,24 +450,33 @@ class CreateOrEditTransactionCategory extends Component {
                       <Label htmlFor="selectTransactionType">
                         Parent Transaction Type
                       </Label>
-                      <Input
-                        type="text"
-                        name="parentTransactionType"
-                        id="parentTransactionType"
-                        value={parentTransactionCategory}
-                        onChange={this.handleChange}
-                        required
-                      ></Input>
+                      <Autosuggest
+                        className="autoSuggest"
+                        suggestions={parentSuggestions}
+                        onSuggestionsFetchRequested={
+                          this.onParentSuggestionsFetchRequested
+                        }
+                        onSuggestionsClearRequested={
+                          this.onParentSuggestionsClearRequested
+                        }
+                        getSuggestionValue={this.getParentSuggestionValue}
+                        onSuggestionSelected={this.onParentSuggestionSelected}
+                        renderSuggestion={this.renderParentSuggestion}
+                        inputProps={parentInputProps}
+                      />
                     </FormGroup>
                   </Col>
                 </FormGroup>
               ) : (
-                ""
-              )}
+                  ""
+                )}
               <FormGroup>
                 <Col>
                   <Button type="submit" size="sm" color="primary">
-                    <i className="fa fa-dot-circle-o"></i> Submit
+                    <i className="fa fa-dot-circle-o"></i> {id ? "Update" : "Save"}
+                  </Button>
+                  <Button size="sm" color="primary" onSubmit={(e) => this.handleSubmit(e, "addMore")}>
+                    <i className="fa fa-dot-circle-o"></i> {id ? "Update & Add More" : "Save & Add More"}
                   </Button>
                 </Col>
               </FormGroup>
@@ -412,13 +485,10 @@ class CreateOrEditTransactionCategory extends Component {
           </CardBody>
         </Card>
         {loading ? (
-          <div className="sk-double-bounce loader">
-            <div className="sk-child sk-double-bounce1"></div>
-            <div className="sk-child sk-double-bounce2"></div>
-          </div>
+          <Loader></Loader>
         ) : (
-          ""
-        )}
+            ""
+          )}
       </div>
     );
   }

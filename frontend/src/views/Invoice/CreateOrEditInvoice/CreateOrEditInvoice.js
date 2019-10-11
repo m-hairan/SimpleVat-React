@@ -19,7 +19,6 @@ import {
 import "react-bootstrap-table/dist/react-bootstrap-table-all.min.css";
 import sendRequest from "../../../xhrRequest";
 import _ from "lodash";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Autosuggest from 'react-autosuggest';
 
@@ -71,7 +70,6 @@ class CreateOrEditInvoice extends Component {
     }
   }
 
-  // Teach Autosuggest how to calculate suggestions for any given input value.
   getSuggestions = value => {
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
@@ -83,12 +81,9 @@ class CreateOrEditInvoice extends Component {
         );
   };
 
-  // When suggestion is clicked, Autosuggest needs to populate the input
-  // based on the clicked suggestion. Teach Autosuggest how to calculate the
-  // input value for every given suggestion.
+
   getSuggestionValue = suggestion => suggestion.name;
 
-  // Use your imagination to render suggestions.
   renderSuggestion = suggestion => <div>{suggestion.name}</div>;
 
   getTransactionListData = () => {
@@ -133,44 +128,6 @@ class CreateOrEditInvoice extends Component {
     });
   };
 
-  success = () => {
-    return toast.success("Transaction Category Updated successfully... ", {
-      position: toast.POSITION.TOP_RIGHT
-    });
-  };
-
-  handleSubmit = e => {
-    this.setState({ loading: true });
-    e.preventDefault();
-    const {
-      categoryName,
-      categoryCode,
-      categoryDiscription,
-      selectCategoryCode,
-      selectTransactionType
-    } = this.state.transactionData;
-    const postObj = {
-      categoryName: categoryName,
-      categoryCode: categoryCode,
-      categoryDiscription: categoryDiscription,
-      selectCategoryCode: selectCategoryCode,
-      selectTransactionType: selectTransactionType
-    };
-    console.log(postObj);
-    //  const res = sendRequest(
-    //   `/transaction/savetransaction?id=1`,
-    //   "post",
-    //   "",
-    //   postObj
-    // );
-    // res.then(res => {
-    //   if (res.status === 200) {
-    //     this.success();
-    //     this.props.history.push("settings/transaction-category");
-    //   }
-    // });
-  };
-
   toggle = () => {
     this.setState({ collapse: !this.state.collapse });
   };
@@ -180,15 +137,12 @@ class CreateOrEditInvoice extends Component {
       value: newValue
     });
   };
-  // Autosuggest will call this function every time you need to update suggestions.
-  // You already implemented this logic above, so just use it.
   onSuggestionsFetchRequested = ({ value }) => {
     this.setState({
       suggestions: this.getSuggestions(value)
     });
   };
 
-  // Autosuggest will call this function every time you need to clear suggestions.
   onSuggestionsClearRequested = () => {
     this.setState({
       suggestions: []
@@ -196,14 +150,9 @@ class CreateOrEditInvoice extends Component {
   };
 
   render() {
-    const { loading } = this.state;
-    const { id, name, vat } = this.state.transactionData
-      ? this.state.transactionData
-      : {};
-
+   
     const { value, suggestions } = this.state;
 
-    // Autosuggest will pass through all these props to the input.
     const inputProps = {
       value,
       onChange: this.onChange
@@ -211,7 +160,7 @@ class CreateOrEditInvoice extends Component {
     return (
       <div className="animated fadeIn">
         <Card>
-          <CardHeader>{id ? "Edit Bank Account" : "New Invoice"}</CardHeader>
+          <CardHeader>New Invoice</CardHeader>
           <div className="create-bank-wrapper">
             <Row>
               <Col xs="12">

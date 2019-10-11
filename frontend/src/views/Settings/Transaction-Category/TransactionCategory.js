@@ -15,6 +15,7 @@ import sendRequest from "../../../xhrRequest";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loader from "../../../Loader";
 
 class TransactionCategory extends Component {
   constructor(props) {
@@ -60,12 +61,8 @@ class TransactionCategory extends Component {
   }
 
   getTransactionListData = () => {
-    const res = sendRequest(
-      `rest/transaction/gettransactioncategory`,
-      "get",
-      "",
-      ""
-    );
+    this.setState({ loading: true })
+    const res = sendRequest(`rest/transaction/gettransactioncategory`, "get", "");
     res
       .then(res => {
         if (res.status === 200) {
@@ -86,8 +83,7 @@ class TransactionCategory extends Component {
   );
 
   getTransactionType = (cell, row) => row.transactionType.transactionTypeName;
-  getparentTransactionCategory = (cell,row) =>row.parentTransactionCategory.transactionCategoryDescription;
-
+  getparentTransactionCategory = (cell, row) => row.parentTransactionCategory.transactionCategoryDescription;
 
   transactionActions = (cell, row) => {
     return (
@@ -149,7 +145,7 @@ class TransactionCategory extends Component {
     const containerStyle = {
       zIndex: 1999
     };
-
+    console.log(this.state)
     return (
       <div className="animated">
         <ToastContainer
@@ -220,13 +216,10 @@ class TransactionCategory extends Component {
           </ModalFooter>
         </Modal>
         {loading ? (
-          <div className="sk-double-bounce loader">
-            <div className="sk-child sk-double-bounce1"></div>
-            <div className="sk-child sk-double-bounce2"></div>
-          </div>
+          <Loader></Loader>
         ) : (
-          ""
-        )}
+            ""
+          )}
       </div>
     );
   }

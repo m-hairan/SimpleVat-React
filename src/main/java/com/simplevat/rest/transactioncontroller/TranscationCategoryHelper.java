@@ -6,6 +6,10 @@
 package com.simplevat.rest.transactioncontroller;
 
 import com.simplevat.entity.bankaccount.TransactionCategory;
+import com.simplevat.service.TransactionCategoryServiceNew;
+import com.simplevat.service.VatCategoryService;
+import com.simplevat.service.bankaccount.TransactionTypeService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -48,6 +52,32 @@ public class TranscationCategoryHelper {
         transactionCategory.setTransactionType(categoryModel.getTransactionType());
         transactionCategory.setVatCategory(categoryModel.getVatCategory());
         transactionCategory.setVersionNumber(categoryModel.getVersionNumber());
+        return transactionCategory;
+    }
+
+    public TransactionCategory getTrascationByTrascationModel(TransactionCategoryBean transactionCategoryBean, TransactionTypeService transactionTypeService, TransactionCategoryServiceNew transactionCategoryService, VatCategoryService vatCategoryService) {
+        TransactionCategory transactionCategory = new TransactionCategory();
+        transactionCategory.setDefaltFlag(transactionCategoryBean.getDefaltFlag());
+        if (transactionCategoryBean.getParentTransactionCategory() != null) {
+            transactionCategory.setParentTransactionCategory(transactionCategoryService.findByPK(transactionCategoryBean.getParentTransactionCategory()));
+        }
+        if (transactionCategoryBean.getTransactionCategoryId() != 0) {
+            transactionCategory.setTransactionCategoryId(transactionCategoryBean.getTransactionCategoryId());
+        }
+        transactionCategory.setTransactionCategoryCode(transactionCategoryBean.getTransactionCategoryCode());
+        transactionCategory.setTransactionCategoryDescription(transactionCategoryBean.getTransactionCategoryDescription());
+        transactionCategory.setTransactionCategoryName(transactionCategoryBean.getTransactionCategoryName());
+        if (transactionCategoryBean.getTransactionType() != null) {
+            transactionCategory.setTransactionType(transactionTypeService.findByPK(transactionCategoryBean.getTransactionType()));
+        }
+        if (transactionCategoryBean.getVatCategory() != null) {
+            transactionCategory.setVatCategory(vatCategoryService.findByPK(transactionCategoryBean.getVatCategory()));
+        }
+        if (transactionCategoryBean.getVersionNumber() != null) {
+            transactionCategory.setVersionNumber(transactionCategoryBean.getVersionNumber());
+        }else{
+            transactionCategory.setVersionNumber(0);
+        }
         return transactionCategory;
     }
 

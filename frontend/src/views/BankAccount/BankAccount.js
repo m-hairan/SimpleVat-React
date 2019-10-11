@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Card, CardHeader, CardBody, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { NavLink } from 'react-router-dom';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import sendRequest from '../../xhrRequest';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import Loader from "../../Loader";
 class BankAccount extends Component {
   constructor(props) {
     super(props);
@@ -77,7 +76,7 @@ class BankAccount extends Component {
   bankAccounttActions = (cell, row) => {
     return (
       <div className="d-flex">
-        <Button block color="primary" className="btn-pill vat-actions" title="Edit Vat Category" onClick={() => this.props.history.push(`/create-bank-account?id=${row.id}`)}><i className="far fa-edit"></i></Button>
+        <Button block color="primary" className="btn-pill vat-actions" title="Edit Vat Category" onClick={() => this.props.history.push(`/create-bank-account?id=${row.bankAccountId}`)}><i className="far fa-edit"></i></Button>
         <Button block color="primary" className="btn-pill vat-actions" title="Transaction" onClick={() => this.props.history.push(`/create-bank-account?id=${row.id}`)}><i className="fas fa-university"></i></Button>
         <Button block color="primary" className="btn-pill vat-actions" title="Delete Vat Ctegory" onClick={() => this.setState({ selectedData: row }, () => this.setState({ openDeleteModal: true }))}><i className="fas fa-trash-alt"></i></Button>
       </div>
@@ -123,10 +122,7 @@ class BankAccount extends Component {
         </Modal>
         {
           loading ?
-            <div className="sk-double-bounce loader">
-              <div className="sk-child sk-double-bounce1"></div>
-              <div className="sk-child sk-double-bounce2"></div>
-            </div>
+            <Loader></Loader>
             : ""
         }
       </div>
