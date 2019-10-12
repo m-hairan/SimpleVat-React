@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -42,7 +43,7 @@ public class TransactionReportRestController {
     TransactionRestControllerHelper transactionRestControllerHelper;
 
     @RequestMapping(method = RequestMethod.GET, value = "/completefinancialperiods")
-    public ResponseEntity completeFinancialPeriods() {
+    public ResponseEntity<List<FinancialPeriodRest>> completeFinancialPeriods() {
         try {
             return new ResponseEntity(FinancialPeriodHolderRest.getFinancialPeriodList(), HttpStatus.OK);
         } catch (Exception e) {
@@ -52,7 +53,7 @@ public class TransactionReportRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/transactiontypes")
-    public ResponseEntity transactionTypes() throws Exception {
+    public ResponseEntity<List<TransactionType>> transactionTypes() throws Exception {
         try {
             List<TransactionType> transactionTypeList = transactionTypeService.findAllChild();
             return new ResponseEntity(transactionTypeList, HttpStatus.OK);
@@ -62,9 +63,10 @@ public class TransactionReportRestController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/transactioncategories")
-    public ResponseEntity transactionCategories(@RequestBody TransactionType transactionType) throws Exception {
+    @RequestMapping(method = RequestMethod.GET, value = "/transactioncategories")
+    public ResponseEntity<List<TransactionCategory>> transactionCategories(@RequestParam("transactionTypeCode") Integer transactionTypeCode) throws Exception {
         try {
+            TransactionType transactionType = transactionTypeService.findByPK(transactionTypeCode);
             System.out.println("transactionType==" + transactionType);
             String name = "";
             List<TransactionCategory> transactionCategoryParentList = new ArrayList<>();
@@ -88,16 +90,24 @@ public class TransactionReportRestController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/view")
-    public void view(@RequestBody TransactionType transactionType, @RequestBody TransactionCategory transactionCategory, @RequestBody FinancialPeriodRest financialPeriod) {
-        double totalTransactionAmount = 0.00;
-        List<TransactionRestModel> transactionList = new ArrayList<>();
-        System.out.println("entered");
-        List<Transaction> transactions = transactionService.getTransactionsByDateRangeAndTranscationTypeAndTranscationCategory(transactionType, transactionCategory, financialPeriod.getStartDate(), financialPeriod.getLastDate());
-        if (transactions != null && !transactions.isEmpty()) {
-            for (Transaction transaction : transactions) {
-                totalTransactionAmount = totalTransactionAmount + transaction.getTransactionAmount().doubleValue();
-                transactionList.add(transactionRestControllerHelper.getTransactionModel(transaction));
+    public ResponseEntity<List<TransactionRestModel>> view(@RequestBody Integer transactionTypeCode, @RequestBody Integer transactionCategoryId, @RequestBody FinancialPeriodRest financialPeriod) {
+        try {
+
+            TransactionType transactionType = transactionTypeService.findByPK(transactionTypeCode);
+            TransactionCategory transactionCategory = transactionCategoryService.findByPK(transactionCategoryId);
+            double totalTransactionAmount = 0.00;
+            List<TransactionRestModel> transactionList = new ArrayList<>();
+            List<Transaction> transactions = transactionService.getTransactionsByDateRangeAndTranscationTypeAndTranscationCategory(transactionType, transactionCategory, financialPeriod.getStartDate(), financialPeriod.getLastDate());
+            if (transactions != null && !transactions.isEmpty()) {
+                for (Transaction transaction : transactions) {
+                    totalTransactionAmount = totalTransactionAmount + transaction.getTransactionAmount().doubleValue();
+                    transactionList.add(transactionRestControllerHelper.getTransactionModel(transaction));
+                }
             }
+            return new ResponseEntity(transactionList, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 

@@ -5,7 +5,10 @@
  */
 package com.simplevat.rest.expenses;
 
+import com.simplevat.entity.Currency;
 import com.simplevat.entity.Expense;
+import com.simplevat.entity.Project;
+import com.simplevat.entity.User;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import static com.simplevat.rest.expenses.ExpenseRestHelper.TRANSACTION_TYPE_EXPENSE;
 import com.simplevat.service.CompanyService;
@@ -14,6 +17,7 @@ import com.simplevat.service.ExpenseService;
 import com.simplevat.service.ProjectService;
 import com.simplevat.service.TransactionCategoryServiceNew;
 import com.simplevat.service.UserServiceNew;
+import com.simplevat.service.bankaccount.TransactionTypeService;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,10 +55,13 @@ public class ExpenseRestController {
     @Autowired
     private ProjectService projectService;
 
+    @Autowired
+    TransactionTypeService transactionTypeService;
+
     ExpenseRestHelper controllerHelper = new ExpenseRestHelper();
 
     @RequestMapping(method = RequestMethod.GET, value = "/retrieveExpenseList")
-    public ResponseEntity expenseList() {
+    public ResponseEntity<List<ExpenseRestModel>> expenseList() {
         try {
             List<ExpenseRestModel> expenses = new ArrayList<>();
             System.out.println("expenseService=" + expenseService);
@@ -75,7 +82,7 @@ public class ExpenseRestController {
     @RequestMapping(method = RequestMethod.POST, value = "/save")
     public ResponseEntity saveExpense(@RequestBody ExpenseRestModel expenseRestModel) {
         try {
-            controllerHelper.saveExpense(expenseRestModel, currencyService, userServiceNew, companyService, projectService, expenseService);
+            controllerHelper.saveExpense(expenseRestModel, currencyService, userServiceNew, companyService, projectService, expenseService, transactionCategoryService, transactionTypeService);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {
             e.printStackTrace();
@@ -84,7 +91,7 @@ public class ExpenseRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/vieworedit")
-    public ResponseEntity viewExpense(@RequestParam("expenseId") Integer expenseId) {
+    public ResponseEntity<ExpenseRestModel> viewExpense(@RequestParam("expenseId") Integer expenseId) {
         try {
             System.out.println("expenseId=" + expenseId);
             return new ResponseEntity(controllerHelper.viewOrEditExpense(expenseId, expenseService), HttpStatus.OK);
@@ -107,7 +114,7 @@ public class ExpenseRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/claimants")
-    public ResponseEntity getClaimants() {
+    public ResponseEntity<List<User>> getClaimants() {
         try {
             return new ResponseEntity(controllerHelper.users(userServiceNew), HttpStatus.OK);
         } catch (Exception e) {
@@ -117,7 +124,7 @@ public class ExpenseRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/categories")
-    public ResponseEntity getCategorys(@RequestParam("categoryName") String queryString) {
+    public ResponseEntity<List<TransactionCategory>> getCategorys(@RequestParam("categoryName") String queryString) {
         try {
             System.out.println("queryString=" + queryString);
             List<TransactionCategory> transactionCategoryList = transactionCategoryService.findAllTransactionCategoryByTransactionType(TRANSACTION_TYPE_EXPENSE, queryString);
@@ -129,7 +136,7 @@ public class ExpenseRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/currencys")
-    public ResponseEntity getCurrencys(@RequestParam("currency") String queryString) {
+    public ResponseEntity<List<Currency>> getCurrencys(@RequestParam("currency") String queryString) {
         try {
             return new ResponseEntity(controllerHelper.completeCurrency(queryString, currencyService), HttpStatus.OK);
         } catch (Exception e) {
@@ -139,7 +146,7 @@ public class ExpenseRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/projects")
-    public ResponseEntity getProjects(@RequestParam("projectName") String queryString) {
+    public ResponseEntity<List<Project>> getProjects(@RequestParam("projectName") String queryString) {
         try {
             return new ResponseEntity(controllerHelper.projects(queryString, projectService), HttpStatus.OK);
         } catch (Exception e) {
