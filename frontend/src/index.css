@@ -64,3 +64,28 @@
   margin-top: 31px;
   margin-left: 25px;
 }
+
+.react-autosuggest__suggestions-list{
+  min-height: auto;
+  max-height: 10rem;
+  overflow-y: scroll;
+  position: absolute;
+  z-index: 1000;
+  background: white;
+  width: 95%;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.expense-items-table{
+  margin: 1rem 0;
+  width: 100%;
+}
+
+.expense-items-table th{
+  padding: 0.5rem;
+}
+
+.expense-items-table, .expense-items-table td ,.expense-items-table th{
+  border: 1px solid rgba(0,0,0,0.1);
+
+}

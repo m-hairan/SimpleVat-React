@@ -18,7 +18,7 @@ import _ from "lodash";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Autosuggest from "react-autosuggest";
-
+import Loader from "../../../Loader";
 class CreateOrEditBankAccount extends Component {
   constructor(props) {
     super(props);
@@ -164,7 +164,6 @@ class CreateOrEditBankAccount extends Component {
   };
 
   handleSubmit = (e) => {
-    console.log(this.state);
     this.setState({ loading: true });
     e.preventDefault();
     const { bankAccountId, bankAccountName, bankName, personalCorporateAccountInd, isprimaryAccountFlag, accountNumber, ibanNumber, swiftCode,
@@ -297,7 +296,6 @@ class CreateOrEditBankAccount extends Component {
   };
 
   render() {
-    console.log(this.state)
     const params = new URLSearchParams(this.props.location.search);
     const id = params.get("id");
     const { loading, countryList, accountTypeList, currencylist, bankAccountStatusList } = this.state;
@@ -592,10 +590,7 @@ class CreateOrEditBankAccount extends Component {
         </Card>
         {
           loading ?
-            <div className="sk-double-bounce loader">
-              <div className="sk-child sk-double-bounce1"></div>
-              <div className="sk-child sk-double-bounce2"></div>
-            </div>
+            <Loader></Loader>
             : ""
         }
       </div>
