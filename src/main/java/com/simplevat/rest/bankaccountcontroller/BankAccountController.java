@@ -77,14 +77,13 @@ public class BankAccountController implements Serializable {
     @PostMapping(value = "/savebank")
     private ResponseEntity saveBankAccount(@RequestBody BankModel bankModel, @RequestParam(value = "id") Integer id) {
         try {
-            BankHelper bankHelper = new BankHelper();
-            BankAccount bankAccount = bankHelper.getBankAccountByBankAccountModel(bankModel, bankAccountStatusService, currencyService, bankAccountTypeService,countryService);
+            BankAccount bankAccount = BankHelper.getBankAccountByBankAccountModel(bankModel, bankAccountStatusService, currencyService, bankAccountTypeService, countryService);
             User user = userServiceNew.findByPK(id);
-            if (user != null) {
-                bankAccount.setCreatedDate(LocalDateTime.now());
-                bankAccount.setCreatedBy(user.getUserId());
-            }
             if (bankModel.getBankAccountId() == null) {
+                if (user != null) {
+                    bankAccount.setCreatedDate(LocalDateTime.now());
+                    bankAccount.setCreatedBy(user.getUserId());
+                }
                 bankAccountService.persist(bankAccount);
             } else {
                 bankAccount.setBankAccountId(bankModel.getBankAccountId());
@@ -94,7 +93,7 @@ public class BankAccountController implements Serializable {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();        
+            e.printStackTrace();
         }
         return new ResponseEntity<>(HttpStatus.OK);
 

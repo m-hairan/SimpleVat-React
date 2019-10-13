@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class TranscationCategoryHelper {
 
-    public TransactionCategoryModel getCategory(TransactionCategory category) {
+    public static TransactionCategoryModel getCategory(TransactionCategory category) {
         TransactionCategoryModel model = new TransactionCategoryModel();
         model.setCreatedBy(category.getCreatedBy());
         model.setCreatedDate(category.getCreatedDate());
@@ -36,7 +36,7 @@ public class TranscationCategoryHelper {
         return model;
     }
 
-    public TransactionCategory getTrascationModel(TransactionCategoryModel categoryModel) {
+    public static TransactionCategory getTrascationModel(TransactionCategoryModel categoryModel) {
         TransactionCategory transactionCategory = new TransactionCategory();
         transactionCategory.setCreatedBy(categoryModel.getCreatedBy());
         transactionCategory.setCreatedDate(categoryModel.getCreatedDate());
@@ -55,7 +55,7 @@ public class TranscationCategoryHelper {
         return transactionCategory;
     }
 
-    public TransactionCategory getTrascationByTrascationModel(TransactionCategoryBean transactionCategoryBean, TransactionTypeService transactionTypeService, TransactionCategoryServiceNew transactionCategoryService, VatCategoryService vatCategoryService) {
+    public static TransactionCategory getTrascationByTrascationModel(TransactionCategoryBean transactionCategoryBean, TransactionTypeService transactionTypeService, TransactionCategoryServiceNew transactionCategoryService, VatCategoryService vatCategoryService) {
         TransactionCategory transactionCategory = new TransactionCategory();
         transactionCategory.setDefaltFlag(transactionCategoryBean.getDefaltFlag());
         if (transactionCategoryBean.getParentTransactionCategory() != null) {

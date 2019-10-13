@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class BankHelper {
 
-    public BankAccount getBankAccountByBankAccountModel(BankModel bankModel, BankAccountStatusService bankAccountStatusService, CurrencyService currencyService, BankAccountTypeService bankAccountTypeService, CountryService countryService) {
+    public static BankAccount getBankAccountByBankAccountModel(BankModel bankModel, BankAccountStatusService bankAccountStatusService, CurrencyService currencyService, BankAccountTypeService bankAccountTypeService, CountryService countryService) {
         BankAccount bankAccount = new BankAccount();
         if (bankModel.getBankCountry() != null) {
             bankAccount.setBankCountry(countryService.getCountry(bankModel.getBankCountry()));
