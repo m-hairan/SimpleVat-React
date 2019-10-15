@@ -85,7 +85,22 @@
   padding: 0.5rem;
 }
 
-.expense-items-table, .expense-items-table td ,.expense-items-table th{
-  border: 1px solid rgba(0,0,0,0.1);
-
+.expense-table-footer{
+  border-bottom: none !important;
+  border-left: none !important;
 }
+
+.expense-table-border{
+  border: 1px solid rgba(0,0,0,0.1) !important;
+  padding: 0.3rem;
+}
+
+.expense-items-table thead,
+.expense-items-table tbody,
+ .expense-items-table thead td ,
+ .expense-items-table tbody td ,
+ .expense-items-table thead th,
+ .expense-items-table tbody th{
+  border: 1px solid rgba(0,0,0,0.1);
+}
+

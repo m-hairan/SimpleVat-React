@@ -87,7 +87,7 @@ class Expense extends Component {
                     <div>{`${row.expenseAmountCompanyCurrency}.00`}</div>
                 </div>
                 <div>
-                    <label>{row.expenseContact.currency.currencySymbol}</label>
+                    <label>{row.expenseContact ? row.expenseContact.currency.currencySymbol : ""}</label>
                     <label>{`${row.expenseAmount}.00`}</label>
                 </div>
             </div>

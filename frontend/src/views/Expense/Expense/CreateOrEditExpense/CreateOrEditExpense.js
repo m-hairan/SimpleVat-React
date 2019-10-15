@@ -10,7 +10,8 @@ import {
   Label,
   Input,
   Form,
-  Collapse
+  Collapse,
+  Alert
 } from "reactstrap";
 import "react-bootstrap-table/dist/react-bootstrap-table-all.min.css";
 import _ from "lodash";
@@ -27,24 +28,48 @@ class CreateOrEditExpense extends Component {
       value: "",
       suggestions: [],
       categorySuggestion: [],
+      selectedCategory: {},
       categoryValue: "",
+      selectedCurrency: {},
       currencySuggestions: [],
       currencyValue: "",
       projectSuggestions: [],
       projectValue: "",
+      currencySymbol: "",
       collapseReceipt: true,
       collapseitemDetails: true,
       loading: false,
       large: false,
       expenseData: { description: "" },
-      cliementList: []
+      cliementList: [],
+      vatList: [],
+      expenseItem: [{ expenseItemId: 0, productName: "", quatity: "0", unitPrice: "0.00", vatId: "", subTotal: "" }],
+      totalNet: 0.00,
+      totalVat: 0.00,
+      total: 0.00
     };
     this.toggleLarge = this.toggleLarge.bind(this);
   }
 
   componentDidMount() {
     this.getcliementList();
+    this.getVatList();
   }
+
+  getVatList = () => {
+    this.setState({ loading: true })
+    const res = sendRequest(`rest/transaction/getvatcategories`, "get", "");
+    res
+      .then(res => {
+        if (res.status === 200) {
+          this.setState({ loading: false });
+          return res.json();
+        }
+      })
+      .then(data => {
+        this.setState({ vatList: data });
+      });
+  };
 
   toggleLarge() {
     this.setState({
@@ -207,8 +232,148 @@ class CreateOrEditExpense extends Component {
     // });
   };
 
+  onCategorySuggestionSelected = (e, val) => {
+    this.setState({ selectedCategory: val.suggestion });
+  }
+
+  onCurrencySuggestionSelected = (e, val) => {
+    this.setState({ selectedCurrency: val.suggestion, currencySymbol: val.suggestion.currencySymbol });
+  }
+
+  addExpense = () => {
+    const d = [...this.state.expenseItem];
+    if (!d[this.state.expenseItem.length - 2] || d[this.state.expenseItem.length - 2].quatity > 0 && d[this.state.expenseItem.length - 2].unitPrice > 0) {
+      this.state.expenseItem.push({ expenseItemId: this.state.expenseItem.length, productName: "", quatity: "0", unitPrice: "0.00", vatId: "", subTotal: "" });
+    } else if (!parseInt(d[this.state.expenseItem.length - 2].quatity) > 0 && !parseInt(d[this.state.expenseItem.length - 2].unitPrice) > 0) {
+      this.setState({ alertMsg: "Unit price should be greater than 0 and Quantity should be greater than 0 in expense items." })
+    } else if (!parseInt(d[this.state.expenseItem.length - 2].quatity) > 0) {
+      this.setState({ alertMsg: "Please enter Quantity should be greater than 0 in expense items." })
+    } else if (!parseInt(d[this.state.expenseItem.length - 2].unitPrice) > 0) {
+      this.setState({ alertMsg: "Unit price should be greater than 0 in expense items." })
+    }
+
+    this.setState({ expenseItem: this.state.expenseItem });
+  }
+
+  deleteExpense = (e, id, item) => {
+    // console.log("detele --> ", id, item)
+    this.state.expenseItem.splice(id, 1);
+    this.setState({ expenseItem: this.state.expenseItem }, () => { this.getTotalNet(); this.getTotal(); this.getTotalVat(); });
+  }
+
+  handleEnpeseTableChange = (e, name, item, ind) => {
+    let expenseData = [...this.state.expenseItem];
+    this.setState({ alertMsg: "" })
+    // console.log("chaged --> ", expenseData, ind, expenseData[ind])
+    if (name === "productName") {
+      expenseData[ind].productName = e.target.value;
+    } else if (name === "quatity") {
+      expenseData[ind].quatity = e.target.value;
+    } else if (name === "unitPrice") {
+      expenseData[ind].unitPrice = e.target.value;
+    } else if (name === "vatId") {
+      expenseData[ind].vatId = e.target.value;
+    }
+    this.calculateSubTotal(ind, item);
+    this.setState({ expenseItem: expenseData }, () => {
+      this.getTotalNet();
+      if (name === "vatId") this.getTotalVat()
+    })
+  }
+
+  calculateSubTotal = (ind, item) => {
+    let subTotal;
+    let expenseData = [...this.state.expenseItem];
+    if (item) {
+      subTotal = `${item.quatity * item.unitPrice}.00`;
+      expenseData[ind].subTotal = subTotal;
+      this.setState({ expenseItem: expenseData })
+      return subTotal > 0 ? subTotal : 0.00;
+    }
+  }
+
+  getTotal = () => {
+    let { totalNet, totalVat } = this.state;
+    if (totalNet && totalVat) {
+      this.setState({ total: parseFloat(totalNet) + parseFloat(totalVat) })
+    }
+  }
+
+  getTotalNet = () => {
+    let totalNet;
+    this.state.expenseItem.reduce((accumulator, currVal) => {
+      totalNet = currVal.subTotal ? `${parseFloat(accumulator) + parseFloat(currVal.subTotal)}.00` : accumulator
+      this.setState({ totalNet: totalNet ? totalNet : 0.00 }, () => this.getTotal())
+      return totalNet
+    }, 0.00);
+  }
+
+  getTotalVat = () => {
+    let totalVat, prevVat;
+    this.state.expenseItem.reduce((accumulator, currVal) => {
+      prevVat = ((this.state.vatList[currVal.vatId].vat * parseFloat(currVal.subTotal)) / 100);
+      totalVat = currVal.subTotal ? `${parseFloat(accumulator) + prevVat}` : accumulator
+      this.setState({ totalVat: totalVat ? totalVat : 0.00 }, () => this.getTotal())
+      return totalVat
+    }, this.state.totalVat);
+  }
+
+  handleSubmit = (e, status) => {
+    // console.log("state --> ", this.state)
+    const params = new URLSearchParams(this.props.location.search);
+    const id = params.get("id");
+    this.setState({ loading: true });
+    e.preventDefault();
+    const { expenseData, expenseItem } = this.state;
+    var fileInput = document.querySelector("#file-input");
+    var files = fileInput.files;
+    var fl = files.length;
+    var i = 0;
+    let flag = true;
+    while (i < fl) {
+      var file = files[i];
+      if (file.size > 1610612736) {
+        flag = false;
+        alert("File size should be less than 1.5 GB !");
+        this.setState({ loading: false });
+        return;
+      } else {
+        flag = true;
+      }
+      i++;
+    }
+    if (flag) {
+      // let postObj;
+      // postObj = {
+      //   expenseData, expenseItem
+      // };
+      let data = new FormData();
+      data.append("expenseData", expenseData);
+      data.append("expenseItem", expenseItem);
+      // console.log("data --> ", data)
+      // const res = sendRequest(
+      //   `rest/transaction/savetransaction?id=1`,
+      //   "post",
+      //   postObj
+      // );
+      // res.then(res => {
+      //   if (res.status === 200) {
+      //     this.success();
+      //     if (status === "addMore") {
+      //       this.setState({ transaction: {} })
+      //       this.props.history.push("create-transaction-category");
+      //     } else {
+      //       this.props.history.push("settings/transaction-category");
+      //     }
+      //   }
+      // });
+    }
+  };
+
   render() {
-    const { categorySuggestion, categoryValue, currencySuggestions, currencyValue, projectSuggestions, projectValue, expenseData, cliementList, loading } = this.state;
+    // console.log("state --> ", this.state)
+    const { categorySuggestion, categoryValue, currencySuggestions, currencyValue, projectSuggestions, projectValue, expenseData, cliementList, loading, expenseItem,
+      vatList, totalNet, totalVat, alertMsg, total, currencySymbol } = this.state;
     const { expenseDate, description, attachmentDescription, recieptNumber } = expenseData;
     const categoryInputProps = {
       placeholder: "Type Category Name",
@@ -234,8 +399,7 @@ class CreateOrEditExpense extends Component {
               <Col xs="12">
                 <Form
                   action=""
-                  method="post"
-                  encType="multipart/form-data"
+                  onSubmit={this.handleSubmit}
                   className="form-horizontal"
                 >
                   <Card>
@@ -245,12 +409,6 @@ class CreateOrEditExpense extends Component {
                         <Col md="4">
                           <FormGroup>
                             <Label htmlFor="text-input">Cliement</Label>
-                            {/* <Input
-                              type="text"
-                              id="Cliement"
-                              name="Cliement"
-                              required
-                            /> */}
                             <Input
                               type="select"
                               name="cliement"
@@ -275,6 +433,7 @@ class CreateOrEditExpense extends Component {
                                 e => this.onSuggestionsClearRequested(e, "categorySuggestion")
                               }
                               getSuggestionValue={this.getCategorySuggestionValue}
+                              onSuggestionSelected={this.onCategorySuggestionSelected}
                               renderSuggestion={this.renderCategorySuggestion}
                               inputProps={categoryInputProps}
                             />
@@ -306,6 +465,7 @@ class CreateOrEditExpense extends Component {
                                 e => this.onSuggestionsClearRequested(e, "currencySuggestions")
                               }
                               getSuggestionValue={this.getCurrencySuggestionValue}
+                              onSuggestionSelected={this.onCurrencySuggestionSelected}
                               renderSuggestion={this.renderCurrencySuggestion}
                               inputProps={currencyInputProps}
                             />
@@ -314,13 +474,6 @@ class CreateOrEditExpense extends Component {
                         <Col md="4">
                           <FormGroup>
                             <Label htmlFor="select">Project</Label>
-                            {/* <Input
-                              type="text"
-                              name="project"
-                              id="project"
-                              onChange={e => this.handleChange(e, "project")}
-                              required
-                            /> */}
                             <Autosuggest
                               suggestions={projectSuggestions}
                               onSuggestionsFetchRequested={
@@ -398,7 +551,7 @@ class CreateOrEditExpense extends Component {
                             </FormGroup>
                           </Col>
                         </Row>
-                        <Input type="file" id="file-input" name="file-input" />
+                        <Input ref={ref => this.uploadInput = ref} type="file" id="file-input" name="file-input" />
                       </CardBody>
                     </Collapse>
                   </Card>
@@ -418,7 +571,14 @@ class CreateOrEditExpense extends Component {
                     </CardHeader>
                     <Collapse isOpen={this.state.collapseitemDetails} id="collapseExample">
                       <CardBody>
-                        <Button type="submit" className="submit-invoice" size="sm" color="primary">
+                        {
+                          alertMsg ?
+                            <Alert color="danger">
+                              {alertMsg}
+                            </Alert>
+                            : ""
+                        }
+                        <Button type="button" className="submit-invoice" onClick={this.addExpense} size="sm" color="primary">
                           <i className="fas fa-plus "></i> Add More
                       </Button>
                         <table className="expense-items-table">
@@ -427,61 +587,98 @@ class CreateOrEditExpense extends Component {
                               <th></th>
                               <th>Product/Service</th>
                               <th>Quantity</th>
-                              <th>Unit Price ()</th>
+                              <th>Unit Price ({currencySymbol})</th>
                               <th>VAT (%)</th>
-                              <th>Subtotal ()</th>
+                              <th>Subtotal ({currencySymbol})</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr>
-                              <td>
-                                <Button
-                                  block
-                                  color="primary"
-                                  className="btn-pill vat-actions"
-                                  title="Delete Expense"
-                                // onClick={() => this.setState({ selectedData:  }, () => this.setState({ openDeleteModal: true }))}
-                                >
-                                  <i className="fas fa-trash-alt"></i>
-                                </Button>
-                              </td>
-                              <td>
-                                <Input
-                                  type="text"
-                                  name="attachmentDescription"
-                                  id="attachmentDescription"
-                                  value={attachmentDescription}
-                                />
-                              </td>
-                              <td>
-                                <Input
-                                  type="text"
-                                  name="attachmentDescription"
-                                  id="attachmentDescription"
-                                  value={attachmentDescription}
-                                />
-                              </td>
-                              <td>
-                                <Input
-                                  type="text"
-                                  name="attachmentDescription"
-                                  id="attachmentDescription"
-                                  value={attachmentDescription}
-                                />
-                              </td>
-                              <td>
-                                <Input
-                                  type="text"
-                                  name="attachmentDescription"
-                                  id="attachmentDescription"
-                                  value={attachmentDescription}
-                                />
-                              </td>
-                              <td>
-                                120
-                              </td>
-                            </tr>
+                            {
+                              expenseItem.map((item, ind) => <tr key={ind}>
+                                <td width="3%">
+                                  {
+                                    ind > 0 ?
+                                      <Button
+                                        block
+                                        color="primary"
+                                        className="btn-pill vat-actions"
+                                        title="Delete Expense"
+                                        onClick={e => this.deleteExpense(e, ind, item)}
+                                      >
+                                        <i className="fas fa-trash-alt"></i>
+                                      </Button> : ""
+                                  }
+                                </td>
+                                <td width="20%">
+                                  <Input
+                                    type="text"
+                                    name="productName"
+                                    id="productName"
+                                    value={item.productName}
+                                    onChange={e => this.handleEnpeseTableChange(e, "productName", item, ind)}
+                                  />
+                                </td>
+                                <td width="7%">
+                                  <Input
+                                    type="text"
+                                    name="quatity"
+                                    id="quatity"
+                                    value={item.quatity}
+                                    onChange={e => this.handleEnpeseTableChange(e, "quatity", item, ind)}
+                                  />
+                                </td>
+                                <td width="25%">
+                                  <Input
+                                    type="text"
+                                    name="unitPrice"
+                                    id="unitPrice"
+                                    value={item.unitPrice}
+                                    onChange={e => this.handleEnpeseTableChange(e, "unitPrice", item, ind)}
+                                  />
+                                </td>
+                                <td width="25%">
+                                  <Input
+                                    type="select"
+                                    name="vatId"
+                                    value={item.vatId}
+                                    id="vatId"
+                                    onChange={e => this.handleEnpeseTableChange(e, "vatId", item, ind)}
+                                    required
+                                  >
+                                    {vatList.map((item, index) => (
+                                      <option key={index} value={item.id}>
+                                        {item.name}
+                                      </option>
+                                    ))}
+                                  </Input>
+                                </td>
+                                <td width="20%">
+                                  <label>{item.subTotal ? `${item.subTotal}${currencySymbol}` : ""}</label>
+                                </td>
+                              </tr>)
+                            }
                           </tbody>
+                          <tfoot>
+                            <tr>
+                              <td rowSpan="3" colSpan="4" className="expense-table-footer"></td>
+                              <td className="expense-table-border">Total</td>
+                              <td className="expense-table-border">{`${total}${currencySymbol}`}</td>
+                            </tr>
+                          </tfoot>
+                          <tfoot>
+                            <tr>
+                              <td rowSpan="3" colSpan="4" className="expense-table-footer"></td>
+                              <td className="expense-table-border">Total Net</td>
+                              <td className="expense-table-border">{`${totalNet}${currencySymbol}`}</td>
+                            </tr>
+                          </tfoot>
+                          <tfoot>
+                            <tr>
+                              <td rowSpan="3" colSpan="4" className="expense-table-footer"></td>
+                              <td className="expense-table-border">Total VAT</td>
+                              <td className="expense-table-border">{`${totalVat}${currencySymbol}`}</td>
+                            </tr>
+                          </tfoot>
                         </table>
                       </CardBody>
                     </Collapse>
