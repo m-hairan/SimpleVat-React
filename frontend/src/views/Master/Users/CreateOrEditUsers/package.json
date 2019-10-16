@@ -1,6 +1,0 @@
-{
-    "name": "CreateOrEditUsers",
-    "version": "0.0.0",
-    "private": true,
-    "main": "./CreateOrEditUsers.js" 
-}

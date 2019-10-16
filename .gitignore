@@ -2,6 +2,7 @@
 ## Eclipse
 #################
 
+node_modules
 target/
 frontend/node_module/*
 frontend/node/*
@@ -234,4 +235,3 @@ simplevat.iml
 
 !.idea/*
 /.idea/
-/frontend/node_modules/

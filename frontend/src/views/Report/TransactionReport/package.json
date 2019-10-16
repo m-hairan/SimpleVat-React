@@ -1,6 +1,0 @@
-{
-    "name": "TransactionReport",
-    "version": "0.0.0",
-    "private": true,
-    "main": "./TransactionReport.js"
-  }

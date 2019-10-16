@@ -1,6 +1,0 @@
-{
-    "name": "CreateOrEditProduct",
-    "version": "0.0.0",
-    "private": true,
-    "main": "./CreateOrEditProduct.js" 
-}

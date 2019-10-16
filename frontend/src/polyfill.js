@@ -1,9 +1,9 @@
 /*
 * required polyfills
 */
-import "core-js";
-import 'core-js/features/set/map';
-import 'core-js/features/map';
+import 'core-js'
+import 'core-js/features/set/map'
+import 'core-js/features/map'
 
 /** IE9, IE10 and IE11 requires all of the following polyfills. **/
 // import 'core-js/es6/symbol'
