@@ -29,6 +29,13 @@ class InitialLayout extends React.Component {
     }
   }
 
+  componentDidMount () {
+    this.props.userActions.checkAuthStatus()
+    if (window.localStorage.getItem('accessToken')) {
+      this.props.history.push('/admin')
+    }
+  }
+
   render() {
 
     return (

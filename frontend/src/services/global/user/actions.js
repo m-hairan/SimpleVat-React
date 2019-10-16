@@ -4,17 +4,32 @@ import {
   authApi
 } from 'utils'
 
-export const signIn = (obj) => {
+export const checkAuthStatus = () => {
+  return (dispatch) => {
+    if (window.localStorage.getItem('accessToken')) {
+      dispatch({
+        type: USER.SIGNED_IN
+      })
+    } else {
+      dispatch({
+        type: USER.SIGNED_OUT
+      })
+    }
+  }
+}
+
+export const logIn = (obj) => {
   return (dispatch) => {
     let data = {
       method: 'post',
-      url: '/auth/login',
+      url: '/auth/token',
       data: obj
     }
     return api(data).then(res => {
       dispatch({
         type: USER.SIGNED_IN
       })
+      window.localStorage.setItem('accessToken', res.data.token)
       return res
     }).catch(err => {
       throw err
@@ -22,8 +37,11 @@ export const signIn = (obj) => {
   }
 }
 
-export const signOut = () => {
+export const logOut = () => {
   return (dispatch) => {
-    dispatch({ type: USER.SIGNED_OUT })
+    window.localStorage.removeItem('accessToken')
+    dispatch({
+      type: USER.SIGNED_OUT
+    })
   }
 }

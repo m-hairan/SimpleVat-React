@@ -14,6 +14,8 @@ import {
   AppSidebarToggler
 } from '@coreui/react'
 
+import './style.scss'
+
 import logo from 'assets/images/brand/logo.svg'
 import sygnet from 'assets/images/brand/sygnet.svg'
 import avatar from 'assets/images/avatars/6.jpg'
@@ -35,8 +37,8 @@ class Header extends Component {
     this.signOut = this.signOut.bind(this)
   }
 
-  signOut (e) {
-    e.preventDefault()
+  signOut () {
+    this.props.userActions.logOut()
     this.props.history.push('/login')
   }
 
@@ -56,9 +58,9 @@ class Header extends Component {
             <DropdownToggle nav>
               <img src={avatar} className="img-avatar" alt="admin@bootstrapmaster.com" />
             </DropdownToggle>
-            <DropdownMenu right style={{ height: 'auto', right: 0 }}>
-              <DropdownItem>
-                <DropdownItem onClick={this.signOut}><i className="fa fa-lock"></i> Logout</DropdownItem>
+            <DropdownMenu right>
+              <DropdownItem onClick={this.signOut}>
+                <i className="fa fa-lock"></i> Logout
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>

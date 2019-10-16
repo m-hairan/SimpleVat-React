@@ -53,6 +53,13 @@ class AdminLayout extends React.Component {
     }
   }
 
+  componentDidMount () {
+    this.props.userActions.checkAuthStatus()
+    if (!window.localStorage.getItem('accessToken')) {
+      this.props.history.push('/login')
+    }
+  }
+
   render() {
 
     return (
@@ -60,7 +67,7 @@ class AdminLayout extends React.Component {
         <div className="app">
           <AppHeader fixed>
             <Suspense fallback={Loading()}>
-              <Header />
+              <Header {...this.props} />
             </Suspense>
           </AppHeader>
           <div className="app-body">
