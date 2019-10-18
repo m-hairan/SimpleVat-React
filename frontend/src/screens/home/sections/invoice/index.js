@@ -1,9 +1,17 @@
-import React, {Component} from 'react';
-import { HorizontalBar } from 'react-chartjs-2';
-import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
-import {Nav, NavItem, NavLink, TabContent, TabPane, Card, CardBody} from 'reactstrap';
+import React, {Component} from 'react'
+import { HorizontalBar } from 'react-chartjs-2'
+import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips'
+import {
+  Nav,
+  NavItem,
+  NavLink,
+  TabContent,
+  TabPane,
+  Card,
+  CardBody
+} from 'reactstrap'
 import { DateRangePicker2 } from 'components'
-import moment from "moment"
+import moment from 'moment'
 
 import './style.scss'
 
@@ -44,19 +52,19 @@ class Invoice extends Component {
 
   constructor(props) {
     super(props);
-
-    this.toggle = this.toggle.bind(this);
     this.state = {
-      activeTab: new Array(4).fill('1'),
-    };
+      activeTab: new Array(4).fill('1')
+    }
+
+    this.toggle = this.toggle.bind(this)
   }
 
   toggle(tabPane, tab) {
     const newArray = this.state.activeTab.slice()
     newArray[tabPane] = tab
     this.setState({
-      activeTab: newArray,
-    });
+      activeTab: newArray
+    })
   }
 
   render() {
@@ -77,9 +85,9 @@ class Invoice extends Component {
         label: 'Overdue(100)',
         backgroundColor: '#FFCE5689',
         data: [2500, 6000, 4000, 500 ],
-        },
-      ],
-      };
+        }
+      ]
+    }
 
     return (
       <div className="animated fadeIn">
@@ -90,7 +98,7 @@ class Invoice extends Component {
                 <NavItem>
                   <NavLink
                   active={this.state.activeTab[0] === '1'}
-                  onClick={() => { this.toggle(0, '1'); }}
+                  onClick={() => { this.toggle(0, '1') }}
                   >
                   Invoices Timeline
                   </NavLink>
@@ -165,8 +173,8 @@ class Invoice extends Component {
           </CardBody>
         </Card>
       </div>
-    );
+    )
   }
 }
 
-export default Invoice;
+export default Invoice

@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React from 'react'
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
-import {CardColumns} from 'reactstrap';
+import { CardColumns } from 'reactstrap'
 
 import {
   Invoice,

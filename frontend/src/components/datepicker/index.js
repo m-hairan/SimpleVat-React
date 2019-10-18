@@ -1,29 +1,27 @@
-import React, { Component } from 'react';
-import {Input, ButtonDropdown, Button, DropdownItem, DropdownMenu, DropdownToggle} from 'reactstrap'
-import moment from "moment"
+import React, { Component } from 'react'
+import {
+  Input,
+  ButtonDropdown,
+  Button,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle
+} from 'reactstrap'
+import moment from 'moment'
 
-import DateRangePicker from 'react-bootstrap-daterangepicker';
+import DateRangePicker from 'react-bootstrap-daterangepicker'
 
-// you will also need the css that comes with bootstrap-daterangepicker
-import 'bootstrap-daterangepicker/daterangepicker.css';
+import 'bootstrap-daterangepicker/daterangepicker.css'
 
 class DateRangePicker2 extends React.Component{
   constructor(props) {
-    super(props);
-  
+    super(props)
     this.state = {
       startDate: moment(),
       endDate: moment()
-    };
-  }
+    }
 
-  handleEvent = (event, picker) => {
-    event.preventDefault()
-
-    this.setState({
-      startDate: picker.startDate,
-      endDate: picker.endDate
-    })
+    this.handleEvent = this.handleEvent.bind(this)
   }
 
   componentDidMount() {
@@ -34,6 +32,14 @@ class DateRangePicker2 extends React.Component{
           endDate: this.props.ranges[key][1]
         })
       }
+    })
+  }
+
+  handleEvent (event, picker) {
+    event.preventDefault()
+    this.setState({
+      startDate: picker.startDate,
+      endDate: picker.endDate
     })
   }
 

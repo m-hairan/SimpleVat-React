@@ -1,9 +1,18 @@
-import React, {Component} from 'react';
-import { Line } from 'react-chartjs-2';
-import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
-import { Nav, NavItem, NavLink, TabContent, TabPane, Card, CardBody} from 'reactstrap';
+import React, {Component} from 'react'
+import { Line } from 'react-chartjs-2'
+import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips'
+import {
+  Nav,
+  NavItem,
+  NavLink,
+  TabContent,
+  TabPane,
+  Card,
+  CardBody
+} from 'reactstrap'
 import { DateRangePicker2 } from 'components'
-import moment from "moment"
+import moment from 'moment'
+
 import './style.scss'
 
 const backOption = {
@@ -38,12 +47,12 @@ const bankIcon = require('assets/images/dashboard/bank.png')
 class BankAccount extends Component {
 
   constructor(props) {
-    super(props);
-
-    this.toggle = this.toggle.bind(this);
+    super(props)
     this.state = {
-      activeTab: new Array(4).fill('1'),
-    };
+      activeTab: new Array(4).fill('1')
+    }
+
+    this.toggle = this.toggle.bind(this)
   }
 
   toggle(tabPane, tab) {
@@ -51,7 +60,7 @@ class BankAccount extends Component {
     newArray[tabPane] = tab
     this.setState({
       activeTab: newArray,
-    });
+    })
   }
 
   componentDidMount(){
@@ -83,8 +92,8 @@ class BankAccount extends Component {
           pointHitRadius: 20,
           data: [65, 23, 100, 2, 23,12, 40, 50, 60, 80, 90],
         }
-      ],
-    };
+      ]
+    }
 
     return (
       <div className="animated fadeIn">
@@ -94,10 +103,10 @@ class BankAccount extends Component {
               <Nav tabs>
                 <NavItem>
                   <NavLink
-                  active={this.state.activeTab[0] === '1'}
-                  onClick={() => { this.toggle(0, '1'); }}
+                    active={this.state.activeTab[0] === '1'}
+                    onClick={() => { this.toggle(0, '1') }}
                   >
-                  Banking
+                    Banking
                   </NavLink>
                 </NavItem>
               </Nav>
@@ -110,7 +119,12 @@ class BankAccount extends Component {
                 <div className="flex-wrapper">
                   <div className="data-info">
                   <div className="data-item">
-                    <img alt="bankIcon" className="d-none d-lg-block" src={bankIcon} style={{width: 40, marginRight: 10}}/>
+                    <img
+                      alt="bankIcon"
+                      className="d-none d-lg-block"
+                      src={bankIcon}
+                      style={{width: 40, marginRight: 10}}
+                    />
                     <div>
                       <select className="form-control bank-type-select">
                         <option value="bank">Current Business Bank Account  </option>
@@ -144,8 +158,8 @@ class BankAccount extends Component {
           </CardBody>
         </Card>
       </div>
-    );
+    )
   }
 }
 
-export default BankAccount;
+export default BankAccount
