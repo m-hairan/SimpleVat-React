@@ -1,7 +1,8 @@
-import React, {Component} from 'react';
-import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
-import { Bar } from 'react-chartjs-2';
-import {Card, CardBody} from 'reactstrap';
+import React, {Component} from 'react'
+import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips'
+import { Bar } from 'react-chartjs-2'
+import { Card, CardBody } from 'reactstrap'
+
 import './style.scss'
 
 const cashBarOption = {
@@ -18,7 +19,7 @@ const cashBarOption = {
       ticks: {
         // Include a dollar sign in the ticks
         callback: function(value, index, values) {
-          return '$' + value;
+          return '$' + value
         },
         beginAtZero: true,
       }
@@ -36,20 +37,20 @@ const totalIcon = require('assets/images/dashboard/total.png')
 class CashFlow extends Component {
 
   constructor(props) {
-    super(props);
-
-    this.toggle = this.toggle.bind(this);
+    super(props)
     this.state = {
-      activeTab: new Array(4).fill('1'),
-    };
+      activeTab: new Array(4).fill('1')
+    }
+
+    this.toggle = this.toggle.bind(this)
   }
 
   toggle(tabPane, tab) {
     const newArray = this.state.activeTab.slice()
     newArray[tabPane] = tab
     this.setState({
-      activeTab: newArray,
-    });
+      activeTab: newArray
+    })
   }
 
   render() {
@@ -68,8 +69,8 @@ class CashFlow extends Component {
         hoverBackgroundColor: 'rgba(255,99,132,1)',
         data: [2500, 6000, 4000, 4000, 1000, 2500, 5300, 1100, 4530, 2000, 4000, 4000, 4000, 3000 ],
         },
-      ],
-    };
+      ]
+    }
 
     return (
       <div className="animated fadeIn">
@@ -115,8 +116,8 @@ class CashFlow extends Component {
           </CardBody>
         </Card> 
       </div>
-    );
+    )
   }
 }
 
-export default CashFlow;
+export default CashFlow

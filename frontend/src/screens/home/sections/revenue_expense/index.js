@@ -1,9 +1,17 @@
-import React, {Component} from 'react';
-import {Pie,  Doughnut} from 'react-chartjs-2';
-import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
-import {Nav, NavItem, NavLink, TabContent, TabPane, Card, CardBody} from 'reactstrap';
+import React, {Component} from 'react'
+import {Pie,  Doughnut} from 'react-chartjs-2'
+import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips'
+import {
+  Nav,
+  NavItem,
+  NavLink,
+  TabContent,
+  TabPane,
+  Card,
+  CardBody
+} from 'reactstrap'
 import { DateRangePicker2 } from 'components'
-import moment from "moment"
+import moment from 'moment'
 import './style.scss'
 
 const expenseOption = {

@@ -1,9 +1,18 @@
-import React, {Component} from 'react';
-import { HorizontalBar } from 'react-chartjs-2';
-import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
-import {Nav, NavItem, NavLink, TabContent, TabPane, Card, CardBody, Progress } from 'reactstrap';
+import React, {Component} from 'react'
+import { HorizontalBar } from 'react-chartjs-2'
+import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips'
+import {
+  Nav,
+  NavItem,
+  NavLink,
+  TabContent,
+  TabPane,
+  Card,
+  CardBody,
+  Progress
+} from 'reactstrap'
 import { DateRangePicker2 } from 'components'
-import moment from "moment"
+import moment from 'moment'
 import './style.scss'
 
 const invoiceOption = {
@@ -41,20 +50,20 @@ const equalIcon = require('assets/images/dashboard/equal.png')
 class ProfitAndLoss extends Component {
 
   constructor(props) {
-    super(props);
-
-    this.toggle = this.toggle.bind(this);
+    super(props)
     this.state = {
-      activeTab: new Array(4).fill('1'),
-    };
+      activeTab: new Array(4).fill('1')
+    }
+
+    this.toggle = this.toggle.bind(this)
   }
 
   toggle(tabPane, tab) {
     const newArray = this.state.activeTab.slice()
     newArray[tabPane] = tab
     this.setState({
-      activeTab: newArray,
-    });
+      activeTab: newArray
+    })
   }
 
   render() {
@@ -66,8 +75,8 @@ class ProfitAndLoss extends Component {
         backgroundColor: '#36A2EB89',
         data: [2500, 4000],
         },
-      ],
-    };
+      ]
+    }
 
     return (
       <div className="animated fadeIn">
@@ -77,18 +86,18 @@ class ProfitAndLoss extends Component {
               <Nav tabs>
                 <NavItem>
                   <NavLink
-                  active={this.state.activeTab[0] === '1'}
-                  onClick={() => { this.toggle(0, '1'); }}
+                    active={this.state.activeTab[0] === '1'}
+                    onClick={() => { this.toggle(0, '1') }}
                   >
-                  Profit and Loss
+                    Profit and Loss
                   </NavLink>
                 </NavItem>
                 <NavItem>
                   <NavLink
-                  active={this.state.activeTab[0] === '2'}
-                  onClick={() => { this.toggle(0, '2'); }}
+                    active={this.state.activeTab[0] === '2'}
+                    onClick={() => { this.toggle(0, '2') }}
                   >
-                  Taxes
+                    Taxes
                   </NavLink>
                 </NavItem>
               </Nav>
@@ -152,8 +161,8 @@ class ProfitAndLoss extends Component {
         </Card>
         
       </div>
-    );
+    )
   }
 }
 
-export default ProfitAndLoss;
+export default ProfitAndLoss
