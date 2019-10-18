@@ -54,6 +54,10 @@ class BankAccount extends Component {
     });
   }
 
+  componentDidMount(){
+    this.props.dashboardActions.getBankAccountTypes()
+  }
+
   render() {
     const line = {
       labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],

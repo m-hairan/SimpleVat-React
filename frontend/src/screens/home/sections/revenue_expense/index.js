@@ -39,7 +39,7 @@ class RevenueAndExpense extends Component {
 
     this.toggle = this.toggle.bind(this);
     this.state = {
-      activeTab: new Array(4).fill('1'),
+      activeTab: new Array(4).fill('0'),
     };
   }
 
@@ -116,14 +116,7 @@ class RevenueAndExpense extends Component {
                   Top 10 Expenses
                   </NavLink>
                 </NavItem>
-                <NavItem>
-                  <NavLink
-                  active={this.state.activeTab[0] === '2'}
-                  onClick={() => { this.toggle(0, '2'); }}
-                  >
-                  Purchases
-                  </NavLink>
-                </NavItem>
+                
               </Nav>
               <div className="card-header-actions">
                 <DateRangePicker2 ranges={ranges}/>

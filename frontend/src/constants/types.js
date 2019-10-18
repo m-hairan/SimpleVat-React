@@ -13,6 +13,9 @@ export const TEMP = {
 }
 
 export const HOME = {
+
+  // Bank Constants
+  BANK_ACCOUNT_TYPE: 'BANK_ACCOUNT_TYPE'
   
 }
 

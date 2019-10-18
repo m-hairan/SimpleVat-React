@@ -95,22 +95,6 @@ class Invoice extends Component {
                   Invoices Timeline
                   </NavLink>
                 </NavItem>
-                <NavItem>
-                  <NavLink
-                  active={this.state.activeTab[0] === '2'}
-                  onClick={() => { this.toggle(0, '2'); }}
-                  >
-                  Invoices
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink
-                  active={this.state.activeTab[0] === '3'}
-                  onClick={() => { this.toggle(0, '3'); }}
-                  >
-                  Projects
-                  </NavLink>
-                </NavItem>
               </Nav>
               <div className="card-header-actions">
                 <DateRangePicker2 ranges={ranges}/>

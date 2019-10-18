@@ -11,15 +11,19 @@ import {
   ProfitAndLoss
 } from './sections'
 
+import * as DashboardActions from './actions'
+
 import './style.scss'
 
 
 const mapStateToProps = (state) => {
   return ({
+    data: state.home.data
   })
 }
 const mapDispatchToProps = (dispatch) => {
   return ({
+    dashboardActions: bindActionCreators(DashboardActions, dispatch)
   })
 }
 
@@ -37,10 +41,10 @@ class Home extends React.Component {
         <div className="animated fadeIn">
           <CashFlow/>
           <CardColumns className="cols-2">
-            <BankAccount/>
-            <RevenueAndExpense/>
-            <Invoice/>
-            <ProfitAndLoss/>
+            <BankAccount {...this.props} />
+            <RevenueAndExpense {...this.props}/>
+            <Invoice {...this.props}/>
+            <ProfitAndLoss {...this.props}/>
           </CardColumns>
         </div>
       </div>
