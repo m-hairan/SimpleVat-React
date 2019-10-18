@@ -4,6 +4,7 @@ import Aside from './aside'
 import Header from './header'
 import Footer from './footer'
 import Message from './message'
+import DateRangePicker2 from './datepicker'
 
 export {
   Loading,
@@ -11,5 +12,6 @@ export {
   Aside,
   Header,
   Footer,
-  Message
+  Message,
+  DateRangePicker2
 }
