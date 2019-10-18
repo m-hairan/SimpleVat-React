@@ -2,7 +2,9 @@
 ## Eclipse
 #################
 
-node_modules
+.vscode/
+node_modules/
+frontend/node_modules/
 target/
 frontend/node_module/*
 frontend/node/*
