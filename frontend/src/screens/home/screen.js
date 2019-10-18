@@ -6,9 +6,9 @@ import {CardColumns} from 'reactstrap';
 import {
   Invoice,
   BankAccount,
-	CashFlow,
-	RevenueAndExpense,
-	ProfitAndLoss
+  CashFlow,
+  RevenueAndExpense,
+  ProfitAndLoss
 } from './sections'
 
 import './style.scss'

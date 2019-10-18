@@ -5,9 +5,9 @@ import RevenueAndExpense from './revenue_expense'
 import ProfitAndLoss from './profit_loss'
 
 export {
-	Invoice,
+  Invoice,
   BankAccount,
-	CashFlow,
-	RevenueAndExpense,
-	ProfitAndLoss
+  CashFlow,
+  RevenueAndExpense,
+  ProfitAndLoss
 }

@@ -7,30 +7,30 @@ import moment from "moment"
 import './style.scss'
 
 const invoiceOption = {
-	tooltips: {
-	  enabled: false,
-	  custom: CustomTooltips
-	},
-	legend: {
-	  display: false,
-	  position: 'right',
-	  labels: {
-		  boxWidth: 15,
-	  }
-	},
-	scales: {
-	}, 
-	maintainAspectRatio: false
+  tooltips: {
+    enabled: false,
+    custom: CustomTooltips
+  },
+  legend: {
+    display: false,
+    position: 'right',
+    labels: {
+      boxWidth: 15,
+    }
+  },
+  scales: {
+  }, 
+  maintainAspectRatio: false
 }
 
 const ranges =  {
-	// 'Today': [moment(), moment()],
-	// 'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-	'This Week': [moment().startOf('week'), moment().endOf('week')],
-	'This Month': [moment().startOf('month'), moment().endOf('month')],
-	'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-	'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-	'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+  // 'Today': [moment(), moment()],
+  // 'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+  'This Week': [moment().startOf('week'), moment().endOf('week')],
+  'This Month': [moment().startOf('month'), moment().endOf('month')],
+  'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+  'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+  'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
 }
 
 
@@ -41,118 +41,118 @@ const equalIcon = require('assets/images/dashboard/equal.png')
 class ProfitAndLoss extends Component {
 
   constructor(props) {
-		super(props);
+    super(props);
 
-		this.toggle = this.toggle.bind(this);
-		this.state = {
-			activeTab: new Array(4).fill('1'),
-		};
+    this.toggle = this.toggle.bind(this);
+    this.state = {
+      activeTab: new Array(4).fill('1'),
+    };
   }
 
   toggle(tabPane, tab) {
-		const newArray = this.state.activeTab.slice()
-		newArray[tabPane] = tab
-		this.setState({
-			activeTab: newArray,
-		});
+    const newArray = this.state.activeTab.slice()
+    newArray[tabPane] = tab
+    this.setState({
+      activeTab: newArray,
+    });
   }
 
   render() {
-		const invoiceBar = {
-			labels: ['', ''],
-			datasets: [
-				{
-				label: 'Profit',
-				backgroundColor: '#36A2EB89',
-				data: [2500, 4000],
-				},
-			],
-		};
+    const invoiceBar = {
+      labels: ['', ''],
+      datasets: [
+        {
+        label: 'Profit',
+        backgroundColor: '#36A2EB89',
+        data: [2500, 4000],
+        },
+      ],
+    };
 
-		return (
-			<div className="animated fadeIn">
-				<Card className='profit-card'>
-					<CardBody className="tab-card">
-						<div className="flex-wrapper">
-							<Nav tabs>
-								<NavItem>
-									<NavLink
-									active={this.state.activeTab[0] === '1'}
-									onClick={() => { this.toggle(0, '1'); }}
-									>
-									Profit and Loss
-									</NavLink>
-								</NavItem>
-								<NavItem>
-									<NavLink
-									active={this.state.activeTab[0] === '2'}
-									onClick={() => { this.toggle(0, '2'); }}
-									>
-									Taxes
-									</NavLink>
-								</NavItem>
-							</Nav>
-							<div className="card-header-actions">
-								<DateRangePicker2 ranges={ranges}/>
-							</div>
-						</div>
-						<TabContent activeTab={this.state.activeTab[0]}>
-							<TabPane tabId="1">
-								<div className="flex-wrapper">
-									<div className="data-info">
-										<div className="data-item">
-											<div>
-											<h3>$ 180, 40</h3>
-											<p>INCOME</p>
-											</div>
-										</div>
-										<img alt="minus" src={minusIcon}/>
-										<div className="data-item">
-											<div>
-											<h3>$ 180, 40</h3>
-											<p>EXPENSES</p>
-											</div>
-										</div>
-										<img alt="sum" src={equalIcon}/>
-										<div className="data-item total">
-											
-											<div>
-											<h3>$ 180, 40</h3>
-											<p>PROFIT</p>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div style={{marginTop: 20}}>
-									<div className="data-info progress">
-										<Progress className="income" color="success" value="90"></Progress>
-										<div className="data-item small">
-											<div>
-											<h3>$ 180, 40</h3>
-											<p>INCOME</p>
-											</div>
-										</div>
-									</div>
-									<div className="data-info progress">
-										<Progress className='expense' color="warning" value="20"></Progress>
-										<div className="data-item small">
-											<div>
-											<h3>$ 180, 40</h3>
-											<p>EXPENSES</p>
-											</div>
-										</div>
-									</div>
-								</div>
-							</TabPane>
-							<TabPane tabId="2">
-								Taxes
-							</TabPane>
-						</TabContent>
-					</CardBody>
-				</Card>
-				
-			</div>
-		);
+    return (
+      <div className="animated fadeIn">
+        <Card className='profit-card'>
+          <CardBody className="tab-card">
+            <div className="flex-wrapper">
+              <Nav tabs>
+                <NavItem>
+                  <NavLink
+                  active={this.state.activeTab[0] === '1'}
+                  onClick={() => { this.toggle(0, '1'); }}
+                  >
+                  Profit and Loss
+                  </NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink
+                  active={this.state.activeTab[0] === '2'}
+                  onClick={() => { this.toggle(0, '2'); }}
+                  >
+                  Taxes
+                  </NavLink>
+                </NavItem>
+              </Nav>
+              <div className="card-header-actions">
+                <DateRangePicker2 ranges={ranges}/>
+              </div>
+            </div>
+            <TabContent activeTab={this.state.activeTab[0]}>
+              <TabPane tabId="1">
+                <div className="flex-wrapper">
+                  <div className="data-info">
+                    <div className="data-item">
+                      <div>
+                      <h3>$ 180, 40</h3>
+                      <p>INCOME</p>
+                      </div>
+                    </div>
+                    <img alt="minus" src={minusIcon}/>
+                    <div className="data-item">
+                      <div>
+                      <h3>$ 180, 40</h3>
+                      <p>EXPENSES</p>
+                      </div>
+                    </div>
+                    <img alt="sum" src={equalIcon}/>
+                    <div className="data-item total">
+                      
+                      <div>
+                      <h3>$ 180, 40</h3>
+                      <p>PROFIT</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div style={{marginTop: 20}}>
+                  <div className="data-info progress">
+                    <Progress className="income" color="success" value="90"></Progress>
+                    <div className="data-item small">
+                      <div>
+                      <h3>$ 180, 40</h3>
+                      <p>INCOME</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="data-info progress">
+                    <Progress className='expense' color="warning" value="20"></Progress>
+                    <div className="data-item small">
+                      <div>
+                      <h3>$ 180, 40</h3>
+                      <p>EXPENSES</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </TabPane>
+              <TabPane tabId="2">
+                Taxes
+              </TabPane>
+            </TabContent>
+          </CardBody>
+        </Card>
+        
+      </div>
+    );
   }
 }
 
