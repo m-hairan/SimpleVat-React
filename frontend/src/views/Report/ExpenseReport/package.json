@@ -1,7 +1,0 @@
-{
-    "name": "ExpenseReport",
-    "version": "0.0.0",
-    "private": true,
-    "main": "./ExpenseReport.js"
-  }
-   

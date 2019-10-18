@@ -1,6 +1,0 @@
-{
-    "name": "CreateOrEditPurchase",
-    "version": "0.0.0",
-    "private": true,
-    "main": "./CreateOrEditPurchase.js"
-}
