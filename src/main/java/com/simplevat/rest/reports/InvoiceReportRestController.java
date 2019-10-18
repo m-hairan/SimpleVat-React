@@ -33,7 +33,7 @@ public class InvoiceReportRestController {
     private InvoiceModelHelper invoiceModelHelper;
 
     @RequestMapping(method = RequestMethod.POST, value = "/viewinvoicereport")
-    public ResponseEntity view(@RequestBody FinancialPeriodRest financialPeriod) {
+    public ResponseEntity<List<InvoiceRestModel>> view(@RequestBody FinancialPeriodRest financialPeriod) {
         try {
             double totalInvoiceAmount = 0.00;
             List<InvoiceRestModel> invoiceList = new ArrayList<>();

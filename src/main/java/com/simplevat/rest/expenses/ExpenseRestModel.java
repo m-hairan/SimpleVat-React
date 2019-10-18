@@ -32,11 +32,11 @@ public class ExpenseRestModel {
     private Date expenseDate;
     private String expenseDescription;
     private String receiptNumber;
-    private User user;
-    private TransactionType transactionType;
-    private TransactionCategory transactionCategory;
-    private Currency currency;
-    private Project project;
+    private Integer user;
+    private Integer transactionType;
+    private Integer transactionCategory;
+    private Integer currency;
+    private Integer project;
     private String receiptAttachmentPath;
     private String receiptAttachmentDescription;
     private Integer createdBy;

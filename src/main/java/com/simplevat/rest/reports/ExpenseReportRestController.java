@@ -33,7 +33,7 @@ public class ExpenseReportRestController {
     ExpenseRestHelper controllerHelper = new ExpenseRestHelper();
 
     @RequestMapping(method = RequestMethod.POST, value = "/viewexpensereport")
-    public ResponseEntity view(@RequestBody FinancialPeriodRest financialPeriod) {
+    public ResponseEntity<List<ExpenseRestModel>> view(@RequestBody FinancialPeriodRest financialPeriod) {
         try {
             double totalExpenseAmount = 0.0;
             List<ExpenseRestModel> expenseList = new ArrayList<>();

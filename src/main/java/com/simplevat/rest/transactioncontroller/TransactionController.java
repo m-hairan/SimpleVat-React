@@ -109,13 +109,9 @@ public class TransactionController implements Serializable {
     @PostMapping(value = "/savetransaction")
     private ResponseEntity save(@RequestBody TransactionCategoryBean transactionCategoryBean, @RequestParam("id") Integer id) throws UnauthorizedException {
         try {
-            TranscationCategoryHelper transcationCategoryHelper = new TranscationCategoryHelper();
             User user = userServiceNew.findByPK(id);
-            TransactionCategory selectedTransactionCategory = transcationCategoryHelper.getTrascationByTrascationModel(transactionCategoryBean, transactionTypeService, transactionCategoryService, vatCategoryService);
+            TransactionCategory selectedTransactionCategory = TranscationCategoryHelper.getTrascationByTrascationModel(transactionCategoryBean, transactionTypeService, transactionCategoryService, vatCategoryService);
 
-            selectedTransactionCategory = transcationCategoryHelper.getTrascationByTrascationModel(transactionCategoryBean, transactionTypeService, transactionCategoryService, vatCategoryService);
-            selectedTransactionCategory.setCreatedBy(user.getUserId());
-            selectedTransactionCategory.setCreatedDate(LocalDateTime.now());
             if (selectedTransactionCategory.getDefaltFlag() == DefualtTypeConstant.YES) {
                 System.out.println("insideif=========1=========" + selectedTransactionCategory.getDefaltFlag());
                 TransactionCategory transactionCategory = transactionCategoryService.getDefaultTransactionCategoryByTransactionCategoryId(selectedTransactionCategory.getTransactionCategoryId());
@@ -127,11 +123,10 @@ public class TransactionController implements Serializable {
             }
             if (selectedTransactionCategory.getTransactionCategoryId() == 0) {
                 selectedTransactionCategory.setOrderSequence(1);
+                selectedTransactionCategory.setCreatedBy(user.getUserId());
+                selectedTransactionCategory.setCreatedDate(LocalDateTime.now());
                 transactionCategoryService.persist(selectedTransactionCategory);
             } else {
-//                TransactionCategory transactionCategory = transactionCategoryService.getDefaultTransactionCategoryByTransactionCategoryId(selectedTransactionCategory.getTransactionCategoryId());
-//               selectedTransactionCategory.setCreatedBy(transactionCategory.getCreatedBy());
-//                selectedTransactionCategory.setCreatedDate(transactionCategory.getCreatedDate());
                 selectedTransactionCategory.setLastUpdateBy(user.getUserId());
                 selectedTransactionCategory.setLastUpdateDate(LocalDateTime.now());
                 transactionCategoryService.update(selectedTransactionCategory);

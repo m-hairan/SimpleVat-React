@@ -20,6 +20,7 @@ import com.simplevat.service.ExpenseService;
 import com.simplevat.service.ProjectService;
 import com.simplevat.service.TransactionCategoryServiceNew;
 import com.simplevat.service.UserServiceNew;
+import com.simplevat.service.bankaccount.TransactionTypeService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -37,24 +38,23 @@ import java.util.stream.Collectors;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
  * @author daynil
  */
 public class ExpenseRestHelper implements Serializable {
-    
+
     private final static Logger LOGGER = LoggerFactory.getLogger(ExpenseRestHelper.class);
-    
+
     public static final int TRANSACTION_TYPE_EXPENSE = 8;
-    
+
     public List<User> users(UserServiceNew userServiceNew) throws Exception {
         return userServiceNew.executeNamedQuery("findAllUsers");
     }
-    
+
     public List<TransactionCategory> completeCategory(List<TransactionCategory> transactionCategoryList) {
-        try {
+        try {            
             List<TransactionCategory> transactionCategoryParentList = new ArrayList<>();
             System.out.println("transactionCategoryList=" + transactionCategoryList);
             if (transactionCategoryList != null && !transactionCategoryList.isEmpty()) {
@@ -62,8 +62,8 @@ public class ExpenseRestHelper implements Serializable {
                     if (transactionCategory.getParentTransactionCategory() != null) {
                         transactionCategoryParentList.add(transactionCategory.getParentTransactionCategory());
                     }
+//                    transactionCategoryModels.add(convertTransactionCategoryModel(transactionCategory));
                 }
-
 //            selectedExpenseModel.setTransactionType(transactionCategoryList.get(0).getTransactionType());
                 transactionCategoryList.removeAll(transactionCategoryParentList);
             }
@@ -73,7 +73,33 @@ public class ExpenseRestHelper implements Serializable {
         }
         return null;
     }
-    
+
+//    public TransactionCategoryModel convertTransactionCategoryModel(TransactionCategory transactionCategory) {
+//        TransactionCategoryModel transactionCategoryModel = new TransactionCategoryModel();
+//        transactionCategoryModel.setCreatedBy(transactionCategory.getCreatedBy());
+//        transactionCategoryModel.setCreatedDate(transactionCategory.getCreatedDate());
+//        transactionCategoryModel.setDefaltFlag(transactionCategory.getDefaltFlag().toString());
+//        transactionCategoryModel.setDeleteFlag(transactionCategory.getDeleteFlag());
+//        transactionCategoryModel.setLastUpdateBy(transactionCategory.getLastUpdateBy());
+//        transactionCategoryModel.setLastUpdateDate(transactionCategory.getLastUpdateDate());
+//        transactionCategoryModel.setOrderSequence(transactionCategory.getOrderSequence());
+//        if (transactionCategory.getParentTransactionCategory() != null) {
+//            transactionCategoryModel.setParentTransactionCategory(transactionCategory.getParentTransactionCategory().getTransactionCategoryId());
+//        }
+//        transactionCategoryModel.setTransactionCategoryCode(transactionCategory.getTransactionCategoryCode());
+//        transactionCategoryModel.setTransactionCategoryDescription(transactionCategory.getTransactionCategoryDescription());
+//        transactionCategoryModel.setTransactionCategoryId(transactionCategory.getTransactionCategoryId());
+//        transactionCategoryModel.setTransactionCategoryName(transactionCategory.getTransactionCategoryName());
+//        if (transactionCategory.getTransactionType() != null) {
+//        }
+//        transactionCategoryModel.setTransactionType(transactionCategory.getTransactionType().getTransactionTypeCode());
+//        if (transactionCategory.getVatCategory() != null) {
+//            transactionCategoryModel.setVatCategory(transactionCategory.getVatCategory().getId());
+//        }
+//        transactionCategoryModel.setVersionNumber(transactionCategory.getVersionNumber());
+//        return transactionCategoryModel;
+//    }
+
     public List<Currency> completeCurrency(String currencyStr, CurrencyService currencyService) {
         List<Currency> currencies = currencyService.getCurrencies();
         List<Currency> currencySuggestion = new ArrayList<>();
@@ -95,11 +121,11 @@ public class ExpenseRestHelper implements Serializable {
                 LOGGER.debug(" currency :" + currency.getCurrencyIsoCode());
             }
         }
-        
+
         LOGGER.debug(" Size :" + currencySuggestion.size());
         return currencySuggestion;
     }
-    
+
     public List<Project> projects(final String searchQuery, ProjectService projectService) {
         try {
             ProjectCriteria criteria = new ProjectCriteria();
@@ -114,26 +140,26 @@ public class ExpenseRestHelper implements Serializable {
             return new ArrayList<>();
         }
     }
-    
+
     public ExpenseRestModel viewOrEditExpense(Integer expenseId, ExpenseService expenseService) throws Exception {
         Expense expense = expenseService.findByPK(expenseId);
         ExpenseRestModel expenseModel = getExpenseModel(expense);
         return expenseModel;
     }
-    
+
     public void deleteExpense(Integer expenseId, ExpenseService expenseService) throws Exception {
         Expense expense = expenseService.findByPK(expenseId);
         expense.setDeleteFlag(true);
         expenseService.update(expense);
     }
-    
-    public Expense getExpense(ExpenseRestModel model) throws Exception {
+
+    public Expense getExpense(ExpenseRestModel model, UserServiceNew userServiceNew, CurrencyService currencyService, ProjectService projectService, ExpenseService expenseService, TransactionCategoryServiceNew transactionCategoryServiceNew, TransactionTypeService transactionTypeService) throws Exception {
         Expense expense = new Expense();
         expense.setExpenseId(model.getExpenseId());
-        expense.setUser(model.getUser());
+        expense.setUser(userServiceNew.findByPK(model.getUser()));
         expense.setCreatedBy(model.getCreatedBy());
         expense.setCreatedDate(model.getCreatedDate());
-        expense.setCurrency(model.getCurrency());
+        expense.setCurrency(currencyService.getCurrency(model.getCurrency()));
         expense.setDeleteFlag(model.isDeleteFlag());
         expense.setExpenseAmount(model.getExpenseAmount());
         if (model.getExpenseDate() != null) {
@@ -143,13 +169,13 @@ public class ExpenseRestHelper implements Serializable {
         expense.setExpenseDescription(model.getExpenseDescription());
         expense.setLastUpdateDate(model.getLastUpdateDate());
         expense.setLastUpdateBy(model.getLastUpdatedBy());
-        expense.setProject(model.getProject());
+        expense.setProject(projectService.findByPK(model.getProject()));
         expense.setReceiptAttachmentDescription(model.getReceiptAttachmentDescription());
         expense.setReceiptAttachmentPath(model.getReceiptAttachmentPath());
         expense.setReceiptNumber(model.getReceiptNumber());
         expense.setExpenseContact(model.getExpenseContact());
-        expense.setTransactionCategory(model.getTransactionCategory());
-        expense.setTransactionType(model.getTransactionType());
+        expense.setTransactionCategory(transactionCategoryServiceNew.findByPK(model.getTransactionCategory()));
+        expense.setTransactionType(transactionTypeService.findByPK(model.getTransactionType()));
         expense.setVersionNumber(model.getVersionNumber());
         expense.setReceiptAttachmentName(model.getReceiptAttachmentName());
         expense.setReceiptAttachmentContentType(model.getReceiptAttachmentContentType());
@@ -166,12 +192,12 @@ public class ExpenseRestHelper implements Serializable {
                 .stream()
                 .map((item) -> convertToLineItem(item, expense))
                 .collect(Collectors.toList());
-        
+
         expense.setExpenseLineItems(items);
-        
+
         return expense;
     }
-    
+
     @NonNull
     private ExpenseLineItem convertToLineItem(@NonNull final ExpenseItemModel expenseItemModel, @NonNull final Expense expense) {
         final ExpenseLineItem item = new ExpenseLineItem();
@@ -188,15 +214,15 @@ public class ExpenseRestHelper implements Serializable {
         item.setExpense(expense);
         return item;
     }
-    
+
     public ExpenseRestModel getExpenseModel(Expense entity) {
         try {
             ExpenseRestModel expenseModel = new ExpenseRestModel();
             expenseModel.setExpenseId(entity.getExpenseId());
-            expenseModel.setUser(entity.getUser());
+            expenseModel.setUser(entity.getUser().getUserId());
             expenseModel.setCreatedBy(entity.getCreatedBy());
             expenseModel.setCreatedDate(entity.getCreatedDate());
-            expenseModel.setCurrency(entity.getCurrency());
+            expenseModel.setCurrency(entity.getCurrency().getCurrencyCode());
             expenseModel.setDeleteFlag(entity.getDeleteFlag());
             expenseModel.setExpenseAmount(entity.getExpenseAmount());
             if (entity.getExpenseDate() != null) {
@@ -206,30 +232,34 @@ public class ExpenseRestHelper implements Serializable {
             expenseModel.setExpenseDescription(entity.getExpenseDescription());
             expenseModel.setLastUpdateDate(entity.getLastUpdateDate());
             expenseModel.setLastUpdatedBy(entity.getLastUpdateBy());
-            expenseModel.setProject(entity.getProject());
+            if (entity.getProject() != null) {
+                expenseModel.setProject(entity.getProject().getProjectId());
+            }
             expenseModel.setReceiptAttachmentDescription(entity.getReceiptAttachmentDescription());
             expenseModel.setReceiptAttachmentPath(entity.getReceiptAttachmentPath());
             expenseModel.setReceiptNumber(entity.getReceiptNumber());
-            expenseModel.setTransactionCategory(entity.getTransactionCategory());
+            expenseModel.setTransactionCategory(entity.getTransactionCategory().getTransactionCategoryId());
             expenseModel.setExpenseContact(entity.getExpenseContact());
-            expenseModel.setTransactionType(entity.getTransactionType());
+            expenseModel.setTransactionType(entity.getTransactionType().getTransactionTypeCode());
             expenseModel.setVersionNumber(entity.getVersionNumber());
             expenseModel.setReceiptAttachmentBinary(entity.getReceiptAttachmentBinary());
             expenseModel.setReceiptAttachmentName(entity.getReceiptAttachmentName());
             expenseModel.setReceiptAttachmentContentType(entity.getReceiptAttachmentContentType());
             expenseModel.setExpenseAmountCompanyCurrency(entity.getExpencyAmountCompanyCurrency());
-            final List<ExpenseItemModel> items = entity.getExpenseLineItems().stream().map((lineItem) -> convertToItemModel(lineItem)).collect(Collectors.toList());
-            expenseModel.setExpenseItem(items);
+            if (entity.getExpenseLineItems() != null) {
+                final List<ExpenseItemModel> items = entity.getExpenseLineItems().stream().map((lineItem) -> convertToItemModel(lineItem)).collect(Collectors.toList());
+                expenseModel.setExpenseItem(items);
+            }
             return expenseModel;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-    
+
     @NonNull
     public ExpenseItemModel convertToItemModel(@NonNull final ExpenseLineItem expenseLineItem) {
-        
+
         final ExpenseItemModel model = new ExpenseItemModel();
         model.setId(expenseLineItem.getExpenseLineItemId());
         model.setDescription(expenseLineItem.getExpenseLineItemDescription());
@@ -242,7 +272,7 @@ public class ExpenseRestHelper implements Serializable {
         updateSubTotal(model);
         return model;
     }
-    
+
     private void updateSubTotal(@NonNull final ExpenseItemModel expenseItemModel) {
         final int quantity = expenseItemModel.getQuatity();
         final BigDecimal unitPrice = expenseItemModel.getUnitPrice();
@@ -255,20 +285,20 @@ public class ExpenseRestHelper implements Serializable {
             expenseItemModel.setSubTotal(amountWithoutTax);
         }
     }
-    
-    public String saveExpense(ExpenseRestModel expenseRestModel, CurrencyService currencyService, UserServiceNew userServiceNew, CompanyService companyService, ProjectService projectService, ExpenseService expenseService) throws Exception {
+
+    public String saveExpense(ExpenseRestModel expenseRestModel, CurrencyService currencyService, UserServiceNew userServiceNew, CompanyService companyService, ProjectService projectService, ExpenseService expenseService, TransactionCategoryServiceNew transactionCategoryServiceNew, TransactionTypeService transactionTypeService) throws Exception {
         removeEmptyRow(expenseRestModel);
         if (!validateInvoiceLineItems(expenseRestModel) || !validateAtLeastOneItem(expenseRestModel)) {
             return "";
         }
-        save(expenseRestModel, currencyService, userServiceNew, companyService, projectService, expenseService);
+        save(expenseRestModel, currencyService, userServiceNew, companyService, projectService, expenseService, transactionCategoryServiceNew, transactionTypeService);
 //        FacesContext context = FacesContext.getCurrentInstance();
 //        context.getExternalContext().getFlash().setKeepMessages(true);
 //        context.addMessage(null, new FacesMessage("", "Expense saved successfully"));
 //        return "/pages/secure/expense/list.xhtml?faces-redirect=true";
         return "Success";
     }
-    
+
     private ExpenseRestModel removeEmptyRow(ExpenseRestModel expenseRestModel) {
         if (expenseRestModel.getExpenseItem().size() > 1) {
             List<ExpenseItemModel> expenseItemModels = new ArrayList<>();
@@ -281,7 +311,7 @@ public class ExpenseRestHelper implements Serializable {
         }
         return expenseRestModel;
     }
-    
+
     private boolean validateInvoiceLineItems(ExpenseRestModel expenseRestModel) { //---------------
         boolean validated = true;
         for (ExpenseItemModel lastItem : expenseRestModel.getExpenseItem()) {
@@ -308,11 +338,11 @@ public class ExpenseRestHelper implements Serializable {
 //                FacesContext.getCurrentInstance().addMessage("validationId", message);
                 validated = false;
             }
-            
+
         }
         return validated;
     }
-    
+
     private boolean validateAtLeastOneItem(ExpenseRestModel expenseModel) {
         if (expenseModel.getExpenseItem().size() < 1) {
 //            FacesMessage message = new FacesMessage("Please add atleast one item to create Expense.");
@@ -322,12 +352,13 @@ public class ExpenseRestHelper implements Serializable {
         }
         return true;
     }
-    
-    private void save(ExpenseRestModel expenseRestModel, CurrencyService currencyService, UserServiceNew userServiceNew, CompanyService companyService, ProjectService projectService, ExpenseService expenseService) throws Exception {
+
+    private void save(ExpenseRestModel expenseRestModel, CurrencyService currencyService, UserServiceNew userServiceNew, CompanyService companyService, ProjectService projectService, ExpenseService expenseService, TransactionCategoryServiceNew transactionCategoryServiceNew, TransactionTypeService transactionTypeService) throws Exception {
         User loggedInUser = userServiceNew.findByPK(expenseRestModel.getUserId());
         Company company = companyService.findByPK(expenseRestModel.getCompanyId());
-        expenseRestModel.setTransactionType(expenseRestModel.getTransactionCategory().getTransactionType());
-        Expense expense = getExpense(expenseRestModel);
+        TransactionCategory transactionCategory = transactionCategoryServiceNew.findByPK(expenseRestModel.getTransactionCategory());
+        expenseRestModel.setTransactionType(transactionCategory.getTransactionType().getTransactionTypeCode());
+        Expense expense = getExpense(expenseRestModel, userServiceNew, currencyService, projectService, expenseService, transactionCategoryServiceNew, transactionTypeService);
         expense.setExpenseAmount(expenseRestModel.getTotalAmount());
         CurrencyConversion currencyConversion = currencyService.getCurrencyRateFromCurrencyConversion(expenseRestModel.getCurrencyCode());
         if (currencyConversion != null) {
@@ -359,5 +390,5 @@ public class ExpenseRestHelper implements Serializable {
             expenseService.update(expense);
         }
     }
-    
+
 }

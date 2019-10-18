@@ -16,6 +16,7 @@ import com.simplevat.entity.CurrencyConversion;
 import com.simplevat.entity.Product;
 import com.simplevat.entity.Project;
 import com.simplevat.entity.Purchase;
+import com.simplevat.entity.User;
 import com.simplevat.entity.VatCategory;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.service.CompanyService;
@@ -78,7 +79,7 @@ public class PurchaseRestController {
     PurchaseRestControllerHelper purchaseControllerRestHelper = new PurchaseRestControllerHelper();
 
     @RequestMapping(method = RequestMethod.GET, value = "/populatepurchases")
-    public ResponseEntity populatePurchases() {
+    public ResponseEntity<List<PurchaseRestModel>> populatePurchases() {
         List<PurchaseRestModel> purchaseModels = new ArrayList<>();
         try {
             int totalPurchases = 0;
@@ -88,18 +89,20 @@ public class PurchaseRestController {
             if (purchaseService.getAllPurchase() != null) {
                 for (Purchase purchase : purchaseService.getAllPurchase()) {
                     if (purchase.getStatus() != null) {
-                        if (null != purchase.getStatus()) switch (purchase.getStatus()) {
-                            case InvoicePurchaseStatusConstant.PAID:
-                                totalPaid++;
-                                break;
-                            case InvoicePurchaseStatusConstant.PARTIALPAID:
-                                totalPartiallyPaid++;
-                                break;
-                            case InvoicePurchaseStatusConstant.UNPAID:
-                                totalUnPaid++;
-                                break;
-                            default:
-                                break;
+                        if (null != purchase.getStatus()) {
+                            switch (purchase.getStatus()) {
+                                case InvoicePurchaseStatusConstant.PAID:
+                                    totalPaid++;
+                                    break;
+                                case InvoicePurchaseStatusConstant.PARTIALPAID:
+                                    totalPartiallyPaid++;
+                                    break;
+                                case InvoicePurchaseStatusConstant.UNPAID:
+                                    totalUnPaid++;
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                     }
                     totalPurchases++;
@@ -115,7 +118,7 @@ public class PurchaseRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/vieworedit")
-    public ResponseEntity viewOrEditPurchase(@RequestParam("purchaseId") Integer purchaseId) {
+    public ResponseEntity<PurchaseRestModel> viewOrEditPurchase(@RequestParam("purchaseId") Integer purchaseId) {
         try {
             PurchaseRestModel selectedPurchaseModel;
             Purchase purchase = purchaseService.findByPK(purchaseId);
@@ -149,37 +152,55 @@ public class PurchaseRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/allpaidpurchase")
-    public void allPaidPurchase() {
-        List<PurchaseRestModel> purchaseModels = new ArrayList<>();
-        for (Purchase purchase : purchaseService.getAllPurchase()) {
-            if (purchase.getStatus() != null && purchase.getStatus() == InvoicePurchaseStatusConstant.PAID) {
-                purchaseModels.add(purchaseControllerRestHelper.getPurchaseModel(purchase));
+    public ResponseEntity<List<PurchaseRestModel>> allPaidPurchase() {
+        try {
+            List<PurchaseRestModel> purchaseModels = new ArrayList<>();
+            for (Purchase purchase : purchaseService.getAllPurchase()) {
+                if (purchase.getStatus() != null && purchase.getStatus() == InvoicePurchaseStatusConstant.PAID) {
+                    purchaseModels.add(purchaseControllerRestHelper.getPurchaseModel(purchase));
+                }
             }
+            return new ResponseEntity(purchaseModels, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/allunpaidpurchase")
-    public void allUnPaidPurchase() {
-        List<PurchaseRestModel> purchaseModels = new ArrayList<>();
-        for (Purchase purchase : purchaseService.getAllPurchase()) {
-            if (purchase.getStatus() != null && purchase.getStatus() == InvoicePurchaseStatusConstant.UNPAID) {
-                purchaseModels.add(purchaseControllerRestHelper.getPurchaseModel(purchase));
+    public ResponseEntity<List<PurchaseRestModel>> allUnPaidPurchase() {
+        try {
+            List<PurchaseRestModel> purchaseModels = new ArrayList<>();
+            for (Purchase purchase : purchaseService.getAllPurchase()) {
+                if (purchase.getStatus() != null && purchase.getStatus() == InvoicePurchaseStatusConstant.UNPAID) {
+                    purchaseModels.add(purchaseControllerRestHelper.getPurchaseModel(purchase));
+                }
             }
+            return new ResponseEntity(purchaseModels, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/allpartialpaidpurchase")
-    public void allPartialPaidPurchase() {
-        List<PurchaseRestModel> purchaseModels = new ArrayList<>();
-        for (Purchase purchase : purchaseService.getAllPurchase()) {
-            if (purchase.getStatus() != null && purchase.getStatus() == InvoicePurchaseStatusConstant.PARTIALPAID) {
-                purchaseModels.add(purchaseControllerRestHelper.getPurchaseModel(purchase));
+    public ResponseEntity<List<PurchaseRestModel>> allPartialPaidPurchase() {
+        try {
+            List<PurchaseRestModel> purchaseModels = new ArrayList<>();
+            for (Purchase purchase : purchaseService.getAllPurchase()) {
+                if (purchase.getStatus() != null && purchase.getStatus() == InvoicePurchaseStatusConstant.PARTIALPAID) {
+                    purchaseModels.add(purchaseControllerRestHelper.getPurchaseModel(purchase));
+                }
             }
+            return new ResponseEntity(purchaseModels, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/claimants")
-    public ResponseEntity getClaimants() {
+    public ResponseEntity<List<User>> getClaimants() {
         try {
             return new ResponseEntity(userServiceNew.executeNamedQuery("findAllUsers"), HttpStatus.OK);
         } catch (Exception e) {
@@ -189,7 +210,7 @@ public class PurchaseRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/categories")
-    public ResponseEntity completeCategory() {
+    public ResponseEntity<List<TransactionCategory>> completeCategory() {
         try {
             List<TransactionCategory> transactionCategoryList = transactionCategoryService.findTransactionCategoryListByParentCategory(TransactionCategoryConsatant.TRANSACTION_CATEGORY_PURCHASE);
             if (transactionCategoryList != null) {
@@ -203,7 +224,7 @@ public class PurchaseRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/currencys")
-    public ResponseEntity completeCurrency(@RequestParam("currencyString") String currencyStr) {
+    public ResponseEntity<List<Currency>> completeCurrency(@RequestParam("currencyString") String currencyStr) {
         try {
             List<Currency> currencies = currencyService.getCurrencies();
             List<Currency> currencySuggestion = new ArrayList<>();
@@ -232,7 +253,7 @@ public class PurchaseRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/projects")
-    public ResponseEntity projects(@RequestParam("projectName") String searchQuery) {
+    public ResponseEntity<List<Project>> projects(@RequestParam("projectName") String searchQuery) {
         try {
             ProjectCriteria criteria = new ProjectCriteria();
             criteria.setActive(Boolean.TRUE);
@@ -248,7 +269,7 @@ public class PurchaseRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/contacts")
-    public ResponseEntity contacts(@RequestParam("contactName") String searchQuery) {
+    public ResponseEntity<List<Contact>> contacts(@RequestParam("contactName") String searchQuery) {
         try {
             List<Contact> contacts = contactService.getContacts(searchQuery, ContactTypeConstant.VENDOR);
             return new ResponseEntity(contacts, HttpStatus.OK);
@@ -259,7 +280,7 @@ public class PurchaseRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/products")
-    public ResponseEntity products(@RequestParam("productName") String searchQuery) throws Exception {
+    public ResponseEntity<List<Product>> products(@RequestParam("productName") String searchQuery) throws Exception {
         try {
             List<Product> productList = productService.getProductList();
             if (productList != null) {
@@ -279,7 +300,7 @@ public class PurchaseRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/vatcategories")
-    public ResponseEntity vatCategorys(@RequestParam("vatSearchString") String searchQuery) throws Exception {
+    public ResponseEntity<List<VatCategory>> vatCategorys(@RequestParam("vatSearchString") String searchQuery) throws Exception {
         try {
             return new ResponseEntity(vatCategoryService.getVatCategoryList(), HttpStatus.OK);
         } catch (Exception e) {
