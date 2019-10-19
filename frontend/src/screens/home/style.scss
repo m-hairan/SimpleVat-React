@@ -27,6 +27,14 @@
     }
   }
 
+  .card-header-actions {
+    select {
+      background: transparent;
+      border: none;
+      box-shadow: none;
+    }
+  }
+
   .card-body.tab-card {
     padding: 5px;
     background: #eee;

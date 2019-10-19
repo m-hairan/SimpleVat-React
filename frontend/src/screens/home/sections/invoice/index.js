@@ -67,24 +67,33 @@ class Invoice extends Component {
     })
   }
 
+  componentDidMount() {
+    this.props.HomeActions.getInvoiceGraphData(12)
+  }
+
+  handleChange(e) {
+    e.preventDefault()
+    this.props.HomeActions.getInvoiceGraphData(e.currentTarget.value)
+  }
+
   render() {
     const invoiceBar = {
-      labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL'],
+      labels: this.props.invoice_graph.labels || [],
       datasets: [
         {
-        label: 'Paid(25)',
-        backgroundColor: '#36A2EB89',
-        data: [2500, 6000, 4000, 2000, 1000, 2400 ],
+          label: (this.props.invoice_graph.paid || {})['label'],
+          backgroundColor: '#36A2EB89',
+          data: (this.props.invoice_graph.paid || {})['data'],
         },
         {
-        label: 'Due(30)',
-        backgroundColor: '#FF638489',
-        data: [3000, 5000, 7000, 1000],
+          label: (this.props.invoice_graph.due || {})['label'],
+          backgroundColor: '#FF638489',
+          data: (this.props.invoice_graph.due || {})['data'],
         },
         {
-        label: 'Overdue(100)',
-        backgroundColor: '#FFCE5689',
-        data: [2500, 6000, 4000, 500 ],
+          label: (this.props.invoice_graph.overdue || {})['label'],
+          backgroundColor: '#FFCE5689',
+          data: (this.props.invoice_graph.overdue || {})['data'],
         }
       ]
     }
@@ -105,7 +114,11 @@ class Invoice extends Component {
                 </NavItem>
               </Nav>
               <div className="card-header-actions">
-                <DateRangePicker2 ranges={ranges}/>
+                <select className="form-control" ref={this.dateRangeSelect} onChange={(e) => this.handleChange(e)}>
+                  <option value="12">Last 12 Months</option>
+                  <option value="6">Last 6 Months</option>
+                  <option value="3">Last 3 Months</option>
+                </select>
               </div>
             </div>
             <TabContent activeTab={this.state.activeTab[0]}>
@@ -126,47 +139,7 @@ class Invoice extends Component {
                   </div>
                 </div>
                 <div className="chart-wrapper invoices">
-                  <HorizontalBar data={invoiceBar} options={invoiceOption}/>
-                </div>
-              </TabPane>
-              <TabPane tabId="2">
-                <div className="flex-wrapper" style={{paddingLeft: 20}}>
-                  <div className="data-info">
-                  <button className="btn-instagram btn-brand mr-1 mb-1 btn btn-secondary btn-sm">
-                    <i className="nav-icon icon-speech"></i><span>New Invoice</span>
-                  </button>
-                  </div>
-                  <div className="data-info">
-                  <div className="data-item">
-                    <div>
-                      <h3>$12,640</h3>
-                      <p>OUTSTANDING</p>
-                    </div>
-                  </div>
-                  </div>
-                </div>
-                <div className="chart-wrapper invoices">
-                  <HorizontalBar data={invoiceBar} options={invoiceOption} type='horizontalBar'/>
-                </div>
-              </TabPane>
-              <TabPane tabId="3">
-                <div className="flex-wrapper" style={{paddingLeft: 20}}>
-                  <div className="data-info">
-                  <button className="btn-instagram btn-brand mr-1 mb-1 btn btn-secondary btn-sm">
-                    <i className="nav-icon icon-speech"></i><span>New Invoice</span>
-                  </button>
-                  </div>
-                  <div className="data-info">
-                  <div className="data-item">
-                    <div>
-                      <h3>$12,640</h3>
-                      <p>OUTSTANDING</p>
-                    </div>
-                  </div>
-                  </div>
-                </div>
-                <div className="chart-wrapper invoices">
-                  <HorizontalBar data={invoiceBar} options={invoiceOption} type='horizontalBar'/>
+                  <HorizontalBar data={invoiceBar} options={invoiceOption} datasetKeyProvider={() => {return Math.random()}}/>
                 </div>
               </TabPane>
             </TabContent>

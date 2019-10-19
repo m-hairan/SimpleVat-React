@@ -14,9 +14,23 @@ export const TEMP = {
 
 export const HOME = {
 
-  // Bank Constants
-  BANK_ACCOUNT_TYPE: 'BANK_ACCOUNT_TYPE'
-  
+  // Bank Account
+  BANK_ACCOUNT_TYPE: 'BANK_ACCOUNT_TYPE',
+  BANK_ACCOUNT_GRAPH: 'BANK_ACCOUNT_GRAPH',
+
+  // Cash Flow
+  CASH_FLOW_GRAPH: 'CASH_FLOW_GRAPH',
+
+  // Invoice
+  INVOICE_GRAPH: 'INVOICE_GRAPH',
+
+  // Profit and Loss
+  PROFIT_LOSS: 'PROFIT_LOSS',
+  TAXES: 'TAXES',
+
+  // Revenues and Expenses
+  EXPENSE_GRAPH: 'EXPENSE_GRAPH',
+  REVENUE_GRAPH: 'REVENUE_GRAPH',
 }
 
 export const BANK = {
