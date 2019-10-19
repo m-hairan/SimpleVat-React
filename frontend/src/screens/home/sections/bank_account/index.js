@@ -49,8 +49,11 @@ class BankAccount extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      activeTab: new Array(4).fill('1')
+      activeTab: new Array(4).fill('1'),
     }
+
+    this.bankAccountSelect = React.createRef();
+    this.dateRangeSelect = React.createRef();
 
     this.toggle = this.toggle.bind(this)
   }
@@ -63,12 +66,34 @@ class BankAccount extends Component {
     })
   }
 
+  componentDidMount(){
+    this.props.HomeActions.getBankAccountTypes().then(firstAccount => {
+      this.getBankAccountGraphData(firstAccount, 12)
+    })
+  }
+
+  getBankAccountGraphData(account, dateRange){
+    this.props.HomeActions.getBankAccountGraphData(account, dateRange)
+  }
+
+  // componentWillReceiveProps(newProps) {
+  //   if (this.props.bank_account_type !== newProps.bank_account_type) {
+      
+  //   }
+  // }
+
+  handleChange(e) {
+    e.preventDefault()
+    this.getBankAccountGraphData(this.bankAccountSelect.current.value, this.dateRangeSelect.current.value)
+  }
+
+
   render() {
     const line = {
-      labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+      labels: this.props.bank_account_graph.labels,
       datasets: [
         {
-          label: 'Current Business Account',
+          label: this.props.bank_account_graph.account_name,
           fill: true,
           lineTension: 0.1,
           backgroundColor: 'rgba(75,192,192,0.4)',
@@ -86,7 +111,7 @@ class BankAccount extends Component {
           pointHoverBorderWidth: 2,
           pointRadius: 4,
           pointHitRadius: 20,
-          data: [65, 23, 100, 2, 23,12, 40, 50, 60, 80, 90],
+          data: this.props.bank_account_graph.data,
         }
       ]
     }
@@ -107,7 +132,11 @@ class BankAccount extends Component {
                 </NavItem>
               </Nav>
               <div className="card-header-actions">
-                <DateRangePicker2 ranges={ranges}/>
+                <select className="form-control" ref={this.dateRangeSelect} onChange={(e) => this.handleChange(e)}>
+                  <option value="12">Last 12 Months</option>
+                  <option value="6">Last 6 Months</option>
+                  <option value="3">Last 3 Months</option>
+                </select>
               </div>
             </div>
             <TabContent activeTab={this.state.activeTab[0]}>
@@ -122,9 +151,11 @@ class BankAccount extends Component {
                       style={{width: 40, marginRight: 10}}
                     />
                     <div>
-                      <select className="form-control bank-type-select">
-                        <option value="bank">Current Business Bank Account  </option>
-                        <option value='credit'>Current Credit Card</option>
+                      <select className="form-control bank-type-select" ref={this.bankAccountSelect} onChange={(e) => this.handleChange(e)}>
+                        {
+                          this.props.bank_account_type.map((account, index) => 
+                              <option key={index} value={account.name}>{account.name}</option>)
+                        }
                       </select>
                       <p style={{fontWeight: 500, textIndent: 5}}>Last updated on 01/20/2019</p>
                     </div>
@@ -147,7 +178,7 @@ class BankAccount extends Component {
                   </div>
                 </div>
                 <div className="chart-wrapper">
-                  <Line data={line} options={backOption}/>
+                  <Line data={line} options={backOption} datasetKeyProvider={() => {return Math.random()}}/>
                 </div>
               </TabPane>
             </TabContent>

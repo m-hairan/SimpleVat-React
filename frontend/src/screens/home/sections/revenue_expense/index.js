@@ -47,7 +47,7 @@ class RevenueAndExpense extends Component {
 
     this.toggle = this.toggle.bind(this);
     this.state = {
-      activeTab: new Array(4).fill('1'),
+      activeTab: new Array(4).fill('0'),
     };
   }
 
@@ -59,22 +59,50 @@ class RevenueAndExpense extends Component {
     });
   }
 
+  componentDidMount() {
+    this.props.HomeActions.getRevenuesGraphData('2019-01-01', '2019-05-01')
+    this.props.HomeActions.getExpensesGraphData('2019-01-01', '2019-05-01')
+    
+  }
+
   render() {
-    const pie = {
-      labels: [
-        'Meals ',
-        'Meals ',
-        'Meals ',
-        'Meals ',
-        'Meals ',
-        'Meals ',
-        'Meals ',
-        'Meals ',
-        'Meals ',
-      ],
+    const pie1 = {
+      labels: this.props.revenue_graph.labels || [],
       datasets: [
         {
-        data: [300, 50, 100, 70, 40, 50, 50, 10, 60, 50],
+        data: this.props.revenue_graph.data,
+        backgroundColor: [
+          'rgba(32, 168, 216, 0.7)',
+          'rgba(77, 189, 116, 0.7)',
+          'rgba(248, 108, 107, 0.7)',
+          'rgba(255, 193, 7, 0.7)',
+          'rgba(99, 194, 222, 0.7)',
+          'rgba(200, 206, 211, 0.7)',
+          'rgba(102, 16, 242, 0.7)',
+          'rgba(111, 66, 193, 0.7)',
+          'rgba(232, 62, 140, 0.7)',
+          'rgba(32, 201, 151, 0.7)'
+        ],
+        hoverBackgroundColor: [
+          'rgba(32, 168, 216, 1)',
+          'rgba(77, 189, 116, 1)',
+          'rgba(248, 108, 107, 1)',
+          'rgba(255, 193, 7, 1)',
+          'rgba(99, 194, 222, 1)',
+          'rgba(200, 206, 211, 1)',
+          'rgba(102, 16, 242, 1)',
+          'rgba(111, 66, 193, 1)',
+          'rgba(232, 62, 140, 1)',
+          'rgba(32, 201, 151, 1)'
+        ],
+        }],
+    };
+
+    const pie2 = {
+      labels: this.props.expense_graph.labels || [],
+      datasets: [
+        {
+        data: this.props.expense_graph.data,
         backgroundColor: [
           'rgba(32, 168, 216, 0.7)',
           'rgba(77, 189, 116, 0.7)',
@@ -124,14 +152,7 @@ class RevenueAndExpense extends Component {
                   Top 10 Expenses
                   </NavLink>
                 </NavItem>
-                <NavItem>
-                  <NavLink
-                  active={this.state.activeTab[0] === '2'}
-                  onClick={() => { this.toggle(0, '2'); }}
-                  >
-                  Purchases
-                  </NavLink>
-                </NavItem>
+                
               </Nav>
               <div className="card-header-actions">
                 <DateRangePicker2 ranges={ranges}/>
@@ -153,7 +174,7 @@ class RevenueAndExpense extends Component {
                   </div>
                 </div>
                 <div className="chart-wrapper">
-                  <Pie data={pie} options={expenseOption}/>
+                  <Pie data={pie1} options={expenseOption} datasetKeyProvider={() => {return Math.random()}}/>
                 </div>
               </TabPane>
               <TabPane tabId="1">
@@ -173,7 +194,7 @@ class RevenueAndExpense extends Component {
                   </div>
                 </div>
                 <div className="chart-wrapper">
-                  <Doughnut data={pie} options={expenseOption}/>
+                  <Doughnut data={pie2} options={expenseOption} datasetKeyProvider={() => {return Math.random()}}/>
                 </div>
               </TabPane>
               <TabPane tabId="2">

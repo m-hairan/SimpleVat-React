@@ -35,7 +35,6 @@ const invoiceOption = {
 const ranges =  {
   // 'Today': [moment(), moment()],
   // 'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-  'This Week': [moment().startOf('week'), moment().endOf('week')],
   'This Month': [moment().startOf('month'), moment().endOf('month')],
   'Last 7 Days': [moment().subtract(6, 'days'), moment()],
   'Last 30 Days': [moment().subtract(29, 'days'), moment()],
@@ -64,6 +63,10 @@ class ProfitAndLoss extends Component {
     this.setState({
       activeTab: newArray
     })
+  }
+
+  componentDidMount() {
+    this.props.HomeActions.getProfitAndLossData('2019-01-01', '2019-05-01')
   }
 
   render() {
@@ -111,23 +114,22 @@ class ProfitAndLoss extends Component {
                   <div className="data-info">
                     <div className="data-item">
                       <div>
-                      <h3>$ 180, 40</h3>
+                      <h3>$ {this.props.profit_loss['income']}</h3>
                       <p>INCOME</p>
                       </div>
                     </div>
                     <img alt="minus" src={minusIcon}/>
                     <div className="data-item">
                       <div>
-                      <h3>$ 180, 40</h3>
+                      <h3>$ {this.props.profit_loss['expenses']}</h3>
                       <p>EXPENSES</p>
                       </div>
                     </div>
                     <img alt="sum" src={equalIcon}/>
                     <div className="data-item total">
-                      
                       <div>
-                      <h3>$ 180, 40</h3>
-                      <p>PROFIT</p>
+                        <h3>$ {this.props.profit_loss['income'] - this.props.profit_loss['expenses']}</h3>
+                        <p>PROFIT</p>
                       </div>
                     </div>
                   </div>
@@ -137,8 +139,8 @@ class ProfitAndLoss extends Component {
                     <Progress className="income" color="success" value="90"></Progress>
                     <div className="data-item small">
                       <div>
-                      <h3>$ 180, 40</h3>
-                      <p>INCOME</p>
+                        <h3>$ 180, 40</h3>
+                        <p>INCOME</p>
                       </div>
                     </div>
                   </div>
