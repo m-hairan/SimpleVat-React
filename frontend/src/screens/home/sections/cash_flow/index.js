@@ -53,21 +53,30 @@ class CashFlow extends Component {
     })
   }
 
+  componentDidMount() {
+    this.props.HomeActions.getCashFlowGraphData(12)
+  }
+
+  handleChange(e) {
+    e.preventDefault()
+    this.props.HomeActions.getCashFlowGraphData(e.currentTarget.value)
+  }
+
   render() {
     const cashFlowBar = {
-      labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+      labels: this.props.cash_flow_graph.labels || [],
       datasets: [
         {
-        label: 'Inflow',
+        label: (this.props.cash_flow_graph.inflow || {})['label'],
         backgroundColor: 'rgba(75,192,192,0.7)',
         hoverBackgroundColor: 'rgba(75,192,192,1)',
-        data: [3000, 5000, 7000, 2000, 5000, 5000, 2000, 1000, 5000, 2000, 6000, 3000, 1000, 2000],
+        data: (this.props.cash_flow_graph.inflow || {})['data'],
         },
         {
-        label: 'Outflow',
+        label: (this.props.cash_flow_graph.outflow || {})['label'],
         backgroundColor: 'rgba(255,99,132,0.7)',
         hoverBackgroundColor: 'rgba(255,99,132,1)',
-        data: [2500, 6000, 4000, 4000, 1000, 2500, 5300, 1100, 4530, 2000, 4000, 4000, 4000, 3000 ],
+        data: (this.props.cash_flow_graph.outflow || {})['data'],
         },
       ]
     }
@@ -79,7 +88,7 @@ class CashFlow extends Component {
           <div className="flex-wrapper">
             <h1>Cashflow</h1>
             <div className="card-header-actions">
-            <select className="form-control">
+            <select className="form-control" onChange={(e) => this.handleChange(e)}>
               <option value="12">Last 12 Months</option>
               <option value="6">Last 6 Months</option>
               <option value="3">Last 3 Months</option>
@@ -91,27 +100,27 @@ class CashFlow extends Component {
             <div className="data-item">
             <img alt="income" src={incomeIcon}/>
             <div>
-              <h3>$ 180, 40</h3>
+              <h3>$ {(this.props.cash_flow_graph.inflow || {})['sum']}</h3>
               <p>INFLOW</p>
             </div>
             </div>
             <div className="data-item">
             <img alt="outgoing" src={outcomeIcon}/>
             <div>
-              <h3>$ 180, 40</h3>
+              <h3>$ {(this.props.cash_flow_graph.outflow || {})['sum']}</h3>
               <p>OUTFLOW</p>
             </div>
             </div>
             <div className="data-item total">
             <img alt="total" src={totalIcon}/>
             <div>
-              <h3>$ 180, 40</h3>
+              <h3>$ {(this.props.cash_flow_graph.inflow || {})['sum'] - (this.props.cash_flow_graph.outflow || {})['sum']}</h3>
               <p>NET</p>
             </div>
             </div>
           </div>
           <div className="chart-wrapper">
-            <Bar data={cashFlowBar} options={cashBarOption} style={{height: 300}}/>
+            <Bar data={cashFlowBar} options={cashBarOption} style={{height: 300}} datasetKeyProvider={() => {return Math.random()}}/>
           </div>
           </CardBody>
         </Card> 
