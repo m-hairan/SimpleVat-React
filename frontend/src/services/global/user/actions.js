@@ -15,9 +15,6 @@ export const checkAuthStatus = () => {
         type: USER.SIGNED_IN
       })
     }).catch(err => {
-      dispatch({
-        type: USER.SIGNED_OUT
-      })
       throw err
     })
   }
