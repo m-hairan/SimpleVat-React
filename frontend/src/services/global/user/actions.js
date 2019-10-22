@@ -6,15 +6,20 @@ import {
 
 export const checkAuthStatus = () => {
   return (dispatch) => {
-    if (window.localStorage.getItem('accessToken')) {
+    let data = {
+      method: 'get',
+      url: '/rest/user/getrole'
+    }
+    return authApi(data).then(res => {
       dispatch({
         type: USER.SIGNED_IN
       })
-    } else {
+    }).catch(err => {
       dispatch({
         type: USER.SIGNED_OUT
       })
-    }
+      throw err
+    })
   }
 }
 

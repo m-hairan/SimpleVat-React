@@ -23,6 +23,10 @@ class BankAccount extends React.Component {
 
   }
 
+  componentDidMount () {
+    
+  }
+
   render() {
 
     return (
