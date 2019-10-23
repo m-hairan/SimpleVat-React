@@ -86,5 +86,9 @@ export const USERS = {
 }
 
 export const VAT = {
-  
+  // All VAT Data
+  VAT_LIST: 'VAT_LIST',
+
+  // Vat Data By ID
+  VAT_ROW: 'VAT_ROW'
 }
