@@ -16,7 +16,7 @@ import {
 
 import './style.scss'
 
-import logo from 'assets/images/brand/logo.svg'
+import logo from 'assets/images/brand/simple.png'
 import sygnet from 'assets/images/brand/sygnet.svg'
 import avatar from 'assets/images/avatars/6.jpg'
 
@@ -49,7 +49,7 @@ class Header extends Component {
       <React.Fragment>
         <AppSidebarToggler className="d-lg-none" display="md" mobile />
         <AppNavbarBrand
-          full={{ src: logo, width: 89, height: 25, alt: 'CoreUI Logo' }}
+          full={{ src: logo, width: 120, height: 40, alt: 'CoreUI Logo' }}
           minimized={{ src: sygnet, width: 30, height: 30, alt: 'CoreUI Logo' }}
         />
         <AppSidebarToggler className="d-md-down-none" display="lg" />
