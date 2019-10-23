@@ -36,24 +36,24 @@ const adminRoutes = [
     component: Home.screen
   },
   {
-    path: '/admin/invoice',
-    name: 'Invoice',
-    component: Invoice.screen
-  },
-  {
     path: '/admin/invoice/update',
     name: 'Update',
     component: CreateOrEditInvoice.screen
   },
   {
-    path: '/admin/bank-account',
-    name: 'Bank Account',
-    component: BankAccount.screen
+    path: '/admin/invoice',
+    name: 'Invoice',
+    component: Invoice.screen
   },
   {
     path: '/admin/bank-account/update',
     name: 'Update',
     component: CreateOrEditBankAccount.screen
+  },
+  {
+    path: '/admin/bank-account',
+    name: 'Bank Account',
+    component: BankAccount.screen
   },
   {
     path: '/admin/taxes',
@@ -92,24 +92,24 @@ const adminRoutes = [
     name: 'Report'
   },
   {
-    path: '/admin/expense/expense',
-    name: 'Expense', 
-    component: Expense.screen
-  },
-  {
     path: '/admin/expense/expense/update',
     name: 'Update',
     component: CreateOrEditExpense.screen
   },
   {
-    path: '/admin/expense/purchase',
-    name: 'Purchase',
-    component: Purchase.screen
+    path: '/admin/expense/expense',
+    name: 'Expense', 
+    component: Expense.screen
   },
   {
     path: '/admin/expense/purchase/update',
     name: 'Update',
     component: CreateOrEditPurchase.screen
+  },
+  {
+    path: '/admin/expense/purchase',
+    name: 'Purchase',
+    component: Purchase.screen
   },
   {
     redirect: true,
@@ -118,19 +118,14 @@ const adminRoutes = [
     name: 'Expense'
   },
   {
-    path: '/admin/master/contact',
-    name: 'Contact',
-    component: Contact.screen
-  },
-  {
     path: '/admin/master/contact/update',
     name: 'Update',
     component: CreateOrEditContact.screen
   },
   {
-    path: '/admin/master/project',
-    name: 'Project',
-    component: Project.screen
+    path: '/admin/master/contact',
+    name: 'Contact',
+    component: Contact.screen
   },
   {
     path: '/admin/master/project/update',
@@ -138,9 +133,9 @@ const adminRoutes = [
     component: CreateOrEditProject.screen
   },
   {
-    path: '/admin/master/product',
-    name: 'Product',
-    component: Product.screen
+    path: '/admin/master/project',
+    name: 'Project',
+    component: Project.screen
   },
   {
     path: '/admin/master/product/update',
@@ -148,14 +143,19 @@ const adminRoutes = [
     component: CreateOrEditProduct.screen
   },
   {
-    path: '/admin/master/users',
-    name: 'Users',
-    component: Users.screen
+    path: '/admin/master/product',
+    name: 'Product',
+    component: Product.screen
   },
   {
     path: '/admin/master/users/update',
     name: 'Update',
     component: CreateOrEditUsers.screen
+  },
+  {
+    path: '/admin/master/users',
+    name: 'Users',
+    component: Users.screen
   },
   {
     redirect: true,
@@ -179,14 +179,14 @@ const adminRoutes = [
     component: VatCategory.screen
   },
   {
-    path: '/admin/settings/transaction-category',
-    name: 'Transaction Category',
-    component: TransactionCategory.screen
-  },
-  {
     path: '/admin/settings/transaction-category/update',
     name: 'Update',
     component: CreateOrEditTranactionCategory.screen
+  },
+  {
+    path: '/admin/settings/transaction-category',
+    name: 'Transaction Category',
+    component: TransactionCategory.screen
   },
   {
     redirect: true,
