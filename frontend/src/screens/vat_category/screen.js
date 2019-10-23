@@ -1,14 +1,14 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Card, CardHeader, CardBody, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { ToastContainer, toast } from 'react-toastify';
-import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table';
-import Loader from "components/loader";
+import { Card, CardHeader, CardBody, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import { ToastContainer, toast } from 'react-toastify'
+import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
+import Loader from "components/loader"
 import moment from 'moment'
 
-import 'react-toastify/dist/ReactToastify.css';
-import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
+import 'react-toastify/dist/ReactToastify.css'
+import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
 import './style.scss'
 
 import * as VatActions from './actions'
@@ -27,7 +27,7 @@ const mapDispatchToProps = (dispatch) => {
 
 class VatCategory extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       vatCategoryList: [],
@@ -55,10 +55,21 @@ class VatCategory extends React.Component {
       searchField: this.customSearchField,
       paginationShowsTotal: this.customTotal,
     }
+
+    this.deleteVat = this.deleteVat.bind(this)
+    this.customSearchField = this.customSearchField.bind(this)
+    this.success = this.success.bind(this)
+    this.customTotal = this.customTotal.bind(this)
+    this.vatPercentageFormat = this.vatPercentageFormat.bind(this)
+    this.vatCreatedDateFormat = this.vatCreatedDateFormat.bind(this)
+    this.versionNumFormat = this.versionNumFormat.bind(this)
+    this.actions = this.actions.bind(this)
+
+    this.closeModal = this.closeModal.bind(this)
   }
 
   // Table Custom Search Field
-  customSearchField = (props) => {
+  customSearchField(props) {
     return (
       <SearchField
         defaultValue=''
@@ -67,23 +78,31 @@ class VatCategory extends React.Component {
   }
 
   // Table Custom Pagination Label
-  customTotal = (from, to, size) => (
-    <span className="react-bootstrap-table-pagination-total">
-      Showing {from} to {to} of {size} Results
-    </span >
-  );
+  customTotal(from, to, size) {
+    return (
+      <span className="react-bootstrap-table-pagination-total">
+        Showing {from} to {to} of {size} Results
+      </span >
+    )
+  }
 
   // -------------------------
   // Data Table Custom Fields
   //--------------------------
   
-  vatPercentageFormat = (cell, row) => `${row.vat} %`
+  vatPercentageFormat(cell, row) {
+    return(`${row.vat} %`)
+  }
 
-  vatCreatedDateFormat = (cell, row) => `${moment(new Date(row.createdDate)).format('lll')}`
+  vatCreatedDateFormat(cell, row) {
+    return(`${moment(new Date(row.createdDate)).format('lll')}`)
+  } 
 
-  versionNumFormat = (cell, row) => <span className="badge badge-lg badge-info">{row.versionNumber}</span>
+  versionNumFormat(cell, row){
+    return(<span className="badge badge-lg badge-info">{row.versionNumber}</span>)
+  }
 
-  actions = (cell, row) => {
+  actions(cell, row) {
     return (
       <div className="d-flex table-action">
           <Button block 
@@ -105,7 +124,7 @@ class VatCategory extends React.Component {
   }
 
   // Show Success Toast
-  success = () => {
+  success() {
     return toast.success('Vat Category Deleted Successfully... ', {
         position: toast.POSITION.TOP_RIGHT
     })
@@ -113,11 +132,11 @@ class VatCategory extends React.Component {
 
   
   componentDidMount() {
-    this.getVatListData();
+    this.getVatListData()
   }
 
   // Get All Vats
-  getVatListData(){
+  getVatListData() {
     this.props.vatActions.getVatList().then(res => {
       if (res.status === 200) {
         this.setState({ loading: false })
@@ -126,7 +145,7 @@ class VatCategory extends React.Component {
   }
 
   // Delete Vat By ID
-  deleteVat = () => {
+  deleteVat() {
     this.setState({ loading: true })
     this.setState({ openDeleteModal: false })
     this.props.vatActions.deleteVat(this.state.selectedData.id).then(res => {
@@ -137,8 +156,18 @@ class VatCategory extends React.Component {
     })
   }
 
+  // Cloase Confirm Modal
+  closeModal() {
+    this.setState({ openDeleteModal: false })
+  }
+
+  // Goto Edit Page
+  goCrateOrEditPage(id) {
+
+  }
+
   render() {
-    const { loading } = this.state;
+    const { loading } = this.state
     const vatList = this.props.vat_list
     const containerStyle = {
         zIndex: 1999
@@ -187,13 +216,13 @@ class VatCategory extends React.Component {
                 </ModalBody>
                   <ModalFooter>
                       <Button color="danger" onClick={this.deleteVat}>Yes</Button>{' '}
-                      <Button color="secondary" onClick={() => this.setState({ openDeleteModal: false })}>No</Button>
+                      <Button color="secondary" onClick={this.closeModal}>No</Button>
                   </ModalFooter>
               </Modal>
             </div>
         }
       </div>
-    );
+    )
   }
 }
 

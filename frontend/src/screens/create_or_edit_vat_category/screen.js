@@ -1,12 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Card, CardHeader, CardBody, Button, Input, Form, FormGroup, Label } from 'reactstrap';
-import { toast } from 'react-toastify';
-import _ from "lodash";
-import Loader from "components/loader";
+import { Card, CardHeader, CardBody, Button, Input, Form, FormGroup, Label } from 'reactstrap'
+import { toast } from 'react-toastify'
+import _ from "lodash"
+import Loader from "components/loader"
 
-import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css'
 import './style.scss'
 
 import * as VatActions from './actions'
@@ -30,6 +30,10 @@ class CreateOrEditVatCategory extends React.Component {
       vatData: {},
       loading: false
     }
+
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.success = this.success.bind(this)
   }
 
   componentDidMount() {
@@ -54,7 +58,7 @@ class CreateOrEditVatCategory extends React.Component {
   }
 
   // Save Updated Field's Value to State
-  handleChange = (e, name) => {
+  handleChange(e, name) {
     this.setState({
       vatData: _.set(
         { ...this.state.vatData },
@@ -65,14 +69,14 @@ class CreateOrEditVatCategory extends React.Component {
   }
 
   // Show Success Toast
-  success = () => {
+  success() {
     return toast.success("Vat Category Updated successfully... ", {
       position: toast.POSITION.TOP_RIGHT
     })
-  };
+  }
 
   // Create or Edit Vat
-  handleSubmit = e => {
+  handleSubmit(e) {
     e.preventDefault()
 
     this.setState({ loading: true })
@@ -88,11 +92,11 @@ class CreateOrEditVatCategory extends React.Component {
 
     this.props.vatActions.createBat(postObj).then(res => {
       if (res.status === 200) {
-        this.success();
+        this.success()
         this.props.history.push("/admin/settings/vat-category")
       }
     })
-  };
+  }
 
   render() {
     const { loading } = this.state
@@ -149,7 +153,7 @@ class CreateOrEditVatCategory extends React.Component {
             )}
         </div>
       </div>
-    );
+    )
   }
 }
 
