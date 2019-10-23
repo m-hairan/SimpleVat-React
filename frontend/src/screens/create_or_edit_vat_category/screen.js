@@ -89,7 +89,7 @@ class CreateOrEditVatCategory extends React.Component {
     this.props.vatActions.createBat(postObj).then(res => {
       if (res.status === 200) {
         this.success();
-        this.props.history.push("settings/vat-category")
+        this.props.history.push("/admin/settings/vat-category")
       }
     })
   };
@@ -132,7 +132,7 @@ class CreateOrEditVatCategory extends React.Component {
                   />
                 </FormGroup>            
                 <FormGroup className="text-right">
-                  <Button type="submit" color="secondary" onClick={() => {this.props.history.push("settings/vat-category")}}>
+                  <Button type="submit" color="secondary" onClick={() => {this.props.history.push("/admin/settings/vat-category")}}>
                     <i className="fa fa-ban"></i> Cancel
                   </Button>
                   <Button type="submit" color="primary">

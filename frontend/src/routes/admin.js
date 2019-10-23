@@ -169,14 +169,14 @@ const adminRoutes = [
     component: GeneralSettings.screen
   },
   {
-    path: '/admin/settings/vat-category',
-    name: 'Vat Category',
-    component: VatCategory.screen
-  },
-  {
     path: '/admin/settings/vat-category/update',
     name: 'Update',
     component: CreateOrEditVatCategory.screen
+  },
+  {
+    path: '/admin/settings/vat-category',
+    name: 'Vat Category',
+    component: VatCategory.screen
   },
   {
     path: '/admin/settings/transaction-category',
