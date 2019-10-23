@@ -34,7 +34,7 @@ export const HOME = {
 }
 
 export const BANK = {
-
+  BANK_ACCOUNT_LIST: 'BANK_ACCOUNT_LIST'
 }
 
 export const EMPLOYEE = {
