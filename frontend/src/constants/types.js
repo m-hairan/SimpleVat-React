@@ -34,7 +34,7 @@ export const HOME = {
 }
 
 export const BANK = {
-
+  BANK_ACCOUNT_LIST: 'BANK_ACCOUNT_LIST'
 }
 
 export const EMPLOYEE = {
@@ -86,5 +86,9 @@ export const USERS = {
 }
 
 export const VAT = {
-  
+  // All VAT Data
+  VAT_LIST: 'VAT_LIST',
+
+  // Vat Data By ID
+  VAT_ROW: 'VAT_ROW'
 }

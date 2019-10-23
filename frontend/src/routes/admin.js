@@ -36,59 +36,29 @@ const adminRoutes = [
     component: Home.screen
   },
   {
+    path: '/admin/invoice/update',
+    name: 'Update',
+    component: CreateOrEditInvoice.screen
+  },
+  {
     path: '/admin/invoice',
     name: 'Invoice',
     component: Invoice.screen
   },
   {
+    path: '/admin/bank-account/update',
+    name: 'Update',
+    component: CreateOrEditBankAccount.screen
+  },
+  {
     path: '/admin/bank-account',
-    name: 'BankAccount',
+    name: 'Bank Account',
     component: BankAccount.screen
   },
   {
     path: '/admin/taxes',
     name: 'Taxes',
     component: Taxes.screen
-  },
-  {
-    path: '/admin/create-invoice',
-    name: 'Invoice',
-    component: CreateOrEditInvoice.screen
-  },
-  {
-    path: '/admin/create-expense',
-    name: 'Expense',
-    component: CreateOrEditExpense.screen
-  },
-  {
-    path: '/admin/create-product',
-    name: 'Product',
-    component: CreateOrEditProduct.screen
-  },
-  {
-    path: '/admin/create-users',
-    name: 'Users',
-    component: CreateOrEditUsers.screen
-  },
-  {
-    path: '/admin/create-project',
-    name: 'Project',
-    component: CreateOrEditProject.screen
-  },
-  {
-    path: '/admin/create-contact',
-    name: 'Contact',
-    component: CreateOrEditContact.screen
-  },
-  {
-    path: '/admin/create-purchase',
-    name: 'Purchase',
-    component: CreateOrEditPurchase.screen
-  },
-  {
-    path: '/admin/create-bank-account',
-    name: 'BankAccount',
-    component: CreateOrEditBankAccount.screen
   },
   {
     path: '/admin/imports',
@@ -102,18 +72,29 @@ const adminRoutes = [
   },
   {
     path: '/admin/report/expense-report',
-    name: 'ExpenseReport', 
+    name: 'Expense Report', 
     component: ExpenseReport.screen
   },
   {
     path: '/admin/report/invoice-report',
-    name: 'InvoiceReport', 
+    name: 'Invoice Report', 
     component: InvoiceReport.screen
   },
   {
     path: '/admin/report/transaction-report',
-    name: 'TransactionReport', 
+    name: 'Transaction Report', 
     component: TransactionReport.screen
+  },
+  {
+    redirect: true,
+    path: '/admin/report',
+    pathTo: '/admin/report/transaction-report',
+    name: 'Report'
+  },
+  {
+    path: '/admin/expense/expense/update',
+    name: 'Update',
+    component: CreateOrEditExpense.screen
   },
   {
     path: '/admin/expense/expense',
@@ -121,19 +102,25 @@ const adminRoutes = [
     component: Expense.screen
   },
   {
+    path: '/admin/expense/purchase/update',
+    name: 'Update',
+    component: CreateOrEditPurchase.screen
+  },
+  {
     path: '/admin/expense/purchase',
     name: 'Purchase',
     component: Purchase.screen
   },
   {
-    path: '/admin/settings/general',
-    name: 'General Settings',
-    component: GeneralSettings.screen
+    redirect: true,
+    path: '/admin/expense',
+    pathTo: '/admin/expense/expense',
+    name: 'Expense'
   },
   {
-    path: '/admin/settings/vat-category',
-    name: 'Vat Category',
-    component: VatCategory.screen
+    path: '/admin/master/contact/update',
+    name: 'Update',
+    component: CreateOrEditContact.screen
   },
   {
     path: '/admin/master/contact',
@@ -141,9 +128,19 @@ const adminRoutes = [
     component: Contact.screen
   },
   {
+    path: '/admin/master/project/update',
+    name: 'Update',
+    component: CreateOrEditProject.screen
+  },
+  {
     path: '/admin/master/project',
     name: 'Project',
     component: Project.screen
+  },
+  {
+    path: '/admin/master/product/update',
+    name: 'Update',
+    component: CreateOrEditProduct.screen
   },
   {
     path: '/admin/master/product',
@@ -151,24 +148,51 @@ const adminRoutes = [
     component: Product.screen
   },
   {
+    path: '/admin/master/users/update',
+    name: 'Update',
+    component: CreateOrEditUsers.screen
+  },
+  {
     path: '/admin/master/users',
     name: 'Users',
     component: Users.screen
   },
   {
-    path: '/admin/create-vat-category',
-    name: 'Create Vat Category',
+    redirect: true,
+    path: '/admin/master',
+    pathTo: '/admin/master/product',
+    name: 'Master'
+  },
+  {
+    path: '/admin/settings/general',
+    name: 'General Settings',
+    component: GeneralSettings.screen
+  },
+  {
+    path: '/admin/settings/vat-category/update',
+    name: 'Update',
     component: CreateOrEditVatCategory.screen
   },
   {
-    path: '/admin/create-transaction-category',
-    name: 'Create Transaction Category',
+    path: '/admin/settings/vat-category',
+    name: 'Vat Category',
+    component: VatCategory.screen
+  },
+  {
+    path: '/admin/settings/transaction-category/update',
+    name: 'Update',
     component: CreateOrEditTranactionCategory.screen
   },
   {
     path: '/admin/settings/transaction-category',
     name: 'Transaction Category',
     component: TransactionCategory.screen
+  },
+  {
+    redirect: true,
+    path: '/admin/settings',
+    pathTo: '/admin/settings/general',
+    name: 'Settings'
   },
   {
     redirect: true,
