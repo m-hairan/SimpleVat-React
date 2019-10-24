@@ -3,7 +3,6 @@ import React from 'react'
 import { Card, CardHeader, CardBody, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
 import { ToastContainer, toast } from 'react-toastify'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
-import paginationFactory from 'react-bootstrap-table2-paginator'
 
 import Loader from 'components/loader'
 
@@ -116,29 +115,26 @@ class BankAccountList extends React.Component {
 
   bankAccounttActions (cell, row) {
     return (
-      <div className="d-flex flex-wrap">
+      <div className="table-action text-right">
         <Button
-          block
           color="primary"
-          className="btn-pill vat-actions"
+          className="btn-pill vat-actions ml-1"
           title="Edit Vat Category"
           onClick={() => this.props.history.push(`/admin/bank-account/update?id=${row.bankAccountId}`)}
         >
           <i className="far fa-edit"></i>
         </Button>
         <Button
-          block
           color="primary"
-          className="btn-pill vat-actions"
+          className="btn-pill vat-actions ml-1"
           title="Transaction"
           onClick={() => this.props.history.push(`/admin/bank-account/update?id=${row.id}`)}
         >
           <i className="fas fa-university"></i>
         </Button>
         <Button
-          block
           color="primary"
-          className="btn-pill vat-actions"
+          className="btn-pill vat-actions ml-1"
           title="Delete Vat Ctegory"
           onClick={() => this.startDelete(row)}
         >
@@ -166,11 +162,13 @@ class BankAccountList extends React.Component {
           <ToastContainer position="top-right" autoClose={5000} style={containerStyle} />
           <Card>
             <CardHeader>
+              <i className="icon-menu" />
               Bank Account
             </CardHeader>
             <CardBody>
               <Button
-                className="mb-3"
+                color="primary"
+                className="mb-3 btn-square"
                 onClick={() => this.props.history.push(`/admin/bank-account/update`)}
               >
                 New
@@ -179,18 +177,23 @@ class BankAccountList extends React.Component {
                 loading ?
                   <Loader />
                 :
-                  <BootstrapTable data={bank_account_list} version="4" striped hover pagination={paginationFactory(this.options)} totalSize={bank_account_list ? bank_account_list.length : 0} >
+                  <BootstrapTable
+                    data={bank_account_list}
+                    version="4"
+                    striped
+                    hover
+                    pagination
+                    totalSize={bank_account_list ? bank_account_list.length : 0}
+                    className="bank-account-table"
+                  >
                     <TableHeaderColumn isKey dataField="bankAccountName">Account Name</TableHeaderColumn>
                     <TableHeaderColumn dataField="accountNumber" >Account Number</TableHeaderColumn>
                     <TableHeaderColumn dataField="accountNumber" >Account Type</TableHeaderColumn>
                     <TableHeaderColumn dataField="accountNumber" >Bank Name</TableHeaderColumn>
-                    <TableHeaderColumn dataField="accountNumber" >IBAN Number</TableHeaderColumn>
-                    <TableHeaderColumn dataField="accountNumber" >Currency</TableHeaderColumn>
                     <TableHeaderColumn dataField="swiftCode" >Swift Code</TableHeaderColumn>
                     <TableHeaderColumn dataFormat={this.setStatus} >Status</TableHeaderColumn>
-                    <TableHeaderColumn dataField="openingBalance" >Current Balance</TableHeaderColumn>
-                    <TableHeaderColumn dataField="accountNumber" >Country</TableHeaderColumn>
-                    <TableHeaderColumn dataFormat={this.bankAccounttActions}>Action</TableHeaderColumn>
+                    <TableHeaderColumn dataField="openingBalance" >Opening Balance</TableHeaderColumn>
+                    <TableHeaderColumn className="text-right" dataFormat={this.bankAccounttActions}>Action</TableHeaderColumn>
                   </BootstrapTable>
               }
             </CardBody>
