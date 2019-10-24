@@ -22,3 +22,18 @@ export const getBankAccountList = () => {
     })
   }
 }
+
+
+export const deleteBankAccount = (_id) => {
+  return (dispatch) => {
+    let data = {
+      method: 'delete',
+      url: `rest/bank/deletebank?id=${_id}`
+    }
+    return authApi(data).then(res => {
+      return res
+    }).catch(err => {
+      throw err
+    })
+  }
+}

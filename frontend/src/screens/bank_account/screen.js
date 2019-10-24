@@ -2,6 +2,11 @@ import React from 'react'
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
 
+import {
+  BankAccountList,
+  BankStatementList
+} from './sections'
+
 import * as BankAccountActions from './actions'
 
 import './style.scss'
@@ -25,23 +30,6 @@ class BankAccount extends React.Component {
     this.state = {
       
     }
-
-  }
-
-  componentDidMount () {
-    if (this.props.is_authed === true) {
-      this.initializeData()
-    }
-  }
-
-  componentWillReceiveProps (newProps) {
-    if (newProps.is_authed !== this.props.is_authed && newProps.is_authed === true) {
-      this.initializeData()
-    }
-  }
-
-  initializeData () {
-    this.props.bankAccountActions.getBankAccountList()
   }
 
 
@@ -49,7 +37,8 @@ class BankAccount extends React.Component {
 
     return (
       <div className="bank-account-screen">
-        <h1>BankAccount Screen</h1>
+        <BankAccountList {...this.props} />
+        <BankStatementList {...this.props} />
       </div>
     )
   }
