@@ -1,0 +1,108 @@
+.filter-section{
+
+  .row.title {
+    margin: 0;
+    color: #9c9c9c;
+    font-size: 15px;
+    font-weight: 500;
+  }
+  
+  button#dropdownMenu {
+    background: white;
+    border-radius: 0;
+    /* width: 183px; */
+    border: 2px solid #d6d3d3;
+    height: 50px;
+    width: 280px;
+    text-align: left;
+    color: #949494;
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 500;
+  }
+  button#dropdownMenu1 {
+    background: white;
+    border-radius: 0;
+    /* width: 183px; */
+    border: 2px solid #d6d3d3;
+    height: 50px;
+    width: 200px;
+    text-align: left;
+    color: #949494;
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 500;
+  }
+  button#dropdownMenuPage {
+  
+    background: white;
+    border-radius: 0;
+    /* width: 183px; */
+    border: 2px solid #d6d3d3;
+    height: 50px;
+    width: 60px;
+    text-align: left;
+    color: #949494;
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 500;
+  }
+  i.fa.fa-angle-down.arrow {
+    float: right;
+    font-size: 30px;
+    // zoom: 1;
+  }
+  input.form-control.date {
+    
+      background: white;
+      border-radius: 0;
+      /* width: 183px; */
+      border: 2px solid #d6d3d3;
+      height: 50px;
+      width: 150px;
+      text-align: left;
+      color: #949494;
+      font-size: 16px;
+      font-style: italic;
+      font-weight: 500;
+    
+  }
+  
+  input.form-control.search {
+    
+    background: white;
+    border-radius: 0;
+    /* width: 183px; */
+    border: 2px solid #d6d3d3;
+    height: 50px;
+    width: 305px;
+    text-align: left;
+    color: #949494;
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 500;
+    
+  
+  }
+  i.fa.fa-calendar {
+    color: gray;
+    float: right;
+    margin-top: -30px;
+    margin-right:25px;
+  }
+  i.fa.fa-search {
+    color: #a7a7a7;
+    font-size: 15px;
+  }
+  button.btn.btn-secondary.search {
+    padding: 13px;
+    // margin-left: 12px;
+    border-radius: 0;
+    background: #efefef;
+    border: 2px solid #d6d3d3;
+  }
+  .row.filter {
+    margin-top: 40px;
+  }
+  
+}
