@@ -1,144 +1,144 @@
 .table-section{
 
 
-    .table-headings th{
-        font-size: 16px;
-    }
-    
-   
-    
-    .col-1.all {
-        color: black;
-        border-bottom: 2px solid #1b5083;
-       
-    }
-    .table-body td {
-        color: rgb(68, 68, 68);
-        font-family: Montserrat, serif;
-        font-size: 16px;
-        font-weight: 500;
-    }
-    td.col-end {
-        color: #1b5083;
-        font-size: 14px;
-        font-weight: 600;
-        
-    }
-    .custom-pagination {
-        float: right;
-        margin-right: 50px;
-        font-size: 15px;
-        color: gray;
-    }
-    .custom-pagination p {
-        display: inline-block;
-        color: #444444;
-        font-size: 16px;
-        font-weight: 500;
-    }
-    button#dropdownMenuPage2 {
-        background: white;
-        border-radius: 0;
-        /* width: 183px; */
-        border:2px solid #ccc;
-        height: 35px;
-        width: 66px;
-        text-align: left;
-        color: rgb(170, 170, 170);
-        font-size: 16px;
-        font-weight: 500;
-        margin: 10px;
-        padding: 5px;
-    }
-    .col-12.limit {
-        color: gray;
-      
-    }
-    
-    .left{
-        height: 31px;
-        width: 50px;
-        border: 2px solid #cccccc;
-    
-    }
-    i.fa.fa-angle-left {
-        color: gray;
-    }
-    i.fa.fa-angle-right {
-        color: gray;
-    }
-    
-    i.fa.fa-angle-down.arrow1 {
-        float: right;
-        font-size: 20px;
-        margin-top: 2px;
-    }
-    
-   
-    
-    
-    .row.title {
-        margin-top: 40px;
-    }
-    
-    .row.title div {
-        padding-bottom: 10px;
-    }
-    
-    button.btn.btn-primary.custom {
-        background: #3ab5e3;
-        font-size: 16px;
-        font-weight: 600;
-        padding: 6px 20px;
-        border: 0;
-        border-radius: 3px;
-    }
-    button.btn.btn-secondary.custom {
-        background: #708fa7;
-        font-size: 16px;
-        font-weight: 600;
-        padding: 6px 20px;
-     
-        font-size: 16px;
-      
-        font-weight: 500;
-        border: 0;
-        border-radius: 3px;
-        color: white;
-    }
-    button.btn.btn-danger.custom {
-        background: #d34245;
-        font-size: 16px;
-        font-weight: 600;
-        padding: 6px 20px;
-        border: 0;
-        border-radius: 3px;
-    }
-    button.btn.btn-success.custom {
-        background: #30c673;
-        font-size: 16px;
-        font-weight: 600;
-        padding: 6px 20px;
-        border: 0;
-        border-radius: 3px;
-    }
-    
+  .table-headings th{
+    font-size: 16px;
+  }
+  
    
   
-    span.action {
-        font-size: 18px;
-        margin-right: 8px;
-    }
+  .col-1.all {
+    color: black;
+    border-bottom: 2px solid #1b5083;
+     
+  }
+  .table-body td {
+    color: rgb(68, 68, 68);
+    font-family: Montserrat, serif;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  td.col-end {
+    color: #1b5083;
+    font-size: 14px;
+    font-weight: 600;
     
-    .table-body button {
-        width: 70%;
-    }
-    .limit p {
-        display: inline-block;
-        color: rgb(68, 68, 68);
-        font-size: 16px;
-        font-weight: 500;
-    }
+  }
+  .custom-pagination {
+    float: right;
+    margin-right: 50px;
+    font-size: 15px;
+    color: gray;
+  }
+  .custom-pagination p {
+    display: inline-block;
+    color: #444444;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  button#dropdownMenuPage2 {
+    background: white;
+    border-radius: 0;
+    /* width: 183px; */
+    border:2px solid #ccc;
+    height: 35px;
+    width: 66px;
+    text-align: left;
+    color: rgb(170, 170, 170);
+    font-size: 16px;
+    font-weight: 500;
+    margin: 10px;
+    padding: 5px;
+  }
+  .col-12.limit {
+    color: gray;
+    
+  }
+  
+  .left{
+    height: 31px;
+    width: 50px;
+    border: 2px solid #cccccc;
+  
+  }
+  i.fa.fa-angle-left {
+    color: gray;
+  }
+  i.fa.fa-angle-right {
+    color: gray;
+  }
+  
+  i.fa.fa-angle-down.arrow1 {
+    float: right;
+    font-size: 20px;
+    margin-top: 2px;
+  }
+  
+   
+  
+  
+  .row.title {
+    margin-top: 40px;
+  }
+  
+  .row.title div {
+    padding-bottom: 10px;
+  }
+  
+  button.btn.btn-primary.custom {
+    background: #3ab5e3;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 6px 20px;
+    border: 0;
+    border-radius: 3px;
+  }
+  button.btn.btn-secondary.custom {
+    background: #708fa7;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 6px 20px;
+   
+    font-size: 16px;
+    
+    font-weight: 500;
+    border: 0;
+    border-radius: 3px;
+    color: white;
+  }
+  button.btn.btn-danger.custom {
+    background: #d34245;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 6px 20px;
+    border: 0;
+    border-radius: 3px;
+  }
+  button.btn.btn-success.custom {
+    background: #30c673;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 6px 20px;
+    border: 0;
+    border-radius: 3px;
+  }
+  
+   
+  
+  span.action {
+    font-size: 18px;
+    margin-right: 8px;
+  }
+  
+  .table-body button {
+    width: 70%;
+  }
+  .limit p {
+    display: inline-block;
+    color: rgb(68, 68, 68);
+    font-size: 16px;
+    font-weight: 500;
+  }
 
 
 }
