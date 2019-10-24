@@ -78,7 +78,20 @@ export const TAXES = {
 }
 
 export const TRANSACTION = {
+  // All Transaction Data
+  TRANSACTION_LIST: 'TRANSACTION_LIST',
 
+  // Vat Transaction By ID
+  TRANSACTION_ROW: 'TRANSACTION_ROW',
+
+  // Transaction Types
+  TRANSACTION_TYPES: 'TRANSACTION_TYPES',
+
+  // Transaction Vat Categories
+  TRANSACTION_VAT_CATEGORIES: 'TRANSACTION_VAT_CATEGORIES',
+
+  // Transaction Parent Category Code List
+  TRANSACTION_PARENT_CATRGORY_CODE_LIST: 'TRANSACTION_PARENT_CATEGORY_CODE_LIST'
 }
 
 export const USERS = {
