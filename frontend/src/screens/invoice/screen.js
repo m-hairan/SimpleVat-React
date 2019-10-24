@@ -1,9 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import State from './sections/state'
-import Filter from './sections/filter'
-import Table from './sections/table'
+
+import {
+  State,
+  Filter,
+  Table
+} from './sections'
 
 import './style.scss'
 
@@ -36,7 +39,6 @@ class Invoice extends React.Component {
             <State {...this.props} />
             <Filter {...this.props} />
             <Table {...this.props}/>
-
           </div>
         </div>
 
