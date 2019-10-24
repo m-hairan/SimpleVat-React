@@ -4,27 +4,12 @@
     color: #20a8d8;
   }
   .bank-statement-table {
-    .react-bs-table {
-      border-radius: 0 !important;
-    }
     .table-action {
       button {
         width: 30px;
         height: 30px;
         padding: 0;
       }
-    }
-    td {
-      vertical-align: middle !important;
-    }
-    th {
-      border-bottom-width: 1px !important;
-    }
-    .btn.dropdown-toggle {
-      border-radius: 0 !important;
-    }
-    .page-link {
-      border-radius: 0 !important;
     }
   }
 }
