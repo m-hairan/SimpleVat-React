@@ -11,10 +11,34 @@ export const getBankAccountList = () => {
       url: '/rest/bank/getbanklist'
     }
     return authApi(data).then(res => {
+      // dispatch({
+      //   type: BANK.BANK_ACCOUNT_LIST,
+      //   payload: {
+      //     data: res.data
+      //   }
+      // })
       dispatch({
         type: BANK.BANK_ACCOUNT_LIST,
         payload: {
-          data: res.data
+          data: [{
+            bankAccountId: 4,
+            bankAccountName: 'temp',
+            accountNumber: 'temp',
+            swiftCode: 'temp',
+            bankAccountStatus: {
+              bankAccountStatusName: 'temp'
+            },
+            openingBalance: 'temp'
+          }, {
+            bankAccountId: 4,
+            bankAccountName: 'temp',
+            accountNumber: 'temp',
+            swiftCode: 'temp',
+            bankAccountStatus: {
+              bankAccountStatusName: 'temp'
+            },
+            openingBalance: 'temp'
+          }]
         }
       })
     }).catch(err => {
