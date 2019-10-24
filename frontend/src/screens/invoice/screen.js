@@ -1,6 +1,9 @@
 import React from 'react'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import State from './sections/state'
+import Filter from './sections/filter'
+import Table from './sections/table'
 
 import './style.scss'
 
@@ -14,11 +17,11 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 class Invoice extends React.Component {
-  
+
   constructor(props) {
     super(props)
     this.state = {
-      
+
     }
 
   }
@@ -27,8 +30,21 @@ class Invoice extends React.Component {
 
     return (
       <div className="invoice-screen">
-        <h1>Invoice Screen</h1>
+
+        <div class="card">
+          <div class="card-body">
+            <State {...this.props} />
+            <Filter {...this.props} />
+            <Table {...this.props}/>
+
+          </div>
+        </div>
+
       </div>
+
+
+
+
     )
   }
 }
