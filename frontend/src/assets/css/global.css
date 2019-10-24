@@ -8,7 +8,15 @@ body, span, label, h1, h2, h3, h4, p, em {   font-family: Montserrat, serif;}
     0px 3px 3px -2px rgba(0,0,0,0.12) !important;
 }
 
+.card-header {
+  border-radius: 0 !important;
+}
+
 .card-body {
+  border-radius: 0 !important;
+}
+
+.card-footer {
   border-radius: 0 !important;
 }
 
