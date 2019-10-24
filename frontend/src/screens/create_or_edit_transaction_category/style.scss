@@ -1,0 +1,45 @@
+.create-or-edit-transaction-category-screen {
+  .card {
+    border: none;
+    box-shadow: 3px 3px 11px rgba(0,0,0,0.2);
+    border-radius: 7px;
+
+    .card-header {
+      font-size: 20px;
+      background: white;
+      background-color: white;
+      border: none;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      padding: 18px 20px;
+      border-top-left-radius: 7px;
+      border-top-right-radius: 7px;
+
+      button {
+        margin: 0 !important;
+        height: 30px;
+        font-size: 14px;
+        padding: 0px 18px;
+      }
+    }
+
+    form {
+      margin-bottom: 30px;
+    }
+
+    .form-group {
+      max-width: 700px;
+      margin: 20px auto;
+
+      input {
+        max-width: 700px;
+      }
+
+      button {
+        margin-left: 10px;
+        height: 30px;
+        padding: 0 20px;
+        margin-top: 15px;
+      }
+    }
+  }
+}

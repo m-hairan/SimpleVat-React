@@ -179,14 +179,14 @@ const adminRoutes = [
     component: VatCategory.screen
   },
   {
-    path: '/admin/settings/transaction-category',
-    name: 'Transaction Category',
-    component: TransactionCategory.screen
-  },
-  {
     path: '/admin/settings/transaction-category/update',
     name: 'Update',
     component: CreateOrEditTranactionCategory.screen
+  },
+  {
+    path: '/admin/settings/transaction-category',
+    name: 'Transaction Category',
+    component: TransactionCategory.screen
   },
   {
     redirect: true,

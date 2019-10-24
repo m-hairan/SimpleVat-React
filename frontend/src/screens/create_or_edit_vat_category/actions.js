@@ -26,7 +26,7 @@ export const getVatByID = (id) => {
 }
 
 
-// Create New Bat
+// Create & Save Bat
 export const createBat = (bat) => {
   return (dispatch) => {
     let data = {
@@ -36,10 +36,6 @@ export const createBat = (bat) => {
     }
 
     return authApi(data).then(res => {
-      dispatch({
-        type: VAT.VAT_ROW,
-        payload: res.data
-      })
       return res
     }).catch(err => {
       throw err

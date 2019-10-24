@@ -30,7 +30,6 @@ class VatCategory extends React.Component {
     super(props)
 
     this.state = {
-      vatCategoryList: [],
       openDeleteModal: false,
       loading: true
     }
@@ -161,11 +160,6 @@ class VatCategory extends React.Component {
     this.setState({ openDeleteModal: false })
   }
 
-  // Goto Edit Page
-  goCrateOrEditPage(id) {
-
-  }
-
   render() {
     const { loading } = this.state
     const vatList = this.props.vat_list
@@ -215,7 +209,7 @@ class VatCategory extends React.Component {
                       Are you sure want to delete this record?
                 </ModalBody>
                   <ModalFooter>
-                      <Button color="danger" onClick={this.deleteVat}>Yes</Button>{' '}
+                      <Button color="danger" onClick={this.deleteVat}>Yes</Button>&nbsp;
                       <Button color="secondary" onClick={this.closeModal}>No</Button>
                   </ModalFooter>
               </Modal>

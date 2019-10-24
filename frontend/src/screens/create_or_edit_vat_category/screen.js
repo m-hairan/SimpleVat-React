@@ -34,25 +34,19 @@ class CreateOrEditVatCategory extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.success = this.success.bind(this)
+
+    this.id = new URLSearchParams(props.location.search).get('id')
   }
 
   componentDidMount() {
-    const params = new URLSearchParams(this.props.location.search)
-    const id = params.get("id")
-
-    if (id) {
+    if (this.id) {
       this.setState({ loading: true });
-      this.props.vatActions.getVatByID(id).then(res => {
+      this.props.vatActions.getVatByID(this.id).then(res => {
         if (res.status === 200)
-          this.setState({ loading: false })
-      })
-    }
-  }
-
-  componentWillReceiveProps(newProps) {
-    if (this.props.vat_row !== newProps.vat_row) {
-      this.setState({
-        vatData: newProps.vat_row
+          this.setState({ 
+            loading: false,
+            vatData: res.data
+          })
       })
     }
   }
@@ -62,15 +56,15 @@ class CreateOrEditVatCategory extends React.Component {
     this.setState({
       vatData: _.set(
         { ...this.state.vatData },
-        e.target.name && e.target.name !== "" ? e.target.name : name,
-        e.target.type === "checkbox" ? e.target.checked : e.target.value
+        e.target.name && e.target.name !== '' ? e.target.name : name,
+        e.target.type === 'checkbox' ? e.target.checked : e.target.value
       )
     })
   }
 
   // Show Success Toast
   success() {
-    return toast.success("Vat Category Updated successfully... ", {
+    return toast.success('Vat Category Updated successfully... ', {
       position: toast.POSITION.TOP_RIGHT
     })
   }
@@ -93,21 +87,21 @@ class CreateOrEditVatCategory extends React.Component {
     this.props.vatActions.createBat(postObj).then(res => {
       if (res.status === 200) {
         this.success()
-        this.props.history.push("/admin/settings/vat-category")
+        this.props.history.push('/admin/settings/vat-category')
       }
     })
   }
 
   render() {
     const { loading } = this.state
-    const { id, name, vat } = this.state.vatData ? this.state.vatData : {}
+    const { name, vat } = this.state.vatData ? this.state.vatData : {}
 
     return (
       <div className="vat-category-create-screen">
         <div className="animated">
           <Card>
             <CardHeader>
-              {id ? "Edit Vat Category" : "New Vat Category"}
+              {this.id ? "Edit Vat Category" : "New Vat Category"}
             </CardHeader>
             <CardBody>
               <Form onSubmit={this.handleSubmit} name="simpleForm">
@@ -136,11 +130,11 @@ class CreateOrEditVatCategory extends React.Component {
                   />
                 </FormGroup>            
                 <FormGroup className="text-right">
-                  <Button type="submit" color="secondary" onClick={() => {this.props.history.push("/admin/settings/vat-category")}}>
-                    <i className="fa fa-ban"></i> Cancel
-                  </Button>
                   <Button type="submit" color="primary">
-                    <i className="fa fa-dot-circle-o"></i> Save
+                    <i className="fa fa-dot-circle-o"></i> {this.id ? "Update" : "Save"}
+                  </Button>
+                  <Button type="submit" color="secondary" onClick={() => {this.props.history.push('/admin/settings/vat-category')}}>
+                    <i className="fa fa-ban"></i> Cancel
                   </Button>
                 </FormGroup>
               </Form>
