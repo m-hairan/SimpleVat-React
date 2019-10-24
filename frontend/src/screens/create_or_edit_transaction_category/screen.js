@@ -432,7 +432,7 @@ class CreateOrEditTranactionCategory extends React.Component {
                     Transaction Type
                   </Label>
                   <Autosuggest
-                    className="autoSuggest"
+                    className="autoSuggest form-control"
                     suggestions={suggestions}
                     onSuggestionsFetchRequested={
                       this.onSuggestionsFetchRequested
@@ -453,7 +453,7 @@ class CreateOrEditTranactionCategory extends React.Component {
                       Parent Transaction Type
                     </Label>
                     <Autosuggest
-                      className="autoSuggest"
+                      className="autoSuggest form-control"
                       suggestions={parentSuggestions}
                       onSuggestionsFetchRequested={
                         this.onParentSuggestionsFetchRequested
@@ -474,9 +474,7 @@ class CreateOrEditTranactionCategory extends React.Component {
                   <Button type="submit" color="primary">
                     <i className="fa fa-dot-circle-o"></i> {this.id ? "Update" : "Save"}
                   </Button>
-                  <Button color="primary" onSubmit={(e) => this.handleSubmit(e, "addMore")}>
-                    <i className="fa fa-dot-circle-o"></i> {this.id ? "Update & Add More" : "Save & Add More"}
-                  </Button>
+                  
                   <Button type="submit" color="secondary" 
                     onClick={() => {this.props.history.push("/admin/settings/transaction-category")}}>
                     <i className="fa fa-ban"></i> Cancel

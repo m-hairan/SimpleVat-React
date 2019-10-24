@@ -176,10 +176,10 @@ class VatCategory extends React.Component {
               <ToastContainer position="top-right" autoClose={3000} style={containerStyle} />
               <Card>
                 <CardHeader>
-                    Vat
+                    Vat Category
                     <div className="card-header-actions">
                       <Button color="primary" className="btn-pill btn btn-primary btn-block" 
-                        onClick={() => this.props.history.push('/admin/settings/vat-category/update' )}>New Vat</Button>
+                        onClick={() => this.props.history.push('/admin/settings/vat-category/update' )}>New Vat Category</Button>
                     </div>
                 </CardHeader>
                 <CardBody>

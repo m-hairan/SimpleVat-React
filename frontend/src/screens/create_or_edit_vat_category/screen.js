@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Card, CardHeader, CardBody, Button, Input, Form, FormGroup, Label } from 'reactstrap'
-import { toast } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 import _ from "lodash"
 import Loader from "components/loader"
 
@@ -30,6 +30,8 @@ class CreateOrEditVatCategory extends React.Component {
       vatData: {},
       loading: false
     }
+
+    this.saveAndContinue = false;
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -64,13 +66,13 @@ class CreateOrEditVatCategory extends React.Component {
 
   // Show Success Toast
   success() {
-    return toast.success('Vat Category Updated successfully... ', {
+    toast.success('Vat Category Updated successfully... ', {
       position: toast.POSITION.TOP_RIGHT
     })
   }
 
   // Create or Edit Vat
-  handleSubmit(e) {
+  handleSubmit = (e, status) => {
     e.preventDefault()
 
     this.setState({ loading: true })
@@ -96,6 +98,7 @@ class CreateOrEditVatCategory extends React.Component {
     const { loading } = this.state
     const { name, vat } = this.state.vatData ? this.state.vatData : {}
 
+    console.log(name, vat)
     return (
       <div className="vat-category-create-screen">
         <div className="animated">
@@ -130,7 +133,7 @@ class CreateOrEditVatCategory extends React.Component {
                   />
                 </FormGroup>            
                 <FormGroup className="text-right">
-                  <Button type="submit" color="primary">
+                  <Button type="submit" name="submit" color="primary">
                     <i className="fa fa-dot-circle-o"></i> {this.id ? "Update" : "Save"}
                   </Button>
                   <Button type="submit" color="secondary" onClick={() => {this.props.history.push('/admin/settings/vat-category')}}>
