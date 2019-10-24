@@ -32,6 +32,8 @@ import {
   Loading
 } from 'components'
 
+import './style.scss'
+
 
 
 const mapStateToProps = (state) => {

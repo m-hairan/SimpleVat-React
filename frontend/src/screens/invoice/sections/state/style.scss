@@ -1,0 +1,56 @@
+.state-section{
+
+.invoice-stats {
+  height: 150px;
+  padding: 10px;
+  border: 2px solid #dad8d8;
+  margin-bottom: 10px;
+  border-radius: 7px;
+}
+
+.stat-container {
+  /* padding: 10px; */
+  // text-align: center;
+  padding-top: 10px;
+}
+
+h3.stats-value {
+  color: rgb(27, 80, 131);
+  font-size: 28px;
+
+  font-weight: 600;
+}
+
+h3.stats-value em{color: rgb(27, 80, 131);
+
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;}
+
+.stat-container h4 {
+  color: rgb(68, 68, 68);
+ 
+  font-size: 18px;
+  
+  font-weight: 500;
+}
+
+.refresh{
+  color:#1464f6;
+  cursor: pointer;
+}
+
+.update {
+  margin-top: 20px;
+}
+i.fa.fa-question-circle-o {
+  font-size: 23px;
+  margin-left: 2px;
+  /* margin-top: 12px; */
+  /* padding: 5px; */
+}
+.invoice{
+  font-weight: 900;
+  font-size: 30px;margin-bottom:15px;
+}
+}
