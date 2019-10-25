@@ -37,8 +37,10 @@ class BankAccount extends React.Component {
 
     return (
       <div className="bank-account-screen">
-        <BankAccountList {...this.props} />
-        <BankStatementList {...this.props} />
+        <div className="animated fadeIn">
+          <BankAccountList {...this.props} />
+          <BankStatementList {...this.props} />
+        </div>
       </div>
     )
   }

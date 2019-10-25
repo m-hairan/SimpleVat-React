@@ -17,7 +17,6 @@ class Aside extends Component {
 
     return (
       <React.Fragment>
-        Aside
       </React.Fragment>
     );
   }

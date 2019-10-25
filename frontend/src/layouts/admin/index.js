@@ -108,7 +108,7 @@ class AdminLayout extends React.Component {
                 </Suspense>
               </Container>
             </main>
-            <AppAside fixed>
+            <AppAside>
               <Suspense fallback={Loading()}>
                 <Aside />
               </Suspense>
