@@ -1,5 +1,5 @@
 
-body, span, label, h1, h2, h3, h4, p, em {   font-family: Montserrat, serif;}
+body, span, label, h1, h2, h3, h4, p, em { font-family: Montserrat, serif;}
 
 .card {
   border-radius: 0 !important;
@@ -33,5 +33,27 @@ body, span, label, h1, h2, h3, h4, p, em {   font-family: Montserrat, serif;}
 
 .tab-content {
   border-radius: 0 !important;
+}
+
+
+.react-bs-table-container {
+  .react-bs-table {
+    border-radius: 0 !important;
+  
+    td {
+      vertical-align: middle !important;
+    }
+    th {
+      border-bottom-width: 1px !important;
+    }
+  }
+  .react-bs-table-pagination {
+    .btn.dropdown-toggle {
+      border-radius: 0 !important;
+    }
+    .page-link {
+      border-radius: 0 !important;
+    }
+  }
 }
 

@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Card, CardHeader, CardBody, Button, Input, Form, FormGroup, Label } from 'reactstrap'
-import { toast } from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 import _ from "lodash"
 import Loader from "components/loader"
 
@@ -31,28 +31,24 @@ class CreateOrEditVatCategory extends React.Component {
       loading: false
     }
 
+    this.saveAndContinue = false;
+
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.success = this.success.bind(this)
+
+    this.id = new URLSearchParams(props.location.search).get('id')
   }
 
   componentDidMount() {
-    const params = new URLSearchParams(this.props.location.search)
-    const id = params.get("id")
-
-    if (id) {
+    if (this.id) {
       this.setState({ loading: true });
-      this.props.vatActions.getVatByID(id).then(res => {
+      this.props.vatActions.getVatByID(this.id).then(res => {
         if (res.status === 200)
-          this.setState({ loading: false })
-      })
-    }
-  }
-
-  componentWillReceiveProps(newProps) {
-    if (this.props.vat_row !== newProps.vat_row) {
-      this.setState({
-        vatData: newProps.vat_row
+          this.setState({ 
+            loading: false,
+            vatData: res.data
+          })
       })
     }
   }
@@ -62,21 +58,21 @@ class CreateOrEditVatCategory extends React.Component {
     this.setState({
       vatData: _.set(
         { ...this.state.vatData },
-        e.target.name && e.target.name !== "" ? e.target.name : name,
-        e.target.type === "checkbox" ? e.target.checked : e.target.value
+        e.target.name && e.target.name !== '' ? e.target.name : name,
+        e.target.type === 'checkbox' ? e.target.checked : e.target.value
       )
     })
   }
 
   // Show Success Toast
   success() {
-    return toast.success("Vat Category Updated successfully... ", {
+    toast.success('Vat Category Updated successfully... ', {
       position: toast.POSITION.TOP_RIGHT
     })
   }
 
   // Create or Edit Vat
-  handleSubmit(e) {
+  handleSubmit = (e, status) => {
     e.preventDefault()
 
     this.setState({ loading: true })
@@ -93,21 +89,22 @@ class CreateOrEditVatCategory extends React.Component {
     this.props.vatActions.createBat(postObj).then(res => {
       if (res.status === 200) {
         this.success()
-        this.props.history.push("/admin/settings/vat-category")
+        this.props.history.push('/admin/settings/vat-category')
       }
     })
   }
 
   render() {
     const { loading } = this.state
-    const { id, name, vat } = this.state.vatData ? this.state.vatData : {}
+    const { name, vat } = this.state.vatData ? this.state.vatData : {}
 
+    console.log(name, vat)
     return (
       <div className="vat-category-create-screen">
         <div className="animated">
           <Card>
             <CardHeader>
-              {id ? "Edit Vat Category" : "New Vat Category"}
+              {this.id ? "Edit Vat Category" : "New Vat Category"}
             </CardHeader>
             <CardBody>
               <Form onSubmit={this.handleSubmit} name="simpleForm">
@@ -136,11 +133,11 @@ class CreateOrEditVatCategory extends React.Component {
                   />
                 </FormGroup>            
                 <FormGroup className="text-right">
-                  <Button type="submit" color="secondary" onClick={() => {this.props.history.push("/admin/settings/vat-category")}}>
-                    <i className="fa fa-ban"></i> Cancel
+                  <Button type="submit" name="submit" color="primary">
+                    <i className="fa fa-dot-circle-o"></i> {this.id ? "Update" : "Save"}
                   </Button>
-                  <Button type="submit" color="primary">
-                    <i className="fa fa-dot-circle-o"></i> Save
+                  <Button type="submit" color="secondary" onClick={() => {this.props.history.push('/admin/settings/vat-category')}}>
+                    <i className="fa fa-ban"></i> Cancel
                   </Button>
                 </FormGroup>
               </Form>
