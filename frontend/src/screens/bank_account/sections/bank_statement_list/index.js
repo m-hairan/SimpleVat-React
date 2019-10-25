@@ -155,7 +155,7 @@ class BankStatementList extends React.Component {
           <Card>
             <CardHeader>
               <i className="icon-menu" />
-              Bank Statement
+              Bank Statements
             </CardHeader>
             <CardBody>
               <Button

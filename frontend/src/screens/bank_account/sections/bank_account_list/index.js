@@ -163,7 +163,7 @@ class BankAccountList extends React.Component {
           <Card>
             <CardHeader>
               <i className="icon-menu" />
-              Bank Account
+              Bank Accounts
             </CardHeader>
             <CardBody>
               <Button
