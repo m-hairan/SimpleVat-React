@@ -1,6 +1,17 @@
 import React from 'react'
 
-import { Card, CardHeader, CardBody, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Row,
+  Col
+} from 'reactstrap'
 import { ToastContainer, toast } from 'react-toastify'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
 
@@ -154,52 +165,69 @@ class BankStatementList extends React.Component {
           <ToastContainer position="top-right" autoClose={5000} style={containerStyle} />
           <Card>
             <CardHeader>
-              <i className="icon-menu" />
-              Bank Statements
+              <Row>
+                <Col lg={12}>
+                  <div className="d-flex align-items-center justify-content-between">
+                    <div className="h5 mb-0 d-flex align-items-center">
+                      <i className="icon-doc" />
+                      <span className="ml-2">Bank Statements</span>
+                    </div>
+                    <div>
+                      <Button
+                        color="primary"
+                        className="btn-square"
+                        onClick={() => this.props.history.push(`/admin/bank-account/update`)}
+                      >
+                        <i className="fas fa-plus mr-1" />
+                        New Statement
+                      </Button>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
             </CardHeader>
             <CardBody>
-              <Button
-                color="primary"
-                className="mb-3 btn-square"
-                onClick={() => this.props.history.push(`/admin/bank-account/update`)}
-              >
-                New
-              </Button>
-              {
-                loading ?
-                  <Loader />
-                :
-                  <BootstrapTable
-                    data={bank_account_list}
-                    version="4"
-                    striped
-                    hover
-                    pagination
-                    totalSize={bank_account_list ? bank_account_list.length : 0}
-                    className="bank-statement-table"
-                  >
-                    <TableHeaderColumn isKey dataField="bankAccountName">No</TableHeaderColumn>
-                    <TableHeaderColumn dataField="accountNumber">Transaction Type</TableHeaderColumn>
-                    <TableHeaderColumn dataField="swiftCode" >Amount</TableHeaderColumn>
-                    <TableHeaderColumn dataFormat={this.setStatus} >Reference Number</TableHeaderColumn>
-                    <TableHeaderColumn dataField="openingBalance" >Description</TableHeaderColumn>
-                    <TableHeaderColumn dataField="openingBalance">Transaction Date</TableHeaderColumn>
-                    <TableHeaderColumn className="text-right" dataFormat={this.bankAccounttActions}>Action</TableHeaderColumn>
-                  </BootstrapTable>
-              }
+              <Row>
+                <Col lg={12}>
+                  {
+                    loading ?
+                      <Loader />
+                    :
+                      <BootstrapTable
+                        data={bank_account_list}
+                        version="4"
+                        hover
+                        pagination
+                        totalSize={bank_account_list ? bank_account_list.length : 0}
+                        className="bank-statement-table"
+                      >
+                        <TableHeaderColumn isKey dataField="bankAccountName">No</TableHeaderColumn>
+                        <TableHeaderColumn dataField="accountNumber">Transaction Type</TableHeaderColumn>
+                        <TableHeaderColumn dataField="swiftCode" >Amount</TableHeaderColumn>
+                        <TableHeaderColumn dataFormat={this.setStatus} >Reference Number</TableHeaderColumn>
+                        <TableHeaderColumn dataField="openingBalance" >Description</TableHeaderColumn>
+                        <TableHeaderColumn dataField="openingBalance">Transaction Date</TableHeaderColumn>
+                        <TableHeaderColumn className="text-right" dataFormat={this.bankAccounttActions}>Action</TableHeaderColumn>
+                      </BootstrapTable>
+                  }
+                </Col>
+              </Row>
             </CardBody>
           </Card>
           <Modal
             isOpen={this.state.openDeleteModal}
-            className="modal-danger"
+            centered
+            className="modal-primary"
           >
-            <ModalHeader toggle={this.toggleDangerModal}>Delete</ModalHeader>
+            <ModalHeader toggle={this.toggleDangerModal}>
+              <h4 className="mb-0">Are you sure ?</h4>
+            </ModalHeader>
             <ModalBody>
-              Are you sure want to delete this record?
+              <h5 className="mb-0">This record will be deleleted permanently.</h5>
             </ModalBody>
             <ModalFooter>
-              <Button color="danger" onClick={this.deleteBank}>Yes</Button>{' '}
-              <Button color="secondary" onClick={this.toggleDangerModal}>No</Button>
+              <Button color="primary" className="btn-square" onClick={this.deleteBank}>Yes</Button>{' '}
+              <Button color="secondary" className="btn-square" onClick={this.toggleDangerModal}>No</Button>
             </ModalFooter>
           </Modal>
         </div>
