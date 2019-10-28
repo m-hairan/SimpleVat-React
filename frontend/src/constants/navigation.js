@@ -3,20 +3,12 @@ export default {
     {
       name: 'Home',
       url: '/admin/home',
-      icon: 'icon-speedometer',
-      // badge: {
-      //   variant: 'info',
-      //   text: 'NEW',
-      // },
+      icon: 'icon-speedometer'
     },
     {
       name: 'Invoice',
       url: '/admin/invoice',
-      icon: 'far fa-address-book',
-      // badge: {
-      //   variant: 'info',
-      //   text: 'NEW',
-      // },
+      icon: 'far fa-address-book'
     },
     {
       name: 'Expense',
@@ -36,22 +28,14 @@ export default {
       ],
     },
     {
-      name: 'BankAccount',
+      name: 'Bank Account',
       url: '/admin/bank-account',
-      icon: 'fas fa-university',
-      // badge: {
-      //   variant: 'info',
-      //   text: 'NEW',
-      // },
+      icon: 'fas fa-university'
     },
     {
       name: 'Taxes',
       url: '/admin/taxes',
-      icon: 'fas fa-chart-line',
-      // badge: {
-      //   variant: 'info',
-      //   text: 'NEW',
-      // },
+      icon: 'fas fa-chart-line'
     },
     {
       name: 'Report',
@@ -73,16 +57,27 @@ export default {
           url: '/admin/report/expense-report',
           icon: 'fas fa-tasks',
         },
+        {
+          name: 'Profit and Loss',
+          url: '/admin/report/profit-and-loss',
+          icon: 'fas fa-signal',
+        },
+        {
+          name: 'Balance Sheet',
+          url: '/admin/report/balance-sheet',
+          icon: 'fas fa-balance-scale',
+        },
+        {
+          name: 'Cash Flow / Position',
+          url: '/admin/report/cash-flow-position',
+          icon: 'fas fa-money',
+        },
       ],
     },
     {
       name: 'Imports',
       url: '/admin/imports',
-      icon: 'fas fa-file-import',
-      // badge: {
-      //   variant: 'info',
-      //   text: 'NEW',
-      // },
+      icon: 'fas fa-file-import'
     },
     {
       name: 'Master',
@@ -136,11 +131,7 @@ export default {
     {
       name: 'Employee',
       url: '/admin/employee',
-      icon: 'fas fa-user-tie',
-      // badge: {
-      //   variant: 'info',
-      //   text: 'NEW',
-      // },
-    },
+      icon: 'fas fa-user-tie'
+    }
   ]
 }

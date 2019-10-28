@@ -55,7 +55,7 @@ class Home extends React.Component {
       <div className="home-screen">
         <div className="animated fadeIn">
           <CashFlow {...this.props}/>
-          <CardColumns className="cols-2">
+          <CardColumns className="cols-2 mb-3">
             <BankAccount {...this.props}/>
             <RevenueAndExpense {...this.props}/>
             <Invoice {...this.props}/>

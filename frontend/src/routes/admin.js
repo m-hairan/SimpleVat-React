@@ -16,6 +16,10 @@ import {
   Invoice,
   BankAccount,
   Taxes,
+  ProfitAndLoss,
+  BalanceSheet,
+  CashFlowPosition,
+  TransactionCategory,
   CreateOrEditInvoice,
   CreateOrEditExpense,
   CreateOrEditProduct,
@@ -25,8 +29,7 @@ import {
   CreateOrEditPurchase,
   CreateOrEditBankAccount,
   CreateOrEditVatCategory,
-  CreateOrEditTranactionCategory,
-  TransactionCategory
+  CreateOrEditTranactionCategory
 } from 'screens'
 
 const adminRoutes = [
@@ -84,6 +87,21 @@ const adminRoutes = [
     path: '/admin/report/transaction-report',
     name: 'Transaction Report', 
     component: TransactionReport.screen
+  },
+  {
+    path: '/admin/report/profit-and-loss',
+    name: 'Profit and Loss', 
+    component: ProfitAndLoss.screen
+  },
+  {
+    path: '/admin/report/balance-sheet',
+    name: 'Balance Sheet', 
+    component: BalanceSheet.screen
+  },
+  {
+    path: '/admin/report/cash-flow-position',
+    name: 'Cash Flow / Position', 
+    component: CashFlowPosition.screen
   },
   {
     redirect: true,

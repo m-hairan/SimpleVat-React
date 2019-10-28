@@ -16,8 +16,8 @@ import {
 
 import './style.scss'
 
-import logo from 'assets/images/brand/logo.svg'
-import sygnet from 'assets/images/brand/sygnet.svg'
+import logo from 'assets/images/brand/logo.png'
+import sygnet from 'assets/images/brand/sygnet.png'
 import avatar from 'assets/images/avatars/6.jpg'
 
 const propTypes = {
@@ -49,8 +49,9 @@ class Header extends Component {
       <React.Fragment>
         <AppSidebarToggler className="d-lg-none" display="md" mobile />
         <AppNavbarBrand
-          full={{ src: logo, width: 89, height: 25, alt: 'CoreUI Logo' }}
-          minimized={{ src: sygnet, width: 30, height: 30, alt: 'CoreUI Logo' }}
+          className="p-2"
+          full={{ src: logo, width: '100%', height: 'auto', alt: 'CoreUI Logo' }}
+          minimized={{ src: sygnet, width: '100%', height: 'auto', alt: 'CoreUI Logo' }}
         />
         <AppSidebarToggler className="d-md-down-none" display="lg" />
         <Nav className="ml-auto" navbar>
