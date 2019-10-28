@@ -10,6 +10,7 @@ import {
   Purchase,
   ExpenseReport,
   TransactionReport,
+  TaxReport,
   Imports,
   Employee,
   InvoiceReport,
@@ -87,6 +88,11 @@ const adminRoutes = [
     path: '/admin/report/transaction-report',
     name: 'Transaction Report', 
     component: TransactionReport.screen
+  },
+  {
+    path: '/admin/report/tax-report',
+    name: 'Tax Report', 
+    component: TaxReport.screen
   },
   {
     path: '/admin/report/profit-and-loss',

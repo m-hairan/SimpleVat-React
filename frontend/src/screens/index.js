@@ -12,6 +12,7 @@ import Expense from './expense'
 import Purchase from './purchase'
 import ExpenseReport from './expense_report'
 import TransactionReport from './transaction_report'
+import TaxReport from './tax_report'
 import Imports from './imports'
 import Employee from './employee'
 import InvoiceReport from './invoice_report'
@@ -49,6 +50,7 @@ export {
   Purchase,
   ExpenseReport,
   TransactionReport,
+  TaxReport,
   Imports,
   Employee,
   InvoiceReport,
