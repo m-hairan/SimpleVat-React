@@ -14,7 +14,8 @@ import './style.scss'
 const mapStateToProps = (state) => {
   return ({
     is_authed: state.user.is_authed,
-    bank_account_list: state.bank.bank_account_list
+    bank_account_list: state.bank.bank_account_list,
+    bank_statement_list: state.bank.bank_statement_list
   })
 }
 const mapDispatchToProps = (dispatch) => {

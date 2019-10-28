@@ -58,6 +58,11 @@ export default {
           icon: 'fas fa-tasks',
         },
         {
+          name: 'Tax Report',
+          url: '/admin/report/tax-report',
+          icon: 'fas fa-files-o',
+        },
+        {
           name: 'Profit and Loss',
           url: '/admin/report/profit-and-loss',
           icon: 'fas fa-signal',

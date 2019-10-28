@@ -79,7 +79,9 @@ class BankAccountList extends React.Component {
   }
 
   renderAccountType (cell, row) {
-    return row.account_type
+    return (
+      <label className="badge badge-primary badge-pill">{ row.account_type }</label>
+    )
   }
 
 
@@ -125,39 +127,39 @@ class BankAccountList extends React.Component {
                   <Row>
                     <Col lg={12}>
                       <div className="mb-2">
-                      <ButtonGroup size="sm">
-                        <Button
-                          color="success"
-                          className="btn-square"
-                        >
-                          <i className="fa glyphicon glyphicon-export fa-download mr-1" />
-                          Export to CSV
-                        </Button>
-                        <Button
-                          color="info"
-                          className="btn-square"
-                        >
-                          <i className="fa glyphicon glyphicon-export fa-upload mr-1" />
-                          Import from CSV
-                        </Button>
-                        <Button
-                          color="primary"
-                          className="btn-square"
-                          onClick={() => this.props.history.push(`/admin/bank-account/update`)}
-                        >
-                          <i className="fas fa-plus mr-1" />
-                          New Account
-                        </Button>
-                        <Button
-                          color="warning"
-                          className="btn-square"
-                        >
-                          <i className="fa glyphicon glyphicon-trash fa-trash mr-1" />
-                          Bulk Delete
-                        </Button>
-                      </ButtonGroup>
+                        <ButtonGroup size="sm">
+                          <Button
+                            color="success"
+                            className="btn-square"
+                          >
+                            <i className="fa glyphicon glyphicon-export fa-download mr-1" />
+                            Export to CSV
+                          </Button>
+                          <Button
+                            color="info"
+                            className="btn-square"
+                          >
+                            <i className="fa glyphicon glyphicon-export fa-upload mr-1" />
+                            Import from CSV
+                          </Button>
+                          <Button
+                            color="primary"
+                            className="btn-square"
+                            onClick={() => this.props.history.push(`/admin/bank-account/update`)}
+                          >
+                            <i className="fas fa-plus mr-1" />
+                            New Account
+                          </Button>
+                          <Button
+                            color="warning"
+                            className="btn-square"
+                          >
+                            <i className="fa glyphicon glyphicon-trash fa-trash mr-1" />
+                            Bulk Delete
+                          </Button>
+                        </ButtonGroup>
                       </div>
-                      <div className="filter-panel my-3 p-3">
+                      <div className="filter-panel my-3 py-3">
                         <Form inline>
                           <FormGroup className="pr-3">
                             <Input type="text" placeholder="Account Name" />
