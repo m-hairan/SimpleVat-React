@@ -1,7 +1,8 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Card, CardHeader, CardBody, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import { Card, CardHeader, CardBody, Button, Modal, ModalHeader, ModalBody, 
+         ModalFooter, Row, Col, Input, FormGroup, Form, ButtonGroup } from 'reactstrap'
 import { ToastContainer, toast } from 'react-toastify'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
 import Loader from "components/loader"
@@ -34,25 +35,12 @@ class VatCategory extends React.Component {
       loading: true
     }
 
-    // DataTable Optioins
-    this.options = {
-      hidePageListOnlyOnePage: true,
-      sizePerPageList: [ {
-        text: '5', value: 5
-      }, {
-        text: '10', value: 10
-      }, {
-        text: 'All', value: this.props.vat_list.length
-      } ], // you can change the dropdown list for size per page
-      sizePerPage: 10,  // which size per page you want to locate as default
-      pageStartIndex: 1, // where to start counting the pages
-      paginationSize: 3,  // the pagination bar size.
-      paginationPosition: 'bottom',  // default is bottom, top and both is all available
-      hideSizePerPage: true,
-      // alwaysShowAllBtns: true,
-      withFirstAndLast: false,
-      searchField: this.customSearchField,
-      paginationShowsTotal: this.customTotal,
+    this.selectRowProp = {
+      mode: 'checkbox',
+      bgColor: 'rgba(0,0,0, 0.05)',
+      clickToSelect: true,
+      onSelect: this.onRowSelect,
+      onSelectAll: this.onSelectAll
     }
 
     this.deleteVat = this.deleteVat.bind(this)
@@ -103,17 +91,17 @@ class VatCategory extends React.Component {
 
   actions(cell, row) {
     return (
-      <div className="d-flex table-action">
-          <Button block 
+      <div className="table-action text-right">
+          <Button
             color="primary" 
-            className="btn-pill vat-actions"
+            className="btn-pill vat-actions ml-1"
             title="Edit Vat Category" 
             onClick={() => this.props.history.push(`/admin/settings/vat-category/update?id=${row.id}`)}>
               <i className="far fa-edit"></i>
           </Button>
-          <Button block 
+          <Button 
             color="primary" 
-            className="btn-pill vat-actions" 
+            className="btn-pill vat-actions ml-1" 
             title="Delete Vat Ctegory" 
             onClick={() => this.setState({ selectedData: row }, () => this.setState({ openDeleteModal: true }))}>
               <i className="fas fa-trash-alt"></i>
@@ -169,52 +157,106 @@ class VatCategory extends React.Component {
 
     return (
       <div className="vat-category-screen">
-        {
-          loading ?
-            <Loader></Loader>: 
-            <div className="animated">
-              <ToastContainer position="top-right" autoClose={3000} style={containerStyle} />
-              <Card>
-                <CardHeader>
-                    Vat Category
-                    <div className="card-header-actions">
-                      <Button color="primary" className="btn-pill btn btn-primary btn-block" 
-                        onClick={() => this.props.history.push('/admin/settings/vat-category/update' )}>New Vat Category</Button>
-                    </div>
-                </CardHeader>
-                <CardBody>
-                  <BootstrapTable data={vatList} search hover pagination options={this.options}>
-                    <TableHeaderColumn isKey dataField="name" dataSort={true}>
-                      Vat Name
-                    </TableHeaderColumn>
-                    <TableHeaderColumn dataField="vat" dataSort={true} dataFormat={this.vatPercentageFormat}>
-                      Vat Percentage
-                    </TableHeaderColumn>
-                    <TableHeaderColumn dataField="createdDate"  width='170' dataSort={true} dataFormat={this.vatCreatedDateFormat}>
-                      Created At
-                    </TableHeaderColumn>
-                    <TableHeaderColumn dataField="versionNumber" width='100' dataSort={true} dataFormat={this.versionNumFormat}>
-                      Version
-                    </TableHeaderColumn>
-                    <TableHeaderColumn dataFormat={this.actions} width='150'>
-                      Action
-                    </TableHeaderColumn>
-                  </BootstrapTable>
-                </CardBody>
-              </Card>
-              <Modal isOpen={this.state.openDeleteModal}
-                  className={'modal-danger ' + this.props.className}>
-                  <ModalHeader toggle={this.toggleDanger}>Delete</ModalHeader>
-                  <ModalBody>
-                      Are you sure want to delete this record?
-                </ModalBody>
-                  <ModalFooter>
-                      <Button color="danger" onClick={this.deleteVat}>Yes</Button>&nbsp;
-                      <Button color="secondary" onClick={this.closeModal}>No</Button>
-                  </ModalFooter>
-              </Modal>
-            </div>
-        }
+        <div className="animated">
+          <ToastContainer position="top-right" autoClose={3000} style={containerStyle} />
+          <Card>
+            <CardHeader>
+              <div className="h4 mb-0 d-flex align-items-center">
+                <i className="nav-icon icon-briefcase" />
+                <span className="ml-2">Vat Category</span>
+              </div>
+            </CardHeader>
+            <CardBody>
+              
+            {
+              loading ?
+                <Loader></Loader>: 
+                <Row>
+                  <Col lg='12'>
+                    <div className="mb-2">
+                        <ButtonGroup className="toolbar" size="sm">
+                          <Button
+                            color="success"
+                            className="btn-square"
+                          >
+                            <i className="fa glyphicon glyphicon-export fa-download mr-1" />
+                            Export to CSV
+                          </Button>
+                          <Button
+                            color="info"
+                            className="btn-square"
+                          >
+                            <i className="fa glyphicon glyphicon-export fa-upload mr-1" />
+                            Import from CSV
+                          </Button>
+                          <Button
+                            color="primary"
+                            className="btn-square"
+                            onClick={() => this.props.history.push(`/admin/settings/vat-category/update`)}
+                          >
+                            <i className="fas fa-plus mr-1" />
+                            New Category
+                          </Button>
+                          <Button
+                            color="warning"
+                            className="btn-square"
+                          >
+                            <i className="fa glyphicon glyphicon-trash fa-trash mr-1" />
+                            Bulk Delete
+                          </Button>
+                        </ButtonGroup>
+                        </div>
+                        <div className="filter-panel my-3 p-3">
+                          <Form inline>
+                            <FormGroup className="pr-3">
+                              <Input type="text" placeholder="Vat Name" />
+                            </FormGroup>
+                            <FormGroup className="pr-3">
+                              <Input type="text" placeholder="Vat Percentage" />
+                            </FormGroup>
+                            
+                            <Button
+                              type="submit"
+                              color="primary"
+                              className="btn-square"
+                            >
+                              <i className="fas fa-search mr-1"></i>Filter
+                            </Button>
+                          </Form>
+                        </div>
+                        <BootstrapTable 
+                          data={vatList}
+                          hover
+                          version="4"
+                          pagination
+                          search={true}
+                          selectRow={ this.selectRowProp }
+                        >
+                          <TableHeaderColumn isKey dataField="name" dataSort={true}>
+                            Vat Name
+                          </TableHeaderColumn>
+                          <TableHeaderColumn dataField="vat" dataSort={true} dataFormat={this.vatPercentageFormat}>
+                            Vat Percentage
+                          </TableHeaderColumn>
+                          
+                        </BootstrapTable>
+                      </Col>
+                    </Row>
+            }
+            </CardBody>
+          </Card>
+          <Modal isOpen={this.state.openDeleteModal}
+              className={'modal-danger ' + this.props.className}>
+              <ModalHeader toggle={this.toggleDanger}>Delete</ModalHeader>
+              <ModalBody>
+                  Are you sure want to delete this record?
+            </ModalBody>
+              <ModalFooter>
+                  <Button color="danger" onClick={this.deleteVat}>Yes</Button>&nbsp;
+                  <Button color="secondary" onClick={this.closeModal}>No</Button>
+              </ModalFooter>
+          </Modal>
+        </div>
       </div>
     )
   }

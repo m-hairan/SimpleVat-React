@@ -330,7 +330,10 @@ class CreateOrEditTranactionCategory extends React.Component {
         <div className="animated">
           <Card>
             <CardHeader>
-              {this.id ? "Edit Vat Category" : "New Transaction Category"}
+              <div className="h4 mb-0 d-flex align-items-center">
+                <i className="nav-icon icon-graph" />
+                <span className="ml-2">{this.id ? "Edit Vat Category" : "New Transaction Category"}</span>
+              </div>
             </CardHeader>
             <CardBody>
               <Form onSubmit={this.handleSubmit} name="simpleForm">
@@ -376,7 +379,7 @@ class CreateOrEditTranactionCategory extends React.Component {
                 <FormGroup>
                   <div className="d-flex">
                     <Label>Default Flag</Label>
-                    <Col sm="1"></Col>
+                    <Col xs="1"></Col>
                     <div>
                       <FormGroup check inline>
                         <div className="custom-radio custom-control">
