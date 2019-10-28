@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Card, CardHeader, CardBody, Button, Input, Form, FormGroup, Label } from 'reactstrap'
+import { Card, CardHeader, CardBody, Button, Input, Form, FormGroup, Label, Col } from 'reactstrap'
 import { ToastContainer, toast } from 'react-toastify'
 import _ from "lodash"
 import Loader from "components/loader"
@@ -104,7 +104,10 @@ class CreateOrEditVatCategory extends React.Component {
         <div className="animated">
           <Card>
             <CardHeader>
-              {this.id ? "Edit Vat Category" : "New Vat Category"}
+              <div className="h4 mb-0 d-flex align-items-center">
+                <i className="nav-icon icon-briefcase" />
+                <span className="ml-2">{this.id ? "Edit Vat Category" : "New Vat Category"}</span>
+              </div>
             </CardHeader>
             <CardBody>
               <Form onSubmit={this.handleSubmit} name="simpleForm">

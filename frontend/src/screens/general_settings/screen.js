@@ -13,7 +13,9 @@ import {
   FormGroup,
   Input,
   Label,
-  Row
+  Row,
+  Table,
+  Button
 } from "reactstrap"
 
 import './style.scss'
@@ -54,203 +56,247 @@ class GeneralSettings extends React.Component {
             <Col xs="12">
               <Card>
                 <CardHeader> 
-                  <i className="icon-menu" />
-                  General Details
+                  <div className="h4 mb-0 d-flex align-items-center">
+                    <i className="nav-icon icon-wrench" />
+                    <span className="ml-2">General Settings</span>
+                  </div>
                 </CardHeader>
                 <CardBody>
+                  <h4>General Details</h4>
                   <Form
                     action=""
                     method="post"
                     encType="multipart/form-data"
                     className="form-horizontal"
                   >
-                    <FormGroup row>
-                      <Col md="3">
-                        <Label htmlFor="text-input">
-                          Invoicing Refrence Pattern
-                        </Label>
+                    <Row>
+                      <Col sm="6">
+                        <FormGroup>
+                          <Label htmlFor="text-input">
+                            Invoicing Refrence Pattern
+                          </Label>
+                          <Input
+                            type="text"
+                            id="text-input"
+                            name="text-input"
+                            placeholder="Text"
+                          />
+                        </FormGroup>
                       </Col>
-                      <Col xs="12" md="9">
-                        <Input
-                          type="text"
-                          id="text-input"
-                          name="text-input"
-                          placeholder="Text"
-                        />
+                      <Col sm="6">
+                        <FormGroup >
+                          <Label htmlFor="select">Invoicing Templates</Label>
+                          <Input type="select" name="select" id="select">
+                            <option value="0">Please select</option>
+                            <option value="1">Option #1</option>
+                            <option value="2">Option #2</option>
+                            <option value="3">Option #3</option>
+                          </Input>
+                        </FormGroup>
                       </Col>
-                    </FormGroup>
-                    <FormGroup row>
-                      <Col md="3">
-                        <Label htmlFor="select">Invoicing Templates</Label>
-                      </Col>
-                      <Col xs="12" md="9">
-                        <Input type="select" name="select" id="select">
-                          <option value="0">Please select</option>
-                          <option value="1">Option #1</option>
-                          <option value="2">Option #2</option>
-                          <option value="3">Option #3</option>
-                        </Input>
-                      </Col>
-                    </FormGroup>
+                    </Row>
                   </Form>
-                </CardBody>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <i className="icon-menu" />
-                  Mail Configuration Detail
-                </CardHeader>
-                <CardBody>
+                  <h4>Mail Configuration Detail</h4>
                   <Form
                     action=""
                     method="post"
                     encType="multipart/form-data"
                     className="form-horizontal"
                   >
-                    <FormGroup row>
-                      <Col md="3">
-                        <Label htmlFor="text-input">Mailing Host</Label>
+                    <Row>
+                      <Col sm='6'>
+                        <FormGroup>
+                          <Label htmlFor="text-input">Mailing Host</Label>
+                          <Input type="text" id="text-input" name="text-input" />
+                        </FormGroup>
                       </Col>
-                      <Col xs="12" md="9">
-                        <Input type="text" id="text-input" name="text-input" />
+                      <Col sm='6'>
+                        <FormGroup>
+                          <Label htmlFor="text-input">Mailing Post</Label>
+                          <Input type="text" id="text-input" name="text-input" />
+                        </FormGroup>
                       </Col>
-                    </FormGroup>
-                    <FormGroup row>
-                      <Col md="3">
-                        <Label htmlFor="text-input">Mailing Post</Label>
+                    </Row>
+                    <Row>
+                      <Col sm='6'>
+                        <FormGroup>
+                          <Label htmlFor="text-input">Mailing UserName</Label>
+                          <Input type="text" id="text-input" name="text-input" />
+                        </FormGroup>
                       </Col>
-                      <Col xs="12" md="9">
-                        <Input type="text" id="text-input" name="text-input" />
+                      <Col sm='6'>
+                        <FormGroup>
+                          <Label htmlFor="text-input">Mailing Password</Label>
+                          <Input type="password" id="text-input" name="text-input" />
+                        </FormGroup>
                       </Col>
-                    </FormGroup>
-                    <FormGroup row>
-                      <Col md="3">
-                        <Label htmlFor="text-input">Mailing UserName</Label>
+                    </Row>
+                    <Row>
+                      <Col sm='6'>
+                        <FormGroup>
+                          <Label htmlFor="text-input">Mailing SMTP Authorization</Label>
+                          <div>
+                            <FormGroup check inline>
+                              <div className="custom-radio custom-control">
+                                <input 
+                                  className="custom-control-input"
+                                  type="radio"
+                                  id="inline-radio1"
+                                  name="SMTP-auth"
+                                  value="Y"
+                                  checked
+                                  onChange={this.handleChange} />
+                                <label className="custom-control-label" htmlFor="inline-radio1">Yes</label>
+                              </div>
+                            </FormGroup>
+                            <FormGroup check inline>
+                              <div className="custom-radio custom-control">
+                                <input 
+                                  className="custom-control-input"
+                                  type="radio"
+                                  id="inline-radio2"
+                                  name="SMTP-auth"
+                                  value="N"
+                                  onChange={this.handleChange}/>
+                                <label className="custom-control-label" htmlFor="inline-radio2">No</label>
+                              </div>
+                            </FormGroup>
+                          </div>
+                        </FormGroup>
                       </Col>
-                      <Col xs="12" md="9">
-                        <Input type="text" id="text-input" name="text-input" />
+                      <Col sm='6'>
+                        <FormGroup>
+                          <Label htmlFor="text-input">Mailing Smtp Starttls Enable</Label>
+                          <div>
+                            <FormGroup check inline>
+                              <div className="custom-radio custom-control">
+                                <input 
+                                  className="custom-control-input"
+                                  type="radio"
+                                  id="inline-radio3"
+                                  name="SMTP-enable"
+                                  value="Y"
+                                  checked
+                                  onChange={this.handleChange} />
+                                <label className="custom-control-label" htmlFor="inline-radio3">Yes</label>
+                              </div>
+                            </FormGroup>
+                            <FormGroup check inline>
+                              <div className="custom-radio custom-control">
+                                <input 
+                                  className="custom-control-input"
+                                  type="radio"
+                                  id="inline-radio4"
+                                  name="SMTP-enable"
+                                  value="N"
+                                  onChange={this.handleChange}/>
+                                <label className="custom-control-label" htmlFor="inline-radio4">No</label>
+                              </div>
+                            </FormGroup>
+                          </div>
+                        </FormGroup>
                       </Col>
-                    </FormGroup>
-                    <FormGroup row>
-                      <Col md="3">
-                        <Label htmlFor="text-input">Mailing Password</Label>
-                      </Col>
-                      <Col xs="12" md="9">
-                        <Input type="text" id="text-input" name="text-input" />
-                      </Col>
-                    </FormGroup>
-                    <FormGroup row>
-                      <Col md="3">
-                        <Label>Mailing SMTP Authorization</Label>
-                      </Col>
-                      <Col md="9">
-                        <div>
-                          <FormGroup check inline>
-                            <div className="custom-radio custom-control">
-                              <input 
-                                className="custom-control-input"
-                                type="radio"
-                                id="inline-radio1"
-                                name="SMTP-auth"
-                                value="Y"
-                                checked
-                                onChange={this.handleChange} />
-                              <label className="custom-control-label" htmlFor="inline-radio1">Yes</label>
-                            </div>
-                          </FormGroup>
-                          <FormGroup check inline>
-                            <div className="custom-radio custom-control">
-                              <input 
-                                className="custom-control-input"
-                                type="radio"
-                                id="inline-radio2"
-                                name="SMTP-auth"
-                                value="N"
-                                onChange={this.handleChange}/>
-                              <label className="custom-control-label" htmlFor="inline-radio2">No</label>
-                            </div>
-                          </FormGroup>
-                        </div>
-                      </Col>
-                    </FormGroup>
-                    <FormGroup row>
-                      <Col md="3">
-                        <Label>Mailing Smtp Starttls Enable</Label>
-                      </Col>
-                      <Col md="9">
-                        <div>
-                          <FormGroup check inline>
-                            <div className="custom-radio custom-control">
-                              <input 
-                                className="custom-control-input"
-                                type="radio"
-                                id="inline-radio3"
-                                name="SMTP-enable"
-                                value="Y"
-                                checked
-                                onChange={this.handleChange} />
-                              <label className="custom-control-label" htmlFor="inline-radio3">Yes</label>
-                            </div>
-                          </FormGroup>
-                          <FormGroup check inline>
-                            <div className="custom-radio custom-control">
-                              <input 
-                                className="custom-control-input"
-                                type="radio"
-                                id="inline-radio4"
-                                name="SMTP-enable"
-                                value="N"
-                                onChange={this.handleChange}/>
-                              <label className="custom-control-label" htmlFor="inline-radio4">No</label>
-                            </div>
-                          </FormGroup>
-                        </div>
-                      </Col>
-                    </FormGroup>
+                    </Row>
                   </Form>
-                </CardBody>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <i className="icon-menu" />
-                  Invoice Mail Configuration
-                </CardHeader>
-                <CardBody>
+
+                  <h4>Invoice Mail Configuration</h4>
                   <Form
                     action=""
                     method="post"
                     encType="multipart/form-data"
                     className="form-horizontal"
                   >
-                    <FormGroup row>
-                      <Col md="3">
-                        <Label htmlFor="text-input">Subject</Label>
+                    <Row>
+                      <Col sm="8">
+                        <FormGroup>
+                          <Label htmlFor="text-input">Subject</Label>
+                          <Input
+                            type="text"
+                            id="text-input"
+                            name="text-input"
+                            placeholder="Text"
+                          />
+                        </FormGroup>
+                        <FormGroup>
+                          <Label htmlFor="text-input">Message</Label>
+                          <Editor
+                            editorState={editorState}
+                            toolbarClassName="editor-toolbar"
+                            wrapperClassName="wrapperClassName"
+                            editorClassName="massage-editor"
+                            onEditorStateChange={this.onEditorStateChange}
+                          />
+                        </FormGroup>
                       </Col>
-                      <Col xs="12" md="9">
-                        <Input
-                          type="text"
-                          id="text-input"
-                          name="text-input"
-                          placeholder="Text"
-                        />
+                      <Col sm="4">
+                        <FormGroup>
+                          <Label htmlFor="text-input">Description</Label>
+                          <Table responsive bordered>
+                            <thead>
+                              <th>Value</th>
+                              <th>Description</th>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>{"{invoiceReferenceNumber}"}</td>
+                                <td>Invoice Reference Number</td>
+                              </tr>
+                              <tr>
+                                <td>{"{invoiceDate}"}</td>
+                                <td>Invoice Date</td>
+                              </tr>
+                              <tr>
+                                <td>{"{invoiceDueDate}"}</td>
+                                <td>Invoice Due Date</td>
+                              </tr>
+                              <tr>
+                                <td>{"{invoiceDiscount}"}</td>
+                                <td>Invoice Discount</td>
+                              </tr>
+                              <tr>
+                                <td>{"{contractPoNumber}"}</td>
+                                <td>contract Po Number</td>
+                              </tr>
+
+                              <tr>
+                                <td>{"{contactName}"}</td>
+                                <td>Contact Name</td>
+                              </tr>
+                              <tr>
+                                <td>{"{projectName}"}</td>
+                                <td>Project Name</td>
+                              </tr>
+                              <tr>
+                                <td>{"{invoiceAmount}"}</td>
+                                <td>Invoice Amount</td>
+                              </tr>
+                              <tr>
+                                <td>{"{dueAmount}"}</td>
+                                <td>Due Amount</td>
+                              </tr>
+                              <tr>
+                                <td>{"{senderName}"}</td>
+                                <td>Sender Name</td>
+                              </tr>
+                              <tr>
+                                <td>{"{companyName}"}</td>
+                                <td>Company Name</td>
+                              </tr>
+                            </tbody>
+                          </Table>
+                        </FormGroup>
+                        
                       </Col>
-                    </FormGroup>
-                    <FormGroup row>
-                      <Col md="3">
-                        <Label htmlFor="text-input">Message</Label>
-                      </Col>
-                      <Col xs="12" md="9">
-                      <Editor
-                        editorState={editorState}
-                        toolbarClassName="editor-toolbar"
-                        wrapperClassName="wrapperClassName"
-                        editorClassName="massage-editor"
-                        onEditorStateChange={this.onEditorStateChange}
-                      />
-                      </Col>
-                    </FormGroup>
-                    
+                    </Row>
                   </Form>
+                  <FormGroup className="text-right">
+                    <Button type="submit" name="submit" color="primary">
+                      <i className="fa fa-dot-circle-o"></i> Save
+                    </Button>
+                    <Button type="submit" color="secondary">
+                      <i className="fa fa-ban"></i> Cancel
+                    </Button>
+                  </FormGroup>
                 </CardBody>
               </Card>
             </Col>

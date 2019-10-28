@@ -19,4 +19,14 @@
     padding: 5px 10px;
     font-size: 12px;
   }
+
+  .toolbar {
+    button {
+      color: white !important;
+    } 
+  }
+
+  .filter-panel {
+    border: 1px solid #eee;
+  }
 }
