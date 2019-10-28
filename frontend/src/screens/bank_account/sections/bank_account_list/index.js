@@ -10,7 +10,11 @@ import {
   ModalBody,
   ModalFooter,
   Row,
-  Col
+  Col,
+  ButtonGroup,
+  Form,
+  FormGroup,
+  Input
 } from 'reactstrap'
 import { ToastContainer, toast } from 'react-toastify'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
@@ -21,6 +25,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
 
 import './style.scss'
+
 
 class BankAccountList extends React.Component {
   
@@ -34,30 +39,20 @@ class BankAccountList extends React.Component {
     }
 
     this.options = {
-      paginationSize: 5,
-      sortIndicator: true,
-      hideSizePerPage: true,
-      hidePageListOnlyOnePage: true,
-      clearSearch: true,
-      alwaysShowAllBtns: false,
-      withFirstAndLast: false,
-      showTotal: true,
-      paginationTotalRenderer: this.customTotal,
-      sizePerPageList: [{
-        text: '5', value: 5
-      }, {
-        text: '10', value: 10
-      }, {
-        text: 'All', value: this.state.bankAccountList ? this.state.bankAccountList.length : 0
-      }]
+    }
+
+    this.selectRowProp = {
+      mode: 'checkbox',
+      bgColor: 'rgba(0,0,0, 0.05)',
+      clickToSelect: true,
+      onSelect: this.onRowSelect,
+      onSelectAll: this.onSelectAll
     }
 
     this.toggleDangerModal = this.toggleDangerModal.bind(this)
-    this.startDelete = this.startDelete.bind(this)
-    this.successDelete = this.successDelete.bind(this)
-    this.deleteBank = this.deleteBank.bind(this)
-    this.renderCheckBox = this.renderCheckBox.bind(this)
-    this.setStatus = this.setStatus.bind(this)
+    this.renderAccountType = this.renderAccountType.bind(this)
+    this.onRowSelect = this.onRowSelect.bind(this)
+    this.onSelectAll = this.onSelectAll.bind(this)
 
   }
 
@@ -74,19 +69,7 @@ class BankAccountList extends React.Component {
   }
 
   initializeData () {
-    this.setState({
-      loading: true
-    })
-    this.props.bankAccountActions.getBankAccountList().then(() => {
-      this.setState({
-        loading: false
-      })
-    }).catch(err => {
-      console.log(err)
-      this.setState({
-        loading: false
-      })
-    })
+    this.props.bankAccountActions.getBankAccountList()
   }
 
   toggleDangerModal () {
@@ -95,45 +78,16 @@ class BankAccountList extends React.Component {
     })
   }
 
-  startDelete (data) {
-    this.setState({
-      selectedData: data
-    }, () => {
-      this.toggleDangerModal()
-    })
+  renderAccountType (cell, row) {
+    return row.account_type
   }
 
-  successDelete () {
-    return toast.success('Bank Account Deleted Successfully... ', {
-      position: toast.POSITION.TOP_RIGHT
-    })
-  }
 
-  deleteBank () {
-    this.setState({
-      loading: true
-    })
-    this.toggleDangerModal()
-    this.props.bankAccountActions.deleteBankAccount(this.state.selectedData.bankAccountId).then(res => {
-      this.setState({ loading: false })
-      this.successDelete()
-      this.getBankListData()
-    }).catch(err => {
-      console.log(err)
-      this.setState({ loading: false })
-    })
+  onRowSelect (row, isSelected, e) {
+    console.log('one row checked ++++++++', row)
   }
-
-  renderCheckBox (cell, row) {
-    return (
-      <div className="table-action">
-        
-      </div>
-    )
-  }
-
-  setStatus (cell, row) {
-    return row.bankAccountStatus.bankAccountStatusName
+  onSelectAll (isSelected, rows) {
+    console.log('current page all row checked ++++++++', rows)
   }
 
   render() {
@@ -152,53 +106,144 @@ class BankAccountList extends React.Component {
             <CardHeader>
               <Row>
                 <Col lg={12}>
-                  <div className="d-flex align-items-center justify-content-between">
-                    <div className="h5 mb-0 d-flex align-items-center">
-                      <i className="fas fa-university" />
-                      <span className="ml-2">Bank Accounts</span>
-                    </div>
-                    <div>
-                      <Button
-                        color="primary"
-                        className="btn-square"
-                        onClick={() => this.props.history.push(`/admin/bank-account/update`)}
-                      >
-                        <i className="fas fa-plus mr-1" />
-                        New Account
-                      </Button>
-                    </div>
+                  <div className="h4 mb-0 d-flex align-items-center">
+                    <i className="fas fa-university" />
+                    <span className="ml-2">Bank Accounts</span>
                   </div>
                 </Col>
               </Row>
             </CardHeader>
             <CardBody>
-              <Row>
-                <Col lg={12}>
-                  {
-                    loading ?
+              {
+                loading ?
+                  <Row>
+                    <Col lg={12}>
                       <Loader />
-                    :
-                      <BootstrapTable
-                        data={bank_account_list}
-                        version="4"
-                        hover
-                        pagination
-                        totalSize={bank_account_list ? bank_account_list.length : 0}
-                        className="bank-account-table"
-                      >
-                        
-                        </TableHeaderColumn>
-                        <TableHeaderColumn isKey dataField="bankAccountName">Account Name</TableHeaderColumn>
-                        <TableHeaderColumn dataField="accountNumber" >Account Number</TableHeaderColumn>
-                        <TableHeaderColumn dataField="accountNumber" >Account Type</TableHeaderColumn>
-                        <TableHeaderColumn dataField="accountNumber" >Bank Name</TableHeaderColumn>
-                        <TableHeaderColumn dataField="swiftCode" >Swift Code</TableHeaderColumn>
-                        <TableHeaderColumn dataFormat={this.setStatus} >Status</TableHeaderColumn>
-                        <TableHeaderColumn dataField="openingBalance" >Opening Balance</TableHeaderColumn>
-                      </BootstrapTable>
-                  }
-                </Col>
-              </Row>
+                    </Col>
+                  </Row>
+                :
+                  <Row>
+                    <Col lg={12}>
+                      <div className="mb-2">
+                      <ButtonGroup size="sm">
+                        <Button
+                          color="success"
+                          className="btn-square"
+                        >
+                          <i className="fa glyphicon glyphicon-export fa-download mr-1" />
+                          Export to CSV
+                        </Button>
+                        <Button
+                          color="info"
+                          className="btn-square"
+                        >
+                          <i className="fa glyphicon glyphicon-export fa-upload mr-1" />
+                          Import from CSV
+                        </Button>
+                        <Button
+                          color="primary"
+                          className="btn-square"
+                          onClick={() => this.props.history.push(`/admin/bank-account/update`)}
+                        >
+                          <i className="fas fa-plus mr-1" />
+                          New Account
+                        </Button>
+                        <Button
+                          color="warning"
+                          className="btn-square"
+                        >
+                          <i className="fa glyphicon glyphicon-trash fa-trash mr-1" />
+                          Bulk Delete
+                        </Button>
+                      </ButtonGroup>
+                      </div>
+                      <div className="filter-panel my-3 p-3">
+                        <Form inline>
+                          <FormGroup className="pr-3">
+                            <Input type="text" placeholder="Account Name" />
+                          </FormGroup>
+                          <FormGroup className="pr-3">
+                            <Input type="text" placeholder="Account Number" />
+                          </FormGroup>
+                          <FormGroup className="pr-3">
+                            <Input type="text" placeholder="Bank Name" />
+                          </FormGroup>
+                          <FormGroup className="pr-3">
+                            <Input type="text" placeholder="Swift Code" />
+                          </FormGroup>
+                          <Button
+                            type="submit"
+                            color="primary"
+                            className="btn-square"
+                          >
+                            <i className="fas fa-search mr-1"></i>Filter
+                          </Button>
+                        </Form>
+                      </div>
+                      <div>
+                        <BootstrapTable
+                          selectRow={ this.selectRowProp }
+                          search={true}
+                          options={ this.options }
+                          data={bank_account_list}
+                          version="4"
+                          hover
+                          pagination
+                          totalSize={bank_account_list ? bank_account_list.length : 0}
+                          className="bank-account-table"
+                        >
+                          <TableHeaderColumn
+                            dataField="account_name"
+                          >
+                            Account Name
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            isKey
+                            dataField="account_number" 
+                          >
+                            Account Number
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            dataFormat={this.renderAccountType}
+                          >
+                            Account Type
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            dataField="bank_name"
+                          >
+                            Bank Name
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            dataField="IBAN_number"
+                          >
+                            IBAN Number
+                          </TableHeaderColumn>
+
+                          <TableHeaderColumn
+                            dataField="swift_code"
+                          >
+                            Swift Code
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            dataField="currency"
+                          >
+                            Currency
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            dataField="opening_balance"
+                          >
+                            Opening Balance
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            dataField="country"
+                          >
+                            Country
+                          </TableHeaderColumn>
+                        </BootstrapTable>
+                      </div>
+                    </Col>
+                  </Row>
+              }
             </CardBody>
           </Card>
           <Modal

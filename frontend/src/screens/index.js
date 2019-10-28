@@ -18,6 +18,11 @@ import InvoiceReport from './invoice_report'
 import Invoice from './invoice'
 import BankAccount from './bank_account'
 import Taxes from './taxes'
+import TransactionCategory from './transaction_category'
+import ProfitAndLoss from './profit_and_loss'
+import BalanceSheet from './balance_sheet'
+import CashFlowPosition from './cash_flow_position'
+
 import CreateOrEditInvoice from './create_or_edit_invoice'
 import CreateOrEditExpense from './create_or_edit_expense'
 import CreateOrEditProduct from './create_or_edit_product'
@@ -28,7 +33,6 @@ import CreateOrEditPurchase from './create_or_edit_purchase'
 import CreateOrEditBankAccount from './create_or_edit_bank_account'
 import CreateOrEditVatCategory from './create_or_edit_vat_category'
 import CreateOrEditTranactionCategory from './create_or_edit_transaction_category'
-import TransactionCategory from './transaction_category'
 
 export {
   LogIn,
@@ -51,6 +55,10 @@ export {
   Invoice,
   BankAccount,
   Taxes,
+  ProfitAndLoss,
+  BalanceSheet,
+  CashFlowPosition,
+  TransactionCategory,
   CreateOrEditInvoice,
   CreateOrEditExpense,
   CreateOrEditProduct,
@@ -60,6 +68,5 @@ export {
   CreateOrEditPurchase,
   CreateOrEditBankAccount,
   CreateOrEditVatCategory,
-  CreateOrEditTranactionCategory,
-  TransactionCategory
+  CreateOrEditTranactionCategory
 }

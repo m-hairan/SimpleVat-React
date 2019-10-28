@@ -34,22 +34,6 @@ class BankStatementList extends React.Component {
     }
 
     this.options = {
-      paginationSize: 5,
-      sortIndicator: true,
-      hideSizePerPage: true,
-      hidePageListOnlyOnePage: true,
-      clearSearch: true,
-      alwaysShowAllBtns: false,
-      withFirstAndLast: false,
-      showTotal: true,
-      paginationTotalRenderer: this.customTotal,
-      sizePerPageList: [{
-        text: '5', value: 5
-      }, {
-        text: '10', value: 10
-      }, {
-        text: 'All', value: this.state.bankAccountList ? this.state.bankAccountList.length : 0
-      }]
     }
 
     this.toggleDangerModal = this.toggleDangerModal.bind(this)
@@ -74,19 +58,7 @@ class BankStatementList extends React.Component {
   }
 
   initializeData () {
-    this.setState({
-      loading: true
-    })
-    this.props.bankAccountActions.getBankAccountList().then(() => {
-      this.setState({
-        loading: false
-      })
-    }).catch(err => {
-      console.log(err)
-      this.setState({
-        loading: false
-      })
-    })
+    this.props.bankAccountActions.getBankAccountList()
   }
 
   toggleDangerModal () {
@@ -187,7 +159,7 @@ class BankStatementList extends React.Component {
               </Row>
             </CardHeader>
             <CardBody>
-              <Row>
+              {/* <Row>
                 <Col lg={12}>
                   {
                     loading ?
@@ -211,7 +183,7 @@ class BankStatementList extends React.Component {
                       </BootstrapTable>
                   }
                 </Col>
-              </Row>
+              </Row> */}
             </CardBody>
           </Card>
           <Modal

@@ -134,7 +134,7 @@ class LogIn extends React.Component {
                         </InputGroup>
                         <Row>
                           <Col xs="6">
-                            <Button color="primary" type="submit" className="px-4">Login</Button>
+                            <Button color="primary" type="submit" className="px-4 btn-square">Login</Button>
                           </Col>
                           <Col xs="6" className="text-right">
                             <Button color="link" className="px-0">Forgot password?</Button>
@@ -150,7 +150,7 @@ class LogIn extends React.Component {
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
                           labore et dolore magna aliqua.</p>
                         <Link to="/register">
-                          <Button color="primary" className="mt-3" active tabIndex={-1}>Register Now!</Button>
+                          <Button color="primary" className="mt-3 btn-square" active tabIndex={-1}>Register Now!</Button>
                         </Link>
                       </div>
                     </CardBody>
