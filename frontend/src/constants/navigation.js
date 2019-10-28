@@ -57,6 +57,21 @@ export default {
           url: '/admin/report/expense-report',
           icon: 'fas fa-tasks',
         },
+        {
+          name: 'Profit and Loss',
+          url: '/admin/report/profit-and-loss',
+          icon: 'fas fa-signal',
+        },
+        {
+          name: 'Balance Sheet',
+          url: '/admin/report/balance-sheet',
+          icon: 'fas fa-balance-scale',
+        },
+        {
+          name: 'Cash Flow / Position',
+          url: '/admin/report/cash-flow-position',
+          icon: 'fas fa-money',
+        },
       ],
     },
     {

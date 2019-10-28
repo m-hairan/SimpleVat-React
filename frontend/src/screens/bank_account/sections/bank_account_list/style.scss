@@ -2,16 +2,12 @@
   .card-header {
     color: #20a8d8;
   }
-  .bank-account-table {
-    .checkbox-container {
-      width: fit-content;
+  .btn-group {
+    .btn {
+      color: #ffffff !important;
     }
-    .table-action {
-      button {
-        width: 30px;
-        height: 30px;
-        padding: 0;
-      }
-    }
+  }
+  .filter-panel {
+    border: 1px solid #e4e7ea;
   }
 }
