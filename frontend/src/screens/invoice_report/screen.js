@@ -12,14 +12,14 @@ import {
 } from "reactstrap"
 
 import _ from "lodash"
-import Select from 'react-select';
+import Select from 'react-select'
 import { DateRangePicker2 } from 'components'
 import moment from 'moment'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
 
 import "react-bootstrap-table/dist/react-bootstrap-table-all.min.css"
 import "react-toastify/dist/ReactToastify.css"
-import 'react-select/dist/react-select.css';
+import 'react-select/dist/react-select.css'
 import './style.scss'
 
 const mapStateToProps = (state) => {
@@ -30,20 +30,6 @@ const mapDispatchToProps = (dispatch) => {
   return ({
   })
 }
-
-const colourOptions = [
-  { value: 'ocean', label: 'Ocean', color: '#00B8D9', isFixed: true },
-  { value: 'blue', label: 'Blue', color: '#0052CC', isDisabled: true },
-  { value: 'purple', label: 'Purple', color: '#5243AA' },
-  { value: 'red', label: 'Red', color: '#FF5630', isFixed: true },
-  { value: 'orange', label: 'Orange', color: '#FF8B00' },
-  { value: 'yellow', label: 'Yellow', color: '#FFC400' },
-  { value: 'green', label: 'Green', color: '#36B37E' },
-  { value: 'forest', label: 'Forestasd fsad fas fsad fsad fsa', color: '#00875A' },
-  { value: 'slate', label: 'Slate', color: '#253858' },
-  { value: 'silver', label: 'Silver', color: '#666666' },
-];
-
 
 const tempdata = [{
   status: 'paid',
@@ -103,6 +89,7 @@ const tempdata = [{
   transactionType: 'TEMP'
 }]
 
+
 const ranges =  {
   'This Week': [moment().startOf('week'), moment().endOf('week')],
   'This Month': [moment().startOf('month'), moment().endOf('month')],
@@ -123,7 +110,7 @@ class InvoiceReport extends React.Component {
 
 
   handleChange(selectedOption) {
-    this.setState({ selectedOption });
+    this.setState({ selectedOption })
   }
 
   getInvoiceStatus(cell, row) {

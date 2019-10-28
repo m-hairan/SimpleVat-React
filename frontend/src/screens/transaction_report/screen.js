@@ -15,14 +15,14 @@ import {
 } from "reactstrap"
 
 import _ from "lodash"
-import Select from 'react-select';
+import Select from 'react-select'
 import { DateRangePicker2 } from 'components'
 import moment from 'moment'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
 
 import "react-bootstrap-table/dist/react-bootstrap-table-all.min.css"
 import "react-toastify/dist/ReactToastify.css"
-import 'react-select/dist/react-select.css';
+import 'react-select/dist/react-select.css'
 import './style.scss'
 
 const mapStateToProps = (state) => {
@@ -45,8 +45,7 @@ const colourOptions = [
   { value: 'forest', label: 'Forestasd fsad fas fsad fsad fsa', color: '#00875A' },
   { value: 'slate', label: 'Slate', color: '#253858' },
   { value: 'silver', label: 'Silver', color: '#666666' },
-];
-
+]
 
 const tempdata = [{
   transactionDate: '10/15/2019',
@@ -107,8 +106,6 @@ const tempdata = [{
 }]
 
 const ranges =  {
-  'Today': [moment(), moment()],
-  'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
   'Last 7 Days': [moment().subtract(6, 'days'), moment()],
   'Last 30 Days': [moment().subtract(29, 'days'), moment()],
   'This Week': [moment().startOf('week'), moment().endOf('week')],
@@ -130,11 +127,11 @@ class TransactionReport extends React.Component {
 
 
   changeType(selectedType) {
-    this.setState({ selectedType });
+    this.setState({ selectedType })
   }
 
   changeCategory(selectedCategory) {
-    this.setState({ selectedCategory });
+    this.setState({ selectedCategory })
   }
 
   render() {

@@ -47,7 +47,7 @@ class GeneralSettings extends React.Component {
   }
 
   render(){
-    const { editorState } = this.state;
+    const { editorState } = this.state
 
     return (
       <div className="general-settings-screen">
