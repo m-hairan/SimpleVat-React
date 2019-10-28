@@ -97,11 +97,10 @@ class TransactionCategory extends React.Component {
 
   actions(cell, row) {
     return (
-      <div className="d-flex">
+      <div className="table-action text-right">
         <Button
-          block
           color="primary"
-          className="btn-pill actions"
+          className="btn-pill actions ml-1"
           title="Edit Transaction Category"
           onClick={() =>
             this.props.history.push(`/admin/settings/transaction-category/update?id=${row.transactionCategoryId}`)
@@ -110,9 +109,8 @@ class TransactionCategory extends React.Component {
           <i className="far fa-edit"></i>
         </Button>
         <Button
-          block
           color="primary"
-          className="btn-pill actions"
+          className="btn-pill actions ml-1"
           title="Delete Transaction Ctegory"
           onClick={() =>
             this.setState({ selectedData: row }, () =>
@@ -174,58 +172,67 @@ class TransactionCategory extends React.Component {
 
     return (
       <div className="transaction-category-screen">
-        {
-          loading ?
-            <Loader></Loader>: 
-            <div className="animated">
-              <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                style={containerStyle}
-              />
-              <Card>
-                <CardHeader>
-                  Transaction Category
-                  <div className="card-header-actions">
-                    <Button color="primary" className="btn-pill btn btn-primary btn-block" 
-                      onClick={() => this.props.history.push('/admin/settings/transaction-category/update' )}>New Transaction</Button>
-                  </div>
-                </CardHeader>
-                <CardBody>
-                  <BootstrapTable data={transactionList} search hover pagination options={this.options}>
-                    <TableHeaderColumn isKey dataField="transactionCategoryCode">
-                      Category Code
-                    </TableHeaderColumn>
-                    <TableHeaderColumn dataField="transactionCategoryName">
-                      Category Name
-                    </TableHeaderColumn>
-                    <TableHeaderColumn dataField="transactionCategoryDescription">
-                      Category Description
-                    </TableHeaderColumn>
-                    <TableHeaderColumn dataFormat={this.getparentTransactionCategory}>
-                      Parent Transaction Category Name
-                    </TableHeaderColumn>
-                    <TableHeaderColumn dataFormat={this.getTransactionType}>
-                      Transaction Type
-                    </TableHeaderColumn>
-                    <TableHeaderColumn dataFormat={this.actions}>
-                      Action
-                    </TableHeaderColumn>
-                  </BootstrapTable>
-                </CardBody>
-              </Card>
-              <Modal isOpen={this.state.openDeleteModal}
-                className={"modal-danger " + this.props.className}
+        <div className="animated">
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            style={containerStyle}
+          />
+          <Card>
+            <CardHeader>
+              <i className="icon-menu" />
+              Transaction Category
+            </CardHeader>
+            <CardBody>
+              <Button
+                color="primary"
+                className="mb-3 btn-square"
+                onClick={() => this.props.history.push('/admin/settings/transaction-category/update' )}
               >
-                <ModalHeader toggle={this.toggleDanger}>Delete</ModalHeader>
-                <ModalBody>Are you sure want to delete this record?</ModalBody>
-                <ModalFooter>
-                  <Button color="danger" onClick={this.deleteTransaction}>Yes</Button>&nbsp;
-                  <Button color="secondary"onClick={this.closeModal}>No</Button>
-                </ModalFooter>
-              </Modal>
-            </div>
-        }
+                New
+              </Button>
+            {
+              loading ?
+                <Loader></Loader>: 
+                <BootstrapTable 
+                  data={transactionList} 
+                  striped
+                  hover
+                  pagination
+                >
+                  <TableHeaderColumn isKey dataField="transactionCategoryCode">
+                    Category Code
+                  </TableHeaderColumn>
+                  <TableHeaderColumn dataField="transactionCategoryName">
+                    Category Name
+                  </TableHeaderColumn>
+                  <TableHeaderColumn dataField="transactionCategoryDescription">
+                    Category Description
+                  </TableHeaderColumn>
+                  <TableHeaderColumn dataFormat={this.getparentTransactionCategory}>
+                    Parent Transaction Category Name
+                  </TableHeaderColumn>
+                  <TableHeaderColumn dataFormat={this.getTransactionType}>
+                    Transaction Type
+                  </TableHeaderColumn>
+                  <TableHeaderColumn className="text-right" dataFormat={this.actions}>
+                    Action
+                  </TableHeaderColumn>
+                </BootstrapTable>
+            }
+            </CardBody>
+          </Card>
+          <Modal isOpen={this.state.openDeleteModal}
+            className={"modal-danger " + this.props.className}
+          >
+            <ModalHeader toggle={this.toggleDanger}>Delete</ModalHeader>
+            <ModalBody>Are you sure want to delete this record?</ModalBody>
+            <ModalFooter>
+              <Button color="danger" onClick={this.deleteTransaction}>Yes</Button>&nbsp;
+              <Button color="secondary"onClick={this.closeModal}>No</Button>
+            </ModalFooter>
+          </Modal>
+        </div>
       </div>
     )
   }

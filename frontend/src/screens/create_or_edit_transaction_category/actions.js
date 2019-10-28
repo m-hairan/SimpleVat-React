@@ -16,7 +16,15 @@ export const getTransactionByID = (id) => {
     return authApi(data).then(res => {
       dispatch({
         type: TRANSACTION.TRANSACTION_ROW,
-        payload: res.data
+        payload: {
+          transactionCategoryCode: 2,
+          transactionCategoryName: 'temp',
+          transactionCategoryDescription: 'temp',
+          parentTransactionCategory: {transactionCategoryDescription: 'Loream Ipsume'},
+          transactionType: {
+            transactionTypeName: 'temp'
+          }
+        }
       })
       return res
     }).catch(err => {

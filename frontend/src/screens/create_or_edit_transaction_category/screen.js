@@ -376,7 +376,7 @@ class CreateOrEditTranactionCategory extends React.Component {
                 <FormGroup>
                   <div className="d-flex">
                     <Label>Default Flag</Label>
-                    <Col sm="1"></Col>
+                    <Col xs="1"></Col>
                     <div>
                       <FormGroup check inline>
                         <div className="custom-radio custom-control">

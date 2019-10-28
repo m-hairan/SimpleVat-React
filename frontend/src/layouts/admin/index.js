@@ -56,14 +56,14 @@ class AdminLayout extends React.Component {
   }
 
   componentDidMount () {
-    if (!window.localStorage.getItem('accessToken')) {
-      this.props.history.push('/login')
-    } else {
-      this.props.userActions.checkAuthStatus().catch(err => {
-        this.props.userActions.logOut()
-        this.props.history.push('/login')
-      })
-    }
+    // if (!window.localStorage.getItem('accessToken')) {
+    //   this.props.history.push('/login')
+    // } else {
+    //   this.props.userActions.checkAuthStatus().catch(err => {
+    //     this.props.userActions.logOut()
+    //     this.props.history.push('/login')
+    //   })
+    // }
   }
 
   render() {

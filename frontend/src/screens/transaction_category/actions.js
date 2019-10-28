@@ -15,7 +15,25 @@ export const getTransactionList = () => {
     return authApi(data).then(res => {
       dispatch({
         type: TRANSACTION.TRANSACTION_LIST,
-        payload: res.data
+        payload: [{
+          transactionCategoryId: 2,
+          transactionCategoryCode: 2,
+          transactionCategoryName: 'temp',
+          transactionCategoryDescription: 'temp',
+          parentTransactionCategory: {transactionCategoryDescription: 'Loream Ipsume'},
+          transactionType: {
+            transactionTypeName: 'temp'
+          }
+        }, {
+          transactionCategoryId: 1,
+          transactionCategoryCode: 4,
+          transactionCategoryName: 'temp',
+          transactionCategoryDescription: 'temp',
+          parentTransactionCategory: {transactionCategoryDescription: 'Loream Ipsume'},
+          transactionType: {
+            transactionTypeName: 'temp'
+          }
+        }]
       })
       return res
     }).catch(err => {
