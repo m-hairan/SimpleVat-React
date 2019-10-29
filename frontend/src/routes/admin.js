@@ -21,16 +21,16 @@ import {
   BalanceSheet,
   CashFlowPosition,
   TransactionCategory,
-  CreateOrEditInvoice,
-  CreateOrEditExpense,
-  CreateOrEditProduct,
-  CreateOrEditContact,
-  CreateOrEditProject,
-  CreateOrEditUsers,
-  CreateOrEditPurchase,
-  CreateOrEditBankAccount,
-  CreateOrEditVatCategory,
-  CreateOrEditTranactionCategory
+  CreateInvoice,
+  CreateExpense,
+  CreateProduct,
+  CreateContact,
+  CreateProject,
+  CreateUsers,
+  CreatePurchase,
+  CreateBankAccount,
+  CreateVatCategory,
+  CreateTranactionCategory
 } from 'screens'
 
 const adminRoutes = [
@@ -40,9 +40,9 @@ const adminRoutes = [
     component: Home.screen
   },
   {
-    path: '/admin/invoice/update',
-    name: 'Update',
-    component: CreateOrEditInvoice.screen
+    path: '/admin/invoice/create',
+    name: 'Create',
+    component: CreateInvoice.screen
   },
   {
     path: '/admin/invoice',
@@ -50,9 +50,9 @@ const adminRoutes = [
     component: Invoice.screen
   },
   {
-    path: '/admin/bank-account/update',
-    name: 'Update',
-    component: CreateOrEditBankAccount.screen
+    path: '/admin/bank-account/create',
+    name: 'Create',
+    component: CreateBankAccount.screen
   },
   {
     path: '/admin/bank-account',
@@ -116,9 +116,9 @@ const adminRoutes = [
     name: 'Report'
   },
   {
-    path: '/admin/expense/expense/update',
-    name: 'Update',
-    component: CreateOrEditExpense.screen
+    path: '/admin/expense/expense/create',
+    name: 'Create',
+    component: CreateExpense.screen
   },
   {
     path: '/admin/expense/expense',
@@ -126,9 +126,9 @@ const adminRoutes = [
     component: Expense.screen
   },
   {
-    path: '/admin/expense/purchase/update',
-    name: 'Update',
-    component: CreateOrEditPurchase.screen
+    path: '/admin/expense/purchase/create',
+    name: 'Create',
+    component: CreatePurchase.screen
   },
   {
     path: '/admin/expense/purchase',
@@ -142,9 +142,9 @@ const adminRoutes = [
     name: 'Expense'
   },
   {
-    path: '/admin/master/contact/update',
-    name: 'Update',
-    component: CreateOrEditContact.screen
+    path: '/admin/master/contact/create',
+    name: 'Create',
+    component: CreateContact.screen
   },
   {
     path: '/admin/master/contact',
@@ -152,9 +152,9 @@ const adminRoutes = [
     component: Contact.screen
   },
   {
-    path: '/admin/master/project/update',
-    name: 'Update',
-    component: CreateOrEditProject.screen
+    path: '/admin/master/project/create',
+    name: 'Create',
+    component: CreateProject.screen
   },
   {
     path: '/admin/master/project',
@@ -162,9 +162,9 @@ const adminRoutes = [
     component: Project.screen
   },
   {
-    path: '/admin/master/product/update',
-    name: 'Update',
-    component: CreateOrEditProduct.screen
+    path: '/admin/master/product/create',
+    name: 'Create',
+    component: CreateProduct.screen
   },
   {
     path: '/admin/master/product',
@@ -172,9 +172,9 @@ const adminRoutes = [
     component: Product.screen
   },
   {
-    path: '/admin/master/users/update',
-    name: 'Update',
-    component: CreateOrEditUsers.screen
+    path: '/admin/master/users/create',
+    name: 'Create',
+    component: CreateUsers.screen
   },
   {
     path: '/admin/master/users',
@@ -193,9 +193,9 @@ const adminRoutes = [
     component: GeneralSettings.screen
   },
   {
-    path: '/admin/settings/vat-category/update',
-    name: 'Update',
-    component: CreateOrEditVatCategory.screen
+    path: '/admin/settings/vat-category/create',
+    name: 'Create',
+    component: CreateVatCategory.screen
   },
   {
     path: '/admin/settings/vat-category',
@@ -203,9 +203,9 @@ const adminRoutes = [
     component: VatCategory.screen
   },
   {
-    path: '/admin/settings/transaction-category/update',
-    name: 'Update',
-    component: CreateOrEditTranactionCategory.screen
+    path: '/admin/settings/transaction-category/create',
+    name: 'Create',
+    component: CreateTranactionCategory.screen
   },
   {
     path: '/admin/settings/transaction-category',

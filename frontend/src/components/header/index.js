@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
+import { Link, NavLink } from 'react-router-dom'
 import {
   DropdownItem,
   DropdownMenu,
   DropdownToggle,
   Nav,
-  UncontrolledDropdown
+  NavItem,
+  UncontrolledDropdown,
+  Badge
 } from 'reactstrap'
 import PropTypes from 'prop-types'
 
@@ -54,6 +57,17 @@ class Header extends Component {
           minimized={{ src: sygnet, width: '100%', height: 'auto', alt: 'CoreUI Logo' }}
         />
         <AppSidebarToggler className="d-md-down-none" display="lg" />
+        <Nav className="d-md-down-none" navbar>
+          <NavItem className="px-3">
+            <NavLink to="/admin/home" className="nav-link" >Home</NavLink>
+          </NavItem>
+          <NavItem className="px-3">
+            <Link to="/admin/employee" className="nav-link">Employee</Link>
+          </NavItem>
+          <NavItem className="px-3">
+            <NavLink to="/admin/settings" className="nav-link">Settings</NavLink>
+          </NavItem>
+        </Nav>
         <Nav className="ml-auto" navbar>
           <UncontrolledDropdown nav direction="down">
             <DropdownToggle nav>

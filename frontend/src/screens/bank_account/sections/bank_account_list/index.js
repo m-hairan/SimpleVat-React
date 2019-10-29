@@ -80,7 +80,7 @@ class BankAccountList extends React.Component {
 
   renderAccountType (cell, row) {
     return (
-      <label className="badge badge-primary badge-pill">{ row.account_type }</label>
+      <label className="badge badge-primary badge-pill mb-0">{ row.account_type }</label>
     )
   }
 
@@ -145,7 +145,7 @@ class BankAccountList extends React.Component {
                           <Button
                             color="primary"
                             className="btn-square"
-                            onClick={() => this.props.history.push(`/admin/bank-account/update`)}
+                            onClick={() => this.props.history.push(`/admin/bank-account/create`)}
                           >
                             <i className="fas fa-plus mr-1" />
                             New Account

@@ -23,7 +23,7 @@ const mapDispatchToProps = (dispatch) => {
   })
 }
 
-class CreateOrEditVatCategory extends React.Component {
+class CreateVatCategory extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -157,4 +157,4 @@ class CreateOrEditVatCategory extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateOrEditVatCategory)
+export default connect(mapStateToProps, mapDispatchToProps)(CreateVatCategory)

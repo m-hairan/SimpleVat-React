@@ -91,7 +91,7 @@ class TransactionCategory extends React.Component {
           className="btn-pill actions ml-1"
           title="Edit Transaction Category"
           onClick={() =>
-            this.props.history.push(`/admin/settings/transaction-category/update?id=${row.transactionCategoryId}`)
+            this.props.history.push(`/admin/settings/transaction-category/create?id=${row.transactionCategoryId}`)
           }
         >
           <i className="far fa-edit"></i>
@@ -198,7 +198,7 @@ class TransactionCategory extends React.Component {
                           <Button
                             color="primary"
                             className="btn-square"
-                            onClick={() => this.props.history.push(`/admin/settings/transaction-category/update`)}
+                            onClick={() => this.props.history.push(`/admin/settings/transaction-category/create`)}
                           >
                             <i className="fas fa-plus mr-1" />
                             New Category
