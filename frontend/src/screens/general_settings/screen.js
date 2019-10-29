@@ -290,10 +290,10 @@ class GeneralSettings extends React.Component {
                     </Row>
                   </Form>
                   <FormGroup className="text-right">
-                    <Button type="submit" name="submit" color="primary">
+                    <Button type="submit" name="submit" color="primary" className="btn-square">
                       <i className="fa fa-dot-circle-o"></i> Save
                     </Button>
-                    <Button type="submit" color="secondary">
+                    <Button color="secondary" className="btn-square">
                       <i className="fa fa-ban"></i> Cancel
                     </Button>
                   </FormGroup>

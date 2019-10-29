@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Card, CardHeader, CardBody, Button, Input, Form, FormGroup, Label, Col } from 'reactstrap'
+import { Card, CardHeader, CardBody, Button, Input, Form, FormGroup, Label, Row, Col } from 'reactstrap'
 import { ToastContainer, toast } from 'react-toastify'
 import _ from "lodash"
 import Loader from "components/loader"
@@ -102,50 +102,60 @@ class CreateVatCategory extends React.Component {
     return (
       <div className="vat-category-create-screen">
         <div className="animated">
-          <Card>
-            <CardHeader>
-              <div className="h4 mb-0 d-flex align-items-center">
-                <i className="nav-icon icon-briefcase" />
-                <span className="ml-2">{this.id ? "Edit Vat Category" : "New Vat Category"}</span>
-              </div>
-            </CardHeader>
-            <CardBody>
-              <Form onSubmit={this.handleSubmit} name="simpleForm">
-                <FormGroup>
-                  <Label htmlFor="name">Vat Category Name</Label>
-                  <Input
-                    type="text"
-                    id="name"
-                    name="name"
-                    defaultValue={name}
-                    placeholder="Enter Vat Category Name"
-                    onChange={this.handleChange}
-                    required
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label htmlFor="name">Percentage</Label>
-                  <Input
-                    type="number"
-                    id="name"
-                    name="vat"
-                    defaultValue={vat}
-                    placeholder="Enter Percentage"
-                    onChange={this.handleChange}
-                    required
-                  />
-                </FormGroup>            
-                <FormGroup className="text-right">
-                  <Button type="submit" name="submit" color="primary">
-                    <i className="fa fa-dot-circle-o"></i> {this.id ? "Update" : "Save"}
-                  </Button>
-                  <Button type="submit" color="secondary" onClick={() => {this.props.history.push('/admin/settings/vat-category')}}>
-                    <i className="fa fa-ban"></i> Cancel
-                  </Button>
-                </FormGroup>
-              </Form>
-            </CardBody>
-          </Card>
+          <Row>
+            <Col lg={7} className="mx-auto">
+              <Card>
+                <CardHeader>
+                  <div className="h4 mb-0 d-flex align-items-center">
+                    <i className="nav-icon icon-briefcase" />
+                    <span className="ml-2">{this.id ? "Edit Vat Category" : "New Vat Category"}</span>
+                  </div>
+                </CardHeader>
+                <CardBody>
+                  <div className="px-5 py-3">
+                    <Form onSubmit={this.handleSubmit} name="simpleForm">
+                      <FormGroup>
+                        <Label htmlFor="name">Vat Category Name</Label>
+                        <Input
+                          type="text"
+                          id="name"
+                          name="name"
+                          defaultValue={name}
+                          placeholder="Enter Vat Category Name"
+                          onChange={this.handleChange}
+                          required
+                        />
+                      </FormGroup>
+                      <FormGroup>
+                        <Label htmlFor="name">Percentage</Label>
+                        <Input
+                          type="number"
+                          id="name"
+                          name="vat"
+                          defaultValue={vat}
+                          placeholder="Enter Percentage"
+                          onChange={this.handleChange}
+                          required
+                        />
+                      </FormGroup>            
+                      <FormGroup className="text-right">
+                        <Button type="submit" name="submit" color="primary" className="btn-square mr-3">
+                          <i className="fa fa-dot-circle-o"></i> {this.id ? "Update" : "Save"}
+                        </Button>
+                        <Button name="submit" color="primary" className="btn-square mr-3">
+                          <i className="fa fa-refresh"></i> Save and More
+                        </Button>
+                        <Button type="submit" color="secondary" className="btn-square"
+                          onClick={() => {this.props.history.push('/admin/settings/vat-category')}}>
+                          <i className="fa fa-ban"></i> Cancel
+                        </Button>
+                      </FormGroup>
+                    </Form>
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
           {loading ? (
             <Loader></Loader>
           ) : (

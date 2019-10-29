@@ -80,7 +80,7 @@ class Header extends Component {
             </DropdownMenu>
           </UncontrolledDropdown>
         </Nav>
-        <AppAsideToggler className="d-md-down-none" />
+        {/* <AppAsideToggler className="d-md-down-none" /> */}
       </React.Fragment>
     );
   }

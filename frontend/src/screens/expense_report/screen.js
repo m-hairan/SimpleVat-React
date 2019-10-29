@@ -113,12 +113,15 @@ class ExpenseReport extends React.Component {
         <div className="animated fadeIn">
           <Card>
             <CardHeader>
-              <div className="d-flex flex-wrap" style={{justifyContent: 'space-between'}}>
+              <div className="d-flex flex-wrap align-items-start justify-content-between">
                 <div>
-                  <h2 className="card-title">Expense Report</h2>
-                  <p><i>Last updated at 28 October 2019</i></p>
+                  <div className="h4 card-title d-flex align-items-center">
+                    <i className="fas fa-tasks" />
+                    <span className="ml-2">Expense Report</span>
+                  </div>
+                  <p className="pl-4"><i className="pl-2">Last updated at 28 October 2019</i></p>
                 </div>
-                <div className="filter-box">
+                <div className="filter-box p-2">
                   <Form onSubmit={this.handleSubmit} name="simpleForm">
                     <div className="flex-wrap d-flex">
                       <FormGroup>

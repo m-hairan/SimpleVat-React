@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Card, CardHeader, CardBody, Button, Input, Form, FormGroup, Label, Col } from 'reactstrap'
+import { Card, CardHeader, CardBody, Button, Input, Form, FormGroup, Label, Row, Col } from 'reactstrap'
 import { toast } from 'react-toastify'
 import Autosuggest from "react-autosuggest"
 import _ from "lodash"
@@ -328,164 +328,172 @@ class CreateTranactionCategory extends React.Component {
     return (
       <div className="create-transaction-category-screen">
         <div className="animated">
-          <Card>
-            <CardHeader>
-              <div className="h4 mb-0 d-flex align-items-center">
-                <i className="nav-icon icon-graph" />
-                <span className="ml-2">{this.id ? "Edit Vat Category" : "New Transaction Category"}</span>
-              </div>
-            </CardHeader>
-            <CardBody>
-              <Form onSubmit={this.handleSubmit} name="simpleForm">
-                <FormGroup>
-                  <Label htmlFor="categoryName">Category Name</Label>
-                  <Input
-                    type="text"
-                    id="categoryName"
-                    name="categoryName"
-                    placeholder="Enter Category Name"
-                    defaultValue={categoryName}
-                    onChange={this.handleChange}
-                    required
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label htmlFor="categoryCode">Category Code</Label>
-                  <Input
-                    type="text"
-                    id="categoryCode"
-                    name="categoryCode"
-                    placeholder="Enter Category Code"
-                    defaultValue={categoryCode}
-                    onChange={this.handleChange}
-                    required
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label htmlFor="categoryDiscription">
-                    Category Description
-                  </Label>
-                  <Input
-                    type="textarea"
-                    id="categoryDiscription"
-                    name="categoryDiscription"
-                    defaultValue={categoryDiscription}
-                    placeholder="Enter  Category Description"
-                    onChange={this.handleChange}
-                    required
-                    rows="5"
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <div className="d-flex">
-                    <Label>Default Flag</Label>
-                    <Col xs="1"></Col>
-                    <div>
-                      <FormGroup check inline>
-                        <div className="custom-radio custom-control">
-                          <input 
-                            className="custom-control-input"
-                            type="radio"
-                            id="inline-radio1"
-                            name="defaltFlag"
-                            value="Y"
-                            checked={defaltFlag === "Y"}
-                            onChange={this.handleChange} />
-                          <label className="custom-control-label" htmlFor="inline-radio1">Yes</label>
-                        </div>
-                      </FormGroup>
-                      <FormGroup check inline>
-                        <div className="custom-radio custom-control">
-                          <input 
-                            className="custom-control-input"
-                            type="radio"
-                            id="inline-radio2"
-                            name="defaltFlag"
-                            value="N"
-                            checked={defaltFlag === "N"}
-                            onChange={this.handleChange}/>
-                          <label className="custom-control-label" htmlFor="inline-radio2">No</label>
-                        </div>
-                      </FormGroup>
-                    </div>
+          <Row>
+            <Col lg={7} className="mx-auto">
+              <Card>
+                <CardHeader>
+                  <div className="h4 mb-0 d-flex align-items-center">
+                    <i className="nav-icon icon-graph" />
+                    <span className="ml-2">{this.id ? "Edit Vat Category" : "New Transaction Category"}</span>
                   </div>
-                </FormGroup>
-                <FormGroup>
-                  <Label htmlFor="selectCategoryCode">
-                    Vat Category Code
-                  </Label>
-                  <Input
-                    type="select"
-                    name="selectVatCategoryCode"
-                    defaultValue={transactionTypeName}
-                    id="selectCategoryCode"
-                    onChange={this.handleChange}
-                    required
-                  >
-                    {this.state.vatCategoryList.map((item, index) => (
-                      <option key={index} value={item.id}>
-                        {item.name}
-                      </option>
-                    ))}
-                  </Input>
-                </FormGroup>
-                  
-                <FormGroup>
-                  <Label htmlFor="selectTransactionType">
-                    Transaction Type
-                  </Label>
-                  <Autosuggest
-                    className="autoSuggest form-control"
-                    suggestions={suggestions}
-                    onSuggestionsFetchRequested={
-                      this.onSuggestionsFetchRequested
-                    }
-                    onSuggestionsClearRequested={
-                      this.onSuggestionsClearRequested
-                    }
-                    getSuggestionValue={this.getSuggestionValue}
-                    onSuggestionSelected={this.onSuggestionSelected}
-                    renderSuggestion={this.renderSuggestion}
-                    inputProps={inputProps}
-                  />
-                </FormGroup>
-                  
-                {selectedTransactionCategory ? ( 
-                  <FormGroup>
-                    <Label htmlFor="selectTransactionType">
-                      Parent Transaction Type
-                    </Label>
-                    <Autosuggest
-                      className="autoSuggest form-control"
-                      suggestions={parentSuggestions}
-                      onSuggestionsFetchRequested={
-                        this.onParentSuggestionsFetchRequested
-                      }
-                      onSuggestionsClearRequested={
-                        this.onParentSuggestionsClearRequested
-                      }
-                      getSuggestionValue={this.getParentSuggestionValue}
-                      onSuggestionSelected={this.onParentSuggestionSelected}
-                      renderSuggestion={this.renderParentSuggestion}
-                      inputProps={parentInputProps}
-                    />
-                  </FormGroup> 
-                ) : (
-                    ""
-                  )}
-                <FormGroup className="text-right">
-                  <Button type="submit" color="primary">
-                    <i className="fa fa-dot-circle-o"></i> {this.id ? "Update" : "Save"}
-                  </Button>
-                  
-                  <Button type="submit" color="secondary" 
-                    onClick={() => {this.props.history.push("/admin/settings/transaction-category")}}>
-                    <i className="fa fa-ban"></i> Cancel
-                  </Button>
-                </FormGroup>
-              </Form>
-            </CardBody>
-          </Card>
+                </CardHeader>
+                <CardBody>
+                  <div className="px-5 py-3">
+                    <Form onSubmit={this.handleSubmit} name="simpleForm">
+                      <FormGroup>
+                        <Label htmlFor="categoryName">Category Name</Label>
+                        <Input
+                          type="text"
+                          id="categoryName"
+                          name="categoryName"
+                          placeholder="Enter Category Name"
+                          defaultValue={categoryName}
+                          onChange={this.handleChange}
+                          required
+                        />
+                      </FormGroup>
+                      <FormGroup>
+                        <Label htmlFor="categoryCode">Category Code</Label>
+                        <Input
+                          type="text"
+                          id="categoryCode"
+                          name="categoryCode"
+                          placeholder="Enter Category Code"
+                          defaultValue={categoryCode}
+                          onChange={this.handleChange}
+                          required
+                        />
+                      </FormGroup>
+                      <FormGroup>
+                        <Label htmlFor="categoryDiscription">
+                          Category Description
+                        </Label>
+                        <Input
+                          type="textarea"
+                          id="categoryDiscription"
+                          name="categoryDiscription"
+                          defaultValue={categoryDiscription}
+                          placeholder="Enter  Category Description"
+                          onChange={this.handleChange}
+                          required
+                          rows="5"
+                        />
+                      </FormGroup>
+                      <FormGroup>
+                        <div className="d-flex">
+                          <Label>Default Flag</Label>
+                          <Col xs="1"></Col>
+                          <div>
+                            <FormGroup check inline>
+                              <div className="custom-radio custom-control">
+                                <input 
+                                  className="custom-control-input"
+                                  type="radio"
+                                  id="inline-radio1"
+                                  name="defaltFlag"
+                                  value="Y"
+                                  checked={defaltFlag === "Y"}
+                                  onChange={this.handleChange} />
+                                <label className="custom-control-label" htmlFor="inline-radio1">Yes</label>
+                              </div>
+                            </FormGroup>
+                            <FormGroup check inline>
+                              <div className="custom-radio custom-control">
+                                <input 
+                                  className="custom-control-input"
+                                  type="radio"
+                                  id="inline-radio2"
+                                  name="defaltFlag"
+                                  value="N"
+                                  checked={defaltFlag === "N"}
+                                  onChange={this.handleChange}/>
+                                <label className="custom-control-label" htmlFor="inline-radio2">No</label>
+                              </div>
+                            </FormGroup>
+                          </div>
+                        </div>
+                      </FormGroup>
+                      <FormGroup>
+                        <Label htmlFor="selectCategoryCode">
+                          Vat Category Code
+                        </Label>
+                        <Input
+                          type="select"
+                          name="selectVatCategoryCode"
+                          defaultValue={transactionTypeName}
+                          id="selectCategoryCode"
+                          onChange={this.handleChange}
+                          required
+                        >
+                          {this.state.vatCategoryList.map((item, index) => (
+                            <option key={index} value={item.id}>
+                              {item.name}
+                            </option>
+                          ))}
+                        </Input>
+                      </FormGroup>
+                        
+                      <FormGroup>
+                        <Label htmlFor="selectTransactionType">
+                          Transaction Type
+                        </Label>
+                        <Autosuggest
+                          className="autoSuggest form-control"
+                          suggestions={suggestions}
+                          onSuggestionsFetchRequested={
+                            this.onSuggestionsFetchRequested
+                          }
+                          onSuggestionsClearRequested={
+                            this.onSuggestionsClearRequested
+                          }
+                          getSuggestionValue={this.getSuggestionValue}
+                          onSuggestionSelected={this.onSuggestionSelected}
+                          renderSuggestion={this.renderSuggestion}
+                          inputProps={inputProps}
+                        />
+                      </FormGroup>
+                        
+                      {selectedTransactionCategory ? ( 
+                        <FormGroup>
+                          <Label htmlFor="selectTransactionType">
+                            Parent Transaction Type
+                          </Label>
+                          <Autosuggest
+                            className="autoSuggest form-control"
+                            suggestions={parentSuggestions}
+                            onSuggestionsFetchRequested={
+                              this.onParentSuggestionsFetchRequested
+                            }
+                            onSuggestionsClearRequested={
+                              this.onParentSuggestionsClearRequested
+                            }
+                            getSuggestionValue={this.getParentSuggestionValue}
+                            onSuggestionSelected={this.onParentSuggestionSelected}
+                            renderSuggestion={this.renderParentSuggestion}
+                            inputProps={parentInputProps}
+                          />
+                        </FormGroup> 
+                      ) : (
+                          ""
+                        )}
+                      <FormGroup className="text-right">
+                        <Button type="submit" color="primary" className="btn-square mr-3">
+                          <i className="fa fa-dot-circle-o"></i> {this.id ? "Update" : "Save"}
+                        </Button>
+                        <Button type="submit" color="primary" className="btn-square mr-3">
+                          <i className="fa fa-refresh"></i> Create and More
+                        </Button>
+                        <Button type="submit" color="secondary" className="btn-square" 
+                          onClick={() => {this.props.history.push("/admin/settings/transaction-category")}}>
+                          <i className="fa fa-ban"></i> Cancel
+                        </Button>
+                      </FormGroup>
+                    </Form>
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
           {loading ? (
             <Loader></Loader>
           ) : (

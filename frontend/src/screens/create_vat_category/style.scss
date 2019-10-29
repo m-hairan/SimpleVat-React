@@ -1,35 +1,7 @@
 .vat-category-create-screen {
   .card {
-    border: none;
-    box-shadow: 3px 3px 11px rgba(0,0,0,0.2);
-    border-radius: 7px;
-    max-width: 800px;
-    margin: 0 auto;
-    margin-bottom: 30px;
-
     .card-header {
-      font-size: 20px;
       color: #20a8d8;
-    }
-
-    form {
-      margin-bottom: 30px;
-    }
-
-    .form-group {
-      max-width: 700px;
-      margin: 20px auto;
-
-      input {
-        max-width: 700px;
-      }
-
-      button {
-        margin-left: 10px;
-        height: 30px;
-        padding: 0 20px;
-        margin-top: 15px;
-      }
     }
   }
 }
