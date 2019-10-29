@@ -96,7 +96,7 @@ class VatCategory extends React.Component {
             color="primary" 
             className="btn-pill vat-actions ml-1"
             title="Edit Vat Category" 
-            onClick={() => this.props.history.push(`/admin/settings/vat-category/update?id=${row.id}`)}>
+            onClick={() => this.props.history.push(`/admin/settings/vat-category/create?id=${row.id}`)}>
               <i className="far fa-edit"></i>
           </Button>
           <Button 
@@ -192,7 +192,7 @@ class VatCategory extends React.Component {
                           <Button
                             color="primary"
                             className="btn-square"
-                            onClick={() => this.props.history.push(`/admin/settings/vat-category/update`)}
+                            onClick={() => this.props.history.push(`/admin/settings/vat-category/create`)}
                           >
                             <i className="fas fa-plus mr-1" />
                             New Category

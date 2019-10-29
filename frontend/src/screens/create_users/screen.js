@@ -13,7 +13,7 @@ const mapDispatchToProps = (dispatch) => {
   })
 }
 
-class CreateOrEditProject extends React.Component {
+class CreateUsers extends React.Component {
   
   constructor(props) {
     super(props)
@@ -26,11 +26,11 @@ class CreateOrEditProject extends React.Component {
   render() {
 
     return (
-      <div className="create-or-edit-project-screen">
-        <h1>CreateOrEditProject Screen</h1>
+      <div className="create-users-screen">
+        <h1>CreateUsers Screen</h1>
       </div>
     )
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateOrEditProject)
+export default connect(mapStateToProps, mapDispatchToProps)(CreateUsers)

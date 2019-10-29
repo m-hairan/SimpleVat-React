@@ -24,16 +24,16 @@ import ProfitAndLoss from './profit_and_loss'
 import BalanceSheet from './balance_sheet'
 import CashFlowPosition from './cash_flow_position'
 
-import CreateOrEditInvoice from './create_or_edit_invoice'
-import CreateOrEditExpense from './create_or_edit_expense'
-import CreateOrEditProduct from './create_or_edit_product'
-import CreateOrEditContact from './create_or_edit_contact'
-import CreateOrEditProject from './create_or_edit_project'
-import CreateOrEditUsers from './create_or_edit_users'
-import CreateOrEditPurchase from './create_or_edit_purchase'
-import CreateOrEditBankAccount from './create_or_edit_bank_account'
-import CreateOrEditVatCategory from './create_or_edit_vat_category'
-import CreateOrEditTranactionCategory from './create_or_edit_transaction_category'
+import CreateInvoice from './create_invoice'
+import CreateExpense from './create_expense'
+import CreateProduct from './create_product'
+import CreateContact from './create_contact'
+import CreateProject from './create_project'
+import CreateUsers from './create_users'
+import CreatePurchase from './create_purchase'
+import CreateBankAccount from './create_bank_account'
+import CreateVatCategory from './create_vat_category'
+import CreateTranactionCategory from './create_transaction_category'
 
 export {
   LogIn,
@@ -61,14 +61,14 @@ export {
   BalanceSheet,
   CashFlowPosition,
   TransactionCategory,
-  CreateOrEditInvoice,
-  CreateOrEditExpense,
-  CreateOrEditProduct,
-  CreateOrEditContact,
-  CreateOrEditProject,
-  CreateOrEditUsers,
-  CreateOrEditPurchase,
-  CreateOrEditBankAccount,
-  CreateOrEditVatCategory,
-  CreateOrEditTranactionCategory
+  CreateInvoice,
+  CreateExpense,
+  CreateProduct,
+  CreateContact,
+  CreateProject,
+  CreateUsers,
+  CreatePurchase,
+  CreateBankAccount,
+  CreateVatCategory,
+  CreateTranactionCategory
 }

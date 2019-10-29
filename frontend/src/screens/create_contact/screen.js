@@ -13,7 +13,7 @@ const mapDispatchToProps = (dispatch) => {
   })
 }
 
-class CreateOrEditPurchase extends React.Component {
+class CreateContact extends React.Component {
   
   constructor(props) {
     super(props)
@@ -26,11 +26,11 @@ class CreateOrEditPurchase extends React.Component {
   render() {
 
     return (
-      <div className="create-or-edit-purchase-screen">
-        <h1>CreateOrEditPurchase Screen</h1>
+      <div className="create-contact-screen">
+        <h1>CreateContact Screen</h1>
       </div>
     )
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateOrEditPurchase)
+export default connect(mapStateToProps, mapDispatchToProps)(CreateContact)

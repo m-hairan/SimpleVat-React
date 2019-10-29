@@ -13,7 +13,7 @@ const mapDispatchToProps = (dispatch) => {
   })
 }
 
-class CreateOrEditExpense extends React.Component {
+class CreateBankAccount extends React.Component {
   
   constructor(props) {
     super(props)
@@ -26,11 +26,11 @@ class CreateOrEditExpense extends React.Component {
   render() {
 
     return (
-      <div className="create-or-edit-expense-screen">
-        <h1>CreateOrEditExpense Screen</h1>
+      <div className="create-bank-account-screen">
+        <h1>CreateBankAccount Screen</h1>
       </div>
     )
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateOrEditExpense)
+export default connect(mapStateToProps, mapDispatchToProps)(CreateBankAccount)

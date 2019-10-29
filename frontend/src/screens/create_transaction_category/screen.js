@@ -22,7 +22,7 @@ const mapDispatchToProps = (dispatch) => {
   })
 }
 
-class CreateOrEditTranactionCategory extends React.Component {
+class CreateTranactionCategory extends React.Component {
   
   constructor(props) {
     super(props)
@@ -284,7 +284,7 @@ class CreateOrEditTranactionCategory extends React.Component {
         this.success()
         if (status === 'addMore') {
           this.setState({ transaction: {} })
-          this.props.history.push('/admin/settings/transaction-category/update')
+          this.props.history.push('/admin/settings/transaction-category/create')
         } else {
           this.props.history.push('/admin/settings/transaction-category')
         }
@@ -326,7 +326,7 @@ class CreateOrEditTranactionCategory extends React.Component {
     }
 
     return (
-      <div className="create-or-edit-transaction-category-screen">
+      <div className="create-transaction-category-screen">
         <div className="animated">
           <Card>
             <CardHeader>
@@ -497,4 +497,4 @@ class CreateOrEditTranactionCategory extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateOrEditTranactionCategory)
+export default connect(mapStateToProps, mapDispatchToProps)(CreateTranactionCategory)
