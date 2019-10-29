@@ -1,5 +1,4 @@
 import React from 'react'
-
 import {
   Card,
   CardHeader,
@@ -83,7 +82,7 @@ class BankAccountList extends React.Component {
     return (
       <label
         className="text-primary my-link mb-0"
-        onClick={() => this.openEditAside(row)}
+        onClick={() => this.props.history.push('/admin/bank-account/detail')}
       >
         { row.account_name }
       </label>
