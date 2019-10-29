@@ -21,6 +21,7 @@ import {
   BalanceSheet,
   CashFlowPosition,
   TransactionCategory,
+
   CreateInvoice,
   CreateExpense,
   CreateProduct,
@@ -30,7 +31,11 @@ import {
   CreatePurchase,
   CreateBankAccount,
   CreateVatCategory,
-  CreateTranactionCategory
+  CreateTranactionCategory,
+
+  DetailBankAccount,
+  DetailVatCategory,
+  DetailTranactionCategory
 } from 'screens'
 
 const adminRoutes = [
@@ -53,6 +58,11 @@ const adminRoutes = [
     path: '/admin/bank-account/create',
     name: 'Create',
     component: CreateBankAccount.screen
+  },
+  {
+    path: '/admin/bank-account/detail',
+    name: 'Detail',
+    component: DetailBankAccount.screen
   },
   {
     path: '/admin/bank-account',
@@ -198,6 +208,11 @@ const adminRoutes = [
     component: CreateVatCategory.screen
   },
   {
+    path: '/admin/settings/vat-category/detail',
+    name: 'Detail',
+    component: DetailVatCategory.screen
+  },
+  {
     path: '/admin/settings/vat-category',
     name: 'Vat Category',
     component: VatCategory.screen
@@ -206,6 +221,11 @@ const adminRoutes = [
     path: '/admin/settings/transaction-category/create',
     name: 'Create',
     component: CreateTranactionCategory.screen
+  },
+  {
+    path: '/admin/settings/transaction-category/detail',
+    name: 'Detail',
+    component: DetailTranactionCategory.screen
   },
   {
     path: '/admin/settings/transaction-category',

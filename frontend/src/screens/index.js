@@ -35,6 +35,10 @@ import CreateBankAccount from './create_bank_account'
 import CreateVatCategory from './create_vat_category'
 import CreateTranactionCategory from './create_transaction_category'
 
+import DetailBankAccount from './detail_bank_account'
+import DetailVatCategory from './detail_vat_category'
+import DetailTranactionCategory from './detail_transaction_category'
+
 export {
   LogIn,
   Register,
@@ -61,6 +65,7 @@ export {
   BalanceSheet,
   CashFlowPosition,
   TransactionCategory,
+
   CreateInvoice,
   CreateExpense,
   CreateProduct,
@@ -70,5 +75,9 @@ export {
   CreatePurchase,
   CreateBankAccount,
   CreateVatCategory,
-  CreateTranactionCategory
+  CreateTranactionCategory,
+
+  DetailBankAccount,
+  DetailVatCategory,
+  DetailTranactionCategory
 }
