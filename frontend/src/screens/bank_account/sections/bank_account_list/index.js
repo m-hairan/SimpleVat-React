@@ -44,12 +44,13 @@ class BankAccountList extends React.Component {
     this.selectRowProp = {
       mode: 'checkbox',
       bgColor: 'rgba(0,0,0, 0.05)',
-      clickToSelect: true,
+      clickToSelect: false,
       onSelect: this.onRowSelect,
       onSelectAll: this.onSelectAll
     }
 
     this.toggleDangerModal = this.toggleDangerModal.bind(this)
+    this.renderAccountName = this.renderAccountName.bind(this)
     this.renderAccountType = this.renderAccountType.bind(this)
     this.onRowSelect = this.onRowSelect.bind(this)
     this.onSelectAll = this.onSelectAll.bind(this)
@@ -76,6 +77,17 @@ class BankAccountList extends React.Component {
     this.setState({
       openDeleteModal: !this.state.openDeleteModal
     })
+  }
+
+  renderAccountName (cell, row) {
+    return (
+      <label
+        className="text-primary my-link mb-0"
+        onClick={() => this.openEditAside(row)}
+      >
+        { row.account_name }
+      </label>
+    )
   }
 
   renderAccountType (cell, row) {
@@ -136,13 +148,6 @@ class BankAccountList extends React.Component {
                             Export to CSV
                           </Button>
                           <Button
-                            color="info"
-                            className="btn-square"
-                          >
-                            <i className="fa glyphicon glyphicon-export fa-upload mr-1" />
-                            Import from CSV
-                          </Button>
-                          <Button
                             color="primary"
                             className="btn-square"
                             onClick={() => this.props.history.push(`/admin/bank-account/create`)}
@@ -195,13 +200,13 @@ class BankAccountList extends React.Component {
                           className="bank-account-table"
                         >
                           <TableHeaderColumn
-                            dataField="account_name"
+                            dataFormat={this.renderAccountName}
                           >
                             Account Name
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             isKey
-                            dataField="account_number" 
+                            dataField="account_number"
                           >
                             Account Number
                           </TableHeaderColumn>

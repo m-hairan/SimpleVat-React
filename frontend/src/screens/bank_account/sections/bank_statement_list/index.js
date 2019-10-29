@@ -43,7 +43,7 @@ class BankStatementList extends React.Component {
     this.selectRowProp = {
       mode: 'checkbox',
       bgColor: 'rgba(0,0,0, 0.05)',
-      clickToSelect: true,
+      clickToSelect: false,
       onSelect: this.onRowSelect,
       onSelectAll: this.onSelectAll
     }
@@ -95,7 +95,6 @@ class BankStatementList extends React.Component {
 
     const { loading } = this.state
     const { bank_statement_list } = this.props
-    console.log(bank_statement_list)
     const containerStyle = {
       zIndex: 1999
     }
@@ -150,7 +149,7 @@ class BankStatementList extends React.Component {
                             onClick={() => this.props.history.push(`/admin/bank-account/update`)}
                           >
                             <i className="fas fa-plus mr-1" />
-                            New Account
+                            New Statement
                           </Button>
                           <Button
                             color="warning"

@@ -39,7 +39,6 @@ class TransactionCategory extends React.Component {
     this.selectRowProp = {
       mode: 'checkbox',
       bgColor: 'rgba(0,0,0, 0.05)',
-      clickToSelect: true,
       onSelect: this.onRowSelect,
       onSelectAll: this.onSelectAll
     }
@@ -212,7 +211,7 @@ class TransactionCategory extends React.Component {
                           </Button>
                         </ButtonGroup>
                         </div>
-                        <div className="filter-panel my-3 p-3">
+                        <div className="filter-panel my-3 py-3">
                           <Form inline>
                             <FormGroup className="pr-3">
                               <Input type="text" placeholder="Category Code" />
