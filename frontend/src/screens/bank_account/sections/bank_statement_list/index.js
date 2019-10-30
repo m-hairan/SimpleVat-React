@@ -1,6 +1,21 @@
 import React from 'react'
 
-import { Card, CardHeader, CardBody, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap'
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Row,
+  Col,
+  ButtonGroup,
+  Form,
+  FormGroup,
+  Input
+} from 'reactstrap'
 import { ToastContainer, toast } from 'react-toastify'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
 
@@ -23,30 +38,21 @@ class BankStatementList extends React.Component {
     }
 
     this.options = {
-      paginationSize: 5,
-      sortIndicator: true,
-      hideSizePerPage: true,
-      hidePageListOnlyOnePage: true,
-      clearSearch: true,
-      alwaysShowAllBtns: false,
-      withFirstAndLast: false,
-      showTotal: true,
-      paginationTotalRenderer: this.customTotal,
-      sizePerPageList: [{
-        text: '5', value: 5
-      }, {
-        text: '10', value: 10
-      }, {
-        text: 'All', value: this.state.bankAccountList ? this.state.bankAccountList.length : 0
-      }]
     }
 
+    this.selectRowProp = {
+      mode: 'checkbox',
+      bgColor: 'rgba(0,0,0, 0.05)',
+      clickToSelect: false,
+      onSelect: this.onRowSelect,
+      onSelectAll: this.onSelectAll
+    }
+
+
     this.toggleDangerModal = this.toggleDangerModal.bind(this)
-    this.startDelete = this.startDelete.bind(this)
-    this.successDelete = this.successDelete.bind(this)
-    this.deleteBank = this.deleteBank.bind(this)
-    this.bankAccounttActions = this.bankAccounttActions.bind(this)
-    this.setStatus = this.setStatus.bind(this)
+    this.renderTransactionType = this.renderTransactionType.bind(this)
+    this.onRowSelect = this.onRowSelect.bind(this)
+    this.onSelectAll = this.onSelectAll.bind(this)
 
   }
 
@@ -63,19 +69,7 @@ class BankStatementList extends React.Component {
   }
 
   initializeData () {
-    this.setState({
-      loading: true
-    })
-    this.props.bankAccountActions.getBankAccountList().then(() => {
-      this.setState({
-        loading: false
-      })
-    }).catch(err => {
-      console.log(err)
-      this.setState({
-        loading: false
-      })
-    })
+    this.props.bankAccountActions.getBankStatementList()
   }
 
   toggleDangerModal () {
@@ -84,66 +78,23 @@ class BankStatementList extends React.Component {
     })
   }
 
-  startDelete (data) {
-    this.setState({
-      selectedData: data
-    }, () => {
-      this.toggleDangerModal()
-    })
-  }
-
-  successDelete () {
-    return toast.success('Bank Account Deleted Successfully... ', {
-      position: toast.POSITION.TOP_RIGHT
-    })
-  }
-
-  deleteBank () {
-    this.setState({
-      loading: true
-    })
-    this.toggleDangerModal()
-    this.props.bankAccountActions.deleteBankAccount(this.state.selectedData.bankAccountId).then(res => {
-      this.setState({ loading: false })
-      this.successDelete()
-      this.getBankListData()
-    }).catch(err => {
-      console.log(err)
-      this.setState({ loading: false })
-    })
-  }
-
-  bankAccounttActions (cell, row) {
+  renderTransactionType (cell, row) {
     return (
-      <div className="table-action text-right">
-        <Button
-          color="primary"
-          className="btn-pill vat-actions ml-1"
-          title="Edit Vat Category"
-          onClick={() => this.props.history.push(`/admin/bank-account/update?id=${row.bankAccountId}`)}
-        >
-          <i className="far fa-edit"></i>
-        </Button>
-        <Button
-          color="primary"
-          className="btn-pill vat-actions ml-1"
-          title="Delete Vat Ctegory"
-          onClick={() => this.startDelete(row)}
-        >
-          <i className="fas fa-trash-alt"></i>
-        </Button>
-      </div>
+      <span className="badge badge-primary badge-pill mb-0">{ row.transaction_type }</span>
     )
   }
 
-  setStatus (cell, row) {
-    return row.bankAccountStatus.bankAccountStatusName
+  onRowSelect (row, isSelected, e) {
+    console.log('one row checked ++++++++', row)
+  }
+  onSelectAll (isSelected, rows) {
+    console.log('current page all row checked ++++++++', rows)
   }
 
   render() {
 
     const { loading } = this.state
-    const { bank_account_list } = this.props
+    const { bank_statement_list } = this.props
     const containerStyle = {
       zIndex: 1999
     }
@@ -154,52 +105,140 @@ class BankStatementList extends React.Component {
           <ToastContainer position="top-right" autoClose={5000} style={containerStyle} />
           <Card>
             <CardHeader>
-              <i className="icon-menu" />
-              Bank Statement
+              <Row>
+                <Col lg={12}>
+                  <div className="d-flex align-items-center justify-content-between">
+                    <div className="h4 mb-0 d-flex align-items-center">
+                      <i className="icon-doc" />
+                      <span className="ml-2">Bank Statements</span>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
             </CardHeader>
             <CardBody>
-              <Button
-                color="primary"
-                className="mb-3 btn-square"
-                onClick={() => this.props.history.push(`/admin/bank-account/update`)}
-              >
-                New
-              </Button>
               {
                 loading ?
-                  <Loader />
+                  <Row>
+                    <Col lg={12}>
+                      <Loader />
+                    </Col>
+                  </Row>
                 :
-                  <BootstrapTable
-                    data={bank_account_list}
-                    version="4"
-                    striped
-                    hover
-                    pagination
-                    totalSize={bank_account_list ? bank_account_list.length : 0}
-                    className="bank-statement-table"
-                  >
-                    <TableHeaderColumn isKey dataField="bankAccountName">No</TableHeaderColumn>
-                    <TableHeaderColumn dataField="accountNumber">Transaction Type</TableHeaderColumn>
-                    <TableHeaderColumn dataField="swiftCode" >Amount</TableHeaderColumn>
-                    <TableHeaderColumn dataFormat={this.setStatus} >Reference Number</TableHeaderColumn>
-                    <TableHeaderColumn dataField="openingBalance" >Description</TableHeaderColumn>
-                    <TableHeaderColumn dataField="openingBalance">Transaction Date</TableHeaderColumn>
-                    <TableHeaderColumn className="text-right" dataFormat={this.bankAccounttActions}>Action</TableHeaderColumn>
-                  </BootstrapTable>
+                  <Row>
+                    <Col lg={12}>
+                      <div className="mb-2">
+                        <ButtonGroup size="sm">
+                          <Button
+                            color="success"
+                            className="btn-square"
+                          >
+                            <i className="fa glyphicon glyphicon-export fa-download mr-1" />
+                            Export to CSV
+                          </Button>
+                          <Button
+                            color="info"
+                            className="btn-square"
+                          >
+                            <i className="fa glyphicon glyphicon-export fa-upload mr-1" />
+                            Import from CSV
+                          </Button>
+                          <Button
+                            color="primary"
+                            className="btn-square"
+                            onClick={() => this.props.history.push(`/admin/bank-account/update`)}
+                          >
+                            <i className="fas fa-plus mr-1" />
+                            New Statement
+                          </Button>
+                          <Button
+                            color="warning"
+                            className="btn-square"
+                          >
+                            <i className="fa glyphicon glyphicon-trash fa-trash mr-1" />
+                            Bulk Delete
+                          </Button>
+                        </ButtonGroup>
+                      </div>
+                      <div className="filter-panel my-3 py-3">
+                        <Form inline>
+                          <FormGroup className="pr-3">
+                            <Input type="text" placeholder="Reference Name" />
+                          </FormGroup>
+                          <FormGroup className="pr-3">
+                            <Input type="text" placeholder="Transaction type" />
+                          </FormGroup>
+                          <FormGroup className="pr-3">
+                            <Input type="text" placeholder="Transaction Date" />
+                          </FormGroup>
+                          <Button
+                            type="submit"
+                            color="primary"
+                            className="btn-square"
+                          >
+                            <i className="fas fa-search mr-1"></i>Filter
+                          </Button>
+                        </Form>
+                      </div>
+                      <div>
+                        <BootstrapTable
+                          selectRow={ this.selectRowProp }
+                          search={true}
+                          options={ this.options }
+                          data={bank_statement_list}
+                          version="4"
+                          hover
+                          pagination
+                          totalSize={bank_statement_list ? bank_statement_list.length : 0}
+                          className="bank-statement-table"
+                        >
+                          <TableHeaderColumn
+                            isKey
+                            dataField="reference_number"
+                          >
+                            Reference Number
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            dataFormat={this.renderTransactionType}
+                          >
+                            Transaction Type
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            dataField="amount" 
+                          >
+                            Amount
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            dataField="description"
+                          >
+                            Description
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            dataField="transaction_date"
+                          >
+                            Transaction Date
+                          </TableHeaderColumn>
+                        </BootstrapTable>
+                      </div>
+                    </Col>
+                  </Row>
               }
             </CardBody>
           </Card>
           <Modal
             isOpen={this.state.openDeleteModal}
-            className="modal-danger"
+            centered
+            className="modal-primary"
           >
-            <ModalHeader toggle={this.toggleDangerModal}>Delete</ModalHeader>
+            <ModalHeader toggle={this.toggleDangerModal}>
+              <h4 className="mb-0">Are you sure ?</h4>
+            </ModalHeader>
             <ModalBody>
-              Are you sure want to delete this record?
+              <h5 className="mb-0">This record will be deleleted permanently.</h5>
             </ModalBody>
             <ModalFooter>
-              <Button color="danger" onClick={this.deleteBank}>Yes</Button>{' '}
-              <Button color="secondary" onClick={this.toggleDangerModal}>No</Button>
+              <Button color="primary" className="btn-square" onClick={this.deleteBank}>Yes</Button>{' '}
+              <Button color="secondary" className="btn-square" onClick={this.toggleDangerModal}>No</Button>
             </ModalFooter>
           </Modal>
         </div>

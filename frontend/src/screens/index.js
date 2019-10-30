@@ -5,30 +5,46 @@ import Register from './register'
 import GeneralSettings from './general_settings'
 import VatCategory from './vat_category'
 import Contact from './contact'
-import Users from './users'
+import User from './user'
 import Project from './project'
 import Product from './product'
 import Expense from './expense'
 import Purchase from './purchase'
 import ExpenseReport from './expense_report'
 import TransactionReport from './transaction_report'
+import TaxReport from './tax_report'
 import Imports from './imports'
 import Employee from './employee'
 import InvoiceReport from './invoice_report'
 import Invoice from './invoice'
 import BankAccount from './bank_account'
 import Taxes from './taxes'
-import CreateOrEditInvoice from './create_or_edit_invoice'
-import CreateOrEditExpense from './create_or_edit_expense'
-import CreateOrEditProduct from './create_or_edit_product'
-import CreateOrEditContact from './create_or_edit_contact'
-import CreateOrEditProject from './create_or_edit_project'
-import CreateOrEditUsers from './create_or_edit_users'
-import CreateOrEditPurchase from './create_or_edit_purchase'
-import CreateOrEditBankAccount from './create_or_edit_bank_account'
-import CreateOrEditVatCategory from './create_or_edit_vat_category'
-import CreateOrEditTranactionCategory from './create_or_edit_transaction_category'
 import TransactionCategory from './transaction_category'
+import ProfitAndLoss from './profit_and_loss'
+import BalanceSheet from './balance_sheet'
+import CashFlowPosition from './cash_flow_position'
+
+import CreateInvoice from './create_invoice'
+import CreateExpense from './create_expense'
+import CreateProduct from './create_product'
+import CreateContact from './create_contact'
+import CreateProject from './create_project'
+import CreateUser from './create_user'
+import CreatePurchase from './create_purchase'
+import CreateBankAccount from './create_bank_account'
+import CreateVatCategory from './create_vat_category'
+import CreateTranactionCategory from './create_transaction_category'
+
+import DetailBankAccount from './detail_bank_account'
+import DetailInvoice from './detail_invoice'
+import DetailExpense from './detail_expense'
+import DetailPurchase from './detail_purchase'
+import DetailContact from './detail_contact'
+import DetailProject from './detail_project'
+import DetailProduct from './detail_product'
+import DetailUser from './detail_user'
+import DetailVatCategory from './detail_vat_category'
+import DetailTranactionCategory from './detail_transaction_category'
 
 export {
   LogIn,
@@ -38,28 +54,44 @@ export {
   GeneralSettings,
   VatCategory,
   Contact,
-  Users,
+  User,
   Project,
   Product,
   Expense,
   Purchase,
   ExpenseReport,
   TransactionReport,
+  TaxReport,
   Imports,
   Employee,
   InvoiceReport,
   Invoice,
   BankAccount,
   Taxes,
-  CreateOrEditInvoice,
-  CreateOrEditExpense,
-  CreateOrEditProduct,
-  CreateOrEditContact,
-  CreateOrEditProject,
-  CreateOrEditUsers,
-  CreateOrEditPurchase,
-  CreateOrEditBankAccount,
-  CreateOrEditVatCategory,
-  CreateOrEditTranactionCategory,
-  TransactionCategory
+  ProfitAndLoss,
+  BalanceSheet,
+  CashFlowPosition,
+  TransactionCategory,
+
+  CreateInvoice,
+  CreateExpense,
+  CreateProduct,
+  CreateContact,
+  CreateProject,
+  CreateUser,
+  CreatePurchase,
+  CreateBankAccount,
+  CreateVatCategory,
+  CreateTranactionCategory,
+
+  DetailBankAccount,
+  DetailInvoice,
+  DetailExpense,
+  DetailPurchase,
+  DetailContact,
+  DetailProject,
+  DetailProduct,
+  DetailUser,
+  DetailVatCategory,
+  DetailTranactionCategory
 }

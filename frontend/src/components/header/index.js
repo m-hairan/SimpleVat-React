@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
+import { Link, NavLink } from 'react-router-dom'
 import {
   DropdownItem,
   DropdownMenu,
   DropdownToggle,
   Nav,
-  UncontrolledDropdown
+  NavItem,
+  UncontrolledDropdown,
+  Badge
 } from 'reactstrap'
 import PropTypes from 'prop-types'
 
@@ -16,8 +19,8 @@ import {
 
 import './style.scss'
 
-import logo from 'assets/images/brand/logo.svg'
-import sygnet from 'assets/images/brand/sygnet.svg'
+import logo from 'assets/images/brand/logo.png'
+import sygnet from 'assets/images/brand/sygnet.png'
 import avatar from 'assets/images/avatars/6.jpg'
 
 const propTypes = {
@@ -38,7 +41,7 @@ class Header extends Component {
   }
 
   signOut () {
-    this.props.userActions.logOut()
+    this.props.authActions.logOut()
     this.props.history.push('/login')
   }
 
@@ -49,10 +52,22 @@ class Header extends Component {
       <React.Fragment>
         <AppSidebarToggler className="d-lg-none" display="md" mobile />
         <AppNavbarBrand
-          full={{ src: logo, width: 89, height: 25, alt: 'CoreUI Logo' }}
-          minimized={{ src: sygnet, width: 30, height: 30, alt: 'CoreUI Logo' }}
+          className="p-2"
+          full={{ src: logo, width: '100%', height: 'auto', alt: 'CoreUI Logo' }}
+          minimized={{ src: sygnet, width: '100%', height: 'auto', alt: 'CoreUI Logo' }}
         />
         <AppSidebarToggler className="d-md-down-none" display="lg" />
+        <Nav className="d-md-down-none" navbar>
+          <NavItem className="px-3">
+            <NavLink to="/admin/home" className="nav-link" >Home</NavLink>
+          </NavItem>
+          <NavItem className="px-3">
+            <Link to="/admin/employee" className="nav-link">Employee</Link>
+          </NavItem>
+          <NavItem className="px-3">
+            <NavLink to="/admin/settings" className="nav-link">Settings</NavLink>
+          </NavItem>
+        </Nav>
         <Nav className="ml-auto" navbar>
           <UncontrolledDropdown nav direction="down">
             <DropdownToggle nav>
@@ -65,7 +80,7 @@ class Header extends Component {
             </DropdownMenu>
           </UncontrolledDropdown>
         </Nav>
-        <AppAsideToggler className="d-md-down-none" />
+        {/* <AppAsideToggler className="d-md-down-none" /> */}
       </React.Fragment>
     );
   }

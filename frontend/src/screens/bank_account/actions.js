@@ -6,43 +6,51 @@ import {
 
 export const getBankAccountList = () => {
   return (dispatch) => {
-    let data = {
-      method: 'get',
-      url: '/rest/bank/getbanklist'
-    }
-    return authApi(data).then(res => {
-      // dispatch({
-      //   type: BANK.BANK_ACCOUNT_LIST,
-      //   payload: {
-      //     data: res.data
-      //   }
-      // })
-      dispatch({
-        type: BANK.BANK_ACCOUNT_LIST,
-        payload: {
-          data: [{
-            bankAccountId: 4,
-            bankAccountName: 'temp',
-            accountNumber: 'temp',
-            swiftCode: 'temp',
-            bankAccountStatus: {
-              bankAccountStatusName: 'temp'
-            },
-            openingBalance: 'temp'
-          }, {
-            bankAccountId: 4,
-            bankAccountName: 'temp',
-            accountNumber: 'temp',
-            swiftCode: 'temp',
-            bankAccountStatus: {
-              bankAccountStatusName: 'temp'
-            },
-            openingBalance: 'temp'
-          }]
-        }
-      })
-    }).catch(err => {
-      throw err
+    dispatch({
+      type: BANK.BANK_ACCOUNT_LIST,
+      payload: {
+        data: [{
+          bank_name: 'NBC',
+          country: 'US',
+          account_name: 'TTC',
+          account_number: 'DGLE23042322340',
+          IBAN_number: 'TYE234254343',
+          currency: 234204924,
+          account_type: 'Credit Card',
+          swift_code: 'UYR239239',
+          opening_balance: 234293
+        }, {
+          bank_name: 'NBC',
+          country: 'US',
+          account_name: 'TTC',
+          account_number: 'DGLE2304230293',
+          IBAN_number: 'TYE234254343',
+          currency: 234204924,
+          account_type: 'Credit Card',
+          swift_code: 'UYR239239',
+          opening_balance: 234293
+        }, {
+          bank_name: 'NBC',
+          country: 'US',
+          account_name: 'TTC',
+          account_number: 'DGLE23042904',
+          IBAN_number: 'TYE234254343',
+          currency: 234204924,
+          account_type: 'Credit Card',
+          swift_code: 'UYR239239',
+          opening_balance: 234293
+        }, {
+          bank_name: 'NBC',
+          country: 'US',
+          account_name: 'TTC',
+          account_number: 'DGLE230423218',
+          IBAN_number: 'TYE234254343',
+          currency: 234204924,
+          account_type: 'Credit Card',
+          swift_code: 'UYR239239',
+          opening_balance: 234293
+        }]
+      }
     })
   }
 }
@@ -58,6 +66,48 @@ export const deleteBankAccount = (_id) => {
       return res
     }).catch(err => {
       throw err
+    })
+  }
+}
+
+
+export const getBankStatementList = () => {
+  return (dispatch) => {
+    dispatch({
+      type: BANK.BANK_STATEMENT_LIST,
+      payload: {
+        data: [{
+          transaction_type: 'Debit',
+          amount: 3453246,
+          reference_number: 'KDF3920342',
+          description: 'This is description',
+          transaction_date: 'Oct 28th, 2019'
+        }, {
+          transaction_type: 'Debit',
+          amount: 3453246,
+          reference_number: 'KDF3929865',
+          description: 'This is description',
+          transaction_date: 'Oct 28th, 2019'
+        }, {
+          transaction_type: 'Debit',
+          amount: 3453246,
+          reference_number: 'KDF39206574',
+          description: 'This is description',
+          transaction_date: 'Oct 28th, 2019'
+        }, {
+          transaction_type: 'Debit',
+          amount: 3453246,
+          reference_number: 'KDF392394',
+          description: 'This is description',
+          transaction_date: 'Oct 28th, 2019'
+        }, {
+          transaction_type: 'Debit',
+          amount: 3453246,
+          reference_number: 'KDF3920923',
+          description: 'This is description',
+          transaction_date: 'Oct 28th, 2019'
+        }]
+      }
     })
   }
 }

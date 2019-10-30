@@ -19,7 +19,7 @@ import {
 
 import { adminRoutes } from 'routes'
 import {
-  UserActions,
+  AuthActions,
   CommonActions
 } from 'services/global'
 
@@ -42,7 +42,7 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch) => {
   return ({
-    userActions: bindActionCreators(UserActions, dispatch),
+    authActions: bindActionCreators(AuthActions, dispatch),
     commonActions: bindActionCreators(CommonActions, dispatch)
   })
 }
@@ -59,8 +59,8 @@ class AdminLayout extends React.Component {
     if (!window.localStorage.getItem('accessToken')) {
       this.props.history.push('/login')
     } else {
-      this.props.userActions.checkAuthStatus().catch(err => {
-        this.props.userActions.logOut()
+      this.props.authActions.checkAuthStatus().catch(err => {
+        this.props.authActions.logOut()
         this.props.history.push('/login')
       })
     }
@@ -108,7 +108,7 @@ class AdminLayout extends React.Component {
                 </Suspense>
               </Container>
             </main>
-            <AppAside fixed>
+            <AppAside>
               <Suspense fallback={Loading()}>
                 <Aside />
               </Suspense>

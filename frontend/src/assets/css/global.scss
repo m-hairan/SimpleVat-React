@@ -1,5 +1,22 @@
 
-body, span, label, h1, h2, h3, h4, p, em { font-family: Montserrat, serif;}
+body, span, label, h1, h2, h3, h4, p, em {
+  font-family: Montserrat, serif;
+}
+
+
+.form-control {
+  border-radius: 0 !important;
+}
+
+.input-group-text {
+  border-radius: 0 !important;
+}
+
+.btn-group {
+  .btn {
+    border-radius: 0 !important;
+  }
+}
 
 .card {
   border-radius: 0 !important;
@@ -47,6 +64,15 @@ body, span, label, h1, h2, h3, h4, p, em { font-family: Montserrat, serif;}
       border-bottom-width: 1px !important;
     }
   }
+  .react-bs-table-tool-bar {
+    .btn {
+      border-radius: 0 !important;
+      color: #ffffff !important;
+      padding: 0.375rem 0.75rem !important;
+      font-size: 0.875rem !important;
+      line-height: 1.5 !important;
+    }
+  }
   .react-bs-table-pagination {
     .btn.dropdown-toggle {
       border-radius: 0 !important;
@@ -56,4 +82,34 @@ body, span, label, h1, h2, h3, h4, p, em { font-family: Montserrat, serif;}
     }
   }
 }
+
+
+.modal-dialog {
+  border-radius: 0 !important;
+  .modal-content {
+    border-radius: 0 !important;
+    .modal-header {
+      border-radius: 0 !important;
+      button.close {
+        display: none;
+        span {
+          color: #ffffff;
+        }
+      }
+    }
+    .modal-body {
+      border-radius: 0 !important;
+    }
+    .modal-footer {
+      border-radius: 0 !important;
+    }
+  }
+}
+
+
+
+.Select-control {
+  border-radius: 0px !important;
+}
+
 

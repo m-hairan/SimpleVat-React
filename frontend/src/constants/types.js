@@ -3,7 +3,7 @@ export const COMMON = {
   END_LOADING: 'END_LOADING'
 }
 
-export const USER = {
+export const AUTH = {
   SIGNED_IN: 'SIGNED_IN',
   SIGNED_OUT: 'SIGNED_OUT'
 }
@@ -34,7 +34,8 @@ export const HOME = {
 }
 
 export const BANK = {
-  BANK_ACCOUNT_LIST: 'BANK_ACCOUNT_LIST'
+  BANK_ACCOUNT_LIST: 'BANK_ACCOUNT_LIST',
+  BANK_STATEMENT_LIST: 'BANK_STATEMENT_LIST'
 }
 
 export const EMPLOYEE = {
@@ -94,7 +95,7 @@ export const TRANSACTION = {
   TRANSACTION_PARENT_CATRGORY_CODE_LIST: 'TRANSACTION_PARENT_CATEGORY_CODE_LIST'
 }
 
-export const USERS = {
+export const USER = {
 
 }
 

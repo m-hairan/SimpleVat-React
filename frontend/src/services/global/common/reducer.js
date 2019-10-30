@@ -20,7 +20,7 @@ const CommonReducer = (state = initState, action) => {
         ...state,
         is_loading: false,
       }
-
+    
     default:
         return state
   }
