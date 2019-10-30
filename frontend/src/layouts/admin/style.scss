@@ -22,6 +22,9 @@
   .app-footer {
     border-top: none;
     background: #ffffff;
+    .footer-logo {
+      max-width: 100px;
+    }
   }
 
   .aside-menu {
