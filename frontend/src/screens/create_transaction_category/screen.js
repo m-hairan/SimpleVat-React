@@ -481,7 +481,7 @@ class CreateTranactionCategory extends React.Component {
                           <i className="fa fa-dot-circle-o"></i> {this.id ? "Update" : "Save"}
                         </Button>
                         <Button type="submit" color="primary" className="btn-square mr-3">
-                          <i className="fa fa-refresh"></i> Create and More
+                          <i className="fa fa-refresh"></i> Save and More
                         </Button>
                         <Button type="submit" color="secondary" className="btn-square" 
                           onClick={() => {this.props.history.push("/admin/settings/transaction-category")}}>

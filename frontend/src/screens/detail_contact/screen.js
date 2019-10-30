@@ -13,7 +13,7 @@ const mapDispatchToProps = (dispatch) => {
   })
 }
 
-class Users extends React.Component {
+class DetailContact extends React.Component {
   
   constructor(props) {
     super(props)
@@ -26,11 +26,11 @@ class Users extends React.Component {
   render() {
 
     return (
-      <div className="users-screen">
-        <h1>Users Screen</h1>
+      <div className="detail-contact-screen">
+        <h1>DetailContact Screen</h1>
       </div>
     )
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Users)
+export default connect(mapStateToProps, mapDispatchToProps)(DetailContact)

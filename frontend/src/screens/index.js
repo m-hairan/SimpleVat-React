@@ -5,7 +5,7 @@ import Register from './register'
 import GeneralSettings from './general_settings'
 import VatCategory from './vat_category'
 import Contact from './contact'
-import Users from './users'
+import User from './user'
 import Project from './project'
 import Product from './product'
 import Expense from './expense'
@@ -29,13 +29,20 @@ import CreateExpense from './create_expense'
 import CreateProduct from './create_product'
 import CreateContact from './create_contact'
 import CreateProject from './create_project'
-import CreateUsers from './create_users'
+import CreateUser from './create_user'
 import CreatePurchase from './create_purchase'
 import CreateBankAccount from './create_bank_account'
 import CreateVatCategory from './create_vat_category'
 import CreateTranactionCategory from './create_transaction_category'
 
 import DetailBankAccount from './detail_bank_account'
+import DetailInvoice from './detail_invoice'
+import DetailExpense from './detail_expense'
+import DetailPurchase from './detail_purchase'
+import DetailContact from './detail_contact'
+import DetailProject from './detail_project'
+import DetailProduct from './detail_product'
+import DetailUser from './detail_user'
 import DetailVatCategory from './detail_vat_category'
 import DetailTranactionCategory from './detail_transaction_category'
 
@@ -47,7 +54,7 @@ export {
   GeneralSettings,
   VatCategory,
   Contact,
-  Users,
+  User,
   Project,
   Product,
   Expense,
@@ -71,13 +78,20 @@ export {
   CreateProduct,
   CreateContact,
   CreateProject,
-  CreateUsers,
+  CreateUser,
   CreatePurchase,
   CreateBankAccount,
   CreateVatCategory,
   CreateTranactionCategory,
 
   DetailBankAccount,
+  DetailInvoice,
+  DetailExpense,
+  DetailPurchase,
+  DetailContact,
+  DetailProject,
+  DetailProduct,
+  DetailUser,
   DetailVatCategory,
   DetailTranactionCategory
 }

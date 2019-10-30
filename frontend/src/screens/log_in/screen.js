@@ -22,7 +22,7 @@ import {
 } from 'components'
 
 import {
-  UserActions
+  AuthActions
 } from 'services/global'
 
 import './style.scss'
@@ -33,7 +33,7 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch) => {
   return ({
-    userActions: bindActionCreators(UserActions, dispatch)
+    authActions: bindActionCreators(AuthActions, dispatch)
   })
 }
 
@@ -64,7 +64,7 @@ class LogIn extends React.Component {
       username,
       password
     }
-    this.props.userActions.logIn(obj).then(res => {
+    this.props.authActions.logIn(obj).then(res => {
       this.setState({
         alert: null
       })

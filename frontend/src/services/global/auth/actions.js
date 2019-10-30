@@ -1,4 +1,4 @@
-import { USER } from 'constants/types'
+import { AUTH } from 'constants/types'
 import {
   api,
   authApi
@@ -12,7 +12,7 @@ export const checkAuthStatus = () => {
     }
     return authApi(data).then(res => {
       dispatch({
-        type: USER.SIGNED_IN
+        type: AUTH.SIGNED_IN
       })
     }).catch(err => {
       throw err
@@ -29,7 +29,7 @@ export const logIn = (obj) => {
     }
     return api(data).then(res => {
       dispatch({
-        type: USER.SIGNED_IN
+        type: AUTH.SIGNED_IN
       })
       window.localStorage.setItem('accessToken', res.data.token)
       return res
@@ -43,7 +43,7 @@ export const logOut = () => {
   return (dispatch) => {
     window.localStorage.removeItem('accessToken')
     dispatch({
-      type: USER.SIGNED_OUT
+      type: AUTH.SIGNED_OUT
     })
   }
 }

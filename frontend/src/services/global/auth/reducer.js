@@ -1,21 +1,21 @@
-import { USER } from 'constants/types'
+import { AUTH } from 'constants/types'
 
 const initState = {
   is_authed: false
 }
 
-const UserReducer = (state = initState, action) => {
+const AuthReducer = (state = initState, action) => {
   const { type, payload} = action
   
   switch(type){
 
-    case USER.SIGNED_IN:
+    case AUTH.SIGNED_IN:
       return {
         ...state,
         is_authed: true
       }
 
-    case USER.SIGNED_OUT:
+    case AUTH.SIGNED_OUT:
       return {
         ...state,
         is_authed: false
@@ -26,4 +26,4 @@ const UserReducer = (state = initState, action) => {
   }
 }
 
-export default UserReducer
+export default AuthReducer

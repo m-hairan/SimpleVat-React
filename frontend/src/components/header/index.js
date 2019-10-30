@@ -41,7 +41,7 @@ class Header extends Component {
   }
 
   signOut () {
-    this.props.userActions.logOut()
+    this.props.authActions.logOut()
     this.props.history.push('/login')
   }
 
