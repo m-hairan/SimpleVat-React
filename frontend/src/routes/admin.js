@@ -3,7 +3,7 @@ import {
   GeneralSettings,
   VatCategory,
   Contact,
-  Users,
+  User,
   Project,
   Product,
   Expense,
@@ -27,13 +27,20 @@ import {
   CreateProduct,
   CreateContact,
   CreateProject,
-  CreateUsers,
+  CreateUser,
   CreatePurchase,
   CreateBankAccount,
   CreateVatCategory,
   CreateTranactionCategory,
 
   DetailBankAccount,
+  DetailInvoice,
+  DetailExpense,
+  DetailPurchase,
+  DetailContact,
+  DetailProject,
+  DetailProduct,
+  DetailUser,
   DetailVatCategory,
   DetailTranactionCategory
 } from 'screens'
@@ -48,6 +55,11 @@ const adminRoutes = [
     path: '/admin/invoice/create',
     name: 'Create',
     component: CreateInvoice.screen
+  },
+  {
+    path: '/admin/invoice/detail',
+    name: 'Detail',
+    component: DetailInvoice.screen
   },
   {
     path: '/admin/invoice',
@@ -131,6 +143,11 @@ const adminRoutes = [
     component: CreateExpense.screen
   },
   {
+    path: '/admin/expense/expense/detail',
+    name: 'Detail',
+    component: DetailExpense.screen
+  },
+  {
     path: '/admin/expense/expense',
     name: 'Expense', 
     component: Expense.screen
@@ -139,6 +156,11 @@ const adminRoutes = [
     path: '/admin/expense/purchase/create',
     name: 'Create',
     component: CreatePurchase.screen
+  },
+  {
+    path: '/admin/expense/purchase/detail',
+    name: 'Detail',
+    component: DetailPurchase.screen
   },
   {
     path: '/admin/expense/purchase',
@@ -157,6 +179,11 @@ const adminRoutes = [
     component: CreateContact.screen
   },
   {
+    path: '/admin/master/contact/detail',
+    name: 'Detail',
+    component: DetailContact.screen
+  },
+  {
     path: '/admin/master/contact',
     name: 'Contact',
     component: Contact.screen
@@ -165,6 +192,11 @@ const adminRoutes = [
     path: '/admin/master/project/create',
     name: 'Create',
     component: CreateProject.screen
+  },
+  {
+    path: '/admin/master/project/detail',
+    name: 'Detail',
+    component: DetailProject.screen
   },
   {
     path: '/admin/master/project',
@@ -177,19 +209,29 @@ const adminRoutes = [
     component: CreateProduct.screen
   },
   {
+    path: '/admin/master/product/detail',
+    name: 'Detail',
+    component: DetailProduct.screen
+  },
+  {
     path: '/admin/master/product',
     name: 'Product',
     component: Product.screen
   },
   {
-    path: '/admin/master/users/create',
+    path: '/admin/master/user/create',
     name: 'Create',
-    component: CreateUsers.screen
+    component: CreateUser.screen
   },
   {
-    path: '/admin/master/users',
-    name: 'Users',
-    component: Users.screen
+    path: '/admin/master/user/detail',
+    name: 'Detail',
+    component: DetailUser.screen
+  },
+  {
+    path: '/admin/master/user',
+    name: 'User',
+    component: User.screen
   },
   {
     redirect: true,

@@ -105,8 +105,8 @@ export default {
           icon: 'fas fa-id-card-alt',
         },
         {
-          name: 'Users',
-          url: '/admin/master/users',
+          name: 'User',
+          url: '/admin/master/user',
           icon: 'icon-graph',
         },
       ],

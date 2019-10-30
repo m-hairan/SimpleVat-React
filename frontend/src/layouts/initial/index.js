@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 
 import { initialRoutes } from 'routes'
 import {
-  UserActions,
+  AuthActions,
   CommonActions
 } from 'services/global'
 
@@ -16,7 +16,7 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch) => {
   return ({
-    userActions: bindActionCreators(UserActions, dispatch),
+    authActions: bindActionCreators(AuthActions, dispatch),
     commonActions: bindActionCreators(CommonActions, dispatch)
   })
 }

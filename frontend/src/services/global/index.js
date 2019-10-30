@@ -1,13 +1,13 @@
-import UserReducer from './user/reducer'
+import AuthReducer from './auth/reducer'
 import CommonReducer from './common/reducer'
 
-import * as UserActions from './user/actions'
+import * as AuthActions from './auth/actions'
 import * as CommonActions from './common/actions'
 
 export {
-  UserReducer,
+  AuthReducer,
   CommonReducer,
 
-  UserActions,
+  AuthActions,
   CommonActions
 }

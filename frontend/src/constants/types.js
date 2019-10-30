@@ -3,7 +3,7 @@ export const COMMON = {
   END_LOADING: 'END_LOADING'
 }
 
-export const USER = {
+export const AUTH = {
   SIGNED_IN: 'SIGNED_IN',
   SIGNED_OUT: 'SIGNED_OUT'
 }
@@ -95,7 +95,7 @@ export const TRANSACTION = {
   TRANSACTION_PARENT_CATRGORY_CODE_LIST: 'TRANSACTION_PARENT_CATEGORY_CODE_LIST'
 }
 
-export const USERS = {
+export const USER = {
 
 }
 

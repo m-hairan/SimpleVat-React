@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 
 import {
-  UserReducer,
+  AuthReducer,
   CommonReducer
 } from './global'
 
@@ -19,14 +19,14 @@ import {
   Purchase,
   Taxes,
   TransactionCategory,
-  Users,
+  User,
   VatCategory
 } from 'screens'
 
 
 const reducer = combineReducers({
   common: CommonReducer,
-  user: UserReducer,
+  auth: AuthReducer,
 
   home: Home.reducer,
   bank: BankAccount.reducer,
@@ -41,7 +41,7 @@ const reducer = combineReducers({
   purchase: Purchase.reducer,
   taxes: Taxes.reducer,
   transaction: TransactionCategory.reducer,
-  users: Users.reducer,
+  user: User.reducer,
   vat: VatCategory.reducer
 })
 
