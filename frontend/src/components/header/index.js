@@ -79,6 +79,9 @@ class Header extends Component {
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
+          <NavItem className="px-3">
+            <NavLink to="/admin/settings" className="nav-link">Settings</NavLink>
+          </NavItem>
         </Nav>
         {/* <AppAsideToggler className="d-md-down-none" /> */}
       </React.Fragment>

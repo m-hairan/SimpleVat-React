@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import './style.scss'
+
+import logo from 'assets/images/brand/logo.png'
 
 const propTypes = {
   children: PropTypes.node
@@ -17,8 +20,10 @@ class Footer extends Component {
 
     return (
       <React.Fragment>
-        <span><a href="https://coreui.io">CoreUI</a> &copy; 2019 creativeLabs.</span>
-        <span className="ml-auto">Powered by <a href="https://coreui.io/react">CoreUI for React</a></span>
+        <div className="d-flex align-items-center justify-content-between w-100">
+          <img src={logo} className="m-2 footer-logo" />
+          <span><Link to="/admin">Simple Vat</Link> &copy; 2019 All Rights Reserved.</span>
+        </div>
       </React.Fragment>
     );
   }
