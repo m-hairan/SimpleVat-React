@@ -49,7 +49,7 @@ class TransactionCategory extends React.Component {
     this.customTotal = this.customTotal.bind(this)
     this.getTransactionType = this.getTransactionType.bind(this)
     this.getparentTransactionCategory = this.getparentTransactionCategory.bind(this)
-    this.actions = this.actions.bind(this)
+    this.getCategoryName = this.getCategoryName.bind(this)
   }
 
   // Table Custom Search Field
@@ -82,32 +82,14 @@ class TransactionCategory extends React.Component {
     return(row.parentTransactionCategory.transactionCategoryDescription)
   }
 
-  actions(cell, row) {
+  getCategoryName(cell, row) {
     return (
-      <div className="table-action text-right">
-        <Button
-          color="primary"
-          className="btn-pill actions ml-1"
-          title="Edit Transaction Category"
-          onClick={() =>
-            this.props.history.push(`/admin/settings/transaction-category/create?id=${row.transactionCategoryId}`)
-          }
-        >
-          <i className="far fa-edit"></i>
-        </Button>
-        <Button
-          color="primary"
-          className="btn-pill actions ml-1"
-          title="Delete Transaction Ctegory"
-          onClick={() =>
-            this.setState({ selectedData: row }, () =>
-              this.setState({ openDeleteModal: true })
-            )
-          }
-        >
-          <i className="fas fa-trash-alt"></i>
-        </Button>
-      </div>
+      <label
+        className="text-primary my-link mb-0"
+        onClick={() => this.props.history.push('/admin/settings/transaction-category/detail')}
+      >
+        { row.transactionCategoryName }
+      </label>
     )
   }
 
@@ -248,7 +230,7 @@ class TransactionCategory extends React.Component {
                           <TableHeaderColumn isKey dataField="transactionCategoryCode">
                             Category Code
                           </TableHeaderColumn>
-                          <TableHeaderColumn dataField="transactionCategoryName">
+                          <TableHeaderColumn dataFormat={this.getCategoryName}>
                             Category Name
                           </TableHeaderColumn>
                           <TableHeaderColumn dataField="transactionCategoryDescription">

@@ -60,47 +60,11 @@ class CreateTranactionCategory extends React.Component {
     this.onParentChange = this.onParentChange.bind(this)
     this.onParentSuggestionsFetchRequested = this.onParentSuggestionsFetchRequested.bind(this)
     this.onParentSuggestionsClearRequested = this.onParentSuggestionsClearRequested.bind(this)
-
-    this.id = new URLSearchParams(props.location.search).get('id')
   }
 
   componentDidMount() {
     this.getTransactionTypes()
     this.getTransactionVatCategories()
-    
-    if (this.id) {
-      this.setState({ loading: true })
-      this.setState({ loading: true })
-      this.props.transactionActions.getTransactionByID(this.id).then(res => {
-        if (res.status === 200){
-          const {
-            transactionCategoryId,
-            transactionCategoryName,
-            transactionCategoryCode,
-            transactionCategoryDescription,
-            parentTransactionCategory,
-            defaltFlag,
-            transactionType
-          } = res.data
-
-          this.setState({
-            loading: false,
-            transactionData: {
-              transactionCategoryId,
-              categoryName: transactionCategoryName,
-              categoryCode: transactionCategoryCode,
-              defaltFlag,
-              categoryDiscription: transactionCategoryDescription,
-              transactionTypeCode: transactionType.transactionTypeCode,
-              parentTransactionCategory: parentTransactionCategory.transactionCategoryName,
-              transactionTypeName: transactionType.transactionTypeName
-            },
-            selectedParentCategory: parentTransactionCategory,
-            selectedTransactionCategory: transactionType
-          })
-        }
-      })
-    }
   }
 
 
@@ -267,7 +231,7 @@ class CreateTranactionCategory extends React.Component {
     const { selectedParentCategory } = this.state
 
     let postObj = {
-      transactionCategoryId: this.id ? this.id : '0',
+      transactionCategoryId: '0',
       transactionCategoryName: categoryName,
       transactionCategoryCode: categoryCode,
       defaltFlag: defaltFlag,
@@ -334,7 +298,7 @@ class CreateTranactionCategory extends React.Component {
                 <CardHeader>
                   <div className="h4 mb-0 d-flex align-items-center">
                     <i className="nav-icon icon-graph" />
-                    <span className="ml-2">{this.id ? "Edit Vat Category" : "New Transaction Category"}</span>
+                    <span className="ml-2">New Transaction Category</span>
                   </div>
                 </CardHeader>
                 <CardBody>
@@ -478,10 +442,10 @@ class CreateTranactionCategory extends React.Component {
                         )}
                       <FormGroup className="text-right">
                         <Button type="submit" color="primary" className="btn-square mr-3">
-                          <i className="fa fa-dot-circle-o"></i> {this.id ? "Update" : "Save"}
+                          <i className="fa fa-dot-circle-o"></i> Create
                         </Button>
                         <Button type="submit" color="primary" className="btn-square mr-3">
-                          <i className="fa fa-refresh"></i> Save and More
+                          <i className="fa fa-refresh"></i> Create and More
                         </Button>
                         <Button type="submit" color="secondary" className="btn-square" 
                           onClick={() => {this.props.history.push("/admin/settings/transaction-category")}}>
