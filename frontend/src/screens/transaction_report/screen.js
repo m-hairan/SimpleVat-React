@@ -12,7 +12,7 @@ import {
   Label,
   Form,
   Table 
-} from "reactstrap"
+} from 'reactstrap'
 
 import _ from "lodash"
 import Select from 'react-select'

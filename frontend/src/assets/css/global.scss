@@ -3,7 +3,6 @@ body, span, label, h1, h2, h3, h4, p, em {
   font-family: Montserrat, serif;
 }
 
-
 .form-control {
   border-radius: 0 !important;
 }
@@ -26,6 +25,7 @@ body, span, label, h1, h2, h3, h4, p, em {
 }
 
 .card-header {
+  background-color: #ffffff !important;
   border-radius: 0 !important;
 }
 
@@ -48,6 +48,9 @@ body, span, label, h1, h2, h3, h4, p, em {
   border-radius: 0 !important;
 }
 
+.tab-card {
+  background: #ffffff !important;
+}
 .tab-content {
   border-radius: 0 !important;
 }
@@ -105,6 +108,13 @@ body, span, label, h1, h2, h3, h4, p, em {
 
 
 .Select-control {
+  border-radius: 0px !important;
+}
+.Select-menu-outer {
+  border-radius: 0px !important;
+}
+
+.react-autosuggest__input {
   border-radius: 0px !important;
 }
 

@@ -104,7 +104,7 @@ class UsersRoles extends React.Component {
             <CardHeader>
               <div className="h4 mb-0 d-flex align-items-center">
                 <i className="nav-icon fas fa-users" />
-                <span className="ml-2">User Management</span>
+                <span className="ml-2">Users & Roles</span>
               </div>
             </CardHeader>
             <CardBody>

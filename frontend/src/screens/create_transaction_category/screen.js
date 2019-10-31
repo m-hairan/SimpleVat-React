@@ -3,9 +3,10 @@ import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Card, CardHeader, CardBody, Button, Input, Form, FormGroup, Label, Row, Col } from 'reactstrap'
 import { toast } from 'react-toastify'
-import Autosuggest from "react-autosuggest"
-import _ from "lodash"
-import Loader from "components/loader"
+import Select from 'react-select'
+import Autosuggest from 'react-autosuggest'
+import _ from 'lodash'
+import Loader from 'components/loader'
 
 import 'react-toastify/dist/ReactToastify.css'
 import './style.scss'
@@ -343,6 +344,7 @@ class CreateTranactionCategory extends React.Component {
                           rows="5"
                         />
                       </FormGroup>
+                      <hr />
                       <FormGroup>
                         <div className="d-flex">
                           <Label>Default Flag</Label>
@@ -381,23 +383,14 @@ class CreateTranactionCategory extends React.Component {
                         <Label htmlFor="selectCategoryCode">
                           Vat Category Code
                         </Label>
-                        <Input
-                          type="select"
-                          name="selectVatCategoryCode"
-                          defaultValue={transactionTypeName}
+                        <Select
                           id="selectCategoryCode"
-                          onChange={this.handleChange}
-                          required
-                        >
-                          {this.state.vatCategoryList.map((item, index) => (
-                            <option key={index} value={item.id}>
-                              {item.name}
-                            </option>
-                          ))}
-                        </Input>
+                          name="selectCategoryCode"
+                          options={null}
+                        />
                       </FormGroup>
                         
-                      <FormGroup>
+                      <FormGroup className="auto-suggestion-form-group">
                         <Label htmlFor="selectTransactionType">
                           Transaction Type
                         </Label>
@@ -418,7 +411,7 @@ class CreateTranactionCategory extends React.Component {
                       </FormGroup>
                         
                       {selectedTransactionCategory ? ( 
-                        <FormGroup>
+                        <FormGroup className="auto-suggestion-form-group">
                           <Label htmlFor="selectTransactionType">
                             Parent Transaction Type
                           </Label>
