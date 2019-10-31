@@ -57,15 +57,7 @@ class BankAccountList extends React.Component {
   }
 
   componentDidMount () {
-    if (this.props.is_authed === true) {
-      this.initializeData()
-    }
-  }
-
-  componentWillReceiveProps (newProps) {
-    if (newProps.is_authed !== this.props.is_authed && newProps.is_authed === true) {
-      this.initializeData()
-    }
+    this.initializeData()
   }
 
   initializeData () {

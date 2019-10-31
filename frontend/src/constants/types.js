@@ -59,7 +59,7 @@ export const IMPORTS = {
 }
 
 export const INVOICE = {
-
+  INVOICE_LIST: 'INVOICE_LIST'
 }
 
 export const PRODUCT = {

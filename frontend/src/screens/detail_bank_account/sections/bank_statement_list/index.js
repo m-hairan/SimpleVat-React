@@ -14,8 +14,11 @@ import {
   ButtonGroup,
   Form,
   FormGroup,
-  Input
+  Input,
+  Label,
+
 } from 'reactstrap'
+import Select from 'react-select'
 import { ToastContainer, toast } from 'react-toastify'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
 
@@ -33,6 +36,11 @@ class BankStatementList extends React.Component {
     this.state = {
       loading: false,
       openDeleteModal: false,
+      stateOptions: [
+        { value: 'Explained', label: 'Explained' },
+        { value: 'Unexplained', label: 'Unexplained' },
+        { value: 'Partially Explained', label: 'Partially Explained' },
+      ],
 
       selectedData: null
     }
@@ -51,21 +59,14 @@ class BankStatementList extends React.Component {
 
     this.toggleDangerModal = this.toggleDangerModal.bind(this)
     this.renderTransactionType = this.renderTransactionType.bind(this)
+    this.renderTransactionStatus = this.renderTransactionStatus.bind(this)
     this.onRowSelect = this.onRowSelect.bind(this)
     this.onSelectAll = this.onSelectAll.bind(this)
 
   }
 
   componentDidMount () {
-    if (this.props.is_authed === true) {
-      this.initializeData()
-    }
-  }
-
-  componentWillReceiveProps (newProps) {
-    if (newProps.is_authed !== this.props.is_authed && newProps.is_authed === true) {
-      this.initializeData()
-    }
+    this.initializeData()
   }
 
   initializeData () {
@@ -76,6 +77,12 @@ class BankStatementList extends React.Component {
     this.setState({
       openDeleteModal: !this.state.openDeleteModal
     })
+  }
+
+  renderTransactionStatus (cell, row) {
+    return (
+      <span className="badge badge-success mb-0">Explained</span>
+    )
   }
 
   renderTransactionType (cell, row) {
@@ -107,10 +114,28 @@ class BankStatementList extends React.Component {
             <CardHeader>
               <Row>
                 <Col lg={12}>
-                  <div className="d-flex align-items-center justify-content-between">
-                    <div className="h4 mb-0 d-flex align-items-center">
-                      <i className="icon-doc" />
-                      <span className="ml-2">Bank Statements</span>
+                  <div className="d-flex flex-wrap align-items-start justify-content-between">
+                    <div>
+                      <div className="h4 card-title d-flex align-items-center">
+                        <i className="icon-doc" />
+                        <span className="ml-2">Bank Statements</span>
+                      </div>
+                    </div>
+                    <div className="filter-box p-2">
+                      <Form onSubmit={this.handleSubmit} name="simpleForm">
+                        <div className="flex-wrap d-flex"> 
+                          <FormGroup>
+                            <Label htmlFor="name">Status:</Label>
+                            <div className="status-option">
+                              <Select
+                                options={this.state.stateOptions}
+                                value={this.state.status}
+                                onChange={this.changeStatus}
+                              />
+                            </div>
+                          </FormGroup>
+                        </div>
+                      </Form>
                     </div>
                   </div>
                 </Col>
@@ -192,6 +217,10 @@ class BankStatementList extends React.Component {
                           totalSize={bank_statement_list ? bank_statement_list.length : 0}
                           className="bank-statement-table"
                         >
+                          <TableHeaderColumn
+                            dataFormat={this.renderTransactionStatus}
+                          >
+                          </TableHeaderColumn>
                           <TableHeaderColumn
                             isKey
                             dataField="reference_number"

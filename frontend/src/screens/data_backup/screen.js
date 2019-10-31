@@ -56,7 +56,7 @@ class DataBackup extends React.Component {
                 <Row>
                   <Col lg='12' className="mx-auto">
                     <p>Backup entire data and download emails</p>
-                    <Button color='danger'>Backup Your Data</Button>
+                    <Button color='danger' className="btn-square">Backup Your Data</Button>
                     <div className="mt-5">
                       <h4>Backup History</h4>
                       <Table responsive>
