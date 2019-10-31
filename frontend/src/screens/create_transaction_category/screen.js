@@ -293,7 +293,7 @@ class CreateTranactionCategory extends React.Component {
       <div className="create-transaction-category-screen">
         <div className="animated">
           <Row>
-            <Col lg={7} className="mx-auto">
+            <Col lg={6} className="mx-auto">
               <Card>
                 <CardHeader>
                   <div className="h4 mb-0 d-flex align-items-center">
