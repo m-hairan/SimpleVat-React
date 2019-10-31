@@ -43,13 +43,11 @@ class VatCategory extends React.Component {
     }
 
     this.deleteVat = this.deleteVat.bind(this)
+    this.getVatName = this.getVatName.bind(this)
     this.customSearchField = this.customSearchField.bind(this)
     this.success = this.success.bind(this)
     this.customTotal = this.customTotal.bind(this)
     this.vatPercentageFormat = this.vatPercentageFormat.bind(this)
-    this.vatCreatedDateFormat = this.vatCreatedDateFormat.bind(this)
-    this.versionNumFormat = this.versionNumFormat.bind(this)
-    this.actions = this.actions.bind(this)
 
     this.closeModal = this.closeModal.bind(this)
   }
@@ -80,32 +78,14 @@ class VatCategory extends React.Component {
     return(`${row.vat} %`)
   }
 
-  vatCreatedDateFormat(cell, row) {
-    return(`${moment(new Date(row.createdDate)).format('lll')}`)
-  } 
-
-  versionNumFormat(cell, row){
-    return(<span className="badge badge-lg badge-info">{row.versionNumber}</span>)
-  }
-
-  actions(cell, row) {
+  getVatName(cell, row) {
     return (
-      <div className="table-action text-right">
-          <Button
-            color="primary" 
-            className="btn-pill vat-actions ml-1"
-            title="Edit Vat Category" 
-            onClick={() => this.props.history.push(`/admin/settings/vat-category/create?id=${row.id}`)}>
-              <i className="far fa-edit"></i>
-          </Button>
-          <Button 
-            color="primary" 
-            className="btn-pill vat-actions ml-1" 
-            title="Delete Vat Ctegory" 
-            onClick={() => this.setState({ selectedData: row }, () => this.setState({ openDeleteModal: true }))}>
-              <i className="fas fa-trash-alt"></i>
-          </Button>
-      </div>
+      <label
+        className="text-primary my-link mb-0"
+        onClick={() => this.props.history.push('/admin/settings/vat-category/detail')}
+      >
+        { row.name }
+      </label>
     )
   }
 
@@ -231,13 +211,12 @@ class VatCategory extends React.Component {
                           search={true}
                           selectRow={ this.selectRowProp }
                         >
-                          <TableHeaderColumn isKey dataField="name">
+                          <TableHeaderColumn isKey dataField="name" dataFormat={this.getVatName}>
                             Vat Name
                           </TableHeaderColumn>
                           <TableHeaderColumn dataField="vat" dataFormat={this.vatPercentageFormat}>
                             Vat Percentage
                           </TableHeaderColumn>
-                          
                         </BootstrapTable>
                       </Col>
                     </Row>
