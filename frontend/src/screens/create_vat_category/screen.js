@@ -36,21 +36,9 @@ class CreateVatCategory extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.success = this.success.bind(this)
-
-    this.id = new URLSearchParams(props.location.search).get('id')
   }
 
   componentDidMount() {
-    if (this.id) {
-      this.setState({ loading: true });
-      this.props.vatActions.getVatByID(this.id).then(res => {
-        if (res.status === 200)
-          this.setState({ 
-            loading: false,
-            vatData: res.data
-          })
-      })
-    }
   }
 
   // Save Updated Field's Value to State
@@ -76,15 +64,9 @@ class CreateVatCategory extends React.Component {
     e.preventDefault()
 
     this.setState({ loading: true })
-    const { name, vat, id } = this.state.vatData
+    const { name, vat } = this.state.vatData
 
-    let postObj
-
-    if (id) {
-      postObj = { ...this.state.vatData }
-    } else {
-      postObj = { name, vat }
-    }
+    let postObj = { name, vat }
 
     this.props.vatActions.createBat(postObj).then(res => {
       if (res.status === 200) {
@@ -103,12 +85,12 @@ class CreateVatCategory extends React.Component {
       <div className="vat-category-create-screen">
         <div className="animated">
           <Row>
-            <Col lg={7} className="mx-auto">
+            <Col lg={6} className="mx-auto">
               <Card>
                 <CardHeader>
                   <div className="h4 mb-0 d-flex align-items-center">
                     <i className="nav-icon icon-briefcase" />
-                    <span className="ml-2">{this.id ? "Edit Vat Category" : "New Vat Category"}</span>
+                    <span className="ml-2">New Vat Category</span>
                   </div>
                 </CardHeader>
                 <CardBody>
@@ -140,10 +122,10 @@ class CreateVatCategory extends React.Component {
                       </FormGroup>            
                       <FormGroup className="text-right">
                         <Button type="submit" name="submit" color="primary" className="btn-square mr-3">
-                          <i className="fa fa-dot-circle-o"></i> {this.id ? "Update" : "Save"}
+                          <i className="fa fa-dot-circle-o"></i> Create
                         </Button>
                         <Button name="submit" color="primary" className="btn-square mr-3">
-                          <i className="fa fa-refresh"></i> Save and More
+                          <i className="fa fa-refresh"></i> Create and More
                         </Button>
                         <Button type="submit" color="secondary" className="btn-square"
                           onClick={() => {this.props.history.push('/admin/settings/vat-category')}}>
