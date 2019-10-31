@@ -1,4 +1,4 @@
-import { TEMP } from 'constants/types'
+import { VAT } from 'constants/types'
 import {
   api,
   authApi

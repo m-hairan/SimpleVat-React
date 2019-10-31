@@ -21,6 +21,13 @@ import {
   BalanceSheet,
   CashFlowPosition,
   TransactionCategory,
+  UsersRoles,
+  OrganizationProfile,
+  Currency,
+  Notification,
+  DataBackup,
+  Help,
+
 
   CreateInvoice,
   CreateExpense,
@@ -273,6 +280,36 @@ const adminRoutes = [
     path: '/admin/settings/transaction-category',
     name: 'Transaction Category',
     component: TransactionCategory.screen
+  },
+  {
+    path: '/admin/settings/user-role',
+    name: 'Users & Roles',
+    component: UsersRoles.screen
+  },
+  {
+    path: '/admin/settings/organization-profile',
+    name: 'Organization Profile',
+    component: OrganizationProfile.screen
+  },
+  {
+    path: '/admin/settings/currency',
+    name: 'Currencies',
+    component: Currency.screen
+  },
+  {
+    path: '/admin/settings/notification',
+    name: 'Notifications',
+    component: Notification.screen
+  },
+  {
+    path: '/admin/settings/data-backup',
+    name: 'Data Backup',
+    component: DataBackup.screen
+  },
+  {
+    path: '/admin/settings/help',
+    name: 'Help',
+    component: Help.screen
   },
   {
     redirect: true,
