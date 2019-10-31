@@ -91,7 +91,7 @@ class BankAccountList extends React.Component {
 
   renderAccountType (cell, row) {
     return (
-      <label className="badge badge-primary badge-pill mb-0">{ row.account_type }</label>
+      <label className="badge badge-primary mb-0">{ row.account_type }</label>
     )
   }
 

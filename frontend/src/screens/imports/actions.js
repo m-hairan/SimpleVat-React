@@ -1,4 +1,4 @@
-import { TEMP } from 'constants/types'
+import { IMPORTS } from 'constants/types'
 import {
   api,
   authApi

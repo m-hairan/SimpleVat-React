@@ -80,7 +80,7 @@ class BankStatementList extends React.Component {
 
   renderTransactionType (cell, row) {
     return (
-      <span className="badge badge-primary badge-pill mb-0">{ row.transaction_type }</span>
+      <span className="badge badge-primary mb-0">{ row.transaction_type }</span>
     )
   }
 

@@ -1,4 +1,4 @@
-import { TEMP } from 'constants/types'
+import { PURCHASE } from 'constants/types'
 import {
   api,
   authApi

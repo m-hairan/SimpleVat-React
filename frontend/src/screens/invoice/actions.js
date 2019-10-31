@@ -1,4 +1,4 @@
-import { TEMP } from 'constants/types'
+import { INVOICE } from 'constants/types'
 import {
   api,
   authApi
