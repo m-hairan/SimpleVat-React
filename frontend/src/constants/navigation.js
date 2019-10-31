@@ -107,7 +107,7 @@ export default {
         {
           name: 'User',
           url: '/admin/master/user',
-          icon: 'icon-graph',
+          icon: 'fas fa-users',
         },
       ],
     },
@@ -130,6 +130,36 @@ export default {
           name: 'Transaction Category',
           url: '/admin/settings/transaction-category',
           icon: 'icon-graph',
+        },
+        {
+          name: 'Users & Roles',
+          url: '/admin/settings/user-role',
+          icon: 'fas fa-users',
+        },
+        {
+          name: 'Organization Profile',
+          url: '/admin/settings/organization-profile',
+          icon: 'fas fa-sitemap',
+        },
+        {
+          name: 'Currencies',
+          url: '/admin/settings/currency',
+          icon: 'fas fa-money',
+        },
+        {
+          name: 'Notifications',
+          url: '/admin/settings/notification',
+          icon: 'fas fa-bell',
+        },
+        {
+          name: 'Data Backup',
+          url: '/admin/settings/data-backup',
+          icon: 'fas fa-hdd-o',
+        },
+        {
+          name: 'Help',
+          url: '/admin/settings/help',
+          icon: 'fas fa-info-circle',
         },
       ],
     },

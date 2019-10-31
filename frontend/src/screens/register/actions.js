@@ -1,4 +1,4 @@
-import { USER } from 'constants/types'
+import { AUTH } from 'constants/types'
 import {
   api,
   authApi

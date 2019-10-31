@@ -23,6 +23,12 @@ import TransactionCategory from './transaction_category'
 import ProfitAndLoss from './profit_and_loss'
 import BalanceSheet from './balance_sheet'
 import CashFlowPosition from './cash_flow_position'
+import UsersRoles from './users_roles'
+import OrganizationProfile from './organization_profile'
+import Currency from './currency'
+import Notification from './notification'
+import DataBackup from './data_backup'
+import Help from './help'
 
 import CreateInvoice from './create_invoice'
 import CreateExpense from './create_expense'
@@ -72,6 +78,12 @@ export {
   BalanceSheet,
   CashFlowPosition,
   TransactionCategory,
+  UsersRoles,
+  OrganizationProfile,
+  Currency,
+  Notification,
+  DataBackup,
+  Help,
 
   CreateInvoice,
   CreateExpense,

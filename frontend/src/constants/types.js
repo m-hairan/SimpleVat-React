@@ -106,3 +106,27 @@ export const VAT = {
   // Vat Data By ID
   VAT_ROW: 'VAT_ROW'
 }
+
+export const CURRENCY = {
+
+}
+
+export const DATA_BACKUP = {
+
+}
+
+export const HELP = {
+
+}
+
+export const NOTIFICATION = {
+
+}
+
+export const ORGANIZATION_PROFILE = {
+
+}
+
+export const USERS_ROLES = {
+  
+}
