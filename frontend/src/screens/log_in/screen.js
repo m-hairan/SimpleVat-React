@@ -64,22 +64,21 @@ class LogIn extends React.Component {
       username,
       password
     }
-    this.props.history.push('/admin')
-    // this.props.authActions.logIn(obj).then(res => {
-    //   this.setState({
-    //     alert: null
-    //   })
-    //   this.props.history.push('/admin')
-    // }).catch(err => {
-    //   console.log(err)
-    //   this.setState({
-    //     alert: <Message
-    //       type="danger"
-    //       title={err.data.error}
-    //       content="Log in failed. Please try again later"
-    //     />
-    //   })
-    // })
+    this.props.authActions.logIn(obj).then(res => {
+      this.setState({
+        alert: null
+      })
+      this.props.history.push('/admin')
+    }).catch(err => {
+      console.log(err)
+      this.setState({
+        alert: <Message
+          type="danger"
+          title={err.data.error}
+          content="Log in failed. Please try again later"
+        />
+      })
+    })
   }
 
   render() {
