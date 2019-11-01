@@ -62,23 +62,33 @@ class Header extends Component {
             <NavLink to="/admin/home" className="nav-link" >Home</NavLink>
           </NavItem>
           <NavItem className="px-3">
-            <Link to="/admin/employee" className="nav-link">Employee</Link>
+            <Link to="/admin/master/user" className="nav-link">Users</Link>
           </NavItem>
           <NavItem className="px-3">
             <NavLink to="/admin/settings" className="nav-link">Settings</NavLink>
           </NavItem>
         </Nav>
         <Nav className="ml-auto" navbar>
+          <NavItem className="px-3">
+            <a href="javascript:void(0)" className="nav-link">
+              <i className="fa fa-bell header-icon"></i>
+            </a>
+          </NavItem>
           <UncontrolledDropdown nav direction="down">
             <DropdownToggle nav>
               <img src={avatar} className="img-avatar" alt="admin@bootstrapmaster.com" />
             </DropdownToggle>
             <DropdownMenu right>
-              <DropdownItem onClick={this.signOut}>
-                <i className="fa fa-lock"></i> Logout
+              <DropdownItem>
+                <i className="fas fa-user"></i> Profile
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
+          <NavItem className="px-3">
+            <a href="javascript:void(0)" className="nav-link d-flex align-items-center" onClick={this.signOut}>
+              <i className="fa fa-sign-out header-icon mr-1"></i> Log Out
+            </a>
+          </NavItem>
         </Nav>
         {/* <AppAsideToggler className="d-md-down-none" /> */}
       </React.Fragment>
