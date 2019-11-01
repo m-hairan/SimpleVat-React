@@ -63,7 +63,7 @@ export const INVOICE = {
 }
 
 export const PRODUCT = {
-
+  PRODUCT_LIST: 'PRODUCT_LIST'
 }
 
 export const PROJECT = {

@@ -4,8 +4,62 @@ import {
   authApi
 } from 'utils'
 
-export const initialData = (obj) => {
+export const getProductList = (obj) => {
   return (dispatch) => {
-    
+    dispatch({
+      type: PRODUCT.PRODUCT_LIST,
+      payload: {
+        data: [{
+          transactionCategoryId: 2,
+          transactionCategoryCode: 2,
+          transactionCategoryName: 'temp',
+          transactionCategoryDescription: 'temp',
+          parentTransactionCategory: 'Loream Ipsume',
+          transactionType: 'TEMP'
+        }, {
+          transactionCategoryId: 1,
+          transactionCategoryCode: 4,
+          transactionCategoryName: 'temp',
+          transactionCategoryDescription: 'temp',
+          parentTransactionCategory: 'Loream Ipsume',
+          transactionType: 'TEMP'
+        }, {
+          transactionCategoryId: 1,
+          transactionCategoryCode: 4,
+          transactionCategoryName: 'temp',
+          transactionCategoryDescription: 'temp',
+          parentTransactionCategory: 'Loream Ipsume',
+          transactionType: 'TEMP'
+        }, {
+          transactionCategoryId: 1,
+          transactionCategoryCode: 4,
+          transactionCategoryName: 'temp',
+          transactionCategoryDescription: 'temp',
+          parentTransactionCategory: 'Loream Ipsume',
+          transactionType: 'TEMP'
+        }, {
+          transactionCategoryId: 1,
+          transactionCategoryCode: 4,
+          transactionCategoryName: 'temp',
+          transactionCategoryDescription: 'temp',
+          parentTransactionCategory: 'Loream Ipsume',
+          transactionType: 'TEMP'
+        },{
+          transactionCategoryId: 1,
+          transactionCategoryCode: 4,
+          transactionCategoryName: 'temp',
+          transactionCategoryDescription: 'temp',
+          parentTransactionCategory: 'Loream Ipsume',
+          transactionType: 'TEMP'
+        },{
+          transactionCategoryId: 1,
+          transactionCategoryCode: 4,
+          transactionCategoryName: 'temp',
+          transactionCategoryDescription: 'temp',
+          parentTransactionCategory: 'Loream Ipsume',
+          transactionType: 'TEMP'
+        }]
+      }
+    })
   }
 }
