@@ -3,8 +3,7 @@ import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import {
-  BankAccountList,
-  BankStatementList
+  BankAccountList
 } from './sections'
 
 import * as BankAccountActions from './actions'
@@ -14,8 +13,7 @@ import './style.scss'
 const mapStateToProps = (state) => {
   return ({
     is_authed: state.auth.is_authed,
-    bank_account_list: state.bank.bank_account_list,
-    bank_statement_list: state.bank.bank_statement_list
+    bank_account_list: state.bank.bank_account_list
   })
 }
 const mapDispatchToProps = (dispatch) => {
@@ -40,7 +38,6 @@ class BankAccount extends React.Component {
       <div className="bank-account-screen">
         <div className="animated fadeIn">
           <BankAccountList {...this.props} />
-          {/* <BankStatementList {...this.props} /> */}
         </div>
       </div>
     )

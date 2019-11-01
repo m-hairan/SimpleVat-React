@@ -27,6 +27,7 @@ import {
   Notification,
   DataBackup,
   Help,
+  Faq,
 
 
   CreateInvoice,
@@ -305,6 +306,11 @@ const adminRoutes = [
     path: '/admin/settings/data-backup',
     name: 'Data Backup',
     component: DataBackup.screen
+  },
+  {
+    path: '/admin/settings/help/Faq',
+    name: 'Faq',
+    component: Faq.screen
   },
   {
     path: '/admin/settings/help',

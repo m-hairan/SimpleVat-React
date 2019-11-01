@@ -1,6 +1,12 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
+import {
+  Card,
+  CardBody,
+  Col,
+  Row,
+} from "reactstrap"
 
 import './style.scss'
 
@@ -18,16 +24,55 @@ class Help extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      
     }
-
   }
 
   render() {
+    const faqIcon = require('assets/images/settings/faq.png')
+    const userIcon = require('assets/images/settings/user.png')
 
     return (
       <div className="help-screen">
-        <h1>Help Screen</h1>
+        <Row>
+          <Col lg='8' className="mx-auto my-auto">
+            <Row>
+              <Col md="6">
+                <Card>
+                  <CardBody>
+                    <div><img src={faqIcon} width="40%"></img></div>
+                    <h3>Have a question?</h3>
+                    <p>
+                      Find detailed answers to the most common questions you might have while using our site
+                    </p>
+                    <a href="" onClick={() => {this.props.history.push('/admin/settings/help/Faq')}}>Go to FAQ</a>
+                  </CardBody>
+                </Card>
+              </Col>
+              <Col md="6">
+                <Card>
+                  <CardBody>
+                    <div><img src={userIcon} width="40%"></img></div>
+                    <h3>Customer Support</h3>
+                    <p>
+                      Find detailed answers to the most common questions you might have while using our site
+                    </p>
+                    <div className="d-flex">
+                      <button className="btn-pill btn btn-danger btn-lg">
+                        <i className="icon-phone icons font-2xl d-block"></i>
+                      </button>
+                      <button className="btn-pill btn btn-danger btn-lg">
+                        <i className="cui-comment-square icons font-2xl d-block"></i>
+                      </button>
+                      <button className="btn-pill btn btn-danger btn-lg">
+                        <i className="cui-envelope-closed icons font-2xl d-block" style={{marginTop: -5}}></i>
+                      </button>
+                    </div>
+                  </CardBody>
+                </Card>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
       </div>
     )
   }

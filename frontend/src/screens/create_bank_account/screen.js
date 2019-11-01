@@ -13,6 +13,7 @@ import {
   Input,
   Label
 } from 'reactstrap'
+import Select from 'react-select'
 
 import './style.scss'
 
@@ -49,7 +50,7 @@ class CreateBankAccount extends React.Component {
       <div className="create-bank-account-screen">
         <div className="animated">
           <Row>
-            <Col lg={6} className="mx-auto">
+            <Col lg={12} className="mx-auto">
               <Card>
                 <CardHeader>
                   <Row>
@@ -64,119 +65,148 @@ class CreateBankAccount extends React.Component {
                 <CardBody>
                   <Row>
                     <Col lg={12}>
-                      <div className="px-5 py-3">
-                        <Form>
-                          <FormGroup className="mb-3">
-                            <Label htmlFor="bank_name">Bank Name</Label>
-                            <Input
-                              type="text"
-                              id="bank_name"
-                              name="bank_name"
-                              placeholder="Enter Bank Name"
-                              required
-                            />
-                          </FormGroup>
-                          <FormGroup className="mb-3">
-                            <Label htmlFor="account_name">Account Name</Label>
-                            <Input
-                              type="text"
-                              id="account_name"
-                              name="account_name"
-                              placeholder="Enter Account Name"
-                              required
-                            />
-                          </FormGroup>
-                          <FormGroup className="mb-3">
-                            <Label htmlFor="account_number">Account Number</Label>
-                            <Input
-                              type="text"
-                              id="account_number"
-                              name="account_number"
-                              placeholder="Enter Account Number"
-                              required
-                            />
-                          </FormGroup>
-                          <FormGroup className="mb-3">
-                            <Label htmlFor="account_number">Account Number</Label>
-                            <Input
-                              type="text"
-                              id="account_number"
-                              name="account_number"
-                              placeholder="Enter Account Number"
-                              required
-                            />
-                          </FormGroup>
-                          <FormGroup className="mb-3">
-                            <Label htmlFor="account_type">
-                              Account Type
-                            </Label>
-                            <Input
-                              type="select"
-                              name="account_type"
-                              id="account_type"
-                              required
-                            >
-                              {this.state.account_type_list.map((item, index) => (
-                                <option key={index} value={item.id}>
-                                  {item.name}
-                                </option>
-                              ))}
-                            </Input>
-                          </FormGroup>
-                          <FormGroup className="mb-3">
-                            <Label htmlFor="IBAN_number">IBAN Number</Label>
-                            <Input
-                              type="text"
-                              id="IBAN_number"
-                              name="IBAN_number"
-                              placeholder="Enter IBAN Number"
-                              required
-                            />
-                          </FormGroup>
-                          <FormGroup className="mb-3">
-                            <Label htmlFor="currency">Currency</Label>
-                            <Input
-                              type="text"
-                              id="currency"
-                              name="currency"
-                              placeholder="Enter Currency"
-                              required
-                            />
-                          </FormGroup>
-                          <FormGroup className="mb-3">
-                            <Label htmlFor="swift_code">Swift Code</Label>
-                            <Input
-                              type="text"
-                              id="swift_code"
-                              name="swift_code"
-                              placeholder="Enter Swift Code"
-                              required
-                            />
-                          </FormGroup>
-                          <FormGroup className="mb-3">
-                            <Label htmlFor="country">Country</Label>
-                            <Input
-                              type="text"
-                              id="country"
-                              name="country"
-                              placeholder="Enter Country"
-                              required
-                            />
-                          </FormGroup>
-                          <FormGroup className="text-right">
-                            <Button type="submit" color="primary" className="btn-square mr-3">
-                              <i className="fa fa-dot-circle-o"></i> Create
-                            </Button>
-                            <Button type="submit" color="primary" className="btn-square mr-3">
-                              <i className="fa fa-repeat"></i> Create and More
-                            </Button>
-                            <Button color="secondary" className="btn-square" 
-                              onClick={() => {this.props.history.push("/admin/bank-account")}}>
-                              <i className="fa fa-ban"></i> Cancel
-                            </Button>
-                          </FormGroup>
-                        </Form>
-                      </div>
+                      <Form>
+                        <Row>
+                          <Col lg={4}>
+                            <FormGroup className="mb-3">
+                              <Label htmlFor="account_name">Account Name</Label>
+                              <Input
+                                type="text"
+                                id="account_name"
+                                name="account_name"
+                                placeholder="Enter Account Name"
+                                required
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col lg={4}>
+                            <FormGroup className="mb-3">
+                              <Label htmlFor="currency">Currency</Label>
+                              <Select
+                                id="currency"
+                                name="currency"
+                                options={[]}
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col lg={4}>
+                            <FormGroup className="mb-3">
+                              <Label htmlFor="opening_balance">Opening Balance</Label>
+                              <Input
+                                type="text"
+                                id="opening_balance"
+                                name="opening_balance"
+                                placeholder="Your Opening Balance"
+                                required
+                              />
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col lg={4}>
+                            <FormGroup className="mb-3">
+                              <Label htmlFor="account_type">
+                                Account Type
+                              </Label>
+                              <Select
+                                id="account_type"
+                                name="account_type"
+                                options={[]}
+                              />
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        <hr />
+                        <Row>
+                          <Col lg={4}>
+                            <FormGroup className="mb-3">
+                              <Label htmlFor="bank_name">Bank Name</Label>
+                              <Input
+                                type="text"
+                                id="bank_name"
+                                name="bank_name"
+                                placeholder="Enter Bank Name"
+                                required
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col lg={4}>
+                            <FormGroup className="mb-3">
+                              <Label htmlFor="account_number">Account Number</Label>
+                              <Input
+                                type="text"
+                                id="account_number"
+                                name="account_number"
+                                placeholder="Enter Account Number"
+                                required
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col lg={4}>
+                            <FormGroup className="mb-3">
+                              <Label htmlFor="account_number">Account Number</Label>
+                              <Input
+                                type="text"
+                                id="account_number"
+                                name="account_number"
+                                placeholder="Enter Account Number"
+                                required
+                              />
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col lg={4}>
+                            <FormGroup className="mb-5">
+                              <Label htmlFor="IBAN_number">IBAN Number</Label>
+                              <Input
+                                type="text"
+                                id="IBAN_number"
+                                name="IBAN_number"
+                                placeholder="Enter IBAN Number"
+                                required
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col lg={4}>
+                            <FormGroup className="mb-5">
+                              <Label htmlFor="swift_code">Swift Code</Label>
+                              <Input
+                                type="text"
+                                id="swift_code"
+                                name="swift_code"
+                                placeholder="Enter Swift Code"
+                                required
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col lg={4}>
+                            <FormGroup className="mb-5">
+                              <Label htmlFor="country">Country</Label>
+                              <Input
+                                type="text"
+                                id="country"
+                                name="country"
+                                placeholder="Enter Country"
+                                required
+                              />
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        
+                        <FormGroup className="text-right">
+                          <Button type="submit" color="primary" className="btn-square mr-3">
+                            <i className="fa fa-dot-circle-o"></i> Create
+                          </Button>
+                          <Button type="submit" color="primary" className="btn-square mr-3">
+                            <i className="fa fa-repeat"></i> Create and More
+                          </Button>
+                          <Button color="secondary" className="btn-square" 
+                            onClick={() => {this.props.history.push("/admin/bank-account")}}>
+                            <i className="fa fa-ban"></i> Cancel
+                          </Button>
+                        </FormGroup>
+                      </Form>
                     </Col>
                   </Row>
                 </CardBody>

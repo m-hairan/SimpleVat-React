@@ -47,7 +47,7 @@ export const CONTACT = {
 }
 
 export const EXPENSE = {
-
+  EXPENSE_LIST: 'EXPENSE_LIST'
 }
 
 export const SETTINGS = {
@@ -59,7 +59,7 @@ export const IMPORTS = {
 }
 
 export const INVOICE = {
-
+  INVOICE_LIST: 'INVOICE_LIST'
 }
 
 export const PRODUCT = {
