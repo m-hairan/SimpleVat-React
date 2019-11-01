@@ -64,21 +64,22 @@ class LogIn extends React.Component {
       username,
       password
     }
-    this.props.authActions.logIn(obj).then(res => {
-      this.setState({
-        alert: null
-      })
-      this.props.history.push('/admin')
-    }).catch(err => {
-      console.log(err)
-      this.setState({
-        alert: <Message
-          type="danger"
-          title={err.data.error}
-          content="Log in failed. Please try again later"
-        />
-      })
-    })
+    this.props.history.push('/admin')
+    // this.props.authActions.logIn(obj).then(res => {
+    //   this.setState({
+    //     alert: null
+    //   })
+    //   this.props.history.push('/admin')
+    // }).catch(err => {
+    //   console.log(err)
+    //   this.setState({
+    //     alert: <Message
+    //       type="danger"
+    //       title={err.data.error}
+    //       content="Log in failed. Please try again later"
+    //     />
+    //   })
+    // })
   }
 
   render() {
@@ -98,8 +99,8 @@ class LogIn extends React.Component {
                   <Card className="p-4">
                     <CardBody>
                       <Form onSubmit={this.logInHandler}>
-                        <h1>Login</h1>
-                        <p className="text-muted">Sign In to your account</p>
+                        <h1>Log In</h1>
+                        <p className="text-muted">Log In to your account</p>
                         <InputGroup className="mb-3">
                           <InputGroupAddon addonType="prepend">
                             <InputGroupText>
@@ -134,7 +135,7 @@ class LogIn extends React.Component {
                         </InputGroup>
                         <Row>
                           <Col xs="6">
-                            <Button color="primary" type="submit" className="px-4 btn-square">Login</Button>
+                            <Button color="primary" type="submit" className="px-4 btn-square">Log In</Button>
                           </Col>
                           <Col xs="6" className="text-right">
                             <Button color="link" className="px-0">Forgot password?</Button>

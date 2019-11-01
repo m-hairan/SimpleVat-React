@@ -136,7 +136,6 @@ class Invoice extends React.Component {
                         <i className="fas fa-address-book" />
                         <span className="ml-2">Invoices</span>
                       </div>
-                      <p className="pl-4"><i className="pl-2">Last updated at 28 October 2019</i></p>
                     </div>
                     <div className="filter-box p-2">
                       <Form onSubmit={this.handleSubmit} name="simpleForm">

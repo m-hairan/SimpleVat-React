@@ -87,7 +87,7 @@ class Header extends Component {
             </DropdownMenu>
           </UncontrolledDropdown>
           <NavItem className="px-3">
-            <a href="javascript:void(0)" className="nav-link d-flex align-items-center" onClick={this.signOut}>
+            <a className="nav-link d-flex align-items-center my-link" onClick={this.signOut}>
               <i className="fa fa-sign-out header-icon mr-1"></i> Log Out
             </a>
           </NavItem>

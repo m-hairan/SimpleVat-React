@@ -30,9 +30,9 @@ class InitialLayout extends React.Component {
   }
 
   componentDidMount () {
-    if (window.localStorage.getItem('accessToken')) {
-      this.props.history.push('/admin')
-    }
+    // if (window.localStorage.getItem('accessToken')) {
+    //   this.props.history.push('/admin')
+    // }
   }
 
   render() {

@@ -193,19 +193,22 @@ class CreateBankAccount extends React.Component {
                             </FormGroup>
                           </Col>
                         </Row>
-                        
-                        <FormGroup className="text-right">
-                          <Button type="submit" color="primary" className="btn-square mr-3">
-                            <i className="fa fa-dot-circle-o"></i> Create
-                          </Button>
-                          <Button type="submit" color="primary" className="btn-square mr-3">
-                            <i className="fa fa-repeat"></i> Create and More
-                          </Button>
-                          <Button color="secondary" className="btn-square" 
-                            onClick={() => {this.props.history.push("/admin/bank-account")}}>
-                            <i className="fa fa-ban"></i> Cancel
-                          </Button>
-                        </FormGroup>
+                        <Row>
+                          <Col lg={12}>
+                            <FormGroup className="text-right">
+                              <Button type="submit" color="primary" className="btn-square mr-3">
+                                <i className="fa fa-dot-circle-o"></i> Create
+                              </Button>
+                              <Button type="submit" color="primary" className="btn-square mr-3">
+                                <i className="fa fa-repeat"></i> Create and More
+                              </Button>
+                              <Button color="secondary" className="btn-square" 
+                                onClick={() => {this.props.history.push('/admin/bank-account')}}>
+                                <i className="fa fa-ban"></i> Cancel
+                              </Button>
+                            </FormGroup>
+                          </Col>
+                        </Row>
                       </Form>
                     </Col>
                   </Row>

@@ -1,7 +1,7 @@
 import { AUTH } from 'constants/types'
 
 const initState = {
-  is_authed: false
+  is_authed: true
 }
 
 const AuthReducer = (state = initState, action) => {
