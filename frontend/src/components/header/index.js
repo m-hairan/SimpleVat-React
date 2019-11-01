@@ -69,10 +69,10 @@ class Header extends Component {
           </NavItem>
         </Nav>
         <Nav className="ml-auto" navbar>
-          <NavItem className="px-3">
-            <a href="javascript:void(0)" className="nav-link">
+          <NavItem>
+            <AppAsideToggler className="d-md-down-none">
               <i className="fa fa-bell header-icon"></i>
-            </a>
+            </AppAsideToggler>
           </NavItem>
           <UncontrolledDropdown nav direction="down">
             <DropdownToggle nav>
@@ -90,7 +90,6 @@ class Header extends Component {
             </a>
           </NavItem>
         </Nav>
-        {/* <AppAsideToggler className="d-md-down-none" /> */}
       </React.Fragment>
     );
   }
