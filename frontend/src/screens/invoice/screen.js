@@ -75,6 +75,7 @@ class Invoice extends React.Component {
     }
 
     this.renderInvoiceStatus = this.renderInvoiceStatus.bind(this)
+    this.renderReferenceNumber = this.renderReferenceNumber.bind(this)
     this.onRowSelect = this.onRowSelect.bind(this)
     this.onSelectAll = this.onSelectAll.bind(this)
 
@@ -91,6 +92,17 @@ class Invoice extends React.Component {
   renderInvoiceStatus (cell, row) {
     return (
       <span className="badge badge-success mb-0">{ row.status }</span>
+    )
+  }
+
+  renderReferenceNumber (cell, row) {
+    return (
+      <label
+        className="text-primary my-link mb-0"
+        onClick={() => this.props.history.push('/admin/invoice/detail')}
+      >
+        { row.transactionCategoryCode }
+      </label>
     )
   }
 
@@ -257,6 +269,7 @@ class Invoice extends React.Component {
                           <TableHeaderColumn
                             isKey
                             dataField="transactionCategoryCode"
+                            dataFormat={this.renderReferenceNumber}
                           >
                             Reference Number
                           </TableHeaderColumn>
