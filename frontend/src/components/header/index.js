@@ -57,7 +57,7 @@ class Header extends Component {
           minimized={{ src: sygnet, width: '100%', height: 'auto', alt: 'CoreUI Logo' }}
         />
         <AppSidebarToggler className="d-md-down-none" display="lg">
-          <i className="fa fa-list-ul header-icon"></i>
+          <i className="fa fa-list-ul header-sidebar-icon"></i>
         </AppSidebarToggler>
         <Nav className="d-md-down-none" navbar>
           <NavItem className="px-3">
