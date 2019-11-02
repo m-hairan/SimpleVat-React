@@ -147,7 +147,7 @@ class Expense extends React.Component {
                             onClick={() => this.props.history.push(`/admin/expense/expense/create`)}
                           >
                             <i className="fas fa-plus mr-1" />
-                            New Account
+                            New Expense
                           </Button>
                           <Button
                             color="warning"
