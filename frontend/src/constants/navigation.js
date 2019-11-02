@@ -1,8 +1,8 @@
 export default {
   items: [
     {
-      name: 'Home',
-      url: '/admin/home',
+      name: 'Dashboard',
+      url: '/admin/dashboard',
       icon: 'icon-speedometer'
     },
     {

@@ -68,12 +68,12 @@ class Invoice extends Component {
   }
 
   componentDidMount() {
-    this.props.HomeActions.getInvoiceGraphData(12)
+    this.props.DashboardActions.getInvoiceGraphData(12)
   }
 
   handleChange(e) {
     e.preventDefault()
-    this.props.HomeActions.getInvoiceGraphData(e.currentTarget.value)
+    this.props.DashboardActions.getInvoiceGraphData(e.currentTarget.value)
   }
 
   render() {

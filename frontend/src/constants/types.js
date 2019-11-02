@@ -12,7 +12,7 @@ export const TEMP = {
 
 }
 
-export const HOME = {
+export const DASHBOARD = {
 
   // Bank Account
   BANK_ACCOUNT_TYPE: 'BANK_ACCOUNT_TYPE',

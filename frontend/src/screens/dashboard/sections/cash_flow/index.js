@@ -54,12 +54,12 @@ class CashFlow extends Component {
   }
 
   componentDidMount() {
-    this.props.HomeActions.getCashFlowGraphData(12)
+    this.props.DashboardActions.getCashFlowGraphData(12)
   }
 
   handleChange(e) {
     e.preventDefault()
-    this.props.HomeActions.getCashFlowGraphData(e.currentTarget.value)
+    this.props.DashboardActions.getCashFlowGraphData(e.currentTarget.value)
   }
 
   render() {

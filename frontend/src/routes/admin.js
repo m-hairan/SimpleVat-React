@@ -1,5 +1,5 @@
 import {
-  Home,
+  Dashboard,
   GeneralSettings,
   VatCategory,
   Contact,
@@ -55,9 +55,9 @@ import {
 
 const adminRoutes = [
   {
-    path: '/admin/home',
-    name: 'Home',
-    component: Home.screen
+    path: '/admin/dashboard',
+    name: 'Dashboard',
+    component: Dashboard.screen
   },
   {
     path: '/admin/invoice/create',
@@ -326,7 +326,7 @@ const adminRoutes = [
   {
     redirect: true,
     path: '/admin',
-    pathTo: '/admin/home',
+    pathTo: '/admin/dashboard',
     name: 'Admin'
   }
 ]
