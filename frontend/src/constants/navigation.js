@@ -87,7 +87,7 @@ export default {
     {
       name: 'Master',
       url: '/admin/master',
-      icon: 'icon-settings',
+      icon: 'fas fa-database',
       children: [
         {
           name: 'Product',
