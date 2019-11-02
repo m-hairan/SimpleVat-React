@@ -21,7 +21,7 @@ import {
   ImportBankStatementsCSV
 } from './sections'
 
-import BankACcount from '../bank_account'
+import BankAccount from '../bank_account'
 
 
 import './style.scss'
@@ -33,7 +33,7 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch) => {
   return ({
-    bankAccountActions: bindActionCreators(BankACcount.actions, dispatch)
+    bankAccountActions: bindActionCreators(BankAccount.actions, dispatch)
   })
 }
 
@@ -101,7 +101,7 @@ class DetailBankAccount extends React.Component {
                       action
                       active={this.state.activeTab === 3}
                     >
-                      <i className="fa glyphicon glyphicon-export fa-upload mr-1" />Import from CSV
+                      <i className="fa glyphicon glyphicon-export fa-upload mr-1" />Import Statements
                     </ListGroupItem>
                   </ListGroup>
                 </CardBody>
@@ -119,10 +119,16 @@ class DetailBankAccount extends React.Component {
                   />
                 </TabPane>
                 <TabPane tabId={2} className="p-0">
-                  <CreateBankStatement {...this.props} />
+                  <CreateBankStatement
+                    toggleMenu={this.toggleMenu}
+                    {...this.props}
+                  />
                 </TabPane>
                 <TabPane tabId={3} className="p-0">
-                  <ImportBankStatementsCSV {...this.props} />
+                  <ImportBankStatementsCSV
+                    toggleMenu={this.toggleMenu}
+                    {...this.props}
+                  />
                 </TabPane>
               </TabContent>
             </Col>
