@@ -113,7 +113,7 @@ class DetailInvoice extends React.Component {
 
     return (
       <div className="detail-invoice-screen">
-        <div className="animated">
+        <div className="animated fadeIn">
           <Row>
             <Col lg={12} className="mx-auto">
               <Card>

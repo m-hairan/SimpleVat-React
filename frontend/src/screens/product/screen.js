@@ -101,7 +101,7 @@ class Product extends React.Component {
 
     return (
       <div className="product-screen">
-        <div className="animated">
+        <div className="animated fadeIn">
           <ToastContainer position="top-right" autoClose={5000} style={containerStyle} />
           <Card>
             <CardHeader>

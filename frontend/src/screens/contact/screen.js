@@ -27,7 +27,9 @@ class Contact extends React.Component {
 
     return (
       <div className="contact-screen">
-        <h1>Contact Screen</h1>
+        <div className="animated fadeIn">
+          <h1>Contact Screen</h1>
+        </div>
       </div>
     )
   }

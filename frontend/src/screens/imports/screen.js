@@ -27,7 +27,9 @@ class Imports extends React.Component {
 
     return (
       <div className="imports-screen">
-        <h1>Imports Screen</h1>
+        <div className="animated fadeIn">
+          <h1>Imports Screen</h1>
+        </div>
       </div>
     )
   }

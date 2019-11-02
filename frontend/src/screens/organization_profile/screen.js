@@ -60,7 +60,7 @@ class OrganizationProfile extends React.Component {
 
     return (
       <div className="organization-profile-screen">
-        <div className="animated">
+        <div className="animated fadeIn">
           <ToastContainer
             position="top-right"
             autoClose={5000}

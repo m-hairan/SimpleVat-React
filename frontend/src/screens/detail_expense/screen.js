@@ -104,7 +104,7 @@ class DetailExpense extends React.Component {
 
     return (
       <div className="detail-expense-screen">
-        <div className="animated">
+        <div className="animated fadeIn">
           <Row>
             <Col lg={12} className="mx-auto">
               <Card>

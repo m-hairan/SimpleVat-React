@@ -83,7 +83,7 @@ class CreateVatCategory extends React.Component {
     console.log(name, vat)
     return (
       <div className="vat-category-create-screen">
-        <div className="animated">
+        <div className="animated fadeIn">
           <Row>
             <Col lg={6} className="mx-auto">
               <Card>

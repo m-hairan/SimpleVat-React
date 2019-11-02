@@ -108,7 +108,7 @@ class BankStatementList extends React.Component {
 
     return (
       <div className="bank-statement-section">
-        <div className="animated">
+        <div className="animated fadeIn">
           <ToastContainer position="top-right" autoClose={5000} style={containerStyle} />
           <Card>
             <CardHeader>
@@ -164,6 +164,7 @@ class BankStatementList extends React.Component {
                           <Button
                             color="info"
                             className="btn-square"
+                            onClick={() => this.props.toggleMenu(3)}
                           >
                             <i className="fa glyphicon glyphicon-export fa-upload mr-1" />
                             Import from CSV
@@ -171,7 +172,7 @@ class BankStatementList extends React.Component {
                           <Button
                             color="primary"
                             className="btn-square"
-                            onClick={() => this.props.history.push(`/admin/bank-account/update`)}
+                            onClick={() => this.props.toggleMenu(2)}
                           >
                             <i className="fas fa-plus mr-1" />
                             New Statement

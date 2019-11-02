@@ -2,7 +2,7 @@ import React from 'react'
 
 import './style.scss'
 
-class Temp extends React.Component {
+class CreateBankStatement extends React.Component {
   
   constructor(props) {
     super(props)
@@ -14,7 +14,7 @@ class Temp extends React.Component {
   render() {
 
     return (
-      <div className="temp-section">
+      <div className="create-bank-statement-section">
         <div className="animated fadeIn">
           
         </div>
@@ -23,6 +23,6 @@ class Temp extends React.Component {
   }
 }
 
-export default Temp
+export default CreateBankStatement
 
 

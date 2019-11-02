@@ -41,7 +41,7 @@ class CreateProduct extends React.Component {
 
     return (
       <div className="create-product-screen">
-        <div className="animated">
+        <div className="animated fadeIn">
           <Row>
             <Col lg={12} className="mx-auto">
               <Card>

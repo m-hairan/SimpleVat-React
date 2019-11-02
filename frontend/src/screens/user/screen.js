@@ -27,7 +27,9 @@ class User extends React.Component {
 
     return (
       <div className="user-screen">
-        <h1>User Screen</h1>
+        <div className="animated fadeIn">
+          <h1>User Screen</h1>
+        </div>
       </div>
     )
   }

@@ -27,7 +27,9 @@ class Temp extends React.Component {
 
     return (
       <div className="temp-screen">
-        <h1>Temp Screen</h1>
+        <div className="animated fadeIn">
+          <h1>Temp Screen</h1>
+        </div>
       </div>
     )
   }

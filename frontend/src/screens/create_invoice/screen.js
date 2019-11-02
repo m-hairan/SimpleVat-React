@@ -115,7 +115,7 @@ class CreateInvoice extends React.Component {
 
     return (
       <div className="create-invoice-screen">
-        <div className="animated">
+        <div className="animated fadeIn">
           <Row>
             <Col lg={12} className="mx-auto">
               <Card>

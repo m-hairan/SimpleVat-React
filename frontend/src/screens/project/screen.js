@@ -27,7 +27,9 @@ class Project extends React.Component {
 
     return (
       <div className="project-screen">
-        <h1>Project Screen</h1>
+        <div className="animated fadeIn">
+          <h1>Project Screen</h1>
+        </div>
       </div>
     )
   }
