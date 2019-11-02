@@ -154,7 +154,7 @@ class TransactionCategory extends React.Component {
 
     return (
       <div className="transaction-category-screen">
-        <div className="animated">
+        <div className="animated fadeIn">
           <ToastContainer
             position="top-right"
             autoClose={5000}

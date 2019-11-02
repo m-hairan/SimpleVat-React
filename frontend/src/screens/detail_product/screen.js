@@ -41,7 +41,7 @@ class DetailProduct extends React.Component {
 
     return (
       <div className="detail-product-screen">
-        <div className="animated">
+        <div className="animated fadeIn">
           <Row>
             <Col lg={12} className="mx-auto">
               <Card>

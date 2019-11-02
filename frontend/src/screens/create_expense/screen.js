@@ -103,7 +103,7 @@ class CreateExpense extends React.Component {
 
     return (
       <div className="create-expense-screen">
-        <div className="animated">
+        <div className="animated fadeIn">
           <Row>
             <Col lg={12} className="mx-auto">
               <Card>

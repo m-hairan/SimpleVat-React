@@ -27,7 +27,9 @@ class DetailContact extends React.Component {
 
     return (
       <div className="detail-contact-screen">
-        <h1>DetailContact Screen</h1>
+        <div className="animated fadeIn">
+          <h1>DetailContact Screen</h1>
+        </div>
       </div>
     )
   }

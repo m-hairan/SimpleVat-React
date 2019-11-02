@@ -27,7 +27,9 @@ class Taxes extends React.Component {
 
     return (
       <div className="taxes-screen">
-        <h1>Taxes Screen</h1>
+        <div className="animated fadeIn">
+          <h1>Taxes Screen</h1>
+        </div>
       </div>
     )
   }

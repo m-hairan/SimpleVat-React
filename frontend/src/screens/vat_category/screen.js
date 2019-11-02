@@ -136,7 +136,7 @@ class VatCategory extends React.Component {
 
     return (
       <div className="vat-category-screen">
-        <div className="animated">
+        <div className="animated fadeIn">
           <ToastContainer position="top-right" autoClose={3000} style={containerStyle} />
           <Card>
             <CardHeader>

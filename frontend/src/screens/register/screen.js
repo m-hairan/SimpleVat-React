@@ -27,7 +27,9 @@ class Register extends React.Component {
 
     return (
       <div className="register-screen">
-        <h1>Register Screen</h1>
+        <div className="animated fadeIn">
+          <h1>Register Screen</h1>
+        </div>
       </div>
     )
   }

@@ -1,0 +1,21 @@
+.detail-bank-account-screen {
+  .menu-title {
+    color: #20a8d8;
+  }
+  .menu-container {
+    .list-group-item:first-child {
+      border-radius: 0px;
+    }
+    .list-group-item:last-child {
+      border-radius: 0px;
+    }
+    .list-group-item {
+      border: none;
+      cursor: pointer;
+    }
+  }
+  .bank-detail-main-container {
+    border: none;
+    background: transparent;
+  }
+}

@@ -292,7 +292,7 @@ class CreateTranactionCategory extends React.Component {
 
     return (
       <div className="create-transaction-category-screen">
-        <div className="animated">
+        <div className="animated fadeIn">
           <Row>
             <Col lg={6} className="mx-auto">
               <Card>
