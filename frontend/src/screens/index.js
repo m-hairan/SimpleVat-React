@@ -1,5 +1,4 @@
 import Home from './home'
-import Healthz from './health_z'
 import LogIn from './log_in'
 import Register from './register'
 import GeneralSettings from './general_settings'
@@ -57,7 +56,6 @@ export {
   LogIn,
   Register,
   Home,
-  Healthz,
   GeneralSettings,
   VatCategory,
   Contact,
