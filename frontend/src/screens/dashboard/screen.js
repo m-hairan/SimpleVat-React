@@ -11,7 +11,7 @@ import {
   ProfitAndLoss
 } from './sections'
 
-import * as HomeActions from './actions'
+import * as DashboardActions from './actions'
 
 import './style.scss'
 
@@ -19,30 +19,30 @@ import './style.scss'
 const mapStateToProps = (state) => {
   return ({
     // Bank Account
-    bank_account_type: state.home.bank_account_type,
-    bank_account_graph: state.home.bank_account_graph,
+    bank_account_type: state.dashboard.bank_account_type,
+    bank_account_graph: state.dashboard.bank_account_graph,
 
     // Cash Flow
-    cash_flow_graph: state.home.cash_flow_graph,
+    cash_flow_graph: state.dashboard.cash_flow_graph,
 
     // Invoice 
-    invoice_graph: state.home.invoice_graph,
+    invoice_graph: state.dashboard.invoice_graph,
 
     // Profit and Loss
-    profit_loss: state.home.proft_loss,
+    profit_loss: state.dashboard.proft_loss,
 
     // Revenues and Expenses
-    revenue_graph: state.home.revenue_graph,
-    expense_graph: state.home.expense_graph
+    revenue_graph: state.dashboard.revenue_graph,
+    expense_graph: state.dashboard.expense_graph
   })
 }
 const mapDispatchToProps = (dispatch) => {
   return ({
-    HomeActions: bindActionCreators(HomeActions, dispatch)
+    DashboardActions: bindActionCreators(DashboardActions, dispatch)
   })
 }
 
-class Home extends React.Component {
+class Dashboard extends React.Component {
   
   constructor(props) {
     super(props)
@@ -52,7 +52,7 @@ class Home extends React.Component {
 
   render() {
     return (
-      <div className="home-screen">
+      <div className="dashboard-screen">
         <div className="animated fadeIn">
           <CashFlow {...this.props}/>
           <CardColumns className="cols-2 mb-3">
@@ -67,4 +67,4 @@ class Home extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home)
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

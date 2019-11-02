@@ -1,4 +1,4 @@
-import { HOME } from 'constants/types'
+import { DASHBOARD } from 'constants/types'
 
 const initState = {
   bank_account_type: [],
@@ -10,19 +10,19 @@ const initState = {
   expense_graph: {}
 }
 
-const HomeReducer = (state = initState, action) => {
+const DashboardReducer = (state = initState, action) => {
   const { type, payload} = action
   
   switch(type) {
 
     // Bank Account
-    case HOME.BANK_ACCOUNT_TYPE:
+    case DASHBOARD.BANK_ACCOUNT_TYPE:
       return {
         ...state,
         bank_account_type: Object.assign([], payload)
       }
 
-    case HOME.BANK_ACCOUNT_GRAPH:
+    case DASHBOARD.BANK_ACCOUNT_GRAPH:
       return {
         ...state,
         bank_account_graph: Object.assign({}, payload)
@@ -30,7 +30,7 @@ const HomeReducer = (state = initState, action) => {
       
 
     // Cash Flow
-    case HOME.CASH_FLOW_GRAPH:
+    case DASHBOARD.CASH_FLOW_GRAPH:
       return {
         ...state,
         cash_flow_graph: Object.assign({}, payload)
@@ -38,7 +38,7 @@ const HomeReducer = (state = initState, action) => {
 
 
     // Invoice 
-    case HOME.INVOICE_GRAPH:
+    case DASHBOARD.INVOICE_GRAPH:
       return {
         ...state,
         invoice_graph: Object.assign({}, payload)
@@ -46,7 +46,7 @@ const HomeReducer = (state = initState, action) => {
 
 
     // Profit and Loss 
-    case HOME.PROFIT_LOSS:
+    case DASHBOARD.PROFIT_LOSS:
       return {
         ...state,
         proft_loss: Object.assign({}, payload)
@@ -54,13 +54,13 @@ const HomeReducer = (state = initState, action) => {
 
     
     // Revenues and Expenses 
-    case HOME.REVENUE_GRAPH:
+    case DASHBOARD.REVENUE_GRAPH:
       return {
         ...state,
         revenue_graph: Object.assign({}, payload)
       }
 
-    case HOME.EXPENSE_GRAPH:
+    case DASHBOARD.EXPENSE_GRAPH:
       return {
         ...state,
         expense_graph: Object.assign({}, payload)
@@ -71,4 +71,4 @@ const HomeReducer = (state = initState, action) => {
   }
 }
 
-export default HomeReducer
+export default DashboardReducer

@@ -60,8 +60,8 @@ class RevenueAndExpense extends Component {
   }
 
   componentDidMount() {
-    this.props.HomeActions.getRevenuesGraphData('2019-01-01', '2019-05-01')
-    this.props.HomeActions.getExpensesGraphData('2019-01-01', '2019-05-01')
+    this.props.DashboardActions.getRevenuesGraphData('2019-01-01', '2019-05-01')
+    this.props.DashboardActions.getExpensesGraphData('2019-01-01', '2019-05-01')
     
   }
 
