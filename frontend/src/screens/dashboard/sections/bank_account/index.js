@@ -67,13 +67,13 @@ class BankAccount extends Component {
   }
 
   componentDidMount(){
-    this.props.HomeActions.getBankAccountTypes().then(firstAccount => {
+    this.props.DashboardActions.getBankAccountTypes().then(firstAccount => {
       this.getBankAccountGraphData(firstAccount, 12)
     })
   }
 
   getBankAccountGraphData(account, dateRange){
-    this.props.HomeActions.getBankAccountGraphData(account, dateRange)
+    this.props.DashboardActions.getBankAccountGraphData(account, dateRange)
   }
 
   // componentWillReceiveProps(newProps) {

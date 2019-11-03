@@ -27,7 +27,9 @@ class DetailPurchase extends React.Component {
 
     return (
       <div className="detail-purchase-screen">
-        <h1>DetailPurchase Screen</h1>
+        <div className="animated fadeIn">
+          <h1>DetailPurchase Screen</h1>
+        </div>
       </div>
     )
   }

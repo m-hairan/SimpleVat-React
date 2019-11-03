@@ -15,6 +15,9 @@ class Temp extends React.Component {
 
     return (
       <div className="temp-section">
+        <div className="animated fadeIn">
+          
+        </div>
       </div>
     )
   }

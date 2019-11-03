@@ -6,7 +6,7 @@ import {
 } from './global'
 
 import {
-  Home,
+  Dashboard,
   BankAccount,
   Employee,
   Contact,
@@ -34,7 +34,7 @@ const reducer = combineReducers({
   common: CommonReducer,
   auth: AuthReducer,
 
-  home: Home.reducer,
+  dashboard: Dashboard.reducer,
   bank: BankAccount.reducer,
   employee: Employee.reducer,
   contact: Contact.reducer,

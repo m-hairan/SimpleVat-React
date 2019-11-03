@@ -1,4 +1,4 @@
-import { HOME } from 'constants/types'
+import { DASHBOARD } from 'constants/types'
 import {
   api,
   authApi
@@ -22,7 +22,7 @@ export const getCashFlowGraphData = (daterange) => {
 
     return authApi(data).then(res => {
       dispatch({
-        type: HOME.CASH_FLOW_GRAPH,
+        type: DASHBOARD.CASH_FLOW_GRAPH,
         payload: {
           labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'].slice(0, daterange),
           inflow: {
@@ -55,7 +55,7 @@ export const getInvoiceGraphData = (daterange) => {
 
     return authApi(data).then(res => {
       dispatch({
-        type: HOME.INVOICE_GRAPH,
+        type: DASHBOARD.INVOICE_GRAPH,
         payload: {
           labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'].slice(0, daterange),
           paid: {
@@ -90,7 +90,7 @@ export const getBankAccountTypes = () => {
 
     return authApi(data).then(res => {
       dispatch({
-        type: HOME.BANK_ACCOUNT_TYPE,
+        type: DASHBOARD.BANK_ACCOUNT_TYPE,
         payload: [
           {id: '1', name: 'Account1'},
           {id: '2', name: 'Account2'},
@@ -112,7 +112,7 @@ export const getBankAccountGraphData = (account, daterange) => {
     // }
     // return authApi(data).then(res => {
     //   dispatch({
-    //     type: HOME.BANK_ACCOUNT_GRAPH,
+    //     type: DASHBOARD.BANK_ACCOUNT_GRAPH,
     //     payload: res
     //   })
     // }).catch(err => {
@@ -120,7 +120,7 @@ export const getBankAccountGraphData = (account, daterange) => {
     // })
 
     dispatch({
-      type: HOME.BANK_ACCOUNT_GRAPH,
+      type: DASHBOARD.BANK_ACCOUNT_GRAPH,
       payload: {
         labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'].slice(0, daterange),
         data:[65, 23, 100, 2, 23,12, 40, 50, 60, 80, 90],
@@ -145,7 +145,7 @@ export const getProfitAndLossData = (startDate, endDate) => {
 
     return authApi(data).then(res => {
       dispatch({
-        type: HOME.PROFIT_LOSS,
+        type: DASHBOARD.PROFIT_LOSS,
         payload: {
           'income': 180,
           'expenses': 80
@@ -170,7 +170,7 @@ export const getExpensesGraphData = (startDate, endDate) => {
 
     return authApi(data).then(res => {
       dispatch({
-        type: HOME.EXPENSE_GRAPH,
+        type: DASHBOARD.EXPENSE_GRAPH,
         payload: {
           'labels': ['Meals', 'Meals', 'Meals', 'Meals', 'Meals', 'Meals', 'Meals', 'Meals', 'Meals'],
           'data': [300, 50, 100, 70, 40, 50, 50, 10, 60, 50]
@@ -192,7 +192,7 @@ export const getRevenuesGraphData = (startDate, endDate) => {
 
     return authApi(data).then(res => {
       dispatch({
-        type: HOME.REVENUE_GRAPH,
+        type: DASHBOARD.REVENUE_GRAPH,
         payload: {
           'labels': ['Meals', 'Meals', 'Meals', 'Meals', 'Meals', 'Meals', 'Meals', 'Meals', 'Meals'],
           'data': [300, 50, 100, 70, 40, 50, 50, 10, 60, 50]

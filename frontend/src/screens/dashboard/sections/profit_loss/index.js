@@ -66,7 +66,7 @@ class ProfitAndLoss extends Component {
   }
 
   componentDidMount() {
-    this.props.HomeActions.getProfitAndLossData('2019-01-01', '2019-05-01')
+    this.props.DashboardActions.getProfitAndLossData('2019-01-01', '2019-05-01')
   }
 
   render() {

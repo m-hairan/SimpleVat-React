@@ -27,7 +27,9 @@ class DetailProject extends React.Component {
 
     return (
       <div className="detail-project-screen">
-        <h1>DetailProject Screen</h1>
+        <div className="animated fadeIn">
+          <h1>DetailProject Screen</h1>
+        </div>
       </div>
     )
   }

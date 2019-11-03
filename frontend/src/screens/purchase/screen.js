@@ -27,7 +27,9 @@ class Purchase extends React.Component {
 
     return (
       <div className="purchase-screen">
-        <h1>Purchase Screen</h1>
+        <div className="animated fadeIn">
+          <h1>Purchase Screen</h1>
+        </div>
       </div>
     )
   }

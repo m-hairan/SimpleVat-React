@@ -27,7 +27,9 @@ class DetailUser extends React.Component {
 
     return (
       <div className="detail-user-screen">
-        <h1>DetailUser Screen</h1>
+        <div className="animated fadeIn">
+          <h1>DetailUser Screen</h1>
+        </div>
       </div>
     )
   }

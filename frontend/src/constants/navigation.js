@@ -1,8 +1,8 @@
 export default {
   items: [
     {
-      name: 'Home',
-      url: '/admin/home',
+      name: 'Dashboard',
+      url: '/admin/dashboard',
       icon: 'icon-speedometer'
     },
     {
@@ -87,7 +87,7 @@ export default {
     {
       name: 'Master',
       url: '/admin/master',
-      icon: 'icon-settings',
+      icon: 'fas fa-database',
       children: [
         {
           name: 'Product',

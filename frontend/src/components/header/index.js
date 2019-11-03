@@ -61,7 +61,7 @@ class Header extends Component {
         </AppSidebarToggler>
         <Nav className="d-md-down-none" navbar>
           <NavItem className="px-3">
-            <NavLink to="/admin/home" className="nav-link" >Home</NavLink>
+            <NavLink to="/admin/dashboard" className="nav-link" >Dashboard</NavLink>
           </NavItem>
           <NavItem className="px-3">
             <Link to="/admin/master/user" className="nav-link">Users</Link>

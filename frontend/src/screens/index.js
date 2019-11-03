@@ -1,5 +1,4 @@
-import Home from './home'
-import Healthz from './health_z'
+import Dashboard from './dashboard'
 import LogIn from './log_in'
 import Register from './register'
 import GeneralSettings from './general_settings'
@@ -56,8 +55,7 @@ import DetailTranactionCategory from './detail_transaction_category'
 export {
   LogIn,
   Register,
-  Home,
-  Healthz,
+  Dashboard,
   GeneralSettings,
   VatCategory,
   Contact,

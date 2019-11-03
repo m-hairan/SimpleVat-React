@@ -27,7 +27,9 @@ class Employee extends React.Component {
 
     return (
       <div className="employee-screen">
-        <h1>Employee Screen</h1>
+        <div className="animated fadeIn">
+          <h1>Employee Screen</h1>
+        </div>
       </div>
     )
   }

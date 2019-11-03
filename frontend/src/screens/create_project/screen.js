@@ -27,7 +27,9 @@ class CreateProject extends React.Component {
 
     return (
       <div className="create-project-screen">
-        <h1>CreateProject Screen</h1>
+        <div className="animated fadeIn">
+          <h1>CreateProject Screen</h1>
+        </div>
       </div>
     )
   }

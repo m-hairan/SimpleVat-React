@@ -48,7 +48,7 @@ class CreateBankAccount extends React.Component {
 
     return (
       <div className="create-bank-account-screen">
-        <div className="animated">
+        <div className="animated fadeIn">
           <Row>
             <Col lg={12} className="mx-auto">
               <Card>
