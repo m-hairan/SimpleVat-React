@@ -43,7 +43,7 @@ export const EMPLOYEE = {
 }
 
 export const CONTACT = {
-  
+  CONTACT_LIST: 'CONTACT_LIST'
 }
 
 export const EXPENSE = {
@@ -67,7 +67,7 @@ export const PRODUCT = {
 }
 
 export const PROJECT = {
-
+  PROJECT_LIST: 'PROJECT_LIST'
 }
 
 export const PURCHASE = {
@@ -96,7 +96,7 @@ export const TRANSACTION = {
 }
 
 export const USER = {
-
+  USER_LIST: 'USER_LIST'
 }
 
 export const VAT = {
