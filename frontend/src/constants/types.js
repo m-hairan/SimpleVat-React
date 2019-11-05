@@ -55,7 +55,7 @@ export const SETTINGS = {
 }
 
 export const IMPORTS = {
-
+  IMPORT_LIST: 'IMPORT_LIST'
 }
 
 export const INVOICE = {

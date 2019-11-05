@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import { bindActionCreators } from 'redux'
 import {
   Card,
   CardHeader,
@@ -10,20 +11,25 @@ import {
   Form,
   FormGroup,
   Input,
-  Label
+  Label,
+  ButtonGroup
 } from 'reactstrap'
 import Select from 'react-select'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
+
+import * as ImportsActions from './actions'
 
 import './style.scss'
 
 
 const mapStateToProps = (state) => {
   return ({
+    import_list: state.imports.import_list
   })
 }
 const mapDispatchToProps = (dispatch) => {
   return ({
+    importsActions: bindActionCreators(ImportsActions, dispatch)
   })
 }
 
@@ -41,6 +47,10 @@ class Imports extends React.Component {
     this.renderTransactionStatus = this.renderTransactionStatus.bind(this)
   }
 
+  componentDidMount () {
+    this.props.importsActions.getImportList()
+  }
+
   renderTransactionStatus (cell, row) {
     return (
       <span className="badge badge-success mb-0">Explained</span>
@@ -49,7 +59,7 @@ class Imports extends React.Component {
 
   render() {
 
-    const { bank_statement_list } = this.props
+    const { import_list } = this.props
 
     return (
       <div className="imports-screen">
@@ -80,6 +90,16 @@ class Imports extends React.Component {
                                   />
                                 </div>
                               </FormGroup>
+                              <FormGroup>
+                                <Label htmlFor="date_format">Date Format:</Label>
+                                <div className="status-option">
+                                  <Select
+                                    id="date_format"
+                                    name="date_format"
+                                    options={[]}
+                                  />
+                                </div>
+                              </FormGroup>
                             </div>
                           </Form>
                         </div>
@@ -90,14 +110,24 @@ class Imports extends React.Component {
                 <CardBody>
                   <Row>
                     <Col lg={12}>
-                      <FormGroup>
-                        <Button color="primary" size="sm" className="btn-square mb-2 mr-2">
-                          <i className="fa glyphicon glyphicon-export fa-upload"></i> Upload File (.csv)
-                        </Button>
-                        <Button color="success" size="sm" className="btn-square mb-2">
-                          <i className="fa glyphicon glyphicon-export fa-download"></i> Download Sample File
-                        </Button>
-                      </FormGroup>
+                      <div className="mb-3">
+                        <ButtonGroup size="sm">
+                          <Button
+                            color="primary"
+                            className="btn-square"
+                          >
+                            <i className="fa glyphicon glyphicon-export fa-upload mr-1" />
+                            Upload File (.csv)
+                          </Button>
+                          <Button
+                            color="success"
+                            className="btn-square"
+                          >
+                            <i className="fa glyphicon glyphicon-export fa-download mr-1" />
+                            Download Sample File
+                          </Button>
+                        </ButtonGroup>
+                      </div>
                     </Col>
                   </Row>
                   <Row>
@@ -105,18 +135,6 @@ class Imports extends React.Component {
                       <div className="mb-3">
                         <Form>
                           <Row>
-                            <Col lg={4}>
-                              <FormGroup>
-                                <Label htmlFor="date_format">Date Formats:</Label>
-                                <div className="status-option">
-                                  <Select
-                                    id="date_format"
-                                    name="date_format"
-                                    options={[]}
-                                  />
-                                </div>
-                              </FormGroup>
-                            </Col>
                             <Col lg={4}>
                               <FormGroup className="mb-3">
                                 <Label htmlFor="delimiter">Delimiter</Label>
@@ -162,38 +180,39 @@ class Imports extends React.Component {
                   <Row>
                     <Col lg={12}>
                       <BootstrapTable
-                    
                         options={ this.options }
-                        data={bank_statement_list}
+                        data={import_list}
+                        search={true}
                         version="4"
                         hover
                         pagination
-                        totalSize={ bank_statement_list ? bank_statement_list.length : 0}
-                        className="upload-bank-statement-table"
+                        totalSize={ import_list ? import_list.length : 0}
+                        className="imports-table"
                       >
                         <TableHeaderColumn
                           isKey
-                          dataField="reference_number"
+                          dataField="status"
+                          dataFormat={this.renderTransactionStatus}
                         >
                           Status
                         </TableHeaderColumn>
                         <TableHeaderColumn
-                          dataField="transaction_type"
+                          dataField="transactionType"
                         >
                           Transaction Date
                         </TableHeaderColumn>
                         <TableHeaderColumn
-                          dataField="amount"
+                          dataField="transactionCategoryCode"
                         >
                           Debit Amount
                         </TableHeaderColumn>
                         <TableHeaderColumn
-                          dataField="description"
+                          dataField="parentTransactionCategory"
                         >
                           Description
                         </TableHeaderColumn>
                         <TableHeaderColumn
-                          dataField="transaction_date"
+                          dataField="transactionCategoryId"
                         >
                           Credit Amount
                         </TableHeaderColumn>

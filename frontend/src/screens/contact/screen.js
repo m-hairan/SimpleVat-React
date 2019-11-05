@@ -223,7 +223,7 @@ class Contact extends React.Component {
                             </BootstrapTable>
                           </Col>
                           <Col xs="12" lg="4">
-                            <div className="contact-info mt-5 p-4">
+                            <div className="contact-info p-4">
                               <h4>Mr. Admin Admin</h4>
                               <hr/>
                               <div className="d-flex">
