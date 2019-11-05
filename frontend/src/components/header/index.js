@@ -81,7 +81,7 @@ class Header extends Component {
               <img src={avatar} className="img-avatar" alt="admin@bootstrapmaster.com" />
             </DropdownToggle>
             <DropdownMenu right>
-              <DropdownItem>
+              <DropdownItem onClick={() => this.props.history.push('/admin/profile')}>
                 <i className="fas fa-user"></i> Profile
               </DropdownItem>
             </DropdownMenu>
