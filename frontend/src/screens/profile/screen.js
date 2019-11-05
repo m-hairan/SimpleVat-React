@@ -58,7 +58,7 @@ class Profile extends React.Component {
   render() {
 
     return (
-      <div className="create-user-screen">
+      <div className="profile-screen">
         <div className="animated fadeIn">
           <Row>
             <Col lg={12} className="mx-auto">
