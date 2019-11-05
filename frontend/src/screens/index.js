@@ -29,6 +29,7 @@ import Notification from './notification'
 import DataBackup from './data_backup'
 import Help from './help'
 import Faq from './faq'
+import Profile from './profile'
 
 import CreateInvoice from './create_invoice'
 import CreateExpense from './create_expense'
@@ -84,6 +85,7 @@ export {
   DataBackup,
   Help,
   Faq,
+  Profile,
 
   CreateInvoice,
   CreateExpense,
