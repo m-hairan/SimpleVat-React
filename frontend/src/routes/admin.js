@@ -28,6 +28,7 @@ import {
   DataBackup,
   Help,
   Faq,
+  Profile,
 
 
   CreateInvoice,
@@ -58,6 +59,11 @@ const adminRoutes = [
     path: '/admin/dashboard',
     name: 'Dashboard',
     component: Dashboard.screen
+  },
+  {
+    path: '/admin/profile',
+    name: 'Profile',
+    component: Profile.screen
   },
   {
     path: '/admin/invoice/create',
