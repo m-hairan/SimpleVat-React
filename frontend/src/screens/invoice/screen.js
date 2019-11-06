@@ -29,12 +29,6 @@ import Loader from 'components/loader'
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
 
-import {
-  State,
-  Filter,
-  Table
-} from './sections'
-
 import * as InvoiceActions from './actions'
 
 import './style.scss'
