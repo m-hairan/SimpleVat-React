@@ -71,7 +71,7 @@ export const PROJECT = {
 }
 
 export const PURCHASE = {
-
+  PURCHASE_LIST: 'PURCHASE_LIST'
 }
 
 export const TAXES = {
