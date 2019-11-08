@@ -17,10 +17,11 @@ import {
   FormGroup,
   Input
 } from 'reactstrap'
+import Select from 'react-select'
 import { ToastContainer, toast } from 'react-toastify'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
 
-import Loader from 'components/loader'
+import { Loader } from 'components'
 
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
@@ -49,8 +50,13 @@ class Contact extends React.Component {
       clickedRow: {}
     }
 
+    this.initializeData = this.initializeData.bind(this)
+    this.onRowSelect = this.onRowSelect.bind(this)
+    this.onSelectAll = this.onSelectAll.bind(this)
+    this.goToDetail = this.goToDetail.bind(this)
+
     this.options = {
-      onRowClick: this.onRowClick
+      onRowClick: this.goToDetail
     }
 
     this.selectRowProp = {
@@ -61,10 +67,6 @@ class Contact extends React.Component {
       onSelectAll: this.onSelectAll
     }
 
-    this.renderUserName = this.renderUserName.bind(this)
-    this.onRowSelect = this.onRowSelect.bind(this)
-    this.onSelectAll = this.onSelectAll.bind(this)
-    this.onRowClick = this.onRowClick.bind(this)
   }
 
   componentDidMount () {
@@ -75,17 +77,6 @@ class Contact extends React.Component {
     this.props.ContactActions.getContactList()
   }
 
-  renderUserName (cell, row) {
-    return (
-      <label
-        className="text-primary my-link mb-0"
-        onClick={() => this.props.history.push('/admin/master/contact/detail')}
-      >
-        { row.transactionCategoryName }
-      </label>
-    )
-  }
-
   onRowSelect (row, isSelected, e) {
     console.log('one row checked ++++++++', row)
   }
@@ -93,8 +84,8 @@ class Contact extends React.Component {
     console.log('current page all row checked ++++++++', rows)
   }
 
-  onRowClick(row) {
-    console.log(row)
+  goToDetail(row) {
+    this.props.history.push('/admin/master/contact/detail')
   }
 
   render() {
@@ -173,11 +164,11 @@ class Contact extends React.Component {
                             <Input type="text" placeholder="Email" />
                           </FormGroup>
                           <FormGroup className="pr-3">
-                            <select className="form-control">
-                              <option value="vendor">All</option>
-                              <option value="customer">Customer</option>
-                              <option value="vendor">Vendor</option>
-                            </select>
+                            <Select
+                              className="select-min-width"
+                              options={[]}
+                              placeholder="User Type"
+                            />
                           </FormGroup>
                           
                           <Button
@@ -202,11 +193,11 @@ class Contact extends React.Component {
                               pagination
                               totalSize={contact_list ? contact_list.length : 0}
                               className="product-table"
+                              trClassName="cursor-pointer"
                             >
                               <TableHeaderColumn
                                 isKey
                                 dataField="transactionCategoryName"
-                                dataFormat={this.renderUserName}
                               >
                                 Name
                               </TableHeaderColumn>

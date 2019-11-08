@@ -155,12 +155,6 @@ class TaxReport extends React.Component {
                   <Form onSubmit={this.handleSubmit} name="simpleForm">
                     <div className="flex-wrap d-flex">
                       <FormGroup>
-                        <Label htmlFor="name">Period:</Label>
-                        <div className="date-range">
-                          <DateRangePicker2  ranges={ranges}/>
-                        </div>
-                      </FormGroup>  
-                      <FormGroup>
                         <Label htmlFor="name">Vat:</Label>
                         <div className="account-type">
                           <Select
@@ -169,7 +163,16 @@ class TaxReport extends React.Component {
                             onChange={this.changeVat}
                           />
                         </div>
-                      </FormGroup>  
+                      </FormGroup>
+                      <FormGroup>
+                        <Label htmlFor="name">Period:</Label>
+                        <div className="date-range">
+                          <DateRangePicker2
+                            ranges={ranges}
+                            opens={'left'}
+                          />
+                        </div>
+                      </FormGroup>
                     </div>
                   </Form>
                 </div>
@@ -224,22 +227,24 @@ class TaxReport extends React.Component {
                   <Form onSubmit={this.handleSubmit} name="simpleForm">
                     <div className="flex-wrap d-flex">
                       <FormGroup>
-                        <Label htmlFor="name">Period:</Label>
-                        <div className="date-range">
-                          <DateRangePicker2  ranges={ranges}/>
-                        </div>
-                      </FormGroup>  
-                      <FormGroup>
                         <Label htmlFor="name">Status:</Label>
                         <div className="account-type">
                           <Select
-
                             options={statusOptions}
                             value={this.state.selectedStatus}
                             onChange={this.changeStatus}
                           />
                         </div>
-                      </FormGroup>  
+                      </FormGroup>
+                      <FormGroup>
+                        <Label htmlFor="name">Period:</Label>
+                        <div className="date-range">
+                          <DateRangePicker2
+                            ranges={ranges}
+                            opens={'left'}
+                          />
+                        </div>
+                      </FormGroup>
                     </div>
                   </Form>
                 </div>

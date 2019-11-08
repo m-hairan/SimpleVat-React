@@ -120,6 +120,7 @@ class CreateProject extends React.Component {
                             <FormGroup className="mb-3">
                               <Label htmlFor="vat_percentage">Currency</Label>
                               <Select
+                                className="select-default-width"
                                 options={[]}
                                 id="vat_percentage"
                                 name="vat_percentage"
@@ -128,8 +129,8 @@ class CreateProject extends React.Component {
                           </Col>
                         </Row>
                         <Row>
-                        <Col lg={4}>
-                            <FormGroup className="mb-3">
+                          <Col lg={4}>
+                            <FormGroup className="">
                               <Label htmlFor="product_price">Expense Budget</Label>
                               <Input
                                 type="text"
@@ -141,7 +142,7 @@ class CreateProject extends React.Component {
                             </FormGroup>
                           </Col>
                           <Col lg={4}>
-                            <FormGroup className="mb-3">
+                            <FormGroup className="">
                               <Label htmlFor="product_price">Revenue Budget</Label>
                               <Input
                                 type="text"
@@ -153,9 +154,10 @@ class CreateProject extends React.Component {
                             </FormGroup>
                           </Col>
                           <Col lg={4}>
-                            <FormGroup className="mb-3">
+                            <FormGroup className="">
                               <Label htmlFor="vat_percentage">Invoice Language</Label>
                               <Select
+                                className="select-default-width"
                                 options={[]}
                                 id="vat_percentage"
                                 name="vat_percentage"
@@ -164,7 +166,7 @@ class CreateProject extends React.Component {
                           </Col>
                         </Row>
                         <Row>
-                          <Col lg={12}>
+                          <Col lg={12} className="mt-5">
                             <FormGroup className="text-right">
                               <Button type="submit" color="primary" className="btn-square mr-3">
                                 <i className="fa fa-dot-circle-o"></i> Create

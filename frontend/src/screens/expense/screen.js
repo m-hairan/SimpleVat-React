@@ -19,11 +19,13 @@ import {
 } from 'reactstrap'
 import { ToastContainer, toast } from 'react-toastify'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
+import DatePicker from 'react-datepicker'
 
-import Loader from 'components/loader'
+import { Loader } from 'components'
 
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
+import 'react-datepicker/dist/react-datepicker.css'
 
 import * as ExpenseActions from './actions'
 
@@ -48,7 +50,13 @@ class Expense extends React.Component {
       loading: false,
     }
 
+    this.initializeData = this.initializeData.bind(this)
+    this.onRowSelect = this.onRowSelect.bind(this)
+    this.onSelectAll = this.onSelectAll.bind(this)
+    this.goToDetail = this.goToDetail.bind(this)
+
     this.options = {
+      onRowClick: this.goToDetail
     }
 
     this.selectRowProp = {
@@ -58,10 +66,6 @@ class Expense extends React.Component {
       onSelect: this.onRowSelect,
       onSelectAll: this.onSelectAll
     }
-
-    this.renderRecieptNumber = this.renderRecieptNumber.bind(this)
-    this.onRowSelect = this.onRowSelect.bind(this)
-    this.onSelectAll = this.onSelectAll.bind(this)
 
   }
 
@@ -73,15 +77,8 @@ class Expense extends React.Component {
     this.props.expenseActions.getExpenseList()
   }
 
-  renderRecieptNumber (cell, row) {
-    return (
-      <label
-        className="text-primary my-link mb-0"
-        onClick={() => this.props.history.push('/admin/expense/expense/detail')}
-      >
-        { row.transactionCategoryName }
-      </label>
-    )
+  goToDetail (row) {
+    this.props.history.push('/admin/expense/expense/detail')
   }
 
   onRowSelect (row, isSelected, e) {
@@ -161,10 +158,10 @@ class Expense extends React.Component {
                       <div className="filter-panel my-3 py-3">
                         <Form inline>
                           <FormGroup className="pr-3">
-                            <Input type="text" placeholder="From" />
-                          </FormGroup>
-                          <FormGroup className="pr-3">
-                            <Input type="text" placeholder="To" />
+                            <DatePicker
+                              className="form-control"
+                              placeholderText="Date"
+                            />
                           </FormGroup>
                           <FormGroup className="pr-3">
                             <Input type="text" placeholder="Reciept Number" />
@@ -189,28 +186,33 @@ class Expense extends React.Component {
                           pagination
                           totalSize={expense_list ? expense_list.length : 0}
                           className="expense-table"
+                          trClassName="cursor-pointer"
                         >
                           <TableHeaderColumn
                             isKey
                             dataField="transactionCategoryName"
-                            dataFormat={this.renderRecieptNumber}
                           >
-                            Reciept Number
+                            Payee Name
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionCategoryCode"
                           >
-                            Amount
+                            Description
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="parentTransactionCategory"
                           >
-                            Description
+                            Receipt No.
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionType"
                           >
-                            Expense Date
+                            Amount
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            dataField="transactionType"
+                          >
+                            Date
                           </TableHeaderColumn>
                         </BootstrapTable>
                       </div>

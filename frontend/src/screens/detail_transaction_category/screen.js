@@ -1,12 +1,23 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Card, CardHeader, CardBody, Button, Input, Form, FormGroup, Label, Row, Col } from 'reactstrap'
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Button,
+  Input,
+  Form,
+  FormGroup,
+  Label,
+  Row,
+  Col
+} from 'reactstrap'
 import { toast } from 'react-toastify'
 import Select from 'react-select'
 import Autosuggest from 'react-autosuggest'
 import _ from 'lodash'
-import Loader from 'components/loader'
+import { Loader } from 'components'
 
 import 'react-toastify/dist/ReactToastify.css'
 import './style.scss'
@@ -469,7 +480,7 @@ class DetailTranactionCategory extends React.Component {
                       ) : (
                           ""
                         )}
-                      <FormGroup className="text-right">
+                      <FormGroup className="text-right mt-5">
                         <Button type="submit" color="primary" className="btn-square mr-3">
                           <i className="fa fa-dot-circle-o"></i> Save
                         </Button>

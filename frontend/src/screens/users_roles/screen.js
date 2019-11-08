@@ -1,13 +1,30 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Card, CardHeader, CardBody, Button, Modal, ModalHeader, 
-        ModalBody, ModalFooter, Row, Input, ButtonGroup, Col, Form, 
-        FormGroup, Label} from 'reactstrap'
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Button,
+  Modal,
+  ModalHeader, 
+  ModalBody,
+  ModalFooter,
+  Row,
+  Input,
+  ButtonGroup,
+  Col,
+  Form, 
+  FormGroup,
+  Label
+} from 'reactstrap'
 import { ToastContainer, toast } from 'react-toastify'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
-import Loader from "components/loader"
+
 import moment from 'moment'
+import Select from 'react-select'
+
+import { Loader } from 'components'
 
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
@@ -40,16 +57,21 @@ class UsersRoles extends React.Component {
       ]
     }
 
+    this.closeInviteUserModal = this.closeInviteUserModal.bind(this)
+    this.showInviteUserModal = this.showInviteUserModal.bind(this)
+    this.getUserName = this.getUserName.bind(this)
+    this.goToDetail = this.goToDetail.bind(this)
+
+    this.options = {
+      onRowClick: this.goToDetail
+    }
+
     this.selectRowProp = {
       mode: 'checkbox',
       bgColor: 'rgba(0,0,0, 0.05)',
       onSelect: this.onRowSelect,
       onSelectAll: this.onSelectAll
     }
-
-    this.closeInviteUserModal = this.closeInviteUserModal.bind(this)
-    this.showInviteUserModal = this.showInviteUserModal.bind(this)
-    this.getUserName = this.getUserName.bind(this)
   }
 
   componentDidMount() {
@@ -62,6 +84,10 @@ class UsersRoles extends React.Component {
   // Cloase Confirm Modal
   closeInviteUserModal() {
     this.setState({ openInviteUserModal: false })
+  }
+
+  goToDetail(row) {
+    this.showInviteUserModal()
   }
 
 
@@ -152,12 +178,11 @@ class UsersRoles extends React.Component {
                               <Input type="text" placeholder="User Name" />
                             </FormGroup>
                             <FormGroup className="pr-3">
-                              <select className="form-control" placeholder="User Role">
-                                <option value="null" >All</option>
-                                <option value='admin'>Admin</option>
-                                <option value='employee'>Employee</option>
-                                <option value='accountant'>Accountant</option>
-                              </select>
+                              <Select
+                                className="select-min-width"
+                                options={[]}
+                                placeholder="User Role"
+                              />
                             </FormGroup>
                             
                             <Button
@@ -176,6 +201,8 @@ class UsersRoles extends React.Component {
                           version="4"
                           search={true}
                           selectRow={ this.selectRowProp }
+                          options={this.options}
+                          trClassName="cursor-pointer"
                         >
                           <TableHeaderColumn isKey dataField="email" dataFormat={this.getUserName}>
                             User Detail
@@ -218,17 +245,17 @@ class UsersRoles extends React.Component {
                 </FormGroup>
                 <FormGroup>
                   <Label htmlFor="categoryCode">Position</Label>
-                  <select className="form-control" placeholder="User Role">
-                    <option value='admin'>Admin</option>
-                    <option value='employee'>Employee</option>
-                    <option value='accountant'>Accountant</option>
-                  </select>
+                  <Select
+                    className="select-min-width"
+                    options={[]}
+                    placeholder="Position"
+                  />
                 </FormGroup>
               </Form>
             </ModalBody>
             <ModalFooter>
-              <Button color="success" onClick={this.closeInviteUserModal}>Send</Button>&nbsp;
-              <Button color="secondary"onClick={this.closeInviteUserModal}>No</Button>
+              <Button color="success" className="btn-square" onClick={this.closeInviteUserModal}>Send</Button>&nbsp;
+              <Button color="secondary" className="btn-square" onClick={this.closeInviteUserModal}>No</Button>
             </ModalFooter>
           </Modal>
         </div>

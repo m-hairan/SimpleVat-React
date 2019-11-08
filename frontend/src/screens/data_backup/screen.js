@@ -1,9 +1,17 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Card, CardHeader, CardBody, Button, Row, Col, Table} from 'reactstrap'
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Button,
+  Row,
+  Col,
+  Table
+} from 'reactstrap'
 import { ToastContainer, toast } from 'react-toastify'
-import Loader from "components/loader"
+import { Loader } from 'components'
 
 import 'react-toastify/dist/ReactToastify.css'
 

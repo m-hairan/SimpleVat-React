@@ -1,25 +1,39 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Card, CardHeader, CardBody, Button, Modal, ModalHeader, 
-        ModalBody, ModalFooter, Row, Input, ButtonGroup, Col, Form, 
-        FormGroup, Label} from 'reactstrap'
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Button,
+  Modal,
+  ModalHeader, 
+  ModalBody,
+  ModalFooter,
+  Row,
+  Input,
+  ButtonGroup,
+  Col,
+  Form, 
+  FormGroup,
+  Label
+} from 'reactstrap'
 import { ToastContainer, toast } from 'react-toastify'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
-import Loader from "components/loader"
 import moment from 'moment'
+import ImagesUploader from 'react-images-uploader'
+import Select from 'react-select'
+
+import { Loader } from 'components'
 
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
+import 'react-images-uploader/styles.css'
+import 'react-images-uploader/font.css'
 import './style.scss'
 
 import * as TransactionActions from './actions'
 
-
-import ImagesUploader from 'react-images-uploader';
-import 'react-images-uploader/styles.css';
-import 'react-images-uploader/font.css';
-import Select from 'react-select'
 
 const industryOptions = [
   { value: 'input', label: 'Input'},
@@ -49,6 +63,18 @@ class TransactionCategory extends React.Component {
       loading: true,
     }
 
+    this.deleteTransaction = this.deleteTransaction.bind(this)
+    this.customSearchField = this.customSearchField.bind(this)
+    this.success = this.success.bind(this)
+    this.customTotal = this.customTotal.bind(this)
+    this.getTransactionType = this.getTransactionType.bind(this)
+    this.getparentTransactionCategory = this.getparentTransactionCategory.bind(this)
+    this.goToDetail = this.goToDetail.bind(this)
+
+    this.options = {
+      onRowClick: this.goToDetail
+    }
+
     this.selectRowProp = {
       mode: 'checkbox',
       bgColor: 'rgba(0,0,0, 0.05)',
@@ -56,13 +82,6 @@ class TransactionCategory extends React.Component {
       onSelectAll: this.onSelectAll
     }
 
-    this.deleteTransaction = this.deleteTransaction.bind(this)
-    this.customSearchField = this.customSearchField.bind(this)
-    this.success = this.success.bind(this)
-    this.customTotal = this.customTotal.bind(this)
-    this.getTransactionType = this.getTransactionType.bind(this)
-    this.getparentTransactionCategory = this.getparentTransactionCategory.bind(this)
-    this.getCategoryName = this.getCategoryName.bind(this)
   }
 
   // Table Custom Search Field
@@ -95,15 +114,8 @@ class TransactionCategory extends React.Component {
     return(row.parentTransactionCategory.transactionCategoryDescription)
   }
 
-  getCategoryName(cell, row) {
-    return (
-      <label
-        className="text-primary my-link mb-0"
-        onClick={() => this.props.history.push('/admin/settings/transaction-category/detail')}
-      >
-        { row.transactionCategoryName }
-      </label>
-    )
+  goToDetail (row) {
+    this.props.history.push('/admin/settings/transaction-category/detail')
   }
 
   // Show Success Toast
@@ -239,11 +251,13 @@ class TransactionCategory extends React.Component {
                           version="4"
                           search={true}
                           selectRow={ this.selectRowProp }
+                          options={this.options}
+                          trClassName="cursor-pointer"
                         >
                           <TableHeaderColumn isKey dataField="transactionCategoryCode">
                             Category Code
                           </TableHeaderColumn>
-                          <TableHeaderColumn dataFormat={this.getCategoryName}>
+                          <TableHeaderColumn dataField="transactionCategoryName">
                             Category Name
                           </TableHeaderColumn>
                           <TableHeaderColumn dataField="transactionCategoryDescription">

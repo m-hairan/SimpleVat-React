@@ -88,6 +88,7 @@ class CreateProduct extends React.Component {
                             <FormGroup className="mb-3">
                               <Label htmlFor="parent_product">Parent Product</Label>
                               <Select
+                                className="select-default-width"
                                 options={[]}
                                 id="parent_product"
                                 name="parent_product"
@@ -112,6 +113,7 @@ class CreateProduct extends React.Component {
                             <FormGroup className="mb-3">
                               <Label htmlFor="vat_percentage">Vat Percentage</Label>
                               <Select
+                                className="select-default-width"
                                 options={[]}
                                 id="vat_percentage"
                                 name="vat_percentage"
@@ -138,6 +140,7 @@ class CreateProduct extends React.Component {
                             <FormGroup className="mb-3">
                               <Label htmlFor="warehourse">Warehourse</Label>
                               <Select
+                                className="select-default-width"
                                 options={[]}
                                 id="warehourse"
                                 name="warehourse"
@@ -147,7 +150,7 @@ class CreateProduct extends React.Component {
                         </Row>
                         <Row>
                           <Col lg={4}>
-                            <FormGroup className="mb-5">
+                            <FormGroup className="">
                               <Button color="primary" className="btn-square">
                                 <i className="fa fa-plus"></i> Add a Warehouse
                               </Button>
@@ -156,7 +159,7 @@ class CreateProduct extends React.Component {
                         </Row>
                         <Row>
                           <Col lg={8}>
-                            <FormGroup className="mb-5">
+                            <FormGroup className="">
                               <Label htmlFor="description">Description</Label>
                               <Input
                                 type="textarea"
@@ -169,7 +172,7 @@ class CreateProduct extends React.Component {
                           </Col>
                         </Row>
                         <Row>
-                          <Col lg={12}>
+                          <Col lg={12} className="mt-5">
                             <FormGroup className="text-right">
                               <Button type="submit" color="primary" className="btn-square mr-3">
                                 <i className="fa fa-dot-circle-o"></i> Create

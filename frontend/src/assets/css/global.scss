@@ -1,8 +1,23 @@
 
+
+// global html styles
 body, span, label, h1, h2, h3, h4, p, em {
   font-family: Montserrat, serif;
 }
+.nav-link {
+  border-radius: 0 !important;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
 
+
+
+
+
+
+
+// form styles
 .form-control {
   border-radius: 0 !important;
   border-color: #ccc !important;
@@ -18,6 +33,15 @@ body, span, label, h1, h2, h3, h4, p, em {
   }
 }
 
+
+
+
+
+
+
+
+
+// card styles
 .card {
   border-radius: 0 !important;
   border: none !important;
@@ -38,17 +62,6 @@ body, span, label, h1, h2, h3, h4, p, em {
   border-radius: 0 !important;
 }
 
-.dropdown-menu {
-  border-radius: 0 !important;
-  border: none !important;
-  box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.2), 0px 3px 4px 0px rgba(0,0,0,0.14),
-    0px 3px 3px -2px rgba(0,0,0,0.12) !important;
-}
-
-.nav-link {
-  border-radius: 0 !important;
-}
-
 .tab-card {
   background: #ffffff !important;
 }
@@ -57,10 +70,34 @@ body, span, label, h1, h2, h3, h4, p, em {
 }
 
 
+
+
+
+
+
+
+// dropdown styles
+.dropdown-menu {
+  border-radius: 0 !important;
+  border: none !important;
+  box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.2), 0px 3px 4px 0px rgba(0,0,0,0.14),
+    0px 3px 3px -2px rgba(0,0,0,0.12) !important;
+}
+
+
+
+
+
+
+
+
+
+
+// react-bootstrap-table styles
 .react-bs-table-container {
   .react-bs-table {
     border-radius: 0 !important;
-  
+    border-bottom: 0px !important;
     td {
       vertical-align: middle !important;
     }
@@ -83,7 +120,22 @@ body, span, label, h1, h2, h3, h4, p, em {
   }
 }
 
+td {
+  padding: 0.65rem !important;
+}
 
+th {
+  padding: 0.65rem !important;
+}
+
+
+
+
+
+
+
+
+// modal styles
 .modal-dialog {
   border-radius: 0 !important;
   .modal-content {
@@ -108,16 +160,97 @@ body, span, label, h1, h2, h3, h4, p, em {
 
 
 
+
+
+
+
+
+// react-select styles
 .Select-control {
   border-radius: 0px !important;
 }
 .Select-menu-outer {
   border-radius: 0px !important;
 }
+.select-default-width {
+  .Select-menu-outer {
+    width: calc(100% - 1px) !important;
+  }
+}
+.select-min-width {
+  min-width: 200px;
+}
 
+
+
+
+// react autosuggest styles
 .react-autosuggest__input {
   border-color: #ccc !important;
   border-radius: 0px !important;
 }
+
+
+
+
+// react-datepicker styles
+.react-datepicker-popper {
+  box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.2), 0px 3px 4px 0px rgba(0,0,0,0.14),
+    0px 3px 3px -2px rgba(0,0,0,0.12) !important;
+  .react-datepicker__triangle::before {
+    box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.2), 0px 3px 4px 0px rgba(0,0,0,0.14),
+      0px 3px 3px -2px rgba(0,0,0,0.12) !important;
+    border: none !important;
+  }
+  .react-datepicker {
+    border-radius: 0px !important;
+    border: none !important;
+    .react-datepicker__header {
+      border-bottom: 0px !important;
+      border-radius: 0px !important;
+    }
+    .react-datepicker__day--keyboard-selected {
+      border-radius: 0px !important;
+    }
+    .react-datepicker__day:hover {
+      border-radius: 0px !important;
+    }
+  }
+}
+
+
+// react date range picker styles
+@media (min-width: 564px) {
+  .daterangepicker .drp-calendar.right {
+    padding-left: 0 !important;
+  }
+}
+
+.daterangepicker {
+  border-radius: 0px !important;
+  border: none !important;
+  box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.2), 0px 3px 4px 0px rgba(0,0,0,0.14),
+    0px 3px 3px -2px rgba(0,0,0,0.12) !important;
+  .applyBtn {
+    border-radius: 0px !important;
+  }
+  .start-date {
+    border-radius: 0px !important;
+  }
+  .end-date {
+    border-radius: 0px !important;
+  }
+}
+.daterangepicker::before {
+  box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.2), 0px 3px 4px 0px rgba(0,0,0,0.14),
+      0px 3px 3px -2px rgba(0,0,0,0.12) !important;
+  border: none !important;
+}
+
+
+
+
+
+
 
 

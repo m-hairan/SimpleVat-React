@@ -516,7 +516,10 @@ class ProfitAndLoss extends React.Component {
                       <FormGroup>
                         <Label htmlFor="name">Period:</Label>
                         <div className="date-range">
-                          <DateRangePicker2  ranges={ranges}/>
+                          <DateRangePicker2
+                            ranges={ranges}
+                            opens={'left'}
+                          />
                         </div>
                       </FormGroup>  
                       

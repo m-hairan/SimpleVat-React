@@ -1,10 +1,21 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Card, CardHeader, CardBody, Button, Input, Form, FormGroup, Label, Row, Col } from 'reactstrap'
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Button,
+  Input,
+  Form,
+  FormGroup,
+  Label,
+  Row,
+  Col
+} from 'reactstrap'
 import { ToastContainer, toast } from 'react-toastify'
-import _ from "lodash"
-import Loader from "components/loader"
+import _ from 'lodash'
+import { Loader } from 'components'
 
 import 'react-toastify/dist/ReactToastify.css'
 import './style.scss'
@@ -120,7 +131,7 @@ class CreateVatCategory extends React.Component {
                           required
                         />
                       </FormGroup>            
-                      <FormGroup className="text-right">
+                      <FormGroup className="text-right mt-5">
                         <Button type="submit" name="submit" color="primary" className="btn-square mr-3">
                           <i className="fa fa-dot-circle-o"></i> Create
                         </Button>

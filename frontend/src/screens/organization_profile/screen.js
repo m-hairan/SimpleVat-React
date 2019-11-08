@@ -1,20 +1,29 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Card, CardHeader, CardBody, Button, Row, Input, Col, Form, 
-        FormGroup, Label} from 'reactstrap'
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Button,
+  Row,
+  Input,
+  Col,
+  Form, 
+  FormGroup,
+  Label
+} from 'reactstrap'
 import { ToastContainer, toast } from 'react-toastify'
-import Loader from "components/loader"
+import ImagesUploader from 'react-images-uploader'
+import Select from 'react-select'
+
+import { Loader } from 'components'
 
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
+import 'react-images-uploader/styles.css'
+import 'react-images-uploader/font.css'
 import './style.scss'
-
-
-import ImagesUploader from 'react-images-uploader';
-import 'react-images-uploader/styles.css';
-import 'react-images-uploader/font.css';
-import Select from 'react-select'
 
 
 const industryOptions = [
@@ -267,7 +276,7 @@ class OrganizationProfile extends React.Component {
                           <Button
                             type="submit"
                             color="primary"
-                            className="btn-square mt-3"
+                            className="btn-square mt-5"
                           >
                             <i className="fas fa-save mr-2"></i>Save
                           </Button>

@@ -15,6 +15,7 @@ import {
 } from 'reactstrap'
 import Select from 'react-select'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
+import DatePicker from 'react-datepicker'
 
 import './style.scss'
 
@@ -45,8 +46,7 @@ class DetailExpense extends React.Component {
 
     this.renderActions = this.renderActions.bind(this)
     this.renderProductName = this.renderProductName.bind(this)
-    this.renderQuantity = this.renderQuantity.bind(this)
-    this.renderUnitPrice = this.renderUnitPrice.bind(this)
+    this.renderAmount = this.renderAmount.bind(this)
     this.renderVat = this.renderVat.bind(this)
     this.renderSubTotal = this.renderSubTotal.bind(this)
 
@@ -60,13 +60,23 @@ class DetailExpense extends React.Component {
 
   renderProductName (cell, row) {
     return (
-      <Input
-        type="text"
-      />
+      <div className="d-flex align-items-center">
+        <Select
+          className="select-default-width flex-grow-1 mr-1"
+          options={[]}
+        />
+        <Button
+          size="sm"
+          color="primary"
+          className="btn-brand icon"
+        >
+          <i className="fas fa-plus"></i>
+        </Button>
+      </div>
     )
   }
 
-  renderQuantity (cell, row) {
+  renderAmount (cell, row) {
     return (
       <Input
         type="text"
@@ -75,18 +85,10 @@ class DetailExpense extends React.Component {
     )
   }
 
-  renderUnitPrice (cell, row) {
-    return (
-      <Input
-        type="text"
-        value="0.00"
-      />
-    )
-  }
-
   renderVat (cell, row) {
     return (
       <Select
+        className="select-default-width"
         options={[]}
         id="currency"
         name="currency"
@@ -125,36 +127,27 @@ class DetailExpense extends React.Component {
                         <Row>
                           <Col lg={4}>
                             <FormGroup className="mb-3">
-                              <Label htmlFor="claimant">Claimant</Label>
+                              <Label htmlFor="payee">Payee</Label>
                               <Input
                                 type="text"
-                                id="claimant"
-                                name="claimant"
-                                placeholder="Enter Claimant"
+                                id="payee"
+                                name="payee"
+                                placeholder="Enter Payee"
                                 required
-                              />
-                            </FormGroup>
-                          </Col>
-                          <Col lg={4}>
-                            <FormGroup className="mb-3">
-                              <Label htmlFor="category">Category</Label>
-                              <Select
-                                options={[]}
-                                id="category"
-                                name="category"
                               />
                             </FormGroup>
                           </Col>
                           <Col lg={4}>
                             <FormGroup className="mb-3">
                               <Label htmlFor="expense_date">Expense Date</Label>
-                              <Input
-                                type="text"
-                                id="expense_date"
-                                name="expense_date"
-                                placeholder="Enter Expense Date"
-                                required
-                              />
+                              <div>
+                                <DatePicker
+                                  className="form-control"
+                                  id="date"
+                                  name="date"
+                                  placeholderText=""
+                                />
+                              </div>
                             </FormGroup>
                           </Col>
                         </Row>
@@ -163,6 +156,7 @@ class DetailExpense extends React.Component {
                             <FormGroup className="mb-3">
                               <Label htmlFor="currency">Currency</Label>
                               <Select
+                                className="select-default-width"
                                 options={[]}
                                 id="currency"
                                 name="currency"
@@ -173,6 +167,7 @@ class DetailExpense extends React.Component {
                             <FormGroup className="mb-3">
                               <Label htmlFor="project">Project</Label>
                               <Select
+                                className="select-default-width"
                                 options={[]}
                                 id="project"
                                 name="project"
@@ -271,15 +266,9 @@ class DetailExpense extends React.Component {
                               </TableHeaderColumn>
                               <TableHeaderColumn
                                 dataField="quantity"
-                                dataFormat={this.renderQuantity}
+                                dataFormat={this.renderAmount}
                               >
-                                Quantity
-                              </TableHeaderColumn>
-                              <TableHeaderColumn
-                                dataField="unit_price"
-                                dataFormat={this.renderUnitPrice}
-                              >
-                                Unit Price (All)
+                                Amount
                               </TableHeaderColumn>
                               <TableHeaderColumn
                                 dataField="vat"
@@ -302,7 +291,7 @@ class DetailExpense extends React.Component {
                   <Row>
                     <Col lg={4} className="ml-auto">
                       <div className="mb-3">
-                        <div className="total-item p-3">
+                        <div className="total-item p-2">
                           <Row>
                             <Col lg={6}>
                               <h5 className="mb-0 text-right">Total Net</h5>
@@ -312,7 +301,7 @@ class DetailExpense extends React.Component {
                             </Col>
                           </Row>
                         </div>
-                        <div className="total-item p-3">
+                        <div className="total-item p-2">
                           <Row>
                             <Col lg={6}>
                               <h5 className="mb-0 text-right">Total Vat</h5>
@@ -322,7 +311,7 @@ class DetailExpense extends React.Component {
                             </Col>
                           </Row>
                         </div>
-                        <div className="total-item p-3">
+                        <div className="total-item p-2">
                           <Row>
                             <Col lg={6}>
                               <h5 className="mb-0 text-right">Total</h5>
