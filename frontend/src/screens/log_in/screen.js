@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux'
 import {
   Button,
   Card,
+  CardHeader,
   CardBody,
   CardGroup,
   Col,
@@ -29,6 +30,7 @@ import './style.scss'
 
 const mapStateToProps = (state) => {
   return ({
+    version: state.common.version
   })
 }
 const mapDispatchToProps = (dispatch) => {
@@ -82,6 +84,8 @@ class LogIn extends React.Component {
   }
 
   render() {
+
+    const { version } = this.props
 
     return (
       <div className="log-in-screen">
@@ -150,7 +154,17 @@ class LogIn extends React.Component {
                         </Form>
                       </CardBody>
                     </Card>
-                    <Card className="text-white bg-primary py-5 d-md-down-none">
+                    <Card className="text-white bg-primary d-md-down-none">
+                      <CardHeader className="bg-primary">
+                        <div className="text-right">
+                          {
+                            version !== '' ?
+                              <label className="text-white mb-0">v. {version} </label>
+                            :
+                              ''
+                          }
+                        </div>
+                      </CardHeader>
                       <CardBody className="text-center">
                         <div>
                           <h2>Sign up</h2>
