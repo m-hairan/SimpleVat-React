@@ -38,6 +38,7 @@ import './style.scss'
 
 const mapStateToProps = (state) => {
   return ({
+    version: state.common.version
   })
 }
 const mapDispatchToProps = (dispatch) => {
@@ -63,6 +64,7 @@ class AdminLayout extends React.Component {
         this.props.authActions.logOut()
         this.props.history.push('/login')
       })
+      this.props.commonActions.getSimpleVATVersion()
     }
   }
 
@@ -116,7 +118,7 @@ class AdminLayout extends React.Component {
           </div>
           <AppFooter>
             <Suspense fallback={Loading()}>
-              <Footer />
+              <Footer {...this.props} />
             </Suspense>
           </AppFooter>
         </div>
