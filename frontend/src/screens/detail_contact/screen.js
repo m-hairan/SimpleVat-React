@@ -326,7 +326,7 @@ class DetailContact extends React.Component {
                           </Col>
                         </Row>
                         <Row>
-                          <Col lg={12}>
+                          <Col lg={12} className="mt-5">
                             <FormGroup className="text-right">
                               <Button type="submit" color="primary" className="btn-square mr-3">
                                 <i className="fa fa-dot-circle-o"></i> Update

@@ -83,6 +83,7 @@ class CreateBankAccount extends React.Component {
                             <FormGroup className="mb-3">
                               <Label htmlFor="currency">Currency</Label>
                               <Select
+                                className="select-default-width"
                                 id="currency"
                                 name="currency"
                                 options={[]}
@@ -109,6 +110,7 @@ class CreateBankAccount extends React.Component {
                                 Account Type
                               </Label>
                               <Select
+                                className="select-default-width"
                                 id="account_type"
                                 name="account_type"
                                 options={[]}

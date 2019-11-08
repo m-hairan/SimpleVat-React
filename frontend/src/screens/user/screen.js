@@ -17,8 +17,10 @@ import {
   FormGroup,
   Input
 } from 'reactstrap'
+import Select from 'react-select'
 import { ToastContainer, toast } from 'react-toastify'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
+import DatePicker from 'react-datepicker'
 
 import Loader from 'components/loader'
 
@@ -48,7 +50,13 @@ class User extends React.Component {
       loading: false,
     }
 
+    this.initializeData = this.initializeData.bind(this)
+    this.onRowSelect = this.onRowSelect.bind(this)
+    this.onSelectAll = this.onSelectAll.bind(this)
+    this.goToDetail = this.goToDetail.bind(this)
+
     this.options = {
+      onRowClick: this.goToDetail
     }
 
     this.selectRowProp = {
@@ -58,10 +66,6 @@ class User extends React.Component {
       onSelect: this.onRowSelect,
       onSelectAll: this.onSelectAll
     }
-
-    this.renderUserName = this.renderUserName.bind(this)
-    this.onRowSelect = this.onRowSelect.bind(this)
-    this.onSelectAll = this.onSelectAll.bind(this)
 
   }
 
@@ -73,15 +77,8 @@ class User extends React.Component {
     this.props.UserActions.getUserList()
   }
 
-  renderUserName (cell, row) {
-    return (
-      <label
-        className="text-primary my-link mb-0"
-        onClick={() => this.props.history.push('/admin/master/user/detail')}
-      >
-        { row.transactionCategoryName }
-      </label>
-    )
+  goToDetail(row) {
+    this.props.history.push('/admin/master/user/detail')
   }
 
   onRowSelect (row, isSelected, e) {
@@ -164,10 +161,17 @@ class User extends React.Component {
                             <Input type="text" placeholder="User Name" />
                           </FormGroup>
                           <FormGroup className="pr-3">
-                            <Input type="text" placeholder="DOB" />
+                            <DatePicker
+                              className="form-control"
+                              placeholderText="DOB"
+                            />
                           </FormGroup>
                           <FormGroup className="pr-3">
-                            <Input type="text" placeholder="Role Name" />
+                            <Select
+                              className="select-min-width"
+                              options={[]}
+                              placeholder="Role Name"
+                            />
                           </FormGroup>
                           <FormGroup className="pr-3">
                             <Input type="text" placeholder="Active" />
@@ -196,11 +200,11 @@ class User extends React.Component {
                           pagination
                           totalSize={user_list ? user_list.length : 0}
                           className="product-table"
+                          trClassName="cursor-pointer"
                         >
                           <TableHeaderColumn
                             isKey
                             dataField="transactionCategoryName"
-                            dataFormat={this.renderUserName}
                           >
                             User Name
                           </TableHeaderColumn>

@@ -14,6 +14,7 @@ import {
   Label
 } from 'reactstrap'
 import Select from 'react-select'
+import DatePicker from 'react-datepicker'
 
 import './style.scss'
 
@@ -63,6 +64,7 @@ class DetailBankStatement extends React.Component {
                             <FormGroup className="mb-3">
                               <Label htmlFor="statement_type">Type</Label>
                               <Select
+                                className="select-default-width"
                                 options={[]}
                                 id="statement_type"
                                 name="statement_type"
@@ -72,13 +74,14 @@ class DetailBankStatement extends React.Component {
                           <Col lg={4}>
                             <FormGroup className="mb-3">
                               <Label htmlFor="date">Date</Label>
-                              <Input
-                                type="text"
-                                id="date"
-                                name="date"
-                                placeholder=""
-                                required
-                              />
+                              <div>
+                                <DatePicker
+                                  className="form-control"
+                                  id="date"
+                                  name="date"
+                                  placeholderText=""
+                                />
+                              </div>
                             </FormGroup>
                           </Col>
                           <Col lg={4}>
@@ -99,6 +102,7 @@ class DetailBankStatement extends React.Component {
                             <FormGroup className="mb-3">
                               <Label htmlFor="category">Category</Label>
                               <Select
+                                className="select-default-width"
                                 options={[]}
                                 id="category"
                                 name="category"
@@ -125,6 +129,7 @@ class DetailBankStatement extends React.Component {
                             <FormGroup className="mb-3">
                               <Label htmlFor="project">Project</Label>
                               <Select
+                                className="select-default-width"
                                 options={[]}
                                 id="project"
                                 name="project"
@@ -151,7 +156,7 @@ class DetailBankStatement extends React.Component {
                             </Row>
                             <Row>
                               <Col lg={12}>
-                                <FormGroup className="mb-5">
+                                <FormGroup className="">
                                   <Label htmlFor="attachment_description">Attachment Description</Label>
                                   <Input
                                     type="textarea"
@@ -167,7 +172,7 @@ class DetailBankStatement extends React.Component {
                           <Col lg={4}>
                             <Row>
                               <Col lg={12}>
-                                <FormGroup className="mb-5">
+                                <FormGroup className="">
                                   <Label>Reciept Attachment</Label><br/>
                                   <Button color="primary" className="btn-square mr-3">
                                     <i className="fa fa-upload"></i> Upload
@@ -178,7 +183,7 @@ class DetailBankStatement extends React.Component {
                           </Col>
                         </Row>
                         <Row>
-                          <Col lg={12}>
+                          <Col lg={12} className="mt-5">
                             <FormGroup className="text-right">
                               <Button type="submit" color="primary" className="btn-square mr-3">
                                 <i className="fa fa-dot-circle-o"></i> Update

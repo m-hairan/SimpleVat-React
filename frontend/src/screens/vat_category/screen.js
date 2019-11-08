@@ -35,21 +35,25 @@ class VatCategory extends React.Component {
       loading: true
     }
 
-    this.selectRowProp = {
-      mode: 'checkbox',
-      bgColor: 'rgba(0,0,0, 0.05)',
-      onSelect: this.onRowSelect,
-      onSelectAll: this.onSelectAll
-    }
-
     this.deleteVat = this.deleteVat.bind(this)
-    this.getVatName = this.getVatName.bind(this)
     this.customSearchField = this.customSearchField.bind(this)
     this.success = this.success.bind(this)
     this.customTotal = this.customTotal.bind(this)
     this.vatPercentageFormat = this.vatPercentageFormat.bind(this)
 
     this.closeModal = this.closeModal.bind(this)
+    this.goToDetail = this.goToDetail.bind(this)
+
+    this.options = {
+      onRowClick: this.goToDetail
+    }
+
+    this.selectRowProp = {
+      mode: 'checkbox',
+      bgColor: 'rgba(0,0,0, 0.05)',
+      onSelect: this.onRowSelect,
+      onSelectAll: this.onSelectAll
+    }
   }
 
   // Table Custom Search Field
@@ -78,15 +82,8 @@ class VatCategory extends React.Component {
     return(`${row.vat} %`)
   }
 
-  getVatName(cell, row) {
-    return (
-      <label
-        className="text-primary my-link mb-0"
-        onClick={() => this.props.history.push('/admin/settings/vat-category/detail')}
-      >
-        { row.name }
-      </label>
-    )
+  goToDetail (row) {
+    this.props.history.push('/admin/settings/vat-category/detail')
   }
 
   // Show Success Toast
@@ -210,8 +207,10 @@ class VatCategory extends React.Component {
                           pagination
                           search={true}
                           selectRow={ this.selectRowProp }
+                          options={ this.options }
+                          trClassName="cursor-pointer"
                         >
-                          <TableHeaderColumn isKey dataField="name" dataFormat={this.getVatName}>
+                          <TableHeaderColumn isKey dataField="name">
                             Vat Name
                           </TableHeaderColumn>
                           <TableHeaderColumn dataField="vat" dataFormat={this.vatPercentageFormat}>

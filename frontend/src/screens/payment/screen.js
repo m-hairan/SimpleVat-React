@@ -23,6 +23,7 @@ import {
 import Select from 'react-select'
 import { ToastContainer, toast } from 'react-toastify'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
+import DatePicker from 'react-datepicker'
 
 import Loader from 'components/loader'
 
@@ -57,7 +58,13 @@ class Payment extends React.Component {
       ],
     }
 
+    this.initializeData = this.initializeData.bind(this)
+    this.onRowSelect = this.onRowSelect.bind(this)
+    this.onSelectAll = this.onSelectAll.bind(this)
+    this.goToDetail = this.goToDetail.bind(this)
+
     this.options = {
+      onRowClick: this.goToDetail
     }
 
     this.selectRowProp = {
@@ -67,10 +74,6 @@ class Payment extends React.Component {
       onSelect: this.onRowSelect,
       onSelectAll: this.onSelectAll
     }
-
-    this.renderRecieptNumber = this.renderRecieptNumber.bind(this)
-    this.onRowSelect = this.onRowSelect.bind(this)
-    this.onSelectAll = this.onSelectAll.bind(this)
 
   }
 
@@ -82,15 +85,8 @@ class Payment extends React.Component {
     this.props.paymentActions.getPaymentList()
   }
 
-  renderRecieptNumber (cell, row) {
-    return (
-      <label
-        className="text-primary my-link mb-0"
-        onClick={() => this.props.history.push('/admin/expense/payment/detail')}
-      >
-        { row.transactionCategoryName }
-      </label>
-    )
+  goToDetail (row) {
+    this.props.history.push('/admin/expense/payment/detail')
   }
 
   onRowSelect (row, isSelected, e) {
@@ -116,29 +112,9 @@ class Payment extends React.Component {
             <CardHeader>
               <Row>
                 <Col lg={12}>
-                  <div className="d-flex flex-wrap align-items-start justify-content-between">
-                    <div>
-                      <div className="h4 card-title d-flex align-items-center">
-                        <i className="fas fa-money-check" />
-                        <span className="ml-2">Payments</span>
-                      </div>
-                    </div>
-                    <div className="filter-box p-2">
-                      <Form onSubmit={this.handleSubmit} name="simpleForm">
-                        <div className="flex-wrap d-flex">
-                          <FormGroup>
-                            <Label htmlFor="name">Status:</Label>
-                            <div className="filter-wrapper">
-                              <Select
-                                options={this.state.stateOptions}
-                                value={this.state.status}
-                                onChange={this.changeStatus}
-                              />
-                            </div>
-                          </FormGroup>
-                        </div>
-                      </Form>
-                    </div>
+                  <div className="h4 mb-0 d-flex align-items-center">
+                    <i className="fas fa-money-check" />
+                    <span className="ml-2">Payments</span>
                   </div>
                 </Col>
               </Row>
@@ -190,10 +166,10 @@ class Payment extends React.Component {
                       <div className="filter-panel my-3 py-3">
                         <Form inline>
                           <FormGroup className="pr-3">
-                            <Input type="text" placeholder="From" />
-                          </FormGroup>
-                          <FormGroup className="pr-3">
-                            <Input type="text" placeholder="To" />
+                            <DatePicker
+                              className="form-control"
+                              placeholderText="Date"
+                            />
                           </FormGroup>
                           <FormGroup className="pr-3">
                             <Input type="text" placeholder="Reciept Number" />
@@ -218,11 +194,11 @@ class Payment extends React.Component {
                           pagination
                           totalSize={payment_list ? payment_list.length : 0}
                           className="payment-table"
+                          trClassName="cursor-pointer"
                         >
                           <TableHeaderColumn
                             isKey
                             dataField="transactionCategoryName"
-                            dataFormat={this.renderRecieptNumber}
                           >
                             Reciept Number
                           </TableHeaderColumn>

@@ -433,7 +433,7 @@ class CreateTranactionCategory extends React.Component {
                       ) : (
                           ""
                         )}
-                      <FormGroup className="text-right">
+                      <FormGroup className="text-right mt-5">
                         <Button type="submit" color="primary" className="btn-square mr-3">
                           <i className="fa fa-dot-circle-o"></i> Create
                         </Button>

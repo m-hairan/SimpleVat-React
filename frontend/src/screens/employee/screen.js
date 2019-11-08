@@ -14,6 +14,7 @@ import {
   Label
 } from 'reactstrap'
 import Select from 'react-select'
+import DatePicker from 'react-datepicker'
 
 
 import './style.scss'
@@ -156,12 +157,14 @@ class Employee extends React.Component {
                           <Col md="4">
                             <FormGroup>
                               <Label htmlFor="select">Date of Birth</Label>
-                              <Input
-                                type="text"
-                                id="text-input"
-                                name="text-input"
-                                required
-                              />
+                              <div>
+                                <DatePicker
+                                  className="form-control"
+                                  id="date"
+                                  name="date"
+                                  placeholderText=""
+                                />
+                              </div>
                             </FormGroup>
                           </Col>
                         </Row>
@@ -216,7 +219,7 @@ class Employee extends React.Component {
                           </Col>
                         </Row>
                         <Row>
-                          <Col lg={12}>
+                          <Col lg={12} className="mt-5">
                             <FormGroup className="text-right">
                               <Button type="submit" color="primary" className="btn-square mr-3">
                                 <i className="fa fa-dot-circle-o"></i> Create

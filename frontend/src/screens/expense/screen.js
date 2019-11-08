@@ -50,7 +50,13 @@ class Expense extends React.Component {
       loading: false,
     }
 
+    this.initializeData = this.initializeData.bind(this)
+    this.onRowSelect = this.onRowSelect.bind(this)
+    this.onSelectAll = this.onSelectAll.bind(this)
+    this.goToDetail = this.goToDetail.bind(this)
+
     this.options = {
+      onRowClick: this.goToDetail
     }
 
     this.selectRowProp = {
@@ -60,10 +66,6 @@ class Expense extends React.Component {
       onSelect: this.onRowSelect,
       onSelectAll: this.onSelectAll
     }
-
-    this.renderRecieptNumber = this.renderRecieptNumber.bind(this)
-    this.onRowSelect = this.onRowSelect.bind(this)
-    this.onSelectAll = this.onSelectAll.bind(this)
 
   }
 
@@ -75,15 +77,8 @@ class Expense extends React.Component {
     this.props.expenseActions.getExpenseList()
   }
 
-  renderRecieptNumber (cell, row) {
-    return (
-      <label
-        className="text-primary my-link mb-0"
-        onClick={() => this.props.history.push('/admin/expense/expense/detail')}
-      >
-        { row.transactionCategoryName }
-      </label>
-    )
+  goToDetail (row) {
+    this.props.history.push('/admin/expense/expense/detail')
   }
 
   onRowSelect (row, isSelected, e) {
@@ -191,11 +186,11 @@ class Expense extends React.Component {
                           pagination
                           totalSize={expense_list ? expense_list.length : 0}
                           className="expense-table"
+                          trClassName="cursor-pointer"
                         >
                           <TableHeaderColumn
                             isKey
                             dataField="transactionCategoryName"
-                            dataFormat={this.renderRecieptNumber}
                           >
                             Payee Name
                           </TableHeaderColumn>

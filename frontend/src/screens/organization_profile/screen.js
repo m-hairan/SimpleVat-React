@@ -267,7 +267,7 @@ class OrganizationProfile extends React.Component {
                           <Button
                             type="submit"
                             color="primary"
-                            className="btn-square mt-3"
+                            className="btn-square mt-5"
                           >
                             <i className="fas fa-save mr-2"></i>Save
                           </Button>

@@ -172,16 +172,22 @@ th {
 .Select-menu-outer {
   border-radius: 0px !important;
 }
-
-.react-autosuggest__input {
-  border-color: #ccc !important;
-  border-radius: 0px !important;
-}
-
 .select-default-width {
   .Select-menu-outer {
     width: calc(100% - 1px) !important;
   }
+}
+.select-min-width {
+  min-width: 200px;
+}
+
+
+
+
+// react autosuggest styles
+.react-autosuggest__input {
+  border-color: #ccc !important;
+  border-radius: 0px !important;
 }
 
 
@@ -189,9 +195,13 @@ th {
 
 // react-datepicker styles
 .react-datepicker-popper {
+  box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.2), 0px 3px 4px 0px rgba(0,0,0,0.14),
+    0px 3px 3px -2px rgba(0,0,0,0.12) !important;
   .react-datepicker {
     border-radius: 0px !important;
+    border: none !important;
     .react-datepicker__header {
+      border-bottom: 0px !important;
       border-radius: 0px !important;
     }
     .react-datepicker__day--keyboard-selected {
@@ -200,6 +210,30 @@ th {
     .react-datepicker__day:hover {
       border-radius: 0px !important;
     }
+  }
+}
+
+
+// react date range picker styles
+@media (min-width: 564px) {
+  .daterangepicker .drp-calendar.right {
+    padding-left: 0 !important;
+  }
+}
+
+.daterangepicker {
+  border-radius: 0px !important;
+  border: none !important;
+  box-shadow: 0px 1px 8px 0px rgba(0,0,0,0.2), 0px 3px 4px 0px rgba(0,0,0,0.14),
+    0px 3px 3px -2px rgba(0,0,0,0.12) !important;
+  .applyBtn {
+    border-radius: 0px !important;
+  }
+  .start-date {
+    border-radius: 0px !important;
+  }
+  .end-date {
+    border-radius: 0px !important;
   }
 }
 

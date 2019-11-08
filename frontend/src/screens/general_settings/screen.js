@@ -17,6 +17,7 @@ import {
   Table,
   Button
 } from "reactstrap"
+import Select from 'react-select'
 
 import './style.scss'
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
@@ -86,12 +87,9 @@ class GeneralSettings extends React.Component {
                       <Col sm="6">
                         <FormGroup >
                           <Label htmlFor="select">Invoicing Templates</Label>
-                          <Input type="select" name="select" id="select">
-                            <option value="0">Please select</option>
-                            <option value="1">Option #1</option>
-                            <option value="2">Option #2</option>
-                            <option value="3">Option #3</option>
-                          </Input>
+                          <Select
+                            options={[]}
+                          />
                         </FormGroup>
                       </Col>
                     </Row>
@@ -289,7 +287,7 @@ class GeneralSettings extends React.Component {
                       </Col>
                     </Row>
                   </Form>
-                  <FormGroup className="text-right">
+                  <FormGroup className="text-right mt-5">
                     <Button type="submit" name="submit" color="primary" className="btn-square">
                       <i className="fa fa-dot-circle-o"></i> Save
                     </Button>
