@@ -1,5 +1,7 @@
 package com.simplevat.configController;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,11 +12,23 @@ import java.io.Serializable;
 @RequestMapping("/config")
 public class ConfigController implements Serializable {
 
+	@Autowired
+	private Environment env;
+
 	@GetMapping(value = "/getreleasenumber")
 	private SimpleVatConfigModel getReleaseNumber()
 	{
 		SimpleVatConfigModel config = new SimpleVatConfigModel();
-		config.setSimpleVatRelease("0-0-2-beta-2-50");
+		if (env.getProperty("SIMPLEVAT_RELEASE") != null && !env.getProperty("SIMPLEVAT_RELEASE").isEmpty()) {
+			config.setSimpleVatRelease(env.getProperty("SIMPLEVAT_RELEASE"));
+		}
+		else if (env.getProperty("GAE_VERSION") != null && !env.getProperty("GAE_VERSION").isEmpty()) {
+			config.setSimpleVatRelease(env.getProperty("GAE_VERSION"));
+		}
+		else {
+			config.setSimpleVatRelease("Unknown");
+		}
+
 		return config;
 	}
 }
