@@ -59,6 +59,7 @@ class Project extends React.Component {
       onSelectAll: this.onSelectAll
     }
 
+    this.initializeData = this.initializeData.bind(this)
     this.renderProductName = this.renderProductName.bind(this)
     this.onRowSelect = this.onRowSelect.bind(this)
     this.onSelectAll = this.onSelectAll.bind(this)

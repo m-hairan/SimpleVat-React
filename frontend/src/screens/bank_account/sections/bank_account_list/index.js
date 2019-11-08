@@ -48,6 +48,7 @@ class BankAccountList extends React.Component {
       onSelectAll: this.onSelectAll
     }
 
+    this.initializeData = this.initializeData.bind(this)
     this.toggleDangerModal = this.toggleDangerModal.bind(this)
     this.renderAccountName = this.renderAccountName.bind(this)
     this.renderAccountType = this.renderAccountType.bind(this)

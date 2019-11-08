@@ -59,6 +59,7 @@ class User extends React.Component {
       onSelectAll: this.onSelectAll
     }
 
+    this.initializeData = this.initializeData.bind(this)
     this.renderUserName = this.renderUserName.bind(this)
     this.onRowSelect = this.onRowSelect.bind(this)
     this.onSelectAll = this.onSelectAll.bind(this)

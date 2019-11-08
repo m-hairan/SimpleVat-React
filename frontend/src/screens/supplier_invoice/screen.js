@@ -59,6 +59,7 @@ class SupplierInvoice extends React.Component {
       ],
     }
 
+    this.initializeData = this.initializeData.bind(this)
     this.renderInvoiceStatus = this.renderInvoiceStatus.bind(this)
     this.renderActions = this.renderActions.bind(this)
     this.onRowSelect = this.onRowSelect.bind(this)

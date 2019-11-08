@@ -71,7 +71,7 @@ class BankStatement extends React.Component {
       onSelectAll: this.onSelectAll
     }
 
-
+    this.initializeData = this.initializeData.bind(this)
     this.toggleDangerModal = this.toggleDangerModal.bind(this)
     this.renderReferenceNumber = this.renderReferenceNumber.bind(this)
     this.renderTransactionType = this.renderTransactionType.bind(this)
