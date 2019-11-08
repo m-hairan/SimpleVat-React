@@ -33,6 +33,7 @@ class InitialLayout extends React.Component {
     if (window.localStorage.getItem('accessToken')) {
       this.props.history.push('/admin')
     }
+    this.props.commonActions.getSimpleVATVersion()
   }
 
   render() {
