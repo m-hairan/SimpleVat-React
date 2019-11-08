@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
 import {
@@ -45,7 +46,7 @@ class Help extends React.Component {
                       <p>
                         Find detailed answers to the most common questions you might have while using our site
                       </p>
-                      <a href="" onClick={() => {this.props.history.push('/admin/settings/help/Faq')}}>Go to FAQ</a>
+                      <Link to="/admin/settings/help/Faq">Go to FAQ</Link>
                     </CardBody>
                   </Card>
                 </Col>

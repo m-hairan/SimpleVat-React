@@ -15,6 +15,7 @@ import {
 } from 'reactstrap'
 import Select from 'react-select'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
+import DatePicker from 'react-datepicker'
 
 import './style.scss'
 
@@ -223,13 +224,14 @@ class DetailCustomerInvoice extends React.Component {
                           <Col lg={4}>
                             <FormGroup className="mb-3">
                               <Label htmlFor="date">Invoice Date</Label>
-                              <Input
-                                type="text"
-                                id="date"
-                                name="date"
-                                placeholder=""
-                                required
-                              />
+                              <div>
+                                <DatePicker
+                                  className="form-control"
+                                  id="date"
+                                  name="date"
+                                  placeholderText=""
+                                />
+                              </div>
                             </FormGroup>
                           </Col>
                           <Col lg={4}>
@@ -247,13 +249,14 @@ class DetailCustomerInvoice extends React.Component {
                           <Col lg={4}>
                             <FormGroup className="mb-3">
                               <Label htmlFor="due_date">Invoice Due Date</Label>
-                              <Input
-                                type="text"
-                                id="due_date"
-                                name="due_date"
-                                placeholder=""
-                                required
-                              />
+                              <div>
+                                <DatePicker
+                                  className="form-control"
+                                  id="date"
+                                  name="date"
+                                  placeholderText=""
+                                />
+                              </div>
                             </FormGroup>
                           </Col>
                         </Row>
@@ -347,7 +350,7 @@ class DetailCustomerInvoice extends React.Component {
                         </Row>
                         <Row>
                           <Col lg={8}>
-                            <FormGroup className="py-3 mb-5">
+                            <FormGroup className="py-3">
                               <Label htmlFor="notes">Notes</Label>
                               <Input
                                 type="textarea"
@@ -359,7 +362,7 @@ class DetailCustomerInvoice extends React.Component {
                             </FormGroup>
                           </Col>
                           <Col lg={4}>
-                            <div className="mb-5">
+                            <div className="">
                               <div className="total-item p-2">
                                 <Row>
                                   <Col lg={6}>
@@ -409,7 +412,7 @@ class DetailCustomerInvoice extends React.Component {
                           </Col>
                         </Row>
                         <Row>
-                          <Col lg={12}>
+                          <Col lg={12} className="mt-5">
                             <FormGroup className="text-right">
                               <Button type="submit" color="primary" className="btn-square mr-3">
                                 <i className="fa fa-dot-circle-o"></i> Save

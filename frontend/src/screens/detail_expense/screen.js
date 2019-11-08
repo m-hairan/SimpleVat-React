@@ -15,6 +15,7 @@ import {
 } from 'reactstrap'
 import Select from 'react-select'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
+import DatePicker from 'react-datepicker'
 
 import './style.scss'
 
@@ -87,6 +88,7 @@ class DetailExpense extends React.Component {
   renderVat (cell, row) {
     return (
       <Select
+        className="select-default-width"
         options={[]}
         id="currency"
         name="currency"
@@ -138,13 +140,14 @@ class DetailExpense extends React.Component {
                           <Col lg={4}>
                             <FormGroup className="mb-3">
                               <Label htmlFor="expense_date">Expense Date</Label>
-                              <Input
-                                type="text"
-                                id="expense_date"
-                                name="expense_date"
-                                placeholder="Enter Expense Date"
-                                required
-                              />
+                              <div>
+                                <DatePicker
+                                  className="form-control"
+                                  id="date"
+                                  name="date"
+                                  placeholderText=""
+                                />
+                              </div>
                             </FormGroup>
                           </Col>
                         </Row>
@@ -153,6 +156,7 @@ class DetailExpense extends React.Component {
                             <FormGroup className="mb-3">
                               <Label htmlFor="currency">Currency</Label>
                               <Select
+                                className="select-default-width"
                                 options={[]}
                                 id="currency"
                                 name="currency"
@@ -163,6 +167,7 @@ class DetailExpense extends React.Component {
                             <FormGroup className="mb-3">
                               <Label htmlFor="project">Project</Label>
                               <Select
+                                className="select-default-width"
                                 options={[]}
                                 id="project"
                                 name="project"
@@ -286,7 +291,7 @@ class DetailExpense extends React.Component {
                   <Row>
                     <Col lg={4} className="ml-auto">
                       <div className="mb-3">
-                        <div className="total-item p-3">
+                        <div className="total-item p-2">
                           <Row>
                             <Col lg={6}>
                               <h5 className="mb-0 text-right">Total Net</h5>
@@ -296,7 +301,7 @@ class DetailExpense extends React.Component {
                             </Col>
                           </Row>
                         </div>
-                        <div className="total-item p-3">
+                        <div className="total-item p-2">
                           <Row>
                             <Col lg={6}>
                               <h5 className="mb-0 text-right">Total Vat</h5>
@@ -306,7 +311,7 @@ class DetailExpense extends React.Component {
                             </Col>
                           </Row>
                         </div>
-                        <div className="total-item p-3">
+                        <div className="total-item p-2">
                           <Row>
                             <Col lg={6}>
                               <h5 className="mb-0 text-right">Total</h5>

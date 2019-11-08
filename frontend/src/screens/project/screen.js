@@ -48,7 +48,13 @@ class Project extends React.Component {
       loading: false,
     }
 
+    this.initializeData = this.initializeData.bind(this)
+    this.onRowSelect = this.onRowSelect.bind(this)
+    this.onSelectAll = this.onSelectAll.bind(this)
+    this.goToDetail = this.goToDetail.bind(this)
+
     this.options = {
+      onRowClick: this.goToDetail
     }
 
     this.selectRowProp = {
@@ -58,11 +64,6 @@ class Project extends React.Component {
       onSelect: this.onRowSelect,
       onSelectAll: this.onSelectAll
     }
-
-    this.initializeData = this.initializeData.bind(this)
-    this.renderProductName = this.renderProductName.bind(this)
-    this.onRowSelect = this.onRowSelect.bind(this)
-    this.onSelectAll = this.onSelectAll.bind(this)
 
   }
 
@@ -74,15 +75,8 @@ class Project extends React.Component {
     this.props.ProjectActions.getProjectList()
   }
 
-  renderProductName (cell, row) {
-    return (
-      <label
-        className="text-primary my-link mb-0"
-        onClick={() => this.props.history.push('/admin/master/project/detail')}
-      >
-        { row.transactionCategoryName }
-      </label>
-    )
+  goToDetail (row) {
+    this.props.history.push('/admin/master/project/detail')
   }
 
   onRowSelect (row, isSelected, e) {
@@ -196,11 +190,11 @@ class Project extends React.Component {
                           pagination
                           totalSize={project_list ? project_list.length : 0}
                           className="product-table"
+                          trClassName="cursor-pointer"
                         >
                           <TableHeaderColumn
                             isKey
                             dataField="transactionCategoryName"
-                            dataFormat={this.renderProductName}
                           >
                             Project Name
                           </TableHeaderColumn>

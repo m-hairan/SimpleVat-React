@@ -219,7 +219,7 @@ class Imports extends React.Component {
                       </BootstrapTable>
                     </Col>
                   </Row>
-                  <div className="mt-3 text-right">
+                  <div className="mt-5 text-right">
                     <Button color="primary" className="btn-square mb-2 mr-2">
                       <i className="fa glyphicon glyphicon-export fa-save"></i> Import
                     </Button>

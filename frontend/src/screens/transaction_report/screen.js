@@ -150,13 +150,7 @@ class TransactionReport extends React.Component {
                 </div>
                 <div className="filter-box p-2">
                   <Form onSubmit={this.handleSubmit} name="simpleForm">
-                    <div className="flex-wrap d-flex">
-                      <FormGroup>
-                        <Label htmlFor="name">Period:</Label>
-                        <div className="date-range">
-                          <DateRangePicker2  ranges={ranges}/>
-                        </div>
-                      </FormGroup>  
+                    <div className="flex-wrap d-flex"> 
                       <FormGroup>
                         <Label htmlFor="name">Type:</Label>
                         <div className="account-type">
@@ -176,7 +170,16 @@ class TransactionReport extends React.Component {
                             onChange={this.changeCategory}
                           />
                         </div>
-                      </FormGroup>  
+                      </FormGroup>
+                      <FormGroup>
+                        <Label htmlFor="name">Period:</Label>
+                        <div className="date-range">
+                          <DateRangePicker2 
+                            ranges={ranges}
+                            opens={'left'}
+                          />
+                        </div>
+                      </FormGroup> 
                     </div>
                   </Form>
                 </div>

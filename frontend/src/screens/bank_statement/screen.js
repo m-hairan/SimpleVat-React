@@ -22,6 +22,7 @@ import {
 import Select from 'react-select'
 import { ToastContainer, toast } from 'react-toastify'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
+import DateRangePicker from 'react-bootstrap-daterangepicker'
 
 import Loader from 'components/loader'
 
@@ -60,7 +61,16 @@ class BankStatement extends React.Component {
       selectedData: null
     }
 
+    this.initializeData = this.initializeData.bind(this)
+    this.toggleDangerModal = this.toggleDangerModal.bind(this)
+    this.renderTransactionType = this.renderTransactionType.bind(this)
+    this.renderTransactionStatus = this.renderTransactionStatus.bind(this)
+    this.onRowSelect = this.onRowSelect.bind(this)
+    this.onSelectAll = this.onSelectAll.bind(this)
+    this.goToDetail = this.goToDetail.bind(this)
+
     this.options = {
+      onRowClick: this.goToDetail
     }
 
     this.selectRowProp = {
@@ -70,14 +80,6 @@ class BankStatement extends React.Component {
       onSelect: this.onRowSelect,
       onSelectAll: this.onSelectAll
     }
-
-    this.initializeData = this.initializeData.bind(this)
-    this.toggleDangerModal = this.toggleDangerModal.bind(this)
-    this.renderReferenceNumber = this.renderReferenceNumber.bind(this)
-    this.renderTransactionType = this.renderTransactionType.bind(this)
-    this.renderTransactionStatus = this.renderTransactionStatus.bind(this)
-    this.onRowSelect = this.onRowSelect.bind(this)
-    this.onSelectAll = this.onSelectAll.bind(this)
 
   }
 
@@ -95,15 +97,8 @@ class BankStatement extends React.Component {
     })
   }
 
-  renderReferenceNumber (cell, row) {
-    return (
-      <label
-        className="text-primary my-link mb-0"
-        onClick={() => this.props.history.push('/admin/bank/bank-statement/detail')}
-      >
-        { row.reference_number }
-      </label>
-    )
+  goToDetail (row) {
+    this.props.history.push('/admin/bank/bank-statement/detail')
   }
 
   renderTransactionStatus (cell, row) {
@@ -219,10 +214,16 @@ class BankStatement extends React.Component {
                             <Input type="text" placeholder="Reference Name" />
                           </FormGroup>
                           <FormGroup className="pr-3">
-                            <Input type="text" placeholder="Transaction type" />
+                            <Select
+                              className="select-min-width"
+                              options={[]}
+                              placeholder="Transaction Type"
+                            />
                           </FormGroup>
                           <FormGroup className="pr-3">
-                            <Input type="text" placeholder="Transaction Date" />
+                            <DateRangePicker>
+                              <Input type="text" placeholder="Date Range" />
+                            </DateRangePicker>
                           </FormGroup>
                           <Button
                             type="submit"
@@ -244,6 +245,7 @@ class BankStatement extends React.Component {
                           pagination
                           totalSize={bank_statement_list ? bank_statement_list.length : 0}
                           className="bank-statement-table"
+                          trClassName="cursor-pointer"
                         >
                           <TableHeaderColumn
                             dataFormat={this.renderTransactionStatus}
@@ -252,7 +254,6 @@ class BankStatement extends React.Component {
                           <TableHeaderColumn
                             isKey
                             dataField="reference_number"
-                            dataFormat={this.renderReferenceNumber}
                           >
                             Reference Number
                           </TableHeaderColumn>

@@ -14,9 +14,11 @@ import {
   Label
 } from 'reactstrap'
 import Select from 'react-select'
-import ImagesUploader from 'react-images-uploader';
-import 'react-images-uploader/styles.css';
-import 'react-images-uploader/font.css';
+import ImagesUploader from 'react-images-uploader'
+import DatePicker from 'react-datepicker'
+
+import 'react-images-uploader/styles.css'
+import 'react-images-uploader/font.css'
 
 
 import './style.scss'
@@ -121,13 +123,14 @@ class DetailUser extends React.Component {
                               <Col lg={6}>
                                 <FormGroup className="mb-3">
                                   <Label htmlFor="product_code">Date of Birth</Label>
-                                  <Input
-                                    type="text"
-                                    id="product_code"
-                                    name="product_code"
-                                    placeholder="Enter Date of Birth"
-                                    required
-                                  />
+                                  <div>
+                                    <DatePicker
+                                      className="form-control"
+                                      id="date"
+                                      name="date"
+                                      placeholderText=""
+                                    />
+                                  </div>
                                 </FormGroup>
                               </Col>
                             </Row>
@@ -179,7 +182,7 @@ class DetailUser extends React.Component {
                             </Row>
                             <Row>
                               <Col lg={6}>
-                                <FormGroup className="mb-3">
+                                <FormGroup className="">
                                   <Label htmlFor="product_code">Password</Label>
                                   <Input
                                     type="text"
@@ -191,7 +194,7 @@ class DetailUser extends React.Component {
                                 </FormGroup>
                               </Col>
                               <Col lg={6}>
-                                <FormGroup className="mb-3">
+                                <FormGroup className="">
                                   <Label htmlFor="product_code">Confirm Password</Label>
                                   <Input
                                     type="text"
@@ -206,7 +209,7 @@ class DetailUser extends React.Component {
                           </Col>
                         </Row>
                         <Row>
-                          <Col lg={12}>
+                          <Col lg={12} className="mt-5">
                             <FormGroup className="text-right">
                               <Button type="submit" color="primary" className="btn-square mr-3">
                                 <i className="fa fa-dot-circle-o"></i> Update

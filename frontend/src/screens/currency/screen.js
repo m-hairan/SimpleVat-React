@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
 import Loader from "components/loader"
 import moment from 'moment'
+import Select from 'react-select'
 
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
@@ -39,16 +40,20 @@ class Currency extends React.Component {
       ]
     }
 
+    this.closeCurrencyModal = this.closeCurrencyModal.bind(this)
+    this.showCurrencyModal = this.showCurrencyModal.bind(this)
+    this.goToDetail = this.goToDetail.bind(this)
+
+    this.options = {
+      onRowClick: this.goToDetail
+    }
+
     this.selectRowProp = {
       mode: 'checkbox',
       bgColor: 'rgba(0,0,0, 0.05)',
       onSelect: this.onRowSelect,
       onSelectAll: this.onSelectAll
     }
-
-    this.closeCurrencyModal = this.closeCurrencyModal.bind(this)
-    this.showCurrencyModal = this.showCurrencyModal.bind(this)
-    this.getCurrencyName = this.getCurrencyName.bind(this)
   }
 
   componentDidMount() {
@@ -63,15 +68,8 @@ class Currency extends React.Component {
     this.setState({ openCurrencyModal: false })
   }
 
-  getCurrencyName(cell, row) {
-    return(
-          <label
-            className="text-primary my-link mb-0"
-            onClick={this.showCurrencyModal}
-          >
-            {row.name}
-          </label>
-        )
+  goToDetail(row) {
+    this.showCurrencyModal()
   }
 
   render() {
@@ -143,8 +141,10 @@ class Currency extends React.Component {
                           version="4"
                           search={true}
                           selectRow={ this.selectRowProp }
+                          options={this.options}
+                          trClassName="cursor-pointer"
                         >
-                          <TableHeaderColumn isKey dataField="name" dataFormat={this.getCurrencyName}>
+                          <TableHeaderColumn isKey dataField="name">
                             Currency Name
                           </TableHeaderColumn>
                           <TableHeaderColumn dataField="symbol">
@@ -165,11 +165,11 @@ class Currency extends React.Component {
               <Form onSubmit={this.handleSubmit} name="simpleForm">
                 <FormGroup>
                   <Label htmlFor="categoryCode">Currency Code</Label>
-                  <select className="form-control" placeholder="User Role">
-                    <option value='admin'>Option1</option>
-                    <option value='employee'>Option2</option>
-                    <option value='accountant'>Option3</option>
-                  </select>
+                  <Select
+                    className="select-min-width"
+                    options={[]}
+                    placeholder="User Role"
+                  />
                 </FormGroup>
                 <FormGroup>
                   <Label htmlFor="categoryName">*Currency Name</Label>
@@ -195,8 +195,8 @@ class Currency extends React.Component {
               </Form>
             </ModalBody>
             <ModalFooter>
-              <Button color="success" onClick={this.closeCurrencyModal}>Save</Button>&nbsp;
-              <Button color="secondary"onClick={this.closeCurrencyModal}>Cancel</Button>
+              <Button color="success" className="btn-square" onClick={this.closeCurrencyModal}>Save</Button>&nbsp;
+              <Button color="secondary" className="btn-square" onClick={this.closeCurrencyModal}>Cancel</Button>
             </ModalFooter>
           </Modal>
         </div>

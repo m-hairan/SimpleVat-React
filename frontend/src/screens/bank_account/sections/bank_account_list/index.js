@@ -37,7 +37,15 @@ class BankAccountList extends React.Component {
       selectedData: null
     }
 
+    this.initializeData = this.initializeData.bind(this)
+    this.toggleDangerModal = this.toggleDangerModal.bind(this)
+    this.renderAccountType = this.renderAccountType.bind(this)
+    this.onRowSelect = this.onRowSelect.bind(this)
+    this.onSelectAll = this.onSelectAll.bind(this)
+    this.goToDetail = this.goToDetail.bind(this)
+
     this.options = {
+      onRowClick: this.goToDetail
     }
 
     this.selectRowProp = {
@@ -47,13 +55,6 @@ class BankAccountList extends React.Component {
       onSelect: this.onRowSelect,
       onSelectAll: this.onSelectAll
     }
-
-    this.initializeData = this.initializeData.bind(this)
-    this.toggleDangerModal = this.toggleDangerModal.bind(this)
-    this.renderAccountName = this.renderAccountName.bind(this)
-    this.renderAccountType = this.renderAccountType.bind(this)
-    this.onRowSelect = this.onRowSelect.bind(this)
-    this.onSelectAll = this.onSelectAll.bind(this)
 
   }
 
@@ -71,15 +72,8 @@ class BankAccountList extends React.Component {
     })
   }
 
-  renderAccountName (cell, row) {
-    return (
-      <label
-        className="text-primary my-link mb-0"
-        onClick={() => this.props.history.push('/admin/bank/bank-account/detail')}
-      >
-        { row.account_name }
-      </label>
-    )
+  goToDetail (row) {
+    this.props.history.push('/admin/bank/bank-account/detail')
   }
 
   renderAccountType (cell, row) {
@@ -190,9 +184,10 @@ class BankAccountList extends React.Component {
                           pagination
                           totalSize={bank_account_list ? bank_account_list.length : 0}
                           className="bank-account-table"
+                          trClassName="cursor-pointer"
                         >
                           <TableHeaderColumn
-                            dataFormat={this.renderAccountName}
+                            dataField="account_name"
                           >
                             Account Name
                           </TableHeaderColumn>
