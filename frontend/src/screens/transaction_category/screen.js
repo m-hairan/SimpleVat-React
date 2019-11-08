@@ -1,25 +1,39 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Card, CardHeader, CardBody, Button, Modal, ModalHeader, 
-        ModalBody, ModalFooter, Row, Input, ButtonGroup, Col, Form, 
-        FormGroup, Label} from 'reactstrap'
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Button,
+  Modal,
+  ModalHeader, 
+  ModalBody,
+  ModalFooter,
+  Row,
+  Input,
+  ButtonGroup,
+  Col,
+  Form, 
+  FormGroup,
+  Label
+} from 'reactstrap'
 import { ToastContainer, toast } from 'react-toastify'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
-import Loader from "components/loader"
 import moment from 'moment'
+import ImagesUploader from 'react-images-uploader'
+import Select from 'react-select'
+
+import { Loader } from 'components'
 
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
+import 'react-images-uploader/styles.css'
+import 'react-images-uploader/font.css'
 import './style.scss'
 
 import * as TransactionActions from './actions'
 
-
-import ImagesUploader from 'react-images-uploader';
-import 'react-images-uploader/styles.css';
-import 'react-images-uploader/font.css';
-import Select from 'react-select'
 
 const industryOptions = [
   { value: 'input', label: 'Input'},

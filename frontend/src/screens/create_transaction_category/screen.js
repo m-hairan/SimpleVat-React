@@ -1,12 +1,23 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { Card, CardHeader, CardBody, Button, Input, Form, FormGroup, Label, Row, Col } from 'reactstrap'
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Button,
+  Input,
+  Form,
+  FormGroup,
+  Label,
+  Row,
+  Col
+} from 'reactstrap'
 import { toast } from 'react-toastify'
 import Select from 'react-select'
 import Autosuggest from 'react-autosuggest'
 import _ from 'lodash'
-import Loader from 'components/loader'
+import { Loader } from 'components'
 
 import 'react-toastify/dist/ReactToastify.css'
 import './style.scss'
