@@ -203,7 +203,7 @@ class CreateBankAccount extends React.Component {
                                 <i className="fa fa-repeat"></i> Create and More
                               </Button>
                               <Button color="secondary" className="btn-square" 
-                                onClick={() => {this.props.history.push('/admin/bank-account')}}>
+                                onClick={() => {this.props.history.push('/admin/bank/bank-account')}}>
                                 <i className="fa fa-ban"></i> Cancel
                               </Button>
                             </FormGroup>

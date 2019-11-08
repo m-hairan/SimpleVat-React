@@ -6,9 +6,21 @@ export default {
       icon: 'icon-speedometer'
     },
     {
-      name: 'Invoice',
-      url: '/admin/invoice',
-      icon: 'far fa-address-book'
+      name: 'Revenue',
+      url: '/admin/revenue',
+      icon: 'far fa-address-book',
+      children: [
+        {
+          name: 'Customer Invoices',
+          url: '/admin/revenue/customer-invoice',
+          icon: 'far fa-address-card',
+        },
+        {
+          name: 'Receipts',
+          url: '/admin/revenue/receipt',
+          icon: 'fa fa-file-o',
+        },
+      ]
     },
     {
       name: 'Expense',
@@ -16,21 +28,38 @@ export default {
       icon: 'fas fa-receipt',
       children: [
         {
+          name: 'Supplier Invoices',
+          url: '/admin/expense/supplier-invoice',
+          icon: 'far fa-address-card',
+        },
+        {
           name: 'Expence',
           url: '/admin/expense/expense',
           icon: 'fab fa-stack-exchange',
         },
         {
-          name: 'Purchase',
-          url: '/admin/expense/purchase',
+          name: 'Payments',
+          url: '/admin/expense/payment',
           icon: 'fas fa-money-check',
         },
       ],
     },
     {
-      name: 'Bank Account',
-      url: '/admin/bank-account',
-      icon: 'fas fa-university'
+      name: 'Bank',
+      url: '/admin/bank',
+      icon: 'fas fa-folder',
+      children: [
+        {
+          name: 'Bank Accounts',
+          url: '/admin/bank/bank-account',
+          icon: 'fas fa-university',
+        },
+        {
+          name: 'Bank Statements',
+          url: '/admin/bank/bank-statement',
+          icon: 'icon-doc',
+        }
+      ],
     },
     {
       name: 'Taxes',

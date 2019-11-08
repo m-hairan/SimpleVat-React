@@ -3,37 +3,28 @@ import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import {
-  Row,
-  Col,
   Card,
   CardHeader,
   CardBody,
-  ListGroup,
-  ListGroupItem,
-  TabContent,
-  TabPane
+  Button,
+  Row,
+  Col,
+  Form,
+  FormGroup,
+  Input,
+  Label
 } from 'reactstrap'
-
-import {
-  BankStatementList,
-  UpdateBankAccount,
-  CreateBankStatement,
-  ImportBankStatementsCSV
-} from './sections'
-
-import BankAccount from '../bank_account'
+import Select from 'react-select'
 
 
 import './style.scss'
 
 const mapStateToProps = (state) => {
   return ({
-    bank_statement_list: state.bank.bank_statement_list
   })
 }
 const mapDispatchToProps = (dispatch) => {
   return ({
-    bankAccountActions: bindActionCreators(BankAccount.actions, dispatch)
   })
 }
 
@@ -43,16 +34,16 @@ class DetailBankAccount extends React.Component {
     super(props)
     this.state = {
       loading: false,
-      activeTab: 0
+
+      account_type_list: [
+        { id: 'Saving', name: 'Saving' },
+        { id: 'Checking', name: 'Checking' },
+        { id: 'Credit Card', name: 'Credit Card' },
+        { id: 'Paypal', name: 'Paypal' },
+        { id: 'Others', name: 'Others' },
+      ]
     }
 
-    this.toggleMenu = this.toggleMenu.bind(this)
-  }
-
-  toggleMenu(index) {
-    this.setState({
-      activeTab: index
-    })
   }
 
   render() {
@@ -60,79 +51,163 @@ class DetailBankAccount extends React.Component {
     return (
       <div className="detail-bank-account-screen">
         <div className="animated fadeIn">
-          <Row>
-            <Col lg={2}>
-              <Card>
-                <CardHeader>
-                  <Row>
-                    <Col lg={12}>
-                      <div className="h4 menu-title mb-0 d-flex align-items-center">
-                        <i className="fa fa-align-justify" />
-                        <span className="ml-2">Menu</span>
-                      </div>
-                    </Col>
-                  </Row>
-                </CardHeader>
-                <CardBody className="menu-container p-0">
-                  <ListGroup id="list-tab" role="tablist">
-                    <ListGroupItem
-                      onClick={() => this.toggleMenu(0)}
-                      action
-                      active={this.state.activeTab === 0}
-                    >
-                      <i className="fas fa-university mr-1" />Bank Account
-                    </ListGroupItem>
-                    <ListGroupItem
-                      onClick={() => this.toggleMenu(1)}
-                      action
-                      active={this.state.activeTab === 1}
-                    >
-                      <i className="icon-doc mr-1" />Bank Statements
-                    </ListGroupItem>
-                    <ListGroupItem
-                      onClick={() => this.toggleMenu(2)}
-                      action
-                      active={this.state.activeTab === 2}
-                    >
-                      <i className="fas fa-plus mr-1" />New Statement
-                    </ListGroupItem>
-                    <ListGroupItem
-                      onClick={() => this.toggleMenu(3)}
-                      action
-                      active={this.state.activeTab === 3}
-                    >
-                      <i className="fa glyphicon glyphicon-export fa-upload mr-1" />Import Statements
-                    </ListGroupItem>
-                  </ListGroup>
-                </CardBody>
-              </Card>
-            </Col>
-            <Col lg={10}>
-              <TabContent className="bank-detail-main-container" activeTab={this.state.activeTab}>
-                <TabPane tabId={0} className="p-0">
-                  <UpdateBankAccount {...this.props} />
-                </TabPane>
-                <TabPane tabId={1} className="p-0">
-                  <BankStatementList
-                    toggleMenu={this.toggleMenu}
-                    {...this.props}
-                  />
-                </TabPane>
-                <TabPane tabId={2} className="p-0">
-                  <CreateBankStatement
-                    toggleMenu={this.toggleMenu}
-                    {...this.props}
-                  />
-                </TabPane>
-                <TabPane tabId={3} className="p-0">
-                  <ImportBankStatementsCSV
-                    toggleMenu={this.toggleMenu}
-                    {...this.props}
-                  />
-                </TabPane>
-              </TabContent>
-            </Col>
-          </Row>
+          <Card>
+            <CardHeader>
+              <Row>
+                <Col lg={12}>
+                  <div className="h4 mb-0 d-flex align-items-center">
+                    <i className="fas fa-university" />
+                    <span className="ml-2">Update Bank Account</span>
+                  </div>
+                </Col>
+              </Row>
+            </CardHeader>
+            <CardBody>
+              <Row>
+                <Col lg={12}>
+                  <Form>
+                    <Row>
+                      <Col lg={4}>
+                        <FormGroup className="mb-3">
+                          <Label htmlFor="account_name">Account Name</Label>
+                          <Input
+                            type="text"
+                            id="account_name"
+                            name="account_name"
+                            placeholder="Enter Account Name"
+                            required
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg={4}>
+                        <FormGroup className="mb-3">
+                          <Label htmlFor="currency">Currency</Label>
+                          <Select
+                            id="currency"
+                            name="currency"
+                            options={[]}
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg={4}>
+                        <FormGroup className="mb-3">
+                          <Label htmlFor="opening_balance">Opening Balance</Label>
+                          <Input
+                            type="text"
+                            id="opening_balance"
+                            name="opening_balance"
+                            placeholder="Your Opening Balance"
+                            required
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col lg={4}>
+                        <FormGroup className="">
+                          <Label htmlFor="account_type">
+                            Account Type
+                          </Label>
+                          <Select
+                            id="account_type"
+                            name="account_type"
+                            options={[]}
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <hr />
+                    <Row>
+                      <Col lg={4}>
+                        <FormGroup className="mb-3">
+                          <Label htmlFor="bank_name">Bank Name</Label>
+                          <Input
+                            type="text"
+                            id="bank_name"
+                            name="bank_name"
+                            placeholder="Enter Bank Name"
+                            required
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg={4}>
+                        <FormGroup className="mb-3">
+                          <Label htmlFor="account_number">Account Number</Label>
+                          <Input
+                            type="text"
+                            id="account_number"
+                            name="account_number"
+                            placeholder="Enter Account Number"
+                            required
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg={4}>
+                        <FormGroup className="mb-3">
+                          <Label htmlFor="account_number">Account Number</Label>
+                          <Input
+                            type="text"
+                            id="account_number"
+                            name="account_number"
+                            placeholder="Enter Account Number"
+                            required
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col lg={4}>
+                        <FormGroup className="mb-3">
+                          <Label htmlFor="IBAN_number">IBAN Number</Label>
+                          <Input
+                            type="text"
+                            id="IBAN_number"
+                            name="IBAN_number"
+                            placeholder="Enter IBAN Number"
+                            required
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg={4}>
+                        <FormGroup className="mb-3">
+                          <Label htmlFor="swift_code">Swift Code</Label>
+                          <Input
+                            type="text"
+                            id="swift_code"
+                            name="swift_code"
+                            placeholder="Enter Swift Code"
+                            required
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg={4}>
+                        <FormGroup className="mb-5">
+                          <Label htmlFor="country">Country</Label>
+                          <Input
+                            type="text"
+                            id="country"
+                            name="country"
+                            placeholder="Enter Country"
+                            required
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    
+                    <FormGroup className="text-right">
+                      <Button type="submit" color="primary" className="btn-square mr-3">
+                        <i className="fa fa-dot-circle-o"></i> Update
+                      </Button>
+                      <Button color="secondary" className="btn-square" 
+                        onClick={() => {this.props.history.push("/admin/bank/bank-account")}}>
+                        <i className="fa fa-ban"></i> Cancel
+                      </Button>
+                    </FormGroup>
+                  </Form>
+                </Col>
+              </Row>
+            </CardBody>
+          </Card>
         </div>
       </div>
     )

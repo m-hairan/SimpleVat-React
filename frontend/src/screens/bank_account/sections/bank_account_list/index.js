@@ -74,7 +74,7 @@ class BankAccountList extends React.Component {
     return (
       <label
         className="text-primary my-link mb-0"
-        onClick={() => this.props.history.push('/admin/bank-account/detail')}
+        onClick={() => this.props.history.push('/admin/bank/bank-account/detail')}
       >
         { row.account_name }
       </label>
@@ -141,7 +141,7 @@ class BankAccountList extends React.Component {
                           <Button
                             color="primary"
                             className="btn-square"
-                            onClick={() => this.props.history.push(`/admin/bank-account/create`)}
+                            onClick={() => this.props.history.push(`/admin/bank/bank-account/create`)}
                           >
                             <i className="fas fa-plus mr-1" />
                             New Account

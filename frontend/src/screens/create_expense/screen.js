@@ -44,8 +44,7 @@ class CreateExpense extends React.Component {
 
     this.renderActions = this.renderActions.bind(this)
     this.renderProductName = this.renderProductName.bind(this)
-    this.renderQuantity = this.renderQuantity.bind(this)
-    this.renderUnitPrice = this.renderUnitPrice.bind(this)
+    this.renderAmount = this.renderAmount.bind(this)
     this.renderVat = this.renderVat.bind(this)
     this.renderSubTotal = this.renderSubTotal.bind(this)
 
@@ -59,26 +58,27 @@ class CreateExpense extends React.Component {
 
   renderProductName (cell, row) {
     return (
-      <Input
-        type="text"
-      />
+      <div className="d-flex align-items-center">
+        <Select
+          className="select-default-width flex-grow-1 mr-1"
+          options={[]}
+        />
+        <Button
+          size="sm"
+          color="primary"
+          className="btn-brand icon"
+        >
+          <i className="fas fa-plus"></i>
+        </Button>
+      </div>
     )
   }
 
-  renderQuantity (cell, row) {
+  renderAmount (cell, row) {
     return (
       <Input
         type="text"
         value="0"
-      />
-    )
-  }
-
-  renderUnitPrice (cell, row) {
-    return (
-      <Input
-        type="text"
-        value="0.00"
       />
     )
   }
@@ -124,23 +124,13 @@ class CreateExpense extends React.Component {
                         <Row>
                           <Col lg={4}>
                             <FormGroup className="mb-3">
-                              <Label htmlFor="claimant">Claimant</Label>
+                              <Label htmlFor="payee">Payee</Label>
                               <Input
                                 type="text"
-                                id="claimant"
-                                name="claimant"
-                                placeholder="Enter Claimant"
+                                id="payee"
+                                name="payee"
+                                placeholder="Enter Payment"
                                 required
-                              />
-                            </FormGroup>
-                          </Col>
-                          <Col lg={4}>
-                            <FormGroup className="mb-3">
-                              <Label htmlFor="category">Category</Label>
-                              <Select
-                                options={[]}
-                                id="category"
-                                name="category"
                               />
                             </FormGroup>
                           </Col>
@@ -270,15 +260,9 @@ class CreateExpense extends React.Component {
                               </TableHeaderColumn>
                               <TableHeaderColumn
                                 dataField="quantity"
-                                dataFormat={this.renderQuantity}
+                                dataFormat={this.renderAmount}
                               >
-                                Quantity
-                              </TableHeaderColumn>
-                              <TableHeaderColumn
-                                dataField="unit_price"
-                                dataFormat={this.renderUnitPrice}
-                              >
-                                Unit Price (All)
+                                Amount
                               </TableHeaderColumn>
                               <TableHeaderColumn
                                 dataField="vat"
