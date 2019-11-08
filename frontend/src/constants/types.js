@@ -33,8 +33,11 @@ export const DASHBOARD = {
   REVENUE_GRAPH: 'REVENUE_GRAPH',
 }
 
-export const BANK = {
-  BANK_ACCOUNT_LIST: 'BANK_ACCOUNT_LIST',
+export const BANK_ACCOUNT = {
+  BANK_ACCOUNT_LIST: 'BANK_ACCOUNT_LIST'
+}
+
+export const BANK_STATEMENT = {
   BANK_STATEMENT_LIST: 'BANK_STATEMENT_LIST'
 }
 
@@ -58,8 +61,16 @@ export const IMPORTS = {
   IMPORT_LIST: 'IMPORT_LIST'
 }
 
-export const INVOICE = {
-  INVOICE_LIST: 'INVOICE_LIST'
+export const CUSTOMER_INVOICE = {
+  CUSTOMER_INVOICE_LIST: 'CUSTOMER_INVOICE_LIST'
+}
+
+export const SUPPLIER_INVOICE = {
+  SUPPLIER_INVOICE_LIST: 'SUPPLIER_INVOICE_LIST'
+}
+
+export const RECEIPT = {
+  RECEIPT_LIST: 'RECEIPT_LIST'
 }
 
 export const PRODUCT = {
@@ -70,8 +81,8 @@ export const PROJECT = {
   PROJECT_LIST: 'PROJECT_LIST'
 }
 
-export const PURCHASE = {
-  PURCHASE_LIST: 'PURCHASE_LIST'
+export const PAYMENT = {
+  PAYMENT_LIST: 'PAYMENT_LIST'
 }
 
 export const TAXES = {

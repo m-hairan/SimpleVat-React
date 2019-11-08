@@ -1,4 +1,4 @@
-import { BANK } from 'constants/types'
+import { BANK_ACCOUNT } from 'constants/types'
 import {
   api,
   authApi
@@ -7,7 +7,7 @@ import {
 export const getBankAccountList = () => {
   return (dispatch) => {
     dispatch({
-      type: BANK.BANK_ACCOUNT_LIST,
+      type: BANK_ACCOUNT.BANK_ACCOUNT_LIST,
       payload: {
         data: [{
           bank_name: 'NBC',
@@ -71,43 +71,4 @@ export const deleteBankAccount = (_id) => {
 }
 
 
-export const getBankStatementList = () => {
-  return (dispatch) => {
-    dispatch({
-      type: BANK.BANK_STATEMENT_LIST,
-      payload: {
-        data: [{
-          transaction_type: 'Debit',
-          amount: 3453246,
-          reference_number: 'KDF3920342',
-          description: 'This is description',
-          transaction_date: 'Oct 28th, 2019'
-        }, {
-          transaction_type: 'Debit',
-          amount: 3453246,
-          reference_number: 'KDF3929865',
-          description: 'This is description',
-          transaction_date: 'Oct 28th, 2019'
-        }, {
-          transaction_type: 'Debit',
-          amount: 3453246,
-          reference_number: 'KDF39206574',
-          description: 'This is description',
-          transaction_date: 'Oct 28th, 2019'
-        }, {
-          transaction_type: 'Debit',
-          amount: 3453246,
-          reference_number: 'KDF392394',
-          description: 'This is description',
-          transaction_date: 'Oct 28th, 2019'
-        }, {
-          transaction_type: 'Debit',
-          amount: 3453246,
-          reference_number: 'KDF3920923',
-          description: 'This is description',
-          transaction_date: 'Oct 28th, 2019'
-        }]
-      }
-    })
-  }
-}
+

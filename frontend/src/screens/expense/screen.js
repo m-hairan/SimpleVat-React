@@ -19,11 +19,13 @@ import {
 } from 'reactstrap'
 import { ToastContainer, toast } from 'react-toastify'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
+import DatePicker from 'react-datepicker'
 
 import Loader from 'components/loader'
 
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
+import 'react-datepicker/dist/react-datepicker.css'
 
 import * as ExpenseActions from './actions'
 
@@ -161,10 +163,10 @@ class Expense extends React.Component {
                       <div className="filter-panel my-3 py-3">
                         <Form inline>
                           <FormGroup className="pr-3">
-                            <Input type="text" placeholder="From" />
-                          </FormGroup>
-                          <FormGroup className="pr-3">
-                            <Input type="text" placeholder="To" />
+                            <DatePicker
+                              className="form-control"
+                              placeholderText="Date"
+                            />
                           </FormGroup>
                           <FormGroup className="pr-3">
                             <Input type="text" placeholder="Reciept Number" />
@@ -195,22 +197,27 @@ class Expense extends React.Component {
                             dataField="transactionCategoryName"
                             dataFormat={this.renderRecieptNumber}
                           >
-                            Reciept Number
+                            Payee Name
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionCategoryCode"
                           >
-                            Amount
+                            Description
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="parentTransactionCategory"
                           >
-                            Description
+                            Receipt No.
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionType"
                           >
-                            Expense Date
+                            Amount
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            dataField="transactionType"
+                          >
+                            Date
                           </TableHeaderColumn>
                         </BootstrapTable>
                       </div>

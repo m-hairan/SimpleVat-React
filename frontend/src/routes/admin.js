@@ -7,15 +7,18 @@ import {
   Project,
   Product,
   Expense,
-  Purchase,
+  Payment,
   ExpenseReport,
   TransactionReport,
   TaxReport,
   Imports,
   Employee,
   InvoiceReport,
-  Invoice,
+  CustomerInvoice,
+  SupplierInvoice,
+  Receipt,
   BankAccount,
+  BankStatement,
   Taxes,
   ProfitAndLoss,
   BalanceSheet,
@@ -31,85 +34,215 @@ import {
   Profile,
 
 
-  CreateInvoice,
+  CreateCustomerInvoice,
+  CreateSupplierInvoice,
+  CreateReceipt,
   CreateExpense,
   CreateProduct,
   CreateContact,
   CreateProject,
   CreateUser,
-  CreatePurchase,
+  CreatePayment,
   CreateBankAccount,
+  CreateBankStatement,
   CreateVatCategory,
   CreateTranactionCategory,
 
   DetailBankAccount,
-  DetailInvoice,
+  DetailBankStatement,
+  DetailCustomerInvoice,
+  DetailSupplierInvoice,
+  DetailReceipt,
   DetailExpense,
-  DetailPurchase,
+  DetailPayment,
   DetailContact,
   DetailProject,
   DetailProduct,
   DetailUser,
   DetailVatCategory,
-  DetailTranactionCategory
+  DetailTranactionCategory,
+
+  ImportBankStatement
+  
 } from 'screens'
 
 const adminRoutes = [
+
+  // dashboard module
   {
     path: '/admin/dashboard',
     name: 'Dashboard',
     component: Dashboard.screen
   },
+
+
+  // profile module
   {
     path: '/admin/profile',
     name: 'Profile',
     component: Profile.screen
   },
+
+
+
+
+  // revenue module
   {
-    path: '/admin/invoice/create',
+    path: '/admin/revenue/customer-invoice/create',
     name: 'Create',
-    component: CreateInvoice.screen
+    component: CreateCustomerInvoice.screen
   },
   {
-    path: '/admin/invoice/detail',
+    path: '/admin/revenue/customer-invoice/detail',
     name: 'Detail',
-    component: DetailInvoice.screen
+    component: DetailCustomerInvoice.screen
   },
   {
-    path: '/admin/invoice',
-    name: 'Invoice',
-    component: Invoice.screen
+    path: '/admin/revenue/customer-invoice',
+    name: 'Customer Invoice',
+    component: CustomerInvoice.screen
   },
   {
-    path: '/admin/bank-account/create',
+    path: '/admin/revenue/receipt/create',
+    name: 'Create',
+    component: CreateReceipt.screen
+  },
+  {
+    path: '/admin/revenue/receipt/detail',
+    name: 'Detail',
+    component: DetailReceipt.screen
+  },
+  {
+    path: '/admin/revenue/receipt',
+    name: 'Receipt',
+    component: Receipt.screen
+  },
+  {
+    redirect: true,
+    path: '/admin/revenue',
+    pathTo: '/admin/revenue/customer-invoice',
+    name: 'Revenue'
+  },
+
+
+
+
+
+
+  // expense module=
+  {
+    path: '/admin/expense/supplier-invoice/create',
+    name: 'Create',
+    component: CreateSupplierInvoice.screen
+  },
+  {
+    path: '/admin/expense/supplier-invoice/detail',
+    name: 'Detail',
+    component: DetailSupplierInvoice.screen
+  },
+  {
+    path: '/admin/expense/supplier-invoice',
+    name: 'Supplier Invoice',
+    component: SupplierInvoice.screen
+  },
+  {
+    path: '/admin/expense/expense/create',
+    name: 'Create',
+    component: CreateExpense.screen
+  },
+  {
+    path: '/admin/expense/expense/detail',
+    name: 'Detail',
+    component: DetailExpense.screen
+  },
+  {
+    path: '/admin/expense/expense',
+    name: 'Expense', 
+    component: Expense.screen
+  },
+  {
+    path: '/admin/expense/payment/create',
+    name: 'Create',
+    component: CreatePayment.screen
+  },
+  {
+    path: '/admin/expense/payment/detail',
+    name: 'Detail',
+    component: DetailPayment.screen
+  },
+  {
+    path: '/admin/expense/payment',
+    name: 'Payment',
+    component: Payment.screen
+  },
+  {
+    redirect: true,
+    path: '/admin/expense',
+    pathTo: '/admin/expense/expense',
+    name: 'Expense'
+  },
+
+
+
+
+  // bank account module
+  {
+    path: '/admin/bank/bank-account/create',
     name: 'Create',
     component: CreateBankAccount.screen
   },
   {
-    path: '/admin/bank-account/detail',
+    path: '/admin/bank/bank-account/detail',
     name: 'Detail',
     component: DetailBankAccount.screen
   },
   {
-    path: '/admin/bank-account',
+    path: '/admin/bank/bank-account',
     name: 'Bank Account',
     component: BankAccount.screen
   },
+  {
+    path: '/admin/bank/bank-statement/import',
+    name: 'Import',
+    component: ImportBankStatement.screen
+  },
+  {
+    path: '/admin/bank/bank-statement/create',
+    name: 'Create',
+    component: CreateBankStatement.screen
+  },
+  {
+    path: '/admin/bank/bank-statement/detail',
+    name: 'Detail',
+    component: DetailBankStatement.screen
+  },
+  {
+    path: '/admin/bank/bank-statement',
+    name: 'Bank Statement',
+    component: BankStatement.screen
+  },
+  {
+    redirect: true,
+    path: '/admin/bank',
+    pathTo: '/admin/bank/bank-account',
+    name: 'Bank'
+  },
+
+
+
+
+  // Taxes module
   {
     path: '/admin/taxes',
     name: 'Taxes',
     component: Taxes.screen
   },
-  {
-    path: '/admin/imports',
-    name: 'Imports',
-    component: Imports.screen
-  },
-  {
-    path: '/admin/employee',
-    name: 'Employee',
-    component: Employee.screen
-  },
+
+  
+
+
+
+  // report module
   {
     path: '/admin/report/expense-report',
     name: 'Expense Report', 
@@ -151,42 +284,20 @@ const adminRoutes = [
     pathTo: '/admin/report/transaction-report',
     name: 'Report'
   },
+
+  
+
+  // imports module
   {
-    path: '/admin/expense/expense/create',
-    name: 'Create',
-    component: CreateExpense.screen
+    path: '/admin/imports',
+    name: 'Imports',
+    component: Imports.screen
   },
-  {
-    path: '/admin/expense/expense/detail',
-    name: 'Detail',
-    component: DetailExpense.screen
-  },
-  {
-    path: '/admin/expense/expense',
-    name: 'Expense', 
-    component: Expense.screen
-  },
-  {
-    path: '/admin/expense/purchase/create',
-    name: 'Create',
-    component: CreatePurchase.screen
-  },
-  {
-    path: '/admin/expense/purchase/detail',
-    name: 'Detail',
-    component: DetailPurchase.screen
-  },
-  {
-    path: '/admin/expense/purchase',
-    name: 'Purchase',
-    component: Purchase.screen
-  },
-  {
-    redirect: true,
-    path: '/admin/expense',
-    pathTo: '/admin/expense/expense',
-    name: 'Expense'
-  },
+
+
+
+
+  // master module
   {
     path: '/admin/master/contact/create',
     name: 'Create',
@@ -253,6 +364,11 @@ const adminRoutes = [
     pathTo: '/admin/master/product',
     name: 'Master'
   },
+
+
+
+
+  // settings module
   {
     path: '/admin/settings/general',
     name: 'General Settings',
@@ -329,6 +445,22 @@ const adminRoutes = [
     pathTo: '/admin/settings/general',
     name: 'Settings'
   },
+
+
+
+
+
+  // employee module
+  {
+    path: '/admin/employee',
+    name: 'Employee',
+    component: Employee.screen
+  },
+
+
+
+
+
   {
     redirect: true,
     path: '/admin',
