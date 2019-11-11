@@ -53,17 +53,26 @@ class CreateExpense extends React.Component {
 
   renderActions (cell, row) {
     return (
-      <Button size="sm" className="btn-twitter btn-brand icon"><i className="fas fa-trash"></i></Button>
+      <Button
+        size="sm"
+        className="btn-twitter btn-brand icon"
+      >
+        <i className="fas fa-trash"></i>
+      </Button>
     )
   }
 
   renderProductName (cell, row) {
     return (
       <div className="d-flex align-items-center">
-        <Select
-          className="select-default-width flex-grow-1 mr-1"
-          options={[]}
-        />
+        <Input type="select" className="mr-1">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+        </Input>
         <Button
           size="sm"
           color="primary"
@@ -86,12 +95,14 @@ class CreateExpense extends React.Component {
 
   renderVat (cell, row) {
     return (
-      <Select
-        className="select-default-width"
-        options={[]}
-        id="currency"
-        name="currency"
-      />
+      <Input type="select">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+      </Input>
     )
   }
 
@@ -175,6 +186,43 @@ class CreateExpense extends React.Component {
                           </Col>
                         </Row>
                         <Row>
+                          <Col lg={4}>
+                            <FormGroup className="mb-3">
+                              <Label htmlFor="bank">Bank</Label>
+                              <Select
+                                className="select-default-width"
+                                options={[]}
+                                id="bank"
+                                name="bank"
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col lg={4}>
+                            <FormGroup className="mb-3">
+                              <Label htmlFor="payment_date">Payment Date</Label>
+                              <div>
+                                <DatePicker
+                                  className="form-control"
+                                  id="payment_date"
+                                  name="payment_date"
+                                  placeholderText=""
+                                />
+                              </div>
+                            </FormGroup>
+                          </Col>
+                          <Col lg={4}>
+                            <FormGroup className="mb-3">
+                              <Label htmlFor="payment_reference_number">Payment Reference Number</Label>
+                              <Select
+                                className="select-default-width"
+                                options={[]}
+                                id="payment_reference_number"
+                                name="payment_reference_number"
+                              />
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                        <Row>
                           <Col lg={8}>
                             <FormGroup className="mb-3">
                               <Label htmlFor="description">Description</Label>
@@ -182,8 +230,8 @@ class CreateExpense extends React.Component {
                                 type="textarea"
                                 name="description"
                                 id="description"
-                                rows="9"
-                                placeholder="Description..."
+                                rows="5"
+                                placeholder="1024 characters..."
                               />
                             </FormGroup>
                           </Col>
@@ -214,7 +262,7 @@ class CreateExpense extends React.Component {
                                     name="attachment_description"
                                     id="attachment_description"
                                     rows="5"
-                                    placeholder="Description..."
+                                    placeholder="1024 characters..."
                                   />
                                 </FormGroup>
                               </Col>
@@ -261,7 +309,7 @@ class CreateExpense extends React.Component {
                                 dataField="product_name"
                                 dataFormat={this.renderProductName}
                               >
-                                Product
+                                Account Code
                               </TableHeaderColumn>
                               <TableHeaderColumn
                                 dataField="quantity"

@@ -136,24 +136,24 @@ class DetailPayment extends React.Component {
                         <Row>
                           <Col lg={4}>
                             <FormGroup className="mb-3">
-                              <Label htmlFor="claimant">Claimant</Label>
-                              <Input
-                                type="text"
-                                id="claimant"
-                                name="claimant"
-                                placeholder="Enter Claimant"
-                                required
+                              <Label htmlFor="supplier_name">Supplier Name</Label>
+                              <Select
+                                className="select-default-width"
+                                options={[]}
+                                id="supplier_name"
+                                name="supplier_name"
+                                value=""
                               />
                             </FormGroup>
                           </Col>
                           <Col lg={4}>
                             <FormGroup className="mb-3">
-                              <Label htmlFor="category">Category</Label>
+                              <Label htmlFor="invoice">Invoice</Label>
                               <Select
                                 className="select-default-width"
                                 options={[]}
-                                id="category"
-                                name="category"
+                                id="invoice"
+                                name="invoice"
                               />
                             </FormGroup>
                           </Col>
@@ -280,100 +280,7 @@ class DetailPayment extends React.Component {
                             </Row>
                           </Col>
                         </Row>
-                        <hr/>
-                        <Row>
-                          <Col lg={12} className="mb-3">
-                            <Button color="primary" className="btn-square mr-3">
-                              <i className="fa fa-plus"></i> Add More
-                            </Button>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col lg={12}>
-                            <BootstrapTable
-                              options={ this.options }
-                              data={data}
-                              version="4"
-                              hover
-                              className="payment-detail-table"
-                            >
-                              <TableHeaderColumn
-                                width="55"
-                                dataAlign="center"
-                                dataFormat={this.renderActions}
-                              >
-                              </TableHeaderColumn>
-                              <TableHeaderColumn
-                                isKey
-                                dataField="product_name"
-                                dataFormat={this.renderProductName}
-                              >
-                                Product
-                              </TableHeaderColumn>
-                              <TableHeaderColumn
-                                dataField="quantity"
-                                dataFormat={this.renderQuantity}
-                              >
-                                Quantity
-                              </TableHeaderColumn>
-                              <TableHeaderColumn
-                                dataField="unit_price"
-                                dataFormat={this.renderUnitPrice}
-                              >
-                                Unit Price (All)
-                              </TableHeaderColumn>
-                              <TableHeaderColumn
-                                dataField="vat"
-                                dataFormat={this.renderVat}
-                              >
-                                Vat (%)
-                              </TableHeaderColumn>
-                              <TableHeaderColumn
-                                dataField="sub_total"
-                                dataFormat={this.renderSubTotal}
-                              >
-                                Sub Total (All)
-                              </TableHeaderColumn>
-                            </BootstrapTable>
-                          </Col>
-                        </Row>
                       </Form>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg={4} className="ml-auto">
-                      <div className="">
-                        <div className="total-item p-2">
-                          <Row>
-                            <Col lg={6}>
-                              <h5 className="mb-0 text-right">Total Net</h5>
-                            </Col>
-                            <Col lg={6} className="text-right">
-                              <label className="mb-0">0.00</label>
-                            </Col>
-                          </Row>
-                        </div>
-                        <div className="total-item p-2">
-                          <Row>
-                            <Col lg={6}>
-                              <h5 className="mb-0 text-right">Total Vat</h5>
-                            </Col>
-                            <Col lg={6} className="text-right">
-                              <label className="mb-0">0.00</label>
-                            </Col>
-                          </Row>
-                        </div>
-                        <div className="total-item p-2">
-                          <Row>
-                            <Col lg={6}>
-                              <h5 className="mb-0 text-right">Total</h5>
-                            </Col>
-                            <Col lg={6} className="text-right">
-                              <label className="mb-0">0.00</label>
-                            </Col>
-                          </Row>
-                        </div>
-                      </div>
                     </Col>
                   </Row>
                   <Row>

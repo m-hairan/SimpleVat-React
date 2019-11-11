@@ -35,6 +35,12 @@ class CreateCustomerInvoice extends React.Component {
     super(props)
     this.state = {
       loading: false,
+      discountOptions: [
+        {value: 'Fixed', label: 'Fixed'},
+        {value: 'Percentage', label: 'Percentage'}
+      ],
+      discount_option: '',
+      
       data: [
         {},
         {}
@@ -69,10 +75,14 @@ class CreateCustomerInvoice extends React.Component {
   renderProductName (cell, row) {
     return (
       <div className="d-flex align-items-center">
-        <Select
-          className="select-default-width flex-grow-1 mr-1"
-          options={[]}
-        />
+        <Input type="select" className="mr-1">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+        </Input>
         <Button
           size="sm"
           color="primary"
@@ -113,12 +123,14 @@ class CreateCustomerInvoice extends React.Component {
 
   renderVat (cell, row) {
     return (
-      <Select
-        className="select-default-width"
-        options={[]}
-        id="currency"
-        name="currency"
-      />
+      <Input type="select">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+      </Input>
     )
   }
 
@@ -129,7 +141,11 @@ class CreateCustomerInvoice extends React.Component {
 
   render() {
 
-    const { data } = this.state
+    const {
+      data,
+      discountOptions,
+      discount_option
+    } = this.state
 
     return (
       <div className="create-customer-invoice-screen">
@@ -154,7 +170,7 @@ class CreateCustomerInvoice extends React.Component {
                         <Row>
                           <Col lg={4}>
                             <FormGroup className="mb-3">
-                              <Label htmlFor="reference_number">Invoice Reference Number</Label>
+                              <Label htmlFor="reference_number">Invoice Number</Label>
                               <Input
                                 type="text"
                                 id="reference_number"
@@ -179,7 +195,7 @@ class CreateCustomerInvoice extends React.Component {
                         <Row>
                           <Col lg={4}>
                             <FormGroup className="mb-3">
-                              <Label htmlFor="contact">Contact</Label>
+                              <Label htmlFor="contact">Customer</Label>
                               <Select
                                 className="select-default-width"
                                 options={[]}
@@ -358,7 +374,7 @@ class CreateCustomerInvoice extends React.Component {
                         </Row>
                         <Row>
                           <Col lg={8}>
-                            <FormGroup className="py-3">
+                            <FormGroup className="py-2">
                               <Label htmlFor="notes">Notes</Label>
                               <Input
                                 type="textarea"
@@ -374,15 +390,44 @@ class CreateCustomerInvoice extends React.Component {
                               <div className="total-item p-2">
                                 <Row>
                                   <Col lg={6}>
-                                  <FormGroup>
-                                    <Label htmlFor="fixed_percentage">Fixed / Percentage Discount</Label>
-                                    <Select
-                                      className="select-default-width"
-                                      options={[]}
-                                      id="fixed_percentage"
-                                      name="fixed_percentage"
-                                    />
-                                  </FormGroup>
+                                    <FormGroup>
+                                      <Label htmlFor="discount_type">Discount Type</Label>
+                                      <Select
+                                        className="select-default-width"
+                                        options={discountOptions}
+                                        id="discount_type"
+                                        name="discount_type"
+                                        value={{ value: discount_option, label: discount_option }}
+                                        onChange={(item) => this.setState({
+                                          discount_option: item.value
+                                        })}
+                                      />
+                                    </FormGroup>
+                                  </Col>
+                                  {
+                                    discount_option == 'Percentage' ?
+                                      <Col lg={6}>
+                                        <FormGroup>
+                                          <Label htmlFor="discount_percentage">Percentage</Label>
+                                          <Input
+                                            id="discount_percentage"
+                                            name="discount_percentage"
+                                          />
+                                        </FormGroup>
+                                      </Col>
+                                    :
+                                      null
+                                  }
+                                </Row>
+                                <Row>
+                                  <Col lg={6} className="mt-4">
+                                    <FormGroup>
+                                      <Label htmlFor="discount_amount">Discount Amount</Label>
+                                      <Input
+                                        id="discount_amount"
+                                        name="discount_amount"
+                                      />
+                                    </FormGroup>
                                   </Col>
                                 </Row>
                               </div>

@@ -18,7 +18,10 @@ import {
   FormGroup,
   Input,
   Label,
-
+  ButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
 } from 'reactstrap'
 import Select from 'react-select'
 import { ToastContainer, toast } from 'react-toastify'
@@ -57,17 +60,18 @@ class CustomerInvoice extends React.Component {
         { value: 'Unpaid', label: 'Unpaid' },
         { value: 'Partially Paid', label: 'Partially Paid' },
       ],
+      actionButtons: {}
     }
 
     this.initializeData = this.initializeData.bind(this)
+    this.renderInvoiceNumber = this.renderInvoiceNumber.bind(this)
     this.renderInvoiceStatus = this.renderInvoiceStatus.bind(this)
     this.renderActions = this.renderActions.bind(this)
     this.onRowSelect = this.onRowSelect.bind(this)
     this.onSelectAll = this.onSelectAll.bind(this)
-    this.goToDetail = this.goToDetail.bind(this)
+    this.toggleActionButton = this.toggleActionButton.bind(this)
 
     this.options = {
-      onRowClick: this.goToDetail
     }
     this.selectRowProp = {
       mode: 'checkbox',
@@ -86,61 +90,76 @@ class CustomerInvoice extends React.Component {
     this.props.customerInvoiceActions.getCustomerInoviceList()
   }
 
+  renderInvoiceNumber (cell, row) {
+    return (
+    <label
+      className="mb-0 my-link"
+      onClick={() => this.props.history.push('/admin/revenue/customer-invoice/detail')}
+    >
+      { row.transactionCategoryName }
+    </label>
+    )
+  }
+
   renderInvoiceStatus (cell, row) {
     return (
       <span className="badge badge-success mb-0">{ row.status }</span>
     )
   }
 
+  toggleActionButton (index) {
+    let temp = Object.assign({}, this.state.actionButtons)
+    if (temp[index]) {
+      temp[index] = false
+    } else {
+      temp[index] = true
+    }
+    this.setState({
+      actionButtons: temp
+    })
+  }
+
   renderActions (cell, row) {
     return (
       <div>
-        <Button
-          size="sm"
-          color="primary"
-          className="btn-brand icon mr-1"
-          title="Post"
+        <ButtonDropdown
+          isOpen={this.state.actionButtons[row.transactionCategoryCode]}
+          toggle={() => this.toggleActionButton(row.transactionCategoryCode)}
         >
-          <i className="fas fa-heart" />
-        </Button>
-        <Button
-          size="sm"
-          color="success"
-          className="btn-brand icon mr-1"
-          title="Adjust"
-        >
-          <i className="fas fa-adjust" />
-        </Button>
-        <Button
-          size="sm"
-          color="info"
-          className="btn-brand icon mr-1"
-          title="Send"
-        >
-          <i className="fas fa-upload" />
-        </Button>
-        <Button
-          size="sm"
-          color="warning"
-          className="btn-brand icon mr-1"
-          title="Print"
-        >
-          <i className="fas fa-print" />
-        </Button>
-        <Button
-          size="sm"
-          color="danger"
-          className="btn-brand icon"
-          title="Cancel"
-        >
-          <i className="fa fa-trash-o" />
-        </Button>
+          <DropdownToggle size="sm" color="primary" className="btn-brand icon">
+            {
+              this.state.actionButtons[row.transactionCategoryCode] == true ?
+                <i className="fas fa-chevron-up" />
+              :
+                <i className="fas fa-chevron-down" />
+            }
+          </DropdownToggle>
+          <DropdownMenu right>
+            <DropdownItem onClick={() => this.props.history.push('/admin/revenue/customer-invoice/detail')}>
+              <i className="fas fa-edit" /> Edit
+            </DropdownItem>
+            <DropdownItem>
+              <i className="fas fa-heart" /> Post
+            </DropdownItem>
+            <DropdownItem>
+              <i className="fas fa-adjust" /> Adjust
+            </DropdownItem>
+            <DropdownItem>
+              <i className="fas fa-upload" /> Send
+            </DropdownItem>
+            <DropdownItem>
+              <i className="fas fa-print" /> Print
+            </DropdownItem>
+            <DropdownItem>
+              <i className="fas fa-times" /> Cancel
+            </DropdownItem>
+            <DropdownItem>
+              <i className="fa fa-trash-o" /> Delete
+            </DropdownItem>
+          </DropdownMenu>
+        </ButtonDropdown>
       </div>
     )
-  }
-
-  goToDetail (row) {
-    this.props.history.push('/admin/revenue/customer-invoice/detail')
   }
 
   onRowSelect (row, isSelected, e) {
@@ -167,37 +186,9 @@ class CustomerInvoice extends React.Component {
             <CardHeader>
               <Row>
                 <Col lg={12}>
-                  <div className="d-flex flex-wrap align-items-start justify-content-between">
-                    <div>
-                      <div className="h4 card-title d-flex align-items-center">
-                        <i className="fas fa-address-book" />
-                        <span className="ml-2">Customer Invoices</span>
-                      </div>
-                    </div>
-                    <div className="filter-box p-2">
-                      <Form onSubmit={this.handleSubmit} name="simpleForm">
-                        <div className="flex-wrap d-flex">
-                          <FormGroup>
-                            <Label htmlFor="name">Contact:</Label>
-                            <div className="filter-wrapper">
-                              <Select
-                                options={[]}
-                              />
-                            </div>
-                          </FormGroup>
-                          <FormGroup>
-                            <Label htmlFor="name">Status:</Label>
-                            <div className="filter-wrapper">
-                              <Select
-                                options={this.state.stateOptions}
-                                value={this.state.status}
-                                onChange={this.changeStatus}
-                              />
-                            </div>
-                          </FormGroup>
-                        </div>
-                      </Form>
-                    </div>
+                  <div className="h4 mb-0 d-flex align-items-center">
+                    <i className="fas fa-address-book" />
+                    <span className="ml-2">Customer Invoices</span>
                   </div>
                 </Col>
               </Row>
@@ -213,23 +204,23 @@ class CustomerInvoice extends React.Component {
                 :
                   <Row>
                     <Col lg={12}>
-                      <div className="my-4 status-panel p-3">
+                      <div className="mb-4 status-panel p-3">
                         <Row>
                           <Col lg={3}>
                             <h5>Overdue</h5>
                             <h3 className="status-title">$53.25 USD</h3>
                           </Col>
                           <Col lg={3}>
-                            <h5>Comming due within 30 days</h5>
+                            <h5>Due Within This Week</h5>
                             <h3 className="status-title">$220.28 USD</h3>
                           </Col>
                           <Col lg={3}>
-                            <h5>Average time get paid</h5>
-                            <h3 className="status-title">0 day</h3>
+                            <h5>Due Within 30 Days</h5>
+                            <h3 className="status-title">$220.28 USD</h3>
                           </Col>
                           <Col lg={3}>
-                            <h5>Next payment</h5>
-                            <h3 className="status-title">None</h3>
+                            <h5>Average Time to Get Paid</h5>
+                            <h3 className="status-title">0 day</h3>
                           </Col>
                         </Row>
                       </div>
@@ -268,21 +259,35 @@ class CustomerInvoice extends React.Component {
                       </div>
                       <div className="filter-panel my-3 py-3">
                         <Form inline>
-                          <FormGroup className="pr-3">
+                          <FormGroup className="pr-3 my-1">
                             <Input type="text" placeholder="Customer Name" />
                           </FormGroup>
-                          <FormGroup className="pr-3">
+                          <FormGroup className="pr-3 my-1">
                             <Input type="text" placeholder="Reference Number" />
                           </FormGroup>
-                          <FormGroup className="pr-3">
+                          <FormGroup className="pr-3 my-1">
                             <DateRangePicker>
-                              <Input type="text" placeholder="Date Range" />
+                              <Input type="text" placeholder="Invoice Date" />
                             </DateRangePicker>
+                          </FormGroup>
+                          <FormGroup className="pr-3 my-1">
+                            <DateRangePicker>
+                              <Input type="text" placeholder="Due Date" />
+                            </DateRangePicker>
+                          </FormGroup>
+                          <FormGroup className="pr-3 my-1">
+                            <Select
+                              className="select-min-width"
+                              options={this.state.stateOptions}
+                              value={this.state.status}
+                              onChange={this.changeStatus}
+                              placeholder="Status"
+                            />
                           </FormGroup>
                           <Button
                             type="submit"
                             color="primary"
-                            className="btn-square"
+                            className="btn-square my-1"
                           >
                             <i className="fas fa-search mr-1"></i>Filter
                           </Button>
@@ -299,49 +304,57 @@ class CustomerInvoice extends React.Component {
                           pagination
                           totalSize={customer_invoice_list ? customer_invoice_list.length : 0}
                           className="customer-invoice-table"
-                          trClassName="cursor-pointer"
                         >
                           <TableHeaderColumn
+                            width="130"
                             dataFormat={this.renderInvoiceStatus}
                           >
+                            Status
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             isKey
                             dataField="transactionCategoryCode"
+                            dataSort
                           >
-                            Conact Name
+                            Customer Name
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionCategoryName"
+                            dataFormat={this.renderInvoiceNumber}
+                            dataSort
                           >
                             Invoice Number
                           </TableHeaderColumn>
                           <TableHeaderColumn
-                            dataField="transactionCategoryDescription" 
+                            dataField="transactionCategoryDescription"
+                            dataSort
                           >
                             Invoice Date
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="parentTransactionCategory"
+                            dataSort
                           >
                             Due Date
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionType"
+                            dataSort
                           >
-                            Invocice Amount
+                            Invoice Amount
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionType"
+                            dataSort
                           >
                             VAT Amount
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             className="text-right"
                             columnClassName="text-right"
+                            width="55"
                             dataFormat={this.renderActions}
                           >
-                            Actions
                           </TableHeaderColumn>
                         </BootstrapTable>
                       </div>

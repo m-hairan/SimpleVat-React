@@ -19,13 +19,14 @@ import {
 } from 'reactstrap'
 import { ToastContainer, toast } from 'react-toastify'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
-import DatePicker from 'react-datepicker'
+import DateRangePicker from 'react-bootstrap-daterangepicker'
 
 import { Loader } from 'components'
 
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
-import 'react-datepicker/dist/react-datepicker.css'
+import 'bootstrap-daterangepicker/daterangepicker.css'
+
 
 import * as ExpenseActions from './actions'
 
@@ -157,19 +158,21 @@ class Expense extends React.Component {
                       </div>
                       <div className="filter-panel my-3 py-3">
                         <Form inline>
-                          <FormGroup className="pr-3">
-                            <DatePicker
-                              className="form-control"
-                              placeholderText="Date"
-                            />
+                          <FormGroup className="pr-3 my-1">
+                            <DateRangePicker>
+                              <Input type="text" placeholder="Expense Date" />
+                            </DateRangePicker>
                           </FormGroup>
-                          <FormGroup className="pr-3">
+                          <FormGroup className="pr-3 my-1">
                             <Input type="text" placeholder="Reciept Number" />
+                          </FormGroup>
+                          <FormGroup className="pr-3 my-1">
+                            <Input type="text" placeholder="Supplier Name" />
                           </FormGroup>
                           <Button
                             type="submit"
                             color="primary"
-                            className="btn-square"
+                            className="btn-square my-1"
                           >
                             <i className="fas fa-search mr-1"></i>Filter
                           </Button>
@@ -191,26 +194,37 @@ class Expense extends React.Component {
                           <TableHeaderColumn
                             isKey
                             dataField="transactionCategoryName"
+                            dataSort
                           >
-                            Payee Name
+                            Supplier Name
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionCategoryCode"
+                            dataSort
                           >
                             Description
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="parentTransactionCategory"
+                            dataSort
                           >
-                            Receipt No.
+                            Receipt Number
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionType"
+                            dataSort
+                          >
+                            VAT
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            dataField="transactionType"
+                            dataSort
                           >
                             Amount
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionType"
+                            dataSort
                           >
                             Date
                           </TableHeaderColumn>

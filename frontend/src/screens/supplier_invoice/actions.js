@@ -20,13 +20,13 @@ export const getSupplierInoviceList = () => {
         }, {
           status: 'paid',
           transactionCategoryId: 1,
-          transactionCategoryCode: 4,
+          transactionCategoryCode: 3,
           transactionCategoryName: 'temp',
           transactionCategoryDescription: 'temp',
           parentTransactionCategory: 'Loream Ipsume',
           transactionType: 'TEMP'
         }, {
-          status: 'paid',
+          status: 'Partially Paid',
           transactionCategoryId: 1,
           transactionCategoryCode: 4,
           transactionCategoryName: 'temp',
@@ -36,7 +36,7 @@ export const getSupplierInoviceList = () => {
         }, {
           status: 'unpaid',
           transactionCategoryId: 1,
-          transactionCategoryCode: 4,
+          transactionCategoryCode: 5,
           transactionCategoryName: 'temp',
           transactionCategoryDescription: 'temp',
           parentTransactionCategory: 'Loream Ipsume',
@@ -44,7 +44,7 @@ export const getSupplierInoviceList = () => {
         }, {
           status: 'unpaid',
           transactionCategoryId: 1,
-          transactionCategoryCode: 4,
+          transactionCategoryCode: 6,
           transactionCategoryName: 'temp',
           transactionCategoryDescription: 'temp',
           parentTransactionCategory: 'Loream Ipsume',
@@ -52,7 +52,7 @@ export const getSupplierInoviceList = () => {
         },{
           status: 'paid',
           transactionCategoryId: 1,
-          transactionCategoryCode: 4,
+          transactionCategoryCode: 7,
           transactionCategoryName: 'temp',
           transactionCategoryDescription: 'temp',
           parentTransactionCategory: 'Loream Ipsume',
@@ -60,12 +60,12 @@ export const getSupplierInoviceList = () => {
         },{
           status: 'unpaid',
           transactionCategoryId: 1,
-          transactionCategoryCode: 4,
+          transactionCategoryCode: 8,
           transactionCategoryName: 'temp',
           transactionCategoryDescription: 'temp',
           parentTransactionCategory: 'Loream Ipsume',
           transactionType: 'TEMP'
-        }]        
+        }]
       }
     })
   }
