@@ -17,7 +17,10 @@ import {
   FormGroup,
   Input,
   Label,
-
+  ButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
 } from 'reactstrap'
 import Select from 'react-select'
 import { ToastContainer, toast } from 'react-toastify'
@@ -57,20 +60,21 @@ class BankStatement extends React.Component {
         { value: 'Unexplained', label: 'Unexplained' },
         { value: 'Partially Explained', label: 'Partially Explained' },
       ],
+      actionButtons: {},
 
       selectedData: null
     }
 
     this.initializeData = this.initializeData.bind(this)
     this.toggleDangerModal = this.toggleDangerModal.bind(this)
-    this.renderTransactionType = this.renderTransactionType.bind(this)
+    this.renderAccountNumber = this.renderAccountNumber.bind(this)
     this.renderTransactionStatus = this.renderTransactionStatus.bind(this)
+    this.renderActions = this.renderActions.bind(this)
     this.onRowSelect = this.onRowSelect.bind(this)
     this.onSelectAll = this.onSelectAll.bind(this)
-    this.goToDetail = this.goToDetail.bind(this)
+    this.toggleActionButton = this.toggleActionButton.bind(this)
 
     this.options = {
-      onRowClick: this.goToDetail
     }
 
     this.selectRowProp = {
@@ -97,19 +101,63 @@ class BankStatement extends React.Component {
     })
   }
 
-  goToDetail (row) {
-    this.props.history.push('/admin/bank/bank-statement/detail')
+  toggleActionButton (index) {
+    let temp = Object.assign({}, this.state.actionButtons)
+    if (temp[index]) {
+      temp[index] = false
+    } else {
+      temp[index] = true
+    }
+    this.setState({
+      actionButtons: temp
+    })
+  }
+
+  renderAccountNumber (cell, row) {
+    return (
+    <label
+      className="mb-0 my-link"
+      onClick={() => this.props.history.push('/admin/bank/bank-statement/detail')}
+    >
+      { row.reference_number }
+    </label>
+    )
   }
 
   renderTransactionStatus (cell, row) {
     return (
-      <span className="badge badge-success mb-0">Explained</span>
+      <span className="badge badge-success mb-0">Reconciled</span>
     )
   }
 
-  renderTransactionType (cell, row) {
+  renderActions (cell, row) {
     return (
-      <span className="badge badge-primary mb-0">{ row.transaction_type }</span>
+      <div>
+        <ButtonDropdown
+          isOpen={this.state.actionButtons[row.reference_number]}
+          toggle={() => this.toggleActionButton(row.reference_number)}
+        >
+          <DropdownToggle size="sm" color="primary" className="btn-brand icon">
+            {
+              this.state.actionButtons[row.reference_number] == true ?
+                <i className="fas fa-chevron-up" />
+              :
+                <i className="fas fa-chevron-down" />
+            }
+          </DropdownToggle>
+          <DropdownMenu right>
+            <DropdownItem onClick={() => this.props.history.push('/admin/bank/bank-statement/detail')}>
+              <i className="fas fa-edit" /> Edit
+            </DropdownItem>
+            <DropdownItem>
+              <i className="fas fa-wrench" /> Achive
+            </DropdownItem>
+            <DropdownItem>
+              <i className="fa fa-trash" /> Delete
+            </DropdownItem>
+          </DropdownMenu>
+        </ButtonDropdown>
+      </div>
     )
   }
 
@@ -136,29 +184,9 @@ class BankStatement extends React.Component {
             <CardHeader>
               <Row>
                 <Col lg={12}>
-                  <div className="d-flex flex-wrap align-items-start justify-content-between">
-                    <div>
-                      <div className="h4 card-title d-flex align-items-center">
-                        <i className="icon-doc" />
-                        <span className="ml-2">Bank Statements</span>
-                      </div>
-                    </div>
-                    <div className="filter-box p-2">
-                      <Form onSubmit={this.handleSubmit} name="simpleForm">
-                        <div className="flex-wrap d-flex"> 
-                          <FormGroup>
-                            <Label htmlFor="name">Status:</Label>
-                            <div className="status-option">
-                              <Select
-                                options={this.state.stateOptions}
-                                value={this.state.status}
-                                onChange={this.changeStatus}
-                              />
-                            </div>
-                          </FormGroup>
-                        </div>
-                      </Form>
-                    </div>
+                  <div className="h4 mb-0 d-flex align-items-center">
+                    <i className="icon-doc" />
+                    <span className="ml-2">Bank Statements</span>
                   </div>
                 </Col>
               </Row>
@@ -177,13 +205,6 @@ class BankStatement extends React.Component {
                       <div className="mb-2">
                         <ButtonGroup size="sm">
                           <Button
-                            color="success"
-                            className="btn-square"
-                          >
-                            <i className="fa glyphicon glyphicon-export fa-download mr-1" />
-                            Export to CSV
-                          </Button>
-                          <Button
                             color="info"
                             className="btn-square"
                             onClick={() => this.props.history.push('/admin/bank/bank-statement/import')}
@@ -199,36 +220,34 @@ class BankStatement extends React.Component {
                             <i className="fas fa-plus mr-1" />
                             New Statement
                           </Button>
-                          <Button
-                            color="warning"
-                            className="btn-square"
-                          >
-                            <i className="fa glyphicon glyphicon-trash fa-trash mr-1" />
-                            Bulk Delete
-                          </Button>
                         </ButtonGroup>
                       </div>
                       <div className="filter-panel my-3 py-3">
                         <Form inline>
-                          <FormGroup className="pr-3">
-                            <Input type="text" placeholder="Reference Name" />
-                          </FormGroup>
-                          <FormGroup className="pr-3">
+                          <FormGroup className="pr-3 my-1">
                             <Select
                               className="select-min-width"
                               options={[]}
-                              placeholder="Transaction Type"
+                              placeholder="Bank"
                             />
                           </FormGroup>
-                          <FormGroup className="pr-3">
-                            <DateRangePicker>
-                              <Input type="text" placeholder="Date Range" />
-                            </DateRangePicker>
+                          <FormGroup className="pr-3 my-1">
+                            <Input type="text" placeholder="Account Number" />
+                          </FormGroup>
+                          <FormGroup className="pr-3 my-1">
+                            <Input type="text" placeholder="Account Name" />
+                          </FormGroup>
+                          <FormGroup className="pr-3 my-1">
+                            <Select
+                              className="select-min-width"
+                              options={[]}
+                              placeholder="Status"
+                            />
                           </FormGroup>
                           <Button
                             type="submit"
                             color="primary"
-                            className="btn-square"
+                            className="btn-square my-1"
                           >
                             <i className="fas fa-search mr-1"></i>Filter
                           </Button>
@@ -236,7 +255,6 @@ class BankStatement extends React.Component {
                       </div>
                       <div>
                         <BootstrapTable
-                          selectRow={ this.selectRowProp }
                           search={true}
                           options={ this.options }
                           data={bank_statement_list}
@@ -245,37 +263,45 @@ class BankStatement extends React.Component {
                           pagination
                           totalSize={bank_statement_list ? bank_statement_list.length : 0}
                           className="bank-statement-table"
-                          trClassName="cursor-pointer"
                         >
                           <TableHeaderColumn
+                            width="110"
                             dataFormat={this.renderTransactionStatus}
                           >
+                            Status
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             isKey
                             dataField="reference_number"
+                            dataFormat={this.renderAccountNumber}
+                            dataSort
                           >
-                            Reference Number
-                          </TableHeaderColumn>
-                          <TableHeaderColumn
-                            dataFormat={this.renderTransactionType}
-                          >
-                            Transaction Type
-                          </TableHeaderColumn>
-                          <TableHeaderColumn
-                            dataField="amount" 
-                          >
-                            Amount
+                            Account Number
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="description"
+                            dataSort
                           >
-                            Description
+                            Account Name
                           </TableHeaderColumn>
                           <TableHeaderColumn
-                            dataField="transaction_date"
+                            dataField="amount"
+                            dataSort
                           >
-                            Transaction Date
+                            Number of Records
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            dataField="amount"
+                            dataSort
+                          >
+                            Upload Date
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            className="text-right"
+                            columnClassName="text-right"
+                            width="55"
+                            dataFormat={this.renderActions}
+                          >
                           </TableHeaderColumn>
                         </BootstrapTable>
                       </div>

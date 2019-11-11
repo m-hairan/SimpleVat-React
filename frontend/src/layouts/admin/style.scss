@@ -47,6 +47,16 @@
     background: #ffffff;
     box-shadow: 0 0 0 1px rgba(63,63,68,0.05), 0 1px 5px 0 rgba(63,63,68,0.15);
 
+    .ps-container {
+      .nav-dropdown-items {
+        .nav-item {
+          .nav-link {
+            padding-left: 26px;
+          }
+        }
+      }
+    }
+
     .nav-link {
       color: #37474f;
       .nav-icon {

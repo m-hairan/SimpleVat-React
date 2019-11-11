@@ -33,7 +33,7 @@ export default {
           icon: 'far fa-address-card',
         },
         {
-          name: 'Expence',
+          name: 'Expense',
           url: '/admin/expense/expense',
           icon: 'fab fa-stack-exchange',
         },
