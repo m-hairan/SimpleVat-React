@@ -7,7 +7,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.simplevat.dao.invoice.InvoiceDao;
-import com.simplevat.entity.Contact;
 import com.simplevat.entity.Event;
 import com.simplevat.entity.invoice.Invoice;
 import com.simplevat.service.SimpleVatService;

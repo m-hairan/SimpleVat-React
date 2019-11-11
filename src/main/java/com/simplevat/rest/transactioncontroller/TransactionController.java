@@ -5,6 +5,8 @@
  */
 package com.simplevat.rest.transactioncontroller;
 
+import com.simplevat.helper.TranscationCategoryHelper;
+import com.simplevat.contact.model.TransactionCategoryBean;
 import com.simplevat.entity.VatCategory;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionType;
@@ -51,7 +53,7 @@ public class TransactionController implements Serializable {
     private UserServiceNew userServiceNew;
 
     @GetMapping(value = "/gettransactioncategory")
-    private ResponseEntity<List<TransactionCategory>> getAllTransactionCategory() {
+    public ResponseEntity<List<TransactionCategory>> getAllTransactionCategory() {
         List<TransactionCategory> transactionCategories = transactionCategoryService.findAllTransactionCategory();
         if (transactionCategories != null) {
             return new ResponseEntity(transactionCategories, HttpStatus.OK);
@@ -61,7 +63,7 @@ public class TransactionController implements Serializable {
     }
 
     @GetMapping(value = "/edittransactioncategory")
-    private ResponseEntity<TransactionCategory> editTransactionCategory(@RequestParam("id") Integer id) {
+    public ResponseEntity<TransactionCategory> editTransactionCategory(@RequestParam("id") Integer id) {
         TransactionCategory transactionCategories = transactionCategoryService.findByPK(id);
         if (transactionCategories != null) {
             return new ResponseEntity(transactionCategories, HttpStatus.OK);
@@ -71,7 +73,7 @@ public class TransactionController implements Serializable {
     }
 
     @DeleteMapping(value = "/deletetransactioncategory")
-    private ResponseEntity<TransactionCategory> deleteTransactionCategory(@RequestParam("id") Integer id) {
+    public ResponseEntity<TransactionCategory> deleteTransactionCategory(@RequestParam("id") Integer id) {
         TransactionCategory transactionCategories = transactionCategoryService.findByPK(id);
         if (transactionCategories == null) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -82,7 +84,7 @@ public class TransactionController implements Serializable {
     }
 
     @GetMapping(value = "/getvatcategories")
-    private ResponseEntity<List<VatCategory>> getVatCategories() {
+    public ResponseEntity<List<VatCategory>> getVatCategories() {
         List<VatCategory> vatCategorys = vatCategoryService.getVatCategoryList();
         if (vatCategorys != null) {
             return new ResponseEntity(vatCategorys, HttpStatus.OK);
@@ -93,8 +95,8 @@ public class TransactionController implements Serializable {
     }
 
     @GetMapping(value = "/gettransactiontype")
-    private ResponseEntity<List<TransactionType>> getAllTransactionType(String str) {
-        List<TransactionType> transactionTypes = null;
+    public ResponseEntity<List<TransactionType>> getAllTransactionType(String str) {
+        List<TransactionType> transactionTypes;
         if (str == null) {
             return new ResponseEntity(transactionTypeService.findAll(), HttpStatus.OK);
         }
@@ -107,7 +109,7 @@ public class TransactionController implements Serializable {
     }
 
     @PostMapping(value = "/savetransaction")
-    private ResponseEntity save(@RequestBody TransactionCategoryBean transactionCategoryBean, @RequestParam("id") Integer id) throws UnauthorizedException {
+    public ResponseEntity save(@RequestBody TransactionCategoryBean transactionCategoryBean, @RequestParam("id") Integer id) {
         try {
             User user = userServiceNew.findByPK(id);
             TransactionCategory selectedTransactionCategory = TranscationCategoryHelper.getTrascationByTrascationModel(transactionCategoryBean, transactionTypeService, transactionCategoryService, vatCategoryService);
@@ -140,10 +142,10 @@ public class TransactionController implements Serializable {
     }
 
     @GetMapping(value = "/getparenttransaction")
-    public ResponseEntity<List<TransactionCategory>> getParentTransaction(@RequestParam("TransactionTypeCode") Integer TransactionTypeCode, @RequestParam("transcationTxt") String transcationTxt) {
+    public ResponseEntity<List<TransactionCategory>> getParentTransaction(@RequestParam("TransactionTypeCode") Integer transactionTypeCode, @RequestParam("transcationTxt") String transcationTxt) {
 
-        if (TransactionTypeCode != null) {
-            List<TransactionCategory> transactionCategorys = transactionCategoryService.findAllTransactionCategoryByTransactionType(TransactionTypeCode, transcationTxt);
+        if (transactionTypeCode != null) {
+            List<TransactionCategory> transactionCategorys = transactionCategoryService.findAllTransactionCategoryByTransactionType(transactionTypeCode, transcationTxt);
             return new ResponseEntity<>(transactionCategorys, HttpStatus.OK);
         }
         return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);

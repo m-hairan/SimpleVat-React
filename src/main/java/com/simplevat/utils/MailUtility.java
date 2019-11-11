@@ -7,13 +7,9 @@ package com.simplevat.utils;
 
 import com.simplevat.entity.Configuration;
 import com.simplevat.entity.Mail;
-import com.simplevat.entity.MailEnum;
-import com.simplevat.integration.MailIntegration;
 import com.simplevat.constant.ConfigurationConstants;
-import com.simplevat.constant.EmailConstant;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Level;
 import javax.mail.internet.MimeMultipart;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -34,9 +30,9 @@ public class MailUtility {
                     mail.setFromName(fromName);
                     mail.setTo(toMailAddress);
                     mail.setSubject(subject);
-                 //  MailIntegration.sendHtmlEmail(mimeMultipart, mail, javaMailSender);
+                    //  MailIntegration.sendHtmlEmail(mimeMultipart, mail, javaMailSender);
                 } catch (Exception ex) {
-                   ex.printStackTrace();
+                    ex.printStackTrace();
                 }
             }
         });
@@ -100,12 +96,24 @@ public class MailUtility {
             }
         }
         if (mailConfigCount == 6) {
-            mailDefaultConfigurationModel.setMailhost(configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_HOST)).findAny().get().getValue());
-            mailDefaultConfigurationModel.setMailport(configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_PORT)).findAny().get().getValue());
-            mailDefaultConfigurationModel.setMailusername(configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_USERNAME)).findAny().get().getValue());
-            mailDefaultConfigurationModel.setMailpassword(configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_PASSWORD)).findAny().get().getValue());
-            mailDefaultConfigurationModel.setMailsmtpAuth(configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_SMTP_AUTH)).findAny().get().getValue());
-            mailDefaultConfigurationModel.setMailstmpStartTLSEnable(configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_SMTP_STARTTLS_ENABLE)).findAny().get().getValue());
+            if (configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_HOST)).findAny().isPresent()) {
+                mailDefaultConfigurationModel.setMailhost(configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_HOST)).findAny().get().getValue());
+            }
+            if (configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_PORT)).findAny().isPresent()) {
+                mailDefaultConfigurationModel.setMailport(configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_PORT)).findAny().get().getValue());
+            }
+            if (configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_USERNAME)).findAny().isPresent()) {
+                mailDefaultConfigurationModel.setMailusername(configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_USERNAME)).findAny().get().getValue());
+            }
+            if (configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_PASSWORD)).findAny().isPresent()) {
+                mailDefaultConfigurationModel.setMailpassword(configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_PASSWORD)).findAny().get().getValue());
+            }
+            if (configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_SMTP_AUTH)).findAny().isPresent()) {
+                mailDefaultConfigurationModel.setMailsmtpAuth(configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_SMTP_AUTH)).findAny().get().getValue());
+            }
+            if (configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_SMTP_STARTTLS_ENABLE)).findAny().isPresent()) {
+                mailDefaultConfigurationModel.setMailstmpStartTLSEnable(configurationList.stream().filter(mailConfiguration -> mailConfiguration.getName().equals(ConfigurationConstants.MAIL_SMTP_STARTTLS_ENABLE)).findAny().get().getValue());
+            }
         }
         return mailDefaultConfigurationModel;
     }

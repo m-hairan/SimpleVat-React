@@ -5,7 +5,7 @@
  */
 package com.simplevat.dao.impl;
 
-import com.simplevat.constants.TaxTransactionStatusConstant;
+import com.simplevat.constant.TaxTransactionStatusConstant;
 import com.simplevat.dao.AbstractDao;
 import com.simplevat.dao.TaxTransactionDao;
 import com.simplevat.entity.TaxTransaction;

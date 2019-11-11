@@ -6,7 +6,7 @@ public enum ServiceErrorCode {
 	RecordAlreadyExists("Record Already Exists", true), RecordDoesntExists("Record does not Exists", true);
 
 	
-	private ServiceErrorCode(String errorDescription_,boolean businessException_) {
+	ServiceErrorCode(String errorDescription_,boolean businessException_) {
 		this.errorDescription = errorDescription_;
 		this.businessException = businessException_;
 	}

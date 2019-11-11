@@ -7,10 +7,10 @@ import com.simplevat.entity.bankaccount.BankAccount;
 
 public interface BankAccountDao extends Dao<Integer, BankAccount> {
 
-    public List<BankAccount> getBankAccounts();
+    List<BankAccount> getBankAccounts();
 
-    public List<BankAccount> getBankAccountByUser(int userId);
+    List<BankAccount> getBankAccountByUser(int userId);
 
-    public BankAccount getBankAccountById(int id);
+    BankAccount getBankAccountById(int id);
 
 }

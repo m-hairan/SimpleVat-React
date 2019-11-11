@@ -5,7 +5,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Calendar;
 import org.hibernate.annotations.ColumnDefault;
 
 /**

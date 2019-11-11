@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.simplevat.dao.AbstractDao;
 import com.simplevat.dao.ExpenseDao;
 import com.simplevat.entity.Expense;
-import com.simplevat.entity.invoice.Invoice;
 import java.time.Instant;
 import java.time.ZoneId;
 import javax.persistence.TypedQuery;

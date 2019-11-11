@@ -14,7 +14,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import com.simplevat.service.impl.bankaccount.ChartData;
+import com.simplevat.contact.model.ChartData;
 import com.simplevat.service.report.model.BankAccountTransactionReportModel;
 
 @Component
@@ -126,8 +126,7 @@ public class ChartUtil {
     }
 
     public int getMaxValue(Map<Object, Number> data) {
-        List<Number> list = new ArrayList<Number>();
-        list.addAll(data.values());
+        List<Number> list = new ArrayList(data.values());
         Number max = 0;
         for (int i = 0; i < list.size(); i++) {
             Number number = list.get(i);
@@ -137,11 +136,11 @@ public class ChartUtil {
                 }
             }
         }
-        int maxValue = 0;
+        int maxValue;
         if (max.doubleValue() < 10) {
             maxValue = max.intValue() * 2;
         } else {
-            maxValue = max.intValue() + max.intValue() * 1 / 5;
+            maxValue = max.intValue() + max.intValue() / 5;
         }
         return maxValue;
 

@@ -10,7 +10,7 @@ import com.simplevat.entity.Currency;
 import com.simplevat.entity.Role;
 import com.simplevat.entity.Title;
 import com.simplevat.entity.User;
-import com.simplevat.rest.contactController.ContactHelper;
+import com.simplevat.helper.ContactHelper;
 import com.simplevat.service.CompanyService;
 import com.simplevat.service.ContactService;
 import com.simplevat.service.CurrencyService;
@@ -47,7 +47,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(value = "/rest/employee")
-public class EmployeeController implements Serializable{
+public class EmployeeController implements Serializable {
 
     @Autowired
     private UserServiceNew userServiceNew;
@@ -72,7 +72,7 @@ public class EmployeeController implements Serializable{
     private ContactHelper contactHelper = new ContactHelper();
 
     @GetMapping(value = "/getuser")
-    private ResponseEntity<List<User>> getUser() {
+    public ResponseEntity<List<User>> getUser() {
         List<User> users = userServiceNew.getAllUserNotEmployee();
         if (users != null) {
             return new ResponseEntity(users, HttpStatus.OK);
@@ -83,7 +83,7 @@ public class EmployeeController implements Serializable{
     }
 
     @GetMapping(value = "/gettitle")
-    private ResponseEntity<List<Title>> getTitle(@RequestParam(value = "titleStr") String titleStr) {
+    public ResponseEntity<List<Title>> getTitle(@RequestParam(value = "titleStr") String titleStr) {
         List<Title> titleSuggestion = new ArrayList<>();
         List<Title> titles = titleService.getTitles();
         Iterator<Title> titleIterator = titles.iterator();
@@ -101,7 +101,7 @@ public class EmployeeController implements Serializable{
     }
 
     @GetMapping(value = "/getcurrencycode")
-    private ResponseEntity<List<Currency>> completeCurrency(@RequestParam(value = "currencyStr") String currencyStr) {
+    public ResponseEntity<List<Currency>> completeCurrency(@RequestParam(value = "currencyStr") String currencyStr) {
         List<Currency> currencySuggestion = new ArrayList<>();
         List<Currency> currencies = currencyService.getCurrencies();
 
@@ -128,7 +128,7 @@ public class EmployeeController implements Serializable{
     }
 
     @PostMapping(value = "/saveuser")
-    private ResponseEntity createOrUpdateEmployee(@RequestBody ContactModel contactModel, @RequestParam("id") Integer id) throws IOException {
+    public ResponseEntity createOrUpdateEmployee(@RequestBody ContactModel contactModel, @RequestParam("id") Integer id) throws IOException {
         Optional<User> optionalUser = userServiceNew.getUserByEmail(contactModel.getEmail());
         String message = "";
         Boolean isPresent = false;

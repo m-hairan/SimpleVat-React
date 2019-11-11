@@ -11,8 +11,7 @@ import com.simplevat.entity.Country;
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.Project;
 import com.simplevat.entity.Title;
-import com.simplevat.entity.User;
-import com.simplevat.rest.contactController.ContactHelper;
+import com.simplevat.helper.ContactHelper;
 import com.simplevat.service.ContactService;
 import com.simplevat.service.CountryService;
 import com.simplevat.service.CurrencyService;
@@ -59,7 +58,7 @@ public class ProjectController {
     private CountryService countryService;
 
     @GetMapping(value = "/getprojectbycriteria")
-    private ResponseEntity<List<Project>> getProjects() throws Exception {
+    public ResponseEntity<List<Project>> getProjects() throws Exception {
         ProjectCriteria projectCriteria = new ProjectCriteria();
         projectCriteria.setActive(Boolean.TRUE);
         List<Project> projects = projectService.getProjectsByCriteria(projectCriteria);
@@ -71,7 +70,7 @@ public class ProjectController {
     }
 
     @DeleteMapping(value = "/deleteproject")
-    private ResponseEntity deleteProject(@RequestParam(value = "id") Integer id) throws Exception {
+    public ResponseEntity deleteProject(@RequestParam(value = "id") Integer id) throws Exception {
         try {
             Project project = projectService.findByPK(id);
 
@@ -89,7 +88,7 @@ public class ProjectController {
     }
 
     @GetMapping(value = "/editproject")
-    private ResponseEntity<Project> editProject(@RequestParam(value = "id") Integer id) throws Exception {
+    public ResponseEntity<Project> editProject(@RequestParam(value = "id") Integer id) throws Exception {
         Project project = projectService.findByPK(id);
 
         if (project == null) {
@@ -99,7 +98,7 @@ public class ProjectController {
     }
 
     @GetMapping(value = "/getcontactbyName")
-    private ResponseEntity<List<Contact>> getContacts(@RequestParam(value = "searchQuery") String searchQuery) {
+    public ResponseEntity<List<Contact>> getContacts(@RequestParam(value = "searchQuery") String searchQuery) {
         List<Contact> contact = contactService.getContacts(searchQuery, ContactTypeConstant.CUSTOMER);
         if (contact == null && contact.isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -109,7 +108,7 @@ public class ProjectController {
     }
 
     @GetMapping(value = "/getcurrenncy")
-    private ResponseEntity<List<Currency>> getCurrency(@RequestParam(value = "currencyStr") String currencyStr) {
+    public ResponseEntity<List<Currency>> getCurrency(@RequestParam(value = "currencyStr") String currencyStr) {
         List<Currency> currencySuggestion = new ArrayList<>();
         List<Currency> currencies = currencyService.getCurrencies();
 
@@ -142,7 +141,7 @@ public class ProjectController {
     }
 
     @GetMapping(value = "/gettitle")
-    private ResponseEntity<List<Title>> completeTitle(@RequestParam(value = "titleStr") String titleStr) {
+    public ResponseEntity<List<Title>> completeTitle(@RequestParam(value = "titleStr") String titleStr) {
         List<Title> titleSuggestion = new ArrayList<>();
         List<Title> titles = titleService.getTitles();
         Iterator<Title> titleIterator = titles.iterator();
@@ -164,7 +163,7 @@ public class ProjectController {
     }
 
     @GetMapping(value = "/getcountry")
-    private ResponseEntity<List<Country>> getCountry(@RequestParam(value = "countryStr") String countryStr) {
+    public ResponseEntity<List<Country>> getCountry(@RequestParam(value = "countryStr") String countryStr) {
         List<Country> countrySuggestion = new ArrayList<>();
         List<Country> countries = countryService.getCountries();
 
@@ -192,7 +191,7 @@ public class ProjectController {
     }
 
     @PostMapping(value = "/saveprojectcontact")
-    private ResponseEntity createContact(@RequestBody ContactModel contactModel, @RequestParam(value = "id") Integer id) {
+    public ResponseEntity createContact(@RequestBody ContactModel contactModel, @RequestParam(value = "id") Integer id) {
 
         Contact contact = new Contact();
         ContactHelper contactHelper = new ContactHelper();
@@ -211,7 +210,7 @@ public class ProjectController {
     }
 
     @PostMapping(value = "/saveproject")
-    private ResponseEntity saveProject(@RequestBody Project project, @RequestParam(value = "id") Integer id) throws Exception {
+    public ResponseEntity saveProject(@RequestBody Project project, @RequestParam(value = "id") Integer id) throws Exception {
         project.setCreatedBy(id);
         project.setCreatedDate(LocalDateTime.now());
         if (project.getProjectId() != null && project.getProjectId() > 0) {

@@ -9,8 +9,8 @@ package com.simplevat.constant;
  *
  * @author h
  */
-public interface DiscountTypeConstant {
+public abstract class DiscountTypeConstant {
 
-    int PERCENTAGEDISCOUNT = 1;
-    int ABSOLUTEDISCOUNT = 2;
+    public static final int PERCENTAGEDISCOUNT = 1;
+    public static final int ABSOLUTEDISCOUNT = 2;
 }

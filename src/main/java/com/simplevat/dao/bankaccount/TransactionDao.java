@@ -1,6 +1,5 @@
 package com.simplevat.dao.bankaccount;
 
-import com.simplevat.criteria.SortOrder;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +9,6 @@ import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionType;
 import com.simplevat.entity.bankaccount.TransactionView;
-import java.time.LocalDateTime;
 import java.util.Map;
 
 public interface TransactionDao extends Dao<Integer, Transaction> {
