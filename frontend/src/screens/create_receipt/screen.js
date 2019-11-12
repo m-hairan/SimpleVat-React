@@ -28,7 +28,6 @@ class CreateReceipt extends React.Component {
     return (
       <div className="create-receipt-screen">
         <div className="animated fadeIn">
-          <h1>CreateReceipt Screen</h1>
         </div>
       </div>
     )

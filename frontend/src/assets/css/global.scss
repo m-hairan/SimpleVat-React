@@ -52,6 +52,8 @@ body, span, label, h1, h2, h3, h4, p, em {
 .card-header {
   background-color: #ffffff !important;
   border-radius: 0 !important;
+  padding-top: 1.2rem !important;
+  padding-bottom: 1.2rem !important;
 }
 
 .card-body {
@@ -97,17 +99,32 @@ body, span, label, h1, h2, h3, h4, p, em {
 .react-bs-table-container {
   .react-bs-table {
     border-radius: 0 !important;
-    border-bottom: 0px !important;
+    border-top-width: 2px !important;
+    border-left: none !important;
+    border-right: none !important;
     td {
-      vertical-align: middle !important;
+      vertical-align: top !important;
+      border-left: 0px !important;
+      border-right: 0px !important;
+      .btn-group {
+        position: inherit !important;
+      }
+      .btn-brand {
+        border-radius: 0.25rem !important;
+      }
     }
     th {
       border-bottom-width: 1px !important;
+      border-left: 0px !important;
+      border-right: 0px !important;
     }
   }
   .react-bs-table-tool-bar {
     .btn {
       border-radius: 0 !important;
+    }
+    .react-bs-table-search-form {
+      margin-bottom: 15px !important;
     }
   }
   .react-bs-table-pagination {
@@ -121,11 +138,11 @@ body, span, label, h1, h2, h3, h4, p, em {
 }
 
 td {
-  padding: 0.65rem !important;
+  padding: 0.60rem !important;
 }
 
 th {
-  padding: 0.65rem !important;
+  padding: 0.60rem !important;
 }
 
 
@@ -168,6 +185,9 @@ th {
 // react-select styles
 .Select-control {
   border-radius: 0px !important;
+  .Select-clear-zone {
+    display: none !important;
+  }
 }
 .Select-menu-outer {
   border-radius: 0px !important;

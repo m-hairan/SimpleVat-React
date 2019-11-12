@@ -28,7 +28,6 @@ class DetailReceipt extends React.Component {
     return (
       <div className="detail-receipt-screen">
         <div className="animated fadeIn">
-          <h1>DetailReceipt Screen</h1>
         </div>
       </div>
     )

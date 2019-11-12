@@ -22,12 +22,13 @@ import {
 import Select from 'react-select'
 import { ToastContainer, toast } from 'react-toastify'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
-import DatePicker from 'react-datepicker'
+import DateRangePicker from 'react-bootstrap-daterangepicker'
 
 import { Loader } from 'components'
 
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
+import 'bootstrap-daterangepicker/daterangepicker.css'
 
 import * as PaymentActions from './actions'
 
@@ -164,19 +165,27 @@ class Payment extends React.Component {
                       </div>
                       <div className="filter-panel my-3 py-3">
                         <Form inline>
-                          <FormGroup className="pr-3">
-                            <DatePicker
-                              className="form-control"
-                              placeholderText="Date"
-                            />
+                          <FormGroup className="pr-3 my-1">
+                            <Input type="text" placeholder="Payment Number" />
                           </FormGroup>
-                          <FormGroup className="pr-3">
-                            <Input type="text" placeholder="Reciept Number" />
+                          <FormGroup className="pr-3 my-1">
+                            <Input type="text" placeholder="Reference" />
+                          </FormGroup>
+                          <FormGroup className="pr-3 my-1">
+                            <Input type="text" placeholder="Supplier Name" />
+                          </FormGroup>
+                          <FormGroup className="pr-3 my-1">
+                            <Input type="text" placeholder="Invoice" />
+                          </FormGroup>
+                          <FormGroup className="pr-3 my-1">
+                            <DateRangePicker>
+                              <Input type="text" placeholder="Payment Date" />
+                            </DateRangePicker>
                           </FormGroup>
                           <Button
                             type="submit"
                             color="primary"
-                            className="btn-square"
+                            className="btn-square my-1"
                           >
                             <i className="fas fa-search mr-1"></i>Filter
                           </Button>
@@ -198,23 +207,39 @@ class Payment extends React.Component {
                           <TableHeaderColumn
                             isKey
                             dataField="transactionCategoryName"
+                            dataSort
                           >
-                            Reciept Number
+                            Payment Number
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionCategoryCode"
+                            dataSort
+                          >
+                            Reference #
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            dataField="parentTransactionCategory"
+                            dataSort
+                          >
+                            Invoice
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            dataField="transactionType"
+                            dataSort
+                          >
+                            Bank Name
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            dataField="transactionType"
+                            dataSort
                           >
                             Amount
                           </TableHeaderColumn>
                           <TableHeaderColumn
-                            dataField="parentTransactionCategory"
-                          >
-                            Description
-                          </TableHeaderColumn>
-                          <TableHeaderColumn
                             dataField="transactionType"
+                            dataSort
                           >
-                            Payment Date
+                            Date
                           </TableHeaderColumn>
                         </BootstrapTable>
                       </div>

@@ -2,9 +2,6 @@
 
 .supplier-invoice-screen {
   .card-header {
-    background: white;
-  }
-  .card-title {
     color: #20a8d8;
   }
   .status-panel {
@@ -16,26 +13,6 @@
   .btn-group {
     .btn {
       color: #ffffff !important;
-    }
-  }
-  .filter-box {
-    border-radius: 0px;
-    border: 1px solid #dad8d8;
-    .filter-wrapper {
-      min-width: 200px;
-    }
-    .form-group {
-      margin: 0px 10px;
-
-      label {
-        
-        padding: 2px;
-        margin-right: 10px;
-      }
-      div.date-range,
-      div.account-type {
-        display: block !important;
-      }
     }
   }
 
@@ -50,6 +27,8 @@
 
   .supplier-invoice-table {
     .my-link {
+      font-weight: bold;
+      color: #20a8d8;
       text-decoration: none;
       cursor: pointer;
     }
