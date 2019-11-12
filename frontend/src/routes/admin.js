@@ -8,7 +8,6 @@ import {
   Product,
   Expense,
   Payment,
-  Imports,
   Employee,
   CustomerInvoice,
   SupplierInvoice,
@@ -254,16 +253,6 @@ const adminRoutes = [
     pathTo: '/admin/report/transactions',
     name: 'Report'
   },
-
-  
-
-  // imports module
-  {
-    path: '/admin/imports',
-    name: 'Imports',
-    component: Imports.screen
-  },
-
 
 
 

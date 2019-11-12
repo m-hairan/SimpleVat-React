@@ -9,7 +9,6 @@ import Project from './project'
 import Product from './product'
 import Expense from './expense'
 import Payment from './payment'
-import Imports from './imports'
 import Employee from './employee'
 import CustomerInvoice from './customer_invoice'
 import SupplierInvoice from './supplier_invoice'
@@ -71,7 +70,6 @@ export {
   Product,
   Expense,
   Payment,
-  Imports,
   Employee,
   CustomerInvoice,
   SupplierInvoice,

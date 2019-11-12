@@ -116,58 +116,58 @@ class Currency extends React.Component {
               loading ?
                 <Loader></Loader>: 
                 <Row>
-                  <Col lg='12'>
-                    <div className="mb-3">
-                        <ButtonGroup className="toolbar" size="sm">
-                          <Button
-                            color="success"
-                            className="btn-square"
-                          >
-                            <i className="fa glyphicon glyphicon-export fa-download mr-1" />
-                            Export to CSV
-                          </Button>
-                          <Button
-                            color="info"
-                            className="btn-square"
-                          >
-                            <i className="fa glyphicon glyphicon-export fa-upload mr-1" />
-                            Import from CSV
-                          </Button>
-                          <Button
-                            color="primary"
-                            className="btn-square"
-                            onClick={this.showCurrencyModal}
-                          >
-                            <i className="fas fa-plus mr-1" />
-                            New Currency
-                          </Button>
-                          <Button
-                            color="warning"
-                            className="btn-square"
-                          >
-                            <i className="fa glyphicon glyphicon-trash fa-trash mr-1" />
-                            Bulk Delete
-                          </Button>
-                        </ButtonGroup>
-                        </div>
-          
-                        <BootstrapTable 
-                          data={currencies} 
-                          hover
-                          pagination
-                          version="4"
-                          search={true}
-                          selectRow={ this.selectRowProp }
-                          options={this.options}
-                          trClassName="cursor-pointer"
+                  <Col lg="12">
+                    <div className="mb-3 d-flex justify-content-end">
+                      <ButtonGroup className="toolbar" size="sm">
+                        <Button
+                          color="success"
+                          className="btn-square"
                         >
-                          <TableHeaderColumn isKey dataField="name">
-                            Currency Name
-                          </TableHeaderColumn>
-                          <TableHeaderColumn dataField="symbol">
-                            Symbol
-                          </TableHeaderColumn>
-                        </BootstrapTable>
+                          <i className="fa glyphicon glyphicon-export fa-download mr-1" />
+                          Export to CSV
+                        </Button>
+                        <Button
+                          color="info"
+                          className="btn-square"
+                        >
+                          <i className="fa glyphicon glyphicon-export fa-upload mr-1" />
+                          Import from CSV
+                        </Button>
+                        <Button
+                          color="primary"
+                          className="btn-square"
+                          onClick={this.showCurrencyModal}
+                        >
+                          <i className="fas fa-plus mr-1" />
+                          New Currency
+                        </Button>
+                        <Button
+                          color="warning"
+                          className="btn-square"
+                        >
+                          <i className="fa glyphicon glyphicon-trash fa-trash mr-1" />
+                          Bulk Delete
+                        </Button>
+                      </ButtonGroup>
+                    </div>
+          
+                    <BootstrapTable 
+                      data={currencies} 
+                      hover
+                      pagination
+                      version="4"
+                      search={false}
+                      selectRow={ this.selectRowProp }
+                      options={this.options}
+                      trClassName="cursor-pointer"
+                    >
+                      <TableHeaderColumn isKey dataField="name">
+                        Currency Name
+                      </TableHeaderColumn>
+                      <TableHeaderColumn dataField="symbol">
+                        Symbol
+                      </TableHeaderColumn>
+                    </BootstrapTable>
                   </Col>
                 </Row>
             }

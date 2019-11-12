@@ -177,7 +177,6 @@ class Taxes extends React.Component {
                   <div className="table-wrapper">
                     <BootstrapTable 
                         data={tempdata} 
-                        
                         hover
                         pagination
                         filter = {true}
@@ -219,7 +218,6 @@ class Taxes extends React.Component {
                   <div className="table-wrapper">
                     <BootstrapTable 
                         data={tempdata} 
-                        
                         hover
                         pagination
                         filter = {true}

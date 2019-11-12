@@ -162,7 +162,7 @@ class ImportBankStatement extends React.Component {
                   <Row>
                     <Col lg={12}>
                       <BootstrapTable
-                        search={true}
+                        search={false}
                         options={ this.options }
                         data={bank_statement_list}
                         version="4"
