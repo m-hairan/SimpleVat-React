@@ -21,10 +21,12 @@ import Select from 'react-select'
 import { DateRangePicker2 } from 'components'
 import moment from 'moment'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
+import DateRangePicker from 'react-bootstrap-daterangepicker'
 
 import "react-bootstrap-table/dist/react-bootstrap-table-all.min.css"
 import "react-toastify/dist/ReactToastify.css"
 import 'react-select/dist/react-select.css'
+import 'bootstrap-daterangepicker/daterangepicker.css'
 import './style.scss'
 
 const mapStateToProps = (state) => {
@@ -138,112 +140,125 @@ class AccountBalances extends React.Component {
 
   render() {
     return (
-      <div className="transaction-report-screen">
+      <div className="transaction-report-section">
         <div className="animated fadeIn">
-          <Card>
-            <CardBody>
-           		<Row>
-                <Col lg={12}>
-		            	<div className="flex-wrap d-flex" style={{justifyContent:'space-between'}}>
-		                  <div className="info-block">
-		                    <h4>Company Name - <small><i>Transactions</i></small></h4>
-		                  </div>
-		                  <Form onSubmit={this.handleSubmit} name="simpleForm">
-		                      <div className="flex-wrap d-flex">
-		                        <FormGroup>
-		                          <div className="date-range">
-		                            <DateRangePicker2
-		                              ranges={ranges}
-		                              opens={'left'}
-		                            />
-		                          </div>
-		                        </FormGroup>  
-		                      </div>
-		                    </Form>
-		                  </div>
-		                  <div className="mb-2">
-		                    <ButtonGroup size="sm">
-		                      <Button
-		                        color="success"
-		                        className="btn-square"
-		                      >
-		                        <i className="fa glyphicon glyphicon-export fa-download mr-1" />
-		                        Export to CSV
-		                      </Button>
-		                    </ButtonGroup>
-		                  </div>
-		                  <div className="filter-panel my-3 py-3">
-		                    <Form inline>
-		                      <FormGroup className="pr-3 my-1">
-		                        <Input type="text" placeholder="Transaction Date" />
-		                      </FormGroup>
-		                      <FormGroup className="pr-3 my-1">
-		                        <Select
-		                        	className="select-min-width"
-		                          options={colourOptions}
-		                          value={this.state.selectedType}
-		                          placeholder="Account"
-		                          onChange={this.changeType}
-		                        />
-		                      </FormGroup>  
-		                      <FormGroup className="pr-3 my-1">
-		                        <Select
-		                        	className="select-min-width"
-		                          options={colourOptions}
-		                          value={this.state.selectedType}
-		                          placeholder="Transaction Type"
-		                          onChange={this.changeType}
-		                        />
-		                      </FormGroup>  
-		                      <FormGroup className="pr-3 my-1">
-		                        <Select
-		                        	className="select-min-width"
-		                          options={colourOptions}
-		                          value={this.state.selectedType}
-		                          placeholder="Transaction Category"
-		                          onChange={this.changeType}
-		                        />
-		                      </FormGroup>  
-		                      <Button
-		                        type="submit"
-		                        color="primary"
-		                        className="btn-square my-1"
-		                      >
-		                        <i className="fas fa-search mr-1"></i>Filter
-		                      </Button>
-		                    </Form>
-		                  </div>
-		              <div className="table-wrapper">
-		                <BootstrapTable 
-		                    data={tempdata} 
-		                    hover
-		                    pagination
-		                    filter = {true}
-		                  >
-		                    <TableHeaderColumn isKey dataField="transactionDate">
-		                      Transaction Date
-		                    </TableHeaderColumn>
-		                    <TableHeaderColumn dataField="transactionDate">
-		                      Account
-		                    </TableHeaderColumn>
-		                    <TableHeaderColumn dataField="transactionType">
-		                      Transaction Type
-		                    </TableHeaderColumn>
-		                    <TableHeaderColumn dataField="parentTransactionCategory">
-		                      Transaction Category
-		                    </TableHeaderColumn>
-		                    <TableHeaderColumn dataField="transactionCategoryDescription">
-		                      Transaction Description
-		                    </TableHeaderColumn>
-		                    <TableHeaderColumn dataField="transactionType">
-		                      Transaction Amount
-		                    </TableHeaderColumn>
-		                  </BootstrapTable>
-		              </div>
-              	</Col>
-              </Row>
-            </CardBody>
-          </Card>
+          <Row>
+            <Col lg={12}>
+              <div className="flex-wrap d-flex align-items-start justify-content-between">
+                <div className="info-block">
+                  <h4>Company Name - <small><i>Transactions</i></small></h4>
+                </div>
+                <Form onSubmit={this.handleSubmit} name="simpleForm">
+                  <div className="flex-wrap d-flex align-items-center">
+                    <FormGroup>
+                      <ButtonGroup className="mr-3">
+                        <Button
+                          color="success"
+                          className="btn-square"
+                        >
+                          <i className="fa glyphicon glyphicon-export fa-download mr-1" />
+                          Export to CSV
+                        </Button>
+                      </ButtonGroup>
+                    </FormGroup>
+                    <FormGroup>
+                      <div className="date-range">
+                        <DateRangePicker2
+                          ranges={ranges}
+                          opens={'left'}
+                        />
+                      </div>
+                    </FormGroup>  
+                  </div>
+                </Form>
+              </div>
+              <div className="py-3">
+                <Form inline>
+                  <FormGroup className="pr-3 my-1">
+                    <h6 className="m-0">View By : </h6>
+                  </FormGroup>
+                  <FormGroup className="pr-3 my-1">
+                    <DateRangePicker>
+                      <Input type="text" placeholder="Transaction Date" />
+                    </DateRangePicker>
+                  </FormGroup>
+                  <FormGroup className="pr-3 my-1">
+                    <Select
+                      className="select-min-width"
+                      options={colourOptions}
+                      value={this.state.selectedType}
+                      placeholder="Account"
+                      onChange={this.changeType}
+                    />
+                  </FormGroup>  
+                  <FormGroup className="pr-3 my-1">
+                    <Select
+                      className="select-min-width"
+                      options={colourOptions}
+                      value={this.state.selectedType}
+                      placeholder="Transaction Type"
+                      onChange={this.changeType}
+                    />
+                  </FormGroup>  
+                  <FormGroup className="pr-3 my-1">
+                    <Select
+                      className="select-min-width"
+                      options={colourOptions}
+                      value={this.state.selectedType}
+                      placeholder="Transaction Category"
+                      onChange={this.changeType}
+                    />
+                  </FormGroup>
+                </Form>
+              </div>
+              <div className="table-wrapper">
+                <BootstrapTable 
+                  data={tempdata} 
+                  hover
+                  pagination
+                  version="4"
+                >
+                  <TableHeaderColumn
+                    isKey
+                    dataField="transactionDate"
+                    dataSort
+                  >
+                    Transaction Date
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    dataField="transactionDate"
+                    dataSort
+                  >
+                    Account
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    dataField="transactionType"
+                    dataSort
+                  >
+                    Transaction Type
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    dataField="parentTransactionCategory"
+                    dataSort
+                  >
+                    Transaction Category
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    dataField="transactionCategoryDescription"
+                    dataSort
+                  >
+                    Transaction Description
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    dataField="transactionType"
+                    dataSort
+                  >
+                    Transaction Amount
+                  </TableHeaderColumn>
+                </BootstrapTable>
+              </div>
+            </Col>
+          </Row>
         </div>
       </div>
     )

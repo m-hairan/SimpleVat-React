@@ -87,7 +87,7 @@ class TransactionsReport extends React.Component {
                     active={this.state.activeTab[0] === '1'}
                     onClick={() => { this.toggle(0, '1') }}
                   >
-                    Account Balaces
+                    Account Balances
                   </NavLink>
                 </NavItem>
                 <NavItem>

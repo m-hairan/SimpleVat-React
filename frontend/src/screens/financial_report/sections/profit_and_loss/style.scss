@@ -1,4 +1,4 @@
-.profitAndLoss-report-screen {
+.profitAndLoss-report-section {
   .card-header {
     background: white;
   }
@@ -10,7 +10,6 @@
   .filter-box {
     border-radius: 0px;
     border: 1px solid #dad8d8;
-    // padding: 5px;
     width: fit-content;
 
     .form-group {
@@ -46,7 +45,6 @@
   }
 
   .info-block {
-    // padding: 0 20px;
     margin: 10px 0;
 
     h4 {
@@ -95,7 +93,6 @@
       }
       
       tr.type {
-        // border-top: 2px solid blue !important;
         border-bottom: 2px solid blue  !important;
         td {
           font-size: 13px !important;

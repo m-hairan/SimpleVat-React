@@ -139,7 +139,7 @@ class UsersRoles extends React.Component {
                 <Loader></Loader>: 
                 <Row>
                   <Col lg='12'>
-                    <div className="mb-2">
+                    <div className="d-flex justify-content-end">
                         <ButtonGroup className="toolbar" size="sm">
                           <Button
                             color="success"
@@ -172,26 +172,21 @@ class UsersRoles extends React.Component {
                           </Button>
                         </ButtonGroup>
                         </div>
-                        <div className="filter-panel my-3 py-3">
+                        <div className="py-3">
                           <Form inline>
-                            <FormGroup className="pr-3">
+                            <FormGroup className="pr-3 my-1">
+                              <h6 className="m-0">View By : </h6>
+                            </FormGroup>
+                            <FormGroup className="pr-3 my-1">
                               <Input type="text" placeholder="User Name" />
                             </FormGroup>
-                            <FormGroup className="pr-3">
+                            <FormGroup className="pr-3 my-1">
                               <Select
                                 className="select-min-width"
                                 options={[]}
                                 placeholder="User Role"
                               />
                             </FormGroup>
-                            
-                            <Button
-                              type="submit"
-                              color="primary"
-                              className="btn-square"
-                            >
-                              <i className="fas fa-search mr-1"></i>Filter
-                            </Button>
                           </Form>
                         </div>
                         <BootstrapTable 
@@ -199,15 +194,23 @@ class UsersRoles extends React.Component {
                           hover
                           pagination
                           version="4"
-                          search={true}
+                          search={false}
                           selectRow={ this.selectRowProp }
                           options={this.options}
                           trClassName="cursor-pointer"
                         >
-                          <TableHeaderColumn isKey dataField="email" dataFormat={this.getUserName}>
+                          <TableHeaderColumn
+                            isKey
+                            dataField="email"
+                            dataFormat={this.getUserName}
+                            dataSort
+                          >
                             User Detail
                           </TableHeaderColumn>
-                          <TableHeaderColumn dataField="role">
+                          <TableHeaderColumn
+                            dataField="role"
+                            dataSort
+                          >
                             Role
                           </TableHeaderColumn>
                         </BootstrapTable>

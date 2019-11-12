@@ -64,7 +64,19 @@ export default {
     {
       name: 'Taxes',
       url: '/admin/taxes',
-      icon: 'fas fa-chart-line'
+      icon: 'fas fa-chart-line',
+      children: [
+        {
+          name: 'VAT Transactions',
+          url: '/admin/taxes/vat-transactions',
+          icon: 'fas fa-exchange-alt',
+        },
+        {
+          name: 'Reports Filing',
+          url: '/admin/taxes/reports-filing',
+          icon: 'fas fa-file-text',
+        }
+      ]
     },
     {
       name: 'Report',

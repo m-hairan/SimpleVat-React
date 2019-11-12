@@ -184,8 +184,8 @@ class TransactionCategory extends React.Component {
               loading ?
                 <Loader></Loader>: 
                 <Row>
-                  <Col lg='12'>
-                    <div className="mb-2">
+                  <Col lg={12}>
+                    <div className="d-flex justify-content-end">
                         <ButtonGroup className="toolbar" size="sm">
                           <Button
                             color="success"
@@ -218,8 +218,11 @@ class TransactionCategory extends React.Component {
                           </Button>
                         </ButtonGroup>
                         </div>
-                        <div className="filter-panel my-3 py-3">
+                        <div className="py-3">
                           <Form inline>
+                            <FormGroup className="pr-3 my-1">
+                              <h6 className="m-0">View By : </h6>
+                            </FormGroup>
                             <FormGroup className="pr-3">
                               <Input type="text" placeholder="Category Code" />
                             </FormGroup>
@@ -235,13 +238,6 @@ class TransactionCategory extends React.Component {
                             <FormGroup className="pr-3">
                               <Input type="text" placeholder="Transaction Type" />
                             </FormGroup>
-                            <Button
-                              type="submit"
-                              color="primary"
-                              className="btn-square"
-                            >
-                              <i className="fas fa-search mr-1"></i>Filter
-                            </Button>
                           </Form>
                         </div>
                         <BootstrapTable 
@@ -249,24 +245,40 @@ class TransactionCategory extends React.Component {
                           hover
                           pagination
                           version="4"
-                          search={true}
+                          search={false}
                           selectRow={ this.selectRowProp }
                           options={this.options}
                           trClassName="cursor-pointer"
                         >
-                          <TableHeaderColumn isKey dataField="transactionCategoryCode">
+                          <TableHeaderColumn
+                            isKey
+                            dataField="transactionCategoryCode"
+                            dataSort
+                          >
                             Category Code
                           </TableHeaderColumn>
-                          <TableHeaderColumn dataField="transactionCategoryName">
+                          <TableHeaderColumn
+                            dataField="transactionCategoryName"
+                            dataSort
+                          >
                             Category Name
                           </TableHeaderColumn>
-                          <TableHeaderColumn dataField="transactionCategoryDescription">
+                          <TableHeaderColumn
+                            dataField="transactionCategoryDescription"
+                            dataSort
+                          >
                             Category Description
                           </TableHeaderColumn>
-                          <TableHeaderColumn dataFormat={this.getparentTransactionCategory}>
+                          <TableHeaderColumn
+                            dataFormat={this.getparentTransactionCategory}
+                            dataSort
+                          >
                             Parent Transaction Category Name
                           </TableHeaderColumn>
-                          <TableHeaderColumn dataFormat={this.getTransactionType}>
+                          <TableHeaderColumn
+                            dataFormat={this.getTransactionType}
+                            dataSort
+                          >
                             Transaction Type
                           </TableHeaderColumn>
                           

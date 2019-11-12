@@ -164,76 +164,79 @@ class VatCategory extends React.Component {
                 <Loader></Loader>: 
                 <Row>
                   <Col lg={12}>
-                    <div className="mb-2">
-                        <ButtonGroup className="toolbar" size="sm">
-                          <Button
-                            color="success"
-                            className="btn-square"
-                          >
-                            <i className="fa glyphicon glyphicon-export fa-download mr-1" />
-                            Export to CSV
-                          </Button>
-                          <Button
-                            color="info"
-                            className="btn-square"
-                          >
-                            <i className="fa glyphicon glyphicon-export fa-upload mr-1" />
-                            Import from CSV
-                          </Button>
-                          <Button
-                            color="primary"
-                            className="btn-square"
-                            onClick={() => this.props.history.push(`/admin/settings/vat-category/create`)}
-                          >
-                            <i className="fas fa-plus mr-1" />
-                            New Category
-                          </Button>
-                          <Button
-                            color="warning"
-                            className="btn-square"
-                          >
-                            <i className="fa glyphicon glyphicon-trash fa-trash mr-1" />
-                            Bulk Delete
-                          </Button>
-                        </ButtonGroup>
-                        </div>
-                        <div className="filter-panel my-3 py-3">
-                          <Form inline>
-                            <FormGroup className="pr-3">
-                              <Input type="text" placeholder="Vat Name" />
-                            </FormGroup>
-                            <FormGroup className="pr-3">
-                              <Input type="text" placeholder="Vat Percentage" />
-                            </FormGroup>
-                            
-                            <Button
-                              type="submit"
-                              color="primary"
-                              className="btn-square"
-                            >
-                              <i className="fas fa-search mr-1"></i>Filter
-                            </Button>
-                          </Form>
-                        </div>
-                        <BootstrapTable 
-                          data={vatList}
-                          hover
-                          version="4"
-                          pagination
-                          search={true}
-                          selectRow={ this.selectRowProp }
-                          options={ this.options }
-                          trClassName="cursor-pointer"
+                    <div className="d-flex justify-content-end">
+                      <ButtonGroup className="toolbar" size="sm">
+                        <Button
+                          color="success"
+                          className="btn-square"
                         >
-                          <TableHeaderColumn isKey dataField="name">
-                            Vat Name
-                          </TableHeaderColumn>
-                          <TableHeaderColumn dataField="vat" dataFormat={this.vatPercentageFormat}>
-                            Vat Percentage
-                          </TableHeaderColumn>
-                        </BootstrapTable>
-                      </Col>
-                    </Row>
+                          <i className="fa glyphicon glyphicon-export fa-download mr-1" />
+                          Export to CSV
+                        </Button>
+                        <Button
+                          color="info"
+                          className="btn-square"
+                        >
+                          <i className="fa glyphicon glyphicon-export fa-upload mr-1" />
+                          Import from CSV
+                        </Button>
+                        <Button
+                          color="primary"
+                          className="btn-square"
+                          onClick={() => this.props.history.push(`/admin/settings/vat-category/create`)}
+                        >
+                          <i className="fas fa-plus mr-1" />
+                          New Category
+                        </Button>
+                        <Button
+                          color="warning"
+                          className="btn-square"
+                        >
+                          <i className="fa glyphicon glyphicon-trash fa-trash mr-1" />
+                          Bulk Delete
+                        </Button>
+                      </ButtonGroup>
+                    </div>
+                    <div className="py-3">
+                      <Form inline>
+                        <FormGroup className="pr-3 my-1">
+                          <h6 className="m-0">View By : </h6>
+                        </FormGroup>
+                        <FormGroup className="pr-3 my-1">
+                          <Input type="text" placeholder="Vat Name" />
+                        </FormGroup>
+                        <FormGroup className="pr-3 my-1">
+                          <Input type="text" placeholder="Vat Percentage" />
+                        </FormGroup>
+                      </Form>
+                    </div>
+                    <BootstrapTable 
+                      data={vatList}
+                      hover
+                      version="4"
+                      pagination
+                      search={false}
+                      selectRow={ this.selectRowProp }
+                      options={ this.options }
+                      trClassName="cursor-pointer"
+                    >
+                      <TableHeaderColumn
+                        isKey
+                        dataField="name"
+                        dataSort
+                      >
+                        Vat Name
+                      </TableHeaderColumn>
+                      <TableHeaderColumn
+                        dataField="vat"
+                        dataFormat={this.vatPercentageFormat}
+                        dataSort
+                      >
+                        Vat Percentage
+                      </TableHeaderColumn>
+                    </BootstrapTable>
+                  </Col>
+                </Row>
             }
             </CardBody>
           </Card>

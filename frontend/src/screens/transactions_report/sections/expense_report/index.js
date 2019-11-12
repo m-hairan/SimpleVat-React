@@ -20,10 +20,12 @@ import Select from 'react-select'
 import { DateRangePicker2 } from 'components'
 import moment from 'moment'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
+import DateRangePicker from 'react-bootstrap-daterangepicker'
 
 import "react-bootstrap-table/dist/react-bootstrap-table-all.min.css"
 import "react-toastify/dist/ReactToastify.css"
 import 'react-select/dist/react-select.css'
+import 'bootstrap-daterangepicker/daterangepicker.css'
 import './style.scss'
 
 const mapStateToProps = (state) => {
@@ -111,83 +113,91 @@ class ExpenseReport extends React.Component {
 
   render() {
     return (
-      <div className="expense-report-screen">
+      <div className="expense-report-section">
         <div className="animated fadeIn">
-          <Card>
-            
-            <CardBody>
-              <Row>
-                <Col lg={12}>
-                  <div className="flex-wrap d-flex" style={{justifyContent:'space-between'}}>
-                    <div className="info-block">
-                      <h4>Company Name - <small><i>Expenses</i></small></h4>
-                    </div>
-                    <Form onSubmit={this.handleSubmit} name="simpleForm">
-                        <div className="flex-wrap d-flex">
-                          <FormGroup>
-                            <div className="date-range">
-                              <DateRangePicker2
-                                ranges={ranges}
-                                opens={'left'}
-                              />
-                            </div>
-                          </FormGroup>  
-                        </div>
-                      </Form>
+          <Row>
+            <Col lg={12}>
+              <div className="flex-wrap d-flex align-items-start justify-content-between">
+                <div className="info-block">
+                  <h4>Company Name - <small><i>Expenses</i></small></h4>
+                </div>
+                <Form onSubmit={this.handleSubmit} name="simpleForm">
+                  <div className="flex-wrap d-flex align-items-center">
+                    <FormGroup>
+                      <ButtonGroup className="mr-3">
+                        <Button
+                          color="success"
+                          className="btn-square"
+                        >
+                          <i className="fa glyphicon glyphicon-export fa-download mr-1" />
+                          Export to CSV
+                        </Button>
+                      </ButtonGroup>
+                    </FormGroup>
+                    <FormGroup>
+                      <div className="date-range">
+                        <DateRangePicker2
+                          ranges={ranges}
+                          opens={'left'}
+                        />
+                      </div>
+                    </FormGroup>  
                   </div>
-                  <div className="mb-2">
-                    <ButtonGroup size="sm">
-                      <Button
-                        color="success"
-                        className="btn-square"
-                      >
-                        <i className="fa glyphicon glyphicon-export fa-download mr-1" />
-                        Export to CSV
-                      </Button>
-                    </ButtonGroup>
-                  </div>
-                  <div className="filter-panel my-3 py-3">
-                    <Form inline>
-                      <FormGroup className="pr-3 my-1">
-                        <Input type="text" placeholder="Receipt Number" />
-                      </FormGroup>
-                      <FormGroup className="pr-3 my-1">
-                        <Input type="text" placeholder="Expense Date" />
-                      </FormGroup>
-                      <Button
-                        type="submit"
-                        color="primary"
-                        className="btn-square my-1"
-                      >
-                        <i className="fas fa-search mr-1"></i>Filter
-                      </Button>
-                    </Form>
-                  </div>
-                    <div className="table-wrapper">
-                    <BootstrapTable 
-                      data={tempdata} 
-                      hover
-                      pagination
-                      filter = {true}
-                      responsive={true}>
-                      <TableHeaderColumn isKey dataField="transactionCategoryCode">
-                        Receipt Number
-                      </TableHeaderColumn>
-                      <TableHeaderColumn dataField="transactionCategoryName">
-                        Expense Date
-                      </TableHeaderColumn>
-                      <TableHeaderColumn dataField="transactionCategoryDescription">
-                        Description
-                      </TableHeaderColumn>
-                      <TableHeaderColumn dataField="parentTransactionCategory">
-                        Amount
-                      </TableHeaderColumn>
-                    </BootstrapTable>
-                  </div>
-                </Col>
-              </Row>  
-            </CardBody>
-          </Card>
+                </Form>
+              </div>
+              <div className="py-3">
+                <Form inline>
+                  <FormGroup className="pr-3 my-1">
+                    <h6 className="m-0">View By : </h6>
+                  </FormGroup>
+                  <FormGroup className="pr-3 my-1">
+                    <Input type="text" placeholder="Receipt Number" />
+                  </FormGroup>
+                  <FormGroup className="pr-3 my-1">
+                    <DateRangePicker>
+                      <Input type="text" placeholder="Expense Date" />
+                    </DateRangePicker>
+                  </FormGroup>
+                </Form>
+              </div>
+                <div className="table-wrapper">
+                <BootstrapTable 
+                  data={tempdata} 
+                  hover
+                  pagination
+                  filter = {true}
+                  responsive={true}
+                  version="4"
+                >
+                  <TableHeaderColumn
+                    isKey
+                    dataField="transactionCategoryCode"
+                    dataSort
+                  >
+                    Receipt Number
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    dataField="transactionCategoryName"
+                    dataSort
+                  >
+                    Expense Date
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    dataField="transactionCategoryDescription"
+                    dataSort
+                  >
+                    Description
+                  </TableHeaderColumn>
+                  <TableHeaderColumn
+                    dataField="parentTransactionCategory"
+                    dataSort
+                  >
+                    Amount
+                  </TableHeaderColumn>
+                </BootstrapTable>
+              </div>
+            </Col>
+          </Row>
         </div>
       </div>
     )
