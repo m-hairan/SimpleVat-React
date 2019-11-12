@@ -9,12 +9,8 @@ import Project from './project'
 import Product from './product'
 import Expense from './expense'
 import Payment from './payment'
-import ExpenseReport from './expense_report'
-import TransactionReport from './transaction_report'
-import TaxReport from './tax_report'
 import Imports from './imports'
 import Employee from './employee'
-import InvoiceReport from './invoice_report'
 import CustomerInvoice from './customer_invoice'
 import SupplierInvoice from './supplier_invoice'
 import Receipt from './receipt'
@@ -22,9 +18,6 @@ import BankAccount from './bank_account'
 import BankStatement from './bank_statement'
 import Taxes from './taxes'
 import TransactionCategory from './transaction_category'
-import ProfitAndLoss from './profit_and_loss'
-import BalanceSheet from './balance_sheet'
-import CashFlowPosition from './cash_flow_position'
 import UsersRoles from './users_roles'
 import OrganizationProfile from './organization_profile'
 import Currency from './currency'
@@ -33,6 +26,8 @@ import DataBackup from './data_backup'
 import Help from './help'
 import Faq from './faq'
 import Profile from './profile'
+import TransactionsReport from './transactions_report'
+import FinancialReport from './financial_report'
 
 import CreateCustomerInvoice from './create_customer_invoice'
 import CreateSupplierInvoice from './create_supplier_invoice'
@@ -76,21 +71,14 @@ export {
   Product,
   Expense,
   Payment,
-  ExpenseReport,
-  TransactionReport,
-  TaxReport,
   Imports,
   Employee,
-  InvoiceReport,
   CustomerInvoice,
   SupplierInvoice,
   Receipt,
   BankAccount,
   BankStatement,
   Taxes,
-  ProfitAndLoss,
-  BalanceSheet,
-  CashFlowPosition,
   TransactionCategory,
   UsersRoles,
   OrganizationProfile,
@@ -100,6 +88,8 @@ export {
   Help,
   Faq,
   Profile,
+  TransactionsReport,
+  FinancialReport,
 
   CreateCustomerInvoice,
   CreateSupplierInvoice,

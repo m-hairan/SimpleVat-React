@@ -8,21 +8,14 @@ import {
   Product,
   Expense,
   Payment,
-  ExpenseReport,
-  TransactionReport,
-  TaxReport,
   Imports,
   Employee,
-  InvoiceReport,
   CustomerInvoice,
   SupplierInvoice,
   Receipt,
   BankAccount,
   BankStatement,
   Taxes,
-  ProfitAndLoss,
-  BalanceSheet,
-  CashFlowPosition,
   TransactionCategory,
   UsersRoles,
   OrganizationProfile,
@@ -32,6 +25,8 @@ import {
   Help,
   Faq,
   Profile,
+  TransactionsReport,
+  FinancialReport,
 
 
   CreateCustomerInvoice,
@@ -244,44 +239,19 @@ const adminRoutes = [
 
   // report module
   {
-    path: '/admin/report/expense-report',
-    name: 'Expense Report', 
-    component: ExpenseReport.screen
+    path: '/admin/report/transactions',
+    name: 'Transactions', 
+    component: TransactionsReport.screen
   },
   {
-    path: '/admin/report/invoice-report',
-    name: 'Invoice Report', 
-    component: InvoiceReport.screen
-  },
-  {
-    path: '/admin/report/transaction-report',
-    name: 'Transaction Report', 
-    component: TransactionReport.screen
-  },
-  {
-    path: '/admin/report/tax-report',
-    name: 'Tax Report', 
-    component: TaxReport.screen
-  },
-  {
-    path: '/admin/report/profit-and-loss',
-    name: 'Profit and Loss', 
-    component: ProfitAndLoss.screen
-  },
-  {
-    path: '/admin/report/balance-sheet',
-    name: 'Balance Sheet', 
-    component: BalanceSheet.screen
-  },
-  {
-    path: '/admin/report/cash-flow-position',
-    name: 'Cash Flow / Position', 
-    component: CashFlowPosition.screen
+    path: '/admin/report/financial',
+    name: 'Financial', 
+    component: FinancialReport.screen
   },
   {
     redirect: true,
     path: '/admin/report',
-    pathTo: '/admin/report/transaction-report',
+    pathTo: '/admin/report/transactions',
     name: 'Report'
   },
 
