@@ -517,105 +517,101 @@ class BalanceSheet extends React.Component {
 
   render() {
     return (
-      <div className="balance-report-screen">
+      <div className="balance-report-section">
         <div className="animated fadeIn">
-        <Card>
-            <CardBody>
-              <div className="flex-wrap d-flex mb-2" style={{justifyContent:'space-between'}}>
-                <div className="info-block">
-                  <h4>Company Name - <small><i>Balance Sheet</i></small></h4>
-                </div>
-                <Form onSubmit={this.handleSubmit} name="simpleForm">
-                    <div className="flex-wrap d-flex">
-                      <FormGroup>
-                        <div className="date-range">
-                          <DateRangePicker2
-                            ranges={ranges}
-                            opens={'left'}
-                          />
-                        </div>
-                      </FormGroup>  
-                    </div>
-                  </Form>
+          <div className="flex-wrap d-flex mb-3 align-items-start justify-content-between">
+            <div className="info-block">
+              <h4>Company Name - <small><i>Balance Sheet</i></small></h4>
+            </div>
+            <Form onSubmit={this.handleSubmit} name="simpleForm">
+              <div className="flex-wrap d-flex align-items-center">
+                <FormGroup>
+                  <ButtonGroup className="mr-3">
+                    <Button
+                      color="success"
+                      className="btn-square"
+                    >
+                      <i className="fa glyphicon glyphicon-export fa-download mr-1" />
+                      Export to CSV
+                    </Button>
+                  </ButtonGroup>
+                </FormGroup>
+                <FormGroup>
+                  <div className="date-range">
+                    <DateRangePicker2
+                      ranges={ranges}
+                      opens={'left'}
+                    />
+                  </div>
+                </FormGroup>  
               </div>
-              <div className="mb-3">
-	            <ButtonGroup size="sm">
-	              <Button
-	                color="success"
-	                className="btn-square"
-	              >
-	                <i className="fa glyphicon glyphicon-export fa-download mr-1" />
-	                Export to CSV
-	              </Button>
-	            </ButtonGroup>
-	          </div>
-              <div className="table-wrapper">
-                <Table responsive>
-                  <thead>
-                    <tr>
-                      <th>Assets</th>
-                      <th>Jan</th>
-                      <th>Feb</th>
-                      <th>Mar</th>
-                      <th>Apr</th>
-                      <th>May</th>
-                      <th>Jun</th>
-                      <th>Jul</th>
-                      <th>Aug</th>
-                      <th>Sep</th>
-                      <th>Oct</th>
-                      <th>Nov</th>
-                      <th>Dec</th>
-                      <th>Total</th>
-                    </tr>
-                  </thead>
-                  <tbody>
+            </Form>
+          </div>
+          <div className="table-wrapper">
+            <Table responsive>
+              <thead>
+                <tr>
+                  <th>Assets</th>
+                  <th>Jan</th>
+                  <th>Feb</th>
+                  <th>Mar</th>
+                  <th>Apr</th>
+                  <th>May</th>
+                  <th>Jun</th>
+                  <th>Jul</th>
+                  <th>Aug</th>
+                  <th>Sep</th>
+                  <th>Oct</th>
+                  <th>Nov</th>
+                  <th>Dec</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  tempdata1.map((item) => <tr className={item.type}>
+                    <td>{item.field}</td>
                     {
-                      tempdata1.map((item) => <tr className={item.type}>
-                        <td>{item.field}</td>
-                        {
-                          Object.keys(item.data).map((key, i) => <td className={key==='Total'?'bold':''} key={i}>{item.data[key].toFixed(2)}</td>)
-                        }
-                      </tr>)
+                      Object.keys(item.data).map((key, i) => <td className={key==='Total'?'bold':''} key={i}>{item.data[key].toFixed(2)}</td>)
                     }
-                  </tbody>
-                </Table>
-              </div>
-              <hr/>
-              <div className="table-wrapper">
-                <Table responsive>
-                  <thead>
-                    <tr>
-                      <th>Equity and liabilities</th>
-                      <th>Jan</th>
-                      <th>Feb</th>
-                      <th>Mar</th>
-                      <th>Apr</th>
-                      <th>May</th>
-                      <th>Jun</th>
-                      <th>Jul</th>
-                      <th>Aug</th>
-                      <th>Sep</th>
-                      <th>Oct</th>
-                      <th>Nov</th>
-                      <th>Dec</th>
-                      <th>Total</th>
-                    </tr>
-                  </thead>
-                  <tbody>
+                  </tr>)
+                }
+              </tbody>
+            </Table>
+          </div>
+          <hr/>
+          <div className="table-wrapper">
+            <Table responsive>
+              <thead>
+                <tr>
+                  <th>Equity and liabilities</th>
+                  <th>Jan</th>
+                  <th>Feb</th>
+                  <th>Mar</th>
+                  <th>Apr</th>
+                  <th>May</th>
+                  <th>Jun</th>
+                  <th>Jul</th>
+                  <th>Aug</th>
+                  <th>Sep</th>
+                  <th>Oct</th>
+                  <th>Nov</th>
+                  <th>Dec</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  tempdata2.map((item) => <tr className={item.type}>
+                    <td>{item.field}</td>
                     {
-                      tempdata2.map((item) => <tr className={item.type}>
-                        <td>{item.field}</td>
-                        {
-                          Object.keys(item.data).map((key, i) => <td className={key==='Total'?'bold':''} key={i}>{item.data[key].toFixed(2)}</td>)
-                        }
-                      </tr>)
+                      Object.keys(item.data).map((key, i) => <td className={key==='Total'?'bold':''} key={i}>{item.data[key].toFixed(2)}</td>)
                     }
-                  </tbody>
-                </Table>
-              </div>
-            </CardBody>
-          </Card>
+                  </tr>)
+                }
+              </tbody>
+            </Table>
+          </div>
         </div>
       </div>
     )

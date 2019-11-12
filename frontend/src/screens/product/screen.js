@@ -185,21 +185,25 @@ class Product extends React.Component {
                           <TableHeaderColumn
                             isKey
                             dataField="transactionCategoryName"
+                            dataSort
                           >
                             Name
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionCategoryCode"
+                            dataSort
                           >
                             Product Code
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="parentTransactionCategory"
+                            dataSort
                           >
                             Description
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionCategoryCode"
+                            dataSort
                           >
                             Vat Percentage
                           </TableHeaderColumn>

@@ -220,10 +220,18 @@ class VatCategory extends React.Component {
                       options={ this.options }
                       trClassName="cursor-pointer"
                     >
-                      <TableHeaderColumn isKey dataField="name">
+                      <TableHeaderColumn
+                        isKey
+                        dataField="name"
+                        dataSort
+                      >
                         Vat Name
                       </TableHeaderColumn>
-                      <TableHeaderColumn dataField="vat" dataFormat={this.vatPercentageFormat}>
+                      <TableHeaderColumn
+                        dataField="vat"
+                        dataFormat={this.vatPercentageFormat}
+                        dataSort
+                      >
                         Vat Percentage
                       </TableHeaderColumn>
                     </BootstrapTable>

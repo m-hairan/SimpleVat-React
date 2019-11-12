@@ -250,19 +250,35 @@ class TransactionCategory extends React.Component {
                           options={this.options}
                           trClassName="cursor-pointer"
                         >
-                          <TableHeaderColumn isKey dataField="transactionCategoryCode">
+                          <TableHeaderColumn
+                            isKey
+                            dataField="transactionCategoryCode"
+                            dataSort
+                          >
                             Category Code
                           </TableHeaderColumn>
-                          <TableHeaderColumn dataField="transactionCategoryName">
+                          <TableHeaderColumn
+                            dataField="transactionCategoryName"
+                            dataSort
+                          >
                             Category Name
                           </TableHeaderColumn>
-                          <TableHeaderColumn dataField="transactionCategoryDescription">
+                          <TableHeaderColumn
+                            dataField="transactionCategoryDescription"
+                            dataSort
+                          >
                             Category Description
                           </TableHeaderColumn>
-                          <TableHeaderColumn dataFormat={this.getparentTransactionCategory}>
+                          <TableHeaderColumn
+                            dataFormat={this.getparentTransactionCategory}
+                            dataSort
+                          >
                             Parent Transaction Category Name
                           </TableHeaderColumn>
-                          <TableHeaderColumn dataFormat={this.getTransactionType}>
+                          <TableHeaderColumn
+                            dataFormat={this.getTransactionType}
+                            dataSort
+                          >
                             Transaction Type
                           </TableHeaderColumn>
                           

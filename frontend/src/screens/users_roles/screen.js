@@ -199,10 +199,18 @@ class UsersRoles extends React.Component {
                           options={this.options}
                           trClassName="cursor-pointer"
                         >
-                          <TableHeaderColumn isKey dataField="email" dataFormat={this.getUserName}>
+                          <TableHeaderColumn
+                            isKey
+                            dataField="email"
+                            dataFormat={this.getUserName}
+                            dataSort
+                          >
                             User Detail
                           </TableHeaderColumn>
-                          <TableHeaderColumn dataField="role">
+                          <TableHeaderColumn
+                            dataField="role"
+                            dataSort
+                          >
                             Role
                           </TableHeaderColumn>
                         </BootstrapTable>

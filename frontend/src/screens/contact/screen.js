@@ -193,16 +193,19 @@ class Contact extends React.Component {
                               <TableHeaderColumn
                                 isKey
                                 dataField="transactionCategoryName"
+                                dataSort
                               >
                                 Name
                               </TableHeaderColumn>
                               <TableHeaderColumn
                                 dataField="transactionCategoryCode"
+                                dataSort
                               >
                                 Email
                               </TableHeaderColumn>
                               <TableHeaderColumn
                                 dataField="parentTransactionCategory"
+                                dataSort
                               >
                                 Type
                               </TableHeaderColumn>

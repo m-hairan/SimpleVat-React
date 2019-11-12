@@ -200,26 +200,31 @@ class User extends React.Component {
                           <TableHeaderColumn
                             isKey
                             dataField="transactionCategoryName"
+                            dataSort
                           >
                             User Name
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionCategoryCode"
+                            dataSort
                           >
                             DOB
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="parentTransactionCategory"
+                            dataSort
                           >
                             Role Name
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionCategoryCode"
+                            dataSort
                           >
                             Active
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionCategoryCode"
+                            dataSort
                           >
                             Company
                           </TableHeaderColumn>

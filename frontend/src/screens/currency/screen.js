@@ -161,10 +161,17 @@ class Currency extends React.Component {
                       options={this.options}
                       trClassName="cursor-pointer"
                     >
-                      <TableHeaderColumn isKey dataField="name">
+                      <TableHeaderColumn
+                        isKey
+                        dataField="name"
+                        dataSort
+                      >
                         Currency Name
                       </TableHeaderColumn>
-                      <TableHeaderColumn dataField="symbol">
+                      <TableHeaderColumn
+                        dataField="symbol"
+                        dataSort
+                      >
                         Symbol
                       </TableHeaderColumn>
                     </BootstrapTable>

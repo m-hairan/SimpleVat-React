@@ -191,31 +191,37 @@ class Project extends React.Component {
                           <TableHeaderColumn
                             isKey
                             dataField="transactionCategoryName"
+                            dataSort
                           >
                             Project Name
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionCategoryCode"
+                            dataSort
                           >
                             Expense Budget
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="parentTransactionCategory"
+                            dataSort
                           >
                             Revenue Budget
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionCategoryCode"
+                            dataSort
                           >
                             VAT Number
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionCategoryCode"
+                            dataSort
                           >
                             Currency Code
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionCategoryCode"
+                            dataSort
                           >
                             Contact Name
                           </TableHeaderColumn>
