@@ -5,13 +5,16 @@
  */
 package com.simplevat.rest.transactionimportcontroller;
 
+import com.simplevat.utils.DateFormatUtil;
+import com.simplevat.contact.model.Transaction;
+import com.simplevat.contact.model.FileModel;
 import com.simplevat.constant.TransactionCreditDebitConstant;
 import com.simplevat.constant.TransactionEntryTypeConstant;
-import com.simplevat.constants.TransactionStatusConstant;
+import com.simplevat.constant.TransactionStatusConstant;
 import com.simplevat.entity.User;
 import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.service.UserServiceNew;
-import com.simplevat.service.bankaccount.BankAccountService;
+import com.simplevat.service.BankAccountService;
 import com.simplevat.service.bankaccount.TransactionService;
 import com.simplevat.service.bankaccount.TransactionStatusService;
 import com.simplevat.service.bankaccount.TransactionTypeService;
@@ -85,7 +88,6 @@ public class TransactionImportController implements Serializable {
 
     private String creditAmount = "Credit Amount";
     private List<Transaction> selectedTransaction;
-    private List<Transaction> debitTransaction = new ArrayList<>();
     private List<Transaction> creditTransaction = new ArrayList<>();
     private boolean transactionDateBoolean = false;
     private boolean descriptionBoolean = false;
@@ -109,7 +111,7 @@ public class TransactionImportController implements Serializable {
     private String dateFormat;
 
     @GetMapping(value = "/getbankaccountlist")
-    private ResponseEntity<List<BankAccount>> getBankAccount() {
+    public ResponseEntity<List<BankAccount>> getBankAccount() {
         List<BankAccount> bankAccounts = bankAccountService.getBankAccounts();
         if (bankAccounts != null) {
             return new ResponseEntity<>(bankAccounts, HttpStatus.OK);
@@ -119,7 +121,7 @@ public class TransactionImportController implements Serializable {
     }
 
     @GetMapping(value = "/downloadcsv")
-    private ResponseEntity<FileModel> downloadSimpleFile() {
+    public ResponseEntity<FileModel> downloadSimpleFile() {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("excel-file/SampleTransaction.csv").getFile());
         FileModel fileModel = new FileModel();
@@ -135,7 +137,7 @@ public class TransactionImportController implements Serializable {
     }
 
     @GetMapping(value = "/getformatdate")
-    private ResponseEntity<List<String>> getDateFormatList() {
+    public ResponseEntity<List<String>> getDateFormatList() {
         List<String> dateFormatList = DateFormatUtil.dateFormatList();
         if (dateFormatList != null) {
             return new ResponseEntity<>(dateFormatList, HttpStatus.OK);
@@ -156,6 +158,7 @@ public class TransactionImportController implements Serializable {
             CSVParser parser = new CSVParser(br, CSVFormat.EXCEL);
             listParser = parser.getRecords();
         } catch (IOException e) {
+            e.printStackTrace();
         }
         populateTranscationOnFileUpload(listParser);
     }
@@ -164,7 +167,6 @@ public class TransactionImportController implements Serializable {
         headerText.clear();
         headerTextData.clear();
         transactionList.clear();
-        debitTransaction.clear();
         creditTransaction.clear();
         invalidHeaderTransactionList.clear();
         totalErrorRows = 0;
@@ -175,7 +177,7 @@ public class TransactionImportController implements Serializable {
         getHeaderListData();
         Set<String> setToReturn = new HashSet<>();
         for (String name : headerTextData) {
-            if (setToReturn.add(name) == false) {
+            if (!setToReturn.add(name)) {
                 // your duplicate element
                 isDataRepeated = true;
                 break;
@@ -200,7 +202,7 @@ public class TransactionImportController implements Serializable {
                         headerIndexPosition = header;
                         headerValue = 0;
                     }
-                    if (headerIndexPosition == header) {
+                    if (headerIndexPosition.equals(header)) {
                         if (headerIndexPositionCounter == header - headerValue) {
                             int i = 0;
                             boolean isDataPresent = true;
@@ -233,16 +235,7 @@ public class TransactionImportController implements Serializable {
                                 message = "Column mapping cannot be repeated";
                                 break;
                             }
-                            if (transactionDateBoolean && descriptionBoolean && debitAmountBoolean && creditAmountBoolean) {
-//                                RequestContext.getCurrentInstance().update("importstatus");
-//                                RequestContext.getCurrentInstance().update("form:footerToolBar");
-//                                RequestContext.getCurrentInstance().update("form:transactionTable");
-//                                RequestContext context = RequestContext.getCurrentInstance();
-//                                context.execute("PF('importStatusPopUp').hide();");
-                            } else {
-//                                RequestContext.getCurrentInstance().update("importstatus");
-//                                RequestContext context = RequestContext.getCurrentInstance();
-//                                context.execute("PF('importStatusPopUp').show();");
+                            if (!transactionDateBoolean && !descriptionBoolean && !debitAmountBoolean && !creditAmountBoolean) {
                                 break;
                             }
                         }
@@ -297,9 +290,7 @@ public class TransactionImportController implements Serializable {
                             transactionList.add(transaction);
                             renderButtonOnValidData = false;
                         }
-                        if (transaction.getDrAmount() != null && !transaction.getDrAmount().trim().isEmpty()) {
-                            debitTransaction.add(transaction);
-                        }
+
                         if (transaction.getCrAmount() != null && !transaction.getCrAmount().trim().isEmpty()) {
                             creditTransaction.add(transaction);
                         }
@@ -316,7 +307,7 @@ public class TransactionImportController implements Serializable {
                 if (!invalidHeaderTransactionList.isEmpty()) {
                     StringBuilder validationMessage = new StringBuilder("Heading mismatch  ");
                     for (String invalidHeading : invalidHeaderTransactionList) {
-                        validationMessage.append(invalidHeading + "  ");
+                        validationMessage.append(invalidHeading).append("  ");
                     }
 //                    validationMessage.append(" heading should be (" + TransactionStatusConstant.TRANSACTION_DATE + "," + TransactionStatusConstant.DESCRIPTION + "," + TransactionStatusConstant.DEBIT_AMOUNT + "," + TransactionStatusConstant.CREDIT_AMOUNT + ")");
 //                    FacesMessage message = new FacesMessage(validationMessage.toString());
@@ -338,7 +329,7 @@ public class TransactionImportController implements Serializable {
     }
 
     @PostMapping(value = "/saveimporttransaction")
-    private ResponseEntity<Integer> saveTransactions(@RequestBody List<Transaction> transactionList, @RequestParam(value = "id") Integer id, @RequestParam(value = "bankId") Integer bankId) {
+    public ResponseEntity<Integer> saveTransactions(@RequestBody List<Transaction> transactionList, @RequestParam(value = "id") Integer id, @RequestParam(value = "bankId") Integer bankId) {
         for (Transaction transaction : transactionList) {
             save(transaction, id, bankId);
         }
@@ -367,7 +358,7 @@ public class TransactionImportController implements Serializable {
                 transaction1.setTransactionAmount(BigDecimal.valueOf(Double.parseDouble(transaction.getCrAmount().replaceAll(",", ""))));
                 transaction1.setDebitCreditFlag(TransactionCreditDebitConstant.CREDIT);
             }
-            transaction1.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.UNEXPLIANED));
+            transaction1.setTransactionStatus(transactionStatusService.findByPK(TransactionStatusConstant.UNEXPLAINED));
             transactionService.persist(transaction1);
         } catch (Exception e) {
             e.printStackTrace();

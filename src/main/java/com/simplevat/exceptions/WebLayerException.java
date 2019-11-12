@@ -1,15 +1,15 @@
 package com.simplevat.exceptions;
 
-import com.simplevat.service.exceptions.BaseException;
+import com.simplevat.enums.WebLayerErrorCodeEnum;
 
 public class WebLayerException extends BaseException {
 
 	
 	private String errorMsg;
-	private WebLayerErrorCode errorCode;
+	private WebLayerErrorCodeEnum errorCode;
 	public static final String WEB = "WEB";
 	
-	public WebLayerException(String errorMsg_, WebLayerErrorCode errorCode_) {
+	public WebLayerException(String errorMsg_, WebLayerErrorCodeEnum errorCode_) {
 		super(errorMsg_);
 		this.errorMsg = errorMsg_;
 		this.errorCode = errorCode_;

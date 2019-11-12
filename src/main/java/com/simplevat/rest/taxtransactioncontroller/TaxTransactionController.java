@@ -20,6 +20,8 @@ import com.simplevat.constant.TransactionCreditDebitConstant;
 import com.simplevat.constant.TransactionRefrenceTypeConstant;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -63,7 +65,7 @@ public class TaxTransactionController implements Serializable {
     private BigDecimal vatOut = new BigDecimal(0);
 
     @GetMapping(value = "/getopentaxtransaction")
-    private ResponseEntity<List<TaxTransaction>> getOpenTaxTranscation() {
+    public ResponseEntity<List<TaxTransaction>> getOpenTaxTranscation() {
         List<TaxTransaction> taxTransactionList = taxTransactionService.getOpenTaxTransactionList();
         Date startDate = getStartDate();
         Date endDate = getEndDate();
@@ -80,7 +82,7 @@ public class TaxTransactionController implements Serializable {
     }
 
     @GetMapping(value = "/getclosetaxtransaction")
-    private ResponseEntity<List<TaxTransaction>> getCloseTaxTranscation() {
+    public ResponseEntity<List<TaxTransaction>> getCloseTaxTranscation() {
         List<TaxTransaction> taxTransactionList = taxTransactionService.getClosedTaxTransactionList();
         if (taxTransactionList != null) {
             return new ResponseEntity(taxTransactionList, HttpStatus.OK);
@@ -91,20 +93,19 @@ public class TaxTransactionController implements Serializable {
     }
 
     private boolean isTaxTransactionExist(Date startDate, Date endDate, List<TaxTransaction> taxTransactionList) {
-        boolean matched = false;
         for (TaxTransaction tax : taxTransactionList) {
             if (tax.getStartDate().compareTo(startDate) == 0 && tax.getEndDate().compareTo(endDate) == 0) {
-                matched = true;
+                return true;
             }
         }
         for (TaxTransaction tax : taxTransactionService.getClosedTaxTransactionList()) {
             if (tax.getStartDate().compareTo(startDate) == 0 && tax.getEndDate().compareTo(endDate) == 0) {
                 if (tax.getDueAmount().doubleValue() == 0) {
-                    matched = true;
+                    return true;
                 }
             }
         }
-        return matched;
+        return false;
     }
 
     private List<TaxTransaction> separateTransactionCrediTAndDebit(Date startDate, Date endDate) {
@@ -228,7 +229,7 @@ public class TaxTransactionController implements Serializable {
     private BigDecimal getVatFromTransaction(Transaction transaction) {
         Integer refId = transaction.getReferenceId();
         BigDecimal totalVat = BigDecimal.ZERO;
-        BigDecimal vatPercent = BigDecimal.ZERO;;
+        BigDecimal vatPercent = BigDecimal.ZERO;
         if (transaction.getReferenceType() == TransactionRefrenceTypeConstant.INVOICE) {
             Invoice invoice = invoiceService.findByPK(refId);
             for (InvoiceLineItem invoiceLineItem : invoice.getInvoiceLineItems()) {
@@ -236,7 +237,7 @@ public class TaxTransactionController implements Serializable {
                 if (invoiceLineItem.getInvoiceLineItemVat() != null) {
                     vatPercent = invoiceLineItem.getInvoiceLineItemVat().getVat();
                 }
-                totalVat = (totalAmount.multiply(vatPercent)).divide(new BigDecimal(100));
+                totalVat = (totalAmount.multiply(vatPercent)).divide(new BigDecimal(100), 5, RoundingMode.HALF_UP);
             }
         }
         if (transaction.getReferenceType() == TransactionRefrenceTypeConstant.PURCHASE) {
@@ -246,18 +247,18 @@ public class TaxTransactionController implements Serializable {
                 if (purchaseLineItem.getPurchaseLineItemVat() != null) {
                     vatPercent = purchaseLineItem.getPurchaseLineItemVat().getVat();
                 }
-                totalVat = (totalAmount.multiply(vatPercent)).divide(new BigDecimal(100));
+                totalVat = (totalAmount.multiply(vatPercent)).divide(new BigDecimal(100), 5, RoundingMode.HALF_UP);
             }
         }
         return totalVat;
     }
 
     @PostMapping(value = "/savetaxtransaction")
-    private ResponseEntity save(@RequestParam(value = "id") Integer id) {
+    public ResponseEntity save(@RequestParam(value = "id") Integer id) {
         TaxTransaction taxTransaction = taxTransactionService.findByPK(id);
 
         TaxTransaction taxTransaction1 = null;
-        BigDecimal dueAmountBeforePayment = null;
+        BigDecimal dueAmountBeforePayment;
         if (taxTransaction.getDueAmount() == null) {
             dueAmountBeforePayment = taxTransaction.getVatIn().subtract(taxTransaction.getVatOut());
         } else {

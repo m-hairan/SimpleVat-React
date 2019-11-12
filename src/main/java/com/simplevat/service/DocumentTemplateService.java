@@ -5,7 +5,6 @@
  */
 package com.simplevat.service;
 
-import com.simplevat.entity.Contact;
 import com.simplevat.entity.DocumentTemplate;
 
 /**

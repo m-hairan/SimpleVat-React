@@ -5,6 +5,9 @@
  */
 package com.simplevat.rest.purchase;
 
+import com.simplevat.helper.PurchaseRestControllerHelper;
+import com.simplevat.contact.model.PurchaseRestModel;
+import com.simplevat.contact.model.PurchaseItemRestModel;
 import com.simplevat.constant.ContactTypeConstant;
 import com.simplevat.constant.InvoicePurchaseStatusConstant;
 import com.simplevat.constant.TransactionCategoryConsatant;
@@ -213,9 +216,6 @@ public class PurchaseRestController {
     public ResponseEntity<List<TransactionCategory>> completeCategory() {
         try {
             List<TransactionCategory> transactionCategoryList = transactionCategoryService.findTransactionCategoryListByParentCategory(TransactionCategoryConsatant.TRANSACTION_CATEGORY_PURCHASE);
-            if (transactionCategoryList != null) {
-//                selectedPurchaseModel.setTransactionType(transactionCategoryList.get(0).getTransactionType());
-            }
             return new ResponseEntity(transactionCategoryList, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -353,12 +353,8 @@ public class PurchaseRestController {
     }
 
     public void updateSubTotal(final PurchaseItemRestModel itemModel, PurchaseRestModel purchaseRestModel) {
-        BigDecimal vatPer = new BigDecimal(BigInteger.ZERO);
         final int quantity = itemModel.getQuatity();
         final BigDecimal unitPrice = itemModel.getUnitPrice();
-        if (itemModel.getVatId() != null) {
-            vatPer = itemModel.getVatId().getVat();
-        }
         if (null != unitPrice) {
             final BigDecimal amountWithoutTax = unitPrice.multiply(new BigDecimal(quantity));
             itemModel.setSubTotal(amountWithoutTax);

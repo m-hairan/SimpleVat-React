@@ -9,7 +9,6 @@ import com.simplevat.dao.CompanyTypeDao;
 import com.simplevat.dao.Dao;
 import com.simplevat.entity.CompanyType;
 import com.simplevat.service.CompanyTypeService;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

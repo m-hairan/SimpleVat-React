@@ -5,8 +5,9 @@
  */
 package com.simplevat.rest.reports;
 
+import com.simplevat.contact.model.FinancialPeriodRestModel;
 import com.simplevat.entity.Expense;
-import com.simplevat.rest.expenses.ExpenseRestHelper;
+import com.simplevat.helper.ExpenseRestHelper;
 import com.simplevat.rest.expenses.ExpenseRestModel;
 import com.simplevat.service.ExpenseService;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class ExpenseReportRestController {
     ExpenseRestHelper controllerHelper = new ExpenseRestHelper();
 
     @RequestMapping(method = RequestMethod.POST, value = "/viewexpensereport")
-    public ResponseEntity<List<ExpenseRestModel>> view(@RequestBody FinancialPeriodRest financialPeriod) {
+    public ResponseEntity<List<ExpenseRestModel>> view(@RequestBody FinancialPeriodRestModel financialPeriod) {
         try {
             double totalExpenseAmount = 0.0;
             List<ExpenseRestModel> expenseList = new ArrayList<>();

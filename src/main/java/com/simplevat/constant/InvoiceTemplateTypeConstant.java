@@ -9,12 +9,12 @@ package com.simplevat.constant;
  *
  * @author h
  */
-public interface InvoiceTemplateTypeConstant {
+public abstract class InvoiceTemplateTypeConstant {
 
-    String GRAY = "1";
-    String BROWN = "2";
-    String GREEN = "3";
-    String BLUE = "4";
-    String CYAN = "5";
-    String RED = "6";
+    public static final String GRAY = "1";
+    public static final String BROWN = "2";
+    public static final String GREEN = "3";
+    public static final String BLUE = "4";
+    public static final String CYAN = "5";
+    public static final String RED = "6";
 }

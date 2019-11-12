@@ -9,11 +9,11 @@ package com.simplevat.constant;
  *
  * @author admin
  */
-public interface RecurringConstant {
-    
-     int DAILY=1;
-     int WEEKLY=2;
-     int MONTHLY=3;
-     int YEARLY=4;
-       
+public abstract class RecurringConstant {
+
+    public static final int DAILY = 1;
+    public static final int WEEKLY = 2;
+    public static final int MONTHLY = 3;
+    public static final int YEARLY = 4;
+
 }

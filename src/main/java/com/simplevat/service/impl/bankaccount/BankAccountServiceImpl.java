@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.simplevat.dao.bankaccount.BankAccountDao;
 import com.simplevat.entity.Activity;
 import com.simplevat.entity.bankaccount.BankAccount;
-import com.simplevat.service.bankaccount.BankAccountService;
+import com.simplevat.service.BankAccountService;
 import org.apache.commons.lang3.StringUtils;
 
 @Service("bankAccountService")

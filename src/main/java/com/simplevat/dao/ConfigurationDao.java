@@ -14,7 +14,8 @@ import java.util.List;
  */
 public interface ConfigurationDao extends Dao<Integer, Configuration> {
 
-    public Configuration getConfigurationByName(String cofigurationName);
-    public List<Configuration> getConfigurationList();
+    Configuration getConfigurationByName(String cofigurationName);
+
+    List<Configuration> getConfigurationList();
 
 }

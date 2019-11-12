@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.simplevat.dao.AbstractDao;
 import com.simplevat.dao.PurchaseDao;
 import com.simplevat.entity.Purchase;
-import com.simplevat.entity.invoice.Invoice;
 import java.math.BigDecimal;
 import javax.persistence.TypedQuery;
 
@@ -39,7 +38,7 @@ public class PurchaseDaoImpl extends AbstractDao<Integer, Purchase> implements P
     @Override
     public List<Purchase> getPurchaseListByDueAmount() {
         TypedQuery<Purchase> query = getEntityManager().createQuery("Select p from Purchase p where p.deleteFlag = false and p.purchaseDueAmount !=:dueAmount", Purchase.class);
-        query.setParameter("dueAmount", new BigDecimal(0.00));
+        query.setParameter("dueAmount", BigDecimal.valueOf(0));
         List<Purchase> purchaseList = query.getResultList();
         if (purchaseList != null && !purchaseList.isEmpty()) {
             return purchaseList;

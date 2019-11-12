@@ -149,10 +149,8 @@ public  abstract class AbstractDao<PK,ENTITY> implements Dao<PK, ENTITY> {
     	        transaction.rollback();
     	    }
     	    throw e;
-    	} finally {
-    	    if (entityManager != null) {
-    	        entityManager.close();
-    	    }
+    	} finally {    	    
+            entityManager.close();            
     	}    	
 		
 	}

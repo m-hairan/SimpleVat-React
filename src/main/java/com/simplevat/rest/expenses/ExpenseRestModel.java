@@ -5,12 +5,8 @@
  */
 package com.simplevat.rest.expenses;
 
+import com.simplevat.contact.model.ExpenseItemModel;
 import com.simplevat.entity.Contact;
-import com.simplevat.entity.Currency;
-import com.simplevat.entity.Project;
-import com.simplevat.entity.User;
-import com.simplevat.entity.bankaccount.TransactionCategory;
-import com.simplevat.entity.bankaccount.TransactionType;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;

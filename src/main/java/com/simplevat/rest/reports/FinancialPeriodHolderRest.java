@@ -5,6 +5,7 @@
  */
 package com.simplevat.rest.reports;
 
+import com.simplevat.contact.model.FinancialPeriodRestModel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,8 +20,8 @@ public class FinancialPeriodHolderRest {
 
     private static final int INITIALYEAR = 2015;
 
-    public static List<FinancialPeriodRest> getFinancialPeriodList() {
-        List<FinancialPeriodRest> financialPeriodList = new ArrayList<>();
+    public static List<FinancialPeriodRestModel> getFinancialPeriodList() {
+        List<FinancialPeriodRestModel> financialPeriodList = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int id = 1;
@@ -28,7 +29,7 @@ public class FinancialPeriodHolderRest {
         int monthDecrement = 0;
         if (year >= INITIALYEAR) {
             financialPeriodList.clear();
-            FinancialPeriodRest financialCustomPeriod = new FinancialPeriodRest();
+            FinancialPeriodRestModel financialCustomPeriod = new FinancialPeriodRestModel();
             financialCustomPeriod.setId(id);
             financialCustomPeriod.setLastDate(null);
             financialCustomPeriod.setStartDate(null);
@@ -37,9 +38,9 @@ public class FinancialPeriodHolderRest {
             id++;
             for (int i = 0; i <= year - INITIALYEAR; i++) {
                 String name = "";
-                FinancialPeriodRest financialPeriod = new FinancialPeriodRest();
+                FinancialPeriodRestModel financialPeriod = new FinancialPeriodRestModel();
                 if (i == 0) {
-                    FinancialPeriodRest financialPeriod1 = new FinancialPeriodRest();
+                    FinancialPeriodRestModel financialPeriod1 = new FinancialPeriodRestModel();
                     Calendar calendar1 = Calendar.getInstance();
                     calendar1.set(Calendar.YEAR, year - i);
                     calendar1.set(Calendar.DAY_OF_MONTH, 01);
@@ -55,7 +56,7 @@ public class FinancialPeriodHolderRest {
                     financialPeriodList.add(financialPeriod1);
                     id++;
                     Calendar calendar2 = Calendar.getInstance();
-                    FinancialPeriodRest financialPeriod2 = new FinancialPeriodRest();
+                    FinancialPeriodRestModel financialPeriod2 = new FinancialPeriodRestModel();
                     calendar2.set(Calendar.YEAR, year - i);
                     calendar2.add(Calendar.MONTH, -1);
                     calendar2.set(Calendar.DAY_OF_MONTH, 01);

@@ -5,8 +5,10 @@
  */
 package com.simplevat.rest.reports;
 
+import com.simplevat.contact.model.InvoiceRestModel;
+import com.simplevat.contact.model.FinancialPeriodRestModel;
 import com.simplevat.entity.invoice.Invoice;
-import com.simplevat.rest.invoicecontroller.InvoiceModelHelper;
+import com.simplevat.helper.InvoiceModelHelper;
 import com.simplevat.service.invoice.InvoiceService;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +35,7 @@ public class InvoiceReportRestController {
     private InvoiceModelHelper invoiceModelHelper;
 
     @RequestMapping(method = RequestMethod.POST, value = "/viewinvoicereport")
-    public ResponseEntity<List<InvoiceRestModel>> view(@RequestBody FinancialPeriodRest financialPeriod) {
+    public ResponseEntity<List<InvoiceRestModel>> view(@RequestBody FinancialPeriodRestModel financialPeriod) {
         try {
             double totalInvoiceAmount = 0.00;
             List<InvoiceRestModel> invoiceList = new ArrayList<>();

@@ -6,6 +6,7 @@
 package com.simplevat.constant;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,16 +30,14 @@ public enum InvoiceReferenceVariable {
     private String name;
     private String value;
 
-    private InvoiceReferenceVariable(String name, String value) {
+    InvoiceReferenceVariable(String name, String value) {
         this.name = name;
         this.value = value;
     }
 
     public static List<InvoiceReferenceVariable> getInvoiceReferenceVariables() {
         List<InvoiceReferenceVariable> referenceVariables = new ArrayList<>();
-        for (InvoiceReferenceVariable invoiceReferenceVariable : values()) {
-            referenceVariables.add(invoiceReferenceVariable);
-        }
+        referenceVariables.addAll(Arrays.asList(values()));
         return referenceVariables;
     }
 

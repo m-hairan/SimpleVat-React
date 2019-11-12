@@ -5,8 +5,6 @@
  */
 package com.simplevat.dao;
 
-import com.simplevat.entity.Activity;
-import com.simplevat.entity.Company;
 import com.simplevat.entity.CompanyType;
 import java.util.List;
 
@@ -14,8 +12,8 @@ import java.util.List;
  *
  * @author admin
  */
-public interface CompanyTypeDao extends Dao<Integer, CompanyType>{
+public interface CompanyTypeDao extends Dao<Integer, CompanyType> {
 
-    public List<CompanyType> getCompanyTypes();
-    
+    List<CompanyType> getCompanyTypes();
+
 }

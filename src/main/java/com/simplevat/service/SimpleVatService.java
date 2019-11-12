@@ -12,7 +12,7 @@ import com.simplevat.dao.ActivityDao;
 import com.simplevat.dao.Dao;
 import com.simplevat.entity.Activity;
 import com.simplevat.service.exceptions.ServiceErrorCode;
-import com.simplevat.service.exceptions.ServiceException;
+import com.simplevat.exceptions.ServiceException;
 
 public abstract class SimpleVatService<PK, ENTITY> {
 	
