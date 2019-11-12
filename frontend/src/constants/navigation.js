@@ -19,7 +19,7 @@ export default {
           name: 'Receipts',
           url: '/admin/revenue/receipt',
           icon: 'fa fa-file-o',
-        },
+        }
       ]
     },
     {
@@ -41,8 +41,8 @@ export default {
           name: 'Payments',
           url: '/admin/expense/payment',
           icon: 'fas fa-money-check',
-        },
-      ],
+        }
+      ]
     },
     {
       name: 'Bank',
@@ -59,7 +59,7 @@ export default {
           url: '/admin/bank/bank-statement',
           icon: 'icon-doc',
         }
-      ],
+      ]
     },
     {
       name: 'Taxes',
@@ -72,46 +72,16 @@ export default {
       icon: "fas fa-chart-bar",
       children: [
         {
-          name: 'Transaction Report',
-          url: '/admin/report/transaction-report',
+          name: 'Transactions',
+          url: '/admin/report/transactions',
           icon: 'fas fa-exchange-alt',
         },
         {
-          name: 'Invoice Report',
-          url: '/admin/report/invoice-report',
-          icon: 'fas fa-list-ul',
-        },
-        {
-          name: 'Expense Report',
-          url: '/admin/report/expense-report',
-          icon: 'fas fa-tasks',
-        },
-        {
-          name: 'Tax Report',
-          url: '/admin/report/tax-report',
-          icon: 'fas fa-files-o',
-        },
-        {
-          name: 'Profit and Loss',
-          url: '/admin/report/profit-and-loss',
-          icon: 'fas fa-signal',
-        },
-        {
-          name: 'Balance Sheet',
-          url: '/admin/report/balance-sheet',
-          icon: 'fas fa-balance-scale',
-        },
-        {
-          name: 'Cash Flow / Position',
-          url: '/admin/report/cash-flow-position',
-          icon: 'fas fa-money',
-        },
-      ],
-    },
-    {
-      name: 'Imports',
-      url: '/admin/imports',
-      icon: 'fas fa-file-import'
+          name: 'Financial',
+          url: '/admin/report/financial',
+          icon: 'fas fa-usd',
+        }
+      ]
     },
     {
       name: 'Master',
@@ -137,8 +107,8 @@ export default {
           name: 'User',
           url: '/admin/master/user',
           icon: 'fas fa-users',
-        },
-      ],
+        }
+      ]
     },
     {
       name: 'Settings',
@@ -189,8 +159,8 @@ export default {
           name: 'Help',
           url: '/admin/settings/help',
           icon: 'fas fa-info-circle',
-        },
-      ],
+        }
+      ]
     },
     {
       name: 'Employee',
