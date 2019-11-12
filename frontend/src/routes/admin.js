@@ -1,68 +1,84 @@
 import {
   Dashboard,
-  GeneralSettings,
-  VatCategory,
-  Contact,
-  User,
-  Project,
-  Product,
-  Expense,
-  Payment,
-  Employee,
+
   CustomerInvoice,
-  SupplierInvoice,
+  CreateCustomerInvoice,
+  DetailCustomerInvoice,
+
   Receipt,
+  CreateReceipt,
+  DetailReceipt,
+
+  SupplierInvoice,
+  CreateSupplierInvoice,
+  DetailSupplierInvoice,
+
+  Expense,
+  CreateExpense,
+  DetailExpense,
+
+  Payment,
+  CreatePayment,
+  DetailPayment,
+
   BankAccount,
+  CreateBankAccount,
+  DetailBankAccount,
+
   BankStatement,
-  Taxes,
+  CreateBankStatement,
+  DetailBankStatement,
+  ImportBankStatement,
+
+  VatTransactions,
+  ReportsFiling,
+
+  TransactionsReport,
+  FinancialReport,
+
+  Product,
+  CreateProduct,
+  DetailProduct,
+
+  Project,
+  CreateProject,
+  DetailProject,
+
+  Contact,
+  CreateContact,
+  DetailContact,
+
+  User,
+  CreateUser,
+  DetailUser,
+
+  GeneralSettings,
+
+  VatCategory,
+  CreateVatCategory,
+  DetailVatCategory,
+
   TransactionCategory,
+  CreateTransactionCategory,
+  DetailTransactionCategory,
+
   UsersRoles,
   OrganizationProfile,
   Currency,
   Notification,
   DataBackup,
+
   Help,
   Faq,
-  Profile,
-  TransactionsReport,
-  FinancialReport,
 
+  Employee,
 
-  CreateCustomerInvoice,
-  CreateSupplierInvoice,
-  CreateReceipt,
-  CreateExpense,
-  CreateProduct,
-  CreateContact,
-  CreateProject,
-  CreateUser,
-  CreatePayment,
-  CreateBankAccount,
-  CreateBankStatement,
-  CreateVatCategory,
-  CreateTranactionCategory,
-
-  DetailBankAccount,
-  DetailBankStatement,
-  DetailCustomerInvoice,
-  DetailSupplierInvoice,
-  DetailReceipt,
-  DetailExpense,
-  DetailPayment,
-  DetailContact,
-  DetailProject,
-  DetailProduct,
-  DetailUser,
-  DetailVatCategory,
-  DetailTranactionCategory,
-
-  ImportBankStatement
+  Profile
   
 } from 'screens'
 
 const adminRoutes = [
 
-  // dashboard module
   {
     path: '/admin/dashboard',
     name: 'Dashboard',
@@ -70,7 +86,6 @@ const adminRoutes = [
   },
 
 
-  // profile module
   {
     path: '/admin/profile',
     name: 'Profile',
@@ -79,8 +94,6 @@ const adminRoutes = [
 
 
 
-
-  // revenue module
   {
     path: '/admin/revenue/customer-invoice/create',
     name: 'Create',
@@ -123,7 +136,6 @@ const adminRoutes = [
 
 
 
-  // expense module=
   {
     path: '/admin/expense/supplier-invoice/create',
     name: 'Create',
@@ -179,7 +191,6 @@ const adminRoutes = [
 
 
 
-  // bank account module
   {
     path: '/admin/bank/bank-account/create',
     name: 'Create',
@@ -225,18 +236,27 @@ const adminRoutes = [
 
 
 
-  // Taxes module
   {
+    path: '/admin/taxes/vat-transactions',
+    name: 'VAT Transactions', 
+    component: VatTransactions.screen
+  },
+  {
+    path: '/admin/taxes/reports-filing',
+    name: 'Reports Filing', 
+    component: ReportsFiling.screen
+  },
+  {
+    redirect: true,
     path: '/admin/taxes',
-    name: 'Taxes',
-    component: Taxes.screen
+    pathTo: '/admin/taxes/vat-transactions',
+    name: 'Taxes'
   },
 
   
 
 
 
-  // report module
   {
     path: '/admin/report/transactions',
     name: 'Transactions', 
@@ -256,7 +276,6 @@ const adminRoutes = [
 
 
 
-  // master module
   {
     path: '/admin/master/contact/create',
     name: 'Create',
@@ -327,7 +346,6 @@ const adminRoutes = [
 
 
 
-  // settings module
   {
     path: '/admin/settings/general',
     name: 'General Settings',
@@ -351,12 +369,12 @@ const adminRoutes = [
   {
     path: '/admin/settings/transaction-category/create',
     name: 'Create',
-    component: CreateTranactionCategory.screen
+    component: CreateTransactionCategory.screen
   },
   {
     path: '/admin/settings/transaction-category/detail',
     name: 'Detail',
-    component: DetailTranactionCategory.screen
+    component: DetailTransactionCategory.screen
   },
   {
     path: '/admin/settings/transaction-category',
@@ -409,7 +427,6 @@ const adminRoutes = [
 
 
 
-  // employee module
   {
     path: '/admin/employee',
     name: 'Employee',

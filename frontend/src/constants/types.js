@@ -72,10 +72,6 @@ export const PAYMENT = {
   PAYMENT_LIST: 'PAYMENT_LIST'
 }
 
-export const TAXES = {
-
-}
-
 export const TRANSACTION = {
   TRANSACTION_LIST: 'TRANSACTION_LIST',
   TRANSACTION_ROW: 'TRANSACTION_ROW',
@@ -114,5 +110,13 @@ export const ORGANIZATION_PROFILE = {
 }
 
 export const USERS_ROLES = {
+  
+}
+
+export const REPORTS_FILING = {
+
+}
+
+export const VAT_TRANSACTIONS = {
   
 }
