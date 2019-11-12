@@ -1,0 +1,25 @@
+
+.transactions-report-screen {
+    .card-header {
+      color: #20a8d8;
+    }
+    .date-select {
+      button {
+        background: white;
+      }
+    }
+    .filter-panel {
+      border-top: 1px solid #e4e7ea;
+      border-bottom: 1px solid #e4e7ea;
+    }
+    .badge {
+      padding: 0.4em 0.6em;
+      font-size: 90%;
+    }
+    .expense-table {  
+      .my-link {
+        text-decoration: none;
+        cursor: pointer;
+      }
+    }
+}
