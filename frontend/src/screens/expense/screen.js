@@ -123,7 +123,7 @@ class Expense extends React.Component {
                 :
                   <Row>
                     <Col lg={12}>
-                      <div className="mb-2">
+                      <div className="d-flex justify-content-end">
                         <ButtonGroup size="sm">
                           <Button
                             color="success"
@@ -156,8 +156,11 @@ class Expense extends React.Component {
                           </Button>
                         </ButtonGroup>
                       </div>
-                      <div className="filter-panel my-3 py-3">
+                      <div className="py-3">
                         <Form inline>
+                          <FormGroup className="pr-3 my-1">
+                            <h6 className="m-0">View By : </h6>
+                          </FormGroup>
                           <FormGroup className="pr-3 my-1">
                             <DateRangePicker>
                               <Input type="text" placeholder="Expense Date" />
@@ -169,19 +172,12 @@ class Expense extends React.Component {
                           <FormGroup className="pr-3 my-1">
                             <Input type="text" placeholder="Supplier Name" />
                           </FormGroup>
-                          <Button
-                            type="submit"
-                            color="primary"
-                            className="btn-square my-1"
-                          >
-                            <i className="fas fa-search mr-1"></i>Filter
-                          </Button>
                         </Form>
                       </div>
                       <div>
                         <BootstrapTable
                           selectRow={ this.selectRowProp }
-                          search={true}
+                          search={false}
                           options={ this.options }
                           data={expense_list}
                           version="4"

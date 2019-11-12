@@ -14,7 +14,7 @@ public enum ConfigurationEnum {
 
     private String configurationName;
 
-    private ConfigurationEnum(String configurationName) {
+    ConfigurationEnum(String configurationName) {
         this.configurationName = configurationName;
     }
 

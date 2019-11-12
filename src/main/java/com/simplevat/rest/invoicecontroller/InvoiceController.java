@@ -5,6 +5,7 @@
  */
 package com.simplevat.rest.invoicecontroller;
 
+import com.simplevat.helper.InvoiceModelHelper;
 import com.simplevat.entity.Company;
 import com.simplevat.entity.Configuration;
 import com.simplevat.entity.invoice.Invoice;
@@ -23,7 +24,7 @@ import com.simplevat.service.invoice.InvoiceService;
 import com.simplevat.constant.ConfigurationConstants;
 import com.simplevat.constant.InvoicePaymentModeConstant;
 import com.simplevat.constant.InvoicePurchaseStatusConstant;
-import com.simplevat.rest.reports.InvoiceRestModel;
+import com.simplevat.contact.model.InvoiceRestModel;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -90,7 +91,7 @@ public class InvoiceController implements Serializable {
     private InvoiceModelHelper invoiceModelHelper = new InvoiceModelHelper();
 
     @GetMapping("/invoicelist")
-    private ResponseEntity<List<InvoiceRestModel>> populateInvoiceList() {
+    public ResponseEntity<List<InvoiceRestModel>> populateInvoiceList() {
         List<Invoice> invoices = invoiceService.getInvoiceList();
 
         List<InvoiceRestModel> invoiceModels = new ArrayList<>();
@@ -105,7 +106,7 @@ public class InvoiceController implements Serializable {
     }
 
     @GetMapping("/paidinvoicelist")
-    private ResponseEntity<List<InvoiceRestModel>> populatePaidInvoiceList() {
+    public ResponseEntity<List<InvoiceRestModel>> populatePaidInvoiceList() {
         List<Invoice> invoices = invoiceService.getInvoiceList();
 
         List<InvoiceRestModel> invoiceModels = new ArrayList<>();
@@ -122,7 +123,7 @@ public class InvoiceController implements Serializable {
     }
 
     @GetMapping("/unpaidinvoicelist")
-    private ResponseEntity<List<InvoiceRestModel>> populateUnPaidInvoiceList() {
+    public ResponseEntity<List<InvoiceRestModel>> populateUnPaidInvoiceList() {
         List<Invoice> invoices = invoiceService.getInvoiceList();
 
         List<InvoiceRestModel> invoiceModels = new ArrayList<>();
@@ -139,7 +140,7 @@ public class InvoiceController implements Serializable {
     }
 
     @GetMapping("/partialpaidinvoicelist")
-    private ResponseEntity<List<InvoiceRestModel>> populatePartialPaidInvoiceList() {
+    public ResponseEntity<List<InvoiceRestModel>> populatePartialPaidInvoiceList() {
         List<Invoice> invoices = invoiceService.getInvoiceList();
 
         List<InvoiceRestModel> invoiceModels = new ArrayList<>();
@@ -156,7 +157,7 @@ public class InvoiceController implements Serializable {
     }
 
     @DeleteMapping(value = "deleteinvoice")
-    private ResponseEntity deleteInvoice(@RequestParam(value = "id") Integer id) {
+    public ResponseEntity deleteInvoice(@RequestParam(value = "id") Integer id) {
         Invoice invoice = invoiceService.findByPK(id);
         if (invoice == null) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -167,7 +168,7 @@ public class InvoiceController implements Serializable {
     }
 
     @GetMapping(value = "/editinvoice")
-    private ResponseEntity<InvoiceRestModel> editInvoice(@RequestParam(value = "id") Integer id) {
+    public ResponseEntity<InvoiceRestModel> editInvoice(@RequestParam(value = "id") Integer id) {
         Invoice invoice = invoiceService.findByPK(id);
         InvoiceRestModel invoiceModel = invoiceModelHelper.getInvoiceModel(invoice);
         if (invoiceModel == null) {
@@ -177,7 +178,7 @@ public class InvoiceController implements Serializable {
     }
 
     @PostMapping("/saveinvoice")
-    private Integer save(@RequestBody InvoiceRestModel invoiceModel, @RequestParam(value = "id") Integer id) {
+    public Integer save(@RequestBody InvoiceRestModel invoiceModel, @RequestParam(value = "id") Integer id) {
         Company company = companyService.findByPK(userServiceNew.findByPK(id).getCompany().getCompanyId());
 
         Invoice invoice = new Invoice();
@@ -185,7 +186,7 @@ public class InvoiceController implements Serializable {
             invoiceModel.setShippingContact(null);
         }
         invoice = invoiceModelHelper.getInvoiceEntity(invoiceModel);
-        invoiceModel.getCurrencyCode().getDefaultFlag();
+        
         if (invoice.getInvoiceId() != null && invoice.getInvoiceId() > 0) {
             invoice.setLastUpdateBy(id);
             Invoice prevInvoice = invoiceService.findByPK(invoice.getInvoiceId());

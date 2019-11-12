@@ -5,11 +5,11 @@ import java.util.List;
 import com.simplevat.entity.bankaccount.BankAccountStatus;
 
 public interface BankAccountStatusDao {
-	
-	public List<BankAccountStatus> getBankAccountStatuses();
-	
-	public BankAccountStatus getBankAccountStatus(Integer id);
-	
-	public BankAccountStatus getBankAccountStatusByName(String status);
+
+    List<BankAccountStatus> getBankAccountStatuses();
+
+    BankAccountStatus getBankAccountStatus(Integer id);
+
+    BankAccountStatus getBankAccountStatusByName(String status);
 
 }

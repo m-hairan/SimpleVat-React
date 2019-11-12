@@ -72,12 +72,7 @@ public class CurrencyDaoImpl extends AbstractDao<Integer, Currency> implements C
         TypedQuery<CurrencyConversion> query = getEntityManager().createQuery("select c from CurrencyConversion c where c.createdDate=:createdDate", CurrencyConversion.class);
         query.setParameter("createdDate", LocalDateTime.ofInstant(dateWithoutTime.toInstant(), ZoneId.systemDefault()));
         List<CurrencyConversion> currencyConversionList = query.getResultList();
-        if (currencyConversionList != null && !currencyConversionList.isEmpty()) {
-            return true;
-        } else {
-            return false;
-
-        }
+        return currencyConversionList != null && !currencyConversionList.isEmpty();
     }
 
     @Override

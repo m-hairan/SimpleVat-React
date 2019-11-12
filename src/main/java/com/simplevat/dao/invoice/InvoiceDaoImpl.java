@@ -1,7 +1,6 @@
 package com.simplevat.dao.invoice;
 
 import com.simplevat.dao.AbstractDao;
-import com.simplevat.entity.Contact;
 import com.simplevat.entity.invoice.Invoice;
 import java.math.BigDecimal;
 import java.time.Instant;

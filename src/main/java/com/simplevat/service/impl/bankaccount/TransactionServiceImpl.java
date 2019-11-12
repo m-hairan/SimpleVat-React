@@ -1,7 +1,5 @@
 package com.simplevat.service.impl.bankaccount;
 
-import com.simplevat.constants.TransactionCreditDebitConstant;
-import com.simplevat.criteria.SortOrder;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;

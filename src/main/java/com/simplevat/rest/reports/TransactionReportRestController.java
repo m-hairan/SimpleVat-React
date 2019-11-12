@@ -5,6 +5,9 @@
  */
 package com.simplevat.rest.reports;
 
+import com.simplevat.helper.TransactionRestControllerHelper;
+import com.simplevat.contact.model.TransactionRestModel;
+import com.simplevat.contact.model.FinancialPeriodRestModel;
 import com.simplevat.entity.bankaccount.Transaction;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.bankaccount.TransactionType;
@@ -43,7 +46,7 @@ public class TransactionReportRestController {
     TransactionRestControllerHelper transactionRestControllerHelper;
 
     @RequestMapping(method = RequestMethod.GET, value = "/completefinancialperiods")
-    public ResponseEntity<List<FinancialPeriodRest>> completeFinancialPeriods() {
+    public ResponseEntity<List<FinancialPeriodRestModel>> completeFinancialPeriods() {
         try {
             return new ResponseEntity(FinancialPeriodHolderRest.getFinancialPeriodList(), HttpStatus.OK);
         } catch (Exception e) {
@@ -90,7 +93,7 @@ public class TransactionReportRestController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/view")
-    public ResponseEntity<List<TransactionRestModel>> view(@RequestBody Integer transactionTypeCode, @RequestBody Integer transactionCategoryId, @RequestBody FinancialPeriodRest financialPeriod) {
+    public ResponseEntity<List<TransactionRestModel>> view(@RequestBody Integer transactionTypeCode, @RequestBody Integer transactionCategoryId, @RequestBody FinancialPeriodRestModel financialPeriod) {
         try {
 
             TransactionType transactionType = transactionTypeService.findByPK(transactionTypeCode);

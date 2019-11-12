@@ -1,9 +1,7 @@
 package com.simplevat.dao.invoice;
 
 import com.simplevat.dao.AbstractFilter;
-import com.simplevat.entity.bankaccount.TransactionCategory;
 import com.simplevat.entity.invoice.Invoice;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Root;
 import lombok.Getter;

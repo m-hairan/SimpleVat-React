@@ -9,8 +9,8 @@ package com.simplevat.constant;
  *
  * @author h
  */
-public interface DefualtTypeConstant {
-    
-    char YES = 'Y';
-    char NO = 'N';
+public abstract class DefualtTypeConstant {
+
+    public static final char YES = 'Y';
+    public static final char NO = 'N';
 }

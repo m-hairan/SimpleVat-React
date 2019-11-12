@@ -6,7 +6,6 @@
 package com.simplevat.dao;
 
 import com.simplevat.entity.ProductWarehouse;
-import com.simplevat.entity.VatCategory;
 import java.util.List;
 
 /**

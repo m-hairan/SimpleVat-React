@@ -122,7 +122,7 @@ class Contact extends React.Component {
                 :
                   <Row>
                     <Col lg={12}>
-                      <div className="mb-2">
+                      <div className="d-flex justify-content-end">
                         <ButtonGroup size="sm">
                           <Button
                             color="success"
@@ -155,8 +155,11 @@ class Contact extends React.Component {
                           </Button>
                         </ButtonGroup>
                       </div>
-                      <div className="filter-panel my-3 py-3">
+                      <div className="py-3">
                         <Form inline>
+                          <FormGroup className="pr-3 my-1">
+                            <h6 className="m-0">View By : </h6>
+                          </FormGroup>
                           <FormGroup className="pr-3">
                             <Input type="text" placeholder="User Name" />
                           </FormGroup>
@@ -170,14 +173,6 @@ class Contact extends React.Component {
                               placeholder="User Type"
                             />
                           </FormGroup>
-                          
-                          <Button
-                            type="submit"
-                            color="primary"
-                            className="btn-square"
-                          >
-                            <i className="fas fa-search mr-1"></i>Filter
-                          </Button>
                         </Form>
                       </div>
                       <div>
@@ -185,7 +180,7 @@ class Contact extends React.Component {
                           <Col xs="12" lg="8">
                             <BootstrapTable
                               selectRow={ this.selectRowProp }
-                              search={true}
+                              search={false}
                               options={ this.options }
                               data={contact_list}
                               version="4"
@@ -198,16 +193,19 @@ class Contact extends React.Component {
                               <TableHeaderColumn
                                 isKey
                                 dataField="transactionCategoryName"
+                                dataSort
                               >
                                 Name
                               </TableHeaderColumn>
                               <TableHeaderColumn
                                 dataField="transactionCategoryCode"
+                                dataSort
                               >
                                 Email
                               </TableHeaderColumn>
                               <TableHeaderColumn
                                 dataField="parentTransactionCategory"
+                                dataSort
                               >
                                 Type
                               </TableHeaderColumn>

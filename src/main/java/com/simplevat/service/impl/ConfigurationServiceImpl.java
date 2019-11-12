@@ -7,11 +7,8 @@ package com.simplevat.service.impl;
 
 import com.simplevat.dao.ConfigurationDao;
 import com.simplevat.dao.Dao;
-import com.simplevat.dao.DocumentTemplateDao;
 import com.simplevat.entity.Configuration;
-import com.simplevat.entity.DocumentTemplate;
 import com.simplevat.service.ConfigurationService;
-import com.simplevat.service.DocumentTemplateService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

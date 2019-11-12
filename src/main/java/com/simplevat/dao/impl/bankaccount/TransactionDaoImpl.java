@@ -1,7 +1,6 @@
 package com.simplevat.dao.impl.bankaccount;
 
-import com.simplevat.constants.TransactionStatusConstant;
-import com.simplevat.criteria.SortOrder;
+import com.simplevat.constant.TransactionStatusConstant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,7 +19,6 @@ import com.simplevat.entity.bankaccount.TransactionType;
 import com.simplevat.entity.bankaccount.TransactionView;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.util.Iterator;
 import java.util.Map;
 import javax.persistence.TypedQuery;
 
@@ -279,7 +277,7 @@ public class TransactionDaoImpl extends AbstractDao<Integer, Transaction> implem
     public Integer getTotalUnexplainedTransactionCountByBankAccountId(Integer bankAccountId) {
         Query query = getEntityManager().createQuery("SELECT COUNT(t) FROM TransactionView t WHERE t.parentTransaction = null AND t.bankAccountId =:bankAccountId AND t.explanationStatusCode =:explanationStatusCode");
         query.setParameter("bankAccountId", bankAccountId);
-        query.setParameter("explanationStatusCode", TransactionStatusConstant.UNEXPLIANED);
+        query.setParameter("explanationStatusCode", TransactionStatusConstant.UNEXPLAINED);
         List<Object> countList = query.getResultList();
         if (countList != null && !countList.isEmpty()) {
             return ((Long) countList.get(0)).intValue();

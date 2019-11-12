@@ -5,6 +5,7 @@
  */
 package com.simplevat.rest.usercontroller;
 
+import com.simplevat.contact.model.UserModel;
 import com.simplevat.entity.Mail;
 import com.simplevat.entity.MailEnum;
 import com.simplevat.entity.Role;
@@ -61,8 +62,6 @@ public class UserController implements Serializable {
 
     private boolean isEmailPresent = false;
 
-    private boolean isUserNew = true;
-
     @GetMapping(value = "/getuserlist")
     private ResponseEntity<List<User>> getUserList() {
         List<User> userList = null;
@@ -75,7 +74,7 @@ public class UserController implements Serializable {
     }
 
     @DeleteMapping(value = "/deleteuser")
-    private ResponseEntity deleteUser(@RequestParam(value = "id") Integer id) {
+    public ResponseEntity deleteUser(@RequestParam(value = "id") Integer id) {
         User user = userService.findByPK(id);
         if (user == null) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -90,7 +89,7 @@ public class UserController implements Serializable {
     }
 
     @GetMapping(value = "/edituser")
-    private ResponseEntity<User> editUser(@RequestParam(value = "id") Integer id) {
+    public ResponseEntity<User> editUser(@RequestParam(value = "id") Integer id) {
         User user = null;
         try {
             user = userService.findByPK(id);
@@ -102,8 +101,8 @@ public class UserController implements Serializable {
     }
 
     @GetMapping(value = "/getrole")
-    private ResponseEntity<List<Role>> comoleteRole() {
-        List<Role> roles = roleService.getRoles();;
+    public ResponseEntity<List<Role>> comoleteRole() {
+        List<Role> roles = roleService.getRoles();
         if (roles != null) {
             return new ResponseEntity<>(roles, HttpStatus.OK);
         } else {
@@ -113,16 +112,13 @@ public class UserController implements Serializable {
     }
 
     @PostMapping(value = "/saveuser")
-    private ResponseEntity save(@RequestBody UserModel selectedUser, @RequestParam("id") Integer id) {
+    public ResponseEntity save(@RequestBody UserModel selectedUser, @RequestParam("id") Integer id) {
+        boolean isUserNew = true;
         User user1 = userService.findByPK(id);
         String password = selectedUser.getPassword();
         if (selectedUser.getUserId() != null) {
             User user = userService.getUserEmail(selectedUser.getUserEmail());
-            if (user == null || user.getUserId() != selectedUser.getUserId()) {
-                isUserNew = true;
-            } else {
-                isUserNew = false;
-            }
+            isUserNew = user == null || !user.getUserId().equals(selectedUser.getUserId());
         }
         if (isUserNew) {
             Optional<User> userOptional = userService.getUserByEmail(selectedUser.getUserEmail());

@@ -1,13 +1,11 @@
 package com.simplevat.entity;
 
-import java.time.LocalDateTime;
 
 import lombok.Data;
 import lombok.Setter;
 
 import javax.persistence.*;
 
-import com.simplevat.entity.converter.DateConverter;
 import java.io.Serializable;
 import java.util.Date;
 import org.hibernate.annotations.ColumnDefault;

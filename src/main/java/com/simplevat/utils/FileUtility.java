@@ -44,29 +44,34 @@ public class FileUtility {
 
     public MimeMultipart getMessageBody(String htmlText) throws MessagingException {
         ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource(LOGO_IMAGE_PATH).getFile());
-        String logoImagePath = file.getAbsolutePath();
-        // This mail has 2 part, the BODY and the embedded image
-        MimeMultipart multipart = new MimeMultipart("related");
+        File file;
+        if (classLoader.getResource(LOGO_IMAGE_PATH).getFile() != null) {
+            file = new File(classLoader.getResource(LOGO_IMAGE_PATH).getFile());
 
-        // first part (the html)
-        BodyPart messageBodyPart = new MimeBodyPart();
+            String logoImagePath = file.getAbsolutePath();
+            // This mail has 2 part, the BODY and the embedded image
+            MimeMultipart multipart = new MimeMultipart("related");
 
-        messageBodyPart.setContent(htmlText, "text/html");
-        // add it
-        multipart.addBodyPart(messageBodyPart);
+            // first part (the html)
+            BodyPart messageBodyPart = new MimeBodyPart();
 
-        // second part (the image)
-        messageBodyPart = new MimeBodyPart();
-        DataSource fds = new FileDataSource(logoImagePath);
+            messageBodyPart.setContent(htmlText, "text/html");
+            // add it
+            multipart.addBodyPart(messageBodyPart);
 
-        messageBodyPart.setDataHandler(new DataHandler(fds));
-        messageBodyPart.setHeader("Content-ID", "<simplevatlogo>");
+            // second part (the image)
+            messageBodyPart = new MimeBodyPart();
+            DataSource fds = new FileDataSource(logoImagePath);
 
-        // add image to the multipart
-        multipart.addBodyPart(messageBodyPart);
+            messageBodyPart.setDataHandler(new DataHandler(fds));
+            messageBodyPart.setHeader("Content-ID", "<simplevatlogo>");
 
-        return multipart;
+            // add image to the multipart
+            multipart.addBodyPart(messageBodyPart);
+
+            return multipart;
+        }
+        return new MimeMultipart();
     }
 
 }

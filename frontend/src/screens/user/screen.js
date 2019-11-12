@@ -122,7 +122,7 @@ class User extends React.Component {
                 :
                   <Row>
                     <Col lg={12}>
-                      <div className="mb-2">
+                      <div className="d-flex justify-content-end">
                         <ButtonGroup size="sm">
                           <Button
                             color="success"
@@ -155,44 +155,39 @@ class User extends React.Component {
                           </Button>
                         </ButtonGroup>
                       </div>
-                      <div className="filter-panel my-3 py-3">
+                      <div className="py-3">
                         <Form inline>
-                          <FormGroup className="pr-3">
+                          <FormGroup className="pr-3 my-1">
+                            <h6 className="m-0">View By : </h6>
+                          </FormGroup>
+                          <FormGroup className="pr-3 my-1">
                             <Input type="text" placeholder="User Name" />
                           </FormGroup>
-                          <FormGroup className="pr-3">
+                          <FormGroup className="pr-3 my-1">
                             <DatePicker
                               className="form-control"
                               placeholderText="DOB"
                             />
                           </FormGroup>
-                          <FormGroup className="pr-3">
+                          <FormGroup className="pr-3 my-1">
                             <Select
                               className="select-min-width"
                               options={[]}
                               placeholder="Role Name"
                             />
                           </FormGroup>
-                          <FormGroup className="pr-3">
+                          <FormGroup className="pr-3 my-1">
                             <Input type="text" placeholder="Active" />
                           </FormGroup>
-                          <FormGroup className="pr-3">
+                          <FormGroup className="pr-3 my-1">
                             <Input type="text" placeholder="Company" />
                           </FormGroup>
-                          
-                          <Button
-                            type="submit"
-                            color="primary"
-                            className="btn-square"
-                          >
-                            <i className="fas fa-search mr-1"></i>Filter
-                          </Button>
                         </Form>
                       </div>
                       <div>
                         <BootstrapTable
                           selectRow={ this.selectRowProp }
-                          search={true}
+                          search={false}
                           options={ this.options }
                           data={user_list}
                           version="4"
@@ -205,26 +200,31 @@ class User extends React.Component {
                           <TableHeaderColumn
                             isKey
                             dataField="transactionCategoryName"
+                            dataSort
                           >
                             User Name
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionCategoryCode"
+                            dataSort
                           >
                             DOB
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="parentTransactionCategory"
+                            dataSort
                           >
                             Role Name
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionCategoryCode"
+                            dataSort
                           >
                             Active
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionCategoryCode"
+                            dataSort
                           >
                             Company
                           </TableHeaderColumn>

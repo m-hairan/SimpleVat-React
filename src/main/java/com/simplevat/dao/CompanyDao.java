@@ -5,13 +5,13 @@
  */
 package com.simplevat.dao;
 
-import com.simplevat.entity.Activity;
 import com.simplevat.entity.Company;
 
 /**
  *
  * @author admin
  */
-public interface CompanyDao extends Dao<Integer, Company>{
-    public Company getCompany();
+public interface CompanyDao extends Dao<Integer, Company> {
+
+    Company getCompany();
 }

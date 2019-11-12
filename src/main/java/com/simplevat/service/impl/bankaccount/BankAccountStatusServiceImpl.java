@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.simplevat.dao.bankaccount.BankAccountStatusDao;
 import com.simplevat.entity.bankaccount.BankAccountStatus;
-import com.simplevat.service.bankaccount.BankAccountStatusService;
+import com.simplevat.service.BankAccountStatusService;
 
 @Service("bankAccountStatusService")
 public class BankAccountStatusServiceImpl implements BankAccountStatusService {

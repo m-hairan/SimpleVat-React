@@ -16,13 +16,13 @@ public interface CurrencyDao extends Dao<Integer, Currency> {
 
     Currency getDefaultCurrency();
 
-    public CurrencyConversion getCurrencyRateFromCurrencyConversion(int currencyCode);
+    CurrencyConversion getCurrencyRateFromCurrencyConversion(int currencyCode);
 
-    public String getCountryCodeAsString(String CountryCode);
+    String getCountryCodeAsString(String CountryCode);
 
-    public List<String> getCountryCodeString();
+    List<String> getCountryCodeString();
 
-    public List<Currency> getCurrencyList(Currency currency);
+    List<Currency> getCurrencyList(Currency currency);
     
-    public Boolean isCurrencyDataAvailableOnTodayDate();
+    Boolean isCurrencyDataAvailableOnTodayDate();
 }

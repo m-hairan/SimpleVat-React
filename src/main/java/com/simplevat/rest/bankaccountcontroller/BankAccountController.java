@@ -5,19 +5,20 @@
  */
 package com.simplevat.rest.bankaccountcontroller;
 
+import com.simplevat.helper.BankHelper;
+import com.simplevat.contact.model.BankModel;
 import com.simplevat.entity.Country;
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.User;
 import com.simplevat.entity.bankaccount.BankAccount;
 import com.simplevat.entity.bankaccount.BankAccountStatus;
 import com.simplevat.entity.bankaccount.BankAccountType;
-import com.simplevat.entity.bankaccount.TransactionStatus;
 import com.simplevat.service.BankAccountTypeService;
 import com.simplevat.service.CountryService;
 import com.simplevat.service.CurrencyService;
 import com.simplevat.service.UserServiceNew;
-import com.simplevat.service.bankaccount.BankAccountService;
-import com.simplevat.service.bankaccount.BankAccountStatusService;
+import com.simplevat.service.BankAccountService;
+import com.simplevat.service.BankAccountStatusService;
 import com.simplevat.service.bankaccount.TransactionStatusService;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -65,7 +66,7 @@ public class BankAccountController implements Serializable {
     private TransactionStatusService transactionStatusService;
 
     @GetMapping(value = "/getbanklist")
-    private ResponseEntity<List<BankAccount>> getBankAccountList() {
+    public ResponseEntity<List<BankAccount>> getBankAccountList() {
         List<BankAccount> bankAccounts = bankAccountService.getBankAccounts();
         if (bankAccounts != null) {
             return new ResponseEntity<>(bankAccounts, HttpStatus.OK);
@@ -75,7 +76,7 @@ public class BankAccountController implements Serializable {
     }
 
     @PostMapping(value = "/savebank")
-    private ResponseEntity saveBankAccount(@RequestBody BankModel bankModel, @RequestParam(value = "id") Integer id) {
+    public ResponseEntity saveBankAccount(@RequestBody BankModel bankModel, @RequestParam(value = "id") Integer id) {
         try {
             BankAccount bankAccount = BankHelper.getBankAccountByBankAccountModel(bankModel, bankAccountStatusService, currencyService, bankAccountTypeService, countryService);
             User user = userServiceNew.findByPK(id);
@@ -100,7 +101,7 @@ public class BankAccountController implements Serializable {
     }
 
     @GetMapping(value = "/getaccounttype")
-    private ResponseEntity<List<BankAccountType>> getBankAccontType() {
+    public ResponseEntity<List<BankAccountType>> getBankAccontType() {
         List<BankAccountType> bankAccountTypes = bankAccountTypeService.getBankAccountTypeList();
         if (bankAccountTypes != null) {
             return new ResponseEntity<>(bankAccountTypes, HttpStatus.OK);
@@ -110,13 +111,13 @@ public class BankAccountController implements Serializable {
     }
 
     @GetMapping(value = "/getbankaccountstatus")
-    private ResponseEntity<List<BankAccountStatus>> getBankAccountStatus() {
+    public ResponseEntity<List<BankAccountStatus>> getBankAccountStatus() {
         List<BankAccountStatus> bankAccountStatuses = bankAccountStatusService.getBankAccountStatuses();
         return new ResponseEntity<>(bankAccountStatuses, HttpStatus.OK);
     }
 
     @GetMapping(value = "/getcountry")
-    private ResponseEntity<List<Country>> completeCountry(@RequestParam(value = "countryStr") String countryStr) {
+    public ResponseEntity<List<Country>> completeCountry(@RequestParam(value = "countryStr") String countryStr) {
         List<Country> countrySuggestion = new ArrayList<>();
         List<Country> countries = countryService.getCountries();
         if (countries == null) {
@@ -139,7 +140,7 @@ public class BankAccountController implements Serializable {
     }
 
     @DeleteMapping(value = "/deletebank")
-    private ResponseEntity deleteBankAccount(@RequestParam("id") Integer id) {
+    public ResponseEntity deleteBankAccount(@RequestParam("id") Integer id) {
         BankAccount bankAccount = bankAccountService.findByPK(id);
         bankAccount.setDeleteFlag(true);
         bankAccountService.update(bankAccount);
@@ -147,7 +148,7 @@ public class BankAccountController implements Serializable {
     }
 
     @GetMapping(value = "/getbyid")
-    private ResponseEntity<BankAccount> editBankAccount(@RequestParam("id") Integer id) {
+    public ResponseEntity<BankAccount> editBankAccount(@RequestParam("id") Integer id) {
         try {
             BankAccount bankAccount = bankAccountService.findByPK(id);
             return new ResponseEntity<>(bankAccount, HttpStatus.OK);
@@ -158,11 +159,14 @@ public class BankAccountController implements Serializable {
     }
 
     @GetMapping(value = "/getcurrenncy")
-    private ResponseEntity<List<Currency>> getCurrency(@RequestParam(value = "currencyStr") String currencyStr) {
+    public ResponseEntity<List<Currency>> getCurrency(@RequestParam(value = "currencyStr") String currencyStr) {
         List<Currency> currencySuggestion = new ArrayList<>();
         List<Currency> currencies = currencyService.getCurrencies();
 
-        Iterator<Currency> currencyIterator = currencies.iterator();
+        Iterator<Currency> currencyIterator = null;
+        if (currencies != null && !currencies.isEmpty()) {
+            currencyIterator = currencies.iterator();
+        }
         if (currencyIterator == null) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         } else {

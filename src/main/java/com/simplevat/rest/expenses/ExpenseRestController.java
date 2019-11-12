@@ -5,12 +5,13 @@
  */
 package com.simplevat.rest.expenses;
 
+import com.simplevat.helper.ExpenseRestHelper;
 import com.simplevat.entity.Currency;
 import com.simplevat.entity.Expense;
 import com.simplevat.entity.Project;
 import com.simplevat.entity.User;
 import com.simplevat.entity.bankaccount.TransactionCategory;
-import static com.simplevat.rest.expenses.ExpenseRestHelper.TRANSACTION_TYPE_EXPENSE;
+import static com.simplevat.helper.ExpenseRestHelper.TRANSACTION_TYPE_EXPENSE;
 import com.simplevat.service.CompanyService;
 import com.simplevat.service.CurrencyService;
 import com.simplevat.service.ExpenseService;
