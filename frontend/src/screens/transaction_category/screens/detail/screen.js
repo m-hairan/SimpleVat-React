@@ -266,7 +266,6 @@ class DetailTransactionCategory extends React.Component {
   // Create or Update Transaction
   handleSubmit(e, status) {
     e.preventDefault()
-    this.setState({ loading: true })
     
     const {
       categoryName,

@@ -74,7 +74,6 @@ class CreateVatCode extends React.Component {
   handleSubmit = (e, status) => {
     e.preventDefault()
 
-    this.setState({ loading: true })
     const { name, vat } = this.state.vatData
 
     let postObj = { name, vat }
