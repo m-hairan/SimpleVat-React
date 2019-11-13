@@ -17,6 +17,8 @@ import Select from 'react-select'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
 import DatePicker from 'react-datepicker'
 
+import 'react-datepicker/dist/react-datepicker.css'
+
 import './style.scss'
 
 const mapStateToProps = (state) => {
@@ -133,7 +135,9 @@ class DetailCustomerInvoice extends React.Component {
   }
 
   renderSubTotal (cell, row) {
-
+    return (
+      <label className="mb-0">0.00</label>
+    )
   }
 
   render() {
@@ -257,18 +261,6 @@ class DetailCustomerInvoice extends React.Component {
                           </Col>
                           <Col lg={4}>
                             <FormGroup className="mb-3">
-                              <Label htmlFor="due_days">Invoice Due In Day(s)</Label>
-                              <Input
-                                type="text"
-                                id="due_days"
-                                name="due_days"
-                                placeholder=""
-                                required
-                              />
-                            </FormGroup>
-                          </Col>
-                          <Col lg={4}>
-                            <FormGroup className="mb-3">
                               <Label htmlFor="due_date">Invoice Due Date</Label>
                               <div>
                                 <DatePicker
@@ -363,6 +355,8 @@ class DetailCustomerInvoice extends React.Component {
                               <TableHeaderColumn
                                 dataField="sub_total"
                                 dataFormat={this.renderSubTotal}
+                                className="text-right"
+                                columnClassName="text-right"
                               >
                                 Sub Total (All)
                               </TableHeaderColumn>

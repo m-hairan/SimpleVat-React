@@ -102,8 +102,18 @@ class CustomerInvoice extends React.Component {
   }
 
   renderInvoiceStatus (cell, row) {
+    let classname = ''
+    if (row.status == 'paid') {
+      classname = 'badge-success'
+    } else if (row.status == 'unpaid') {
+      classname = 'badge-danger'
+    } else if (row.status == 'Patially Paid') {
+      classname = "badget-info"
+    } else {
+      classname = 'badge-primary'
+    }
     return (
-      <span className="badge badge-success mb-0">{ row.status }</span>
+      <span className={ `badge ${classname} mb-0` }>{ row.status }</span>
     )
   }
 

@@ -7,6 +7,7 @@ import {
 
 import {
   Dashboard,
+  Journal,
   BankAccount,
   BankStatement,
   Employee,
@@ -21,11 +22,11 @@ import {
   Payment,
   TransactionCategory,
   User,
-  VatCategory,
+  VatCode,
   Currency,
   Help,
   Notification,
-  OrganizationProfile,
+  Organization,
   UsersRoles,
   DataBackup
 } from 'screens'
@@ -36,6 +37,7 @@ const reducer = combineReducers({
   auth: AuthReducer,
 
   dashboard: Dashboard.reducer,
+  journal: Journal.reducer,
   bank_account: BankAccount.reducer,
   bank_statement: BankStatement.reducer,
   employee: Employee.reducer,
@@ -50,11 +52,11 @@ const reducer = combineReducers({
   payment: Payment.reducer,
   transaction: TransactionCategory.reducer,
   user: User.reducer,
-  vat: VatCategory.reducer,
+  vat: VatCode.reducer,
   currency: Currency.reducer,
   help: Help.reducer,
   notification: Notification.reducer,
-  organization_profile: OrganizationProfile.reducer,
+  organization: Organization.reducer,
   users_roles: UsersRoles.reducer,
   data_backup: DataBackup.reducer
 })

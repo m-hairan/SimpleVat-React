@@ -6,6 +6,23 @@ export default {
       icon: 'icon-speedometer'
     },
     {
+      name: 'Accountant',
+      url: '/admin/accountant',
+      icon: 'icon-user',
+      children: [
+        {
+          name: 'Journals',
+          url: '/admin/accountant/journal',
+          icon: 'fa fa-diamond',
+        },
+        {
+          name: 'Begining Balances',
+          url: '/admin/accountant/begining-balance',
+          icon: 'fas fa-balance-scale',
+        }
+      ]
+    },
+    {
       name: 'Revenue',
       url: '/admin/revenue',
       icon: 'far fa-address-book',
@@ -101,6 +118,21 @@ export default {
       icon: 'fas fa-database',
       children: [
         {
+          name: 'Chart of Accounts',
+          url: '/admin/master/chart-accounts',
+          icon: 'fas fa-area-chart',
+        },
+        {
+          name: 'Contact',
+          url: '/admin/master/contact',
+          icon: 'fas fa-id-card-alt',
+        },
+        {
+          name: 'Employee',
+          url: '/admin/master/employee',
+          icon: 'fas fa-user-tie'
+        },
+        {
           name: 'Product',
           url: '/admin/master/product',
           icon: 'fas fa-object-group',
@@ -111,15 +143,15 @@ export default {
           icon: 'fas fa-project-diagram',
         },
         {
-          name: 'Contact',
-          url: '/admin/master/contact',
-          icon: 'fas fa-id-card-alt',
+          name: 'VAT Codes',
+          url: '/admin/master/vat-code',
+          icon: 'icon-briefcase',
         },
         {
-          name: 'User',
-          url: '/admin/master/user',
-          icon: 'fas fa-users',
-        }
+          name: 'Currencies',
+          url: '/admin/master/currency',
+          icon: 'fas fa-money',
+        },
       ]
     },
     {
@@ -128,56 +160,16 @@ export default {
       icon: 'icon-settings',
       children: [
         {
-          name: 'General Settings',
-          url: '/admin/settings/general',
-          icon: 'icon-wrench',
-        },
-        {
-          name: 'Vat Category',
-          url: '/admin/settings/vat-category',
-          icon: 'icon-briefcase',
-        },
-        {
-          name: 'Transaction Category',
-          url: '/admin/settings/transaction-category',
-          icon: 'icon-graph',
-        },
-        {
-          name: 'Users & Roles',
-          url: '/admin/settings/user-role',
+          name: 'Users',
+          url: '/admin/settings/user',
           icon: 'fas fa-users',
         },
         {
-          name: 'Organization Profile',
-          url: '/admin/settings/organization-profile',
+          name: 'Organization',
+          url: '/admin/settings/organization',
           icon: 'fas fa-sitemap',
-        },
-        {
-          name: 'Currencies',
-          url: '/admin/settings/currency',
-          icon: 'fas fa-money',
-        },
-        {
-          name: 'Notifications',
-          url: '/admin/settings/notification',
-          icon: 'fas fa-bell',
-        },
-        {
-          name: 'Data Backup',
-          url: '/admin/settings/data-backup',
-          icon: 'fas fa-hdd-o',
-        },
-        {
-          name: 'Help',
-          url: '/admin/settings/help',
-          icon: 'fas fa-info-circle',
         }
       ]
-    },
-    {
-      name: 'Employee',
-      url: '/admin/employee',
-      icon: 'fas fa-user-tie'
     }
   ]
 }

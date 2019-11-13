@@ -78,7 +78,7 @@ class User extends React.Component {
   }
 
   goToDetail(row) {
-    this.props.history.push('/admin/master/user/detail')
+    this.props.history.push('/admin/settings/user/detail')
   }
 
   onRowSelect (row, isSelected, e) {
@@ -141,7 +141,7 @@ class User extends React.Component {
                           <Button
                             color="primary"
                             className="btn-square"
-                            onClick={() => this.props.history.push(`/admin/master/user/create`)}
+                            onClick={() => this.props.history.push(`/admin/settings/user/create`)}
                           >
                             <i className="fas fa-plus mr-1" />
                             New User
