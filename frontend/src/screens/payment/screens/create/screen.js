@@ -17,6 +17,8 @@ import Select from 'react-select'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
 import DatePicker from 'react-datepicker'
 
+import 'react-datepicker/dist/react-datepicker.css'
+
 import './style.scss'
 
 const mapStateToProps = (state) => {

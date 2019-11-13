@@ -17,6 +17,8 @@ import Select from 'react-select'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
 import DatePicker from 'react-datepicker'
 
+import 'react-datepicker/dist/react-datepicker.css'
+
 import './style.scss'
 
 const mapStateToProps = (state) => {
@@ -108,7 +110,9 @@ class DetailExpense extends React.Component {
   }
 
   renderSubTotal (cell, row) {
-
+    return (
+      <label className="mb-0">0.00</label>
+    )
   }
 
   render() {
@@ -327,6 +331,8 @@ class DetailExpense extends React.Component {
                               <TableHeaderColumn
                                 dataField="sub_total"
                                 dataFormat={this.renderSubTotal}
+                                className="text-right"
+                                columnClassName="text-right"
                               >
                                 Sub Total (All)
                               </TableHeaderColumn>
