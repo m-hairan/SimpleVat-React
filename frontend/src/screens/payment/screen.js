@@ -172,7 +172,7 @@ class Payment extends React.Component {
                             <Input type="text" placeholder="Payment Number" />
                           </FormGroup>
                           <FormGroup className="pr-3 my-1">
-                            <Input type="text" placeholder="Reference" />
+                            <Input type="text" placeholder="Reference Number" />
                           </FormGroup>
                           <FormGroup className="pr-3 my-1">
                             <Input type="text" placeholder="Supplier Name" />
