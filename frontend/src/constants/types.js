@@ -14,24 +14,14 @@ export const TEMP = {
 }
 
 export const DASHBOARD = {
-
-  // Bank Account
   BANK_ACCOUNT_TYPE: 'BANK_ACCOUNT_TYPE',
   BANK_ACCOUNT_GRAPH: 'BANK_ACCOUNT_GRAPH',
-
-  // Cash Flow
   CASH_FLOW_GRAPH: 'CASH_FLOW_GRAPH',
-
-  // Invoice
   INVOICE_GRAPH: 'INVOICE_GRAPH',
-
-  // Profit and Loss
   PROFIT_LOSS: 'PROFIT_LOSS',
   TAXES: 'TAXES',
-
-  // Revenues and Expenses
   EXPENSE_GRAPH: 'EXPENSE_GRAPH',
-  REVENUE_GRAPH: 'REVENUE_GRAPH',
+  REVENUE_GRAPH: 'REVENUE_GRAPH'
 }
 
 export const BANK_ACCOUNT = {
@@ -58,10 +48,6 @@ export const SETTINGS = {
 
 }
 
-export const IMPORTS = {
-  IMPORT_LIST: 'IMPORT_LIST'
-}
-
 export const CUSTOMER_INVOICE = {
   CUSTOMER_INVOICE_LIST: 'CUSTOMER_INVOICE_LIST'
 }
@@ -86,24 +72,11 @@ export const PAYMENT = {
   PAYMENT_LIST: 'PAYMENT_LIST'
 }
 
-export const TAXES = {
-
-}
-
 export const TRANSACTION = {
-  // All Transaction Data
   TRANSACTION_LIST: 'TRANSACTION_LIST',
-
-  // Vat Transaction By ID
   TRANSACTION_ROW: 'TRANSACTION_ROW',
-
-  // Transaction Types
   TRANSACTION_TYPES: 'TRANSACTION_TYPES',
-
-  // Transaction Vat Categories
   TRANSACTION_VAT_CATEGORIES: 'TRANSACTION_VAT_CATEGORIES',
-
-  // Transaction Parent Category Code List
   TRANSACTION_PARENT_CATRGORY_CODE_LIST: 'TRANSACTION_PARENT_CATEGORY_CODE_LIST'
 }
 
@@ -112,10 +85,7 @@ export const USER = {
 }
 
 export const VAT = {
-  // All VAT Data
   VAT_LIST: 'VAT_LIST',
-
-  // Vat Data By ID
   VAT_ROW: 'VAT_ROW'
 }
 
@@ -135,10 +105,32 @@ export const NOTIFICATION = {
 
 }
 
-export const ORGANIZATION_PROFILE = {
+export const ORGANIZATION = {
 
 }
 
 export const USERS_ROLES = {
   
+}
+
+export const REPORTS_FILING = {
+
+}
+
+export const VAT_TRANSACTIONS = {
+  
+}
+
+export const CHART_ACCOUNTS = {
+  
+}
+
+
+export const BEGINING_BALANCE = {
+  
+}
+
+
+export const JOURNAL = {
+  JOURNAL_LIST: 'JOURNAL_LIST'
 }

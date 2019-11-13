@@ -120,7 +120,7 @@ class Project extends React.Component {
                 :
                   <Row>
                     <Col lg={12}>
-                      <div className="mb-2">
+                      <div className="d-flex justify-content-end">
                         <ButtonGroup size="sm">
                           <Button
                             color="success"
@@ -153,8 +153,11 @@ class Project extends React.Component {
                           </Button>
                         </ButtonGroup>
                       </div>
-                      <div className="filter-panel my-3 py-3">
+                      <div className="py-3">
                         <Form inline>
+                          <FormGroup className="pr-3 my-1">
+                            <h6 className="m-0">View By : </h6>
+                          </FormGroup>
                           <FormGroup className="pr-3">
                             <Input type="text" placeholder="Project Name" />
                           </FormGroup>
@@ -170,19 +173,12 @@ class Project extends React.Component {
                           <FormGroup className="pr-3">
                             <Input type="text" placeholder="Currency Code" />
                           </FormGroup>
-                          <Button
-                            type="submit"
-                            color="primary"
-                            className="btn-square"
-                          >
-                            <i className="fas fa-search mr-1"></i>Filter
-                          </Button>
                         </Form>
                       </div>
                       <div>
                         <BootstrapTable
                           selectRow={ this.selectRowProp }
-                          search={true}
+                          search={false}
                           options={ this.options }
                           data={project_list}
                           version="4"
@@ -195,31 +191,37 @@ class Project extends React.Component {
                           <TableHeaderColumn
                             isKey
                             dataField="transactionCategoryName"
+                            dataSort
                           >
                             Project Name
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionCategoryCode"
+                            dataSort
                           >
                             Expense Budget
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="parentTransactionCategory"
+                            dataSort
                           >
                             Revenue Budget
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionCategoryCode"
+                            dataSort
                           >
                             VAT Number
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionCategoryCode"
+                            dataSort
                           >
                             Currency Code
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionCategoryCode"
+                            dataSort
                           >
                             Contact Name
                           </TableHeaderColumn>

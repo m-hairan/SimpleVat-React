@@ -1,69 +1,94 @@
 import {
   Dashboard,
-  GeneralSettings,
-  VatCategory,
-  Contact,
-  User,
-  Project,
-  Product,
-  Expense,
-  Payment,
-  Imports,
-  Employee,
+
+
+  Journal,
+  CreateJournal,
+  DetailJournal,
+  BeginingBalance,
+
+
+
   CustomerInvoice,
-  SupplierInvoice,
+  CreateCustomerInvoice,
+  DetailCustomerInvoice,
   Receipt,
+  CreateReceipt,
+  DetailReceipt,
+
+
+
+  SupplierInvoice,
+  CreateSupplierInvoice,
+  DetailSupplierInvoice,
+  Expense,
+  CreateExpense,
+  DetailExpense,
+  Payment,
+  CreatePayment,
+  DetailPayment,
+
+
+
   BankAccount,
+  CreateBankAccount,
+  DetailBankAccount,
   BankStatement,
-  Taxes,
-  TransactionCategory,
-  UsersRoles,
-  OrganizationProfile,
-  Currency,
-  Notification,
-  DataBackup,
-  Help,
-  Faq,
-  Profile,
+  CreateBankStatement,
+  DetailBankStatement,
+  ImportBankStatement,
+
+
+
+  VatTransactions,
+  ReportsFiling,
+
+
+
   TransactionsReport,
   FinancialReport,
 
 
-  CreateCustomerInvoice,
-  CreateSupplierInvoice,
-  CreateReceipt,
-  CreateExpense,
-  CreateProduct,
+
+  ChartAccounts,
+  Contact,
   CreateContact,
-  CreateProject,
-  CreateUser,
-  CreatePayment,
-  CreateBankAccount,
-  CreateBankStatement,
-  CreateVatCategory,
-  CreateTranactionCategory,
-
-  DetailBankAccount,
-  DetailBankStatement,
-  DetailCustomerInvoice,
-  DetailSupplierInvoice,
-  DetailReceipt,
-  DetailExpense,
-  DetailPayment,
   DetailContact,
-  DetailProject,
+  Employee,
+  Product,
+  CreateProduct,
   DetailProduct,
-  DetailUser,
-  DetailVatCategory,
-  DetailTranactionCategory,
+  Project,
+  CreateProject,
+  DetailProject,
+  VatCode,
+  CreateVatCode,
+  DetailVatCode,
+  Currency,
 
-  ImportBankStatement
+
+
+  User,
+  CreateUser,
+  DetailUser,
+  Organization,
+
+
+  Profile,
+  GeneralSettings,
+  TransactionCategory,
+  CreateTransactionCategory,
+  DetailTransactionCategory,
+  UsersRoles,
+  Notification,
+  DataBackup,
+  Help,
+  Faq
   
 } from 'screens'
 
 const adminRoutes = [
 
-  // dashboard module
   {
     path: '/admin/dashboard',
     name: 'Dashboard',
@@ -71,17 +96,36 @@ const adminRoutes = [
   },
 
 
-  // profile module
   {
-    path: '/admin/profile',
-    name: 'Profile',
-    component: Profile.screen
+    path: '/admin/accountant/journal/create',
+    name: 'Create',
+    component: CreateJournal.screen
+  },
+  {
+    path: '/admin/accountant/journal/detail',
+    name: 'Detail',
+    component: DetailJournal.screen
+  },
+  {
+    path: '/admin/accountant/journal',
+    name: 'Journals',
+    component: Journal.screen
+  },
+  {
+    path: '/admin/accountant/begining-balance',
+    name: 'Begining Balance',
+    component: BeginingBalance.screen
+  },
+  {
+    redirect: true,
+    path: '/admin/accountant',
+    pathTo: '/admin/accountant/journal',
+    name: 'Accountant'
   },
 
 
 
 
-  // revenue module
   {
     path: '/admin/revenue/customer-invoice/create',
     name: 'Create',
@@ -124,7 +168,6 @@ const adminRoutes = [
 
 
 
-  // expense module=
   {
     path: '/admin/expense/supplier-invoice/create',
     name: 'Create',
@@ -180,7 +223,9 @@ const adminRoutes = [
 
 
 
-  // bank account module
+
+
+
   {
     path: '/admin/bank/bank-account/create',
     name: 'Create',
@@ -226,18 +271,31 @@ const adminRoutes = [
 
 
 
-  // Taxes module
+
+
   {
-    path: '/admin/taxes',
-    name: 'Taxes',
-    component: Taxes.screen
+    path: '/admin/taxes/vat-transactions',
+    name: 'VAT Transactions', 
+    component: VatTransactions.screen
   },
+  {
+    path: '/admin/taxes/reports-filing',
+    name: 'Reports Filing', 
+    component: ReportsFiling.screen
+  },
+  {
+    redirect: true,
+    path: '/admin/taxes',
+    pathTo: '/admin/taxes/vat-transactions',
+    name: 'Taxes'
+  },
+
+
 
   
 
 
 
-  // report module
   {
     path: '/admin/report/transactions',
     name: 'Transactions', 
@@ -255,19 +313,15 @@ const adminRoutes = [
     name: 'Report'
   },
 
-  
 
-  // imports module
+
+
+
   {
-    path: '/admin/imports',
-    name: 'Imports',
-    component: Imports.screen
+    path: '/admin/master/chart-accounts',
+    name: 'Chart of Accounts',
+    component: ChartAccounts.screen
   },
-
-
-
-
-  // master module
   {
     path: '/admin/master/contact/create',
     name: 'Create',
@@ -284,19 +338,9 @@ const adminRoutes = [
     component: Contact.screen
   },
   {
-    path: '/admin/master/project/create',
-    name: 'Create',
-    component: CreateProject.screen
-  },
-  {
-    path: '/admin/master/project/detail',
-    name: 'Detail',
-    component: DetailProject.screen
-  },
-  {
-    path: '/admin/master/project',
-    name: 'Project',
-    component: Project.screen
+    path: '/admin/master/employee',
+    name: 'Employee',
+    component: Employee.screen
   },
   {
     path: '/admin/master/product/create',
@@ -314,60 +358,91 @@ const adminRoutes = [
     component: Product.screen
   },
   {
-    path: '/admin/master/user/create',
+    path: '/admin/master/project/create',
     name: 'Create',
-    component: CreateUser.screen
+    component: CreateProject.screen
   },
   {
-    path: '/admin/master/user/detail',
+    path: '/admin/master/project/detail',
     name: 'Detail',
-    component: DetailUser.screen
+    component: DetailProject.screen
   },
   {
-    path: '/admin/master/user',
-    name: 'User',
-    component: User.screen
+    path: '/admin/master/project',
+    name: 'Project',
+    component: Project.screen
+  },
+  {
+    path: '/admin/master/vat-code/create',
+    name: 'Create',
+    component: CreateVatCode.screen
+  },
+  {
+    path: '/admin/master/vat-code/detail',
+    name: 'Detail',
+    component: DetailVatCode.screen
+  },
+  {
+    path: '/admin/master/vat-code',
+    name: 'Vat Code',
+    component: VatCode.screen
+  },
+  {
+    path: '/admin/master/currency',
+    name: 'Currencies',
+    component: Currency.screen
   },
   {
     redirect: true,
     path: '/admin/master',
-    pathTo: '/admin/master/product',
+    pathTo: '/admin/master/chart-accounts',
     name: 'Master'
   },
 
 
 
 
-  // settings module
+
+
+
+  {
+    path: '/admin/settings/user/create',
+    name: 'Create',
+    component: CreateUser.screen
+  },
+  {
+    path: '/admin/settings/user/detail',
+    name: 'Detail',
+    component: DetailUser.screen
+  },
+  {
+    path: '/admin/settings/user',
+    name: 'User',
+    component: User.screen
+  },
+  {
+    path: '/admin/settings/organization',
+    name: 'Organization',
+    component: Organization.screen
+  },
+
+
+
+
   {
     path: '/admin/settings/general',
     name: 'General Settings',
     component: GeneralSettings.screen
   },
   {
-    path: '/admin/settings/vat-category/create',
-    name: 'Create',
-    component: CreateVatCategory.screen
-  },
-  {
-    path: '/admin/settings/vat-category/detail',
-    name: 'Detail',
-    component: DetailVatCategory.screen
-  },
-  {
-    path: '/admin/settings/vat-category',
-    name: 'Vat Category',
-    component: VatCategory.screen
-  },
-  {
     path: '/admin/settings/transaction-category/create',
     name: 'Create',
-    component: CreateTranactionCategory.screen
+    component: CreateTransactionCategory.screen
   },
   {
     path: '/admin/settings/transaction-category/detail',
     name: 'Detail',
-    component: DetailTranactionCategory.screen
+    component: DetailTransactionCategory.screen
   },
   {
     path: '/admin/settings/transaction-category',
@@ -378,16 +453,6 @@ const adminRoutes = [
     path: '/admin/settings/user-role',
     name: 'Users & Roles',
     component: UsersRoles.screen
-  },
-  {
-    path: '/admin/settings/organization-profile',
-    name: 'Organization Profile',
-    component: OrganizationProfile.screen
-  },
-  {
-    path: '/admin/settings/currency',
-    name: 'Currencies',
-    component: Currency.screen
   },
   {
     path: '/admin/settings/notification',
@@ -420,14 +485,14 @@ const adminRoutes = [
 
 
 
-  // employee module
+  
+
+
   {
-    path: '/admin/employee',
-    name: 'Employee',
-    component: Employee.screen
+    path: '/admin/profile',
+    name: 'Profile',
+    component: Profile.screen
   },
-
-
 
 
 
