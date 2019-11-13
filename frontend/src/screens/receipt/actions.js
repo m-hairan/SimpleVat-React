@@ -12,49 +12,49 @@ export const getReceiptList = () => {
         data: [{
           transactionCategoryId: 2,
           transactionCategoryCode: 2,
-          transactionCategoryName: 'temp',
+          transactionCategoryName: 'temp1',
           transactionCategoryDescription: 'temp',
           parentTransactionCategory: 'Loream Ipsume',
           transactionType: 'TEMP'
         }, {
           transactionCategoryId: 1,
           transactionCategoryCode: 4,
-          transactionCategoryName: 'temp',
+          transactionCategoryName: 'temp2',
           transactionCategoryDescription: 'temp',
           parentTransactionCategory: 'Loream Ipsume',
           transactionType: 'TEMP'
         }, {
           transactionCategoryId: 1,
           transactionCategoryCode: 4,
-          transactionCategoryName: 'temp',
+          transactionCategoryName: 'temp3',
           transactionCategoryDescription: 'temp',
           parentTransactionCategory: 'Loream Ipsume',
           transactionType: 'TEMP'
         }, {
           transactionCategoryId: 1,
           transactionCategoryCode: 4,
-          transactionCategoryName: 'temp',
+          transactionCategoryName: 'temp4',
           transactionCategoryDescription: 'temp',
           parentTransactionCategory: 'Loream Ipsume',
           transactionType: 'TEMP'
         }, {
           transactionCategoryId: 1,
           transactionCategoryCode: 4,
-          transactionCategoryName: 'temp',
+          transactionCategoryName: 'temp5',
           transactionCategoryDescription: 'temp',
           parentTransactionCategory: 'Loream Ipsume',
           transactionType: 'TEMP'
         },{
           transactionCategoryId: 1,
           transactionCategoryCode: 4,
-          transactionCategoryName: 'temp',
+          transactionCategoryName: 'temp6',
           transactionCategoryDescription: 'temp',
           parentTransactionCategory: 'Loream Ipsume',
           transactionType: 'TEMP'
         },{
           transactionCategoryId: 1,
           transactionCategoryCode: 4,
-          transactionCategoryName: 'temp',
+          transactionCategoryName: 'temp7',
           transactionCategoryDescription: 'temp',
           parentTransactionCategory: 'Loream Ipsume',
           transactionType: 'TEMP'
