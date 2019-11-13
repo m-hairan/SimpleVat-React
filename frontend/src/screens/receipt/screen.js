@@ -174,7 +174,7 @@ class Receipt extends React.Component {
                             </DateRangePicker>
                           </FormGroup>
                           <FormGroup className="pr-3 my-1">
-                            <Input type="text" placeholder="Payment Number" />
+                            <Input type="text" placeholder="Reference Number" />
                           </FormGroup>
                           <FormGroup className="pr-3 my-1">
                             <Input type="text" placeholder="Invoice Number" />
