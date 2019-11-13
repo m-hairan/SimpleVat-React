@@ -215,7 +215,7 @@ class DetailUser extends React.Component {
                                 <i className="fa fa-dot-circle-o"></i> Update
                               </Button>
                               <Button color="secondary" className="btn-square" 
-                                onClick={() => {this.props.history.push('/admin/master/user')}}>
+                                onClick={() => {this.props.history.push('/admin/settings/user')}}>
                                 <i className="fa fa-ban"></i> Cancel
                               </Button>
                             </FormGroup>

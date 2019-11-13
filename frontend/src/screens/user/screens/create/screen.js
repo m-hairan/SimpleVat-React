@@ -219,7 +219,7 @@ class CreateUser extends React.Component {
                                 <i className="fa fa-repeat"></i> Create and More
                               </Button>
                               <Button color="secondary" className="btn-square" 
-                                onClick={() => {this.props.history.push('/admin/master/user')}}>
+                                onClick={() => {this.props.history.push('/admin/settings/user')}}>
                                 <i className="fa fa-ban"></i> Cancel
                               </Button>
                             </FormGroup>

@@ -84,6 +84,24 @@ class Header extends Component {
               <DropdownItem onClick={() => this.props.history.push('/admin/profile')}>
                 <i className="fas fa-user"></i> Profile
               </DropdownItem>
+              <DropdownItem onClick={() => this.props.history.push('/admin/settings/general')}>
+                <i className="icon-wrench"></i> General Settings
+              </DropdownItem>
+              <DropdownItem onClick={() => this.props.history.push('/admin/settings/transaction-category')}>
+                <i className="icon-graph"></i> Transaction Category
+              </DropdownItem>
+              <DropdownItem onClick={() => this.props.history.push('/admin/settings/user-role')}>
+                <i className="fas fa-users"></i> Users & Roles
+              </DropdownItem>
+              <DropdownItem onClick={() => this.props.history.push('/admin/settings/notification')}>
+                <i className="fas fa-bell"></i> Notifications
+              </DropdownItem>
+              <DropdownItem onClick={() => this.props.history.push('/admin/settings/data-backup')}>
+                <i className="fas fa-hdd-o"></i> Data Backup
+              </DropdownItem>
+              <DropdownItem onClick={() => this.props.history.push('/admin/settings/help')}>
+                <i className="fas fa-info-circle"></i> Help
+              </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
           <NavItem className="px-3">

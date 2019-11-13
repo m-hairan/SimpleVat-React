@@ -20,29 +20,31 @@ import {
 import Select from 'react-select'
 import { ToastContainer, toast } from 'react-toastify'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
-import DatePicker from 'react-datepicker'
+import DateRangePicker from 'react-bootstrap-daterangepicker'
 
 import { Loader } from 'components'
 
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
+import 'bootstrap-daterangepicker/daterangepicker.css'
 
-import * as UserActions from './actions'
+import * as JournalActions from './actions'
+
 
 import './style.scss'
 
 const mapStateToProps = (state) => {
   return ({
-    user_list: state.user.user_list
+    journal_list: state.journal.journal_list
   })
 }
 const mapDispatchToProps = (dispatch) => {
   return ({
-    UserActions: bindActionCreators(UserActions, dispatch)
+    journalActions: bindActionCreators(JournalActions, dispatch)
   })
 }
 
-class User extends React.Component {
+class Journal extends React.Component {
   
   constructor(props) {
     super(props)
@@ -51,6 +53,7 @@ class User extends React.Component {
     }
 
     this.initializeData = this.initializeData.bind(this)
+    this.renderStatus = this.renderStatus.bind(this)
     this.onRowSelect = this.onRowSelect.bind(this)
     this.onSelectAll = this.onSelectAll.bind(this)
     this.goToDetail = this.goToDetail.bind(this)
@@ -74,11 +77,17 @@ class User extends React.Component {
   }
 
   initializeData () {
-    this.props.UserActions.getUserList()
+    this.props.journalActions.getJournalList()
   }
 
-  goToDetail(row) {
-    this.props.history.push('/admin/settings/user/detail')
+  renderStatus (cell, row) {
+    return (
+      <span className="badge badge-success mb-0">status</span>
+    )
+  }
+
+  goToDetail (row) {
+    this.props.history.push('/admin/accountant/journal/detail')
   }
 
   onRowSelect (row, isSelected, e) {
@@ -91,13 +100,13 @@ class User extends React.Component {
   render() {
 
     const { loading } = this.state
-    const { user_list } = this.props
+    const { journal_list } = this.props
     const containerStyle = {
       zIndex: 1999
     }
 
     return (
-      <div className="user-screen">
+      <div className="journal-screen">
         <div className="animated fadeIn">
           <ToastContainer position="top-right" autoClose={5000} style={containerStyle} />
           <Card>
@@ -105,8 +114,8 @@ class User extends React.Component {
               <Row>
                 <Col lg={12}>
                   <div className="h4 mb-0 d-flex align-items-center">
-                    <i className="nav-icon fas fa-users" />
-                    <span className="ml-2">Users</span>
+                    <i className="fa fa-diamond" />
+                    <span className="ml-2">Journals</span>
                   </div>
                 </Col>
               </Row>
@@ -141,10 +150,10 @@ class User extends React.Component {
                           <Button
                             color="primary"
                             className="btn-square"
-                            onClick={() => this.props.history.push(`/admin/settings/user/create`)}
+                            onClick={() => this.props.history.push(`/admin/accountant/journal/create`)}
                           >
                             <i className="fas fa-plus mr-1" />
-                            New User
+                            New Journal
                           </Button>
                           <Button
                             color="warning"
@@ -161,26 +170,16 @@ class User extends React.Component {
                             <h6 className="m-0">View By : </h6>
                           </FormGroup>
                           <FormGroup className="pr-3 my-1">
-                            <Input type="text" placeholder="User Name" />
-                          </FormGroup>
-                          <FormGroup className="pr-3 my-1">
-                            <DatePicker
-                              className="form-control"
-                              placeholderText="DOB"
-                            />
-                          </FormGroup>
-                          <FormGroup className="pr-3 my-1">
                             <Select
                               className="select-min-width"
                               options={[]}
-                              placeholder="Role Name"
+                              placeholder="Status"
                             />
                           </FormGroup>
                           <FormGroup className="pr-3 my-1">
-                            <Input type="text" placeholder="Active" />
-                          </FormGroup>
-                          <FormGroup className="pr-3 my-1">
-                            <Input type="text" placeholder="Company" />
+                            <DateRangePicker>
+                              <Input type="text" placeholder="Period" />
+                            </DateRangePicker>
                           </FormGroup>
                         </Form>
                       </div>
@@ -189,12 +188,12 @@ class User extends React.Component {
                           selectRow={ this.selectRowProp }
                           search={false}
                           options={ this.options }
-                          data={user_list}
+                          data={ journal_list }
                           version="4"
                           hover
                           pagination
-                          totalSize={user_list ? user_list.length : 0}
-                          className="product-table"
+                          totalSize={journal_list ? journal_list.length : 0}
+                          className="journal-table"
                           trClassName="cursor-pointer"
                         >
                           <TableHeaderColumn
@@ -202,31 +201,50 @@ class User extends React.Component {
                             dataField="transactionCategoryName"
                             dataSort
                           >
-                            User Name
+                            Date
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionCategoryCode"
                             dataSort
                           >
-                            DOB
+                            Journal #
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="parentTransactionCategory"
                             dataSort
                           >
-                            Role Name
+                            Reference Number
                           </TableHeaderColumn>
                           <TableHeaderColumn
-                            dataField="transactionCategoryCode"
+                            dataField="transactionType"
+                            dataFormat={this.renderStatus}
                             dataSort
                           >
-                            Active
+                            Status
                           </TableHeaderColumn>
                           <TableHeaderColumn
-                            dataField="transactionCategoryCode"
+                            dataField="transactionType"
                             dataSort
                           >
-                            Company
+                            Note
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            dataField="transactionType"
+                            dataSort
+                          >
+                            Amount
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            dataField="transactionType"
+                            dataSort
+                          >
+                            Documents
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            dataField="transactionType"
+                            dataSort
+                          >
+                            Created By
                           </TableHeaderColumn>
                         </BootstrapTable>
                       </div>
@@ -241,4 +259,4 @@ class User extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(User)
+export default connect(mapStateToProps, mapDispatchToProps)(Journal)
