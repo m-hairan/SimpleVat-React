@@ -74,6 +74,18 @@ class DetailProduct extends React.Component {
                           </Col>
                           <Col lg={4}>
                             <FormGroup className="mb-3">
+                              <Label htmlFor="account_code">Account Code</Label>
+                              <Input
+                                type="text"
+                                id="account_code"
+                                name="account_code"
+                                placeholder="Enter Account Code"
+                                required
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col lg={4}>
+                            <FormGroup className="mb-3">
                               <Label htmlFor="product_code">Product Code</Label>
                               <Input
                                 type="text"
@@ -84,6 +96,8 @@ class DetailProduct extends React.Component {
                               />
                             </FormGroup>
                           </Col>
+                        </Row>
+                        <Row>
                           <Col lg={4}>
                             <FormGroup className="mb-3">
                               <Label htmlFor="parent_product">Parent Product</Label>
@@ -95,8 +109,6 @@ class DetailProduct extends React.Component {
                               />
                             </FormGroup>
                           </Col>
-                        </Row>
-                        <Row>
                           <Col lg={4}>
                             <FormGroup className="mb-3">
                               <Label htmlFor="product_price">Product Price</Label>

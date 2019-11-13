@@ -105,7 +105,7 @@ export const NOTIFICATION = {
 
 }
 
-export const ORGANIZATION_PROFILE = {
+export const ORGANIZATION = {
 
 }
 
@@ -119,4 +119,18 @@ export const REPORTS_FILING = {
 
 export const VAT_TRANSACTIONS = {
   
+}
+
+export const CHART_ACCOUNTS = {
+  
+}
+
+
+export const BEGINING_BALANCE = {
+  
+}
+
+
+export const JOURNAL = {
+  JOURNAL_LIST: 'JOURNAL_LIST'
 }

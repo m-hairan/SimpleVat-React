@@ -193,6 +193,12 @@ class Product extends React.Component {
                             dataField="transactionCategoryCode"
                             dataSort
                           >
+                            Account Code
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            dataField="transactionCategoryCode"
+                            dataSort
+                          >
                             Product Code
                           </TableHeaderColumn>
                           <TableHeaderColumn
