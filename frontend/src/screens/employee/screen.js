@@ -75,7 +75,7 @@ class Employee extends React.Component {
                           </Col>
                           <Col md="4">
                             <FormGroup>
-                              <Label htmlFor="select">Type</Label>
+                              <Label htmlFor="select">Title</Label>
                               <Input
                                 type="text"
                                 id="text-input"
@@ -184,7 +184,7 @@ class Employee extends React.Component {
                           </Col>
                           <Col md="4">
                             <FormGroup>
-                              <Label htmlFor="select">Contract Po Number</Label>
+                              <Label htmlFor="select">Contract PO Number</Label>
                               <Input
                                 type="text"
                                 id="text-input"
