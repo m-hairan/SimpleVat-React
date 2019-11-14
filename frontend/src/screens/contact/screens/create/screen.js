@@ -146,7 +146,7 @@ class CreateContact extends React.Component {
                           </Col>
                           <Col md="4">
                             <FormGroup>
-                              <Label htmlFor="select">Po Box Number</Label>
+                              <Label htmlFor="select">PO Box Number</Label>
                               <Input
                                 type="text"
                                 id="text-input"
