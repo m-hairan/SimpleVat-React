@@ -62,7 +62,7 @@ class CreateBankTransaction extends React.Component {
                         <Row>
                           <Col lg={4}>
                             <FormGroup className="mb-3">
-                              <Label htmlFor="statement_type">Type</Label>
+                              <Label htmlFor="statement_type">Transaction Type</Label>
                               <Select
                                 className="select-default-width"
                                 options={[]}

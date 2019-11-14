@@ -11,7 +11,12 @@ import {
   Form,
   FormGroup,
   Input,
-  Label
+  Label,
+  TabContent,
+  TabPane,
+  Nav,
+  NavItem,
+  NavLink,
 } from 'reactstrap'
 import Select from 'react-select'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
@@ -68,29 +73,9 @@ class ImportBankStatement extends React.Component {
                 <CardHeader>
                   <Row>
                     <Col lg={12}>
-                      <div className="d-flex flex-wrap align-items-start justify-content-between">
-                        <div>
-                          <div className="h4 card-title d-flex align-items-center">
-                            <i className="fa glyphicon glyphicon-export fa-upload" />
-                            <span className="ml-2">Import Statement</span>
-                          </div>
-                        </div>
-                        <div className="filter-box p-2">
-                          <Form onSubmit={this.handleSubmit} name="simpleForm">
-                            <div className="flex-wrap d-flex"> 
-                              <FormGroup>
-                                <Label htmlFor="date_format">Date Format:</Label>
-                                <div className="status-option">
-                                  <Select
-                                    id="date_format"
-                                    name="date_format"
-                                    options={[]}
-                                  />
-                                </div>
-                              </FormGroup>
-                            </div>
-                          </Form>
-                        </div>
+                      <div className="h4 mb-0 d-flex align-items-center">
+                        <i className="fa glyphicon glyphicon-export fa-upload" />
+                        <span className="ml-2">Import Statement</span>
                       </div>
                     </Col>
                   </Row>
@@ -98,104 +83,67 @@ class ImportBankStatement extends React.Component {
                 <CardBody>
                   <Row>
                     <Col lg={12}>
-                      <FormGroup>
-                        <Button color="primary" size="sm" className="btn-square mb-2">
-                          <i className="fa glyphicon glyphicon-export fa-upload"></i> Upload File (.csv)
-                        </Button>
-                      </FormGroup>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg={12}>
-                      <div className="mb-3">
-                        <Form>
+                      <Nav tabs>
+                        <NavItem>
+                          <NavLink
+                            active={true}
+                          >
+                            <Label className="mb-0 text-primary">
+                              Preview for Imported Statement
+                            </Label>
+                          </NavLink>
+                        </NavItem>
+                      </Nav>
+                      <TabContent activeTab={'1'}>
+                        <TabPane tabId="1"> 
                           <Row>
-                            <Col lg={4}>
-                              <FormGroup className="mb-3">
-                                <Label htmlFor="delimiter">Delimiter</Label>
-                                <Input
-                                  type="text"
-                                  id="delimiter"
-                                  name="delimiter"
-                                  value=","
-                                  placeholder=""
-                                />
-                              </FormGroup>
-                            </Col>
-                            <Col lg={4}>
-                              <FormGroup className="mb-3">
-                                <Label htmlFor="skip_rows">Skip Rows</Label>
-                                <Input
-                                  type="text"
-                                  id="skip_rows"
-                                  name="skip_rows"
-                                  value="0"
-                                  placeholder=""
-                                />
-                              </FormGroup>
+                            <Col lg={12}>
+                              <BootstrapTable
+                                search={false}
+                                options={ this.options }
+                                data={bank_transaction_list}
+                                version="4"
+                                hover
+                                pagination
+                                totalSize={ bank_transaction_list ? bank_transaction_list.length : 0}
+                                className="preview-bank-transaction-table"
+                              >
+                                <TableHeaderColumn
+                                  isKey
+                                  dataField="reference_number"
+                                  dataSort
+                                >
+                                  Reference Number
+                                </TableHeaderColumn>
+                                <TableHeaderColumn
+                                  dataField="transaction_type"
+                                  dataSort
+                                >
+                                  Transaction Type
+                                </TableHeaderColumn>
+                                <TableHeaderColumn
+                                  dataField="amount"
+                                  dataSort
+                                >
+                                  Amount
+                                </TableHeaderColumn>
+                                <TableHeaderColumn
+                                  dataField="description"
+                                  dataSort
+                                >
+                                  Description
+                                </TableHeaderColumn>
+                                <TableHeaderColumn
+                                  dataField="transaction_date"
+                                  dataSort
+                                >
+                                  Transaction Date
+                                </TableHeaderColumn>
+                              </BootstrapTable>
                             </Col>
                           </Row>
-                          <Row>
-                            <Col lg={4}>
-                              <FormGroup check inline className="">
-                                <Input
-                                  className="form-check-input"
-                                  type="checkbox"
-                                  id="header_row"
-                                  name="header_row"
-                                />
-                                <Label className="form-check-label" check htmlFor="header_row">Header Row</Label>
-                              </FormGroup>
-                            </Col>
-                          </Row>
-                        </Form>
-                      </div>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col lg={12}>
-                      <BootstrapTable
-                        search={false}
-                        options={ this.options }
-                        data={bank_transaction_list}
-                        version="4"
-                        hover
-                        pagination
-                        totalSize={ bank_transaction_list ? bank_transaction_list.length : 0}
-                        className="preview-bank-transaction-table"
-                      >
-                        <TableHeaderColumn
-                          isKey
-                          dataField="reference_number"
-                          dataSort
-                        >
-                          Reference Number
-                        </TableHeaderColumn>
-                        <TableHeaderColumn
-                          dataField="transaction_type"
-                          dataSort
-                        >
-                          Transaction Type
-                        </TableHeaderColumn>
-                        <TableHeaderColumn
-                          dataField="amount"
-                          dataSort
-                        >
-                          Amount
-                        </TableHeaderColumn>
-                        <TableHeaderColumn
-                          dataField="description"
-                          dataSort
-                        >
-                          Description
-                        </TableHeaderColumn>
-                        <TableHeaderColumn
-                          dataField="transaction_date"
-                          dataSort
-                        >
-                          Transaction Date
-                        </TableHeaderColumn>
-                      </BootstrapTable>
+                        </TabPane>
+                      </TabContent>
                     </Col>
                   </Row>
                   <Row>

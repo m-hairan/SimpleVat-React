@@ -126,8 +126,16 @@ class BankTransactions extends React.Component {
   }
 
   renderTransactionStatus (cell, row) {
+    let classname = ''
+    if (row.status == 'Explained') {
+      classname = 'badge-success'
+    } else if (row.status == 'Unexplained') {
+      classname = 'badge-danger'
+    } else {
+      classname = 'badge-primary'
+    }
     return (
-      <span className="badge badge-success mb-0">Reconciled</span>
+      <span className={ `badge ${classname} mb-0` }>{ row.status }</span>
     )
   }
 
@@ -262,7 +270,7 @@ class BankTransactions extends React.Component {
                           className="bank-transaction-table"
                         >
                           <TableHeaderColumn
-                            width="110"
+                            width="120"
                             dataFormat={this.renderTransactionStatus}
                           >
                             Status
