@@ -16,18 +16,18 @@ import {
 import Select from 'react-select'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
 
-import { BankStatement } from 'screens'
+import BankTransactions from '../transactions'
 
 import './style.scss'
 
 const mapStateToProps = (state) => {
   return ({
-    bank_statement_list: state.bank_statement.bank_statement_list
+    bank_transaction_list: state.bank_account.bank_transaction_list
   })
 }
 const mapDispatchToProps = (dispatch) => {
   return ({
-    bankStatementActions: bindActionCreators(BankStatement.actions, dispatch)
+    transactionActions: bindActionCreators(BankTransactions.actions, dispatch)
   })
 }
 
@@ -53,7 +53,7 @@ class ImportBankStatement extends React.Component {
   }
 
   initializeData () {
-    this.props.bankStatementActions.getBankStatementList()
+    this.props.transactionActions.getTransactionList()
   }
 
   renderTransactionStatus (cell, row) {
@@ -65,7 +65,7 @@ class ImportBankStatement extends React.Component {
 
   render() {
 
-    const { bank_statement_list } = this.props
+    const { bank_transaction_list } = this.props
 
     return (
       <div className="import-bank-statement-screen">
@@ -80,7 +80,7 @@ class ImportBankStatement extends React.Component {
                         <div>
                           <div className="h4 card-title d-flex align-items-center">
                             <i className="fa glyphicon glyphicon-export fa-upload" />
-                            <span className="ml-2">Import Bank Statements from CSV</span>
+                            <span className="ml-2">Import Statement</span>
                           </div>
                         </div>
                         <div className="filter-box p-2">
@@ -165,12 +165,12 @@ class ImportBankStatement extends React.Component {
                       <BootstrapTable
                         search={false}
                         options={ this.options }
-                        data={bank_statement_list}
+                        data={bank_transaction_list}
                         version="4"
                         hover
                         pagination
-                        totalSize={ bank_statement_list ? bank_statement_list.length : 0}
-                        className="upload-bank-statement-table"
+                        totalSize={ bank_transaction_list ? bank_transaction_list.length : 0}
+                        className="upload-bank-transaction-table"
                       >
                         <TableHeaderColumn
                           dataFormat={this.renderTransactionStatus}
@@ -212,7 +212,7 @@ class ImportBankStatement extends React.Component {
                           <i className="fa fa-dot-circle-o"></i> Import
                         </Button>
                         <Button color="secondary" className="btn-square" 
-                          onClick={() => this.props.history.push('/admin/bank/bank-statement')}>
+                          onClick={() => this.props.history.push('/admin/bank/transactions')}>
                           <i className="fa fa-ban"></i> Cancel
                         </Button>
                       </FormGroup>

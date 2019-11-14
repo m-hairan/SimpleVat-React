@@ -27,7 +27,7 @@ const mapDispatchToProps = (dispatch) => {
   })
 }
 
-class DetailBankStatement extends React.Component {
+class CreateBankTransaction extends React.Component {
   
   constructor(props) {
     super(props)
@@ -40,7 +40,7 @@ class DetailBankStatement extends React.Component {
   render() {
 
     return (
-      <div className="detail-bank-statement-screen">
+      <div className="create-bank-transaction-screen">
         <div className="animated fadeIn">
           <Row>
             <Col lg={12} className="mx-auto">
@@ -50,7 +50,7 @@ class DetailBankStatement extends React.Component {
                     <Col lg={12}>
                       <div className="h4 mb-0 d-flex align-items-center">
                         <i className="icon-doc" />
-                        <span className="ml-2">Update Bank Statement</span>
+                        <span className="ml-2">Create Bank Transaction</span>
                       </div>
                     </Col>
                   </Row>
@@ -186,7 +186,10 @@ class DetailBankStatement extends React.Component {
                           <Col lg={12} className="mt-5">
                             <FormGroup className="text-right">
                               <Button type="submit" color="primary" className="btn-square mr-3">
-                                <i className="fa fa-dot-circle-o"></i> Update
+                                <i className="fa fa-dot-circle-o"></i> Create
+                              </Button>
+                              <Button type="submit" color="primary" className="btn-square mr-3">
+                                <i className="fa fa-repeat"></i> Create and More
                               </Button>
                               <Button color="secondary" className="btn-square" 
                                 onClick={() => this.props.history.push('/admin/bank/bank-statement')}>
@@ -208,4 +211,4 @@ class DetailBankStatement extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DetailBankStatement)
+export default connect(mapStateToProps, mapDispatchToProps)(CreateBankTransaction)

@@ -117,7 +117,7 @@ class BankAccount extends React.Component {
     return (
     <label
       className="mb-0 my-link"
-      onClick={() => this.props.history.push('/admin/bank/transactions')}
+      onClick={() => this.props.history.push('/admin/bank/transaction')}
     >
       { row.account_number }
     </label>
@@ -143,10 +143,10 @@ class BankAccount extends React.Component {
             <DropdownItem onClick={() => this.props.history.push('/admin/bank/detail')}>
               <i className="fas fa-edit" /> Edit
             </DropdownItem>
-            <DropdownItem onClick={() => this.props.history.push('/admin/bank/transactions')}>
+            <DropdownItem onClick={() => this.props.history.push('/admin/bank/transaction')}>
               <i className="fas fa-eye" /> View Transactions
             </DropdownItem>
-            <DropdownItem>
+            <DropdownItem onClick={() => this.props.history.push('/admin/bank/import-statement')}>
               <i className="fas fa-upload" /> Import Statement
             </DropdownItem>
             <DropdownItem>
@@ -216,6 +216,7 @@ class BankAccount extends React.Component {
                           <Button
                             color="info"
                             className="btn-square"
+                            onClick={() => this.props.history.push('/admin/bank/import-statement')}
                           >
                             <i className="fa glyphicon glyphicon-export fa-upload mr-1" />
                             Import Statement

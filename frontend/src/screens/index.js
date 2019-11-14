@@ -22,11 +22,12 @@ import BeginingBalance from './begining_balance'
 import BankAccount from './bank_account'
 import CreateBankAccount from './bank_account/screens/create'
 import DetailBankAccount from './bank_account/screens/detail'
-import BankAccountTransactions from './bank_account/screens/transactions'
-import BankStatement from './bank_statement'
-import CreateBankStatement from './bank_statement/screens/create'
-import DetailBankStatement from './bank_statement/screens/detail'
-import ImportBankStatement from './bank_statement/screens/import'
+import BankTransactions from './bank_account/screens/transactions'
+import CreateBankTransaction from './bank_account/screens/transactions/screens/create'
+import DetailBankTransaction from './bank_account/screens/transactions/screens/detail'
+import ImportBankStatement from './bank_account/screens/import'
+
+
 
 
 
@@ -127,10 +128,9 @@ export {
   BankAccount,
   CreateBankAccount,
   DetailBankAccount,
-  BankAccountTransactions,
-  BankStatement,
-  CreateBankStatement,
-  DetailBankStatement,
+  BankTransactions,
+  CreateBankTransaction,
+  DetailBankTransaction,
   ImportBankStatement,
 
 

@@ -23,7 +23,7 @@ export default {
       ]
     },
     {
-      name: 'Banking',
+      name: 'Bank',
       url: '/admin/bank',
       icon: 'fas fa-university'
     },
