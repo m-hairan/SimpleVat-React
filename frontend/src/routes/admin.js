@@ -12,11 +12,11 @@ import {
   BankAccount,
   CreateBankAccount,
   DetailBankAccount,
-  BankAccountTransactions,
-  BankStatement,
-  CreateBankStatement,
-  DetailBankStatement,
+  BankTransactions,
+  CreateBankTransaction,
+  DetailBankTransaction,
   ImportBankStatement,
+
 
 
 
@@ -142,13 +142,28 @@ const adminRoutes = [
     component: DetailBankAccount.screen
   },
   {
-    path: '/admin/bank/transactions',
-    name: 'Transactions',
-    component: BankAccountTransactions.screen
+    path: '/admin/bank/transaction/create',
+    name: 'Create',
+    component: CreateBankTransaction.screen
+  },
+  {
+    path: '/admin/bank/transaction/detail',
+    name: 'Detail',
+    component: DetailBankTransaction.screen
+  },
+  {
+    path: '/admin/bank/transaction',
+    name: 'Transaction',
+    component: BankTransactions.screen
+  },
+  {
+    path: '/admin/bank/import-statement',
+    name: 'Import Statement',
+    component: ImportBankStatement.screen
   },
   {
     path: '/admin/bank',
-    name: 'Banking',
+    name: 'Bank Account',
     component: BankAccount.screen
   },
 

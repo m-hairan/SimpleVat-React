@@ -27,7 +27,7 @@ const mapDispatchToProps = (dispatch) => {
   })
 }
 
-class CreateBankStatement extends React.Component {
+class CreateBankTransaction extends React.Component {
   
   constructor(props) {
     super(props)
@@ -40,7 +40,7 @@ class CreateBankStatement extends React.Component {
   render() {
 
     return (
-      <div className="create-bank-statement-screen">
+      <div className="create-bank-transaction-screen">
         <div className="animated fadeIn">
           <Row>
             <Col lg={12} className="mx-auto">
@@ -50,7 +50,7 @@ class CreateBankStatement extends React.Component {
                     <Col lg={12}>
                       <div className="h4 mb-0 d-flex align-items-center">
                         <i className="icon-doc" />
-                        <span className="ml-2">Create Bank Statement</span>
+                        <span className="ml-2">Create Bank Transaction</span>
                       </div>
                     </Col>
                   </Row>
@@ -62,7 +62,7 @@ class CreateBankStatement extends React.Component {
                         <Row>
                           <Col lg={4}>
                             <FormGroup className="mb-3">
-                              <Label htmlFor="statement_type">Type</Label>
+                              <Label htmlFor="statement_type">Transaction Type</Label>
                               <Select
                                 className="select-default-width"
                                 options={[]}
@@ -192,7 +192,7 @@ class CreateBankStatement extends React.Component {
                                 <i className="fa fa-repeat"></i> Create and More
                               </Button>
                               <Button color="secondary" className="btn-square" 
-                                onClick={() => this.props.history.push('/admin/bank/bank-statement')}>
+                                onClick={() => this.props.history.push('/admin/bank/transaction')}>
                                 <i className="fa fa-ban"></i> Cancel
                               </Button>
                             </FormGroup>
@@ -211,4 +211,4 @@ class CreateBankStatement extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateBankStatement)
+export default connect(mapStateToProps, mapDispatchToProps)(CreateBankTransaction)

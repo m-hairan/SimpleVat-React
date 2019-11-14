@@ -1,4 +1,4 @@
-import { TEMP } from 'constants/types'
+import { BANK_ACCOUNT } from 'constants/types'
 import {
   api,
   authApi
