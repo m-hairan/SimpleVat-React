@@ -56,10 +56,19 @@ class BankTransactions extends React.Component {
       loading: false,
       openDeleteModal: false,
       stateOptions: [
-        { value: 'Explained', label: 'Explained' },
-        { value: 'Unexplained', label: 'Unexplained' },
-        { value: 'Partially Explained', label: 'Partially Explained' },
+        { value: 'Uncategorized', label: 'Uncategorized' },
+        { value: 'Recognized', label: 'Recognized' },
+        { value: 'Excluded', label: 'Excluded' },
       ],
+      statusOptions: [
+        { value: 'All', label: 'All' },
+        { value: 'Matched', label: 'Matched' },
+        { value: 'Manually Added', label: 'Manually Added' },
+        { value: 'Categorized', label: 'Categorized' },
+        { value: 'Reconciled', label: 'Reconciled' },
+        { value: 'Unreconciled', label: 'Unreconciled' }
+      ]
+      ,
       actionButtons: {},
 
       selectedData: null
@@ -179,7 +188,11 @@ class BankTransactions extends React.Component {
 
   render() {
 
-    const { loading } = this.state
+    const {
+      loading,
+      stateOptions,
+      statusOptions
+    } = this.state
     const { bank_transaction_list } = this.props
     const containerStyle = {
       zIndex: 1999
@@ -229,6 +242,14 @@ class BankTransactions extends React.Component {
                             <i className="fas fa-plus mr-1" />
                             New Transaction
                           </Button>
+                          <Button
+                            color="success"
+                            className="btn-square"
+                            onClick={() => this.props.history.push('/admin/bank/detail')}
+                          >
+                            <i className="fas fa-edit mr-1" />
+                            Edit Account
+                          </Button>
                         </ButtonGroup>
                       </div>
                       <div className="py-3">
@@ -239,21 +260,15 @@ class BankTransactions extends React.Component {
                           <FormGroup className="pr-3 my-1">
                             <Select
                               className="select-min-width"
-                              options={[]}
-                              placeholder="Bank"
+                              options={stateOptions}
+                              placeholder="Transaction State"
                             />
-                          </FormGroup>
-                          <FormGroup className="pr-3 my-1">
-                            <Input type="text" placeholder="Account Number" />
-                          </FormGroup>
-                          <FormGroup className="pr-3 my-1">
-                            <Input type="text" placeholder="Account Name" />
                           </FormGroup>
                           <FormGroup className="pr-3 my-1">
                             <Select
                               className="select-min-width"
-                              options={[]}
-                              placeholder="Status"
+                              options={statusOptions}
+                              placeholder="Transaction Status"
                             />
                           </FormGroup>
                         </Form>
@@ -281,25 +296,31 @@ class BankTransactions extends React.Component {
                             dataFormat={this.renderAccountNumber}
                             dataSort
                           >
-                            Account Number
+                            Reference Number
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="description"
                             dataSort
                           >
-                            Account Name
+                            Transaction Type
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="amount"
                             dataSort
                           >
-                            Number of Records
+                            Amount
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="amount"
                             dataSort
                           >
-                            Upload Date
+                            Description
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            dataField="amount"
+                            dataSort
+                          >
+                            Transaction Date
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             className="text-right"

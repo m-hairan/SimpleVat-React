@@ -97,13 +97,14 @@ body, span, label, h1, h2, h3, h4, p, em {
 
 // react-bootstrap-table styles
 .react-bs-table-container {
+  margin-bottom: 15px !important;
   .react-bs-table {
     border-radius: 0 !important;
     border-top-width: 2px !important;
     border-left: none !important;
     border-right: none !important;
     td {
-      vertical-align: middle !important;
+      vertical-align: top !important;
       border-left: 0px !important;
       border-right: 0px !important;
       .btn-group {
