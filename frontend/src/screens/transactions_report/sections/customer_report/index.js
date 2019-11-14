@@ -195,7 +195,6 @@ class CustomerReport extends React.Component {
                     dataField="status" 
                     dataFormat={this.getInvoiceStatus}
                   >
-                    Status
                   </TableHeaderColumn>
                   <TableHeaderColumn
                     isKey

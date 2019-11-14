@@ -4,7 +4,7 @@ import {
   authApi
 } from 'utils'
 
-export const initialData = (obj) => {
+export const initialData = () => {
   return (dispatch) => {
     
   }

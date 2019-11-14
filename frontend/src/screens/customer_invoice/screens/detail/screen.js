@@ -49,6 +49,7 @@ class DetailCustomerInvoice extends React.Component {
     }
 
     this.options = {
+      paginationPosition: 'top'
     }
 
     this.renderActions = this.renderActions.bind(this)

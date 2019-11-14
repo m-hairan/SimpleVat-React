@@ -72,6 +72,7 @@ class CustomerInvoice extends React.Component {
     this.toggleActionButton = this.toggleActionButton.bind(this)
 
     this.options = {
+      paginationPosition: 'top'
     }
     this.selectRowProp = {
       mode: 'checkbox',
@@ -315,7 +316,6 @@ class CustomerInvoice extends React.Component {
                             width="130"
                             dataFormat={this.renderInvoiceStatus}
                           >
-                            Status
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             isKey
