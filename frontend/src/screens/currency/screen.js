@@ -185,44 +185,45 @@ class Currency extends React.Component {
           <Modal isOpen={openCurrencyModal}
             className={"modal-success " + this.props.className}
           >
-            <ModalHeader toggle={this.toggleDanger}>Create & Update Currency</ModalHeader>
-            <ModalBody>
-              <Form onSubmit={this.handleSubmit} name="simpleForm">
-                <FormGroup>
-                  <Label htmlFor="categoryCode">Currency Code</Label>
-                  <Select
-                    className="select-min-width"
-                    options={[]}
-                    placeholder="User Role"
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label htmlFor="categoryName">*Currency Name</Label>
-                  <Input
-                    type="text"
-                    id="categoryName"
-                    name="categoryName"
-                    placeholder="Enter Name"
-                    required
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label htmlFor="categoryCode">*Symbol</Label>
-                  <Input
-                    type="text"
-                    id="categoryCode"
-                    name="categoryCode"
-                    placeholder="Enter Symbol"
-                    required
-                  />
-                </FormGroup>
+            <Form name="simpleForm">
+              <ModalHeader toggle={this.toggleDanger}>Create & Update Currency</ModalHeader>
+              <ModalBody>
                 
-              </Form>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="success" className="btn-square" onClick={this.closeCurrencyModal}>Save</Button>&nbsp;
-              <Button color="secondary" className="btn-square" onClick={this.closeCurrencyModal}>Cancel</Button>
-            </ModalFooter>
+                  <FormGroup>
+                    <Label htmlFor="categoryCode">Currency Code</Label>
+                    <Select
+                      className="select-min-width"
+                      options={[]}
+                      placeholder="User Role"
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label htmlFor="categoryName"><span className="text-danger">*</span>Currency Name</Label>
+                    <Input
+                      type="text"
+                      id="categoryName"
+                      name="categoryName"
+                      placeholder="Enter Name"
+                      required
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label htmlFor="categoryCode"><span className="text-danger">*</span>Symbol</Label>
+                    <Input
+                      type="text"
+                      id="categoryCode"
+                      name="categoryCode"
+                      placeholder="Enter Symbol"
+                      required
+                    />
+                  </FormGroup>
+                
+              </ModalBody>
+              <ModalFooter>
+                <Button color="success" className="btn-square">Save</Button>&nbsp;
+                <Button color="secondary" className="btn-square" onClick={this.closeCurrencyModal}>Cancel</Button>
+              </ModalFooter>
+            </Form>
           </Modal>
         </div>
       </div>

@@ -143,14 +143,12 @@ class VatCode extends React.Component {
   render() {
     const { loading } = this.state
     const vatList = this.props.vat_list
-    const containerStyle = {
-        zIndex: 1999
-    }
+   
 
     return (
       <div className="vat-code-screen">
         <div className="animated fadeIn">
-          <ToastContainer position="top-right" autoClose={3000} style={containerStyle} />
+          <ToastContainer position="top-right" autoClose={3000}  />
           <Card>
             <CardHeader>
               <div className="h4 mb-0 d-flex align-items-center">

@@ -34,8 +34,16 @@ class Employee extends React.Component {
     super(props)
     this.state = {
       loading: false,
+      birthday: new Date()
     }
 
+    this.changeBirthday = this.changeBirthday.bind(this)
+  }
+
+  changeBirthday(date){
+    this.setState({
+      birthday: date
+    })
   }
 
   render() {
@@ -75,7 +83,7 @@ class Employee extends React.Component {
                           </Col>
                           <Col md="4">
                             <FormGroup>
-                              <Label htmlFor="select">Type</Label>
+                              <Label htmlFor="select">Title</Label>
                               <Input
                                 type="text"
                                 id="text-input"
@@ -162,6 +170,8 @@ class Employee extends React.Component {
                                   className="form-control"
                                   id="date"
                                   name="date"
+                                  selected={this.state.birthday}
+                                  onChange={this.changeBirthday}
                                   placeholderText=""
                                 />
                               </div>
@@ -184,7 +194,7 @@ class Employee extends React.Component {
                           </Col>
                           <Col md="4">
                             <FormGroup>
-                              <Label htmlFor="select">Contract Po Number</Label>
+                              <Label htmlFor="select">Contract PO Number</Label>
                               <Input
                                 type="text"
                                 id="text-input"

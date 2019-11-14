@@ -86,7 +86,6 @@ class DetailVatCode extends React.Component {
   handleSubmit = (e, status) => {
     e.preventDefault()
 
-    this.setState({ loading: true })
     const { name, vat, id } = this.state.vatData
 
     let postObj
@@ -109,7 +108,6 @@ class DetailVatCode extends React.Component {
     const { loading } = this.state
     const { name, vat } = this.state.vatData ? this.state.vatData : {}
 
-    console.log(name, vat)
     return (
       <div className="detail-vat-code-screen">
         <div className="animated fadeIn">
