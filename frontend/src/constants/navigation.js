@@ -23,6 +23,11 @@ export default {
       ]
     },
     {
+      name: 'Banking',
+      url: '/admin/bank',
+      icon: 'fas fa-university'
+    },
+    {
       name: 'Revenue',
       url: '/admin/revenue',
       icon: 'far fa-address-book',
@@ -58,23 +63,6 @@ export default {
           name: 'Payments',
           url: '/admin/expense/payment',
           icon: 'fas fa-money-check',
-        }
-      ]
-    },
-    {
-      name: 'Bank',
-      url: '/admin/bank',
-      icon: 'fas fa-folder',
-      children: [
-        {
-          name: 'Bank Accounts',
-          url: '/admin/bank/bank-account',
-          icon: 'fas fa-university',
-        },
-        {
-          name: 'Bank Statements',
-          url: '/admin/bank/bank-statement',
-          icon: 'icon-doc',
         }
       ]
     },

@@ -9,6 +9,17 @@ import {
 
 
 
+  BankAccount,
+  CreateBankAccount,
+  DetailBankAccount,
+  BankAccountTransactions,
+  BankStatement,
+  CreateBankStatement,
+  DetailBankStatement,
+  ImportBankStatement,
+
+
+
   CustomerInvoice,
   CreateCustomerInvoice,
   DetailCustomerInvoice,
@@ -27,16 +38,6 @@ import {
   Payment,
   CreatePayment,
   DetailPayment,
-
-
-
-  BankAccount,
-  CreateBankAccount,
-  DetailBankAccount,
-  BankStatement,
-  CreateBankStatement,
-  DetailBankStatement,
-  ImportBankStatement,
 
 
 
@@ -122,6 +123,39 @@ const adminRoutes = [
     pathTo: '/admin/accountant/journal',
     name: 'Accountant'
   },
+
+
+
+
+
+
+  
+
+  {
+    path: '/admin/bank/create',
+    name: 'Create',
+    component: CreateBankAccount.screen
+  },
+  {
+    path: '/admin/bank/detail',
+    name: 'Detail',
+    component: DetailBankAccount.screen
+  },
+  {
+    path: '/admin/bank/transactions',
+    name: 'Transactions',
+    component: BankAccountTransactions.screen
+  },
+  {
+    path: '/admin/bank',
+    name: 'Banking',
+    component: BankAccount.screen
+  },
+
+
+
+
+
 
 
 
@@ -220,53 +254,6 @@ const adminRoutes = [
     name: 'Expense'
   },
 
-
-
-
-
-
-
-  {
-    path: '/admin/bank/bank-account/create',
-    name: 'Create',
-    component: CreateBankAccount.screen
-  },
-  {
-    path: '/admin/bank/bank-account/detail',
-    name: 'Detail',
-    component: DetailBankAccount.screen
-  },
-  {
-    path: '/admin/bank/bank-account',
-    name: 'Bank Account',
-    component: BankAccount.screen
-  },
-  {
-    path: '/admin/bank/bank-statement/import',
-    name: 'Import',
-    component: ImportBankStatement.screen
-  },
-  {
-    path: '/admin/bank/bank-statement/create',
-    name: 'Create',
-    component: CreateBankStatement.screen
-  },
-  {
-    path: '/admin/bank/bank-statement/detail',
-    name: 'Detail',
-    component: DetailBankStatement.screen
-  },
-  {
-    path: '/admin/bank/bank-statement',
-    name: 'Bank Statement',
-    component: BankStatement.screen
-  },
-  {
-    redirect: true,
-    path: '/admin/bank',
-    pathTo: '/admin/bank/bank-account',
-    name: 'Bank'
-  },
 
 
 
