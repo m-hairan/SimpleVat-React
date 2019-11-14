@@ -72,6 +72,7 @@ class SupplierInvoice extends React.Component {
     this.toggleActionButton = this.toggleActionButton.bind(this)
 
     this.options = {
+      paginationPosition: 'top'
     }
     this.selectRowProp = {
       mode: 'checkbox',

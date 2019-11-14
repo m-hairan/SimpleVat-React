@@ -40,6 +40,7 @@ class ImportBankStatement extends React.Component {
     }
 
     this.options = {
+      paginationPosition: 'top'
     }
 
     this.initializeData = this.initializeData.bind(this)

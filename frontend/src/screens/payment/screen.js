@@ -64,7 +64,8 @@ class Payment extends React.Component {
     this.goToDetail = this.goToDetail.bind(this)
 
     this.options = {
-      onRowClick: this.goToDetail
+      onRowClick: this.goToDetail,
+      paginationPosition: 'top'
     }
 
     this.selectRowProp = {

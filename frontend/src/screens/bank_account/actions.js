@@ -16,7 +16,7 @@ export const getBankAccountList = () => {
           account_number: 'DGLE23042322340',
           IBAN_number: 'TYE234254343',
           currency: 234204924,
-          account_type: 'Credit Card',
+          account_type: 'Bank',
           swift_code: 'UYR239239',
           opening_balance: 234293
         }, {
@@ -26,7 +26,7 @@ export const getBankAccountList = () => {
           account_number: 'DGLE2304230291',
           IBAN_number: 'TYE234254343',
           currency: 234204924,
-          account_type: 'Credit Card',
+          account_type: 'Bank',
           swift_code: 'UYR239239',
           opening_balance: 234293
         }, {
@@ -36,7 +36,7 @@ export const getBankAccountList = () => {
           account_number: 'DGLE230429042',
           IBAN_number: 'TYE234254343',
           currency: 234204924,
-          account_type: 'Credit Card',
+          account_type: 'Bank',
           swift_code: 'UYR239239',
           opening_balance: 234293
         }, {
@@ -46,7 +46,7 @@ export const getBankAccountList = () => {
           account_number: 'DGLE2304232183',
           IBAN_number: 'TYE234254343',
           currency: 234204924,
-          account_type: 'Credit Card',
+          account_type: 'Bank',
           swift_code: 'UYR239239',
           opening_balance: 234293
         },  {
@@ -56,7 +56,7 @@ export const getBankAccountList = () => {
           account_number: 'DGLE23042302934',
           IBAN_number: 'TYE234254343',
           currency: 234204924,
-          account_type: 'Credit Card',
+          account_type: 'Bank',
           swift_code: 'UYR239239',
           opening_balance: 234293
         }, {
@@ -66,7 +66,7 @@ export const getBankAccountList = () => {
           account_number: 'DGLE230429045',
           IBAN_number: 'TYE234254343',
           currency: 234204924,
-          account_type: 'Credit Card',
+          account_type: 'Bank',
           swift_code: 'UYR239239',
           opening_balance: 234293
         }, {
@@ -76,7 +76,7 @@ export const getBankAccountList = () => {
           account_number: 'DGLE2304232186',
           IBAN_number: 'TYE234254343',
           currency: 234204924,
-          account_type: 'Credit Card',
+          account_type: 'Bank',
           swift_code: 'UYR239239',
           opening_balance: 234293
         },  {
@@ -86,7 +86,7 @@ export const getBankAccountList = () => {
           account_number: 'DGLE23042302937',
           IBAN_number: 'TYE234254343',
           currency: 234204924,
-          account_type: 'Credit Card',
+          account_type: 'Bank',
           swift_code: 'UYR239239',
           opening_balance: 234293
         }, {
@@ -96,7 +96,7 @@ export const getBankAccountList = () => {
           account_number: 'DGLE230429048',
           IBAN_number: 'TYE234254343',
           currency: 234204924,
-          account_type: 'Credit Card',
+          account_type: 'Bank',
           swift_code: 'UYR239239',
           opening_balance: 234293
         }, {
@@ -106,7 +106,7 @@ export const getBankAccountList = () => {
           account_number: 'DGLE2304232189',
           IBAN_number: 'TYE234254343',
           currency: 234204924,
-          account_type: 'Credit Card',
+          account_type: 'Bank',
           swift_code: 'UYR239239',
           opening_balance: 234293
         }]

@@ -49,6 +49,7 @@ class CreateSupplierInvoice extends React.Component {
     }
 
     this.options = {
+      paginationPosition: 'top'
     }
 
     this.renderActions = this.renderActions.bind(this)
