@@ -20,6 +20,7 @@ import {
 } from 'reactstrap'
 import Select from 'react-select'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
+import Stepper from 'react-stepper-horizontal'
 
 import BankTransactions from '../transactions'
 
