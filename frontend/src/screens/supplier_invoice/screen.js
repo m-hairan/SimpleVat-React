@@ -316,7 +316,6 @@ class SupplierInvoice extends React.Component {
                             width="130"
                             dataFormat={this.renderInvoiceStatus}
                           >
-                            Status
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             isKey

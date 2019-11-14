@@ -78,6 +78,7 @@ class BankTransactions extends React.Component {
     this.toggleDangerModal = this.toggleDangerModal.bind(this)
     this.renderAccountNumber = this.renderAccountNumber.bind(this)
     this.renderTransactionStatus = this.renderTransactionStatus.bind(this)
+    this.renderTransactionType = this.renderTransactionType.bind(this)
     this.renderActions = this.renderActions.bind(this)
     this.onRowSelect = this.onRowSelect.bind(this)
     this.onSelectAll = this.onSelectAll.bind(this)
@@ -145,6 +146,24 @@ class BankTransactions extends React.Component {
     }
     return (
       <span className={ `badge ${classname} mb-0` }>{ row.status }</span>
+    )
+  }
+
+  renderTransactionType (cell, row) {
+    let classname = ''
+    let value = ''
+    if (row.status == 'Explained') {
+      classname = 'badge-success'
+      value = 'Cost of Goods Sold'
+    } else if (row.status == 'Unexplained') {
+      classname = 'badge-danger'
+      value = 'Expense'
+    } else {
+      classname = 'badge-primary'
+      value = 'Tax Claim'
+    }
+    return (
+      <span className={ `badge ${classname} mb-0` }>{ value }</span>
     )
   }
 
@@ -288,7 +307,6 @@ class BankTransactions extends React.Component {
                             width="120"
                             dataFormat={this.renderTransactionStatus}
                           >
-                            Status
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             isKey
@@ -300,6 +318,7 @@ class BankTransactions extends React.Component {
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="description"
+                            dataFormat={this.renderTransactionType}
                             dataSort
                           >
                             Transaction Type
@@ -308,13 +327,13 @@ class BankTransactions extends React.Component {
                             dataField="amount"
                             dataSort
                           >
-                            Amount
+                            Description
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="amount"
                             dataSort
                           >
-                            Description
+                            Amount
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="amount"
