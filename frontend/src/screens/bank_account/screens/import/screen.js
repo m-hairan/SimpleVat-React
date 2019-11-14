@@ -50,6 +50,7 @@ class ImportBankStatement extends React.Component {
     }
 
     this.initializeData = this.initializeData.bind(this)
+    this.renderTransactionType = this.renderTransactionType.bind(this)
 
   }
 
@@ -59,6 +60,24 @@ class ImportBankStatement extends React.Component {
 
   initializeData () {
     this.props.transactionActions.getTransactionList()
+  }
+
+  renderTransactionType (cell, row) {
+    let classname = ''
+    let value = ''
+    if (row.status == 'Explained') {
+      classname = 'badge-success'
+      value = 'Cost of Goods Sold'
+    } else if (row.status == 'Unexplained') {
+      classname = 'badge-danger'
+      value = 'Expense'
+    } else {
+      classname = 'badge-primary'
+      value = 'Tax Claim'
+    }
+    return (
+      <span className={ `badge ${classname} mb-0` }>{ value }</span>
+    )
   }
 
   render() {
@@ -118,6 +137,7 @@ class ImportBankStatement extends React.Component {
                                 </TableHeaderColumn>
                                 <TableHeaderColumn
                                   dataField="transaction_type"
+                                  dataFormat={this.renderTransactionType}
                                   dataSort
                                 >
                                   Transaction Type
