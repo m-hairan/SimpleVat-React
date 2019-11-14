@@ -144,18 +144,6 @@ class CreateBankAccount extends React.Component {
                               />
                             </FormGroup>
                           </Col>
-                          <Col lg={4}>
-                            <FormGroup className="mb-3">
-                              <Label htmlFor="account_number">Account Number</Label>
-                              <Input
-                                type="text"
-                                id="account_number"
-                                name="account_number"
-                                placeholder="Enter Account Number"
-                                required
-                              />
-                            </FormGroup>
-                          </Col>
                         </Row>
                         <Row>
                           <Col lg={4}>
