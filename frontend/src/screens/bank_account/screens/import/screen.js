@@ -44,7 +44,6 @@ class ImportBankStatement extends React.Component {
     }
 
     this.initializeData = this.initializeData.bind(this)
-    this.renderTransactionStatus = this.renderTransactionStatus.bind(this)
 
   }
 
@@ -55,13 +54,6 @@ class ImportBankStatement extends React.Component {
   initializeData () {
     this.props.transactionActions.getTransactionList()
   }
-
-  renderTransactionStatus (cell, row) {
-    return (
-      <span className="badge badge-success mb-0">Explained</span>
-    )
-  }
-  
 
   render() {
 
@@ -170,35 +162,36 @@ class ImportBankStatement extends React.Component {
                         hover
                         pagination
                         totalSize={ bank_transaction_list ? bank_transaction_list.length : 0}
-                        className="upload-bank-transaction-table"
+                        className="preview-bank-transaction-table"
                       >
-                        <TableHeaderColumn
-                          dataFormat={this.renderTransactionStatus}
-                        >
-                        </TableHeaderColumn>
                         <TableHeaderColumn
                           isKey
                           dataField="reference_number"
+                          dataSort
                         >
                           Reference Number
                         </TableHeaderColumn>
                         <TableHeaderColumn
                           dataField="transaction_type"
+                          dataSort
                         >
                           Transaction Type
                         </TableHeaderColumn>
                         <TableHeaderColumn
                           dataField="amount"
+                          dataSort
                         >
                           Amount
                         </TableHeaderColumn>
                         <TableHeaderColumn
                           dataField="description"
+                          dataSort
                         >
                           Description
                         </TableHeaderColumn>
                         <TableHeaderColumn
                           dataField="transaction_date"
+                          dataSort
                         >
                           Transaction Date
                         </TableHeaderColumn>
@@ -212,7 +205,7 @@ class ImportBankStatement extends React.Component {
                           <i className="fa fa-dot-circle-o"></i> Import
                         </Button>
                         <Button color="secondary" className="btn-square" 
-                          onClick={() => this.props.history.push('/admin/bank/transactions')}>
+                          onClick={() => this.props.history.push('/admin/bank')}>
                           <i className="fa fa-ban"></i> Cancel
                         </Button>
                       </FormGroup>

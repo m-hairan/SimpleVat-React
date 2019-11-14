@@ -189,7 +189,7 @@ class DetailBankTransaction extends React.Component {
                                 <i className="fa fa-dot-circle-o"></i> Update
                               </Button>
                               <Button color="secondary" className="btn-square" 
-                                onClick={() => this.props.history.push('/admin/bank/bank-statement')}>
+                                onClick={() => this.props.history.push('/admin/bank/transaction')}>
                                 <i className="fa fa-ban"></i> Cancel
                               </Button>
                             </FormGroup>
