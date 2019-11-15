@@ -9,6 +9,17 @@ import {
 
 
 
+  BankAccount,
+  CreateBankAccount,
+  DetailBankAccount,
+  BankTransactions,
+  CreateBankTransaction,
+  DetailBankTransaction,
+  ImportBankStatement,
+
+
+
+
   CustomerInvoice,
   CreateCustomerInvoice,
   DetailCustomerInvoice,
@@ -27,16 +38,6 @@ import {
   Payment,
   CreatePayment,
   DetailPayment,
-
-
-
-  BankAccount,
-  CreateBankAccount,
-  DetailBankAccount,
-  BankStatement,
-  CreateBankStatement,
-  DetailBankStatement,
-  ImportBankStatement,
 
 
 
@@ -122,6 +123,54 @@ const adminRoutes = [
     pathTo: '/admin/accountant/journal',
     name: 'Accountant'
   },
+
+
+
+
+
+
+  
+
+  {
+    path: '/admin/bank/create',
+    name: 'Create',
+    component: CreateBankAccount.screen
+  },
+  {
+    path: '/admin/bank/detail',
+    name: 'Detail',
+    component: DetailBankAccount.screen
+  },
+  {
+    path: '/admin/bank/transaction/create',
+    name: 'Create',
+    component: CreateBankTransaction.screen
+  },
+  {
+    path: '/admin/bank/transaction/detail',
+    name: 'Detail',
+    component: DetailBankTransaction.screen
+  },
+  {
+    path: '/admin/bank/transaction',
+    name: 'Transaction',
+    component: BankTransactions.screen
+  },
+  {
+    path: '/admin/bank/import-statement',
+    name: 'Import Statement',
+    component: ImportBankStatement.screen
+  },
+  {
+    path: '/admin/bank',
+    name: 'Bank Account',
+    component: BankAccount.screen
+  },
+
+
+
+
+
 
 
 
@@ -220,53 +269,6 @@ const adminRoutes = [
     name: 'Expense'
   },
 
-
-
-
-
-
-
-  {
-    path: '/admin/bank/bank-account/create',
-    name: 'Create',
-    component: CreateBankAccount.screen
-  },
-  {
-    path: '/admin/bank/bank-account/detail',
-    name: 'Detail',
-    component: DetailBankAccount.screen
-  },
-  {
-    path: '/admin/bank/bank-account',
-    name: 'Bank Account',
-    component: BankAccount.screen
-  },
-  {
-    path: '/admin/bank/bank-statement/import',
-    name: 'Import',
-    component: ImportBankStatement.screen
-  },
-  {
-    path: '/admin/bank/bank-statement/create',
-    name: 'Create',
-    component: CreateBankStatement.screen
-  },
-  {
-    path: '/admin/bank/bank-statement/detail',
-    name: 'Detail',
-    component: DetailBankStatement.screen
-  },
-  {
-    path: '/admin/bank/bank-statement',
-    name: 'Bank Statement',
-    component: BankStatement.screen
-  },
-  {
-    redirect: true,
-    path: '/admin/bank',
-    pathTo: '/admin/bank/bank-account',
-    name: 'Bank'
-  },
 
 
 
@@ -477,7 +479,7 @@ const adminRoutes = [
   {
     redirect: true,
     path: '/admin/settings',
-    pathTo: '/admin/settings/general',
+    pathTo: '/admin/settings/user',
     name: 'Settings'
   },
 

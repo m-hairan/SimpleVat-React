@@ -1,7 +1,8 @@
 import { BANK_ACCOUNT } from 'constants/types'
 
 const initState = {
-  bank_account_list: []
+  bank_account_list: [],
+  bank_transaction_list: []
 }
 
 const BankAccountReducer = (state = initState, action) => {
@@ -13,6 +14,12 @@ const BankAccountReducer = (state = initState, action) => {
       return {
         ...state,
         bank_account_list: Object.assign([], payload.data)
+      }
+    
+    case BANK_ACCOUNT.BANK_TRANSACTION_LIST:
+      return {
+        ...state,
+        bank_transaction_list: Object.assign([], payload.data)
       }
     
     default:

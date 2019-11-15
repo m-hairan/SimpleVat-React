@@ -14,6 +14,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import { Loader } from 'components'
 
 import 'react-toastify/dist/ReactToastify.css'
+import './style.scss'
 
 const mapStateToProps = (state) => {
   return ({
@@ -42,7 +43,7 @@ class DataBackup extends React.Component {
     };
 
     return (
-      <div className="organization-profile-screen">
+      <div className="data-backup-screen">
         <div className="animated fadeIn">
           <ToastContainer
             position="top-right"

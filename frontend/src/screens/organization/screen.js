@@ -109,7 +109,9 @@ class Organization extends React.Component {
                       </FormGroup>
                       <FormGroup row>
                         <Col md="2" className="text-right">
-                          <Label htmlFor="categoryName">*Company Name</Label>
+                          <Label htmlFor="categoryName">
+                            <span className="text-danger">*</span>Company Name
+                          </Label>
                         </Col>
                         <Col xs="12" md="5">
                           <Input
@@ -123,17 +125,22 @@ class Organization extends React.Component {
                       </FormGroup>
                       <FormGroup row>
                         <Col md="2" className="text-right">
-                          <Label htmlFor="categoryName">*Industry</Label>
+                          <Label htmlFor="categoryName">
+                            <span className="text-danger">*</span>Industry
+                          </Label>
                         </Col>
                         <Col xs="12" md="5">
                           <Select
                             options={industryOptions}
+                            required
                           />
                         </Col>
                       </FormGroup>
                       <FormGroup row>
                         <Col md="2" className="text-right">
-                          <Label htmlFor="categoryName">*Company Address</Label>
+                          <Label htmlFor="categoryName">
+                            <span className="text-danger">*</span>Company Address
+                          </Label>
                         </Col>
                         <Col xs="12" md="8">
                           <FormGroup>
@@ -187,7 +194,9 @@ class Organization extends React.Component {
                       </FormGroup>
                       <FormGroup row>
                         <Col md="2" className="text-right">
-                          <Label htmlFor="categoryName">*Phone</Label>
+                          <Label htmlFor="categoryName">
+                            <span className="text-danger">*</span>Phone
+                          </Label>
                         </Col>
                         <Col xs="12" md="8">
                           <Input
@@ -201,7 +210,7 @@ class Organization extends React.Component {
                       </FormGroup>
                       <FormGroup row>
                         <Col md="2" className="text-right">
-                          <Label htmlFor="categoryName">*Contact Detail</Label>
+                          <Label htmlFor="categoryName"><span className="text-danger">*</span>Contact Detail</Label>
                         </Col>
                         <Col xs="12" md="8">
                           <Row>
@@ -237,7 +246,7 @@ class Organization extends React.Component {
                       </FormGroup>
                       <FormGroup row>
                         <Col md="2" className="text-right">
-                          <Label htmlFor="categoryName">*Company ID</Label>
+                          <Label htmlFor="categoryName"><span className="text-danger">*</span>Company ID</Label>
                         </Col>
                         <Col xs="12" md="8">
                           <Row>
@@ -258,7 +267,7 @@ class Organization extends React.Component {
                       </FormGroup>
                       <FormGroup row>
                         <Col md="2" className="text-right">
-                          <Label htmlFor="categoryName">*Tax ID</Label>
+                          <Label htmlFor="categoryName"><span className="text-danger">*</span>Tax ID</Label>
                         </Col>
                         <Col xs="12" md="8">
                           <Input

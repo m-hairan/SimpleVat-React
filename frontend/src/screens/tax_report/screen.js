@@ -134,7 +134,7 @@ class TaxReport extends React.Component {
   }
 
   getAction(cell, row) {
-    return(<a href="/">Detail</a>)
+    return(<a href="#">Detail</a>)
   }
 
   render() {

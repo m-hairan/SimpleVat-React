@@ -164,7 +164,7 @@ class CustomerReport extends React.Component {
                     <h6 className="m-0">View By : </h6>
                   </FormGroup>
                   <FormGroup className="pr-3 my-1">
-                    <Input type="text" placeholder="Ref.Number" />
+                    <Input type="text" placeholder="Ref. Number" />
                   </FormGroup>
                   <FormGroup className="pr-3 my-1">
                     <DateRangePicker>
@@ -201,7 +201,7 @@ class CustomerReport extends React.Component {
                     dataField="transactionCategoryCode"
                     dataSort
                   >
-                    Ref.Number
+                    Ref. Number
                   </TableHeaderColumn>
                   <TableHeaderColumn
                     dataField="transactionCategoryName"
@@ -225,7 +225,7 @@ class CustomerReport extends React.Component {
                     dataField="transactionType"
                     dataSort
                   >
-                    No.ofItems
+                    No. of Items
                   </TableHeaderColumn>
                   <TableHeaderColumn
                     dataField="transactionType"
