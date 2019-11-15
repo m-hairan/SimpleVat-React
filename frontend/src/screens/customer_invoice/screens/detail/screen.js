@@ -99,7 +99,6 @@ class DetailCustomerInvoice extends React.Component {
     return (
       <Input
         type="text"
-        value=""
       />
     )
   }
@@ -108,7 +107,7 @@ class DetailCustomerInvoice extends React.Component {
     return (
       <Input
         type="text"
-        value="0"
+        placeholder="0"
       />
     )
   }
@@ -117,7 +116,7 @@ class DetailCustomerInvoice extends React.Component {
     return (
       <Input
         type="text"
-        value="0.00"
+        placeholder="0.00"
       />
     )
   }
