@@ -100,7 +100,6 @@ class CreateSupplierInvoice extends React.Component {
     return (
       <Input
         type="text"
-        value=""
       />
     )
   }
@@ -109,7 +108,7 @@ class CreateSupplierInvoice extends React.Component {
     return (
       <Input
         type="text"
-        value="0"
+        placeholder="0"
       />
     )
   }
@@ -118,7 +117,7 @@ class CreateSupplierInvoice extends React.Component {
     return (
       <Input
         type="text"
-        value="0.00"
+        placeholder="0.00"
       />
     )
   }

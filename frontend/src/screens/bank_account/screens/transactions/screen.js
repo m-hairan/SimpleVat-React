@@ -187,7 +187,7 @@ class BankTransactions extends React.Component {
               <i className="fas fa-edit" /> Edit
             </DropdownItem>
             <DropdownItem>
-              <i className="fas fa-wrench" /> Achive
+              <i className="fas fa-wrench" /> Archive
             </DropdownItem>
             <DropdownItem>
               <i className="fa fa-trash" /> Delete

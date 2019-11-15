@@ -205,13 +205,6 @@ class Receipt extends React.Component {
                             Date
                           </TableHeaderColumn>
                           <TableHeaderColumn
-                            isKey
-                            dataField="transactionCategoryName"
-                            dataSort
-                          >
-                            Payment #
-                          </TableHeaderColumn>
-                          <TableHeaderColumn
                             dataField="transactionCategoryCode"
                             dataSort
                           >
@@ -224,6 +217,7 @@ class Receipt extends React.Component {
                             Customer Name
                           </TableHeaderColumn>
                           <TableHeaderColumn
+                            isKey
                             dataField="transactionType"
                             dataSort
                           >
