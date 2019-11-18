@@ -272,25 +272,23 @@ class BankTransactions extends React.Component {
                         </ButtonGroup>
                       </div>
                       <div className="py-3">
-                        <Form inline>
-                          <FormGroup className="pr-3 my-1">
-                            <h6 className="m-0">View By : </h6>
-                          </FormGroup>
-                          <FormGroup className="pr-3 my-1">
+                        <h6>View By : </h6>
+                        <Row>
+                          <Col lg={2} className="mb-1">
                             <Select
-                              className="select-min-width"
+                              className=""
                               options={stateOptions}
                               placeholder="Transaction State"
                             />
-                          </FormGroup>
-                          <FormGroup className="pr-3 my-1">
+                          </Col>
+                          <Col lg={2} className="mb-1">
                             <Select
-                              className="select-min-width"
+                              className=""
                               options={statusOptions}
                               placeholder="Transaction Status"
                             />
-                          </FormGroup>
-                        </Form>
+                          </Col>
+                        </Row>
                       </div>
                       <div>
                         <BootstrapTable
