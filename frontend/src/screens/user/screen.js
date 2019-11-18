@@ -157,33 +157,31 @@ class User extends React.Component {
                         </ButtonGroup>
                       </div>
                       <div className="py-3">
-                        <Form inline>
-                          <FormGroup className="pr-3 my-1">
-                            <h6 className="m-0">View By : </h6>
-                          </FormGroup>
-                          <FormGroup className="pr-3 my-1">
+                        <h6>View By : </h6>
+                        <Row>
+                          <Col lg={2} className="mb-1">
                             <Input type="text" placeholder="User Name" />
-                          </FormGroup>
-                          <FormGroup className="pr-3 my-1">
+                          </Col>
+                          <Col lg={2} className="mb-1">
                             <DatePicker
                               className="form-control"
                               placeholderText="DOB"
                             />
-                          </FormGroup>
-                          <FormGroup className="pr-3 my-1">
+                          </Col>
+                          <Col lg={2} className="mb-1">
                             <Select
-                              className="select-min-width"
+                              className=""
                               options={[]}
                               placeholder="Role Name"
                             />
-                          </FormGroup>
-                          <FormGroup className="pr-3 my-1">
+                          </Col>
+                          <Col lg={2} className="mb-1">
                             <Input type="text" placeholder="Active" />
-                          </FormGroup>
-                          <FormGroup className="pr-3 my-1">
+                          </Col>
+                          <Col lg={2} className="mb-1">
                             <Input type="text" placeholder="Company" />
-                          </FormGroup>
-                        </Form>
+                          </Col>
+                        </Row>
                       </div>
                       <div>
                         <BootstrapTable
