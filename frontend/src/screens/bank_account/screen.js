@@ -115,12 +115,12 @@ class BankAccount extends React.Component {
 
   renderAccountNumber (cell, row) {
     return (
-    <label
-      className="mb-0 my-link"
-      onClick={() => this.props.history.push('/admin/bank/transaction')}
-    >
-      { row.account_number }
-    </label>
+      <label
+        className="mb-0 my-link"
+        onClick={() => this.props.history.push('/admin/bank/transaction')}
+      >
+        { row.account_number }
+      </label>
     )
   }
 

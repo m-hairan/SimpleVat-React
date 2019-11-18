@@ -304,159 +304,161 @@ class CreateTransactionCategory extends React.Component {
       <div className="create-transaction-category-screen">
         <div className="animated fadeIn">
           <Row>
-            <Col lg={6} className="mx-auto">
+            <Col lg={12}>
               <Card>
                 <CardHeader>
                   <div className="h4 mb-0 d-flex align-items-center">
                     <i className="nav-icon icon-graph" />
-                    <span className="ml-2">New Transaction Category</span>
+                    <span className="ml-2">Create Transaction Category</span>
                   </div>
                 </CardHeader>
                 <CardBody>
-                  <div className="px-5 py-3">
-                    <Form onSubmit={this.handleSubmit} name="simpleForm">
-                      <FormGroup>
-                        <Label htmlFor="categoryName">Category Name</Label>
-                        <Input
-                          type="text"
-                          id="categoryName"
-                          name="categoryName"
-                          placeholder="Enter Category Name"
-                          defaultValue={categoryName}
-                          onChange={this.handleChange}
-                          required
-                        />
-                      </FormGroup>
-                      <FormGroup>
-                        <Label htmlFor="categoryCode">Category Code</Label>
-                        <Input
-                          type="text"
-                          id="categoryCode"
-                          name="categoryCode"
-                          placeholder="Enter Category Code"
-                          defaultValue={categoryCode}
-                          onChange={this.handleChange}
-                          required
-                        />
-                      </FormGroup>
-                      <FormGroup>
-                        <Label htmlFor="categoryDiscription">
-                          Category Description
-                        </Label>
-                        <Input
-                          type="textarea"
-                          id="categoryDiscription"
-                          name="categoryDiscription"
-                          defaultValue={categoryDiscription}
-                          placeholder="Enter  Category Description"
-                          onChange={this.handleChange}
-                          required
-                          rows="5"
-                        />
-                      </FormGroup>
-                      <hr />
-                      <FormGroup>
-                        <div className="d-flex">
-                          <Label>Default Flag</Label>
-                          <Col xs="1"></Col>
-                          <div>
-                            <FormGroup check inline>
-                              <div className="custom-radio custom-control">
-                                <input 
-                                  className="custom-control-input"
-                                  type="radio"
-                                  id="inline-radio1"
-                                  name="defaltFlag"
-                                  value="Y"
-                                  checked={defaltFlag === "Y"}
-                                  onChange={this.handleChange} />
-                                <label className="custom-control-label" htmlFor="inline-radio1">Yes</label>
-                              </div>
-                            </FormGroup>
-                            <FormGroup check inline>
-                              <div className="custom-radio custom-control">
-                                <input 
-                                  className="custom-control-input"
-                                  type="radio"
-                                  id="inline-radio2"
-                                  name="defaltFlag"
-                                  value="N"
-                                  checked={defaltFlag === "N"}
-                                  onChange={this.handleChange}/>
-                                <label className="custom-control-label" htmlFor="inline-radio2">No</label>
-                              </div>
-                            </FormGroup>
+                  <Row>
+                    <Col lg={6}>
+                      <Form onSubmit={this.handleSubmit} name="simpleForm">
+                        <FormGroup>
+                          <Label htmlFor="categoryName">Category Name</Label>
+                          <Input
+                            type="text"
+                            id="categoryName"
+                            name="categoryName"
+                            placeholder="Enter Category Name"
+                            defaultValue={categoryName}
+                            onChange={this.handleChange}
+                            required
+                          />
+                        </FormGroup>
+                        <FormGroup>
+                          <Label htmlFor="categoryCode">Category Code</Label>
+                          <Input
+                            type="text"
+                            id="categoryCode"
+                            name="categoryCode"
+                            placeholder="Enter Category Code"
+                            defaultValue={categoryCode}
+                            onChange={this.handleChange}
+                            required
+                          />
+                        </FormGroup>
+                        <FormGroup>
+                          <Label htmlFor="categoryDiscription">
+                            Category Description
+                          </Label>
+                          <Input
+                            type="textarea"
+                            id="categoryDiscription"
+                            name="categoryDiscription"
+                            defaultValue={categoryDiscription}
+                            placeholder="Enter  Category Description"
+                            onChange={this.handleChange}
+                            required
+                            rows="5"
+                          />
+                        </FormGroup>
+                        <hr />
+                        <FormGroup>
+                          <div className="d-flex">
+                            <Label>Default Flag</Label>
+                            <Col xs="1"></Col>
+                            <div>
+                              <FormGroup check inline>
+                                <div className="custom-radio custom-control">
+                                  <input 
+                                    className="custom-control-input"
+                                    type="radio"
+                                    id="inline-radio1"
+                                    name="defaltFlag"
+                                    value="Y"
+                                    checked={defaltFlag === "Y"}
+                                    onChange={this.handleChange} />
+                                  <label className="custom-control-label" htmlFor="inline-radio1">Yes</label>
+                                </div>
+                              </FormGroup>
+                              <FormGroup check inline>
+                                <div className="custom-radio custom-control">
+                                  <input 
+                                    className="custom-control-input"
+                                    type="radio"
+                                    id="inline-radio2"
+                                    name="defaltFlag"
+                                    value="N"
+                                    checked={defaltFlag === "N"}
+                                    onChange={this.handleChange}/>
+                                  <label className="custom-control-label" htmlFor="inline-radio2">No</label>
+                                </div>
+                              </FormGroup>
+                            </div>
                           </div>
-                        </div>
-                      </FormGroup>
-                      <FormGroup>
-                        <Label htmlFor="selectCategoryCode">
-                          Vat Category Code
-                        </Label>
-                        <Select
-                          id="selectCategoryCode"
-                          name="selectCategoryCode"
-                          options={null}
-                        />
-                      </FormGroup>
-                        
-                      <FormGroup className="auto-suggestion-form-group">
-                        <Label htmlFor="selectTransactionType">
-                          Transaction Type
-                        </Label>
-                        <Autosuggest
-                          className="autoSuggest form-control"
-                          suggestions={suggestions}
-                          onSuggestionsFetchRequested={
-                            this.onSuggestionsFetchRequested
-                          }
-                          onSuggestionsClearRequested={
-                            this.onSuggestionsClearRequested
-                          }
-                          getSuggestionValue={this.getSuggestionValue}
-                          onSuggestionSelected={this.onSuggestionSelected}
-                          renderSuggestion={this.renderSuggestion}
-                          inputProps={inputProps}
-                        />
-                      </FormGroup>
-                        
-                      {selectedTransactionCategory ? ( 
+                        </FormGroup>
+                        <FormGroup>
+                          <Label htmlFor="selectCategoryCode">
+                            Vat Code
+                          </Label>
+                          <Select
+                            id="selectCategoryCode"
+                            name="selectCategoryCode"
+                            options={null}
+                          />
+                        </FormGroup>
+                          
                         <FormGroup className="auto-suggestion-form-group">
                           <Label htmlFor="selectTransactionType">
-                            Parent Transaction Type
+                            Transaction Type
                           </Label>
                           <Autosuggest
                             className="autoSuggest form-control"
-                            suggestions={parentSuggestions}
+                            suggestions={suggestions}
                             onSuggestionsFetchRequested={
-                              this.onParentSuggestionsFetchRequested
+                              this.onSuggestionsFetchRequested
                             }
                             onSuggestionsClearRequested={
-                              this.onParentSuggestionsClearRequested
+                              this.onSuggestionsClearRequested
                             }
-                            getSuggestionValue={this.getParentSuggestionValue}
-                            onSuggestionSelected={this.onParentSuggestionSelected}
-                            renderSuggestion={this.renderParentSuggestion}
-                            inputProps={parentInputProps}
+                            getSuggestionValue={this.getSuggestionValue}
+                            onSuggestionSelected={this.onSuggestionSelected}
+                            renderSuggestion={this.renderSuggestion}
+                            inputProps={inputProps}
                           />
-                        </FormGroup> 
-                      ) : (
-                          ""
-                        )}
-                      <FormGroup className="text-right mt-5">
-                        <Button type="submit" color="primary" className="btn-square mr-3">
-                          <i className="fa fa-dot-circle-o"></i> Create
-                        </Button>
-                        <Button type="submit" color="primary" className="btn-square mr-3">
-                          <i className="fa fa-refresh"></i> Create and More
-                        </Button>
-                        <Button type="submit" color="secondary" className="btn-square" 
-                          onClick={() => {this.props.history.push("/admin/settings/transaction-category")}}>
-                          <i className="fa fa-ban"></i> Cancel
-                        </Button>
-                      </FormGroup>
-                    </Form>
-                  </div>
+                        </FormGroup>
+                          
+                        {selectedTransactionCategory ? ( 
+                          <FormGroup className="auto-suggestion-form-group">
+                            <Label htmlFor="selectTransactionType">
+                              Parent Transaction Type
+                            </Label>
+                            <Autosuggest
+                              className="autoSuggest form-control"
+                              suggestions={parentSuggestions}
+                              onSuggestionsFetchRequested={
+                                this.onParentSuggestionsFetchRequested
+                              }
+                              onSuggestionsClearRequested={
+                                this.onParentSuggestionsClearRequested
+                              }
+                              getSuggestionValue={this.getParentSuggestionValue}
+                              onSuggestionSelected={this.onParentSuggestionSelected}
+                              renderSuggestion={this.renderParentSuggestion}
+                              inputProps={parentInputProps}
+                            />
+                          </FormGroup> 
+                        ) : (
+                            ""
+                          )}
+                        <FormGroup className="text-right mt-5">
+                          <Button type="submit" color="primary" className="btn-square mr-3">
+                            <i className="fa fa-dot-circle-o"></i> Create
+                          </Button>
+                          <Button type="submit" color="primary" className="btn-square mr-3">
+                            <i className="fa fa-refresh"></i> Create and More
+                          </Button>
+                          <Button type="submit" color="secondary" className="btn-square" 
+                            onClick={() => {this.props.history.push("/admin/settings/transaction-category")}}>
+                            <i className="fa fa-ban"></i> Cancel
+                          </Button>
+                        </FormGroup>
+                      </Form>
+                    </Col>
+                  </Row>
                 </CardBody>
               </Card>
             </Col>
