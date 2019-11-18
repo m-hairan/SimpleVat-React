@@ -220,26 +220,24 @@ class TransactionCategory extends React.Component {
                         </ButtonGroup>
                         </div>
                         <div className="py-3">
-                          <Form inline>
-                            <FormGroup className="pr-3 my-1">
-                              <h6 className="m-0">View By : </h6>
-                            </FormGroup>
-                            <FormGroup className="pr-3">
+                          <h6>View By : </h6>
+                          <Row>
+                            <Col lg={2} className="mb-1">
                               <Input type="text" placeholder="Category Code" />
-                            </FormGroup>
-                            <FormGroup className="pr-3">
+                            </Col>
+                            <Col lg={2} className="mb-1">
                               <Input type="text" placeholder="Category Name" />
-                            </FormGroup>
-                            <FormGroup className="pr-3">
+                            </Col>
+                            <Col lg={2} className="mb-1">
                               <Input type="text" placeholder="Category Description" />
-                            </FormGroup>
-                            <FormGroup className="pr-3">
+                            </Col>
+                            <Col lg={2} className="mb-1">
                               <Input type="text" placeholder="Paret Transaction Category Name " />
-                            </FormGroup>
-                            <FormGroup className="pr-3">
+                            </Col>
+                            <Col lg={2} className="mb-1">
                               <Input type="text" placeholder="Transaction Type" />
-                            </FormGroup>
-                          </Form>
+                            </Col>
+                          </Row>
                         </div>
                         <BootstrapTable 
                           data={transactionList} 

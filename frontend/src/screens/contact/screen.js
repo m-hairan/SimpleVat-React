@@ -157,24 +157,22 @@ class Contact extends React.Component {
                         </ButtonGroup>
                       </div>
                       <div className="py-3">
-                        <Form inline>
-                          <FormGroup className="pr-3 my-1">
-                            <h6 className="m-0">View By : </h6>
-                          </FormGroup>
-                          <FormGroup className="pr-3">
+                        <h6>View By : </h6>
+                        <Row>
+                          <Col lg={2} className="mb-1">
                             <Input type="text" placeholder="User Name" />
-                          </FormGroup>
-                          <FormGroup className="pr-3">
+                          </Col>
+                          <Col lg={2} className="mb-1">
                             <Input type="text" placeholder="Email" />
-                          </FormGroup>
-                          <FormGroup className="pr-3">
+                          </Col>
+                          <Col lg={2} className="mb-1">
                             <Select
-                              className="select-min-width"
+                              className=""
                               options={[]}
                               placeholder="User Type"
                             />
-                          </FormGroup>
-                        </Form>
+                          </Col>
+                        </Row>
                       </div>
                       <div>
                         <Row>

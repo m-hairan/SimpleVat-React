@@ -165,28 +165,26 @@ class Payment extends React.Component {
                         </ButtonGroup>
                       </div>
                       <div className="py-3">
-                        <Form inline>
-                          <FormGroup className="pr-3 my-1">
-                            <h6 className="m-0">View By : </h6>
-                          </FormGroup>
-                          <FormGroup className="pr-3 my-1">
+                        <h6>View By : </h6>
+                        <Row>
+                          <Col lg={2} className="mb-1">
                             <Input type="text" placeholder="Payment Number" />
-                          </FormGroup>
-                          <FormGroup className="pr-3 my-1">
+                          </Col>
+                          <Col lg={2} className="mb-1">
                             <Input type="text" placeholder="Reference Number" />
-                          </FormGroup>
-                          <FormGroup className="pr-3 my-1">
+                          </Col>
+                          <Col lg={2} className="mb-1">
                             <Input type="text" placeholder="Supplier Name" />
-                          </FormGroup>
-                          <FormGroup className="pr-3 my-1">
+                          </Col>
+                          <Col lg={2} className="mb-1">
                             <Input type="text" placeholder="Invoice" />
-                          </FormGroup>
-                          <FormGroup className="pr-3 my-1">
+                          </Col>
+                          <Col lg={2} className="mb-1">
                             <DateRangePicker>
                               <Input type="text" placeholder="Payment Date" />
                             </DateRangePicker>
-                          </FormGroup>
-                        </Form>
+                          </Col>
+                        </Row>
                       </div>
                       <div>
                         <BootstrapTable

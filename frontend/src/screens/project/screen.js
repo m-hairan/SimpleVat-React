@@ -155,26 +155,24 @@ class Project extends React.Component {
                         </ButtonGroup>
                       </div>
                       <div className="py-3">
-                        <Form inline>
-                          <FormGroup className="pr-3 my-1">
-                            <h6 className="m-0">View By : </h6>
-                          </FormGroup>
-                          <FormGroup className="pr-3">
+                        <h6>View By : </h6>
+                        <Row>
+                          <Col lg={2} className="mb-1">
                             <Input type="text" placeholder="Project Name" />
-                          </FormGroup>
-                          <FormGroup className="pr-3">
+                          </Col>
+                          <Col lg={2} className="mb-1">
                             <Input type="text" placeholder="Expense Budget" />
-                          </FormGroup>
-                          <FormGroup className="pr-3">
+                          </Col>
+                          <Col lg={2} className="mb-1">
                             <Input type="text" placeholder="Revenue Budget" />
-                          </FormGroup>
-                          <FormGroup className="pr-3">
+                          </Col>
+                          <Col lg={2} className="mb-1">
                             <Input type="text" placeholder="VAT Number" />
-                          </FormGroup>
-                          <FormGroup className="pr-3">
+                          </Col>
+                          <Col lg={2} className="mb-1">
                             <Input type="text" placeholder="Currency Code" />
-                          </FormGroup>
-                        </Form>
+                          </Col>
+                        </Row>
                       </div>
                       <div>
                         <BootstrapTable

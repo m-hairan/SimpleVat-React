@@ -269,36 +269,34 @@ class CustomerInvoice extends React.Component {
                         </ButtonGroup>
                       </div>
                       <div className="py-3">
-                        <Form inline>
-                          <FormGroup className="pr-3 my-1">
-                            <h6 className="m-0">View By : </h6>
-                          </FormGroup>
-                          <FormGroup className="pr-3 my-1">
+                        <h6>View By : </h6>
+                        <Row>
+                          <Col lg={2} className="mb-1">
                             <Input type="text" placeholder="Customer Name" />
-                          </FormGroup>
-                          <FormGroup className="pr-3 my-1">
+                          </Col>
+                          <Col lg={2} className="mb-1">
                             <Input type="text" placeholder="Reference Number" />
-                          </FormGroup>
-                          <FormGroup className="pr-3 my-1">
+                          </Col>
+                          <Col lg={2} className="mb-1">
                             <DateRangePicker>
                               <Input type="text" placeholder="Invoice Date" />
                             </DateRangePicker>
-                          </FormGroup>
-                          <FormGroup className="pr-3 my-1">
+                          </Col>
+                          <Col lg={2} className="mb-1">
                             <DateRangePicker>
                               <Input type="text" placeholder="Due Date" />
                             </DateRangePicker>
-                          </FormGroup>
-                          <FormGroup className="pr-3 my-1">
+                          </Col>
+                          <Col lg={2} className="mb-1">
                             <Select
-                              className="select-min-width"
+                              className=""
                               options={this.state.stateOptions}
                               value={this.state.status}
                               onChange={this.changeStatus}
                               placeholder="Status"
                             />
-                          </FormGroup>
-                        </Form>
+                          </Col>
+                        </Row>
                       </div>
                       <div>
                         <BootstrapTable

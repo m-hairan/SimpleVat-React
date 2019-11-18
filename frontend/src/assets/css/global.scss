@@ -193,6 +193,7 @@ th {
 }
 .Select-menu-outer {
   border-radius: 0px !important;
+  z-index: 9 !important
 }
 .select-default-width {
   .Select-menu-outer {
@@ -249,6 +250,9 @@ th {
   }
 }
 
+.react-bootstrap-daterangepicker-container {
+  width: 100%;
+}
 .daterangepicker {
   border-radius: 0px !important;
   border: none !important;
