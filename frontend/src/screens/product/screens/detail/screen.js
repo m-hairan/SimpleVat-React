@@ -177,7 +177,7 @@ class DetailProduct extends React.Component {
                                 type="textarea"
                                 name="description"
                                 id="description"
-                                rows="9"
+                                rows="6"
                                 placeholder="Description..."
                               />
                             </FormGroup>

@@ -95,7 +95,7 @@ class CreateVatCode extends React.Component {
       <div className="vat-code-create-screen">
         <div className="animated fadeIn">
           <Row>
-            <Col lg={6} className="mx-auto">
+            <Col lg={12}>
               <Card>
                 <CardHeader>
                   <div className="h4 mb-0 d-flex align-items-center">
@@ -104,46 +104,48 @@ class CreateVatCode extends React.Component {
                   </div>
                 </CardHeader>
                 <CardBody>
-                  <div className="px-5 py-3">
-                    <Form onSubmit={this.handleSubmit} name="simpleForm">
-                      <FormGroup>
-                        <Label htmlFor="name">Vat Code Name</Label>
-                        <Input
-                          type="text"
-                          id="name"
-                          name="name"
-                          defaultValue={name}
-                          placeholder="Enter Vat Code Name"
-                          onChange={this.handleChange}
-                          required
-                        />
-                      </FormGroup>
-                      <FormGroup>
-                        <Label htmlFor="name">Percentage</Label>
-                        <Input
-                          type="number"
-                          id="name"
-                          name="vat"
-                          defaultValue={vat}
-                          placeholder="Enter Percentage"
-                          onChange={this.handleChange}
-                          required
-                        />
-                      </FormGroup>            
-                      <FormGroup className="text-right mt-5">
-                        <Button type="submit" name="submit" color="primary" className="btn-square mr-3">
-                          <i className="fa fa-dot-circle-o"></i> Create
-                        </Button>
-                        <Button name="submit" color="primary" className="btn-square mr-3">
-                          <i className="fa fa-refresh"></i> Create and More
-                        </Button>
-                        <Button type="submit" color="secondary" className="btn-square"
-                          onClick={() => {this.props.history.push('/admin/master/vat-code')}}>
-                          <i className="fa fa-ban"></i> Cancel
-                        </Button>
-                      </FormGroup>
-                    </Form>
-                  </div>
+                  <Row>
+                    <Col lg={6}>
+                      <Form onSubmit={this.handleSubmit} name="simpleForm">
+                        <FormGroup>
+                          <Label htmlFor="name">Vat Code Name</Label>
+                          <Input
+                            type="text"
+                            id="name"
+                            name="name"
+                            defaultValue={name}
+                            placeholder="Enter Vat Code Name"
+                            onChange={this.handleChange}
+                            required
+                          />
+                        </FormGroup>
+                        <FormGroup>
+                          <Label htmlFor="name">Percentage</Label>
+                          <Input
+                            type="number"
+                            id="name"
+                            name="vat"
+                            defaultValue={vat}
+                            placeholder="Enter Percentage"
+                            onChange={this.handleChange}
+                            required
+                          />
+                        </FormGroup>            
+                        <FormGroup className="text-right mt-5">
+                          <Button type="submit" name="submit" color="primary" className="btn-square mr-3">
+                            <i className="fa fa-dot-circle-o"></i> Create
+                          </Button>
+                          <Button name="submit" color="primary" className="btn-square mr-3">
+                            <i className="fa fa-refresh"></i> Create and More
+                          </Button>
+                          <Button type="submit" color="secondary" className="btn-square"
+                            onClick={() => {this.props.history.push('/admin/master/vat-code')}}>
+                            <i className="fa fa-ban"></i> Cancel
+                          </Button>
+                        </FormGroup>
+                      </Form>
+                    </Col>
+                  </Row>
                 </CardBody>
               </Card>
             </Col>

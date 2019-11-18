@@ -24,6 +24,7 @@ import Stepper from 'react-stepper-horizontal'
 
 import BankTransactions from '../transactions'
 
+import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
 import './style.scss'
 
 const mapStateToProps = (state) => {

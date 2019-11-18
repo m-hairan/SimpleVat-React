@@ -16,6 +16,7 @@ import {
 import Select from 'react-select'
 import DatePicker from 'react-datepicker'
 
+import 'react-datepicker/dist/react-datepicker.css'
 import './style.scss'
 
 const mapStateToProps = (state) => {
@@ -118,7 +119,7 @@ class CreateBankTransaction extends React.Component {
                                 type="textarea"
                                 name="description"
                                 id="description"
-                                rows="9"
+                                rows="6"
                                 placeholder="Description..."
                               />
                             </FormGroup>

@@ -20,7 +20,7 @@ import DatePicker from 'react-datepicker'
 
 import 'react-images-uploader/styles.css'
 import 'react-images-uploader/font.css'
-
+import 'react-datepicker/dist/react-datepicker.css'
 
 import './style.scss'
 

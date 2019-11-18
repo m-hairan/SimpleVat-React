@@ -31,6 +31,7 @@ import { Loader } from 'components'
 
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
+import 'bootstrap-daterangepicker/daterangepicker.css'
 
 
 import * as TransactionsActions from './actions'
