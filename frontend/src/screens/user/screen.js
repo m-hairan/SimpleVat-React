@@ -24,10 +24,12 @@ import DatePicker from 'react-datepicker'
 
 import { Loader } from 'components'
 
+import * as UserActions from './actions'
+
 import 'react-toastify/dist/ReactToastify.css'
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
+import 'react-datepicker/dist/react-datepicker.css'
 
-import * as UserActions from './actions'
 
 import './style.scss'
 

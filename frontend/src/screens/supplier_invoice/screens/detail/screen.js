@@ -18,6 +18,7 @@ import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-
 import DatePicker from 'react-datepicker'
 
 import 'react-datepicker/dist/react-datepicker.css'
+import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
 
 import './style.scss'
 

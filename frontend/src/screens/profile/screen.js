@@ -23,9 +23,9 @@ import ImagesUploader from 'react-images-uploader'
 import DatePicker from 'react-datepicker'
 
 
+import 'react-datepicker/dist/react-datepicker.css'
 import 'react-images-uploader/styles.css'
 import 'react-images-uploader/font.css'
-
 
 import './style.scss'
 

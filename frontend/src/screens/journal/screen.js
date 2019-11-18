@@ -15,7 +15,11 @@ import {
   ButtonGroup,
   Form,
   FormGroup,
-  Input
+  Input,
+  ButtonDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
 } from 'reactstrap'
 import Select from 'react-select'
 import { ToastContainer, toast } from 'react-toastify'
@@ -50,16 +54,18 @@ class Journal extends React.Component {
     super(props)
     this.state = {
       loading: false,
+      actionButtons: {}
     }
 
     this.initializeData = this.initializeData.bind(this)
+    this.renderJournalNumber = this.renderJournalNumber.bind(this)
     this.renderStatus = this.renderStatus.bind(this)
+    this.renderActions = this.renderActions.bind(this)
     this.onRowSelect = this.onRowSelect.bind(this)
     this.onSelectAll = this.onSelectAll.bind(this)
-    this.goToDetail = this.goToDetail.bind(this)
+    this.toggleActionButton = this.toggleActionButton.bind(this)
 
     this.options = {
-      onRowClick: this.goToDetail,
       paginationPosition: 'top'
     }
 
@@ -82,13 +88,72 @@ class Journal extends React.Component {
   }
 
   renderStatus (cell, row) {
+    let label = ''
+    let class_name = ''
+    if (row.transactionCategoryCode == 4) {
+      label = 'New'
+      class_name = 'badge-danger'
+    } else {
+      label = 'Posted'
+      class_name = 'badge-success'
+    }
     return (
-      <span className="badge badge-success mb-0">status</span>
+      <span className={`badge ${class_name} mb-0`}>{ label }</span>
     )
   }
 
-  goToDetail (row) {
-    this.props.history.push('/admin/accountant/journal/detail')
+  renderJournalNumber (cell, row) {
+    return (
+      <label
+        className="mb-0 my-link"
+        onClick={() => this.props.history.push('/admin/accountant/journal/detail')}
+      >
+        { row.transactionCategoryCode }3443543
+      </label>
+    )
+  }
+
+  renderActions (cell, row) {
+    return (
+      <div>
+        <ButtonDropdown
+          isOpen={this.state.actionButtons[row.transactionCategoryCode]}
+          toggle={() => this.toggleActionButton(row.transactionCategoryCode)}
+        >
+          <DropdownToggle size="sm" color="primary" className="btn-brand icon">
+            {
+              this.state.actionButtons[row.transactionCategoryCode] == true ?
+                <i className="fas fa-chevron-up" />
+              :
+                <i className="fas fa-chevron-down" />
+            }
+          </DropdownToggle>
+          <DropdownMenu right>
+            <DropdownItem onClick={() => this.props.history.push('/admin/accountant/journal/detail')}>
+              <i className="fas fa-edit" /> Edit
+            </DropdownItem>
+            <DropdownItem>
+              <i className="fas fa-file" /> Post
+            </DropdownItem>
+            <DropdownItem>
+              <i className="fa fa-trash" /> Cancel
+            </DropdownItem>
+          </DropdownMenu>
+        </ButtonDropdown>
+      </div>
+    )
+  }
+
+  toggleActionButton (index) {
+    let temp = Object.assign({}, this.state.actionButtons)
+    if (temp[index]) {
+      temp[index] = false
+    } else {
+      temp[index] = true
+    }
+    this.setState({
+      actionButtons: temp
+    })
   }
 
   onRowSelect (row, isSelected, e) {
@@ -193,26 +258,20 @@ class Journal extends React.Component {
                           pagination
                           totalSize={journal_list ? journal_list.length : 0}
                           className="journal-table"
-                          trClassName="cursor-pointer"
                         >
                           <TableHeaderColumn
                             isKey
                             dataField="transactionCategoryName"
                             dataSort
                           >
-                            Date
+                            Post Date
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionCategoryCode"
+                            dataFormat={this.renderJournalNumber}
                             dataSort
                           >
-                            Journal #
-                          </TableHeaderColumn>
-                          <TableHeaderColumn
-                            dataField="parentTransactionCategory"
-                            dataSort
-                          >
-                            Reference Number
+                            Journal No.
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionType"
@@ -225,25 +284,20 @@ class Journal extends React.Component {
                             dataField="transactionType"
                             dataSort
                           >
-                            Note
-                          </TableHeaderColumn>
-                          <TableHeaderColumn
-                            dataField="transactionType"
-                            dataSort
-                          >
                             Amount
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="transactionType"
                             dataSort
                           >
-                            Documents
+                            Created By
                           </TableHeaderColumn>
                           <TableHeaderColumn
-                            dataField="transactionType"
-                            dataSort
+                            className="text-right"
+                            columnClassName="text-right"
+                            width="55"
+                            dataFormat={this.renderActions}
                           >
-                            Created By
                           </TableHeaderColumn>
                         </BootstrapTable>
                       </div>

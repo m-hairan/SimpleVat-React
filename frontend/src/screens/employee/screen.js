@@ -16,7 +16,7 @@ import {
 import Select from 'react-select'
 import DatePicker from 'react-datepicker'
 
-
+import 'react-datepicker/dist/react-datepicker.css'
 import './style.scss'
 
 const mapStateToProps = (state) => {
