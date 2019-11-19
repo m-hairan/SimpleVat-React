@@ -193,7 +193,7 @@ class CreateBankTransaction extends React.Component {
                                 <i className="fa fa-repeat"></i> Create and More
                               </Button>
                               <Button color="secondary" className="btn-square" 
-                                onClick={() => this.props.history.push('/admin/bank/transaction')}>
+                                onClick={() => this.props.history.push('/admin/banking/bank-account/transaction')}>
                                 <i className="fa fa-ban"></i> Cancel
                               </Button>
                             </FormGroup>

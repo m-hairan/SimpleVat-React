@@ -23,9 +23,21 @@ export default {
       ]
     },
     {
-      name: 'Bank',
-      url: '/admin/bank',
-      icon: 'fas fa-university'
+      name: 'Banking',
+      url: '/admin/banking',
+      icon: 'fas fa-file',
+      children: [
+        {
+          name: 'Bank Account',
+          url: '/admin/banking/bank-account',
+          icon: 'fas fa-university',
+        },
+        {
+          name: 'Upload Statement',
+          url: '/admin/banking/upload-statement',
+          icon: 'fa fa-upload',
+        }
+      ]
     },
     {
       name: 'Revenue',
