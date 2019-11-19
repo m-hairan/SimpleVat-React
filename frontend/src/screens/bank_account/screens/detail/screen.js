@@ -201,7 +201,7 @@ class DetailBankAccount extends React.Component {
                         <i className="fa fa-dot-circle-o"></i> Update
                       </Button>
                       <Button color="secondary" className="btn-square" 
-                        onClick={() => {this.props.history.push("/admin/bank")}}>
+                        onClick={() => {this.props.history.push("/admin/banking/bank-account")}}>
                         <i className="fa fa-ban"></i> Cancel
                       </Button>
                     </FormGroup>

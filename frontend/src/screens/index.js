@@ -25,7 +25,7 @@ import DetailBankAccount from './bank_account/screens/detail'
 import BankTransactions from './bank_account/screens/transactions'
 import CreateBankTransaction from './bank_account/screens/transactions/screens/create'
 import DetailBankTransaction from './bank_account/screens/transactions/screens/detail'
-import ImportBankStatement from './bank_account/screens/import'
+import ImportBankStatement from './import_bank_statement'
 
 
 
