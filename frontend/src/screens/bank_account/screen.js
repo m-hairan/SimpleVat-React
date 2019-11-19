@@ -117,7 +117,7 @@ class BankAccount extends React.Component {
     return (
       <label
         className="mb-0 my-link"
-        onClick={() => this.props.history.push('/admin/bank/transaction')}
+        onClick={() => this.props.history.push('/admin/banking/bank-account/transaction')}
       >
         { row.account_number }
       </label>
@@ -140,14 +140,14 @@ class BankAccount extends React.Component {
             }
           </DropdownToggle>
           <DropdownMenu right>
-            <DropdownItem onClick={() => this.props.history.push('/admin/bank/detail')}>
+            <DropdownItem onClick={() => this.props.history.push('/admin/banking/bank-account/detail')}>
               <i className="fas fa-edit" /> Edit
             </DropdownItem>
-            <DropdownItem onClick={() => this.props.history.push('/admin/bank/transaction')}>
+            <DropdownItem onClick={() => this.props.history.push('/admin/banking/bank-account/transaction')}>
               <i className="fas fa-eye" /> View Transactions
             </DropdownItem>
-            <DropdownItem onClick={() => this.props.history.push('/admin/bank/import-statement')}>
-              <i className="fas fa-upload" /> Import Statement
+            <DropdownItem onClick={() => this.props.history.push('/admin/banking/upload-statement')}>
+              <i className="fas fa-upload" /> Upload Statement
             </DropdownItem>
             <DropdownItem>
               <i className="fa fa-connectdevelop" /> Reconcile
@@ -216,15 +216,15 @@ class BankAccount extends React.Component {
                           <Button
                             color="info"
                             className="btn-square"
-                            onClick={() => this.props.history.push('/admin/bank/import-statement')}
+                            onClick={() => this.props.history.push('/admin/banking/upload-statement')}
                           >
                             <i className="fa glyphicon glyphicon-export fa-upload mr-1" />
-                            Import Statement
+                            Upload Statement
                           </Button>
                           <Button
                             color="primary"
                             className="btn-square"
-                            onClick={() => this.props.history.push(`/admin/bank/create`)}
+                            onClick={() => this.props.history.push(`/admin/banking/bank-account/create`)}
                           >
                             <i className="fas fa-plus mr-1" />
                             New Account

@@ -132,39 +132,45 @@ const adminRoutes = [
   
 
   {
-    path: '/admin/bank/create',
-    name: 'Create',
-    component: CreateBankAccount.screen
-  },
-  {
-    path: '/admin/bank/detail',
-    name: 'Detail',
-    component: DetailBankAccount.screen
-  },
-  {
-    path: '/admin/bank/transaction/create',
+    path: '/admin/banking/bank-account/transaction/create',
     name: 'Create',
     component: CreateBankTransaction.screen
   },
   {
-    path: '/admin/bank/transaction/detail',
+    path: '/admin/banking/bank-account/transaction/detail',
     name: 'Detail',
     component: DetailBankTransaction.screen
   },
   {
-    path: '/admin/bank/transaction',
+    path: '/admin/banking/bank-account/transaction',
     name: 'Transaction',
     component: BankTransactions.screen
   },
   {
-    path: '/admin/bank/import-statement',
+    path: '/admin/banking/bank-account/create',
+    name: 'Create',
+    component: CreateBankAccount.screen
+  },
+  {
+    path: '/admin/banking/bank-account/detail',
+    name: 'Detail',
+    component: DetailBankAccount.screen
+  },
+  {
+    path: '/admin/banking/bank-account',
+    name: 'Bank Account',
+    component: BankAccount.screen
+  },
+  {
+    path: '/admin/banking/upload-statement',
     name: 'Import Statement',
     component: ImportBankStatement.screen
   },
   {
-    path: '/admin/bank',
-    name: 'Bank Account',
-    component: BankAccount.screen
+    redirect: true,
+    path: '/admin/banking',
+    pathTo: '/admin/banking/bank-account',
+    name: 'Banking'
   },
 
 

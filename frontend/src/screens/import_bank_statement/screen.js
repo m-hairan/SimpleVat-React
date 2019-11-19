@@ -22,7 +22,7 @@ import Select from 'react-select'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
 import Stepper from 'react-stepper-horizontal'
 
-import BankTransactions from '../transactions'
+import BankTransactions from '../bank_account/screens/transactions'
 
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css'
 import './style.scss'
@@ -175,7 +175,7 @@ class ImportBankStatement extends React.Component {
                           <i className="fa fa-dot-circle-o"></i> Import
                         </Button>
                         <Button color="secondary" className="btn-square" 
-                          onClick={() => this.props.history.push('/admin/bank')}>
+                          onClick={() => this.props.history.push('/admin/banking/bank-account')}>
                           <i className="fa fa-ban"></i> Cancel
                         </Button>
                       </FormGroup>
