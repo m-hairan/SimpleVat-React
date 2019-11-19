@@ -129,7 +129,7 @@ class BankTransactions extends React.Component {
     return (
     <label
       className="mb-0 my-link"
-      onClick={() => this.props.history.push('/admin/bank/transaction/detail')}
+      onClick={() => this.props.history.push('/admin/banking/bank-account/transaction/detail')}
     >
       { row.reference_number }
     </label>
@@ -184,7 +184,7 @@ class BankTransactions extends React.Component {
             }
           </DropdownToggle>
           <DropdownMenu right>
-            <DropdownItem onClick={() => this.props.history.push('/admin/bank/transaction/detail')}>
+            <DropdownItem onClick={() => this.props.history.push('/admin/banking/bank-account/transaction/detail')}>
               <i className="fas fa-edit" /> Edit
             </DropdownItem>
             <DropdownItem>
@@ -249,15 +249,15 @@ class BankTransactions extends React.Component {
                           <Button
                             color="info"
                             className="btn-square"
-                            onClick={() => this.props.history.push('/admin/bank/import-statement')}
+                            onClick={() => this.props.history.push('/admin/banking/upload-statement')}
                           >
                             <i className="fa glyphicon glyphicon-export fa-upload mr-1" />
-                            Import Statement
+                            Upload Statement
                           </Button>
                           <Button
                             color="primary"
                             className="btn-square"
-                            onClick={() => this.props.history.push('/admin/bank/transaction/create')}
+                            onClick={() => this.props.history.push('/admin/banking/bank-account/transaction/create')}
                           >
                             <i className="fas fa-plus mr-1" />
                             New Transaction
@@ -265,7 +265,7 @@ class BankTransactions extends React.Component {
                           <Button
                             color="success"
                             className="btn-square"
-                            onClick={() => this.props.history.push('/admin/bank/detail')}
+                            onClick={() => this.props.history.push('/admin/banking/bank-account/detail')}
                           >
                             <i className="fas fa-edit mr-1" />
                             Edit Account
