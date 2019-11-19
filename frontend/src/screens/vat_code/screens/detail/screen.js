@@ -20,7 +20,10 @@ import { Loader } from 'components'
 import 'react-toastify/dist/ReactToastify.css'
 import './style.scss'
 
-import * as VatActions from './actions'
+import * as VatActions from '../../actions'
+
+import { Formik } from 'formik';
+import * as Yup from "yup";
 
 
 const mapStateToProps = (state) => {
@@ -83,20 +86,9 @@ class DetailVatCode extends React.Component {
   }
 
   // Create or Edit Vat
-  handleSubmit = (e, status) => {
-    e.preventDefault()
+  handleSubmit(data){
 
-    const { name, vat, id } = this.state.vatData
-
-    let postObj
-
-    if (id) {
-      postObj = { ...this.state.vatData }
-    } else {
-      postObj = { name, vat }
-    }
-
-    this.props.vatActions.createBat(postObj).then(res => {
+    this.props.vatActions.createBat(data).then(res => {
       if (res.status === 200) {
         this.success()
         this.props.history.push('/admin/master/vat-code')
@@ -121,54 +113,82 @@ class DetailVatCode extends React.Component {
                   </div>
                 </CardHeader>
                 <CardBody>
-                  <Row>
-                    <Col lg={6}>
-                      <Form onSubmit={this.handleSubmit} name="simpleForm">
-                        <FormGroup>
-                          <Label htmlFor="name">Vat Code Name</Label>
-                          <Input
-                            type="text"
-                            id="name"
-                            name="name"
-                            defaultValue={name}
-                            placeholder="Enter Vat Code Name"
-                            onChange={this.handleChange}
-                            required
-                          />
-                        </FormGroup>
-                        <FormGroup>
-                          <Label htmlFor="name">Percentage</Label>
-                          <Input
-                            type="number"
-                            id="name"
-                            name="vat"
-                            defaultValue={vat}
-                            placeholder="Enter Percentage"
-                            onChange={this.handleChange}
-                            required
-                          />
-                        </FormGroup>            
-                        <FormGroup className="text-right mt-5">
-                          <Button type="submit" name="submit" color="primary" className="btn-square mr-3">
-                            <i className="fa fa-dot-circle-o"></i> Save
-                          </Button>
-                          <Button type="submit" color="secondary" className="btn-square"
-                            onClick={() => {this.props.history.push('/admin/master/vat-code')}}>
-                            <i className="fa fa-ban"></i> Cancel
-                          </Button>
-                        </FormGroup>
-                      </Form>
-                    </Col>
-                  </Row>
+                  {loading ? (
+                    <Loader></Loader>
+                  ) : (
+                    <Row>
+                      <Col lg={6}>
+                      <Formik
+                          initialValues={this.state.vatData}
+                          onSubmit={values => {
+                            console.log(values)
+                            this.handleSubmit(values)
+                          }}
+                          validationSchema={Yup.object().shape({
+                            name: Yup.string()
+                              .required("Vat Code Name is Required"),
+                            vat: Yup.string()
+                              .required("Vat Percentage is Required")
+                          })}>
+                            {props => (
+                              <Form onSubmit={props.handleSubmit} name="simpleForm">
+                                <FormGroup>
+                                  <Label htmlFor="name">Vat Code Name</Label>
+                                  <Input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    placeholder="Enter Vat Code Name"
+                                    onChange={props.handleChange}
+                                    value={props.values.name}
+                                    className={
+                                      props.errors.name && props.touched.name
+                                        ? "is-invalid"
+                                        : ""
+                                    }
+                                  />
+                                  {props.errors.name && props.touched.name && (
+                                    <div className="invalid-feedback">{props.errors.name}</div>
+                                  )}
+                                </FormGroup>
+                                <FormGroup>
+                                  <Label htmlFor="name">Percentage</Label>
+                                  <Input
+                                    type="number"
+                                    id="name"
+                                    name="vat"
+                                    placeholder="Enter Percentage"
+                                    onChange={props.handleChange}
+                                    value={props.values.vat}
+                                    className={
+                                      props.errors.vat && props.touched.vat
+                                        ? "is-invalid"
+                                        : ""
+                                    }
+                                  />
+                                  {props.errors.vat && props.touched.vat && (
+                                    <div className="invalid-feedback">{props.errors.vat}</div>
+                                  )}
+                                </FormGroup>            
+                                <FormGroup className="text-right mt-5">
+                                  <Button type="submit" name="submit" color="primary" className="btn-square mr-3">
+                                    <i className="fa fa-dot-circle-o"></i> Update
+                                  </Button>
+                                  <Button type="submit" color="secondary" className="btn-square"
+                                    onClick={() => {this.props.history.push('/admin/master/vat-code')}}>
+                                    <i className="fa fa-ban"></i> Cancel
+                                  </Button>
+                                </FormGroup>
+                              </Form>
+                            )}
+                          </Formik>
+                        </Col>
+                      </Row>
+                    )}
                 </CardBody>
               </Card>
             </Col>
           </Row>
-          {loading ? (
-            <Loader></Loader>
-          ) : (
-              ""
-            )}
         </div>
       </div>
     )

@@ -72,6 +72,15 @@ class VatCode extends React.Component {
     }
   }
 
+
+  onRowSelect(row, isSelected, e) {
+    console.log(row, isSelected)
+  }
+
+  onSelectAll(isSelected, rows) {
+    console.log(rows, isSelected)
+  }
+
   // Table Custom Search Field
   customSearchField(props) {
     return (
@@ -99,7 +108,10 @@ class VatCode extends React.Component {
   }
 
   goToDetail (row) {
-    this.props.history.push('/admin/master/vat-code/detail')
+    this.props.history.push({
+      pathname: '/admin/master/vat-code/detail',
+      search: `?id=${row.id}`
+    })
   }
 
   // Show Success Toast
@@ -199,10 +211,10 @@ class VatCode extends React.Component {
                     <div className="py-3">
                       <h6>View By : </h6>
                       <Row>
-                        <Col lg={2} className="mb-1">
+                        <Col lg={4} className="mb-1">
                           <Input type="text" placeholder="Vat Name" />
                         </Col>
-                        <Col lg={2} className="mb-1">
+                        <Col lg={4} className="mb-1">
                           <Input type="text" placeholder="Vat Percentage" />
                         </Col>
                       </Row>
