@@ -334,7 +334,7 @@ class CashFlowStatement extends React.Component {
         <div className="animated fadeIn">
           <div className="flex-wrap d-flex mb-3 align-items-start justify-content-between">
             <div className="info-block">
-              <h4>Company Name - <small><i>Cash Flow Statment</i></small></h4>
+              <h4>Company Name - <small><i>Cash Flow Statement</i></small></h4>
             </div>
             <Form onSubmit={this.handleSubmit} name="simpleForm">
               <div className="flex-wrap d-flex align-items-center">

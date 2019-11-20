@@ -108,7 +108,7 @@ body, span, label, h1, h2, h3, h4, p, em {
     border-left: none !important;
     border-right: none !important;
     td {
-      vertical-align: top !important;
+      vertical-align: top;
       border-left: 0px !important;
       border-right: 0px !important;
       .btn-group {
