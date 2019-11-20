@@ -95,7 +95,7 @@ class TransactionsReport extends React.Component {
                     active={this.state.activeTab[0] === '2'}
                     onClick={() => { this.toggle(0, '2') }}
                   >
-                    Customer Aging Report
+                    Customer Invoice Report
                   </NavLink>
                 </NavItem>
                 <NavItem>
