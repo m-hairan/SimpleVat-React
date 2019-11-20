@@ -209,7 +209,7 @@ class VatCode extends React.Component {
                       </ButtonGroup>
                     </div>
                     <div className="py-3">
-                      <h6>View By : </h6>
+                      <h6>Filter : </h6>
                       <Row>
                         <Col lg={4} className="mb-1">
                           <Input type="text" placeholder="Vat Name" />

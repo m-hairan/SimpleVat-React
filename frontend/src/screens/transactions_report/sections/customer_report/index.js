@@ -159,7 +159,7 @@ class CustomerReport extends React.Component {
                 </Form>
               </div>
               <div className="py-3">
-                <h6>View By : </h6>
+                <h6>Filter : </h6>
                 <Row>
                   <Col lg={2} className="mb-1">
                     <Input type="text" placeholder="Ref. Number" />
