@@ -131,13 +131,6 @@ class Project extends React.Component {
                             Export to CSV
                           </Button>
                           <Button
-                            color="info"
-                            className="btn-square"
-                          >
-                            <i className="fa glyphicon glyphicon-export fa-upload mr-1" />
-                            Import from CSV
-                          </Button>
-                          <Button
                             color="primary"
                             className="btn-square"
                             onClick={() => this.props.history.push(`/admin/master/project/create`)}
@@ -155,7 +148,7 @@ class Project extends React.Component {
                         </ButtonGroup>
                       </div>
                       <div className="py-3">
-                        <h6>View By : </h6>
+                        <h5>Filter : </h5>
                         <Row>
                           <Col lg={2} className="mb-1">
                             <Input type="text" placeholder="Project Name" />
