@@ -13,4 +13,5 @@ public interface BankAccountDao extends Dao<Integer, BankAccount> {
 
     BankAccount getBankAccountById(int id);
 
+    void deleteByIds(List<Integer> ids);
 }

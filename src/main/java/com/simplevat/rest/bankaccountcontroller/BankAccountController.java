@@ -5,6 +5,7 @@
  */
 package com.simplevat.rest.bankaccountcontroller;
 
+import com.simplevat.bank.model.DeleteModel;
 import com.simplevat.helper.BankHelper;
 import com.simplevat.contact.model.BankModel;
 import com.simplevat.entity.Country;
@@ -158,6 +159,15 @@ public class BankAccountController implements Serializable {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+     @DeleteMapping(value = "/deletebanks")
+    public ResponseEntity deleteBankAccounts(@RequestBody DeleteModel ids) {
+        try {
+            bankAccountService.deleteByIds(ids.getIds());
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity(HttpStatus.OK);
+    }
     @GetMapping(value = "/getcurrenncy")
     public ResponseEntity<List<Currency>> getCurrency(@RequestParam(value = "currencyStr") String currencyStr) {
         List<Currency> currencySuggestion = new ArrayList<>();
