@@ -224,7 +224,7 @@ class Journal extends React.Component {
                         </ButtonGroup>
                       </div>
                       <div className="py-3">
-                        <h6>Filter : </h6>
+                        <h5>Filter : </h5>
                         <Row>
                           <Col lg={2} className="mb-1">
                             <Select
