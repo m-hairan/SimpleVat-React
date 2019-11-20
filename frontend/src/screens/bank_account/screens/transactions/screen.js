@@ -56,10 +56,9 @@ class BankTransactions extends React.Component {
     this.state = {
       loading: false,
       openDeleteModal: false,
-      stateOptions: [
-        { value: 'Uncategorized', label: 'Uncategorized' },
-        { value: 'Recognized', label: 'Recognized' },
-        { value: 'Excluded', label: 'Excluded' },
+      typeOptions: [
+        { value: 'Withdrawal', label: 'Withdrawal' },
+        { value: 'Deposit', label: 'Deposit' }
       ],
       statusOptions: [
         { value: 'All', label: 'All' },
@@ -155,10 +154,10 @@ class BankTransactions extends React.Component {
     let value = ''
     if (row.status == 'Explained') {
       classname = 'badge-success'
-      value = 'Cost of Goods Sold'
+      value = 'Withdrawal'
     } else if (row.status == 'Unexplained') {
       classname = 'badge-danger'
-      value = 'Expense'
+      value = 'Deposit'
     } else {
       classname = 'badge-primary'
       value = 'Tax Claim'
@@ -210,7 +209,7 @@ class BankTransactions extends React.Component {
 
     const {
       loading,
-      stateOptions,
+      typeOptions,
       statusOptions
     } = this.state
     const { bank_transaction_list } = this.props
@@ -278,16 +277,21 @@ class BankTransactions extends React.Component {
                           <Col lg={2} className="mb-1">
                             <Select
                               className=""
-                              options={stateOptions}
-                              placeholder="Transaction State"
+                              options={statusOptions}
+                              placeholder="Transaction Status"
                             />
                           </Col>
                           <Col lg={2} className="mb-1">
                             <Select
                               className=""
-                              options={statusOptions}
-                              placeholder="Transaction Status"
+                              options={typeOptions}
+                              placeholder="Transaction Type"
                             />
+                          </Col>
+                          <Col lg={2} className="mb-1">
+                            <DateRangePicker>
+                              <Input type="text" placeholder="Transaction Date" />
+                            </DateRangePicker>
                           </Col>
                         </Row>
                       </div>
@@ -308,12 +312,18 @@ class BankTransactions extends React.Component {
                           >
                           </TableHeaderColumn>
                           <TableHeaderColumn
+                            dataField="amount"
+                            dataSort
+                          >
+                            Date
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
                             isKey
                             dataField="reference_number"
                             dataFormat={this.renderAccountNumber}
                             dataSort
                           >
-                            Reference Number
+                            Reference No.
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="description"
@@ -326,19 +336,19 @@ class BankTransactions extends React.Component {
                             dataField="amount"
                             dataSort
                           >
-                            Description
+                            Deposit
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="amount"
                             dataSort
                           >
-                            Amount
+                            Withdrawal
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             dataField="amount"
                             dataSort
                           >
-                            Transaction Date
+                            Running Balance
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             className="text-right"

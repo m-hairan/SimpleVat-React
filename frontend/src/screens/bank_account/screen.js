@@ -62,6 +62,7 @@ class BankAccount extends React.Component {
     this.renderAccountNumber = this.renderAccountNumber.bind(this)
     this.renderAccountType = this.renderAccountType.bind(this)
     this.renderActions = this.renderActions.bind(this)
+    this.renderLastReconciled = this.renderLastReconciled.bind(this)
     this.onRowSelect = this.onRowSelect.bind(this)
     this.onSelectAll = this.onSelectAll.bind(this)
     this.toggleActionButton = this.toggleActionButton.bind(this)
@@ -161,6 +162,20 @@ class BankAccount extends React.Component {
     )
   }
 
+  renderLastReconciled (cell, row) {
+    return (
+      <div>
+        <div>
+          <label className="font-weight-bold mr-2">Balance : </label>
+          <label className="badge badge-success mb-0">Test</label>
+        </div>
+        <div>
+          <label className="font-weight-bold mr-2">Date : </label><label>2019/12/05</label>
+        </div>
+      </div>
+    )
+  }
+
 
   onRowSelect (row, isSelected, e) {
     console.log('one row checked ++++++++', row)
@@ -239,7 +254,7 @@ class BankAccount extends React.Component {
                         </ButtonGroup>
                       </div>
                       <div className="py-3">
-                        <h6>Filter : </h6>
+                        <h5>Filter : </h5>
                         <Row>
                           <Col lg={2} className="mb-1">
                             <Select
@@ -254,6 +269,12 @@ class BankAccount extends React.Component {
                               options={[]}
                               placeholder="Account Type"
                             />
+                          </Col>
+                          <Col lg={2} className="mb-1">
+                            <Input type="text" placeholder="Account Name" />
+                          </Col>
+                          <Col lg={2} className="mb-1">
+                            <Input type="text" placeholder="Account Number" />
                           </Col>
                           <Col lg={2} className="mb-1">
                             <Select
@@ -312,7 +333,13 @@ class BankAccount extends React.Component {
                             dataField="swift_code"
                             dataSort
                           >
-                            Balance
+                            Book Balance
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            dataField="swift_code"
+                            dataFormat={this.renderLastReconciled}
+                          >
+                            Last Reconciled
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             className="text-right"
