@@ -150,13 +150,6 @@ class UsersRoles extends React.Component {
                             Export to CSV
                           </Button>
                           <Button
-                            color="info"
-                            className="btn-square"
-                          >
-                            <i className="fa glyphicon glyphicon-export fa-upload mr-1" />
-                            Import from CSV
-                          </Button>
-                          <Button
                             color="primary"
                             className="btn-square"
                             onClick={this.showInviteUserModal}
