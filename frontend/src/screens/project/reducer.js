@@ -1,7 +1,9 @@
 import { PROJECT } from 'constants/types'
 
 const initState = {
-  project_list: []
+  project_list: [],
+  project_currency_list: [],
+  project_country_list: []
 }
 
 const ProjectReducer = (state = initState, action) => {
@@ -13,6 +15,18 @@ const ProjectReducer = (state = initState, action) => {
       return {
         ...state,
         project_list: Object.assign([], payload.data)
+      }
+
+    case PROJECT.PROJECT_CURRENCY_LIST:
+      return {
+        ...state,
+        project_currency_list: Object.assign([], payload.data)
+      }
+    
+    case PROJECT.PROJECT_COUNTRY_LIST:
+      return {
+        ...state,
+        project_country_list: Object.assign([], payload.data)
       }
 
     default:
