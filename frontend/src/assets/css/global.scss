@@ -38,6 +38,18 @@ body, span, label, h1, h2, h3, h4, p, em {
 }
 
 
+.is-invalid ~ .invalid-feedback {
+  display: block;
+}
+
+div.Select.is-invalid {
+  .Select-control {
+    border:1px solid #f86c6b !important;
+  }
+  
+}
+
+
 
 
 
@@ -134,10 +146,6 @@ body, span, label, h1, h2, h3, h4, p, em {
     }
   }
   .react-bs-table-pagination {
-    margin-bottom: 1rem;
-    ul {
-      margin-bottom: 0 !important;
-    }
     .btn.dropdown-toggle {
       border-radius: 0 !important;
     }
