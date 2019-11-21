@@ -11,4 +11,5 @@ public abstract class PurchaseService extends SimpleVatService<Integer, Purchase
 
     public abstract List<Purchase> getPurchaseListByDueAmount();
 
+    public abstract void deleteByIds(List<Integer> ids);
 }

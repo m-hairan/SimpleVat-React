@@ -273,6 +273,18 @@ class DetailCustomerInvoice extends React.Component {
                               </div>
                             </FormGroup>
                           </Col>
+                          <Col lg={4}>
+                            <FormGroup className="mb-3">
+                              <Label htmlFor="tax_identification_number">Tax Identification Number (TIN)</Label>
+                              <Input
+                                type="text"
+                                id="tax_identification_number"
+                                name="tax_identification_number"
+                                placeholder=""
+                                required
+                              />
+                            </FormGroup>
+                          </Col>
                         </Row>
                         <Row>
                           <Col lg={4}>

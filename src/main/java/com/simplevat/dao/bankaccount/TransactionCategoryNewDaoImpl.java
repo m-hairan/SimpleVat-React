@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.simplevat.dao.AbstractDao;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import javax.persistence.TypedQuery;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository(value = "transactionCategoryDao")
 public class TransactionCategoryNewDaoImpl extends AbstractDao<Integer, TransactionCategory> implements TransactionCategoryDaoNew {
@@ -33,7 +34,7 @@ public class TransactionCategoryNewDaoImpl extends AbstractDao<Integer, Transact
     }
 
     @Override
-    public List<TransactionCategory> findAllTransactionCategoryByTransactionType(Integer transactionTypeCode,String name) {
+    public List<TransactionCategory> findAllTransactionCategoryByTransactionType(Integer transactionTypeCode, String name) {
         TypedQuery<TransactionCategory> query = getEntityManager().createQuery("SELECT t FROM TransactionCategory t where t.deleteFlag=FALSE AND t.transactionType.transactionTypeCode =:transactionTypeCode AND t.transactionCategoryName LIKE '%'||:transactionCategoryName||'%' ORDER BY t.defaltFlag DESC , t.orderSequence,t.transactionCategoryName ASC", TransactionCategory.class);
         query.setParameter("transactionTypeCode", transactionTypeCode);
         query.setParameter("transactionCategoryName", name);
@@ -62,6 +63,18 @@ public class TransactionCategoryNewDaoImpl extends AbstractDao<Integer, Transact
             return transactionCategoryList.get(0);
         }
         return null;
+    }
+
+    @Override
+    @Transactional
+    public void deleteByIds(List<Integer> ids) {
+        if (ids != null && !ids.isEmpty()) {
+            for (Integer id : ids) {
+                TransactionCategory transactionCategory = findByPK(id);
+                transactionCategory.setDeleteFlag(Boolean.TRUE);
+                update(transactionCategory);
+            }
+        }
     }
 
 }

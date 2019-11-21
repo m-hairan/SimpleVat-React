@@ -13,6 +13,9 @@ import java.util.List;
  * @author daynil
  */
 public interface ProductDao extends Dao<Integer, Product> {
-     public List<Product> getProductList();
+
+    public List<Product> getProductList();
+
+    public void deleteByIds(List<Integer> ids);
 
 }

@@ -14,4 +14,5 @@ public abstract class ProjectService extends SimpleVatService<Integer, Project> 
 
     public abstract void updateProjectRevenueBudget(BigDecimal revenueAmount, Project project);
 
+    public abstract void deleteByIds(List<Integer> ids);
 }
