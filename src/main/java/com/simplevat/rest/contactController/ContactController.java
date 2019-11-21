@@ -5,6 +5,7 @@
  */
 package com.simplevat.rest.contactController;
 
+import com.simplevat.bank.model.DeleteModel;
 import com.simplevat.utils.ContactUtil;
 import com.simplevat.helper.ContactHelper;
 import com.simplevat.entity.Contact;
@@ -107,9 +108,8 @@ public class ContactController implements Serializable {
     }
 
     @GetMapping(value = "/contactvendorlist")
-    public ResponseEntity<List<ContactViewModel>> populateContactVendorList() {
+    public ResponseEntity populateContactVendorList() {
         List<ContactView> contactViewList = contactService.getContactViewList();
-
         List<ContactViewModel> contactList = new ArrayList<>();
         if (contactViewList != null) {
             for (ContactView contactView : contactViewList) {
@@ -123,7 +123,7 @@ public class ContactController implements Serializable {
     }
 
     @GetMapping(value = "/contactcustomerlist")
-    public ResponseEntity<List<ContactViewModel>> populateContactCustomerList() {
+    public ResponseEntity populateContactCustomerList() {
         List<ContactView> contactViews = contactService.getContactViewList();
 
         List<ContactViewModel> contactViewModels = new ArrayList<>();
@@ -137,10 +137,18 @@ public class ContactController implements Serializable {
     }
 
     @GetMapping(value = "/contacttype")
-    public ResponseEntity< List<ContactType>> contactType() {
-        List<ContactType> contactTypes = ContactUtil.contactTypeList();
-
-        return new ResponseEntity<>(contactTypes, HttpStatus.OK);
+    public ResponseEntity contactType() {
+        try {
+            List<ContactType> contactTypes = ContactUtil.contactTypeList();
+            if (contactTypes != null && !contactTypes.isEmpty()) {
+                return new ResponseEntity<>(contactTypes, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping(value = "/titlelist")
@@ -149,8 +157,9 @@ public class ContactController implements Serializable {
         return new ResponseEntity<>(titles, HttpStatus.OK);
     }
 
+    @Deprecated
     @GetMapping(value = "/countrieslist")
-    public ResponseEntity<List<CountryModel>> countryList() {
+    public ResponseEntity countryList() {
         ArrayList<CountryModel> countryModel = new ArrayList<>();
         List<Country> countrys = countryService.getCountries();
         for (Country country : countrys) {
@@ -161,7 +170,6 @@ public class ContactController implements Serializable {
             countryModel1.setCountryName(country.getCountryName());
             countryModel1.setIsoAlpha3Code(country.getIsoAlpha3Code());
             countryModel.add(countryModel1);
-
         }
         if (!countryModel.isEmpty()) {
             return new ResponseEntity<>(countryModel, HttpStatus.OK);
@@ -169,13 +177,20 @@ public class ContactController implements Serializable {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @Deprecated
     @GetMapping(value = "/currencieslist")
-    public ResponseEntity<List<Currency>> CurrenciesList() {
-        List<Currency> currencys = currencyService.getCurrencies();
-        if (currencys != null && !currencys.isEmpty()) {
-            return new ResponseEntity<>(currencys, HttpStatus.OK);
+    public ResponseEntity CurrenciesList() {
+        try {
+            List<Currency> currencys = currencyService.getCurrencies();
+            if (currencys != null && !currencys.isEmpty()) {
+                return new ResponseEntity<>(currencys, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(currencys, HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @PostMapping(value = "/savecontact")
@@ -218,5 +233,16 @@ public class ContactController implements Serializable {
         contactService.update(contact1);
         return new ResponseEntity<>(HttpStatus.OK);
 
+    }
+
+    @DeleteMapping(value = "/deletecontacts")
+    public ResponseEntity deleteContacts(@RequestParam(value = "ids") DeleteModel ids) {
+        try {
+            contactService.deleleByIds(ids.getIds());
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

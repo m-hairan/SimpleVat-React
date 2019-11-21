@@ -82,7 +82,7 @@ public class PurchaseRestController {
     PurchaseRestControllerHelper purchaseControllerRestHelper = new PurchaseRestControllerHelper();
 
     @RequestMapping(method = RequestMethod.GET, value = "/populatepurchases")
-    public ResponseEntity<List<PurchaseRestModel>> populatePurchases() {
+    public ResponseEntity populatePurchases() {
         List<PurchaseRestModel> purchaseModels = new ArrayList<>();
         try {
             int totalPurchases = 0;
@@ -121,7 +121,7 @@ public class PurchaseRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/vieworedit")
-    public ResponseEntity<PurchaseRestModel> viewOrEditPurchase(@RequestParam("purchaseId") Integer purchaseId) {
+    public ResponseEntity viewOrEditPurchase(@RequestParam("purchaseId") Integer purchaseId) {
         try {
             PurchaseRestModel selectedPurchaseModel;
             Purchase purchase = purchaseService.findByPK(purchaseId);
@@ -213,7 +213,7 @@ public class PurchaseRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/categories")
-    public ResponseEntity<List<TransactionCategory>> completeCategory() {
+    public ResponseEntity completeCategory() {
         try {
             List<TransactionCategory> transactionCategoryList = transactionCategoryService.findTransactionCategoryListByParentCategory(TransactionCategoryConsatant.TRANSACTION_CATEGORY_PURCHASE);
             return new ResponseEntity(transactionCategoryList, HttpStatus.OK);
@@ -223,37 +223,24 @@ public class PurchaseRestController {
         }
     }
 
+    @Deprecated
     @RequestMapping(method = RequestMethod.GET, value = "/currencys")
-    public ResponseEntity<List<Currency>> completeCurrency(@RequestParam("currencyString") String currencyStr) {
+    public ResponseEntity getCurrency() {
         try {
             List<Currency> currencies = currencyService.getCurrencies();
-            List<Currency> currencySuggestion = new ArrayList<>();
-            Iterator<Currency> currencyIterator = currencies.iterator();
-            while (currencyIterator.hasNext()) {
-                Currency currency = currencyIterator.next();
-                if (currency.getCurrencyName() != null
-                        && !currency.getCurrencyName().isEmpty()
-                        && currency.getCurrencyName().toUpperCase().contains(currencyStr.toUpperCase())) {
-                    currencySuggestion.add(currency);
-                } else if (currency.getCurrencyDescription() != null
-                        && !currency.getCurrencyDescription().isEmpty()
-                        && currency.getCurrencyDescription().toUpperCase().contains(currencyStr.toUpperCase())) {
-                    currencySuggestion.add(currency);
-                } else if (currency.getCurrencyIsoCode() != null
-                        && !currency.getCurrencyIsoCode().isEmpty()
-                        && currency.getCurrencyIsoCode().toUpperCase().contains(currencyStr.toUpperCase())) {
-                    currencySuggestion.add(currency);
-                }
+            if (currencies != null && !currencies.isEmpty()) {
+                return new ResponseEntity<>(currencies, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity(currencySuggestion, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/projects")
-    public ResponseEntity<List<Project>> projects(@RequestParam("projectName") String searchQuery) {
+    public ResponseEntity projects(@RequestParam("projectName") String searchQuery) {
         try {
             ProjectCriteria criteria = new ProjectCriteria();
             criteria.setActive(Boolean.TRUE);
@@ -269,7 +256,7 @@ public class PurchaseRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/contacts")
-    public ResponseEntity<List<Contact>> contacts(@RequestParam("contactName") String searchQuery) {
+    public ResponseEntity contacts(@RequestParam("contactName") String searchQuery) {
         try {
             List<Contact> contacts = contactService.getContacts(searchQuery, ContactTypeConstant.VENDOR);
             return new ResponseEntity(contacts, HttpStatus.OK);

@@ -5,14 +5,14 @@
  */
 package com.simplevat.rest.expenses;
 
+import com.simplevat.bank.model.DeleteModel;
+import com.simplevat.entity.Country;
 import com.simplevat.helper.ExpenseRestHelper;
-import com.simplevat.entity.Currency;
 import com.simplevat.entity.Expense;
-import com.simplevat.entity.Project;
-import com.simplevat.entity.User;
 import com.simplevat.entity.bankaccount.TransactionCategory;
 import static com.simplevat.helper.ExpenseRestHelper.TRANSACTION_TYPE_EXPENSE;
 import com.simplevat.service.CompanyService;
+import com.simplevat.service.CountryService;
 import com.simplevat.service.CurrencyService;
 import com.simplevat.service.ExpenseService;
 import com.simplevat.service.ProjectService;
@@ -39,10 +39,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class ExpenseRestController {
 
     @Autowired
-    ExpenseService expenseService;
+    private ExpenseService expenseService;
 
     @Autowired
-    TransactionCategoryServiceNew transactionCategoryService;
+    private TransactionCategoryServiceNew transactionCategoryService;
 
     @Autowired
     private UserServiceNew userServiceNew;
@@ -57,12 +57,15 @@ public class ExpenseRestController {
     private ProjectService projectService;
 
     @Autowired
-    TransactionTypeService transactionTypeService;
+    private TransactionTypeService transactionTypeService;
+
+    @Autowired
+    private CountryService countryService;
 
     ExpenseRestHelper controllerHelper = new ExpenseRestHelper();
 
     @RequestMapping(method = RequestMethod.GET, value = "/retrieveExpenseList")
-    public ResponseEntity<List<ExpenseRestModel>> expenseList() {
+    public ResponseEntity expenseList() {
         try {
             List<ExpenseRestModel> expenses = new ArrayList<>();
             System.out.println("expenseService=" + expenseService);
@@ -92,7 +95,7 @@ public class ExpenseRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/vieworedit")
-    public ResponseEntity<ExpenseRestModel> viewExpense(@RequestParam("expenseId") Integer expenseId) {
+    public ResponseEntity viewExpense(@RequestParam("expenseId") Integer expenseId) {
         try {
             System.out.println("expenseId=" + expenseId);
             return new ResponseEntity(controllerHelper.viewOrEditExpense(expenseId, expenseService), HttpStatus.OK);
@@ -114,8 +117,20 @@ public class ExpenseRestController {
         }
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/deletes")
+    public ResponseEntity deleteExpenses(@RequestParam("expenseId") DeleteModel expenseIds) {
+        try {
+            System.out.println("expenseId=" + expenseIds);
+            controllerHelper.deleteExpenses(expenseIds, expenseService);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = "/claimants")
-    public ResponseEntity<List<User>> getClaimants() {
+    public ResponseEntity getClaimants() {
         try {
             return new ResponseEntity(controllerHelper.users(userServiceNew), HttpStatus.OK);
         } catch (Exception e) {
@@ -125,7 +140,7 @@ public class ExpenseRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/categories")
-    public ResponseEntity<List<TransactionCategory>> getCategorys(@RequestParam("categoryName") String queryString) {
+    public ResponseEntity getCategorys(@RequestParam("categoryName") String queryString) {
         try {
             System.out.println("queryString=" + queryString);
             List<TransactionCategory> transactionCategoryList = transactionCategoryService.findAllTransactionCategoryByTransactionType(TRANSACTION_TYPE_EXPENSE, queryString);
@@ -136,18 +151,24 @@ public class ExpenseRestController {
         }
     }
 
+    @Deprecated
     @RequestMapping(method = RequestMethod.GET, value = "/currencys")
-    public ResponseEntity<List<Currency>> getCurrencys(@RequestParam("currency") String queryString) {
+    public ResponseEntity getCurrencys() {
         try {
-            return new ResponseEntity(controllerHelper.completeCurrency(queryString, currencyService), HttpStatus.OK);
+            List<Country> countries = countryService.getCountries();
+            if (countries != null && !countries.isEmpty()) {
+                return new ResponseEntity<>(countries, HttpStatus.OK);
+            } else {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/projects")
-    public ResponseEntity<List<Project>> getProjects(@RequestParam("projectName") String queryString) {
+    public ResponseEntity getProjects(@RequestParam("projectName") String queryString) {
         try {
             return new ResponseEntity(controllerHelper.projects(queryString, projectService), HttpStatus.OK);
         } catch (Exception e) {

@@ -48,4 +48,15 @@ public class BankAccountDaoImpl extends AbstractDao<Integer, BankAccount> implem
         return null;
     }
 
+    @Override
+    public void deleteByIds(List<Integer> ids) {
+        if (ids != null && !ids.isEmpty()) {
+            for (Integer id : ids) {
+                BankAccount bankAccount = findByPK(id);
+                bankAccount.setDeleteFlag(Boolean.TRUE);
+                update(bankAccount);
+            }
+        }
+    }
+
 }

@@ -62,4 +62,9 @@ public class BankAccountServiceImpl extends BankAccountService {
     public BankAccount getBankAccountById(int id) {
         return bankAccountDao.getBankAccountById(id);
     }
+
+    @Override
+    public void deleteByIds(List<Integer> ids) {
+        bankAccountDao.deleteByIds(ids);
+    }
 }
