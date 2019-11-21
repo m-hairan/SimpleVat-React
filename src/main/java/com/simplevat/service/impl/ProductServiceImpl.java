@@ -25,4 +25,9 @@ public class ProductServiceImpl extends ProductService {
         return productDao.getProductList();
     }
 
+    @Override
+    public void deleteByIds(List<Integer> ids) {
+       productDao.deleteByIds(ids);
+    }
+
 }

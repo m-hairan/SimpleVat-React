@@ -54,7 +54,7 @@ public class TransactionCategoryServiceNewImpl extends TransactionCategoryServic
     }
 
     @Override
-    public List<TransactionCategory> findAllTransactionCategoryByTransactionType(Integer transactionTypeCode,String name) {
+    public List<TransactionCategory> findAllTransactionCategoryByTransactionType(Integer transactionTypeCode, String name) {
         return dao.findAllTransactionCategoryByTransactionType(transactionTypeCode, name);
     }
 
@@ -86,5 +86,10 @@ public class TransactionCategoryServiceNewImpl extends TransactionCategoryServic
         activity.setLastUpdateDate(LocalDateTime.now());
         activity.setLoggingRequired(true);
         return activity;
+    }
+
+    @Override
+    public void deleteByIds(List<Integer> ids) {
+        dao.deleteByIds(ids);
     }
 }

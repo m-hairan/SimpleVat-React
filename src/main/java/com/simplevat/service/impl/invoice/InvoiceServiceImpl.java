@@ -167,4 +167,9 @@ public class InvoiceServiceImpl extends InvoiceService {
     public List<Invoice> getInvoiceList() {
         return getDao().getInvoiceList();
     }
+
+    @Override
+    public void deleteByIds(List<Integer> ids) {
+        getDao().deleteByIds(ids);
+    }
 }

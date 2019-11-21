@@ -5,6 +5,7 @@
  */
 package com.simplevat.helper;
 
+import com.simplevat.bank.model.DeleteModel;
 import com.simplevat.contact.model.ExpenseItemModel;
 import com.simplevat.criteria.ProjectCriteria;
 import com.simplevat.entity.Company;
@@ -56,7 +57,7 @@ public class ExpenseRestHelper implements Serializable {
     }
 
     public List<TransactionCategory> completeCategory(List<TransactionCategory> transactionCategoryList) {
-        try {            
+        try {
             List<TransactionCategory> transactionCategoryParentList = new ArrayList<>();
             System.out.println("transactionCategoryList=" + transactionCategoryList);
             if (transactionCategoryList != null && !transactionCategoryList.isEmpty()) {
@@ -101,7 +102,6 @@ public class ExpenseRestHelper implements Serializable {
 //        transactionCategoryModel.setVersionNumber(transactionCategory.getVersionNumber());
 //        return transactionCategoryModel;
 //    }
-
     public List<Currency> completeCurrency(String currencyStr, CurrencyService currencyService) {
         List<Currency> currencies = currencyService.getCurrencies();
         List<Currency> currencySuggestion = new ArrayList<>();
@@ -153,6 +153,14 @@ public class ExpenseRestHelper implements Serializable {
         Expense expense = expenseService.findByPK(expenseId);
         expense.setDeleteFlag(true);
         expenseService.update(expense);
+    }
+
+    public void deleteExpenses(DeleteModel expenseIds, ExpenseService expenseService) throws Exception {
+        try {
+            expenseService.deleteByIds(expenseIds.getIds());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public Expense getExpense(ExpenseRestModel model, UserServiceNew userServiceNew, CurrencyService currencyService, ProjectService projectService, ExpenseService expenseService, TransactionCategoryServiceNew transactionCategoryServiceNew, TransactionTypeService transactionTypeService) throws Exception {
@@ -345,7 +353,7 @@ public class ExpenseRestHelper implements Serializable {
 //            FacesMessage message = new FacesMessage("Please add atleast one item to create Expense.");
 //            message.setSeverity(FacesMessage.SEVERITY_ERROR);
 //            FacesContext.getCurrentInstance().addMessage("validationId", message);
-        
+
         return expenseModel.getExpenseItem().size() >= 1;
     }
 

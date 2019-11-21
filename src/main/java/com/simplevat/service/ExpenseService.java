@@ -26,4 +26,6 @@ public abstract class ExpenseService extends SimpleVatService<Integer, Expense> 
     public abstract int getMaxValue(Map<Object, Number> data);
 
     public abstract List<Expense> getExpenseForReports(Date startDate, Date endDate);
+
+    public abstract void deleteByIds(List<Integer> ids);
 }

@@ -88,7 +88,12 @@ public class ExpenseServiceImpl extends ExpenseService {
 
     @Override
     public List<Expense> getExpenseForReports(Date startDate, Date endDate) {
-        return expenseDao.getExpenseForReports(startDate,endDate);
+        return expenseDao.getExpenseForReports(startDate, endDate);
+    }
+
+    @Override
+    public void deleteByIds(List<Integer> ids) {
+        expenseDao.deleteByIds(ids);
     }
 
 }

@@ -13,4 +13,5 @@ public abstract class BankAccountService extends SimpleVatService<Integer, BankA
 
     public abstract BankAccount getBankAccountById(int id);
 
+    public abstract void deleteByIds(List<Integer> ids);
 }

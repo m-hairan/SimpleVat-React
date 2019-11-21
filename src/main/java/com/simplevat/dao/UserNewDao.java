@@ -12,6 +12,9 @@ public interface UserNewDao extends Dao<Integer, User> {
     public User getUserEmail(String emailAddress);
 
     public boolean getUserByEmail(String usaerName, String password);
-    
+
     public List<User> getAllUserNotEmployee();
+
+    public void deleteByIds(List<Integer> ids);
 }
+    

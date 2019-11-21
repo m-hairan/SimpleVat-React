@@ -24,4 +24,6 @@ public abstract class ContactService extends SimpleVatService<Integer, Contact> 
 
     public abstract Contact getLastContact();
 
+    public abstract void deleleByIds(List<Integer> ids);
+
 }
