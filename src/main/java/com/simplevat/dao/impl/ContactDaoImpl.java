@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 import org.apache.commons.collections4.CollectionUtils;
 
 /**
@@ -74,6 +75,18 @@ public class ContactDaoImpl extends AbstractDao<Integer, Contact> implements Con
             return contacts.get(0);
         }
         return null;
+    }
+
+    @Override
+    @Transactional
+    public void deleteByIds(List<Integer> ids) {
+        if (ids != null && !ids.isEmpty()) {
+            for (Integer id : ids) {
+                Contact contact = findByPK(id);
+                contact.setDeleteFlag(Boolean.TRUE);
+                update(contact);
+            }
+        }
     }
 
 }

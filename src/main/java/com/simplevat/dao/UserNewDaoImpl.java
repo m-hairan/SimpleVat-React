@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.simplevat.entity.User;
 import java.util.ArrayList;
 import javax.persistence.TypedQuery;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository(value = "userDao")
 public class UserNewDaoImpl extends AbstractDao<Integer, User> implements UserNewDao {
@@ -53,6 +54,18 @@ public class UserNewDaoImpl extends AbstractDao<Integer, User> implements UserNe
             return resultList;
         } else {
             return new ArrayList<>();
+        }
+    }
+
+    @Override
+    @Transactional
+    public void deleteByIds(List<Integer> ids) {
+        if (ids != null && !ids.isEmpty()) {
+            for (Integer id : ids) {
+                User user = findByPK(id);
+                user.setDeleteFlag(Boolean.TRUE);
+                update(user);
+            }
         }
     }
 }

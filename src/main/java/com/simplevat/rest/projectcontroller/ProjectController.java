@@ -5,6 +5,7 @@
  */
 package com.simplevat.rest.projectcontroller;
 
+import com.simplevat.bank.model.DeleteModel;
 import com.simplevat.criteria.ProjectCriteria;
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Country;
@@ -58,7 +59,7 @@ public class ProjectController {
     private CountryService countryService;
 
     @GetMapping(value = "/getprojectbycriteria")
-    public ResponseEntity<List<Project>> getProjects() throws Exception {
+    public ResponseEntity getProjects() throws Exception {
         ProjectCriteria projectCriteria = new ProjectCriteria();
         projectCriteria.setActive(Boolean.TRUE);
         List<Project> projects = projectService.getProjectsByCriteria(projectCriteria);
@@ -87,8 +88,19 @@ public class ProjectController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @DeleteMapping(value = "/deleteprojects")
+    public ResponseEntity deleteProjects(@RequestBody DeleteModel ids) throws Exception {
+        try {
+            projectService.deleteByIds(ids.getIds());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @GetMapping(value = "/editproject")
-    public ResponseEntity<Project> editProject(@RequestParam(value = "id") Integer id) throws Exception {
+    public ResponseEntity editProject(@RequestParam(value = "id") Integer id) throws Exception {
         Project project = projectService.findByPK(id);
 
         if (project == null) {
@@ -98,7 +110,7 @@ public class ProjectController {
     }
 
     @GetMapping(value = "/getcontactbyName")
-    public ResponseEntity<List<Contact>> getContacts(@RequestParam(value = "searchQuery") String searchQuery) {
+    public ResponseEntity getContacts(@RequestParam(value = "searchQuery") String searchQuery) {
         List<Contact> contact = contactService.getContacts(searchQuery, ContactTypeConstant.CUSTOMER);
         if (contact == null && contact.isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -107,41 +119,25 @@ public class ProjectController {
         return new ResponseEntity<>(contact, HttpStatus.OK);
     }
 
+    @Deprecated
     @GetMapping(value = "/getcurrenncy")
-    public ResponseEntity<List<Currency>> getCurrency(@RequestParam(value = "currencyStr") String currencyStr) {
-        List<Currency> currencySuggestion = new ArrayList<>();
-        List<Currency> currencies = currencyService.getCurrencies();
-
-        Iterator<Currency> currencyIterator = currencies.iterator();
-        if (currencyIterator == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        } else {
-            while (currencyIterator.hasNext()) {
-                Currency currency = currencyIterator.next();
-                if (currency.getCurrencyName() != null
-                        && !currency.getCurrencyName().isEmpty()
-                        && currency.getCurrencyName().toUpperCase().contains(currencyStr.toUpperCase())) {
-
-                    currencySuggestion.add(currency);
-                } else if (currency.getCurrencyDescription() != null
-                        && !currency.getCurrencyDescription().isEmpty()
-                        && currency.getCurrencyDescription().toUpperCase().contains(currencyStr.toUpperCase())) {
-                    currencySuggestion.add(currency);
-
-                } else if (currency.getCurrencyIsoCode() != null
-                        && !currency.getCurrencyIsoCode().isEmpty()
-                        && currency.getCurrencyIsoCode().toUpperCase().contains(currencyStr.toUpperCase())) {
-                    currencySuggestion.add(currency);
-
-                }
+    public ResponseEntity getCurrency() {
+        try {
+            List<Currency> currencies = currencyService.getCurrencies();
+            if (currencies != null && !currencies.isEmpty()) {
+                return new ResponseEntity<>(currencies, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-
-            return new ResponseEntity<>(currencySuggestion, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 
     @GetMapping(value = "/gettitle")
-    public ResponseEntity<List<Title>> completeTitle(@RequestParam(value = "titleStr") String titleStr) {
+    public ResponseEntity getTitle(@RequestParam(value = "titleStr") String titleStr) {
         List<Title> titleSuggestion = new ArrayList<>();
         List<Title> titles = titleService.getTitles();
         Iterator<Title> titleIterator = titles.iterator();
@@ -162,36 +158,25 @@ public class ProjectController {
         }
     }
 
+    @Deprecated
     @GetMapping(value = "/getcountry")
-    public ResponseEntity<List<Country>> getCountry(@RequestParam(value = "countryStr") String countryStr) {
-        List<Country> countrySuggestion = new ArrayList<>();
-        List<Country> countries = countryService.getCountries();
-
-        Iterator<Country> countryIterator = countries.iterator();
-        if (countryIterator == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-
-        } else {
-
-            while (countryIterator.hasNext()) {
-                Country country = countryIterator.next();
-                if (country.getCountryName() != null
-                        && !country.getCountryName().isEmpty()
-                        && country.getCountryName().toUpperCase().contains(countryStr.toUpperCase())) {
-                    countrySuggestion.add(country);
-                } else if (country.getIsoAlpha3Code() != null
-                        && !country.getIsoAlpha3Code().isEmpty()
-                        && country.getIsoAlpha3Code().toUpperCase().contains(countryStr.toUpperCase())) {
-                    countrySuggestion.add(country);
-                }
+    public ResponseEntity getCountry() {
+        try {
+            List<Country> countries = countryService.getCountries();
+            if (countries != null && !countries.isEmpty()) {
+                return new ResponseEntity<>(countries, HttpStatus.OK);
+            } else {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(countrySuggestion, HttpStatus.OK);
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 
     @PostMapping(value = "/saveprojectcontact")
-    public ResponseEntity createContact(@RequestBody ContactModel contactModel, @RequestParam(value = "id") Integer id) {
+    public ResponseEntity saveContact(@RequestBody ContactModel contactModel, @RequestParam(value = "id") Integer id) {
 
         Contact contact = new Contact();
         ContactHelper contactHelper = new ContactHelper();

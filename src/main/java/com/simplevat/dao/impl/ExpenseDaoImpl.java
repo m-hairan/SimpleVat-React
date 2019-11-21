@@ -105,4 +105,16 @@ public class ExpenseDaoImpl extends AbstractDao<Integer, Expense> implements Exp
         }
         return null;
     }
+
+    @Override
+    @Transactional
+    public void deleteByIds(List<Integer> ids) {
+        if (ids != null && !ids.isEmpty()) {
+            for (Integer id : ids) {
+                Expense expense = findByPK(id);
+                expense.setDeleteFlag(Boolean.TRUE);
+                update(expense);
+            }
+        }
+    }
 }
