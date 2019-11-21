@@ -67,7 +67,7 @@ public class BankAccountController implements Serializable {
     private TransactionStatusService transactionStatusService;
 
     @GetMapping(value = "/getbanklist")
-    public ResponseEntity<List<BankAccount>> getBankAccountList() {
+    public ResponseEntity getBankAccountList() {
         List<BankAccount> bankAccounts = bankAccountService.getBankAccounts();
         if (bankAccounts != null) {
             return new ResponseEntity<>(bankAccounts, HttpStatus.OK);
@@ -102,42 +102,39 @@ public class BankAccountController implements Serializable {
     }
 
     @GetMapping(value = "/getaccounttype")
-    public ResponseEntity<List<BankAccountType>> getBankAccontType() {
+    public ResponseEntity getBankAccontType() {
         List<BankAccountType> bankAccountTypes = bankAccountTypeService.getBankAccountTypeList();
-        if (bankAccountTypes != null) {
+        if (bankAccountTypes != null && !bankAccountTypes.isEmpty()) {
             return new ResponseEntity<>(bankAccountTypes, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping(value = "/getbankaccountstatus")
-    public ResponseEntity<List<BankAccountStatus>> getBankAccountStatus() {
+    public ResponseEntity getBankAccountStatus() {
         List<BankAccountStatus> bankAccountStatuses = bankAccountStatusService.getBankAccountStatuses();
-        return new ResponseEntity<>(bankAccountStatuses, HttpStatus.OK);
+        if (bankAccountStatuses != null && !bankAccountStatuses.isEmpty()) {
+            return new ResponseEntity<>(bankAccountStatuses, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
+    @Deprecated
     @GetMapping(value = "/getcountry")
-    public ResponseEntity<List<Country>> completeCountry(@RequestParam(value = "countryStr") String countryStr) {
-        List<Country> countrySuggestion = new ArrayList<>();
-        List<Country> countries = countryService.getCountries();
-        if (countries == null) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        Iterator<Country> countryIterator = countries.iterator();
-        while (countryIterator.hasNext()) {
-            Country country = countryIterator.next();
-            if (country.getCountryName() != null
-                    && !country.getCountryName().isEmpty()
-                    && country.getCountryName().toUpperCase().contains(countryStr.toUpperCase())) {
-                countrySuggestion.add(country);
-            } else if (country.getIsoAlpha3Code() != null
-                    && !country.getIsoAlpha3Code().isEmpty()
-                    && country.getIsoAlpha3Code().toUpperCase().contains(countryStr.toUpperCase())) {
-                countrySuggestion.add(country);
+    public ResponseEntity getCountry() {
+        try {
+            List<Country> countries = countryService.getCountries();
+            if (countries != null && !countries.isEmpty()) {
+                return new ResponseEntity<>(countries, HttpStatus.OK);
+            } else {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return new ResponseEntity<>(countrySuggestion, HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @DeleteMapping(value = "/deletebank")
@@ -149,7 +146,7 @@ public class BankAccountController implements Serializable {
     }
 
     @GetMapping(value = "/getbyid")
-    public ResponseEntity<BankAccount> editBankAccount(@RequestParam("id") Integer id) {
+    public ResponseEntity getById(@RequestParam("id") Integer id) {
         try {
             BankAccount bankAccount = bankAccountService.findByPK(id);
             return new ResponseEntity<>(bankAccount, HttpStatus.OK);
@@ -159,48 +156,30 @@ public class BankAccountController implements Serializable {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-     @DeleteMapping(value = "/deletebanks")
+    @DeleteMapping(value = "/deletebanks")
     public ResponseEntity deleteBankAccounts(@RequestBody DeleteModel ids) {
         try {
             bankAccountService.deleteByIds(ids.getIds());
+            return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            e.printStackTrace();
         }
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @Deprecated
     @GetMapping(value = "/getcurrenncy")
-    public ResponseEntity<List<Currency>> getCurrency(@RequestParam(value = "currencyStr") String currencyStr) {
-        List<Currency> currencySuggestion = new ArrayList<>();
-        List<Currency> currencies = currencyService.getCurrencies();
-
-        Iterator<Currency> currencyIterator = null;
-        if (currencies != null && !currencies.isEmpty()) {
-            currencyIterator = currencies.iterator();
-        }
-        if (currencyIterator == null) {
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        } else {
-            while (currencyIterator.hasNext()) {
-                Currency currency = currencyIterator.next();
-                if (currency.getCurrencyName() != null
-                        && !currency.getCurrencyName().isEmpty()
-                        && currency.getCurrencyName().toUpperCase().contains(currencyStr.toUpperCase())) {
-
-                    currencySuggestion.add(currency);
-                } else if (currency.getCurrencyDescription() != null
-                        && !currency.getCurrencyDescription().isEmpty()
-                        && currency.getCurrencyDescription().toUpperCase().contains(currencyStr.toUpperCase())) {
-                    currencySuggestion.add(currency);
-
-                } else if (currency.getCurrencyIsoCode() != null
-                        && !currency.getCurrencyIsoCode().isEmpty()
-                        && currency.getCurrencyIsoCode().toUpperCase().contains(currencyStr.toUpperCase())) {
-                    currencySuggestion.add(currency);
-
-                }
+    public ResponseEntity getCurrency() {
+        try {
+            List<Currency> currencies = currencyService.getCurrencies();
+            if (currencies != null && !currencies.isEmpty()) {
+                return new ResponseEntity<>(currencies, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-
-            return new ResponseEntity<>(currencySuggestion, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

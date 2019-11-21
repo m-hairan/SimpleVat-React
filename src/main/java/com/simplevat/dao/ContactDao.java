@@ -27,4 +27,6 @@ public interface ContactDao extends Dao<Integer, Contact> {
 
     Contact updateContact(Contact contact);*/
     Optional<Contact> getContactByEmail(String Email);
+
+    void deleteByIds(List<Integer> ids);
 }

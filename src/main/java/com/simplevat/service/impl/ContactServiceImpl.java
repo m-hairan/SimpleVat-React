@@ -17,45 +17,50 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("contactService")
 @Transactional
 public class ContactServiceImpl extends ContactService {
-
+    
     @Autowired
     private ContactDao contactDao;
-
+    
     public List<Contact> getContacts(Integer pageIndex, Integer noOfRecorgs) {
         return this.contactDao.getContacts(pageIndex, noOfRecorgs);
     }
-
+    
     @Override
     public List<Contact> getContacts() {
         return this.contactDao.getContacts();
     }
-
+    
     @Override
     public List<Contact> getContacts(final String searchQuery, int contactType) {
         return contactDao.getContacts(searchQuery, contactType);
     }
-
+    
     @Override
     public Contact getContact(final int id) {
         return contactDao.findByPK(id);
     }
-
+    
     @Override
     public Dao<Integer, Contact> getDao() {
         return this.contactDao;
     }
-
+    
     @Override
     public Optional<Contact> getContactByEmail(String Email) {
         return contactDao.getContactByEmail(Email);
     }
-
+    
     @Override
     public List<ContactView> getContactViewList() {
         return contactDao.getContactViewList();
     }
-
+    
     public Contact getLastContact() {
         return contactDao.getLastContact();
+    }
+    
+    @Override
+    public void deleleByIds(List<Integer> ids) {
+        contactDao.deleteByIds(ids);
     }
 }

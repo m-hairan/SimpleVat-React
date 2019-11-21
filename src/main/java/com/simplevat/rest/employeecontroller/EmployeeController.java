@@ -100,31 +100,20 @@ public class EmployeeController implements Serializable {
         return new ResponseEntity(titleSuggestion, HttpStatus.OK);
     }
 
+    @Deprecated
     @GetMapping(value = "/getcurrencycode")
-    public ResponseEntity<List<Currency>> completeCurrency(@RequestParam(value = "currencyStr") String currencyStr) {
-        List<Currency> currencySuggestion = new ArrayList<>();
-        List<Currency> currencies = currencyService.getCurrencies();
-
-        Iterator<Currency> currencyIterator = currencies.iterator();
-
-        while (currencyIterator.hasNext()) {
-            Currency currency = currencyIterator.next();
-            if (currency.getCurrencyName() != null
-                    && !currency.getCurrencyName().isEmpty()
-                    && currency.getCurrencyName().toUpperCase().contains(currencyStr.toUpperCase())) {
-                currencySuggestion.add(currency);
-            } else if (currency.getCurrencyDescription() != null
-                    && !currency.getCurrencyDescription().isEmpty()
-                    && currency.getCurrencyDescription().toUpperCase().contains(currencyStr.toUpperCase())) {
-                currencySuggestion.add(currency);
-            } else if (currency.getCurrencyIsoCode() != null
-                    && !currency.getCurrencyIsoCode().isEmpty()
-                    && currency.getCurrencyIsoCode().toUpperCase().contains(currencyStr.toUpperCase())) {
-                currencySuggestion.add(currency);
+    public ResponseEntity getCurrency() {
+        try {
+            List<Currency> currencies = currencyService.getCurrencies();
+            if (currencies != null && !currencies.isEmpty()) {
+                return new ResponseEntity(currencies, HttpStatus.OK);
+            } else {
+                return new ResponseEntity(currencies, HttpStatus.NOT_FOUND);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        return new ResponseEntity(currencySuggestion, HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @PostMapping(value = "/saveuser")
