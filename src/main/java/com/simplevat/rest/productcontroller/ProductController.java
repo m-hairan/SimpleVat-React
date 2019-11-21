@@ -5,6 +5,7 @@
  */
 package com.simplevat.rest.productcontroller;
 
+import com.simplevat.bank.model.DeleteModel;
 import com.simplevat.helper.ProductModelHelper;
 import com.simplevat.entity.Product;
 import com.simplevat.entity.ProductWarehouse;
@@ -48,7 +49,7 @@ public class ProductController implements Serializable {
     private ProductModelHelper productModelHelper = new ProductModelHelper();
 
     @GetMapping(value = "/getproduct")
-    public ResponseEntity<List<Product>> getProduct() {
+    public ResponseEntity getProduct() {
         List<Product> products = productService.getProductList();
         try {
             if (products == null) {
@@ -62,7 +63,7 @@ public class ProductController implements Serializable {
     }
 
     @DeleteMapping(value = "/deleteproduct")
-    public ResponseEntity deleteUser(@RequestParam(value = "id") Integer id) {
+    public ResponseEntity deleteProduct(@RequestParam(value = "id") Integer id) {
         Product product = productService.findByPK(id);
         if (product != null) {
             product.setDeleteFlag(Boolean.TRUE);
@@ -72,8 +73,20 @@ public class ProductController implements Serializable {
 
     }
 
+    @DeleteMapping(value = "/deleteproducts")
+    public ResponseEntity deleteProducts(@RequestBody DeleteModel ids) {
+        try {
+            productService.deleteByIds(ids.getIds());
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+
+    }
+
     @GetMapping(value = "/editproduct")
-    public ResponseEntity<Product> editProduct(@RequestParam(value = "id") Integer id) {
+    public ResponseEntity editProduct(@RequestParam(value = "id") Integer id) {
         Product product = productService.findByPK(id);
         if (product == null) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -84,7 +97,7 @@ public class ProductController implements Serializable {
     }
 
     @GetMapping(value = "/getvatpercentage")
-    public ResponseEntity<List<VatCategory>> vatCategorys() {
+    public ResponseEntity vatCategorys() {
         List<VatCategory> vatCategorys = vatCategoryService.getVatCategoryList();
         if (vatCategorys == null) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -93,7 +106,7 @@ public class ProductController implements Serializable {
     }
 
     @GetMapping(value = "/getwarehouse")
-    public ResponseEntity<List<ProductWarehouse>> getProductWarehouse() {
+    public ResponseEntity getProductWarehouse() {
         List<ProductWarehouse> productWarehouseList = productWarehouseService.getProductWarehouseList();
         if (productWarehouseList == null) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);

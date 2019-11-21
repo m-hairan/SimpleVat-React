@@ -75,7 +75,7 @@ public class ContactController implements Serializable {
     private int totalContacts;
 
     @GetMapping("/contactlist")
-    public ResponseEntity<List<ContactViewModel>> populateContactList() {
+    public ResponseEntity populateContactList() {
         List<ContactView> contactViewList = contactService.getContactViewList();
 
         List<ContactViewModel> contactList = new ArrayList<>();
@@ -137,7 +137,7 @@ public class ContactController implements Serializable {
     }
 
     @GetMapping(value = "/contacttype")
-    public ResponseEntity contactType() {
+    public ResponseEntity getContactType() {
         try {
             List<ContactType> contactTypes = ContactUtil.contactTypeList();
             if (contactTypes != null && !contactTypes.isEmpty()) {
@@ -152,7 +152,7 @@ public class ContactController implements Serializable {
     }
 
     @GetMapping(value = "/titlelist")
-    public ResponseEntity<List<Title>> titleList() {
+    public ResponseEntity titleList() {
         List<Title> titles = titleService.getTitles();
         return new ResponseEntity<>(titles, HttpStatus.OK);
     }
@@ -194,7 +194,7 @@ public class ContactController implements Serializable {
     }
 
     @PostMapping(value = "/savecontact")
-    public ResponseEntity<String> createOrUpdateContact(@RequestBody Contact contact, @RequestParam(value = "id") Integer id) {
+    public ResponseEntity createOrUpdateContact(@RequestBody Contact contact, @RequestParam(value = "id") Integer id) {
         try {
             if (contact.getContactId() != null && contact.getContactId() > 0) {
                 contactService.update(contact);
@@ -211,7 +211,7 @@ public class ContactController implements Serializable {
     }
 
     @GetMapping(value = "/editcontact")
-    public ResponseEntity<ContactModel> editContact(@RequestParam(value = "id") Integer id) {
+    public ResponseEntity editContact(@RequestParam(value = "id") Integer id) {
         Contact contact = contactService.findByPK(id);
         if (contact == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -222,12 +222,10 @@ public class ContactController implements Serializable {
     }
 
     @DeleteMapping(value = "/deletecontact")
-    public ResponseEntity deleteContact(@RequestParam(value = "id") Integer id
-    ) {
+    public ResponseEntity deleteContact(@RequestParam(value = "id") Integer id) {
         Contact contact1 = contactService.findByPK(id);
         if (contact1 == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
         }
         contact1.setDeleteFlag(Boolean.TRUE);
         contactService.update(contact1);
@@ -236,7 +234,7 @@ public class ContactController implements Serializable {
     }
 
     @DeleteMapping(value = "/deletecontacts")
-    public ResponseEntity deleteContacts(@RequestParam(value = "ids") DeleteModel ids) {
+    public ResponseEntity deleteContacts(@RequestBody DeleteModel ids) {
         try {
             contactService.deleleByIds(ids.getIds());
             return new ResponseEntity(HttpStatus.OK);

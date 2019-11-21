@@ -2,7 +2,6 @@ package com.simplevat.dao.impl;
 
 import java.util.List;
 
-
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,12 +15,11 @@ import javax.persistence.TypedQuery;
 @Transactional
 public class PurchaseDaoImpl extends AbstractDao<Integer, Purchase> implements PurchaseDao {
 
-	
     @Override
-	public List<Purchase> getAllPurchase() {
-		List<Purchase> purchases = this.executeNamedQuery("allPurchase");
-		return purchases;
-	}
+    public List<Purchase> getAllPurchase() {
+        List<Purchase> purchases = this.executeNamedQuery("allPurchase");
+        return purchases;
+    }
 
     @Override
     public Purchase getClosestDuePurchaseByContactId(Integer contactId) {
@@ -44,6 +42,18 @@ public class PurchaseDaoImpl extends AbstractDao<Integer, Purchase> implements P
             return purchaseList;
         }
         return null;
+    }
+
+    @Override
+    @Transactional
+    public void deleteByIds(List<Integer> ids) {
+        if (ids != null && !ids.isEmpty()) {
+            for (Integer id : ids) {
+                Purchase purchase = findByPK(id);
+                purchase.setDeleteFlag(Boolean.TRUE);
+                update(purchase);
+            }
+        }
     }
 
 }

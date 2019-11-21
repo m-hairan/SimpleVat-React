@@ -16,6 +16,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -165,5 +166,17 @@ public class InvoiceDaoImpl extends AbstractDao<Integer, Invoice> implements Inv
             return invoiceList;
         }
         return null;
+    }
+
+    @Override
+    @Transactional
+    public void deleteByIds(List<Integer> ids) {
+        if (ids != null && !ids.isEmpty()) {
+            for (Integer id : ids) {
+                Invoice invoice = findByPK(id);
+                invoice.setDeleteFlag(Boolean.TRUE);
+                update(invoice);
+            }
+        }
     }
 }

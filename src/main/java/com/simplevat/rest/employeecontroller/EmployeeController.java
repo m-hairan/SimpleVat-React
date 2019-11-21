@@ -72,7 +72,7 @@ public class EmployeeController implements Serializable {
     private ContactHelper contactHelper = new ContactHelper();
 
     @GetMapping(value = "/getuser")
-    public ResponseEntity<List<User>> getUser() {
+    public ResponseEntity getUser() {
         List<User> users = userServiceNew.getAllUserNotEmployee();
         if (users != null) {
             return new ResponseEntity(users, HttpStatus.OK);
@@ -83,7 +83,7 @@ public class EmployeeController implements Serializable {
     }
 
     @GetMapping(value = "/gettitle")
-    public ResponseEntity<List<Title>> getTitle(@RequestParam(value = "titleStr") String titleStr) {
+    public ResponseEntity getTitle(@RequestParam(value = "titleStr") String titleStr) {
         List<Title> titleSuggestion = new ArrayList<>();
         List<Title> titles = titleService.getTitles();
         Iterator<Title> titleIterator = titles.iterator();

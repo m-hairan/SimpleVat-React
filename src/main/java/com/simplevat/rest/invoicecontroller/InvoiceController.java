@@ -5,6 +5,7 @@
  */
 package com.simplevat.rest.invoicecontroller;
 
+import com.simplevat.bank.model.DeleteModel;
 import com.simplevat.helper.InvoiceModelHelper;
 import com.simplevat.entity.Company;
 import com.simplevat.entity.Configuration;
@@ -91,7 +92,7 @@ public class InvoiceController implements Serializable {
     private InvoiceModelHelper invoiceModelHelper = new InvoiceModelHelper();
 
     @GetMapping("/invoicelist")
-    public ResponseEntity<List<InvoiceRestModel>> populateInvoiceList() {
+    public ResponseEntity populateInvoiceList() {
         List<Invoice> invoices = invoiceService.getInvoiceList();
 
         List<InvoiceRestModel> invoiceModels = new ArrayList<>();
@@ -106,7 +107,7 @@ public class InvoiceController implements Serializable {
     }
 
     @GetMapping("/paidinvoicelist")
-    public ResponseEntity<List<InvoiceRestModel>> populatePaidInvoiceList() {
+    public ResponseEntity populatePaidInvoiceList() {
         List<Invoice> invoices = invoiceService.getInvoiceList();
 
         List<InvoiceRestModel> invoiceModels = new ArrayList<>();
@@ -123,7 +124,7 @@ public class InvoiceController implements Serializable {
     }
 
     @GetMapping("/unpaidinvoicelist")
-    public ResponseEntity<List<InvoiceRestModel>> populateUnPaidInvoiceList() {
+    public ResponseEntity populateUnPaidInvoiceList() {
         List<Invoice> invoices = invoiceService.getInvoiceList();
 
         List<InvoiceRestModel> invoiceModels = new ArrayList<>();
@@ -140,7 +141,7 @@ public class InvoiceController implements Serializable {
     }
 
     @GetMapping("/partialpaidinvoicelist")
-    public ResponseEntity<List<InvoiceRestModel>> populatePartialPaidInvoiceList() {
+    public ResponseEntity populatePartialPaidInvoiceList() {
         List<Invoice> invoices = invoiceService.getInvoiceList();
 
         List<InvoiceRestModel> invoiceModels = new ArrayList<>();
@@ -167,8 +168,19 @@ public class InvoiceController implements Serializable {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @DeleteMapping(value = "deleteinvoices")
+    public ResponseEntity deleteInvoices(@RequestBody DeleteModel ids) {
+        try {
+            invoiceService.deleteByIds(ids.getIds());
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @GetMapping(value = "/editinvoice")
-    public ResponseEntity<InvoiceRestModel> editInvoice(@RequestParam(value = "id") Integer id) {
+    public ResponseEntity editInvoice(@RequestParam(value = "id") Integer id) {
         Invoice invoice = invoiceService.findByPK(id);
         InvoiceRestModel invoiceModel = invoiceModelHelper.getInvoiceModel(invoice);
         if (invoiceModel == null) {
@@ -186,7 +198,7 @@ public class InvoiceController implements Serializable {
             invoiceModel.setShippingContact(null);
         }
         invoice = invoiceModelHelper.getInvoiceEntity(invoiceModel);
-        
+
         if (invoice.getInvoiceId() != null && invoice.getInvoiceId() > 0) {
             invoice.setLastUpdateBy(id);
             Invoice prevInvoice = invoiceService.findByPK(invoice.getInvoiceId());
