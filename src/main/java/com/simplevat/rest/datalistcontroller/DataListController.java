@@ -7,6 +7,8 @@ package com.simplevat.rest.datalistcontroller;
 
 import com.simplevat.entity.Country;
 import com.simplevat.entity.Currency;
+import com.simplevat.entity.bankaccount.BankAccountType;
+import com.simplevat.service.BankAccountTypeService;
 import com.simplevat.service.CountryService;
 import com.simplevat.service.CurrencyService;
 import java.io.Serializable;
@@ -31,6 +33,9 @@ public class DataListController implements Serializable {
 
     @Autowired
     private CurrencyService currencyService;
+
+    @Autowired
+    private BankAccountTypeService bankAccountTypeService;
 
     @GetMapping(value = "/getcountry")
     public ResponseEntity getCountry() {
@@ -61,4 +66,5 @@ public class DataListController implements Serializable {
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 }

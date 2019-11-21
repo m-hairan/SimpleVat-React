@@ -105,7 +105,7 @@ public class ExpenseRestController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/delete")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/delete")
     public ResponseEntity deleteExpense(@RequestParam("expenseId") Integer expenseId) {
         try {
             System.out.println("expenseId=" + expenseId);
@@ -117,8 +117,8 @@ public class ExpenseRestController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/deletes")
-    public ResponseEntity deleteExpenses(@RequestParam("expenseId") DeleteModel expenseIds) {
+    @RequestMapping(method = RequestMethod.DELETE, value = "/deletes")
+    public ResponseEntity deleteExpenses(@RequestBody DeleteModel expenseIds) {
         try {
             System.out.println("expenseId=" + expenseIds);
             controllerHelper.deleteExpenses(expenseIds, expenseService);

@@ -54,4 +54,9 @@ public class ProjectServiceImpl extends ProjectService {
         }
         update(project);
     }
+
+    @Override
+    public void deleteByIds(List<Integer> ids) {
+        projectDao.deleteByIds(ids);
+    }
 }

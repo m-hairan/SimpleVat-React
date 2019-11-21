@@ -5,6 +5,7 @@
  */
 package com.simplevat.rest.purchase;
 
+import com.simplevat.bank.model.DeleteModel;
 import com.simplevat.helper.PurchaseRestControllerHelper;
 import com.simplevat.contact.model.PurchaseRestModel;
 import com.simplevat.contact.model.PurchaseItemRestModel;
@@ -40,6 +41,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -54,30 +56,31 @@ import org.springframework.web.bind.annotation.RestController;
 public class PurchaseRestController {
 
     @Autowired
-    PurchaseService purchaseService;
+    private PurchaseService purchaseService;
 
     @Autowired
-    ProjectService projectService;
+    private ProjectService projectService;
 
     @Autowired
-    ContactService contactService;
+    private ContactService contactService;
 
     @Autowired
-    ProductService productService;
+    private ProductService productService;
 
     @Autowired
-    UserServiceNew userServiceNew;
-    @Autowired
-    VatCategoryService vatCategoryService;
+    private UserServiceNew userServiceNew;
 
     @Autowired
-    TransactionCategoryServiceNew transactionCategoryService;
+    private VatCategoryService vatCategoryService;
+
+    @Autowired
+    private TransactionCategoryServiceNew transactionCategoryService;
 
     @Autowired
     private CurrencyService currencyService;
 
     @Autowired
-    CompanyService companyService;
+    private CompanyService companyService;
 
     PurchaseRestControllerHelper purchaseControllerRestHelper = new PurchaseRestControllerHelper();
 
@@ -138,7 +141,7 @@ public class PurchaseRestController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/delete")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/delete")
     public ResponseEntity deletePurchase(@RequestParam("purchaseId") Integer purchaseId) {
         try {
 //              PurchaseRestModel selectedPurchaseModel;
@@ -152,6 +155,17 @@ public class PurchaseRestController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/deletes")
+    public ResponseEntity deletePurchases(@RequestBody DeleteModel purchaseIds) {
+        try {
+            purchaseService.deleteByIds(purchaseIds.getIds());
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/allpaidpurchase")
@@ -187,7 +201,7 @@ public class PurchaseRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/allpartialpaidpurchase")
-    public ResponseEntity<List<PurchaseRestModel>> allPartialPaidPurchase() {
+    public ResponseEntity allPartialPaidPurchase() {
         try {
             List<PurchaseRestModel> purchaseModels = new ArrayList<>();
             for (Purchase purchase : purchaseService.getAllPurchase()) {
@@ -203,7 +217,7 @@ public class PurchaseRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/claimants")
-    public ResponseEntity<List<User>> getClaimants() {
+    public ResponseEntity getClaimants() {
         try {
             return new ResponseEntity(userServiceNew.executeNamedQuery("findAllUsers"), HttpStatus.OK);
         } catch (Exception e) {
@@ -213,7 +227,7 @@ public class PurchaseRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/categories")
-    public ResponseEntity completeCategory() {
+    public ResponseEntity getCategory() {
         try {
             List<TransactionCategory> transactionCategoryList = transactionCategoryService.findTransactionCategoryListByParentCategory(TransactionCategoryConsatant.TRANSACTION_CATEGORY_PURCHASE);
             return new ResponseEntity(transactionCategoryList, HttpStatus.OK);
@@ -267,7 +281,7 @@ public class PurchaseRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/products")
-    public ResponseEntity<List<Product>> products(@RequestParam("productName") String searchQuery) throws Exception {
+    public ResponseEntity products(@RequestParam("productName") String searchQuery) throws Exception {
         try {
             List<Product> productList = productService.getProductList();
             if (productList != null) {
@@ -287,7 +301,7 @@ public class PurchaseRestController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/vatcategories")
-    public ResponseEntity<List<VatCategory>> vatCategorys(@RequestParam("vatSearchString") String searchQuery) throws Exception {
+    public ResponseEntity vatCategorys(@RequestParam("vatSearchString") String searchQuery) throws Exception {
         try {
             return new ResponseEntity(vatCategoryService.getVatCategoryList(), HttpStatus.OK);
         } catch (Exception e) {

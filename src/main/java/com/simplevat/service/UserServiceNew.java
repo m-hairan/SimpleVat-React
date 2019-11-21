@@ -14,7 +14,8 @@ public abstract class UserServiceNew extends SimpleVatService<Integer, User> {
     public abstract List<User> findAll();
 
     public abstract boolean authenticateUser(String usaerName, String password);
-    
+
     public abstract List<User> getAllUserNotEmployee();
 
+    public abstract void deleteByIds(List<Integer> ids);
 }

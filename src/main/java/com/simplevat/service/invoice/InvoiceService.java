@@ -45,6 +45,8 @@ public abstract class InvoiceService extends SimpleVatService<Integer, Invoice> 
 
     public abstract List<Invoice> getInvoiceList();
 
+    public abstract void deleteByIds(List<Integer> ids);
+
     @Override
     protected InvoiceDao getDao() {
         return invoiceDao;

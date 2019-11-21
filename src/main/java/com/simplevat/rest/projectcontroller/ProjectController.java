@@ -5,6 +5,7 @@
  */
 package com.simplevat.rest.projectcontroller;
 
+import com.simplevat.bank.model.DeleteModel;
 import com.simplevat.criteria.ProjectCriteria;
 import com.simplevat.entity.Contact;
 import com.simplevat.entity.Country;
@@ -87,6 +88,17 @@ public class ProjectController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @DeleteMapping(value = "/deleteprojects")
+    public ResponseEntity deleteProjects(@RequestBody DeleteModel ids) throws Exception {
+        try {
+            projectService.deleteByIds(ids.getIds());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @GetMapping(value = "/editproject")
     public ResponseEntity editProject(@RequestParam(value = "id") Integer id) throws Exception {
         Project project = projectService.findByPK(id);
@@ -125,7 +137,7 @@ public class ProjectController {
     }
 
     @GetMapping(value = "/gettitle")
-    public ResponseEntity completeTitle(@RequestParam(value = "titleStr") String titleStr) {
+    public ResponseEntity getTitle(@RequestParam(value = "titleStr") String titleStr) {
         List<Title> titleSuggestion = new ArrayList<>();
         List<Title> titles = titleService.getTitles();
         Iterator<Title> titleIterator = titles.iterator();
@@ -164,7 +176,7 @@ public class ProjectController {
     }
 
     @PostMapping(value = "/saveprojectcontact")
-    public ResponseEntity createContact(@RequestBody ContactModel contactModel, @RequestParam(value = "id") Integer id) {
+    public ResponseEntity saveContact(@RequestBody ContactModel contactModel, @RequestParam(value = "id") Integer id) {
 
         Contact contact = new Contact();
         ContactHelper contactHelper = new ContactHelper();

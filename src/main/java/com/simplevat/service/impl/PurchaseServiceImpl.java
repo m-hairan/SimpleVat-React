@@ -39,4 +39,9 @@ public class PurchaseServiceImpl extends PurchaseService {
         return purchaseDao.getPurchaseListByDueAmount();
     }
 
+    @Override
+    public void deleteByIds(List<Integer> ids) {
+        purchaseDao.deleteByIds(ids);
+    }
+
 }

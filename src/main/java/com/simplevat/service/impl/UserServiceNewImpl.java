@@ -48,4 +48,9 @@ public class UserServiceNewImpl extends UserServiceNew implements Serializable {
     public List<User> getAllUserNotEmployee() {
         return getDao().getAllUserNotEmployee();
     }
+
+    @Override
+    public void deleteByIds(List<Integer> ids) {
+        getDao().deleteByIds(ids);
+    }
 }

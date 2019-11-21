@@ -5,6 +5,7 @@
  */
 package com.simplevat.rest.usercontroller;
 
+import com.simplevat.bank.model.DeleteModel;
 import com.simplevat.contact.model.UserModel;
 import com.simplevat.entity.Mail;
 import com.simplevat.entity.MailEnum;
@@ -86,6 +87,17 @@ public class UserController implements Serializable {
         }
         return new ResponseEntity(HttpStatus.OK);
 
+    }
+
+    @DeleteMapping(value = "/deleteusers")
+    public ResponseEntity deleteUsers(@RequestBody DeleteModel ids) {
+        try {
+            userService.deleteByIds(ids.getIds());
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping(value = "/edituser")
