@@ -4,62 +4,39 @@ import {
   authApi
 } from 'utils'
 
-export const getProjectList = (obj) => {
+export const getProjectList = () => {
   return (dispatch) => {
-    dispatch({
-      type: PROJECT.PROJECT_LIST,
-      payload: {
-        data: [{
-          transactionCategoryId: 2,
-          transactionCategoryCode: 2,
-          transactionCategoryName: 'temp',
-          transactionCategoryDescription: 'temp',
-          parentTransactionCategory: 'Loream Ipsume',
-          transactionType: 'TEMP'
-        }, {
-          transactionCategoryId: 1,
-          transactionCategoryCode: 4,
-          transactionCategoryName: 'temp',
-          transactionCategoryDescription: 'temp',
-          parentTransactionCategory: 'Loream Ipsume',
-          transactionType: 'TEMP'
-        }, {
-          transactionCategoryId: 1,
-          transactionCategoryCode: 4,
-          transactionCategoryName: 'temp',
-          transactionCategoryDescription: 'temp',
-          parentTransactionCategory: 'Loream Ipsume',
-          transactionType: 'TEMP'
-        }, {
-          transactionCategoryId: 1,
-          transactionCategoryCode: 4,
-          transactionCategoryName: 'temp',
-          transactionCategoryDescription: 'temp',
-          parentTransactionCategory: 'Loream Ipsume',
-          transactionType: 'TEMP'
-        }, {
-          transactionCategoryId: 1,
-          transactionCategoryCode: 4,
-          transactionCategoryName: 'temp',
-          transactionCategoryDescription: 'temp',
-          parentTransactionCategory: 'Loream Ipsume',
-          transactionType: 'TEMP'
-        },{
-          transactionCategoryId: 1,
-          transactionCategoryCode: 4,
-          transactionCategoryName: 'temp',
-          transactionCategoryDescription: 'temp',
-          parentTransactionCategory: 'Loream Ipsume',
-          transactionType: 'TEMP'
-        },{
-          transactionCategoryId: 1,
-          transactionCategoryCode: 4,
-          transactionCategoryName: 'temp',
-          transactionCategoryDescription: 'temp',
-          parentTransactionCategory: 'Loream Ipsume',
-          transactionType: 'TEMP'
-        }]
-      }
+    let data = {
+      method: 'GET',
+      url: `rest/project/getprojectbycriteria`
+    }
+
+    return authApi(data).then(res => {
+
+      dispatch({
+        type: PROJECT.PROJECT_LIST,
+        payload: res.data
+      })
+      return res
+    }).catch(err => {
+      throw err
+    })
+  }
+}
+
+
+// Get Project By ID
+export const getProjectByID = (id) => {
+  return (dispatch) => {
+    let data = {
+      method: 'GET',
+      url: `rest/project/editproject?id=${id}`
+    }
+
+    return authApi(data).then(res => {
+      return res
+    }).catch(err => {
+      throw err
     })
   }
 }
@@ -71,6 +48,24 @@ export const createAndSaveProject = (project) => {
     let data = {
       method: 'POST',
       url: `/rest/project/saveproject?id=1`,
+      data: project
+    }
+
+    return authApi(data).then(res => {
+      return res
+    }).catch(err => {
+      throw err
+    })
+  }
+}
+
+
+// Create Project Contact
+export const createProjectContact = (project) => {
+  return (dispatch) => {
+    let data = {
+      method: 'POST',
+      url: `/rest/project/saveprojectcontact?id=1`,
       data: project
     }
 
@@ -117,6 +112,28 @@ export const getProjectCountryList = () => {
       console.log("=================== project Coutnry ==============", res)
       dispatch({
         type: PROJECT.PROJECT_COUNTRY_LIST,
+        payload: res.data
+      })
+      return res
+    }).catch(err => {
+      throw err
+    })
+  }
+}
+
+
+// Get Project title
+export const getProjectTitleList = () => {
+  return (dispatch) => {
+    let data = {
+      method: 'GET',
+      url: '/rest/project/gettitle?titleStr=1'
+    }
+
+    return authApi(data).then(res => {
+      console.log("=================== project currency ==============", res)
+      dispatch({
+        type: PROJECT.PROJECT_TITLE_LIST,
         payload: res.data
       })
       return res

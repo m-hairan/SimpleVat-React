@@ -47,7 +47,6 @@ class DetailVatCode extends React.Component {
 
     this.saveAndContinue = false;
 
-    this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.success = this.success.bind(this)
 
@@ -67,17 +66,6 @@ class DetailVatCode extends React.Component {
     }
   }
 
-  // Save Updated Field's Value to State
-  handleChange(e, name) {
-    this.setState({
-      vatData: _.set(
-        { ...this.state.vatData },
-        e.target.name && e.target.name !== '' ? e.target.name : name,
-        e.target.type === 'checkbox' ? e.target.checked : e.target.value
-      )
-    })
-  }
-
   // Show Success Toast
   success() {
     toast.success('Vat Code Updated successfully... ', {
@@ -87,7 +75,6 @@ class DetailVatCode extends React.Component {
 
   // Create or Edit Vat
   handleSubmit(data){
-
     this.props.vatActions.createBat(data).then(res => {
       if (res.status === 200) {
         this.success()
@@ -98,7 +85,6 @@ class DetailVatCode extends React.Component {
 
   render() {
     const { loading } = this.state
-    const { name, vat } = this.state.vatData ? this.state.vatData : {}
 
     return (
       <div className="detail-vat-code-screen">

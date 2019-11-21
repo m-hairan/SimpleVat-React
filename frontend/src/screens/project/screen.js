@@ -45,10 +45,9 @@ class Project extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      loading: false,
+      loading: true,
     }
 
-    this.initializeData = this.initializeData.bind(this)
     this.onRowSelect = this.onRowSelect.bind(this)
     this.onSelectAll = this.onSelectAll.bind(this)
     this.goToDetail = this.goToDetail.bind(this)
@@ -69,15 +68,18 @@ class Project extends React.Component {
   }
 
   componentDidMount () {
-    this.initializeData()
-  }
-
-  initializeData () {
-    this.props.ProjectActions.getProjectList()
+    this.props.ProjectActions.getProjectList().then(res => {
+      if (res.status === 200) {
+        this.setState({ loading: false })
+      }
+    })
   }
 
   goToDetail (row) {
-    this.props.history.push('/admin/master/project/detail')
+    this.props.history.push({
+      pathname: '/admin/master/project/detail',
+      search: `?id=${row.id}`
+    })
   }
 
   onRowSelect (row, isSelected, e) {
@@ -88,7 +90,6 @@ class Project extends React.Component {
   }
 
   render() {
-
     const { loading } = this.state
     const { project_list } = this.props
     const containerStyle = {
@@ -111,14 +112,9 @@ class Project extends React.Component {
               </Row>
             </CardHeader>
             <CardBody>
-              {
-                loading ?
-                  <Row>
-                    <Col lg={12}>
-                      <Loader />
-                    </Col>
-                  </Row>
-                :
+            {
+              loading ?
+                <Loader></Loader>: 
                   <Row>
                     <Col lg={12}>
                       <div className="d-flex justify-content-end">

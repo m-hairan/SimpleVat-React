@@ -123,11 +123,6 @@ class VatCode extends React.Component {
 
   
   componentDidMount() {
-    this.getVatListData()
-  }
-
-  // Get All Vats
-  getVatListData() {
     this.props.vatActions.getVatList().then(res => {
       if (res.status === 200) {
         this.setState({ loading: false })
