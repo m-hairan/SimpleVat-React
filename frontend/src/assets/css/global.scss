@@ -134,6 +134,10 @@ body, span, label, h1, h2, h3, h4, p, em {
     }
   }
   .react-bs-table-pagination {
+    margin-bottom: 1rem;
+    ul {
+      margin-bottom: 0 !important;
+    }
     .btn.dropdown-toggle {
       border-radius: 0 !important;
     }

@@ -15,14 +15,18 @@ import {
 } from 'reactstrap'
 import Select from 'react-select'
 
+import * as createBankAccountActions from './actions'
+
 import './style.scss'
 
 const mapStateToProps = (state) => {
   return ({
+    account_type_list: state.bank_account.account_type_list
   })
 }
 const mapDispatchToProps = (dispatch) => {
   return ({
+    createBankAccountActions: bindActionCreators(createBankAccountActions, dispatch)
   })
 }
 
@@ -42,6 +46,14 @@ class CreateBankAccount extends React.Component {
       ]
     }
 
+  }
+
+  componentDidMount () {
+    this.initializeData()
+  }
+
+  initializeData () {
+    this.props.createBankAccountActions.getAccountTypeList()
   }
 
   render() {

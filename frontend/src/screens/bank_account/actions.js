@@ -6,41 +6,21 @@ import {
 
 export const getBankAccountList = () => {
   return (dispatch) => {
-    dispatch({
-      type: BANK_ACCOUNT.BANK_ACCOUNT_LIST,
-      payload: {
-        data: [{
-          bank_name: 'NBC',
-          country: 'US',
-          account_name: 'TTC',
-          account_number: 'DGLE23042322340',
-          IBAN_number: 'TYE234254343',
-          currency: 234204924,
-          account_type: 'Bank',
-          swift_code: 'UYR239239',
-          opening_balance: 234293
-        }, {
-          bank_name: 'NBC',
-          country: 'US',
-          account_name: 'TTC',
-          account_number: 'DGLE2304230291',
-          IBAN_number: 'TYE234254343',
-          currency: 234204924,
-          account_type: 'Bank',
-          swift_code: 'UYR239239',
-          opening_balance: 234293
-        }, {
-          bank_name: 'NBC',
-          country: 'US',
-          account_name: 'TTC',
-          account_number: 'DGLE230429042',
-          IBAN_number: 'TYE234254343',
-          currency: 234204924,
-          account_type: 'Bank',
-          swift_code: 'UYR239239',
-          opening_balance: 234293
-        }]
+    let data = {
+      method: 'get',
+      url: 'rest/bank/getbanklist'
+    }
+    return authApi(data).then(res => {
+      if (res.status == 200) {
+        dispatch({
+          type: BANK_ACCOUNT.BANK_ACCOUNT_LIST,
+          payload: {
+            data: Object.assign([], res.data)
+          } 
+        })
       }
+    }).catch(err => {
+      throw err
     })
   }
 }
