@@ -41,15 +41,10 @@ class CreateVatCode extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      vatData: {
-        name: null,
-        vat: null
-      },
+      initValue: {name: '', vat: ''},
       loading: false,
       readMore: false
     }
-
-    this.saveAndContinue = false;
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -112,11 +107,11 @@ class CreateVatCode extends React.Component {
                   <Row>
                     <Col lg={6}>
                       <Formik
-                        initialValues={{name: '', vat: ''}}
+                        initialValues={this.state.initValue}
                         onSubmit={(values, {resetForm}) => {
                           
                           this.handleSubmit(values)
-                          resetForm({name: '', vat: ''})
+                          resetForm(this.state.initValue)
                         }}
                         validationSchema={Yup.object().shape({
                           name: Yup.string()
