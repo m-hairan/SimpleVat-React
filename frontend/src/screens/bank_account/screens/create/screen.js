@@ -43,7 +43,9 @@ class CreateBankAccount extends React.Component {
         { id: 'Credit Card', name: 'Credit Card' },
         { id: 'Paypal', name: 'Paypal' },
         { id: 'Others', name: 'Others' },
-      ]
+      ],
+      account_list: []
+
     }
 
   }
@@ -54,6 +56,8 @@ class CreateBankAccount extends React.Component {
 
   initializeData () {
     this.props.createBankAccountActions.getAccountTypeList()
+    this.props.createBankAccountActions.getCurrencyList()
+
   }
 
   render() {

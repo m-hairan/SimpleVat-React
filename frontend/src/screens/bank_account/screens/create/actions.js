@@ -17,3 +17,17 @@ export const getAccountTypeList = () => {
     })
   }
 }
+
+export const getCurrencyList = () => {
+  return (dispatch) => {
+    let data = {
+      method: 'get',
+      url: 'rest/bank/getcurrenncy'
+    }
+    return authApi(data).then(res => {
+      console.log(res)
+    }).catch(err => {
+      throw err
+    })
+  }
+}
