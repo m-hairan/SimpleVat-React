@@ -26,6 +26,7 @@ import com.simplevat.constant.ConfigurationConstants;
 import com.simplevat.constant.InvoicePaymentModeConstant;
 import com.simplevat.constant.InvoicePurchaseStatusConstant;
 import com.simplevat.contact.model.InvoiceRestModel;
+import com.simplevat.service.invoice.InvoiceLineItemService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -89,6 +90,9 @@ public class InvoiceController implements Serializable {
     @Autowired
     private TitleService titleService;
 
+    @Autowired
+    private InvoiceLineItemService invoiceLineItemService;
+    
     private InvoiceModelHelper invoiceModelHelper = new InvoiceModelHelper();
 
     @GetMapping("/invoicelist")
@@ -190,17 +194,17 @@ public class InvoiceController implements Serializable {
     }
 
     @PostMapping("/saveinvoice")
-    public Integer save(@RequestBody InvoiceRestModel invoiceModel, @RequestParam(value = "id") Integer id) {
-        Company company = companyService.findByPK(userServiceNew.findByPK(id).getCompany().getCompanyId());
+    public Integer save(@RequestBody InvoiceRestModel invoiceModel, @RequestParam(value = "id") Integer userId) {
+        Company company = companyService.findByPK(userServiceNew.findByPK(userId).getCompany().getCompanyId());
 
         Invoice invoice = new Invoice();
         if (invoiceModel.getShippingContact() == null) {
             invoiceModel.setShippingContact(null);
         }
-        invoice = invoiceModelHelper.getInvoiceEntity(invoiceModel);
+        invoice = invoiceModelHelper.getInvoiceEntity(invoiceModel,invoiceLineItemService);
 
         if (invoice.getInvoiceId() != null && invoice.getInvoiceId() > 0) {
-            invoice.setLastUpdateBy(id);
+            invoice.setLastUpdateBy(userId);
             Invoice prevInvoice = invoiceService.findByPK(invoice.getInvoiceId());
             BigDecimal defferenceAmount = invoice.getInvoiceAmount().subtract(prevInvoice.getInvoiceAmount());
             if (invoice.getPaymentMode() == null) {
@@ -233,7 +237,7 @@ public class InvoiceController implements Serializable {
             } else {
                 configurationService.persist(configuration);
             }
-            invoice.setCreatedBy(id);
+            invoice.setCreatedBy(userId);
             if (invoice.getPaymentMode() == null) {
                 invoice.setDueAmount(invoice.getInvoiceAmount());
                 updateDueAmountAndStatus(invoice);
