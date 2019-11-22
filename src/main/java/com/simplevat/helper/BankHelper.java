@@ -20,7 +20,7 @@ import com.simplevat.service.BankAccountStatusService;
  * @author Sonu
  */
 public class BankHelper {
-
+    
     public static BankAccount getBankAccountByBankAccountModel(BankModel bankModel, BankAccountStatusService bankAccountStatusService, CurrencyService currencyService, BankAccountTypeService bankAccountTypeService, CountryService countryService) {
         BankAccount bankAccount = new BankAccount();
         if (bankModel.getBankCountry() != null) {
@@ -33,10 +33,10 @@ public class BankHelper {
         bankAccount.setIbanNumber(bankModel.getIbanNumber());
         bankAccount.setIsprimaryAccountFlag(bankModel.getIsprimaryAccountFlag());
         bankAccount.setOpeningBalance(bankModel.getOpeningBalance());
-        bankAccount.setPersonalCorporateAccountInd(bankModel.getPersonalCorporateAccountInd());
+        bankAccount.setPersonalCorporateAccountInd(bankModel.getPersonalCorporateAccountInd().charAt(0));
         bankAccount.setSwiftCode(bankModel.getSwiftCode());
         bankAccount.setVersionNumber(1);
-
+        
         if (bankModel.getBankAccountStatus() != null) {
             BankAccountStatus bankAccountStatus = bankAccountStatusService
                     .getBankAccountStatus(bankModel.getBankAccountStatus());
@@ -47,19 +47,19 @@ public class BankHelper {
                     .getCurrency(Integer.valueOf(bankModel.getBankAccountCurrency()));
             bankAccount.setBankAccountCurrency(currency);
         }
-
+        
         if (bankModel.getBankAccountType() != null) {
             BankAccountType bankAccountType = bankAccountTypeService.getBankAccountType(bankModel.getBankAccountType());
             bankAccount.setBankAccountType(bankAccountType);
         }
-
+        
         if (bankModel.getBankAccountId() == null || bankModel.getBankAccountId() == 0) {
             bankAccount.setCurrentBalance(bankModel.getOpeningBalance());
             BankAccountStatus bankAccountStatus = bankAccountStatusService.getBankAccountStatusByName("ACTIVE");
             bankAccount.setBankAccountStatus(bankAccountStatus);
         }
-
+        
         return bankAccount;
     }
-
+    
 }
