@@ -24,7 +24,7 @@ public class BankModel implements Serializable {
 
     private Integer bankAccountStatus;
 
-    private Character personalCorporateAccountInd;
+    private String personalCorporateAccountInd;
 
     private Boolean isprimaryAccountFlag = Boolean.TRUE;
 
