@@ -7,6 +7,7 @@ import com.simplevat.entity.Product;
 import com.simplevat.entity.Project;
 import com.simplevat.entity.invoice.DiscountType;
 import com.simplevat.invoice.model.InvoiceItemModel;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,7 +22,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class InvoiceRestModel {
+public class InvoiceRestModel implements Serializable{
 
     private Integer invoiceId;
 
