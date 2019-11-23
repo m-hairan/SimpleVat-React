@@ -13,7 +13,7 @@ const mapDispatchToProps = (dispatch) => {
   })
 }
 
-class ChartAccounts extends React.Component {
+class CreateChartAccount extends React.Component {
   
   constructor(props) {
     super(props)
@@ -26,7 +26,7 @@ class ChartAccounts extends React.Component {
   render() {
 
     return (
-      <div className="chart-accounts-screen">
+      <div className="create-chart-account-screen">
         <div className="animated fadeIn">
         </div>
       </div>
@@ -34,4 +34,4 @@ class ChartAccounts extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChartAccounts)
+export default connect(mapStateToProps, mapDispatchToProps)(CreateChartAccount)
