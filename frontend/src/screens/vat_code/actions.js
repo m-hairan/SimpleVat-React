@@ -66,11 +66,11 @@ export const createBat = (bat) => {
 }
 
 // Delete Vat Row
-export const deleteVat = (id) => {
+export const deleteVat = (ids) => {
   return (dispatch) => {
     let data = {
       method: 'DELETE',
-      url: `rest/vat/deletevat?id=${id}`
+      url: `rest/vat/deletevats?id=${ids}`
     }
 
     return authApi(data).then(res => {

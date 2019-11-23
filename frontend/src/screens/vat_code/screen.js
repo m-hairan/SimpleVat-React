@@ -20,6 +20,7 @@ import {
 import { ToastContainer, toast } from 'react-toastify'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
 import moment from 'moment'
+import _ from 'lodash'
 
 import { Loader } from 'components'
 
@@ -47,17 +48,23 @@ class VatCode extends React.Component {
 
     this.state = {
       openDeleteModal: false,
-      loading: true
+      loading: true,
+      selectedRows: [],
+      filters: {}
     }
 
     this.deleteVat = this.deleteVat.bind(this)
-    this.customSearchField = this.customSearchField.bind(this)
     this.success = this.success.bind(this)
-    this.customTotal = this.customTotal.bind(this)
     this.vatPercentageFormat = this.vatPercentageFormat.bind(this)
 
-    this.closeModal = this.closeModal.bind(this)
+    this.showConfirmModal = this.showConfirmModal.bind(this)
+    this.closeConfirmModal = this.closeConfirmModal.bind(this)
     this.goToDetail = this.goToDetail.bind(this)
+
+    this.onSelectAll = this.onSelectAll.bind(this)
+    this.onRowSelect = this.onRowSelect.bind(this)
+
+    this.handleFilterChange = this.handleFilterChange.bind(this)
 
     this.options = {
       onRowClick: this.goToDetail,
@@ -73,30 +80,24 @@ class VatCode extends React.Component {
   }
 
 
-  onRowSelect(row, isSelected, e) {
-    console.log(row, isSelected)
+  onRowSelect(row, isSelected) {
+    if(isSelected) {
+      this.state.selectedRows.push(row.id)
+
+      this.setState({
+        selectedRows: this.state.selectedRows
+      })
+    }
+    else 
+      this.setState({
+        selectedRows: this.state.selectedRows.filter(el => el!=row.id)
+      })
   }
 
   onSelectAll(isSelected, rows) {
-    console.log(rows, isSelected)
-  }
-
-  // Table Custom Search Field
-  customSearchField(props) {
-    return (
-      <SearchField
-        defaultValue=''
-        placeholder='Search ...'/>
-    )
-  }
-
-  // Table Custom Pagination Label
-  customTotal(from, to, size) {
-    return (
-      <span className="react-bootstrap-table-pagination-total">
-        Showing {from} to {to} of {size} Results
-      </span >
-    )
+    this.setState({
+      selectedRows: isSelected?rows.map(row => row.id):[]
+    }) 
   }
 
   // -------------------------
@@ -130,11 +131,16 @@ class VatCode extends React.Component {
     })
   }
 
+
+  // -------------------------
+  // Actions
+  //--------------------------
+
   // Delete Vat By ID
   deleteVat() {
     this.setState({ loading: true })
     this.setState({ openDeleteModal: false })
-    this.props.vatActions.deleteVat(this.state.selectedData.id).then(res => {
+    this.props.vatActions.deleteVat(this.state.selectedRows).then(res => {
       if (res.status === 200) {
         this.setState({ loading: false })
         this.getVatListData()
@@ -142,15 +148,40 @@ class VatCode extends React.Component {
     })
   }
 
-  // Cloase Confirm Modal
-  closeModal() {
+  // Open Confirm Modal
+  showConfirmModal() {
+    this.setState({ openDeleteModal: true })
+  }
+  // Close Confirm Modal
+  closeConfirmModal() {
     this.setState({ openDeleteModal: false })
   }
 
+
+  handleFilterChange(e, name) {
+    this.setState({
+      filters: _.set(
+        { ...this.state.filters },
+        e.target.name && e.target.name !== '' ? e.target.name : name,
+        e.target.type === 'checkbox' ? e.target.checked : e.target.value
+      )
+    })
+  }
+
   render() {
-    const { loading } = this.state
+    const { loading, selectedRows, filters } = this.state
     const vatList = this.props.vat_list
    
+    let display_data = []
+
+    console.log('=========== Filter ============',  this.state.filters)
+    display_data = vatList.filter(item => {
+      for (var key in filters) {
+        if (item[key] === undefined || !item[key].toString().includes(filters[key]))
+          return false;
+      }
+      return true;
+    })
 
     return (
       <div className="vat-code-screen">
@@ -164,7 +195,6 @@ class VatCode extends React.Component {
               </div>
             </CardHeader>
             <CardBody>
-              
             {
               loading ?
                 <Loader></Loader>: 
@@ -190,6 +220,8 @@ class VatCode extends React.Component {
                         <Button
                           color="warning"
                           className="btn-square"
+                          onClick={this.showConfirmModal}
+                          disabled={selectedRows.length == 0}
                         >
                           <i className="fa glyphicon glyphicon-trash fa-trash mr-1" />
                           Bulk Delete
@@ -200,15 +232,21 @@ class VatCode extends React.Component {
                       <h5>Filter : </h5>
                       <Row>
                         <Col lg={4} className="mb-1">
-                          <Input type="text" placeholder="Vat Name" />
+                          <Input type="text" 
+                            name="name"
+                            placeholder="Vat Name" 
+                            onChange={this.handleFilterChange}/>
                         </Col>
                         <Col lg={4} className="mb-1">
-                          <Input type="text" placeholder="Vat Percentage" />
+                          <Input type="number" 
+                            name="vat"
+                            placeholder="Vat Percentage" 
+                            onChange={this.handleFilterChange}/>
                         </Col>
                       </Row>
                     </div>
                     <BootstrapTable 
-                      data={vatList}
+                      data={display_data}
                       hover
                       version="4"
                       pagination
@@ -245,7 +283,7 @@ class VatCode extends React.Component {
             </ModalBody>
               <ModalFooter>
                   <Button color="danger" onClick={this.deleteVat}>Yes</Button>&nbsp;
-                  <Button color="secondary" onClick={this.closeModal}>No</Button>
+                  <Button color="secondary" onClick={this.closeConfirmModal}>No</Button>
               </ModalFooter>
           </Modal>
         </div>
