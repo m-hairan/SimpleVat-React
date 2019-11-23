@@ -8,6 +8,7 @@ import com.simplevat.enums.InvoiceNumberReferenceEnum;
 import com.simplevat.constant.InvoicePurchaseStatusConstant;
 import com.simplevat.invoice.model.InvoiceItemModel;
 import com.simplevat.contact.model.InvoiceRestModel;
+import com.simplevat.service.invoice.InvoiceLineItemService;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -116,8 +117,84 @@ public class InvoiceModelHelper {
         return item;
     }
 
+    @Nonnull
+    InvoiceLineItem convertToLineItem(@Nonnull final InvoiceItemModel model,
+            @Nonnull final Invoice invoice, @Nonnull InvoiceLineItemService invoiceLineItemService) {
+        InvoiceLineItem item = null;
+        if (model.getId() > 0) {
+            item = invoiceLineItemService.findByPK(model.getId());
+        } else {
+            item = new InvoiceLineItem();
+            item.setCreatedDate(Calendar.getInstance().getTime());
+            item.setInvoiceLineItemDescription(model.getDescription());
+            item.setInvoiceLineItemQuantity(model.getQuatity());
+            item.setInvoiceLineItemUnitPrice(model.getUnitPrice());
+            item.setInvoiceLineItemVat(model.getVatId());
+            item.setCreatedBy(1);
+            item.setLastUpdateDate(Calendar.getInstance().getTime());
+            item.setVersionNumber(model.getVersionNumber());
+            if (model.getProductService() != null) {
+                item.setInvoiceLineItemProductService(model.getProductService());
+            }
+            item.setInvoice(invoice);
+        }
+
+        return item;
+    }
+
     public InvoiceRestModel getInvoiceModel(Invoice invoice) {
         return getInvoiceModel(invoice, false);
+    }
+
+    public Invoice getInvoiceEntity(InvoiceRestModel invoiceModel, InvoiceLineItemService invoiceLineItemService) {
+        final LocalDateTime invoiceDate = LocalDateTime.ofInstant(invoiceModel.getInvoiceDate().toInstant(), ZoneId.systemDefault());
+        final LocalDateTime invoiceDueDate = LocalDateTime.ofInstant(invoiceModel.getInvoiceDueDate().toInstant(), ZoneId.systemDefault());
+        Invoice invoice;
+        if (invoiceModel.getInvoiceId() != null && invoiceModel.getInvoiceId() > 0) {
+            invoice = invoiceService.findByPK(invoiceModel.getInvoiceId());
+        } else {
+            invoice = new Invoice();
+        }
+        invoice.setContractPoNumber(invoiceModel.getContractPoNumber());
+        invoice.setCurrency(invoiceModel.getCurrencyCode());
+        invoice.setInvoiceProject(invoiceModel.getProject());
+        if (invoiceModel.getInvoiceContact() != null
+                && invoiceModel.getInvoiceContact().getContactId() != null
+                && invoiceModel.getInvoiceContact().getContactId() > 0) {
+            invoice.setInvoiceContact(invoiceModel.getInvoiceContact());
+        } else {
+            invoice.setInvoiceContact(null);
+        }
+        if (invoiceModel.getShippingContact() != null
+                && invoiceModel.getShippingContact().getContactId() != null
+                && invoiceModel.getShippingContact().getContactId() > 0) {
+            invoice.setShippingContact(invoiceModel.getShippingContact());
+        } else {
+            invoice.setShippingContact(null);
+        }
+        invoice.setInvoiceDate(invoiceDate);
+        invoice.setInvoiceDiscount(invoiceModel.getDiscount());
+        invoice.setDiscountType(invoiceModel.getDiscountType());
+        invoice.setInvoiceDueOn(invoiceModel.getInvoiceDueOn());
+        invoice.setInvoiceDueDate(invoiceDueDate);
+        invoice.setInvoiceReferenceNumber(invoiceModel.getInvoiceReferenceNumber());
+        invoice.setInvoiceNotes(invoiceModel.getInvoiceNotes());
+        final Collection<InvoiceLineItem> items = invoiceModel
+                .getInvoiceLineItems()
+                .stream()
+                .map((item) -> convertToLineItem(item, invoice, invoiceLineItemService))
+                .collect(Collectors.toList());
+
+        invoice.setInvoiceLineItems(items);
+        invoice.setCreatedBy(invoiceModel.getCreatedBy());
+        invoice.setLastUpdateBy(invoiceModel.getLastUpdatedBy());
+        invoice.setInvoiceAmount(invoiceModel.getInvoiceAmount());
+        invoice.setDueAmount(invoiceModel.getDueAmount());
+        invoice.setStatus(invoiceModel.getStatus());
+        invoice.setFreeze(invoiceModel.getFreeze());
+        invoice.setPaymentMode(invoiceModel.getPaymentMode());
+//        invoice.setRecurringFlag(invoiceModel.getRecurringFlag());
+        return invoice;
     }
 
     public InvoiceRestModel getInvoiceModel(Invoice invoice, boolean process) {

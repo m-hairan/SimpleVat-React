@@ -10,6 +10,10 @@ body, span, label, h1, h2, h3, h4, p, em {
 .cursor-pointer {
   cursor: pointer;
 }
+.filter-panel {
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
 
 
 
@@ -146,6 +150,10 @@ div.Select.is-invalid {
     }
   }
   .react-bs-table-pagination {
+    margin-bottom: 1rem;
+    ul {
+      margin-bottom: 0px;
+    }
     .btn.dropdown-toggle {
       border-radius: 0 !important;
     }

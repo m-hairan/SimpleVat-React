@@ -19,6 +19,7 @@ import {
 } from 'reactstrap'
 import { ToastContainer, toast } from 'react-toastify'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
+import Select from 'react-select'
 
 import { Loader } from 'components'
 
@@ -40,7 +41,7 @@ const mapDispatchToProps = (dispatch) => {
   })
 }
 
-class ChartAccounts extends React.Component {
+class ChartAccount extends React.Component {
   
   constructor(props) {
     super(props)
@@ -51,10 +52,11 @@ class ChartAccounts extends React.Component {
     this.initializeData = this.initializeData.bind(this)
     this.onRowSelect = this.onRowSelect.bind(this)
     this.onSelectAll = this.onSelectAll.bind(this)
-    this.goToDetail = this.goToDetail.bind(this)
+    this.goToDetailPage = this.goToDetailPage.bind(this)
+    this.goToCreatePage = this.goToCreatePage.bind(this)
 
     this.options = {
-      onRowClick: this.goToDetail,
+      onRowClick: this.goToDetailPage,
       paginationPosition: 'top'
     }
 
@@ -76,8 +78,12 @@ class ChartAccounts extends React.Component {
     // this.props.productActions.getProductList()
   }
 
-  goToDetail (row) {
-    this.props.history.push('/admin/master/product/detail')
+  goToDetailPage (row) {
+    this.props.history.push('/admin/master/chart-account/detail')
+  }
+
+  goToCreatePage() {
+    this.props.history.push('/admin/master/chart-account/create')
   }
 
   onRowSelect (row, isSelected, e) {
@@ -96,7 +102,7 @@ class ChartAccounts extends React.Component {
     }
 
     return (
-      <div className="product-screen">
+      <div className="chart-account-screen">
         <div className="animated fadeIn">
           <ToastContainer position="top-right" autoClose={5000} style={containerStyle} />
           <Card>
@@ -133,7 +139,7 @@ class ChartAccounts extends React.Component {
                           <Button
                             color="primary"
                             className="btn-square"
-                            onClick={() => this.props.history.push(`/admin/master/chart-accounts/create`)}
+                            onClick={this.goToCreatePage}
                           >
                             <i className="fas fa-plus mr-1" />
                             New Account
@@ -157,7 +163,11 @@ class ChartAccounts extends React.Component {
                             <Input type="text" placeholder="Account" />
                           </Col>
                           <Col lg={2} className="mb-1">
-                            <Input type="text" placeholder="Type" />
+                            <Select
+                              className=""
+                              options={[]}
+                              placeholder="Account Type"
+                            />
                           </Col>
                         </Row>
                       </div>
@@ -206,4 +216,4 @@ class ChartAccounts extends React.Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChartAccounts)
+export default connect(mapStateToProps, mapDispatchToProps)(ChartAccount)

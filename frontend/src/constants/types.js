@@ -121,7 +121,7 @@ export const VAT_TRANSACTIONS = {
   
 }
 
-export const CHART_ACCOUNTS = {
+export const CHART_ACCOUNT = {
   
 }
 

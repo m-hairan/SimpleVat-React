@@ -67,7 +67,9 @@ import FinancialReport from './financial_report'
 
 
 
-import ChartAccounts from './chart_accounts'
+import ChartAccount from './chart_account'
+import CreateChartAccount from './chart_account/screens/create'
+import DetailChartAccount from './chart_account/screens/detail'
 import Contact from './contact'
 import CreateContact from './contact/screens/create'
 import DetailContact from './contact/screens/detail'
@@ -166,7 +168,9 @@ export {
 
 
 
-  ChartAccounts,
+  ChartAccount,
+  CreateChartAccount,
+  DetailChartAccount,
   Contact,
   CreateContact,
   DetailContact,

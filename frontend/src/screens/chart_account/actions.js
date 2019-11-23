@@ -1,4 +1,4 @@
-import { CHART_ACCOUNTS } from 'constants/types'
+import { CHART_ACCOUNT } from 'constants/types'
 import {
   api,
   authApi

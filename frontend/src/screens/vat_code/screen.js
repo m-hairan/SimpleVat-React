@@ -21,6 +21,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
 import moment from 'moment'
 import _ from 'lodash'
+import Select from 'react-select'
 
 import { Loader } from 'components'
 
@@ -159,6 +160,7 @@ class VatCode extends React.Component {
 
 
   handleFilterChange(e, name) {
+    console.log(e)
     this.setState({
       filters: _.set(
         { ...this.state.filters },
@@ -243,6 +245,17 @@ class VatCode extends React.Component {
                             placeholder="Vat Percentage" 
                             onChange={this.handleFilterChange}/>
                         </Col>
+                        {/* <Col>
+                          <Select
+                            className=""
+                            options={[{'value':'121', label:'11111'}, {value:'222', label:'123131'}]}
+                            name="type"
+                            placeholder="Account Type"
+                            onChange={(val)=> {
+                              this.handleFilterChange({target: { name:'type', value: val.value }})
+                            }}
+                          />
+                        </Col> */}
                       </Row>
                     </div>
                     <BootstrapTable 
