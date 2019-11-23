@@ -51,7 +51,9 @@ import {
 
 
 
-  ChartAccounts,
+  ChartAccount,
+  CreateChartAccount,
+  DetailChartAccount,
   Contact,
   CreateContact,
   DetailContact,
@@ -324,11 +326,20 @@ const adminRoutes = [
 
 
 
-
   {
-    path: '/admin/master/chart-accounts',
+    path: '/admin/master/chart-account/create',
+    name: 'Create',
+    component: CreateChartAccount.screen
+  },
+  {
+    path: '/admin/master/chart-account/detail',
+    name: 'Detail',
+    component: DetailChartAccount.screen
+  },
+  {
+    path: '/admin/master/chart-account',
     name: 'Chart of Accounts',
-    component: ChartAccounts.screen
+    component: ChartAccount.screen
   },
   {
     path: '/admin/master/contact/create',
