@@ -21,7 +21,9 @@ import './style.scss'
 
 const mapStateToProps = (state) => {
   return ({
-    account_type_list: state.bank_account.account_type_list
+    account_type_list: state.bank_account.account_type_list,
+    currency_list: state.bank_account.currency_list,
+    country_list: state.bank_account.country_list
   })
 }
 const mapDispatchToProps = (dispatch) => {
@@ -57,7 +59,7 @@ class CreateBankAccount extends React.Component {
   initializeData () {
     this.props.createBankAccountActions.getAccountTypeList()
     this.props.createBankAccountActions.getCurrencyList()
-
+    this.props.createBankAccountActions.getCountryList()
   }
 
   render() {
