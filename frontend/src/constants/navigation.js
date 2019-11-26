@@ -119,7 +119,7 @@ export default {
       children: [
         {
           name: 'Chart of Accounts',
-          url: '/admin/master/chart-accounts',
+          url: '/admin/master/chart-account',
           icon: 'fas fa-area-chart',
         },
         {
