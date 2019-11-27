@@ -58,11 +58,13 @@ public class TranscationCategoryHelper {
 
     public static TransactionCategory getTrascationByTrascationModel(TransactionCategoryBean transactionCategoryBean, TransactionTypeService transactionTypeService, TransactionCategoryServiceNew transactionCategoryService, VatCategoryService vatCategoryService) {
         TransactionCategory transactionCategory = new TransactionCategory();
-        transactionCategory.setDefaltFlag(transactionCategoryBean.getDefaltFlag());
+        if (transactionCategoryBean.getDefaltFlag() != null && !transactionCategoryBean.getDefaltFlag().isEmpty()) {
+            transactionCategory.setDefaltFlag(transactionCategoryBean.getDefaltFlag().charAt(0));
+        }
         if (transactionCategoryBean.getParentTransactionCategory() != null) {
             transactionCategory.setParentTransactionCategory(transactionCategoryService.findByPK(transactionCategoryBean.getParentTransactionCategory()));
         }
-        if (transactionCategoryBean.getTransactionCategoryId() != 0) {
+        if (transactionCategoryBean.getTransactionCategoryId() != null && transactionCategoryBean.getTransactionCategoryId() > 0) {
             transactionCategory.setTransactionCategoryId(transactionCategoryBean.getTransactionCategoryId());
         }
         transactionCategory.setTransactionCategoryCode(transactionCategoryBean.getTransactionCategoryCode());
@@ -76,7 +78,7 @@ public class TranscationCategoryHelper {
         }
         if (transactionCategoryBean.getVersionNumber() != null) {
             transactionCategory.setVersionNumber(transactionCategoryBean.getVersionNumber());
-        }else{
+        } else {
             transactionCategory.setVersionNumber(0);
         }
         return transactionCategory;

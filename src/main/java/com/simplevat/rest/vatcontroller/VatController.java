@@ -5,6 +5,7 @@
  */
 package com.simplevat.rest.vatcontroller;
 
+import com.simplevat.bank.model.DeleteModel;
 import com.simplevat.entity.VatCategory;
 import com.simplevat.service.VatCategoryService;
 import java.io.Serializable;
@@ -54,6 +55,17 @@ public class VatController implements Serializable {
         }
         return new ResponseEntity(HttpStatus.OK);
 
+    }
+
+    @DeleteMapping(value = "/deletevats")
+    public ResponseEntity deleteVats(@RequestBody DeleteModel ids) {
+        try {
+            vatCategoryService.deleteByIds(ids.getIds());
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping(value = "/getbyid")
