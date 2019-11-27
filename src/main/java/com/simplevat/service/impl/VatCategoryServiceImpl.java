@@ -10,17 +10,15 @@ import com.simplevat.entity.VatCategory;
 import com.simplevat.service.VatCategoryService;
 import java.time.LocalDateTime;
 
-
 @Service("vatCategoryService")
 
 public class VatCategoryServiceImpl extends VatCategoryService {
-
+    
     @Autowired
     private VatCategoryDao vatCategoryDao;
-
-
+    
     private static final String VAT_CATEGORY = "VAT_CATEGORY";
-
+    
     public List<VatCategory> getVatCategoryList() {
         return vatCategoryDao.getVatCategoryList();
     }
@@ -29,26 +27,25 @@ public class VatCategoryServiceImpl extends VatCategoryService {
     public List<VatCategory> getVatCategorys(String name) {
         return vatCategoryDao.getVatCategorys(name);
     }
-
+    
     @Override
     protected Dao<Integer, VatCategory> getDao() {
         return vatCategoryDao;
     }
-
+    
     @Override
     public VatCategory getDefaultVatCategory() {
         return vatCategoryDao.getDefaultVatCategory();
     }
-
     
     public void persist(VatCategory vatCategory) {
         super.persist(vatCategory, null, getActivity(vatCategory, "CREATED"));
     }
-
+    
     public VatCategory update(VatCategory vatCategory) {
         return super.update(vatCategory, null, getActivity(vatCategory, "UPDATED"));
     }
-
+    
     private Activity getActivity(VatCategory vatCategory, String activityCode) {
         Activity activity = new Activity();
         activity.setActivityCode(activityCode);
@@ -60,7 +57,10 @@ public class VatCategoryServiceImpl extends VatCategoryService {
         activity.setLoggingRequired(true);
         return activity;
     }
-
     
-
+    @Override
+    public void deleteByIds(List<Integer> ids) {
+        vatCategoryDao.deleteByIds(ids);
+    }
+    
 }
