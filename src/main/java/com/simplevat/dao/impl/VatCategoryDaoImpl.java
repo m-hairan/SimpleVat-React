@@ -37,4 +37,15 @@ public class VatCategoryDaoImpl extends AbstractDao<Integer, VatCategory> implem
         }
         return null;
     }
+
+    @Override
+    public void deleteByIds(List<Integer> ids) {
+        if (ids != null && !ids.isEmpty()) {
+            for (Integer id : ids) {
+                VatCategory vatCategory = findByPK(id);
+                vatCategory.setDeleteFlag(Boolean.TRUE);
+                update(vatCategory);
+            }
+        }
+    }
 }

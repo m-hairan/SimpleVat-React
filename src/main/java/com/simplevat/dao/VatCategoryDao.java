@@ -15,9 +15,10 @@ import java.util.List;
 public interface VatCategoryDao extends Dao<Integer, VatCategory> {
 
     public List<VatCategory> getVatCategoryList();
-  
+
     public List<VatCategory> getVatCategorys(String name);
 
     public VatCategory getDefaultVatCategory();
 
+    public void deleteByIds(List<Integer> ids);
 }

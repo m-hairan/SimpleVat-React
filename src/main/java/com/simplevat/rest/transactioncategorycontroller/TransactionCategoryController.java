@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.simplevat.rest.transactioncontroller;
+package com.simplevat.rest.transactioncategorycontroller;
 
 import com.simplevat.bank.model.DeleteModel;
 import com.simplevat.helper.TranscationCategoryHelper;
@@ -37,8 +37,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Sonu
  */
 @RestController
-@RequestMapping(value = "/rest/transaction")
-public class TransactionController implements Serializable {
+@RequestMapping(value = "/rest/transactioncategory")
+public class TransactionCategoryController implements Serializable {
 
     @Autowired
     private TransactionCategoryServiceNew transactionCategoryService;
@@ -119,7 +119,7 @@ public class TransactionController implements Serializable {
         return new ResponseEntity(filterList, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/savetransaction")
+    @PostMapping(value = "/savetransactioncategory")
     public ResponseEntity save(@RequestBody TransactionCategoryBean transactionCategoryBean, @RequestParam("id") Integer id) {
         try {
             User user = userServiceNew.findByPK(id);
@@ -134,15 +134,16 @@ public class TransactionController implements Serializable {
                     transactionCategoryService.update(transactionCategory);
                 }
             }
-            if (selectedTransactionCategory.getTransactionCategoryId() == 0) {
+            if (selectedTransactionCategory.getTransactionCategoryId() != null && selectedTransactionCategory.getTransactionCategoryId() > 0) {
+                selectedTransactionCategory.setLastUpdateBy(user.getUserId());
+                selectedTransactionCategory.setLastUpdateDate(LocalDateTime.now());
+                transactionCategoryService.update(selectedTransactionCategory);
+
+            } else {
                 selectedTransactionCategory.setOrderSequence(1);
                 selectedTransactionCategory.setCreatedBy(user.getUserId());
                 selectedTransactionCategory.setCreatedDate(LocalDateTime.now());
                 transactionCategoryService.persist(selectedTransactionCategory);
-            } else {
-                selectedTransactionCategory.setLastUpdateBy(user.getUserId());
-                selectedTransactionCategory.setLastUpdateDate(LocalDateTime.now());
-                transactionCategoryService.update(selectedTransactionCategory);
             }
 
             return new ResponseEntity(HttpStatus.OK);
