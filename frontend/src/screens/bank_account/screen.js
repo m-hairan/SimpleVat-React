@@ -22,10 +22,14 @@ import {
   DropdownItem
 } from 'reactstrap'
 import Select from 'react-select'
-import { ToastContainer, toast } from 'react-toastify'
+
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
 
 import { Loader } from 'components'
+import {
+  selectOptionsFactory,
+  filterFactory
+} from 'utils'
 
 import * as BankAccountActions from './actions'
 
@@ -36,6 +40,8 @@ import './style.scss'
 const mapStateToProps = (state) => {
   return ({
     is_authed: state.auth.is_authed,
+    account_type_list: state.bank_account.account_type_list,
+    currency_list: state.bank_account.currency_list,
     bank_account_list: state.bank_account.bank_account_list
   })
 }
@@ -54,15 +60,26 @@ class BankAccount extends React.Component {
       openDeleteModal: false,
       actionButtons: {},
 
-      selectedData: null
+      selectedData: null,
+
+      filter_bank: '',
+      filter_account_type: null,
+      filter_account_name: '',
+      filter_account_number: '',
+      filter_currency: null
     }
 
     this.initializeData = this.initializeData.bind(this)
+    this.inputHandler = this.inputHandler.bind(this)
     this.toggleDangerModal = this.toggleDangerModal.bind(this)
+    this.filterBankAccountList = this.filterBankAccountList.bind(this)
+
     this.renderAccountNumber = this.renderAccountNumber.bind(this)
     this.renderAccountType = this.renderAccountType.bind(this)
+    this.renderCurrency = this.renderCurrency.bind(this)
     this.renderActions = this.renderActions.bind(this)
     this.renderLastReconciled = this.renderLastReconciled.bind(this)
+
     this.onRowSelect = this.onRowSelect.bind(this)
     this.onSelectAll = this.onSelectAll.bind(this)
     this.toggleActionButton = this.toggleActionButton.bind(this)
@@ -87,7 +104,15 @@ class BankAccount extends React.Component {
   }
 
   initializeData () {
+    this.props.bankAccountActions.getAccountTypeList()
+    this.props.bankAccountActions.getCurrencyList()
     this.props.bankAccountActions.getBankAccountList()
+  }
+
+  inputHandler (key, value) {
+    this.setState({
+      [key]: value
+    })
   }
 
   toggleDangerModal () {
@@ -96,10 +121,68 @@ class BankAccount extends React.Component {
     })
   }
 
+  filterBankAccountList (bank_account_list) {
+    let data = []
+    const {
+      filter_bank,
+      filter_account_type,
+      filter_account_name,
+      filter_account_number,
+      filter_currency
+    } = this.state
+    
+    data = filterFactory.filterDataList(filter_bank, 'bankName', 'contain', bank_account_list)
+    let data_temp = []
+    data.map(item => {
+      let flag = true
+      flag = filterFactory.compareString(
+        filter_account_type ? filter_account_type.value : '',
+        item.bankAccountType && item.bankAccountType.id ? item.bankAccountType.id : '',
+        'match'
+      )
+      if (flag) {
+        let temp = Object.assign({}, item)
+        data_temp.push(temp)
+      }
+    })
+    data = filterFactory.filterDataList(filter_account_name, 'bankAccountName', 'contain', data_temp)
+    data_temp = filterFactory.filterDataList(filter_account_number, 'accountNumber', 'contain', data)
+    data = []
+    data_temp.map(item => {
+      let flag = true
+      flag = filterFactory.compareString(
+        filter_currency ? filter_currency.value : '',
+        item.bankAccountCurrency && item.bankAccountCurrency.currencyCode ? item.bankAccountCurrency.currencyCode : '',
+        'match'
+      )
+      if (flag) {
+        let temp = Object.assign({}, item)
+        data.push(temp)
+      }
+    })
+    return data
+  }
+
   renderAccountType (cell, row) {
-    return (
-      <label className="badge badge-primary mb-0">{ row.account_type }</label>
-    )
+    if (row.bankAccountType) {
+      let data = null
+      switch(row.bankAccountType.name) {
+        case 'Saving':
+          data = <label className="badge badge-primary mb-0">{ row.bankAccountType.name }</label>
+          break
+        case 'Current':
+          data = <label className="badge badge-info mb-0">{ row.bankAccountType.name }</label>
+          break
+        default:
+          data = <label className="badge badge-default mb-0">No Specified</label>
+          break
+      }
+      return data
+    } else {
+      return (
+        <label className="badge badge-danger mb-0">No Specified</label>
+      )
+    }
   }
 
   toggleActionButton (index) {
@@ -118,11 +201,27 @@ class BankAccount extends React.Component {
     return (
       <label
         className="mb-0 my-link"
-        onClick={() => this.props.history.push('/admin/banking/bank-account/transaction')}
+        onClick={() => this.props.history.push('/admin/banking/bank-account/transaction',
+          {bankAccountId: row.bankAccountId })}
       >
-        { row.account_number }
+        { row.accountNumber }
       </label>
     )
+  }
+
+  renderCurrency (cell, row) {
+    if (
+      row.bankAccountCurrency &&
+      row.bankAccountCurrency.currencyIsoCode
+    ) {
+      return (
+        <label className="badge badge-primary mb-0">{ row.bankAccountCurrency.currencyIsoCode }</label>
+      )  
+    } else {
+      return (
+        <label className="badge badge-danger mb-0">No Specified</label>
+      )
+    }
   }
 
   renderActions (cell, row) {
@@ -141,7 +240,9 @@ class BankAccount extends React.Component {
             }
           </DropdownToggle>
           <DropdownMenu right>
-            <DropdownItem onClick={() => this.props.history.push('/admin/banking/bank-account/detail')}>
+            <DropdownItem onClick={() => this.props.history.push('/admin/banking/bank-account/detail', {
+              bankAccountId: row.bankAccountId
+            })}>
               <i className="fas fa-edit" /> Edit
             </DropdownItem>
             <DropdownItem onClick={() => this.props.history.push('/admin/banking/bank-account/transaction')}>
@@ -187,16 +288,25 @@ class BankAccount extends React.Component {
 
   render() {
 
-    const { loading } = this.state
-    const { bank_account_list } = this.props
-    const containerStyle = {
-      zIndex: 1999
-    }
+    const {
+      loading,
+      filter_bank,
+      filter_account_type,
+      filter_account_name,
+      filter_account_number,
+      filter_currency
+    } = this.state
+    const {
+      account_type_list,
+      currency_list,
+      bank_account_list
+    } = this.props
+
+    let displayData = this.filterBankAccountList(bank_account_list)
 
     return (
       <div className="bank-account-screen">
         <div className="animated fadeIn">
-          <ToastContainer position="top-right" autoClose={5000} style={containerStyle} />
           <Card>
             <CardHeader>
               <Row>
@@ -257,29 +367,48 @@ class BankAccount extends React.Component {
                         <h5>Filter : </h5>
                         <Row>
                           <Col lg={2} className="mb-1">
-                            <Select
-                              className=""
-                              options={[]}
+                            <Input
+                              type="text"
                               placeholder="Bank"
+                              value={filter_bank}
+                              onChange={e => this.inputHandler('filter_bank', e.target.value)}
                             />
                           </Col>
                           <Col lg={2} className="mb-1">
                             <Select
                               className=""
-                              options={[]}
+                              options={selectOptionsFactory.renderOptions('name', 'id', account_type_list)}
+                              value={filter_account_type}
+                              onChange={option => this.setState({
+                                filter_account_type: option
+                              })}
                               placeholder="Account Type"
                             />
                           </Col>
                           <Col lg={2} className="mb-1">
-                            <Input type="text" placeholder="Account Name" />
+                            <Input
+                              type="text"
+                              placeholder="Account Name"
+                              value={filter_account_name}
+                              onChange={e => this.inputHandler('filter_account_name', e.target.value)}
+                            />
                           </Col>
                           <Col lg={2} className="mb-1">
-                            <Input type="text" placeholder="Account Number" />
+                            <Input
+                              type="text"
+                              placeholder="Account Number"
+                              value={filter_account_number}
+                              onChange={e => this.inputHandler('filter_account_number', e.target.value)}
+                            />
                           </Col>
                           <Col lg={2} className="mb-1">
                             <Select
                               className=""
-                              options={[]}
+                              options={selectOptionsFactory.renderOptions('currencyName', 'currencyCode', currency_list)}
+                              value={filter_currency}
+                              onChange={option => this.setState({
+                                filter_currency: option
+                              })}
                               placeholder="Currency"
                             />
                           </Col>
@@ -290,15 +419,15 @@ class BankAccount extends React.Component {
                           selectRow={ this.selectRowProp }
                           search={false}
                           options={ this.options }
-                          data={bank_account_list}
+                          data={displayData}
                           version="4"
                           hover
                           pagination
-                          totalSize={bank_account_list ? bank_account_list.length : 0}
+                          totalSize={displayData ? displayData.length : 0}
                           className="bank-account-table"
                         >
                           <TableHeaderColumn
-                            dataField="account_name"
+                            dataField="bankName"
                             dataSort
                           >
                             Bank
@@ -311,26 +440,26 @@ class BankAccount extends React.Component {
                           </TableHeaderColumn>
                           <TableHeaderColumn
                             isKey
-                            dataField="account_number"
+                            dataField="accountNumber"
                             dataFormat={this.renderAccountNumber}
                             dataSort
                           >
                             Account Number
                           </TableHeaderColumn>
                           <TableHeaderColumn
-                            dataField="bank_name"
+                            dataField="bankAccountName"
                             dataSort
                           >
                             Account Name
                           </TableHeaderColumn>
                           <TableHeaderColumn
-                            dataField="IBAN_number"
+                            dataFormat={this.renderCurrency}
                             dataSort
                           >
                             Currency
                           </TableHeaderColumn>
                           <TableHeaderColumn
-                            dataField="swift_code"
+                            dataField="openingBalance"
                             dataSort
                           >
                             Book Balance

@@ -4,6 +4,48 @@ import {
   authApi
 } from 'utils'
 
+export const getAccountTypeList = () => {
+  return (dispatch) => {
+    let data ={
+      method: 'get',
+      url: 'rest/bank/getaccounttype'
+    }
+    return authApi(data).then(res => {
+      if (res.status == 200) {
+        dispatch({
+          type: BANK_ACCOUNT.ACCOUNT_TYPE_LIST,
+          payload: {
+            data: res.data
+          }
+        })
+      }
+    }).catch(err => {
+      throw err
+    })
+  }
+}
+
+export const getCurrencyList = () => {
+  return (dispatch) => {
+    let data = {
+      method: 'get',
+      url: 'rest/bank/getcurrenncy'
+    }
+    return authApi(data).then(res => {
+      if (res.status == 200) {
+        dispatch({
+          type: BANK_ACCOUNT.CURRENCY_LIST,
+          payload: {
+            data: res.data
+          }
+        })
+      }
+    }).catch(err => {
+      throw err
+    })
+  }
+}
+
 export const getBankAccountList = () => {
   return (dispatch) => {
     let data = {
