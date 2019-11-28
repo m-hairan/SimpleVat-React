@@ -23,7 +23,7 @@ public class TransactionCategoryBean implements Serializable{
     private Integer transactionType;
     private Integer parentTransactionCategory;
     private Integer vatCategory;
-    private Character defaltFlag;
+    private String defaltFlag;
     private Integer orderSequence;
     private Integer createdBy;
     private LocalDateTime createdDate;

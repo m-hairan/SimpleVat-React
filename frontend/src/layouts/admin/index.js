@@ -16,6 +16,7 @@ import {
   AppSidebarMinimizer,
   AppSidebarNav,
 } from '@coreui/react'
+import { ToastContainer, toast } from 'react-toastify'
 
 import { adminRoutes } from 'routes'
 import {
@@ -65,10 +66,34 @@ class AdminLayout extends React.Component {
         this.props.history.push('/login')
       })
       this.props.commonActions.getSimpleVATVersion()
+      const toastifyAlert = (status, message) => {
+        if (status === 'success') {
+          toast.success(message, {
+            position: toast.POSITION.TOP_RIGHT
+          })
+        } else if (status === 'error') {
+          toast.error(message, {
+            position: toast.POSITION.TOP_RIGHT
+          })
+        } else if (status === 'warn') {
+          toast.warn(message, {
+            position: toast.POSITION.TOP_RIGHT
+          })
+        } else if (status === 'info') {
+          toast.info(message, {
+            position: toast.POSITION.TOP_RIGHT
+          })
+        }
+      }
+      this.props.commonActions.setTostifyAlertFunc(toastifyAlert)
     }
   }
 
   render() {
+
+    const containerStyle = {
+      zIndex: 1999
+    }
 
     return (
       <div className="admin-container">
@@ -92,6 +117,7 @@ class AdminLayout extends React.Component {
               <AppBreadcrumb appRoutes={adminRoutes} />
               <Container fluid>
                 <Suspense fallback={Loading()}>
+                  <ToastContainer position="top-right" autoClose={5000} style={containerStyle} />
                   <Switch>
                     {
                       adminRoutes.map((prop, key) => {

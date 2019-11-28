@@ -47,7 +47,7 @@ public class Project implements Serializable {
     private String vatRegistrationNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "INVOICE_LANGUAGE_CODE")
+    @JoinColumn(name = "LANGUAGE_CODE")
     private Language invoiceLanguageCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
