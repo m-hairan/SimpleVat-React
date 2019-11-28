@@ -11,7 +11,14 @@ export const getAccountTypeList = () => {
       url: 'rest/bank/getaccounttype'
     }
     return authApi(data).then(res => {
-      console.log(res)
+      if (res.status == 200) {
+        dispatch({
+          type: BANK_ACCOUNT.ACCOUNT_TYPE_LIST,
+          payload: {
+            data: res.data
+          }
+        })
+      }
     }).catch(err => {
       throw err
     })
@@ -54,6 +61,22 @@ export const getCountryList = () => {
           }
         })
       }
+    }).catch(err => {
+      throw err
+    })
+  }
+}
+
+
+export const createBankAccount = (obj) => {
+  return (dispatch) => {
+    let data = {
+      method: 'post',
+      url: 'rest/bank/savebank',
+      data: obj
+    }
+    return authApi(data).then(res => {
+      return res
     }).catch(err => {
       throw err
     })
