@@ -21,7 +21,10 @@ import { ToastContainer, toast } from 'react-toastify'
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
 import moment from 'moment'
 import _ from 'lodash'
-import Select from 'react-select'
+import {
+  selectOptionsFactory,
+  filterFactory
+} from 'utils'
 
 import { Loader } from 'components'
 
@@ -64,6 +67,8 @@ class VatCode extends React.Component {
 
     this.onSelectAll = this.onSelectAll.bind(this)
     this.onRowSelect = this.onRowSelect.bind(this)
+
+    this.filterVatList = this.filterVatList.bind(this)
 
     this.handleFilterChange = this.handleFilterChange.bind(this)
 
@@ -160,7 +165,6 @@ class VatCode extends React.Component {
 
 
   handleFilterChange(e, name) {
-    console.log(e)
     this.setState({
       filters: _.set(
         { ...this.state.filters },
@@ -170,14 +174,10 @@ class VatCode extends React.Component {
     })
   }
 
-  render() {
-    const { loading, selectedRows, filters } = this.state
-    const vatList = this.props.vat_list
-   
-    let display_data = []
+  filterVatList(vat_list) {
+    const {filters} = this.state
 
-    console.log('=========== Filter ============',  this.state.filters)
-    display_data = vatList.filter(item => {
+    const data = vat_list.filter(item => {
       for (var key in filters) {
         if (item[key] === undefined || !item[key].toString().includes(filters[key]))
           return false;
@@ -185,10 +185,18 @@ class VatCode extends React.Component {
       return true;
     })
 
+    return data
+  }
+
+  render() {
+    const { loading, selectedRows, filters } = this.state
+    const vatList = this.props.vat_list
+   
+    let display_data = this.filterVatList(vatList)
+
     return (
       <div className="vat-code-screen">
         <div className="animated fadeIn">
-          <ToastContainer position="top-right" autoClose={3000}  />
           <Card>
             <CardHeader>
               <div className="h4 mb-0 d-flex align-items-center">
