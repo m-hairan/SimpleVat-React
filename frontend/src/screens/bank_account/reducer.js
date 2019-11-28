@@ -4,6 +4,7 @@ const initState = {
   bank_account_list: [],
   bank_transaction_list: [],
 
+  account_type_list: [],
   currency_list: [],
   country_list: []
 }
@@ -23,6 +24,12 @@ const BankAccountReducer = (state = initState, action) => {
       return {
         ...state,
         bank_transaction_list: Object.assign([], payload.data)
+      }
+
+    case BANK_ACCOUNT.ACCOUNT_TYPE_LIST:
+      return {
+        ...state,
+        account_type_list: Object.assign([], payload.data)
       }
 
     case BANK_ACCOUNT.CURRENCY_LIST:

@@ -19,15 +19,23 @@ const ProjectReducer = (state = initState, action) => {
       }
 
     case PROJECT.PROJECT_CURRENCY_LIST:
+      const currency_list = payload.data.map(currency => {
+        return {label: currency.currencyName, value: currency.currencyCode}
+      })
+
       return {
         ...state,
-        project_currency_list: Object.assign([], payload.data)
+        project_currency_list: Object.assign([], currency_list)
       }
     
     case PROJECT.PROJECT_COUNTRY_LIST:
+      const country_list = payload.data.map(country => {
+        return {label: country.countryName, value: country.countryCode}
+      })
+
       return {
         ...state,
-        project_country_list: Object.assign([], payload.data)
+        project_country_list: Object.assign([], country_list)
       }
 
     case PROJECT.PROJECT_TITLE_LIST:

@@ -20,6 +20,29 @@ export const endRequest = () => {
   }
 }
 
+export const setTostifyAlertFunc = (func) => {
+  return (dispatch) => {
+    dispatch({
+      type: COMMON.TOSTIFY_ALERT_FUNC,
+      payload: {
+        data: func
+      }
+    })
+  }
+}
+
+export const tostifyAlert = (status, message) => {
+  return (dispatch) => {
+    dispatch({
+      type: COMMON.TOSTIFY_ALERT,
+      payload: {
+        status,
+        message
+      }
+    })
+  }
+}
+
 
 export const getSimpleVATVersion = () => {
   return (dispatch) => {

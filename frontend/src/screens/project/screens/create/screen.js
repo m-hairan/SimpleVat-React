@@ -12,10 +12,6 @@ import {
   FormGroup,
   Input,
   Label,
-  Modal,
-  ModalHeader, 
-  ModalBody,
-  ModalFooter,
 } from 'reactstrap'
 import Select from 'react-select'
 import _ from 'lodash'
@@ -23,15 +19,19 @@ import _ from 'lodash'
 import { Formik } from 'formik';
 import * as Yup from "yup";
 
+import {ContactModal} from '../../sections'
+
 import * as ProjectActions from '../../actions'
 
 import './style.scss'
 
 const mapStateToProps = (state) => {
   return ({
-
+    currency_list: state.project.project_currency_list,
+    country_list: state.project.project_country_list
   })
 }
+
 const mapDispatchToProps = (dispatch) => {
   return ({
     projectActions: bindActionCreators(ProjectActions, dispatch)
@@ -49,7 +49,7 @@ class CreateProject extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      openContactModel: false,
+      openContactModal: false,
       loading: false,
 
       selectedContact: null,
@@ -57,7 +57,6 @@ class CreateProject extends React.Component {
       selectedInvoiceLanguage: null,
 
       selectedContactCountry: null,
-      selectedContactCurrency: null,
       selectedContactTitle: null,
 
       initProjectValue: {
@@ -70,40 +69,23 @@ class CreateProject extends React.Component {
           projectRevenueBudget: '', 
           currency: ''
       },
-
-
-      initContactValue: {
-        title: '',
-        billingEmail: '',
-        city: '',
-        country : '',
-        currency: '',
-        firstName: '',
-        lastName: '',
-        middleName: '',
-        email: '',
-        stateRegion: '',
-        invoicingAddressLine1: '',
-        invoicingAddressLine2: '' 
-      },
     }
 
     this.showContactModel = this.showContactModel.bind(this)
     this.closeContactModel = this.closeContactModel.bind(this)
     
     this.projectHandleSubmit = this.projectHandleSubmit.bind(this)
-    this.contactHandleSubmit = this.contactHandleSubmit.bind(this)
     this.success = this.success.bind(this)
   }
 
 
    // Show Invite User Modal
   showContactModel() {
-    this.setState({ openContactModel: true })
+    this.setState({ openContactModal: true })
   }
   // Cloase Confirm Modal
   closeContactModel() {
-    this.setState({ openContactModel: false })
+    this.setState({ openContactModal: false })
   }
 
   componentDidMount(){
@@ -119,7 +101,7 @@ class CreateProject extends React.Component {
     // })
   }
 
-  // Create or Edit Vat
+  // Create or Edit Project
   projectHandleSubmit(data) {
     this.props.projectActions.createAndSaveProject(data).then(res => {
       if (res.status === 200) {
@@ -134,18 +116,9 @@ class CreateProject extends React.Component {
     })
   }
 
-
-  // Create or Contact
-  contactHandleSubmit(data) {
-    this.props.projectActions.createProjectContact(data).then(res => {
-      if (res.status === 200) {
-        // this.success()
-        this.closeContactModel()
-      }
-    })
-  }
-
   render() {
+    const {currency_list, country_list} = this.props
+
     return (
       <div className="create-product-screen">
         <div className="animated fadeIn">
@@ -170,6 +143,12 @@ class CreateProject extends React.Component {
                           onSubmit={(values, {resetForm}) => {
                             this.projectHandleSubmit(values)
                             resetForm(this.state.initProjectValue)
+
+                            this.setState({
+                              selectedContactCurrency: null,
+                              selectedCurrency: null,
+                              selectedInvoiceLanguage: null
+                            })
                           }}
                           validationSchema={Yup.object().shape({
                             projectName: Yup.string()
@@ -178,14 +157,6 @@ class CreateProject extends React.Component {
                               .required("Contact is Required"),
                             currency: Yup.string()
                               .required("Currency is Required"),
-                            contractPoNumber: Yup.string()
-                              .required("Contract PO Number is Required"),
-                            vatRegistrationNumber: Yup.string()
-                              .required("VAT Registration Number is Required"),
-                            projectExpenseBudget: Yup.string()
-                              .required("Expense Budget is Required"),
-                            projectRevenueBudget: Yup.string()
-                              .required("Revenue Budget is Required"),
                             invoiceLanguageCode: Yup.string()
                               .required("Invoice Language is Required")
                           })}>
@@ -194,7 +165,7 @@ class CreateProject extends React.Component {
                                 <Row>
                                   <Col lg={4}>
                                     <FormGroup className="mb-3">
-                                      <Label htmlFor="projectName">Project Name</Label>
+                                      <Label htmlFor="projectName"><span className="text-danger">*</span>Project Name</Label>
                                       <Input
                                         type="text"
                                         id="name"
@@ -215,7 +186,7 @@ class CreateProject extends React.Component {
                                   </Col>
                                   <Col lg={4}>
                                     <FormGroup className="mb-3">
-                                      <Label htmlFor="contact">Contact</Label>
+                                      <Label htmlFor="contact"><span className="text-danger">*</span>Contact</Label>
                                       <Select
                                         options={INVOICE_LANGUAGE_OPTIONS}
                                         onChange={(option) => {
@@ -291,10 +262,12 @@ class CreateProject extends React.Component {
                                   </Col>
                                   <Col lg={4}>
                                     <FormGroup className="mb-3">
-                                      <Label htmlFor="currency">Currency</Label>
+                                      <Label htmlFor="currency">
+                                        <span className="text-danger">*</span>Currency
+                                      </Label>
                                       <Select
                                         className="select-default-width"
-                                        options={INVOICE_LANGUAGE_OPTIONS}
+                                        options={currency_list}
                                         onChange={(option) => {
                                           this.setState({
                                             selectedCurrency: option.value
@@ -362,7 +335,9 @@ class CreateProject extends React.Component {
                                   </Col>
                                   <Col lg={4}>
                                     <FormGroup className="">
-                                      <Label htmlFor="invoiceLanguageCode">Invoice Language</Label>
+                                      <Label htmlFor="invoiceLanguageCode">
+                                        <span className="text-danger">*</span>Invoice Language
+                                      </Label>
                                       <Select
                                         className="select-default-width"
                                         options={INVOICE_LANGUAGE_OPTIONS}
@@ -419,340 +394,13 @@ class CreateProject extends React.Component {
           </Row>
         </div>
 
-        <Modal isOpen={this.state.openContactModel}
-            className="modal-success contact-modal"
-          >
-          <Formik
-            initialValues={this.state.initContactValue}
-            onSubmit={(values, {resetForm}) => {
-              this.contactHandleSubmit(values)
-              resetForm(this.state.initContactValue)
-            }}
-            validationSchema={Yup.object().shape({
-              title: Yup.string()
-                .required(),
-              billingEmail: Yup.string()
-                .email()
-                .required(),
-              city: Yup.string()
-                .required(),
-              country: Yup.string()
-                .required(),
-              currency: Yup.string()
-                .required(),
-              firstName: Yup.string()
-                .required(),
-              lastName: Yup.string()
-                .required(),
-              middleName: Yup.string()
-                .required(),
-              email: Yup.string()
-                .email()
-                .required(),
-              stateRegion: Yup.string()
-                .required(),
-              invoicingAddressLine1: Yup.string()
-                .required(),
-              invoicingAddressLine2: Yup.string()
-                .required()
-            })}>
-              {props => (
-            <Form name="simpleForm" onSubmit={props.handleSubmit}>
-              <ModalHeader toggle={this.toggleDanger}>New Contact</ModalHeader>
-              <ModalBody>
-                <Row>
-                  <Col>
-                    <FormGroup>
-                      <Label htmlFor="categoryCode"><span className="text-danger">*</span>Title</Label>
-                      <Select
-                        className="select-default-width"
-                        options={INVOICE_LANGUAGE_OPTIONS}
-                        id="title"
-                        onChange={(option) => {
-                          this.setState({
-                            selectedContactTitle: option.value
-                          })
-                          props.handleChange("title")(option.value);
-                        }}
-                        placeholder="Select title"
-                        value={this.state.selectedContactTitle}
-                        name="title"
-                        className={
-                          props.errors.title && props.touched.title
-                            ? "is-invalid"
-                            : ""
-                        }
-                      />
-                      {props.errors.title && props.touched.title && (
-                        <div className="invalid-feedback">{props.errors.title}</div>
-                      )}
-                    </FormGroup>                 
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <FormGroup>
-                      <Label htmlFor="categoryName"><span className="text-danger">*</span>First Name</Label>
-                      <Input
-                        type="text"
-                        id="firstName"
-                        name="firstName"
-                        onChange={props.handleChange}
-                        placeholder="Enter firstName "
-                        value={props.values.firstName }
-                        className={
-                          props.errors.firstName  && props.touched.firstName 
-                            ? "is-invalid"
-                            : ""
-                        }
-                      />
-                      {props.errors.firstName  && props.touched.firstName  && (
-                        <div className="invalid-feedback">{props.errors.firstName }</div>
-                      )}
-                    </FormGroup>
-                  </Col>
-                  <Col>
-                    <FormGroup>
-                      <Label htmlFor="categoryName"><span className="text-danger">*</span>Middle Name</Label>
-                      <Input
-                        type="text"
-                        id="middleName"
-                        name="middleName"
-                        onChange={props.handleChange}
-                        placeholder="Enter middleName  "
-                        value={props.values.middleName}
-                        className={
-                          props.errors.middleName && props.touched.middleName  
-                            ? "is-invalid"
-                            : ""
-                        }
-                      />
-                      {props.errors.middleName && props.touched.middleName && (
-                        <div className="invalid-feedback">{props.errors.middleName}</div>
-                      )}
-                    </FormGroup>
-                  </Col>
-                  <Col>
-                    <FormGroup>
-                      <Label htmlFor="categoryName"><span className="text-danger">*</span>Last Name</Label>
-                      <Input
-                        type="text"
-                        id="lastName"
-                        name="lastName"
-                        onChange={props.handleChange}
-                        placeholder="Enter lastName   "
-                        value={props.values.lastName  }
-                        className={
-                          props.errors.lastName && props.touched.lastName   
-                            ? "is-invalid"
-                            : ""
-                        }
-                      />
-                      {props.errors.lastName && props.touched.lastName && (
-                        <div className="invalid-feedback">{props.errors.lastName}</div>
-                      )}
-                    </FormGroup>
-                  </Col>
-                </Row>
+        <ContactModal 
+          openContactModal={this.state.openContactModal} 
+          closeContactModel={this.closeContactModel}
+          currencyList = {currency_list}
+          countryList = {country_list}
+          />    
 
-                <Row>
-                  <Col>
-                    <FormGroup>
-                      <Label htmlFor="categoryName"><span className="text-danger">*</span>Email</Label>
-                      <Input
-                        type="email"
-                        id="email"
-                        name="email"
-                        onChange={props.handleChange}
-                        placeholder="Enter email"
-                        value={props.values.email   }
-                        className={
-                          props.errors.email && props.touched.email    
-                            ? "is-invalid"
-                            : ""
-                        }
-                      />
-                      {props.errors.email && props.touched.email && (
-                        <div className="invalid-feedback">{props.errors.email}</div>
-                      )}
-                    </FormGroup>
-                  </Col>
-                  <Col>
-                    <FormGroup>
-                      <Label htmlFor="categoryName"><span className="text-danger">*</span>Address Line 1</Label>
-                      <Input
-                        type="text"
-                        id="invoicingAddressLine1"
-                        name="invoicingAddressLine1"
-                        onChange={props.handleChange}
-                        placeholder="Enter invoicingAddressLine1"
-                        value={props.values.invoicingAddressLine1}
-                        className={
-                          props.errors.invoicingAddressLine1 && props.touched.invoicingAddressLine1     
-                            ? "is-invalid"
-                            : ""
-                        }
-                      />
-                      {props.errors.invoicingAddressLine1 && props.touched.invoicingAddressLine1 && (
-                        <div className="invalid-feedback">{props.errors.invoicingAddressLine1}</div>
-                      )}
-                    </FormGroup>
-                  </Col>
-                  <Col>
-                    <FormGroup>
-                      <Label htmlFor="categoryName"><span className="text-danger">*</span>Address Line 2</Label>
-                      <Input
-                        type="text"
-                        id="invoicingAddressLine2"
-                        name="invoicingAddressLine2"
-                        onChange={props.handleChange}
-                        placeholder="Enter invoicingAddressLine2"
-                        value={props.values.invoicingAddressLine2}
-                        className={
-                          props.errors.invoicingAddressLine2 && props.touched.invoicingAddressLine2     
-                            ? "is-invalid"
-                            : ""
-                        }
-                      />
-                      {props.errors.invoicingAddressLine2 && props.touched.invoicingAddressLine2 && (
-                        <div className="invalid-feedback">{props.errors.invoicingAddressLine2}</div>
-                      )}
-                    </FormGroup>
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col>
-                    <FormGroup>
-                      <Label htmlFor="categoryName"><span className="text-danger">*</span>State Region</Label>
-                      <Input
-                        type="text"
-                        id="stateRegion"
-                        name="stateRegion"
-                        onChange={props.handleChange}
-                        placeholder="Enter stateRegion"
-                        value={props.values.stateRegion}
-                        className={
-                          props.errors.stateRegion && props.touched.stateRegion     
-                            ? "is-invalid"
-                            : ""
-                        }
-                      />
-                      {props.errors.stateRegion && props.touched.stateRegion && (
-                        <div className="invalid-feedback">{props.errors.stateRegion}</div>
-                      )}
-                    </FormGroup>
-                  </Col>
-                  <Col>
-                    <FormGroup>
-                      <Label htmlFor="categoryName"><span className="text-danger">*</span>City</Label>
-                      <Input
-                        type="text"
-                        id="city"
-                        name="city"
-                        onChange={props.handleChange}
-                        placeholder="Enter stateRegion"
-                        value={props.values.city}
-                        className={
-                          props.errors.city && props.touched.city     
-                            ? "is-invalid"
-                            : ""
-                        }
-                      />
-                      {props.errors.city && props.touched.city && (
-                        <div className="invalid-feedback">{props.errors.city}</div>
-                      )}
-                    </FormGroup>
-                  </Col>
-                  <Col>
-                    <FormGroup>
-                      <Label htmlFor="categoryName"><span className="text-danger">*</span>Country</Label>
-                      <Select
-                        className="select-default-width"
-                        options={INVOICE_LANGUAGE_OPTIONS}
-                        id="country"
-                        onChange={(option) => {
-                          this.setState({
-                            selectedContactCountry: option.value
-                          })
-                          props.handleChange("country")(option.value);
-                        }}
-                        placeholder="Select country"
-                        value={this.state.selectedContactCountry}
-                        name="country"
-                        className={
-                          props.errors.country && props.touched.country
-                            ? "is-invalid"
-                            : ""
-                        }
-                      />
-                      {props.errors.country && props.touched.country && (
-                        <div className="invalid-feedback">{props.errors.country}</div>
-                      )}
-                    </FormGroup>
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col>
-                    <FormGroup>
-                      <Label htmlFor="categoryName"><span className="text-danger">*</span>Currency Code</Label>
-                      <Select
-                        className="select-default-width"
-                        options={INVOICE_LANGUAGE_OPTIONS}
-                        id="currency"
-                        onChange={(option) => {
-                          this.setState({
-                            selectedContactCurrency: option.value
-                          })
-                          props.handleChange("currency")(option.value);
-                        }}
-                        placeholder="Select currency"
-                        value={this.state.selectedContactCurrency}
-                        name="currency"
-                        className={
-                          props.errors.currency && props.touched.currency
-                            ? "is-invalid"
-                            : ""
-                        }
-                      />
-                      {props.errors.currency && props.touched.currency && (
-                        <div className="invalid-feedback">{props.errors.currency}</div>
-                      )}
-                    </FormGroup>
-                  </Col>
-                  <Col>
-                    <FormGroup>
-                      <Label htmlFor="categoryName"><span className="text-danger">*</span>Billing Email</Label>
-                      <Input
-                        type="text"
-                        id="billingEmail"
-                        name="billingEmail"
-                        onChange={props.handleChange}
-                        placeholder="Enter billingEmail"
-                        value={props.values.billingEmail}
-                        className={
-                          props.errors.billingEmail && props.touched.billingEmail    
-                            ? "is-invalid"
-                            : ""
-                        }
-                      />
-                      {props.errors.billingEmail && props.touched.billingEmail && (
-                        <div className="invalid-feedback">{props.errors.billingEmail}</div>
-                      )}
-                    </FormGroup>
-                  </Col>
-                </Row>
-
-              </ModalBody>
-              <ModalFooter>
-                <Button color="success" type="submit" className="btn-square">Save</Button>&nbsp;
-                <Button color="secondary" className="btn-square" onClick={this.closeContactModel}>Cancel</Button>
-              </ModalFooter>
-            </Form>
-            )}
-          </Formik>
-          </Modal>
       </div>
     )
   }

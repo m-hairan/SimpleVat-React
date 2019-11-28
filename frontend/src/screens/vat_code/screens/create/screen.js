@@ -16,6 +16,12 @@ import {
 import { ToastContainer, toast } from 'react-toastify'
 import _ from 'lodash'
 import { Loader } from 'components'
+import {
+  selectOptionsFactory
+} from 'utils'
+import {
+  CommonActions
+} from 'services/global'
 
 import 'react-toastify/dist/ReactToastify.css'
 import './style.scss'
@@ -33,6 +39,7 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch) => {
   return ({
+    commonActions: bindActionCreators(CommonActions, dispatch),
     vatActions: bindActionCreators(VatActions, dispatch)
   })
 }
@@ -76,7 +83,7 @@ class CreateVatCode extends React.Component {
   handleSubmit(data) {
     this.props.vatActions.createBat(data).then(res => {
       if (res.status === 200) {
-        this.success()
+        this.props.commonActions.tostifyAlert('success', 'New vat code is created successfully!')
 
         if(this.state.readMore){
           this.setState({
@@ -84,6 +91,9 @@ class CreateVatCode extends React.Component {
           })
         } else this.props.history.push('/admin/master/vat-code')
       }
+    }).catch(err => {
+      console.log(err)
+      this.props.commonActions.tostifyAlert('error', err.data.message)
     })
   }
 
