@@ -87,10 +87,9 @@ export const getProjectCurrencyList = () => {
     }
 
     return authApi(data).then(res => {
-      console.log("=================== project currency ==============", res)
       dispatch({
         type: PROJECT.PROJECT_CURRENCY_LIST,
-        payload: res.data
+        payload: res
       })
       return res
     }).catch(err => {
@@ -109,10 +108,9 @@ export const getProjectCountryList = () => {
     }
 
     return authApi(data).then(res => {
-      console.log("=================== project Coutnry ==============", res)
       dispatch({
         type: PROJECT.PROJECT_COUNTRY_LIST,
-        payload: res.data
+        payload: res
       })
       return res
     }).catch(err => {
@@ -127,14 +125,13 @@ export const getProjectTitleList = () => {
   return (dispatch) => {
     let data = {
       method: 'GET',
-      url: '/rest/project/gettitle?titleStr=1'
+      url: '/rest/project/gettitle?titleStr'
     }
 
     return authApi(data).then(res => {
-      console.log("=================== project currency ==============", res)
       dispatch({
         type: PROJECT.PROJECT_TITLE_LIST,
-        payload: res.data
+        payload: res
       })
       return res
     }).catch(err => {

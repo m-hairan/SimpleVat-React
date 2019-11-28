@@ -160,7 +160,6 @@ class VatCode extends React.Component {
 
 
   handleFilterChange(e, name) {
-    console.log(e)
     this.setState({
       filters: _.set(
         { ...this.state.filters },

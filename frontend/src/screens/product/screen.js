@@ -45,7 +45,7 @@ class Product extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      loading: false,
+      loading: true,
     }
 
     this.initializeData = this.initializeData.bind(this)
@@ -73,7 +73,11 @@ class Product extends React.Component {
   }
 
   initializeData () {
-    this.props.productActions.getProductList()
+    this.props.productActions.getProductList().then(res => {
+      if (res.status === 200) {
+        this.setState({ loading: false })
+      }
+    })
   }
 
   goToDetail (row) {
@@ -176,31 +180,25 @@ class Product extends React.Component {
                         >
                           <TableHeaderColumn
                             isKey
-                            dataField="transactionCategoryName"
+                            dataField="productName"
                             dataSort
                           >
                             Name
                           </TableHeaderColumn>
                           <TableHeaderColumn
-                            dataField="transactionCategoryCode"
-                            dataSort
-                          >
-                            Account Code
-                          </TableHeaderColumn>
-                          <TableHeaderColumn
-                            dataField="transactionCategoryCode"
+                            dataField="productCode"
                             dataSort
                           >
                             Product Code
                           </TableHeaderColumn>
                           <TableHeaderColumn
-                            dataField="parentTransactionCategory"
+                            dataField="productDescription"
                             dataSort
                           >
                             Description
                           </TableHeaderColumn>
                           <TableHeaderColumn
-                            dataField="transactionCategoryCode"
+                            dataField="vatCategory"
                             dataSort
                           >
                             Vat Percentage

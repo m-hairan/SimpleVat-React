@@ -70,7 +70,8 @@ export const deleteVat = (ids) => {
   return (dispatch) => {
     let data = {
       method: 'DELETE',
-      url: `rest/vat/deletevats?id=${ids}`
+      url: `rest/vat/deletevats?id=1`,
+      data: {ids: ids}
     }
 
     return authApi(data).then(res => {
