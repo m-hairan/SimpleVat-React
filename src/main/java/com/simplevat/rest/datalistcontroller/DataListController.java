@@ -52,6 +52,7 @@ public class DataListController implements Serializable {
         return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @Deprecated
     @GetMapping(value = "/getcurrenncy")
     public ResponseEntity getCurrency() {
         try {

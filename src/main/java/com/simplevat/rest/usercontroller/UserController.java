@@ -12,6 +12,7 @@ import com.simplevat.entity.MailEnum;
 import com.simplevat.entity.Role;
 import com.simplevat.entity.User;
 import com.simplevat.integration.MailIntegration;
+import com.simplevat.security.JwtTokenUtil;
 import com.simplevat.service.CompanyService;
 import com.simplevat.service.ConfigurationService;
 import com.simplevat.service.RoleService;
@@ -28,6 +29,8 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.internet.MimeMultipart;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -60,6 +63,9 @@ public class UserController implements Serializable {
 
     @Autowired
     private ConfigurationService configurationService;
+    
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
 
     private boolean isEmailPresent = false;
 
@@ -121,6 +127,17 @@ public class UserController implements Serializable {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+    }
+    
+    @GetMapping(value = "/current")
+    public ResponseEntity<User> currentUser(HttpServletRequest request) {
+        try {
+        	Integer userId = jwtTokenUtil.getUserIdFromHttpRequest(request);
+        	User user = userService.findByPK(userId);
+        	return new ResponseEntity<>(user, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
     }
 
     @PostMapping(value = "/saveuser")
