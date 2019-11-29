@@ -480,15 +480,24 @@ class DetailTransactionCategory extends React.Component {
                         ) : (
                             ""
                           )}
-                        <FormGroup className="text-right mt-5">
-                          <Button type="submit" color="primary" className="btn-square mr-3">
-                            <i className="fa fa-dot-circle-o"></i> Save
-                          </Button>
-                          <Button type="submit" color="secondary" className="btn-square" 
-                            onClick={() => {this.props.history.push("/admin/settings/transaction-category")}}>
-                            <i className="fa fa-ban"></i> Cancel
-                          </Button>
-                        </FormGroup>
+                        <Row>
+                          <Col lg={12} className="d-flex flex-wrap align-items-center justify-content-between mt-5">
+                            <FormGroup>
+                              <Button type="button" color="danger" className="btn-square">
+                                <i className="fa fa-trash"></i> Delete
+                              </Button>
+                            </FormGroup>
+                            <FormGroup className="text-right">
+                              <Button type="submit" color="primary" className="btn-square mr-3">
+                                <i className="fa fa-dot-circle-o"></i> Save
+                              </Button>
+                              <Button type="submit" color="secondary" className="btn-square" 
+                                onClick={() => {this.props.history.push("/admin/settings/transaction-category")}}>
+                                <i className="fa fa-ban"></i> Cancel
+                              </Button>
+                            </FormGroup>
+                          </Col>
+                        </Row>
                       </Form>
                     </Col>
                   </Row>

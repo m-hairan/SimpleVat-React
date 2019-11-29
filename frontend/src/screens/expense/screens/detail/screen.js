@@ -396,7 +396,12 @@ class DetailExpense extends React.Component {
                     </Col>
                   </Row>
                   <Row>
-                    <Col lg={12}>
+                    <Col lg={12} className="d-flex flex-wrap align-items-center justify-content-between">
+                      <FormGroup>
+                        <Button color="danger" className="btn-square">
+                          <i className="fa fa-trash"></i> Delete
+                        </Button>
+                      </FormGroup>
                       <FormGroup className="text-right">
                         <Button type="submit" color="primary" className="btn-square mr-3">
                           <i className="fa fa-dot-circle-o"></i> Update

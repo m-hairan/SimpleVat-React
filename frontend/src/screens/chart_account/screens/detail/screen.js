@@ -181,16 +181,24 @@ class DetailChartAccount extends React.Component {
                                   <div className="invalid-feedback">{props.errors.type}</div>
                                 )}     
                               </FormGroup>
-                              
-                              <FormGroup className="text-right mt-5">
-                                <Button type="submit" name="submit" color="primary" className="btn-square mr-3">
-                                  <i className="fa fa-dot-circle-o"></i> Update
-                                </Button>
-                                <Button type="submit" color="secondary" className="btn-square"
-                                  onClick={() => {this.props.history.push('/admin/master/chart-account')}}>
-                                  <i className="fa fa-ban"></i> Cancel
-                                </Button>
-                              </FormGroup>
+                              <Row>
+                                <Col lg={12} className="d-flex flex-wrap align-items-center justify-content-between mt-5">
+                                  <FormGroup>
+                                    <Button type="button" color="danger" className="btn-square">
+                                      <i className="fa fa-trash"></i> Delete
+                                    </Button>
+                                  </FormGroup>
+                                  <FormGroup className="text-right">
+                                    <Button type="submit" name="submit" color="primary" className="btn-square mr-3">
+                                      <i className="fa fa-dot-circle-o"></i> Update
+                                    </Button>
+                                    <Button type="button" color="secondary" className="btn-square"
+                                      onClick={() => {this.props.history.push('/admin/master/chart-account')}}>
+                                      <i className="fa fa-ban"></i> Cancel
+                                    </Button>
+                                  </FormGroup>
+                                </Col>
+                              </Row>
                             </Form>
                           )}
                         </Formik>
