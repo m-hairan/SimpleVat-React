@@ -195,16 +195,24 @@ class DetailBankAccount extends React.Component {
                         </FormGroup>
                       </Col>
                     </Row>
-                    
-                    <FormGroup className="text-right">
-                      <Button type="submit" color="primary" className="btn-square mr-3">
-                        <i className="fa fa-dot-circle-o"></i> Update
-                      </Button>
-                      <Button color="secondary" className="btn-square" 
-                        onClick={() => {this.props.history.push("/admin/banking/bank-account")}}>
-                        <i className="fa fa-ban"></i> Cancel
-                      </Button>
-                    </FormGroup>
+                    <Row>
+                      <Col lg={12} className="d-flex align-items-center justify-content-between flex-wrap">
+                        <FormGroup>
+                          <Button color="danger" className="btn-square">
+                            <i className="fa fa-trash"></i> Close
+                          </Button>
+                        </FormGroup>
+                        <FormGroup className="text-right">
+                          <Button type="submit" color="primary" className="btn-square mr-3">
+                            <i className="fa fa-dot-circle-o"></i> Update
+                          </Button>
+                          <Button color="secondary" className="btn-square" 
+                            onClick={() => {this.props.history.push("/admin/banking/bank-account")}}>
+                            <i className="fa fa-ban"></i> Cancel
+                          </Button>
+                        </FormGroup>
+                      </Col>
+                    </Row>
                   </Form>
                 </Col>
               </Row>
