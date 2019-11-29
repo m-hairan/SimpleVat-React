@@ -156,16 +156,25 @@ class DetailVatCode extends React.Component {
                                   {props.errors.vat && props.touched.vat && (
                                     <div className="invalid-feedback">{props.errors.vat}</div>
                                   )}
-                                </FormGroup>            
-                                <FormGroup className="text-right mt-5">
-                                  <Button type="submit" name="submit" color="primary" className="btn-square mr-3">
-                                    <i className="fa fa-dot-circle-o"></i> Update
-                                  </Button>
-                                  <Button type="submit" color="secondary" className="btn-square"
-                                    onClick={() => {this.props.history.push('/admin/master/vat-code')}}>
-                                    <i className="fa fa-ban"></i> Cancel
-                                  </Button>
                                 </FormGroup>
+                                <Row>
+                                  <Col lg={12} className="mt-5 d-flex flex-wrap align-items-center justify-content-between">
+                                    <FormGroup>
+                                      <Button type="button" color="danger" className="btn-square">
+                                        <i className="fa fa-trash"></i> Delete
+                                      </Button>
+                                    </FormGroup>
+                                    <FormGroup className="text-right">
+                                      <Button type="submit" name="submit" color="primary" className="btn-square mr-3">
+                                        <i className="fa fa-dot-circle-o"></i> Update
+                                      </Button>
+                                      <Button type="submit" color="secondary" className="btn-square"
+                                        onClick={() => {this.props.history.push('/admin/master/vat-code')}}>
+                                        <i className="fa fa-ban"></i> Cancel
+                                      </Button>
+                                    </FormGroup>
+                                  </Col>
+                                </Row>
                               </Form>
                             )}
                           </Formik>

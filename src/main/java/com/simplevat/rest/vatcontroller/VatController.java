@@ -97,4 +97,20 @@ public class VatController implements Serializable {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @DeleteMapping(value = "/deletevats")
+    private ResponseEntity deleteVats() {
+        List<VatCategory> vatCategoryList = vatCategoryService.getVatCategoryList();
+        if (vatCategoryList != null) {
+            for (VatCategory vatCategory : vatCategoryList) {
+            	vatCategory.setDeleteFlag(true);
+            	vatCategoryService.update(vatCategory, vatCategory.getId());
+			}
+        } else {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(HttpStatus.OK);
+
+    }
+     
+    
 }

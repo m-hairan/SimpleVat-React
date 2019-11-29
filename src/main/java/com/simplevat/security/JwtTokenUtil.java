@@ -4,13 +4,22 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.simplevat.entity.Currency;
+import com.simplevat.entity.User;
+import com.simplevat.service.UserServiceNew;
+
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -23,6 +32,9 @@ public class JwtTokenUtil implements Serializable {
 
 	@Value("${jwt.secret}")
 	private String secret;
+	
+	@Autowired
+	UserServiceNew userServiceNew;
 
 	public String getUsernameFromToken(String token) {
 		return getClaimFromToken(token, Claims::getSubject);
@@ -74,4 +86,17 @@ public class JwtTokenUtil implements Serializable {
 		final String username = getUsernameFromToken(token);
 		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
 	}
+	
+	public Integer getUserIdFromHttpRequest(HttpServletRequest request) {
+		String header = request.getHeader("Authorization");
+        if (header == null || !header.startsWith("Bearer ")) {
+            throw new JwtException("No JWT token found in request headers");
+        }
+        String authToken = header.substring(7);
+		String userEmail = getUsernameFromToken(authToken);
+		Optional<User> optionalUser = userServiceNew.getUserByEmail(userEmail);
+		Integer userId = optionalUser.get().getUserId();
+		return userId;
+	}
+	
 }
