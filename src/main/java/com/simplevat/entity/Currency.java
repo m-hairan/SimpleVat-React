@@ -22,6 +22,7 @@ public class Currency implements Serializable {
 
     @Id
     @Column(name = "CURRENCY_CODE")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer currencyCode;
 
     @Basic(optional = false)

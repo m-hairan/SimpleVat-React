@@ -7,7 +7,7 @@ import com.simplevat.dao.AbstractDao;
 import com.simplevat.dao.BankAccountTypeDao;
 import com.simplevat.entity.bankaccount.BankAccountType;
 
-@Repository
+@Repository(value = "bankAccountTypeDao")
 public class BankAccountTypeDaoImpl extends AbstractDao<Integer, BankAccountType> implements BankAccountTypeDao {
 
     @Override

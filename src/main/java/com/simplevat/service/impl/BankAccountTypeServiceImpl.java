@@ -5,15 +5,18 @@ import com.simplevat.dao.Dao;
 import com.simplevat.entity.bankaccount.BankAccountType;
 import com.simplevat.service.BankAccountTypeService;
 import java.util.List;
+
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service("bankAccountTypeService")
-
+@Transactional
 public class BankAccountTypeServiceImpl extends BankAccountTypeService {
 
     @Autowired
-    private BankAccountTypeDao bankAccountTypeDao;
+    BankAccountTypeDao bankAccountTypeDao;
 
     @Override
     public List<BankAccountType> getBankAccountTypeList() {
