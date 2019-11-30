@@ -13,11 +13,11 @@ steps:
   id: docker-push
   waitFor:
   - docker-build
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['app', 'deploy', '--image-url', 'gcr.io/simplevat-dev/simplevat:$TAG_NAME', '--project', 'simplevat-dev', '--version', '$TAG_NAME', '--promote','--stop-previous-version']
-  id: gae-deploy
-  waitFor:
-  - docker-push
+#- name: 'gcr.io/cloud-builders/gcloud'
+#  args: ['app', 'deploy', '--image-url', 'gcr.io/simplevat-dev/simplevat:$TAG_NAME', '--project', 'simplevat-dev', '--version', '$TAG_NAME', '--promote','--stop-previous-version']
+#  id: gae-deploy
+#  waitFor:
+#  - docker-push
 - name: 'gcr.io/simplevat-dev/simplevat-bash-kube'
   args:
   - 'bash'
