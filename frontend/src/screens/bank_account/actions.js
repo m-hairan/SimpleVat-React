@@ -83,4 +83,34 @@ export const deleteBankAccount = (_id) => {
 }
 
 
+export const removeBankAccountByID = (_id) => {
+  return (dispatch) => {
+    let data = {
+      method: 'delete',
+      url: `rest/bank/${_id}`
+    }
+    return authApi(data).then(res => {
+      return res
+    }).catch(err => {
+      throw err
+    })
+  }
+}
+
+export const removeBulkBankAccount = (_ids) => {
+  return (dispatch) => {
+    let data = {
+      method: 'delete',
+      url: 'rest/bank/multiple',
+      data: _ids
+    }
+    return authApi(data).then(res => {
+      return res
+    }).catch(err => {
+      throw err
+    })
+  }
+}
+
+
 
