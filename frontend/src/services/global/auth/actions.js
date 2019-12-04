@@ -8,12 +8,22 @@ export const checkAuthStatus = () => {
   return (dispatch) => {
     let data = {
       method: 'get',
-      url: '/rest/user/getrole'
+      url: '/rest/user/current'
     }
     return authApi(data).then(res => {
-      dispatch({
-        type: AUTH.SIGNED_IN
-      })
+      if (res.status == 200) {
+        dispatch({
+          type: AUTH.SIGNED_IN
+        })
+        dispatch({
+          type: AUTH.USER_PROFILE,
+          payload: {
+            data: res.data
+          }
+        })
+      } else {
+        throw new Error('Auth Failed')
+      }
     }).catch(err => {
       throw err
     })

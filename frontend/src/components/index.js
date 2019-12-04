@@ -5,6 +5,7 @@ import Header from './header'
 import Footer from './footer'
 import Message from './message'
 import DateRangePicker2 from './datepicker'
+import ConfirmDeleteModal from './confirm_delete_modal'
 
 export {
   Loading,
@@ -13,5 +14,6 @@ export {
   Header,
   Footer,
   Message,
-  DateRangePicker2
+  DateRangePicker2,
+  ConfirmDeleteModal
 }
