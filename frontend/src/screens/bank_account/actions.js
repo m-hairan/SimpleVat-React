@@ -97,12 +97,12 @@ export const removeBankAccountByID = (_id) => {
   }
 }
 
-export const removeBulkBankAccount = (_ids) => {
+export const removeBulkBankAccount = (obj) => {
   return (dispatch) => {
     let data = {
       method: 'delete',
       url: 'rest/bank/multiple',
-      data: _ids
+      data: obj
     }
     return authApi(data).then(res => {
       return res
