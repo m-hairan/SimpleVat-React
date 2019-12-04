@@ -67,6 +67,9 @@ class AdminLayout extends React.Component {
       })
       this.props.commonActions.getSimpleVATVersion()
       const toastifyAlert = (status, message) => {
+        if (!message) {
+          message = 'Unexpected Error'
+        }
         if (status === 'success') {
           toast.success(message, {
             position: toast.POSITION.TOP_RIGHT

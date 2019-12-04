@@ -6,10 +6,6 @@ import {
   CardHeader,
   CardBody,
   Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Row,
   Col,
   ButtonGroup,
@@ -25,12 +21,18 @@ import Select from 'react-select'
 
 import { BootstrapTable, TableHeaderColumn, SearchField } from 'react-bootstrap-table'
 
-import { Loader } from 'components'
+import {
+  Loader,
+  ConfirmDeleteModal
+} from 'components'
 import {
   selectOptionsFactory,
   filterFactory
 } from 'utils'
 
+import {
+  CommonActions
+} from 'services/global'
 import * as BankAccountActions from './actions'
 
 import 'react-toastify/dist/ReactToastify.css'
@@ -47,6 +49,7 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch) => {
   return ({
+    commonActions: bindActionCreators(CommonActions, dispatch),
     bankAccountActions: bindActionCreators(BankAccountActions, dispatch)
   })
 }
@@ -57,10 +60,10 @@ class BankAccount extends React.Component {
     super(props)
     this.state = {
       loading: false,
-      openDeleteModal: false,
+      dialog: null,
       actionButtons: {},
 
-      selectedData: null,
+      selected_id_list: [],
 
       filter_bank: '',
       filter_account_type: null,
@@ -71,8 +74,13 @@ class BankAccount extends React.Component {
 
     this.initializeData = this.initializeData.bind(this)
     this.inputHandler = this.inputHandler.bind(this)
-    this.toggleDangerModal = this.toggleDangerModal.bind(this)
     this.filterBankAccountList = this.filterBankAccountList.bind(this)
+
+    this.closeBankAccount = this.closeBankAccount.bind(this)
+    this.removeDialog = this.removeDialog.bind(this)
+    this.removeBankAccount = this.removeBankAccount.bind(this)
+    this.bulkDeleteBankAccount = this.bulkDeleteBankAccount.bind(this)
+    this.removeBulkBankAccount = this.removeBulkBankAccount.bind(this)
 
     this.renderAccountNumber = this.renderAccountNumber.bind(this)
     this.renderAccountType = this.renderAccountType.bind(this)
@@ -106,18 +114,23 @@ class BankAccount extends React.Component {
   initializeData () {
     this.props.bankAccountActions.getAccountTypeList()
     this.props.bankAccountActions.getCurrencyList()
-    this.props.bankAccountActions.getBankAccountList()
+    this.setState({
+      loading: true
+    })
+    this.props.bankAccountActions.getBankAccountList().then(() => {
+      this.setState({
+        loading: false
+      })
+    }).catch(() => {
+      this.setState({
+        loading: false
+      })
+    })
   }
 
   inputHandler (key, value) {
     this.setState({
       [key]: value
-    })
-  }
-
-  toggleDangerModal () {
-    this.setState({
-      openDeleteModal: !this.state.openDeleteModal
     })
   }
 
@@ -168,10 +181,22 @@ class BankAccount extends React.Component {
       let data = null
       switch(row.bankAccountType.name) {
         case 'Saving':
-          data = <label className="badge badge-primary mb-0">{ row.bankAccountType.name }</label>
+          data = <label className="badge badge-primary text-white mb-0">{ row.bankAccountType.name }</label>
           break
         case 'Current':
-          data = <label className="badge badge-info mb-0">{ row.bankAccountType.name }</label>
+          data = <label className="badge badge-info text-white mb-0">{ row.bankAccountType.name }</label>
+          break
+        case 'Checking':
+          data = <label className="badge badge-warning text-white mb-0">{ row.bankAccountType.name }</label>
+          break
+        case 'Credit Card':
+          data = <label className="badge badge-success text-white mb-0">{ row.bankAccountType.name }</label>
+          break
+        case 'Others':
+          data = <label className="badge badge-info text-white mb-0">{ row.bankAccountType.name }</label>
+          break
+        case 'Paypal':
+          data = <label className="badge badge-danger text-white mb-0">{ row.bankAccountType.name }</label>
           break
         default:
           data = <label className="badge badge-default mb-0">No Specified</label>
@@ -228,12 +253,12 @@ class BankAccount extends React.Component {
     return (
       <div>
         <ButtonDropdown
-          isOpen={this.state.actionButtons[row.account_number]}
-          toggle={() => this.toggleActionButton(row.account_number)}
+          isOpen={this.state.actionButtons[row.bankAccountId]}
+          toggle={() => this.toggleActionButton(row.bankAccountId)}
         >
           <DropdownToggle size="sm" color="primary" className="btn-brand icon">
             {
-              this.state.actionButtons[row.account_number] == true ?
+              this.state.actionButtons[row.bankAccountId] == true ?
                 <i className="fas fa-chevron-up" />
               :
                 <i className="fas fa-chevron-down" />
@@ -245,7 +270,9 @@ class BankAccount extends React.Component {
             })}>
               <i className="fas fa-edit" /> Edit
             </DropdownItem>
-            <DropdownItem onClick={() => this.props.history.push('/admin/banking/bank-account/transaction')}>
+            <DropdownItem onClick={() => this.props.history.push('/admin/banking/bank-account/transaction', {
+              bankAccountId: row.bankAccountId
+            })}>
               <i className="fas fa-eye" /> View Transactions
             </DropdownItem>
             <DropdownItem onClick={() => this.props.history.push('/admin/banking/upload-statement')}>
@@ -254,7 +281,7 @@ class BankAccount extends React.Component {
             <DropdownItem>
               <i className="fa fa-connectdevelop" /> Reconcile
             </DropdownItem>
-            <DropdownItem>
+            <DropdownItem onClick={() => this.closeBankAccount(row.bankAccountId)}>
               <i className="fa fa-trash" /> Close
             </DropdownItem>
           </DropdownMenu>
@@ -263,12 +290,47 @@ class BankAccount extends React.Component {
     )
   }
 
+  closeBankAccount (_id) {
+    this.setState({
+      dialog: <ConfirmDeleteModal
+        isOpen={true}
+        okHandler={() => this.removeBankAccount(_id)}
+        cancelHandler={this.removeDialog}
+      />
+    })
+  }
+
+  removeBankAccount(_id) {
+    this.removeDialog()
+    this.props.bankAccountActions.removeBankAccountByID(_id).then(() => {
+      this.props.commonActions.tostifyAlert('success', 'Removed Successfully')
+      this.props.bankAccountActions.getBankAccountList()
+      let temp_List = []
+      this.state.selected_id_list.map(item => {
+        if (item != _id) {
+          temp_List.push(item)
+        }
+      })
+      this.setState({
+        selected_id_list: temp_List
+      })
+    }).catch(err => {
+      this.props.commonActions.tostifyAlert('error', err.data ? err.data.message : null)
+    })
+  }
+
+  removeDialog () {
+    this.setState({
+      dialog: null
+    })
+  }
+
   renderLastReconciled (cell, row) {
     return (
       <div>
         <div>
           <label className="font-weight-bold mr-2">Balance : </label>
-          <label className="badge badge-success mb-0">Test</label>
+          <label className="badge badge-success mb-0">2034234</label>
         </div>
         <div>
           <label className="font-weight-bold mr-2">Date : </label><label>2019/12/05</label>
@@ -279,10 +341,64 @@ class BankAccount extends React.Component {
 
 
   onRowSelect (row, isSelected, e) {
-    console.log('one row checked ++++++++', row)
+    let temp_list = []
+    if (isSelected) {
+      temp_list = Object.assign([], this.state.selected_id_list)
+      temp_list.push(row.bankAccountId)
+    } else {
+      this.state.selected_id_list.map(item => {
+        if (item != row.bankAccountId) {
+          temp_list.push(item)
+        }
+      })
+    }
+    this.setState({
+      selected_id_list: temp_list
+    })
   }
   onSelectAll (isSelected, rows) {
-    console.log('current page all row checked ++++++++', rows)
+    let temp_list = []
+    if (isSelected) {
+      rows.map(item => {
+        temp_list.push(item.bankAccountId)
+      })
+    }
+    this.setState({
+      selected_id_list: temp_list
+    })
+  }
+
+  bulkDeleteBankAccount () {
+    let {
+      selected_id_list
+    } = this.state
+    if (selected_id_list.length > 0) {
+      this.setState({
+        dialog: <ConfirmDeleteModal
+          isOpen={true}
+          okHandler={this.removeBulkBankAccount}
+          cancelHandler={this.removeDialog}
+        />
+      })
+    } else {
+      this.props.commonActions.tostifyAlert('info', 'Please select the rows of the table and try again.')
+    }
+  }
+
+  removeBulkBankAccount () {
+    this.removeDialog()
+    let {
+      selected_id_list
+    } = this.state
+    this.props.bankAccountActions.removeBulkBankAccount(selected_id_list).then(() => {
+      this.props.commonActions.tostifyAlert('success', 'Removed Successfully')
+      this.props.bankAccountActions.getBankAccountList()
+      this.setState({
+        selected_id_list: []
+      })
+    }).catch(err => {
+      this.props.commonActions.tostifyAlert('error', err.data ? err.data.message : null)
+    })
   }
 
 
@@ -294,7 +410,8 @@ class BankAccount extends React.Component {
       filter_account_type,
       filter_account_name,
       filter_account_number,
-      filter_currency
+      filter_currency,
+      dialog
     } = this.state
     const {
       account_type_list,
@@ -307,6 +424,7 @@ class BankAccount extends React.Component {
     return (
       <div className="bank-account-screen">
         <div className="animated fadeIn">
+          { dialog }
           <Card>
             <CardHeader>
               <Row>
@@ -357,6 +475,7 @@ class BankAccount extends React.Component {
                           <Button
                             color="warning"
                             className="btn-square"
+                            onClick={this.bulkDeleteBankAccount}
                           >
                             <i className="fa glyphicon glyphicon-trash fa-trash mr-1" />
                             Bulk Delete
@@ -427,6 +546,12 @@ class BankAccount extends React.Component {
                           className="bank-account-table"
                         >
                           <TableHeaderColumn
+                            isKey
+                            dataField="bankAccountId"
+                            width="0"
+                          >
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
                             dataField="bankName"
                             dataSort
                           >
@@ -439,7 +564,6 @@ class BankAccount extends React.Component {
                             Account Type
                           </TableHeaderColumn>
                           <TableHeaderColumn
-                            isKey
                             dataField="accountNumber"
                             dataFormat={this.renderAccountNumber}
                             dataSort
@@ -484,22 +608,6 @@ class BankAccount extends React.Component {
               }
             </CardBody>
           </Card>
-          <Modal
-            isOpen={this.state.openDeleteModal}
-            centered
-            className="modal-primary"
-          >
-            <ModalHeader toggle={this.toggleDangerModal}>
-              <h4 className="mb-0">Are you sure ?</h4>
-            </ModalHeader>
-            <ModalBody>
-              <h5 className="mb-0">This record will be deleleted permanently.</h5>
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" className="btn-square" onClick={this.deleteBank}>Yes</Button>{' '}
-              <Button color="secondary" className="btn-square" onClick={this.toggleDangerModal}>No</Button>
-            </ModalFooter>
-          </Modal>
         </div>
       </div>
     )
