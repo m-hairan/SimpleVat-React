@@ -390,7 +390,10 @@ class BankAccount extends React.Component {
     let {
       selected_id_list
     } = this.state
-    this.props.bankAccountActions.removeBulkBankAccount(selected_id_list).then(() => {
+    let obj = {
+      ids: selected_id_list
+    }
+    this.props.bankAccountActions.removeBulkBankAccount(obj).then(() => {
       this.props.commonActions.tostifyAlert('success', 'Removed Successfully')
       this.props.bankAccountActions.getBankAccountList()
       this.setState({
