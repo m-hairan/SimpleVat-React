@@ -138,19 +138,14 @@ class DetailBankAccount extends React.Component {
       bankAccountId: this.state.current_bank_account_id,
       bankAccountName: data.account_name,
       bankAccountCurrency: data.currency.value,
-      bankAccountStatus: this.state.current_bank_account.bankAccountStatusCode,
       personalCorporateAccountInd: data.account_is_for.value == 'Personal' ? 'P' :
         data.account_is_for.value == 'Corporate' ? 'C' : '',
-      isprimaryAccountFlag: this.state.current_bank_account.isprimaryAccountFlag,
       bankName: data.bank_name,
       accountNumber: data.account_number,
       ibanNumber: data.iban_number,
       swiftCode: data.swift_code,
       openingBalance: data.opening_balance,
-      currentBalance: this.state.current_bank_account.currentBalance,
-      bankFeedStatusCode: this.state.current_bank_account.bankFeedStatusCode,
       bankCountry: data.country.value,
-      createdBy: this.state.current_bank_account.createdBy,
       bankAccountType: data.account_type.value
     }
     this.props.detailBankAccountActions.updateBankAccount(obj).catch(err => {
