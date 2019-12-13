@@ -14,7 +14,9 @@ import com.simplevat.entity.bankaccount.TransactionType;
 import com.simplevat.service.TransactionCategoryServiceNew;
 import com.simplevat.service.bankaccount.TransactionService;
 import com.simplevat.service.bankaccount.TransactionTypeService;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,7 +47,7 @@ public class TransactionReportRestController {
     @Autowired
     TransactionRestControllerHelper transactionRestControllerHelper;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/completefinancialperiods")
+    @RequestMapping(method = RequestMethod.GET, value = "/getfinancialperiods")
     public ResponseEntity<List<FinancialPeriodRestModel>> completeFinancialPeriods() {
         try {
             return new ResponseEntity(FinancialPeriodHolderRest.getFinancialPeriodList(), HttpStatus.OK);
@@ -55,7 +57,7 @@ public class TransactionReportRestController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/transactiontypes")
+    @RequestMapping(method = RequestMethod.GET, value = "/gettransactiontypes")
     public ResponseEntity<List<TransactionType>> transactionTypes() throws Exception {
         try {
             List<TransactionType> transactionTypeList = transactionTypeService.findAllChild();
@@ -66,7 +68,7 @@ public class TransactionReportRestController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/transactioncategories")
+    @RequestMapping(method = RequestMethod.GET, value = "/gettransactioncategories")
     public ResponseEntity<List<TransactionCategory>> transactionCategories(@RequestParam("transactionTypeCode") Integer transactionTypeCode) throws Exception {
         try {
             TransactionType transactionType = transactionTypeService.findByPK(transactionTypeCode);
@@ -93,14 +95,14 @@ public class TransactionReportRestController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/view")
-    public ResponseEntity<List<TransactionRestModel>> view(@RequestBody Integer transactionTypeCode, @RequestBody Integer transactionCategoryId, @RequestBody FinancialPeriodRestModel financialPeriod) {
+    public ResponseEntity<List<TransactionRestModel>> view(@RequestBody Integer transactionTypeCode, @RequestBody Integer transactionCategoryId, @RequestBody String startDate, @RequestBody String endDate) {
         try {
-
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
             TransactionType transactionType = transactionTypeService.findByPK(transactionTypeCode);
             TransactionCategory transactionCategory = transactionCategoryService.findByPK(transactionCategoryId);
             double totalTransactionAmount = 0.00;
             List<TransactionRestModel> transactionList = new ArrayList<>();
-            List<Transaction> transactions = transactionService.getTransactionsByDateRangeAndTranscationTypeAndTranscationCategory(transactionType, transactionCategory, financialPeriod.getStartDate(), financialPeriod.getLastDate());
+            List<Transaction> transactions = transactionService.getTransactionsByDateRangeAndTranscationTypeAndTranscationCategory(transactionType, transactionCategory, dateFormat.parse(startDate), dateFormat.parse(endDate));
             if (transactions != null && !transactions.isEmpty()) {
                 for (Transaction transaction : transactions) {
                     totalTransactionAmount = totalTransactionAmount + transaction.getTransactionAmount().doubleValue();
