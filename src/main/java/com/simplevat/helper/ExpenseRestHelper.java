@@ -54,8 +54,6 @@ public class ExpenseRestHelper implements Serializable {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ExpenseRestHelper.class);
 
-    public static final int TRANSACTION_TYPE_EXPENSE = 8;
-
     @Autowired
     private VatCategoryService vatCategoryService;
 
@@ -150,7 +148,7 @@ public class ExpenseRestHelper implements Serializable {
         }
     }
 
-    public ExpenseRestModel viewOrEditExpense(Integer expenseId, ExpenseService expenseService) throws Exception {
+    public ExpenseRestModel getExpenseById(Integer expenseId, ExpenseService expenseService) throws Exception {
         Expense expense = expenseService.findByPK(expenseId);
         ExpenseRestModel expenseModel = getExpenseModel(expense);
         return expenseModel;
