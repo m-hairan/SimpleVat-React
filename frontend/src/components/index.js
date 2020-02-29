@@ -6,6 +6,10 @@ import Footer from './footer'
 import Message from './message'
 import DateRangePicker2 from './datepicker'
 import ConfirmDeleteModal from './confirm_delete_modal'
+import ImageUpload from './upload/imageUploader'
+import AvatarUploader from './upload/avatarUploader'
+import FaviconUploader from './upload/faviconUploader'
+import DataSlider from './slider'
 
 export {
   Loading,
@@ -15,5 +19,9 @@ export {
   Footer,
   Message,
   DateRangePicker2,
-  ConfirmDeleteModal
+  ConfirmDeleteModal,
+  ImageUpload,
+  DataSlider,
+  AvatarUploader,
+  FaviconUploader
 }

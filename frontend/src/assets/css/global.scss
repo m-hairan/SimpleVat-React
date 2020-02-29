@@ -1,9 +1,29 @@
-
-
 // global html styles
-body, span, label, h1, h2, h3, h4, p, em {
-  font-family: Montserrat, serif;
+
+@font-face {
+  font-family: Poppins;
+  src: url('fonts/Poppins/Poppins-Regular.ttf');
 }
+
+@font-face {
+  font-family: Poppins-Medium;
+  src: url('fonts/Poppins/Poppins-Medium.ttf');
+}
+
+@font-face {
+  font-family: Poppins-SemiBold;
+  src: url('fonts/Poppins/Poppins-SemiBold.ttf');
+}
+
+
+p, span, label, a, div, input, select, textarea, form {
+  font-family: Poppins;
+}
+
+h1, h2, h3, h4, h5, h6, th, button {
+  font-family: Poppins-SemiBold !important;
+}
+
 .nav-link {
   border-radius: 0 !important;
 }
@@ -14,12 +34,6 @@ body, span, label, h1, h2, h3, h4, p, em {
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
 }
-
-
-
-
-
-
 
 // form styles
 .form-control {
@@ -41,7 +55,6 @@ body, span, label, h1, h2, h3, h4, p, em {
   }
 }
 
-
 .is-invalid ~ .invalid-feedback {
   display: block;
 }
@@ -50,7 +63,6 @@ div.Select.is-invalid {
   .Select-control {
     border:1px solid #f86c6b !important;
   }
-  
 }
 
 
@@ -179,24 +191,40 @@ th {
 
 
 // modal styles
+
+.modal-open {
+  overflow: auto !important;
+}
+
 .modal-dialog {
-  border-radius: 0 !important;
+  border-radius: 10px !important;
+  border:none !important;
   .modal-content {
-    border-radius: 0 !important;
+    border: none !important;
+    border-radius: 10px !important;
     .modal-header {
-      border-radius: 0 !important;
+      background-color: white;
+      color: black;
+      font-size: 18px;
+      padding: 30px 25px;
+      border-bottom: none !important;
       button.close {
-        display: none;
         span {
-          color: #ffffff;
+          color: black;
         }
       }
     }
     .modal-body {
+      padding: 0px 25px;
       border-radius: 0 !important;
     }
     .modal-footer {
+      padding: 30px 25px;
+      border-top: none !important;
       border-radius: 0 !important;
+      button {
+        height: 50px !important;
+      }
     }
   }
 }

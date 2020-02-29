@@ -1,6 +1,8 @@
 import {
   LogIn,
-  Register
+  Register,
+  Home,
+  PaypalPaying
 } from 'screens'
 
 const initialRoutes = [
@@ -15,10 +17,14 @@ const initialRoutes = [
     component: Register.screen
   },
   {
-    redirect: true,
+    path: '/paypal-pay',
+    name: 'Register',
+    component: PaypalPaying.screen
+  },
+  {
     path: '/',
-    pathTo: '/login',
-    name: 'Initial'
+    component: Home.screen,
+    name: 'Home'
   }
 ]
 

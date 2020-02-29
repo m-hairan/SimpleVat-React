@@ -1,1 +1,376 @@
 // Here you can add other styles
+.btn {
+    border: none !important;
+    border-radius: 10px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    padding-left: 50px;
+    padding-right: 50px;
+    min-height: 50px;
+    white-space: nowrap;
+}
+
+.bg-brown {
+    background-color: #E4D6FF !important;
+}
+
+.btn-default {
+    background-color: #F1F1F1 !important;
+    color: #A7A5B4 !important;
+    border: none !important;
+}
+
+.btn-primary {
+    background-color: #613BEA !important;
+    color: white !important;
+}
+
+.btn-secondary {
+    background-color: white;
+    border: 2px solid #613BEA !important;
+    color: #613BEA !important;
+}
+
+.btn-white {
+    background-color: white;
+    color: #A7A5B4 !important;
+}
+
+.daterangepicker {
+    // right: 30px !important;
+
+    button {
+        min-height: 33px;
+        border-radius: 0 !important;
+    }
+}
+
+// .daterangepicker:before, .daterangepicker:after {
+//     left: inherit !important;
+//     right: 50px !important;
+// }
+
+.calendar-table {
+    table td {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        height: 40px !important;
+    }
+}
+
+.react-bootstrap-daterangepicker-container {
+    button {
+        margin-right: 0 !important;
+        color: #A7A5B4 !important;
+        padding: 0 !important;
+        height: 40px;
+        min-height: 0 !important;
+        font-weight: normal !important;
+        border: none !important;
+        background-color: #FCFCFE !important;
+    }
+    button:hover,
+    button:focus,
+    button:active {
+        border: none !important;
+        box-shadow: none !important;
+    }
+    button::after {
+        display: none;
+    }
+}
+
+.datepicker2 {
+    display: flex;
+    align-items: center;
+    color: #A7A5B4;
+    padding: 0 30px 0 20px;
+    border-radius: 10px;
+    height: 50px;
+    background-color: #FCFCFE;
+    border: 1px solid #F5F5F5;
+}
+
+html:not([dir="rtl"]) .sidebar {
+    margin-left: -250px
+}
+
+html:not([dir="rtl"]) .sidebar-show .sidebar {
+    margin-left: 0
+}
+
+.sidebar {
+    background: #F6F4FF;
+    min-width: 230px !important;
+
+    .sidebar-nav {
+        min-width: 230px !important;
+    }
+}
+  
+select {
+    margin: 0 2px;
+}
+
+.form-control {
+    min-height: 50px !important;
+    background-color: #FCFCFE;
+    border: 1px solid #F5F5F5 !important;
+    padding: 0 25px;
+    border-radius: 10px !important;
+    font-size: 16px !important;
+}
+
+.Select-control {
+    height: 50px !important;
+    background-color: #FCFCFE !important;
+    border: 1px solid #F5F5F5 !important;
+    border-radius: 10px !important;
+
+    .Select-input,
+    .Select-placeholder {
+        padding-left: 25px;
+        line-height: 3em;
+        width: 100% !important;
+        font-size: 16px !important;
+    }
+
+    input {
+        padding-top: 0px !important;
+        line-height: 3em !important;
+        width: 100% !important;
+        font-size: 16px;
+    }
+}
+
+.Select-control:hover {
+    box-shadow: none !important;
+}
+
+.form-control::placeholder {
+    color: #A7A5B4;
+}
+
+.new-select {
+    position: relative;
+    
+    select {
+        appearance: none;
+        padding-right: 50px !important;
+    }
+
+    i {
+        color: black;
+        position: absolute;
+        right: 20px;
+        top: 36%;
+        margin-top: 0 !important;
+    }
+}
+
+.react-bs-table-container .react-bs-table {
+    border-top: none !important;
+    padding: 30px 20px!important;
+    background-color: white !important;
+    border-radius: 10px !important;
+    border-bottom: none !important;
+    margin-bottom: 30px;
+}
+
+.react-bs-table-pagination {
+    padding: 0 20px;
+    background-color: transparent !important;
+    align-items: center;
+
+    a {
+        background-color: transparent;
+        border: none !important;
+    }
+
+    a:hover {
+        background-color: transparent;
+    }
+}
+
+
+.page-link {
+    color: black;
+}
+
+.custom-control-label {
+    color: #A7A5B4 !important;
+}
+
+.form-group {
+    label {
+        font-size: 16px;
+        color: #A7A5B4;
+        font-weight: 500;
+        font-family: 'Poppins-SemiBold';
+    }
+}
+
+.react-bs-table-container .react-bs-table th{
+    font-size: 14px !important;
+    text-transform: initial !important;
+    color: #A7A5B4 !important;
+    font-weight: 600 !important;
+}
+
+.card {
+    background-color: transparent;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+
+    .card-header-actions {
+        margin-right: 0 !important;
+    }
+
+    .card-header {
+        background-color: transparent !important;
+        border-radius: 10px !important;
+        border: none !important;
+        padding: 20px 0 !important;
+
+        h1 {
+            font-size: 18px;
+            color: black;
+            font-weight: 600;
+            font-family: 'Poppins';
+        }
+
+        .header-search-input {
+            background-color: white !important;
+        }
+    }
+    
+    .card-body {
+        background-color: white;
+        border-radius: 10px !important;
+        padding: 30px 25px;
+    }
+}
+
+.card.grey {
+    .card-body {
+        background-color: #F6F4FF !important;
+
+        h1.report {
+            color: #613BEA;
+            font-size: 36px;
+            font-weight: 600;
+        }
+
+        p.report-title {
+            font-size: 18px;
+            color: black;
+            font-family: 'Poppins-SemiBold' !important;
+            margin-bottom: 0;
+        }
+    }
+}
+
+.app-header .navbar-nav .dropdown-menu-right {
+    top: 35px !important;
+    right: 10px !important;
+    left: auto !important;
+    transform: none !important;
+}
+
+.price-select {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    padding-right: 10px !important;
+}
+
+.currency-select {
+    min-width: 100px !important;
+    .Select-control {
+        border-top-left-radius: 0 !important;
+        border-bottom-left-radius: 0 !important;
+    }
+}
+
+
+table {
+    border-top: none !important;
+
+    * {
+        font-family: 'Poppins';
+    }
+
+    thead {
+        th {
+            font-size: 14px !important;
+            text-transform: initial !important;
+            color: #A7A5B4 !important;
+            border: none !important;
+        }
+    }
+
+    tbody {
+        td{
+            vertical-align: middle !important;
+            padding-top: 20px !important;
+            padding-bottom: 20px !important;
+            border: none !important;
+            border-top: 1px solid #F5F5F5 !important;
+
+            p {
+                margin-bottom: 0 !important;
+                font-size: 14px !important;
+            }
+
+            p.caption {
+                color: #A7A5B4 !important;
+            }
+
+            .badge {
+                text-align: center;
+                border-radius: 10px;
+                font-size: 14px !important;
+                font-weight: normal;
+                width: 110px;
+                height: 30px;
+                align-items: center;
+                display: flex;
+                justify-content: center;
+            }
+
+            .badge-normal {
+                background-color: #E4D6FF;
+                color: #613BEA;
+            }
+            
+            .badge-completed,
+            .badge-open,
+            .badge-live {
+                color: #2BB224;
+                background-color: #CBF4C9;
+            }
+
+            .badge-pending,
+            .badge-closed {
+                color: #B22424;
+                background-color: #F4C9C9;
+            }
+
+            .badge-partial {
+                color: #B27424;
+                background-color: #F4E6C9;
+            }
+
+            .actions {
+                justify-content: flex-end;
+                a {
+                    color: #A7A5B4 !important;
+                    font-size: 18px !important;
+                    margin-left: 15px;
+                }
+                a:hover {
+                    color: #613BEA !important;
+                }
+            }
+        }
+    }
+}

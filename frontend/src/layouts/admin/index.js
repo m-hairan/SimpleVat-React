@@ -7,16 +7,15 @@ import { Container } from 'reactstrap'
 import {
   AppAside,
   AppBreadcrumb,
-  AppFooter,
   AppHeader,
   AppSidebar,
-  AppSidebarFooter,
-  AppSidebarForm,
-  AppSidebarHeader,
-  AppSidebarMinimizer,
   AppSidebarNav,
 } from '@coreui/react'
 import { ToastContainer, toast } from 'react-toastify'
+
+import { ThemeProvider, createGlobalStyle  } from 'styled-components';
+import { darkTheme, lightTheme } from 'layouts/theme/theme'
+import { GlobalStyles } from 'layouts/theme/global'
 
 import { adminRoutes } from 'routes'
 import {
@@ -24,7 +23,7 @@ import {
   CommonActions
 } from 'services/global'
 
-import navigation from 'constants/navigation'
+import { mainNavigation, accountSettingsNavigation, shopSettingsNavigation } from 'constants/navigation'
 
 import {
   Aside,
@@ -34,8 +33,6 @@ import {
 } from 'components'
 
 import './style.scss'
-
-
 
 const mapStateToProps = (state) => {
   return ({
@@ -50,108 +47,110 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 class AdminLayout extends React.Component {
-
   constructor(props) {
     super(props)
     this.state = {
+      theme: 'light'
     }
   }
 
   componentDidMount () {
-    if (!window.localStorage.getItem('accessToken')) {
-      this.props.history.push('/login')
-    } else {
-      this.props.authActions.checkAuthStatus().catch(err => {
-        this.props.authActions.logOut()
-        this.props.history.push('/login')
-      })
-      this.props.commonActions.getSimpleVATVersion()
-      const toastifyAlert = (status, message) => {
-        if (!message) {
-          message = 'Unexpected Error'
-        }
-        if (status === 'success') {
-          toast.success(message, {
-            position: toast.POSITION.TOP_RIGHT
-          })
-        } else if (status === 'error') {
-          toast.error(message, {
-            position: toast.POSITION.TOP_RIGHT
-          })
-        } else if (status === 'warn') {
-          toast.warn(message, {
-            position: toast.POSITION.TOP_RIGHT
-          })
-        } else if (status === 'info') {
-          toast.info(message, {
-            position: toast.POSITION.TOP_RIGHT
-          })
-        }
-      }
-      this.props.commonActions.setTostifyAlertFunc(toastifyAlert)
-    }
+    // if (!window.localStorage.getItem('accessToken')) {
+    //   this.props.history.push('/login')
+    // } else {
+    //   this.props.authActions.checkAuthStatus().catch(err => {
+    //     this.props.authActions.logOut()
+    //     this.props.history.push('/login')
+    //   })
+    //   this.props.commonActions.getSimpleVATVersion()
+    //   const toastifyAlert = (status, message) => {
+    //     if (!message) {
+    //       message = 'Unexpected Error'
+    //     }
+    //     if (status === 'success') {
+    //       toast.success(message, {
+    //         position: toast.POSITION.TOP_RIGHT
+    //       })
+    //     } else if (status === 'error') {
+    //       toast.error(message, {
+    //         position: toast.POSITION.TOP_RIGHT
+    //       })
+    //     } else if (status === 'warn') {
+    //       toast.warn(message, {
+    //         position: toast.POSITION.TOP_RIGHT
+    //       })
+    //     } else if (status === 'info') {
+    //       toast.info(message, {
+    //         position: toast.POSITION.TOP_RIGHT
+    //       })
+    //     }
+    //   }
+    //   this.props.commonActions.setTostifyAlertFunc(toastifyAlert)
+    // }
+  }
+
+  changeTheme() {
+    this.setState({
+      theme: this.state.theme == 'light'? 'dark': 'light'
+    })
   }
 
   render() {
-
     const containerStyle = {
       zIndex: 1999
     }
 
+    const {theme} = this.state
+
+    let isSettings = this.props.location.pathname.includes('/admin/settings')?true:false
+
     return (
-      <div className="admin-container">
-        <div className="app">
-          <AppHeader fixed>
-            <Suspense fallback={Loading()}>
-              <Header {...this.props} />
-            </Suspense>
-          </AppHeader>
-          <div className="app-body">
-            <AppSidebar fixed display="lg">
-              <AppSidebarHeader />
-              <AppSidebarForm />
-              <Suspense>
-                <AppSidebarNav navConfig={navigation} {...this.props} />
-              </Suspense>
-              <AppSidebarFooter />
-              <AppSidebarMinimizer />
-            </AppSidebar>
-            <main className="main">
-              <AppBreadcrumb appRoutes={adminRoutes} />
-              <Container fluid>
-                <Suspense fallback={Loading()}>
-                  <ToastContainer position="top-right" autoClose={5000} style={containerStyle} />
-                  <Switch>
-                    {
-                      adminRoutes.map((prop, key) => {
-                        if (prop.redirect)
-                          return <Redirect from={prop.path} to={prop.pathTo} key={key} />
-                        return (
-                          <Route
-                            path={prop.path}
-                            component={prop.component}
-                            key={key}
-                          />
-                        )
-                      })
-                    }
-                  </Switch>
-                </Suspense>
-              </Container>
-            </main>
-            <AppAside>
+      <ThemeProvider theme={theme=='light'?lightTheme:darkTheme}>
+        <GlobalStyles />
+        <div className="admin-container">
+          <div className="app">
+            <AppHeader>
               <Suspense fallback={Loading()}>
-                <Aside />
+                <Header {...this.props} theme={theme} changeTheme={this.changeTheme.bind(this)}/>
               </Suspense>
-            </AppAside>
+            </AppHeader>
+            <div className="app-body">
+              <AppSidebar  className="pt-4 mb-5" display="lg">
+                <Suspense>
+                  <AppSidebarNav navConfig={mainNavigation} {...this.props} />
+                </Suspense>
+              </AppSidebar>
+              <main className="main mt-5 mb-5">
+                <Container className="p-0" fluid>
+                  <Suspense fallback={Loading()}>
+                    <ToastContainer position="top-right" autoClose={5000} style={containerStyle} />
+                    <Switch>
+                      {
+                        adminRoutes.map((prop, key) => {
+                          if (prop.redirect)
+                            return <Redirect from={prop.path} to={prop.pathTo} key={key} />
+                          return (
+                            <Route
+                              path={prop.path}
+                              component={prop.component}
+                              key={key}
+                            />
+                          )
+                        })
+                      }
+                    </Switch>
+                  </Suspense>
+                </Container>
+              </main>
+              <AppAside>
+                <Suspense fallback={Loading()}>
+                  <Aside />
+                </Suspense>
+              </AppAside>
+            </div>
           </div>
-          <AppFooter>
-            <Suspense fallback={Loading()}>
-              <Footer {...this.props} />
-            </Suspense>
-          </AppFooter>
         </div>
-      </div>
+      </ThemeProvider>
     )
   }
 }

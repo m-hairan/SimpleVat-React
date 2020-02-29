@@ -9,6 +9,7 @@ import {
   CommonActions
 } from 'services/global'
 
+import './style.scss'
 
 const mapStateToProps = (state) => {
   return ({
@@ -30,9 +31,9 @@ class InitialLayout extends React.Component {
   }
 
   componentDidMount () {
-    if (window.localStorage.getItem('accessToken')) {
-      this.props.history.push('/admin')
-    }
+    // if (window.localStorage.getItem('accessToken')) {
+    //   this.props.history.push('/')
+    // }
     this.props.commonActions.getSimpleVATVersion()
   }
 

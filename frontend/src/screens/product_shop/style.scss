@@ -1,0 +1,46 @@
+.shop-product-screen {
+  .card-header {
+    color: #20a8d8;
+  }
+  .btn-group {
+    .btn {
+      color: #ffffff !important;
+    }
+  }
+
+  .product-card {
+    cursor: pointer;
+  }
+
+  .product-card:hover {
+    box-shadow: 0 0px 30px rgba(0,0,0,0.4) !important;
+  }
+
+  button {
+    width: 200px;
+    padding: 0 !important;
+    margin-bottom: 10px;
+
+  }
+
+  h5 {
+    font-size: 18px;
+    color: #A7A5B4;
+  }
+
+  span {
+    font-size: 18px;
+  }
+
+  span.price {
+    font-family: 'Poppins-SemiBold';
+  }
+
+  span.stock {
+    color: #A7A5B4;
+  }
+
+  span.stock-size {
+    color: #2BB224;
+  }
+}
